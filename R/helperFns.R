@@ -1,7 +1,7 @@
 #' @include AAAClassDefinitions.R
 NULL
 
-
+#' @export
 getAllYrs<-function(allYrs){
   if(!identical('static',allYrs)){
     allYrs=setdiff(allYrs,'static')

@@ -29,7 +29,7 @@ setGeneric('bCaribouMetaAnalysisPredictors',function(landscapeState,years=NULL,r
 
 #' @rdname bCaribouMetaAnalysisPredictors
 setMethod('bCaribouMetaAnalysisPredictors', signature(landscapeState="LandscapeStateBCaribou"), function(landscapeState,years,ranges,predictors,width) {
-  #landscapeState = cLS;years=NULL;ranges=NULL;predictors=c("fire","anthro","totalDist");width=300
+  #landscapeState = cLS;years=NULL;ranges=NULL;predictors=c("anthro");width=300
 
   recognizedPredictors = c("fire","anthro","totalDist")
   bufferPredictors = c("anthro","totalDist")
