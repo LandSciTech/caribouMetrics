@@ -56,7 +56,7 @@ setMethod(
     # update PLC to DTN if natDist and age <= 35
     yfNatDist <- (age <= 35 | is.na(age)) & natDist == 1
     
-    plc <- mask(plc, natDist, maskvalue = 1, 
+    plc <- mask(plc, yfNatDist, maskvalue = 1, 
                 updatevalue = DTNcode)
     
     # convert to 16 ha resolution stack of ResType proportion to match 16 ha
@@ -94,7 +94,7 @@ setMethod(
       pull(code)
     
     for (i in toChange) {
-      plc[[i]] <- raster::mask(plc[[i]], allDist16ha[[2:3]] > 0.35,
+      plc[[i]] <- raster::mask(plc[[i]], max(allDist16ha[[2:3]] > 0.35),
                                maskvalue = 1,
                                updatevalue = 0)
     }
@@ -107,7 +107,7 @@ setMethod(
       pull(code)
     
     for (i in toChange) {
-      plc[[i]] <- raster::mask(plc[[i]], max(allDist16ha[[1]] > 0.35),
+      plc[[i]] <- raster::mask(plc[[i]], allDist16ha[[1]] > 0.35,
                                maskvalue = 1, 
                                updatevalue = 0)
     }

@@ -98,12 +98,12 @@ setMethod(
                                          resTypeLevels, by = c(ID = "code"))
 
     # Resample linFeat and esker to 16 ha
-    # tmplt <- inData@linFeat %>% raster::`res<-`(c(400, 400))
-    # inData@linFeat <- raster::resample(inData@linFeat, tmplt,
-    #                                    method = "bilinear")
-    # 
-    # inData@esker <- raster::resample(inData@esker, tmplt,
-    #                                    method = "bilinear")
+    tmplt <- inData@plc %>% raster::`res<-`(c(400, 400))
+    inData@linFeat <- raster::resample(inData@linFeat, tmplt,
+                                       method = "bilinear")
+
+    inData@esker <- raster::resample(inData@esker, tmplt,
+                                       method = "bilinear")
     
     # Get window area from table b/c some models used different sizes
     if(is.null(winArea)){
@@ -182,7 +182,7 @@ setMethod(
     newData <- purrr::map2(newData, names(newData), 
                 ~checkAlign(.x, inData@plc, .y, "plc"))
     
-    raster::compareRaster(newData, inData@plc)
+    #raster::compareRaster(newData, inData@plc)
     
     # get resTypeLevels from inData@plc RAT
     resTypeLevels <- inData@plc %>% raster::levels() %>% .[[1]] %>% 

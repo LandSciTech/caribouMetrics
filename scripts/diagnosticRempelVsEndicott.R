@@ -21,14 +21,14 @@ tmap_mode("plot")
 
 
 rmdTitle <- "Compare with Rempel fixed data"
-rmdDescrip <- "New version with Rempel disturbance, roads, rail, utilities. Try rastize to 16 ha. Slightly narrower offset"
+rmdDescrip <- "New version with Rempel disturbance, roads, rail, utilities. Try rastize to 16 ha. Slightly narrower offset. After switch to caribouMetrics"
 rmdConclu <- "Changing to rasters instead of hexagons did not change the agreement with Rempel's results. Adding offseting improved the agreement.
 \n\n We concluded after consulting Rob Rempel that the difference in the calculation given the same inputs was not significant due to the random distribtion around zero of the differences in each season. However, we still don't have a staisfactory answer for why there are differences or why these differences seem to be larger for the Fall model."
 
 # slightly narrower offset improved slope to closer to 1 for all except TDENLF which got worse
 
 # based on folder of .rmd file as working directory
-rmdOutFile <- "../../outputs/diagnosticRVsE_wRempelDataFixed6.html"
+rmdOutFile <- "../outputs/diagnosticRVsE_wRempelDataFixed7.html"
 
 # Load Data #===================================================================
  
@@ -39,7 +39,7 @@ sSimData <- getSyncSimData(ssimLib = "./inputNV/Libraries/ChurchillBC",
                            scnNum = 6)
 
 # data as rasters and hexgrid provided
-plcD <- raster("./inputNV/intermediaryData/plc_aligned.tif")
+plcD <- raster("./inputNV/HornsethRempelInfo/Provincial-Landcover-2000/studyAreaMerged250.tif")
 #plcD <- raster("inputNV/Provincial-Landcover-2000/Provincial Landcover 2000/z15-27class.tif")
 eskerD <- st_read("inputNV/HornsethRempelInfo/Eskers_Ontario/Eskers_Ontario.shp")
 distTypeD <- raster("inputNV/HornsethRempelInfo/Dist_UtilLinesEtc_Churchill/Churchill_Dist_Type.tif")
@@ -78,8 +78,8 @@ caribouResults <- caribouHabitat(
     linFeat = list(roads = roadD, rail = railD,
                    utilities = utilD),
     projectPoly = projectPolyD, 
-    friLU = sSimData$friLU, 
-    winArea = 5000,
+    friLU = rfuToResType %>% mutate(ID = 1:n()) %>% select(ID, RegionalForestUnit), 
+    #winArea = 5000,
     caribouRange = "Churchill", 
     padProjPoly = TRUE 
     # eskerSave = "inputNV/HornsethRempelInfo/eskerDen.tif",
@@ -383,7 +383,7 @@ difFAVarsGraph <- comparCalc %>% select(HEXID, difFA, contains("_S5")) %>%
 #
 # ggeffects::ggeffect(difLm, terms = c("CON_S5", "LGTP_S5")) %>% plot()
 
-rmarkdown::render("scripts/RempelHabitatDefs/diagnosticRempelVsEndicott.Rmd",
+rmarkdown::render("scripts/diagnosticRempelVsEndicott.Rmd",
                   output_file = rmdOutFile)
 beepr::beep()
 

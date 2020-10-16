@@ -114,6 +114,10 @@ movingWindowAvg <- function(rast, radius, nms, veloxpkg = FALSE, offset = TRUE,
       
     }
     
+    # error if rast is smaller than the focal window
+    if(any(!dim(rast)[1:2]>dim(cf2))){
+      stop("The project area is smaller than the window area", call. = FALSE)
+    }
     
     if(nl == 1){
       rast <- raster::focal(rast, w = cf2, na.rm = na.rm, pad = pad,

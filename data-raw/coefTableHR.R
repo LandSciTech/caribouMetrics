@@ -1320,7 +1320,7 @@ extractCoefTableLSLSeason <- function(text){
     Coefficient = c(text %>% 
                       str_extract_all("(?<=\\()(\\d|[[:punct:]])*(?= \\* gs)") %>%
                       .[which(!is.na(.))] %>% unlist(), text %>% 
-                      str_extract("(?<=\\+ \\()(\\d|[[:punct:]])*(?=\\))")), 
+                      str_extract("(?<=\\+ \\()(\\d|[[:punct:]])*(?=\\))")) %>% as.numeric(), 
     WinArea = text %>% 
       str_extract("(?<=gs.[[:upper:]]{2,6}_)S\\d(?=\\(j\\))"), 
     stringsAsFactors = FALSE
@@ -1342,4 +1342,4 @@ coefTableHR <- inText %>% str_squish() %>%  str_split("#region Model") %>%
   map_dfr(extractCoefTableLSL)
 
 
-usethis::use_data(coefTableHR)
+usethis::use_data(coefTableHR, overwrite = TRUE)

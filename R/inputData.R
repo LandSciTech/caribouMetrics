@@ -99,18 +99,18 @@ setMethod(
       linFeat <- raster(linFeatSave)
     }
     
-    # Resample linFeat and esker to 16 ha
-    tmplt <- plc %>% raster::`res<-`(c(400, 400))
-    if(any(res(linFeat) < 400)){
-      linFeat <- raster::resample(inData@linFeat, tmplt,
-                                  method = "bilinear")
-    }
-    
-    if(any(res(esker) < 400)){
-      esker <- raster::resample(inData@esker, tmplt,
-                                method = "bilinear")
-    }
- 
+    # # Resample linFeat and esker to 16 ha
+    # tmplt <- plc %>% raster::`res<-`(c(400, 400))
+    # if(any(res(linFeat) < 400)){
+    #   linFeat <- raster::resample(inData@linFeat, tmplt,
+    #                               method = "bilinear")
+    # }
+    # 
+    # if(any(res(esker) < 400)){
+    #   esker <- raster::resample(inData@esker, tmplt,
+    #                             method = "bilinear")
+    # }
+    # 
     # check alignment of other layers
     fri <- aggregateIf(fri, plc, "fri", "plc") %>% checkAlign(plc, "fri", "plc")
     age <- aggregateIf(age, plc, "age", "plc") %>% checkAlign(plc, "age", "plc")

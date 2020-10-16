@@ -28,27 +28,6 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #' @rdname CaribouHabitat-class
 #' @export CaribouHabitat
 #' @importClassesFrom raster RasterLayer
-#' @import dplyr
-#' @import purrr
-#' @import sf
-#' @import tidyr
-#' @import dplyr
-#' @importFrom raster addLayer
-#' @importFrom raster compareRaster
-#' @importFrom raster cover
-#' @importFrom raster crs
-#' @importFrom raster focal
-#' @importFrom raster focalWeight
-#' @importFrom raster layerize
-#' @importFrom raster mask
-#' @importFrom raster ncell
-#' @importFrom raster nlayers
-#' @importFrom raster plot
-#' @importFrom raster projectRaster
-#' @importFrom raster raster
-#' @importFrom raster reclassify
-#' @importFrom raster res
-#' @importFrom tidyselect all_of
 
 CaribouHabitat <- setClass("CaribouHabitat",
                            slots = c(plc = "RasterLayer", 

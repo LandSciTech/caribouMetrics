@@ -11,6 +11,11 @@ setMethod(
   function(ssimLib, ssimProject, scnNum, rfuLUPath){
     # TODO: expand function to pull any other data like roads
     # syncrosim connection
+    
+    if(!requireNamespace("rsyncrosim", quietly = T)){
+      stop("the rsyncrosim package is need to use the getSyncSimData function")
+    }
+    
     myResult = scenario(ssimProject, scenario = scnNum,
                         forceElements = T)
     myIC = scenario(ssimProject, scenario = scnNum, 
@@ -43,6 +48,10 @@ setMethod(
   function(ssimLib, ssimProject, scnNum, rfuLUPath){
   # TODO: expand function to pull any other data like roads
   # syncrosim connection
+    if(!requireNamespace("rsyncrosim", quietly = T)){
+      stop("the rsyncrosim package is need to use the getSyncSimData function")
+    }
+    
   ssimLib <-  ssimLibrary(name = ssimLib) #open library
   ssimProject <-  rsyncrosim::project(ssimLib, project = ssimProject)
   

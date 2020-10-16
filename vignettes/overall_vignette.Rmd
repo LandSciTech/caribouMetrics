@@ -69,8 +69,10 @@ carHab1 <- caribouHabitat(
   plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
   anthroDist = anthroDistD, harv = harvD,
   linFeat = linFeatDras, projectPoly = projectPolyD,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill"
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
+    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")),
+  caribouRange = "Churchill", 
+  winArea = 500
 )
 ```
 
@@ -110,8 +112,9 @@ carHab2 <- caribouHabitat(
   plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
   anthroDist = anthroDistD, harv = harvD,
   linFeat = linFeatDras, projectPoly = projectPolyD2,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill", padProjPoly = TRUE, winArea = 1000
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
+    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
+  caribouRange = "Churchill", padProjPoly = TRUE, winArea = 500
 )
 ```
 
@@ -128,8 +131,9 @@ carHab3 <- caribouHabitat(
   plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
   anthroDist = anthroDistD, harv = harvD,
   linFeat = linFeatDras, projectPoly = projectPolyD2,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill", padProjPoly = FALSE, winArea = 1000
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
+    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
+  caribouRange = "Churchill", padProjPoly = FALSE, winArea = 500
 )
 st_area(projectPolyD2)
 
@@ -155,8 +159,10 @@ carHab4 <- caribouHabitat(
   linFeat = list(roads = roadsD, rail = railD, utilities = utilitiesD),
   projectPoly = projectPolyD,
   hexgrid = hexgridD,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill"
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
+    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
+  caribouRange = "Churchill",
+  winArea = 500
 )
 ```
 
@@ -191,20 +197,24 @@ carHabLF1 <- caribouHabitat(
   anthroDist = anthroDistD, harv = harvD,
   linFeat = linFeatDras1, projectPoly = projectPolyD,
   hexgrid = hexgridD,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill"
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
+    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
+  caribouRange = "Churchill", 
+  winArea = 500
 )
 
 # Run updateCaribou with the new linFeat raster
 carHabLF2 <- updateCaribou(
   carHabLF1, newData = list(linFeat = linFeatDras2),
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill"
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
+    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
+  caribouRange = "Churchill", 
+  winArea = 500
 )
 
 # compare results
-plot(carHabLF1, season = "Fall", title = "linFeat 1", raster.breaks = 0:12/2/10)
-plot(carHabLF2, season = "Fall", title = "linFeat 2", raster.breaks = 0:12/2/10)
+plot(carHabLF1, season = "Fall", title = "linFeat 1", raster.breaks = 0:20/2/10)
+plot(carHabLF2, season = "Fall", title = "linFeat 2", raster.breaks = 0:20/2/10)
 
 
 ```
@@ -226,8 +236,10 @@ linFeatResults <- purrr::map(
   linFeatScns,
   ~updateCaribou(carHabLF1, newData = list(linFeat = .x),
                  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), 
-                                  stringsAsFactors = FALSE), 
-                 caribouRange = "Churchill")
+                                  stringsAsFactors = FALSE) %>%
+                   mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
+                 caribouRange = "Churchill", 
+                 winArea = 500)
 )
 
 purrr::walk2(c(carHabLF1, linFeatResults), 

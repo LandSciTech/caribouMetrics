@@ -57,8 +57,8 @@ rfuToResType <- "If .FU(i) = \"PRDOM\" Then
 									.class2(i) = 4	'DEC" %>% 
   stringr::str_squish() %>% 
   stringr::str_extract_all("[[:upper:]]{3,}\\d?", simplify = TRUE) %>% 
-  matrix(ncol = 2, byrow = TRUE) %>% as.data.frame() %>% 
-  setNames(c("RegionalForestUnit", "ForestGroup")) %>% 
+  matrix(ncol = 2, byrow = TRUE) %>% data.frame(stringsAsFactors = FALSE) %>% 
+  setNames(c("RegionalForestUnit", "ResourceType")) %>% 
   distinct()
 
 usethis::use_data(rfuToResType, overwrite = TRUE)
