@@ -1,0 +1,100 @@
+---
+title: "Compare Disturbance Data Sources"
+author: "Sarah Endicott"
+output: html_document
+---
+<style>
+.vscroll-plot {
+    width: 1000px;
+    height: 500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Year: `r yr`
+
+## Data Sources
+This document compares 5 sources of anthropogenic and natural disturbance data for the Churchill caribou range. Four of them were derived from the Ontario Forest Research Institute Disturbance (OFRID) database which is an attempt to combine available disturbance datasets in one data base and includes a new landsat derived assessment of fire and harvest. The data sources derived from the OFRID database were: the OFRID landsat classification (**OFRID**), Fire from the Aviation, Forest Fire and Emergency Services and harvest from the MNRF harvesting data compiled from annual reporting data (**AFFESMNRF**), Fire and harvest from the MNRF Science and Research Branch (**MNRFSRB**), and Fire and harvest from Natural Resources Canada (**NRCAN**). 
+
+The OFRID database data is stored as points on a grid which each represent 1.44ha and have values of 0 or 1 for fire and harvest from each data source as well as the year of disturbance. To use this in the model I filtered the data to include the years 1990-2010 and counted the number of points overlaping each 6.25ha cell of a raster and considered the cell disturbed if there were more than 2 points with a value of 1 (ie >46% disturbed) for each data source. The MNRFSRB data is only available from 2014-2018 so it showed no disturbances but I kept it as an extreme example.
+
+The other data source included is the anthropogenic disturbance mapping across boreal woodland caribou ranges produced by Environment Canada (**BEAD**). I used the 2010 edition and only included the polygons which cover cutblocks, settlements, and mines.
+
+## Compare Category 2 habitat
+
+### Total Category 2 habitat for each data source
+
+```{r totCat2}
+sumCat2Plot
+```
+
+The maximum difference between the total area of Category 2 habitat between two data sources was `r maxDif` million hectares.
+
+### Agreement between data sources
+The map below shows the number of data sources that had Category 2 habitat in each cell
+```{r nSourceCat2}
+sumCat2Map
+```
+
+## Compare to BEAD
+The following graphs and maps compare the data sources using BEAD as a reference
+
+### Compare habitat use graphs
+
+<div class="vscroll-plot">
+```{r compBEADGrphs, message=FALSE}
+purrr::walk(compBEADGrphs, print)
+```
+</div>
+
+### Compare habitat use maps
+
+<div class="vscroll-plot">
+```{r compBEADMaps, comment=FALSE, message=FALSE}
+compBEADMaps %>% walk(print)
+```
+</div>
+
+### Compare fire and harvest
+<div class="vscroll-plot">
+```{r compExpBEADMaps, fig.height=2, comment=FALSE, message=FALSE}
+compExpBEADMaps %>% walk(print)
+```
+</div>
+
+## All results
+
+### Harvest and Natural Disturbance
+<div class="vscroll-plot">
+```{r expMaps, fig.height=12, comment=FALSE, message=FALSE}
+expCompMaps
+```
+</div>
+
+### Habitat use
+<div class="vscroll-plot">
+```{r resmaps, fig.height=12, fig.width=10, comment=TRUE, message=FALSE}
+compHabMaps
+```
+</div>
+
+## Discussion
+Among the data sources MNRFAFFES and NRCAN are the most similar to BEAD. But even between BEAD and MNRFSRB, which showed no disturbances, the habitat use results are fairly similar overall and differences are fairly localized. This is probably because the PLC data includes some disturbances already and because the model coefficient for natural disturbance is very low compared to other variables. 
+
+### Model coefficients for Churchill
+```{r coefGrph}
+coefGrph
+```
+
+### Dissturbances in the PLC data
+```{r plcDist}
+qtm(plcD == 7|plcD == 8)
+```
+
+
+

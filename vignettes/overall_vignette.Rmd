@@ -1,0 +1,239 @@
+---
+title: "Caribou Resource Selection Probability Function package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Caribou RSPF package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+This package implements the caribou resource selection probability functions (RSPF) described in [Hornseth and Rempel (2018)](https://doi.org/10.1139/cjz-2015-0101) in R. They were previously written in LSL and the goal of this package is to make them more accessible to a wider range of users. Although the LSL code is what this implementation is based on there are some differences which will be pointed out where they occur.  
+
+```{r setup}
+devtools::load_all()
+pthBase <- "../tests/testthat/data/"
+```
+
+## The Data
+Several different data sets are used in the model to describe conditions that affect caribou habitat selection. These include types of forest, wetland, eskers, and linear features. There are also several data sets used to update this information using more recent data and disturbance histories. The table below describes each data set, its source and what it is used for. 
+
+| Name                            | Description                                                     | Purpose                                                                                                                                 | Source                                                                           |
+|---------------------------------|-----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| Provincial landcover (PLC)      | 27 land-cover classes interpreted from 1999 to 2000 imagery     | Grouped into 7 resource types based on patterns believed sufficient to discriminate habitat selection                                   | [link](https://geohub.lio.gov.on.ca/datasets/7aa998fdf100434da27a41f1c637382c)   |
+| Eskers                          | Location of eskers                                              | Used to calculate the density of eskers                                                                                                 | Rob Rempel                                                                       |
+| Roads                           | Road network                                                    | Combined to calculate density of linear features which was used as a proxy for human disturbance                                        | Josie Hughes MNRFwithORN                                                         |
+| Utilities                       | Transmission lines, pipelines etc.                              | Combined to calculate density of linear features which was used as a proxy for human disturbance                                        | [link](https://geohub.lio.gov.on.ca/datasets/mnrf::utility-line)                 |
+| Rail                            | Rail network                                                    | Combined to calculate density of linear features which was used as a proxy for human disturbance                                        | [link](https://geohub.lio.gov.on.ca/datasets/mnrf::ontario-railway-network-orwn) |
+| Forest resource inventory (FRI) | MNRF data on composition of forests                             | Used to update the PLC based forest type if it had been disturbed since 2001 or if it was disturbed before 2001 and the age is now > 35 | Josie Hughes                                                                     |
+| Age                             | Age of forest stands in 10 year classes                         | Used to determine if PLC should be updated                                                                                              | Josie Hughes                                                                     |
+| Natural disturbance             | Fire, wind or insect damage since 1990 (ie 10 years before PLC) | Used to determine if PLC should be updated and to set forest classes to 0 if > 35% disturbed                                                                                              | Stephen Mayer, OFRI Disturbance History database                                 |
+| Harvest disturbance             | Whether a stand was harvested after PLC data collection         | Used to determine if PLC should be updated and to set forest classes to 0 if > 35% disturbed                                                                                              | Stephen Mayer, OFRI Disturbance History database                                 |
+| Anthropogenic disturbance       | Presence of anthropogenic disturbance                           | Used to determine if PLC should be updated and to set forest classes to 0 if > 35% disturbed                                                                                              | Presence of any linear features                                                  |
+
+
+
+## Simple Example
+The example data set loaded below inlcudes a small area in the Churchill caribou range that we will use as an example. 
+
+```{r load data}
+# load example data
+plcD = raster(paste0(pthBase, "plc", ".tif"))
+eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
+eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE)
+friD = raster(paste0(pthBase, "fri", ".tif"))
+ageD = raster(paste0(pthBase, "age", ".tif"))
+natDistD = raster(paste0(pthBase, "natDist", ".tif"))
+anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
+harvD = raster(paste0(pthBase, "harv", ".tif"))
+linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
+projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
+hexgridD = st_read(paste0(pthBase, "hexgrid", ".shp"), quiet = TRUE)
+linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE)
+roadsD = st_read(paste0(pthBase, "roads.shp"), quiet = TRUE)
+railD = st_read(paste0(pthBase, "rail.shp"), quiet = TRUE)
+utilitiesD = st_read(paste0(pthBase, "utilities.shp"), quiet = TRUE)
+```
+
+`caribouHabitat` is the primary function in the package. It will prepare the data, process it into the explanatory variables in the Hornseth and Rempel RSPF models and then calculate the probability of habitat use in each season at each location. The function can be run in several different was but the simplest is to provide spatial objects for each dataset. Other required arguments for the function are a lookup table that converts the forest units used in the FRI data to the regional forest units (RFUs) used in the model, and the name of the caribou range that the project is located in.
+
+```{r caribouHabitat1}
+carHab1 <- caribouHabitat(
+  plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
+  anthroDist = anthroDistD, harv = harvD,
+  linFeat = linFeatDras, projectPoly = projectPolyD,
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+  caribouRange = "Churchill"
+)
+```
+
+The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat` which has slots for the input data, the hexagonal grid, the processed data, and the results. To access the results as a RasterStack object that can be used for ploting or graphing use the `results` function.
+
+```{r results1}
+carHabRes1 <- results(carHab1)
+carHabRes1
+```
+
+You can also create a plot of the results directly from the `CaribouHabitat` object. If `tmap` is installed it will be used to make a plot or if it is not `plot.raster` will be used. You can provide the season you wish to display and additional arguments that will be passed on to either `qtm` or `plot.raster`.  
+
+```{r plot1}
+plot(carHab1, season = c("Fall", "Summer"))
+```
+
+## Example with padding
+
+In most cases you will have a project area that is smaller than the environmental data sets available. For our example we will create this project area by selecting a rectangle inside our example data set. 
+
+```{r create projPoly}
+# interactively you can do the following
+# plot(plcD)
+# ext <- raster::drawExtent()
+# 
+
+# We will hard code this to run non-interactively
+ext <- raster::extent(plcD) - 10000
+
+projectPolyD2 <- st_bbox(ext) %>% st_as_sfc() %>% st_as_sf() %>% st_set_crs(st_crs(plcD))
+```
+
+The information that is outside our project area is still useful for preventing edge effects in our results. To use this data you can set `padProjPoly = TRUE` in the `caribouHabitat` call which will set a buffer around the project area based on the size of the moving window used to scale variables for that range. 
+
+```{r caribouHabitat2}
+carHab2 <- caribouHabitat(
+  plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
+  anthroDist = anthroDistD, harv = harvD,
+  linFeat = linFeatDras, projectPoly = projectPolyD2,
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+  caribouRange = "Churchill", padProjPoly = TRUE, winArea = 1000
+)
+```
+
+```{r inspect padded}
+plot(plcD, col = "black", legend = FALSE)
+plot(carHab2@plc, add = TRUE)
+plot(carHab2@projectPoly %>% st_geometry(), add = TRUE)
+```
+
+The black area on the map above shows the extent of the original plc data, the raster shows the proportion of conifer in the processed plc data that has been cropped to within 1750 m of the projectPoly which is the black rectangle.  
+
+```{r compare pad}
+carHab3 <- caribouHabitat(
+  plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
+  anthroDist = anthroDistD, harv = harvD,
+  linFeat = linFeatDras, projectPoly = projectPolyD2,
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+  caribouRange = "Churchill", padProjPoly = FALSE, winArea = 1000
+)
+st_area(projectPolyD2)
+
+tmap::qtm(carHab3@projectPoly, fill = NULL)+
+plot(carHab2, season = "Fall", title = "With padding", 
+     raster.breaks = c(0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 1), 
+     layout.legend.outside = TRUE)
+tmap::qtm(carHab3@projectPoly, fill = NULL)+
+plot(carHab3, season = "Fall", title = "Without padding", 
+     raster.breaks = c(0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 1),
+     layout.legend.outside = TRUE)
+```
+
+The difference is very large in this example because the project area is very small compared to the window size. The version with padding shows the highest probability of use in the top left corner because of the large conifer dominated (pink) area in the top left. Because this conifer dominated area is mostly outside the projectPoly it is not picked up in the version without padding and as a result the probability of use is lower. Padding also prevents the loss of information due to edge cells having NAs. 
+
+## Example with other inputs
+As mentioned above `caribouHabitat` can be called in several different ways. You can provide the data as filepaths instead of spatial objects, you can provide a previously created hexgrid to save time making it again, you can provide the eskers and linear features as vector files which will be updated, and you can provide roads, rail, and utilities as a list to be combined into the linear features. 
+
+```{r carbiouHabitat4}
+carHab4 <- caribouHabitat(
+  plc = plcD, esker = eskerDshp, fri = friD, age = ageD, natDist = natDistD, 
+  anthroDist = anthroDistD, harv = harvD,
+  linFeat = list(roads = roadsD, rail = railD, utilities = utilitiesD),
+  projectPoly = projectPolyD,
+  hexgrid = hexgridD,
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+  caribouRange = "Churchill"
+)
+```
+
+## Example of updating an existing object
+In some cases you may want to update an existing object with new data for one or more of the input data sets. This can be done using `updateCaribou`.
+
+For example we can create several data sets that show roads expanding across our study are and what effect this will have on caribou habitat. Since the only dataset that is changing is the linear features it will be faster to use `updateCaribou` rather than `caribouHabitat`.
+
+```{r updateCaribou, fig.width=6, fig.height=6}
+# Create series of data sets
+ext <- raster::extent(linFeatDras)
+
+height <- dim(linFeatDras)[1]/4
+
+linFeatDras1 <- linFeatDras[1:height, , drop = FALSE] %>%
+  raster::extend(linFeatDras, value = 0)
+linFeatDras2 <- linFeatDras[1:(height*2), , drop = FALSE] %>%
+  raster::extend(linFeatDras, value = 0)
+linFeatDras3 <- linFeatDras[1:(height*3), , drop = FALSE] %>%
+  raster::extend(linFeatDras, value = 0)
+
+par(mfrow = c(2, 2))
+plot(linFeatDras1)
+plot(linFeatDras2)
+plot(linFeatDras3)
+plot(linFeatDras)
+
+
+# Run caribouHabitat to process all the data once
+carHabLF1 <- caribouHabitat(
+  plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
+  anthroDist = anthroDistD, harv = harvD,
+  linFeat = linFeatDras1, projectPoly = projectPolyD,
+  hexgrid = hexgridD,
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+  caribouRange = "Churchill"
+)
+
+# Run updateCaribou with the new linFeat raster
+carHabLF2 <- updateCaribou(
+  carHabLF1, newData = list(linFeat = linFeatDras2),
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+  caribouRange = "Churchill"
+)
+
+# compare results
+plot(carHabLF1, season = "Fall", title = "linFeat 1", raster.breaks = 0:12/2/10)
+plot(carHabLF2, season = "Fall", title = "linFeat 2", raster.breaks = 0:12/2/10)
+
+
+```
+
+You can see that there is a lower probability of caribou habitat use when there are more roads (linFeat 2).
+
+## Example using Iteration
+
+To go through a large number of updated data sets we can use the `purrr` package to iterate over different sets of data
+
+```{r}
+#library(purrr)
+
+linFeatScns <- lst(linFeatDras2, linFeatDras3, linFeatDras)
+
+# using carHabLF1 created above we run the update for all three datasets
+
+linFeatResults <- purrr::map(
+  linFeatScns,
+  ~updateCaribou(carHabLF1, newData = list(linFeat = .x),
+                 friLU = read.csv(paste0(pthBase, "friLU", ".csv"), 
+                                  stringsAsFactors = FALSE), 
+                 caribouRange = "Churchill")
+)
+
+purrr::walk2(c(carHabLF1, linFeatResults), 
+             c("linFeatDras1", names(linFeatResults)), 
+             ~plot(.x, season = "Fall", main = .y, breaks = 0:12/2/10) %>% print())
+
+
+```
+

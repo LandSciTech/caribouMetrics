@@ -5,3 +5,9 @@
 .Rbuildignore
 installcaribouMetrics.R
 caribouMetrics.Rproj
+inst/doc
+inputNV/
+*.pdf
+*.html
+inst/doc
+outputs/

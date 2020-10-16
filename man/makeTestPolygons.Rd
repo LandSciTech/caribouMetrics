@@ -4,8 +4,14 @@
 \alias{makeTestPolygons}
 \title{Test function for calculation of meta-analysis predictors}
 \usage{
-makeTestPolygons(width = 300, makeRaster = c(), nrows = 1000,
-  ncols = 1000, forceRaster = F, useLSClass = T)
+makeTestPolygons(
+  width = 300,
+  makeRaster = c(),
+  nrows = 1000,
+  ncols = 1000,
+  forceRaster = F,
+  useLSClass = T
+)
 }
 \arguments{
 \item{width}{Numeric. Radius of circular linear}
