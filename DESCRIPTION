@@ -2,7 +2,7 @@ Package: caribouMetrics
 Type: Package
 Title: Models and metrics of boreal caribou responses to forest landscapes
 Version: 0.1.0
-Author: Josie Hughes
+Author: Josie Hughes and Sarah Endicott
 Maintainer: Josie Hughes <josie.hughes@canada.ca>
 Description: This is a package in development. bCaribouMetaAnalysisPredictors function calculates predictors described in Table 52 of Environment Canada (2011) Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
 License: file LICENSE
