@@ -26,26 +26,6 @@ test_that("movingWindowAvg gives expected result on dummy data", {
   
   res2 <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE)
   expect_gt(raster::extract(res$X1, pt), raster::extract(res2$X1, pt))
-  
-  res3 <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = 9, na.rm = TRUE)
-  expect_equal(raster::extract(res2$X1, pt), raster::extract(res3$X1, pt))
-  
-  res4 <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = 16, na.rm = TRUE)
-  expect_gt(raster::extract(res2$X1, pt), raster::extract(res4$X1, pt))
-  
-  res5 <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = FALSE, na.rm = TRUE, pad = TRUE)
-  expect_equal(raster::extract(res3$X1, pt), 13/21)
-  
-  res6 <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, na.rm = TRUE, pad = TRUE)
-  expect_gt(raster::extract(res$X1, pt), raster::extract(res4$X1, pt))
- 
-  res7 <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = FALSE, na.rm = TRUE, 
-                          pad = TRUE, padValue = 0)
-  expect_equal(raster::extract(res3$X1, pt), 13/21)
-  
-  res8 <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, na.rm = TRUE, 
-                          pad = TRUE, padValue = 0)
-  expect_gt(raster::extract(res$X1, pt), raster::extract(res4$X1, pt))
   })
 
 

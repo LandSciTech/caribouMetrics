@@ -80,7 +80,8 @@ paths_eskshp_linFshp <- caribouHabitat(
   linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
   eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill"
+  caribouRange = "Churchill", 
+  winArea = 500
 )
 
 paths_list_linF <- caribouHabitat(
@@ -98,7 +99,8 @@ paths_list_linF <- caribouHabitat(
   linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
   eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill"
+  caribouRange = "Churchill", 
+  winArea = 500
 )
 
 
@@ -125,7 +127,8 @@ data_esktif_linFtif <- caribouHabitat(
   anthroDist = anthroDistD, harv = harvD,
   linFeat = linFeatDras, projectPoly = projectPolyD,
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill"
+  caribouRange = "Churchill", 
+  winArea = 500
 )
 
 data_eskshp_linFshp <- caribouHabitat(
@@ -135,7 +138,8 @@ data_eskshp_linFshp <- caribouHabitat(
   eskerSave = paste0(pthBase, "eskerTif", ".tif"),
   linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill"
+  caribouRange = "Churchill", 
+  winArea = 500
 )
 
 data_list_linF <- caribouHabitat(
@@ -148,7 +152,8 @@ data_list_linF <- caribouHabitat(
   eskerSave = paste0(pthBase, "eskerTif", ".tif"),
   linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-  caribouRange = "Churchill"
+  caribouRange = "Churchill", 
+  winArea = 500
 )
 
 test_that("results match when input is paths or data, or list of either for linFeat",{

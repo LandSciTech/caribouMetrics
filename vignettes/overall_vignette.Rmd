@@ -75,7 +75,7 @@ carHab1 <- caribouHabitat(
 )
 ```
 
-The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat` which has slots for the input data, the hexagonal grid, the processed data, and the results. To access the results as a RasterStack object that can be used for ploting or graphing use the `results` function.
+The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat` which has slots for the input data, the processed data, and the results. To access the results as a RasterStack object that can be used for ploting or graphing use the `results` function.
 
 ```{r results1}
 carHabRes1 <- results(carHab1)

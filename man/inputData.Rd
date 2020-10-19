@@ -48,7 +48,8 @@ inputData(
   projectPoly,
   eskerSave = NULL,
   linFeatSave = NULL,
-  caribouRange = NULL
+  caribouRange = NULL,
+  winArea = NULL
 )
 }
 \arguments{
