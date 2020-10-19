@@ -28,7 +28,7 @@ setMethod(
   function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat,  projectPoly, 
            eskerSave = NULL, linFeatSave = NULL, 
            winArea = NULL, padProjPoly = FALSE, caribouRange = NULL) {
-    
+
     charIn <-  sapply(list(plc, esker, fri, age, natDist, anthroDist, harv, 
                            linFeat, projectPoly),
                       function(x) "character" %in% class(x))
@@ -141,7 +141,8 @@ setMethod(
 setMethod(
   "inputData", signature(plc = "character"), 
   function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat,  projectPoly,
-           eskerSave = NULL, linFeatSave = NULL, caribouRange = NULL) {
+           eskerSave = NULL, linFeatSave = NULL, caribouRange = NULL, 
+           winArea = NULL) {
     
     if(inherits(linFeat, "list")){
       indata <- lst(plc, esker, fri, age, natDist, anthroDist, harv, 
@@ -196,6 +197,6 @@ setMethod(
     return(inputData(indata$plc, indata$esker, indata$fri, indata$age,
                      indata$natDist, indata$anthroDist, indata$harv, linFeat, 
                      indata$projectPoly, eskerSave, linFeatSave, 
-                     caribouRange))
+                     caribouRange = caribouRange, winArea = winArea))
     
   })
