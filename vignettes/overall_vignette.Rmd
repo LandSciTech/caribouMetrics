@@ -55,7 +55,6 @@ anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
 harvD = raster(paste0(pthBase, "harv", ".tif"))
 linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
 projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
-hexgridD = st_read(paste0(pthBase, "hexgrid", ".shp"), quiet = TRUE)
 linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE)
 roadsD = st_read(paste0(pthBase, "roads.shp"), quiet = TRUE)
 railD = st_read(paste0(pthBase, "rail.shp"), quiet = TRUE)
@@ -150,7 +149,7 @@ plot(carHab3, season = "Fall", title = "Without padding",
 The difference is very large in this example because the project area is very small compared to the window size. The version with padding shows the highest probability of use in the top left corner because of the large conifer dominated (pink) area in the top left. Because this conifer dominated area is mostly outside the projectPoly it is not picked up in the version without padding and as a result the probability of use is lower. Padding also prevents the loss of information due to edge cells having NAs. 
 
 ## Example with other inputs
-As mentioned above `caribouHabitat` can be called in several different ways. You can provide the data as filepaths instead of spatial objects, you can provide a previously created hexgrid to save time making it again, you can provide the eskers and linear features as vector files which will be updated, and you can provide roads, rail, and utilities as a list to be combined into the linear features. 
+As mentioned above `caribouHabitat` can be called in several different ways. You can provide the data as filepaths instead of spatial objects, you can provide the eskers and linear features as vector files which will be updated, and you can provide roads, rail, and utilities as a list to be combined into the linear features. 
 
 ```{r carbiouHabitat4}
 carHab4 <- caribouHabitat(
@@ -158,7 +157,6 @@ carHab4 <- caribouHabitat(
   anthroDist = anthroDistD, harv = harvD,
   linFeat = list(roads = roadsD, rail = railD, utilities = utilitiesD),
   projectPoly = projectPolyD,
-  hexgrid = hexgridD,
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
     mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
   caribouRange = "Churchill",
@@ -196,7 +194,6 @@ carHabLF1 <- caribouHabitat(
   plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
   anthroDist = anthroDistD, harv = harvD,
   linFeat = linFeatDras1, projectPoly = projectPolyD,
-  hexgrid = hexgridD,
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
     mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
   caribouRange = "Churchill", 

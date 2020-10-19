@@ -33,12 +33,12 @@ rmdOutFile <- "../outputs/diagnosticRVsE_wRempelDataFixed7.html"
 # Load Data #===================================================================
  
 # Our results
-sSimData <- getSyncSimData(ssimLib = "./inputNV/Libraries/ChurchillBC",
-                           ssimProject = "2008/09 Plans",
-                           rfuLUPath = "inputTables/OLTBorealCaribouFURegionalForestUnitMapping.csv",
-                           scnNum = 6)
+# sSimData <- getSyncSimData(ssimLib = "./inputNV/Libraries/ChurchillBC",
+#                            ssimProject = "2008/09 Plans",
+#                            rfuLUPath = "inputTables/OLTBorealCaribouFURegionalForestUnitMapping.csv",
+#                            scnNum = 6)
 
-# data as rasters and hexgrid provided
+# data as rasters
 plcD <- raster("./inputNV/HornsethRempelInfo/Provincial-Landcover-2000/studyAreaMerged250.tif")
 #plcD <- raster("inputNV/Provincial-Landcover-2000/Provincial Landcover 2000/z15-27class.tif")
 eskerD <- st_read("inputNV/HornsethRempelInfo/Eskers_Ontario/Eskers_Ontario.shp")
