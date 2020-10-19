@@ -94,7 +94,7 @@ setMethod(
     # create raster attribute table
     inData@plc <- raster::ratify(inData@plc)
     
-    levels(inData@plc)[[1]] <- full_join(raster::levels(inData@plc)[[1]], 
+    levels(inData@plc)[[1]] <- left_join(raster::levels(inData@plc)[[1]], 
                                          resTypeLevels, by = c(ID = "code"))
 
     # Resample linFeat and esker to 16 ha
@@ -126,7 +126,7 @@ setMethod(
       addLayer(inData@linFeat) %>% 
       addLayer(inData@esker) 
     
-    layernames <- c(raster::levels(inData@plc)[[1]] %>% arrange(ID) %>%
+    layernames <- c(resTypeLevels %>% arrange(code) %>%
                       pull(resType) %>% as.character(),
                     "TDENLF", "ESK")
     
