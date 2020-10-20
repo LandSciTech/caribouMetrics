@@ -19,7 +19,7 @@ rasterizeLineDensity <- function(x, r) {
     mutate(length = st_length(geometry) %>% units::drop_units()) %>% 
     select(ID, length, geometry) %>% st_drop_geometry() %>% 
     group_by(ID) %>% 
-    summarise(length = sum(length, na.rm = TRUE)/(res(r)[1]*res(r)[2]/10000))
+    summarise(length = round(sum(length, na.rm = TRUE)/(res(r)[1]*res(r)[2]/10000), digits = 1))
   
   rp2 <- left_join(rPoly %>% st_drop_geometry(), rp2, by = "ID") %>% 
     mutate(length = replace_na(length, 0))
