@@ -65,8 +65,8 @@ projectPolyD <- st_read("./inputNV/caribouRanges/Caribou_Range_Boundary.shp",
 
 # plcD <- plcD %>% raster::crop((raster::extent(projectPolyD) + 100000)) %>% 
 #   raster::aggregate(fact = 10, fun = raster::modal)
-
-caribouResults <- caribouHabitat(
+profvis::profvis({
+  caribouResults <- caribouHabitat(
     plc = plcD, 
     esker = eskerD, 
     fri = plcD %>% raster::setValues(NA), 
@@ -86,6 +86,8 @@ caribouResults <- caribouHabitat(
     # linFeatSave = "inputNV/HornsethRempelInfo/linFeatDen.tif"
   ) 
   beepr::beep()
+})
+
 
 # Rempel's results
 rempelResults592 <- st_read(paste0("./inputNV/HornsethRempelInfo", 

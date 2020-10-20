@@ -3,27 +3,55 @@
 \name{calcBinaryUse}
 \alias{calcBinaryUse}
 \alias{calcBinaryUse,CaribouHabitat-method}
+\alias{calcBinaryUse,data.frame-method}
+\alias{calcBinaryUse,numeric-method}
 \title{Calculate binary use}
 \usage{
 calcBinaryUse(x, ...)
 
 \S4method{calcBinaryUse}{CaribouHabitat}(x, caribouRange, tholdTable = threshTable, bySeason = FALSE)
+
+\S4method{calcBinaryUse}{data.frame}(x, caribouRange, tholdTable = threshTable, bySeason = FALSE)
+
+\S4method{calcBinaryUse}{numeric}(
+  x,
+  spring,
+  summer,
+  fall,
+  winter,
+  caribouRange,
+  tholdTable = threshTable,
+  bySeason = FALSE
+)
 }
 \arguments{
-\item{x}{CaribouHabitat object where habitat use has been calculated, or a 
-data.frame with columns PID, Spring, Summer, Fall, Winter}
+\item{x}{CaribouHabitat object where habitat use has been calculated, or a
+data.frame with columns PID, Spring, Summer, Fall, Winter, or a numeric
+vector containing ID values, in which case spring, summer, fall and winter
+must also be supplied}
 
-\item{caribouRange}{The caribou range of the CaribouHabitat object}
+\item{caribouRange}{string. The caribou range of the CaribouHabitat object}
 
-\item{tholdTable}{By default \code{threshTable} which contains thresholds 
-determimed by Rempel and Hornseth (2018) using Youden's J and a false 
+\item{tholdTable}{By default \code{threshTable} which contains thresholds
+determimed by Rempel and Hornseth (2018) using Youden's J and a false
 negative cost of 5. Change at own risk.}
+
+\item{bySeason}{logical. If FALSE (the default) the result is a single value
+of 1 when the habitat use was >= threshold in any season and 0 if not. If
+TRUE then the result is a 0 or 1 for each season.}
+
+\item{spring, summer, fall, winter}{numeric vectors of habitat use probability
+in each season}
 }
 \value{
-a binary RasterLayer with 1 for habitat that is above the 
-  threshold in any season
+If \code{bySeason} is \code{FALSE} and \code{x} is a CaribouHabitat object then the result is a RasterLayer.
+ If \code{bySeason} is \code{TRUE} and \code{x} is a CaribouHabitat object then the result is a RasterBrick.  
+ If \code{bySeason} is \code{FALSE} and \code{x} is a data.frame then the result is a data.frame.
+ If \code{bySeason} is \code{TRUE} and \code{x} is a data.frame then the result is a data.frame.
+ If \code{bySeason} is \code{FALSE} and \code{x} is a vector then the result is a vector.
+ If \code{bySeason} is \code{TRUE} and \code{x} is a vector then the result is a data.frame.
 }
 \description{
-Convert continuous probability in each season of use to binary high use in
-any season using thresholds given in a table.
+Convert continuous probability of use in each season to binary high use in
+any season or each season using thresholds given in a table.
 }

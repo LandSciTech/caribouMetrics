@@ -21,22 +21,64 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
             return(.Object)
           })
 
-#' caribouHabitat
-#' 
-#' @param x CaribouHabitat object, or named list with required elements: plc,
-#'   esker, fri, age, natDist, linFeat,  projectPoly, friLU, and optional
-#'   elements: hexgrid = NULL, offset = c(0,0), eskerSave = NULL, hexgridSave =
-#'   NULL, linFeatSave = NULL, winArea = NULL see \code{\link{inputData}} and
-#'   \code{\link{processData}} for details on these arguments.
+#'caribouHabitat
 #'
-#' @param caribouRange character the range where caribou were located. See
-#'   \code{unique(coefTableHR$Range)}
+#'Caluculate the probability of caribou habitat use in spring, summer, fall and
+#'winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
+#'2016.
 #'
-
-#' @export
+#'Caribou habitat use is calculated based on the availability of resources and
+#'the presence of disturbances on the landscape. The primary source of resource
+#'information is the \code{plc} but this is can be updated based on more recent
+#'\code{fri} data and disturbance information. All data sources can be provided
+#'either as filenames or as spatial files. The result is a CaribouHabitat object
+#'which has methods defined for plotting and extracting the results. To update
+#'an existing CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
+#'
+#'
+#'@param plc filename or RasterLayer. Provincial landcover class
+#'@param esker filename, RasterLayer or sf object. Eskers. If it is a
+#'  RasterLayer then it should be esker density in m^2/ha.
+#'@param fri filename or RasterLayer. Forest resource inventory class ids must
+#'  correspond to the ids in the \code{friLU}.
+#'@param age filename or RasterLayer. Tree age in years
+#'@param natDist filename or RasterLayer. Presence or absence or natural
+#'  disturbance, primarily by fire
+#'@param anthroDist filename or RasterLayer. Anthropogenic disturbance
+#'@param harv filename or RasterLayer. Harvest history
+#'@param linFeat filename, RasterLayer, sf object or named list with elements
+#'  roads, rail, and utilities. Linear features. If it is a RasterLayer then it
+#'  should be linear feature density in m^2/ha
+#'@param projectPoly filename or sf object. Polygon defining the project area
+#'@param caribouRange character. The range where caribou were located. See
+#'  \code{unique(coefTableHR$Range)}
+#'@param eskerSave filename to save rasterized esker data
+#'@param linFeatSave filename to save rasterized linear feature data
+#'@param padProjPoly logical. Should the area around the \code{projectPoly} be
+#'  used to avoid edge effects? If FALSE, the default, only data from inside the
+#'  \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
+#'  the other variables are clipped to the extent of the buffered area. Results
+#'  are always clipped to the original \code{projectPoly}.
+#'@param friLU data.frame. A look up table to convert local forest units to
+#'  regional forest units. It should have two columns, the first must contain
+#'  all the unique values in the supplied \code{fri} raster and the second must
+#'  contain the names of regional forest units matching those provided in the
+#'  table \code{rfuToResType}
+#'
+#'@source Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource
+#'  selection probability functions for 13 caribou ranges in Northern Ontario.
+#'  Ontario Ministry of Natural Resources and Forestry, Science and Research
+#'  Branch, Peterborough, ON. Science and Research Internal File Report IFR-01.
+#'  42 p. + appends.
+#'
+#'  Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+#'  woodland caribou (Rangifer tarandus caribou) across a gradient of
+#'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+#'  \url{https://doi.org/10.1139/cjz-2015-0101}
+#'
+#'@export
 setGeneric("caribouHabitat", function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, projectPoly, ...) standardGeneric("caribouHabitat"))
 
-#' @rdname caribouHabitat
 setMethod(
   "caribouHabitat", 
   signature(plc = "ANY"), 
@@ -77,7 +119,5 @@ setMethod(
     return(updateCaribou(x, caribouRange = updateArgs$caribouRange))
   })
 
-# TODO: add methods for print, plot, other useful generics
-# TODO: deal with warning messages
 
 # JH: add save method

@@ -3,19 +3,33 @@ NULL
 
 #' Calculate binary use
 #'
-#' Convert continuous probability in each season of use to binary high use in
-#' any season using thresholds given in a table.
+#' Convert continuous probability of use in each season to binary high use in
+#' any season or each season using thresholds given in a table.
+#' 
 #'
-#' @param x CaribouHabitat object where habitat use has been calculated, or a 
-#' data.frame with columns PID, Spring, Summer, Fall, Winter
-#' @param caribouRange The caribou range of the CaribouHabitat object
-#' @param tholdTable By default \code{threshTable} which contains thresholds 
-#'   determimed by Rempel and Hornseth (2018) using Youden's J and a false 
+#' @param x CaribouHabitat object where habitat use has been calculated, or a
+#'   data.frame with columns PID, Spring, Summer, Fall, Winter, or a numeric
+#'   vector containing ID values, in which case spring, summer, fall and winter
+#'   must also be supplied
+#' @param caribouRange string. The caribou range of the CaribouHabitat object
+#' @param tholdTable By default \code{threshTable} which contains thresholds
+#'   determimed by Rempel and Hornseth (2018) using Youden's J and a false
 #'   negative cost of 5. Change at own risk.
+#' @param bySeason logical. If FALSE (the default) the result is a single value
+#'   of 1 when the habitat use was >= threshold in any season and 0 if not. If
+#'   TRUE then the result is a 0 or 1 for each season.
+#' @param spring,summer,fall,winter numeric vectors of habitat use probability
+#'   in each season
 #'
-#' @return a binary RasterLayer with 1 for habitat that is above the 
-#'   threshold in any season 
-#'   
+#'
+#' @return
+#'  If \code{bySeason} is \code{FALSE} and \code{x} is a CaribouHabitat object then the result is a RasterLayer.
+#'  If \code{bySeason} is \code{TRUE} and \code{x} is a CaribouHabitat object then the result is a RasterBrick.  
+#'  If \code{bySeason} is \code{FALSE} and \code{x} is a data.frame then the result is a data.frame.
+#'  If \code{bySeason} is \code{TRUE} and \code{x} is a data.frame then the result is a data.frame.
+#'  If \code{bySeason} is \code{FALSE} and \code{x} is a vector then the result is a vector.
+#'  If \code{bySeason} is \code{TRUE} and \code{x} is a vector then the result is a data.frame.  
+#'
 #' @export
 #'
 #' @examples
@@ -38,6 +52,7 @@ setMethod(
     return(binUse)
   })
 
+#' @rdname calcBinaryUse
 setMethod(
   "calcBinaryUse", signature(x = "data.frame"), 
   function(x, caribouRange, tholdTable = threshTable, bySeason = FALSE){
@@ -68,6 +83,7 @@ setMethod(
     return(out)
   })
 
+#' @rdname calcBinaryUse
 setMethod(
   "calcBinaryUse", signature(x = "numeric"), 
   function(x, spring, summer, fall, winter, caribouRange, 
