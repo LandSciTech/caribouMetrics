@@ -98,12 +98,25 @@ setMethod(
                                          resTypeLevels, by = c(ID = "code"))
 
     # Resample linFeat and esker to 16 ha
-    tmplt <- inData@plc %>% raster::`res<-`(c(400, 400))
-    inData@linFeat <- raster::resample(inData@linFeat, tmplt,
+    if(any(raster::res(inData@linFeat) < 400)){
+      tmplt <- inData@plc %>% raster::`res<-`(c(400, 400))
+      
+      # lfFile <- tempfile()
+      # raster::writeRaster(inData@linFeat, lfFile)
+      
+      inData@linFeat <- raster::resample(inData@linFeat, tmplt,
+                                         method = "bilinear")
+    }
+    
+    if(any(raster::res(inData@esker) < 400)){
+      # eskFile <- tempfile()
+      # raster::writeRaster(inData@esker, eskFile)
+      
+      inData@esker <- raster::resample(inData@esker, tmplt,
                                        method = "bilinear")
+    }
 
-    inData@esker <- raster::resample(inData@esker, tmplt,
-                                       method = "bilinear")
+
     
     # Get window area from table b/c some models used different sizes
     if(is.null(winArea)){
