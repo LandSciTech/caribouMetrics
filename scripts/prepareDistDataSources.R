@@ -79,7 +79,7 @@ raster::writeRaster(beadPoly2010Rast > 0,
 # 
 # CHlgFiresNFDB <- st_read(paste0(pthBase,
 #                                 "NFDB_poly_large_fires/NFDB_large_fires_Churchill.shp"))
-# 
+#
 # NFDBFire2011 <- fasterize::fasterize(CHlgFiresNFDB %>% filter(YEAR == 2011) %>% 
 #                                            st_transform(crs = st_crs(plcD)), 
 #                                          plcD, 

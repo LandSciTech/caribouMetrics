@@ -94,6 +94,7 @@ beepr::beep()
 # Cuts off half way through our range! Does not seem to be available for
 # southern part of Ontario?
 
+# Doesn't include all of ROF ranges either
 
 # Explore wooded area #=========================================================
 wooded <- st_read("inputNV/WOODAREA/LIO-2019-09-30/WOODED_AREA.shp")
