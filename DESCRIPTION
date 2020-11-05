@@ -24,7 +24,6 @@ Imports:
     dplyr,
     rgeos,
     sp,
-    roads,
     data.table,
     velox,
     sf,

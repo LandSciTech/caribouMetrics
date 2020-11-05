@@ -5,7 +5,7 @@ NULL
 #' Apply buffer.
 #'
 #' @details
-#' For a Raster* object use velox package.
+#' For a Raster* object use raster focal.
 #'
 #' For a LandscapeStateBCaribou* object, this function calculates non-overlapping buffered anthropogenic disturbance maps.
 #' For more details, see appendix 7.5 of Environment Canada (2011) Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
@@ -37,18 +37,19 @@ setMethod('lsBuffer', signature(x="RasterLayer"), function(x,width,subset) {
   if(length(raster::unique(x))>0){
     if(width>0){
 
-      hdim = ceiling(width/res(x)[1])
-      wDim = 2*hdim+1
-      locSeq = seq(-hdim,hdim)
-      y = matrix(locSeq, wDim, wDim)
-      xx=t(y)
-      weights = (xx^2+y^2)^0.5
-      weights=weights <= width/res(x)[1]
+      x=movingWindowAvg(x,radius=width,nms="name")#TO DO: check this works.
+      #hdim = ceiling(width/res(x)[1])
+      #wDim = 2*hdim+1
+      #locSeq = seq(-hdim,hdim)
+      #y = matrix(locSeq, wDim, wDim)
+      #xx=t(y)
+      #weights = (xx^2+y^2)^0.5
+      #weights=weights <= width/res(x)[1]
 
-      vx = velox::velox(x)
-      vx$sumFocal(weights=weights, bands=c(1))
+      #vx = velox::velox(x)
+      #vx$sumFocal(weights=weights, bands=c(1))
 
-      x = vx$as.RasterLayer()
+      #x = vx$as.RasterLayer()
       x[x!=0]=1
     }else{
       x[x>1]=1

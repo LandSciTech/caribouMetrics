@@ -76,7 +76,7 @@ setMethod(f = 'initialize', signature = "LandscapeState", definition = function(
 
           cMap = maps[[cM]][[cName]]
 
-          cLines = roads::convertRasterToLineSegments(cMap)
+          cLines = convertRasterToLineSegments(cMap)#roads::convertRasterToLineSegments(cMap)#remove dependency on roads package
 
           outMaps[[cName]]=cLines
         }
