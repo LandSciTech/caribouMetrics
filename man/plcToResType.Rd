@@ -4,10 +4,12 @@
 \name{plcToResType}
 \alias{plcToResType}
 \title{Lookup table for PLC to resource type}
-\format{A data frame with 27 rows and 2 variables: \describe{
+\format{
+A data frame with 27 rows and 2 variables: \describe{
   \item{PLCCode}{Provincial landcover number code}
   \item{ResourceType}{Resource type code} 
-}}
+}
+}
 \source{
 LSL script for work published in:
  \url{https://doi.org/10.1139/cjz-2015-0101}

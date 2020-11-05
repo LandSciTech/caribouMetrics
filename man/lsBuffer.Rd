@@ -53,7 +53,7 @@ A LandscapeStateBCaribou object with filled anthroBuffer slot. Overlapping fire 
 Apply buffer.
 }
 \details{
-For a Raster* object use velox package.
+For a Raster* object use raster focal.
 
 For a LandscapeStateBCaribou* object, this function calculates non-overlapping buffered anthropogenic disturbance maps.
 For more details, see appendix 7.5 of Environment Canada (2011) Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
