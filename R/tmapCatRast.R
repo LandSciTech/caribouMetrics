@@ -14,9 +14,9 @@ tmapCatRast <- function(rast, lbls = NULL, ttle = NULL, pal = "Accent"){
       raster::deratify(att = 1, drop = TRUE, complete = TRUE)
   }
   
-  tm_shape(rast)+
-    tm_raster(style = "cat", 
+  tmap::tm_shape(rast)+
+    tmap::tm_raster(style = "cat", 
               palette = getPalette(rast, pal = pal, ncolour = length(lbls)), 
               labels = lbls, title = ttle)+
-    tm_legend(bg.color = "white", legend.outside = TRUE)
+    tmap::tm_legend(bg.color = "white", legend.outside = TRUE)
 }

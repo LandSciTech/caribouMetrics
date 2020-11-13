@@ -43,7 +43,7 @@ setMethod(
     
     x@habitatUse <- calcRSP(x@processedData, coefTable)
     
-    #x@habitatUse <- raster::mask(x@habitatUse, x@projectPoly)
+    x@habitatUse <- raster::mask(x@habitatUse, x@projectPoly)
     return(x)
   })
 

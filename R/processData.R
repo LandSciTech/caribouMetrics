@@ -132,7 +132,7 @@ setMethod(
     # window radius is radius of circle with winArea rounded to even number of
     # raster cells based on resolution
     winRad <- (sqrt(winArea*10000/pi)/res(expVars[[1]])[1]) %>% 
-      round(digits = 0)*res(expVars[[1]])[1]
+      round(digits = 0)*res(expVars[[1]])[1] %>% round()
     
     # calculate moving window average for all explanatory variables
     expVars <- expVars %>% 

@@ -3,9 +3,9 @@ exps <- raster(mat, xmn = 0, xmx = 40000, ymn = 0, ymx = 40000)
 lyrs <- layerize(exps)
 pt <- st_sfc(st_point(c(20000, 20000))) %>% st_sf(PID = 1) %>%
   set_names(c("PID", "geometry")) %>% st_set_geometry("geometry")
-
+testRad <- 4000
 # Internal of function helpful for interactive testing
-cf2 <- focalWeight(lyrs, 5600, "circle")
+cf2 <- focalWeight(lyrs, testRad, "circle")
 
 # add rows to make only far edge points overlap
 nToAdd2 <- nrow(cf2)-1
