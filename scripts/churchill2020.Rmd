@@ -1,0 +1,91 @@
+---
+title: "Churchill Caribou Habitat 2020"
+output:
+  html_document:
+    df_print: paged
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+
+
+```{r setup, include=FALSE}
+# Current Situation in Churchill
+
+devtools::load_all(".")
+
+# load data
+pth_base <- "inputNV/ChurchillData/"
+
+```
+
+```{r run, include=FALSE, cache=TRUE}
+eskerD <- st_read(paste0(pth_base, "esker.shp"))
+plcD <- raster(paste0(pth_base, "plc50.tif"))
+roadD <- st_read(paste0(pth_base, "road_ORNMNRFCH2020.shp"))
+railD <- st_read(paste0(pth_base, "rail.shp"))
+utilD <- st_read(paste0(pth_base, "util2020.shp"))
+natDistD <- raster(paste0(pth_base, "fireAFFES2020_50.tif"))
+anthroDistD <- raster(paste0(pth_base, "harvHRFCCan2015_50.tif"))
+friD <- raster(paste0(pth_base, "fri50.tif"))
+ageD <- raster(paste0(pth_base, "age50.tif"))
+friLUD <- read.csv(paste0(pth_base, "friLookUp.csv"))
+
+projectPolyD <- st_read("./inputNV/caribouRanges/Caribou_Range_Boundary.shp", 
+                        quiet = TRUE) %>% 
+  filter(RANGE_NAME == "Churchill") %>% 
+  st_transform(crs = st_crs(plcD))
+
+caribouResults <- caribouHabitat(
+  plc = plcD, 
+  esker = eskerD, 
+  fri = friD, 
+  age = ageD, 
+  natDist = natDistD, 
+  anthroDist = anthroDistD,
+  harv = anthroDistD,
+  # linFeat = linFeatDen,
+  linFeat = list(roads = roadD, rail = railD,
+                 utilities = utilD),
+  projectPoly = projectPolyD, 
+  friLU = friLUD, 
+  caribouRange = "Churchill", 
+  padProjPoly = TRUE, 
+  eskerSave = paste0(pth_base, "eskerDen.tif"),
+  linFeatSave = paste0(pth_base, "linFeatDen.tif")
+) 
+```
+### Caribou probability of use
+
+```{r results1, fig.width=9, fig.height=8, echo=FALSE}
+plot(caribouResults, raster.title = "Probability\nof use")
+```
+
+### Explanatory variables
+Variables used in the model to predict the probability of caribou habitat use. These variables represent the porportion of each habitat type in a 5000 ha moving window, except for the eskers and linear features which represent the density of the feature in the 5000 ha moving window in m/ha. 
+```{r results2, fig.width=10, fig.height=10, echo=FALSE}
+
+tmap::qtm(caribouResults@processedData[[c(1:6, 8:11)]] %>% 
+            raster::mask(caribouResults@projectPoly),
+          facets.free.scales = TRUE, 
+          layout.legend.position = c("RIGHT", "BOTTOM"),
+          layout.panel.labels = c("Dense conifer", "Dense deciduous", 
+                                  "Open peatland", "Conifer peatland", "Water",
+                                  "Mixed deciduous and conifer", "Sparse conifer",
+                                  "Natural burn", "Linear features", 
+                                  "Gravel esker"),
+          raster.title = "")
+```
+
+### Model coefficients
+The coefficients used in the RSPF model give an indication of which variables have a large impact on the probability of caribou habitat use.
+```{r results3, fig.width=10, fig.height=10, echo=FALSE}
+coefTableHR %>% filter(Range == "Churchill") %>% 
+  pivot_wider(id_cols = Variable, names_from = Season, 
+              values_from = Coefficient) %>% 
+  arrange(Variable) %>% 
+  mutate(Variable = c("Dense conifer", "Constant", "Dense deciduous",
+                      "Natural burn", "Gravel esker", "Open peatland",
+                      "Conifer peatland", "Water", "Mixed deciduous and conifer",
+                      "Sparse conifer", "Linear features")) %>%
+  knitr::kable()
+```

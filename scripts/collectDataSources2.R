@@ -468,3 +468,45 @@ CanLadHrBSand2015 <- raster::crop(CanLadHrON2015, bSand %>% st_transform(st_crs(
                                   datatype = "INT1U")
 
 beepr::beep()
+
+
+# Convert Churchill data to 50 m res #==========================================
+
+pth_base <- "inputNV/ChurchillData/"
+
+plcD <- raster(paste0(pth_base, "plc.tif"))
+
+tmplt_rast <- raster::projectExtent(plcD, crsUseR) %>% raster::`res<-`(50)
+
+plcD <- raster::projectRaster(plcD, tmplt_rast, method = "ngb",
+                              filename = paste0(pth_base, "plc50.tif"))
+
+natDistD <- st_read(paste0(pth_base, "fireAFFES2020.shp"))
+
+natDistD <- fasterize::fasterize(natDistD, tmplt_rast, background = 0)
+
+raster::writeRaster(natDistD, paste0(pth_base, "fireAFFES2020_50.tif"))
+
+# change to MNRF Harvest database once aquired
+anthroDistD <- raster(paste0(pth_base, "harvHRFCCan2015.tif"))
+
+anthroDistD <- raster::projectRaster(anthroDistD, tmplt_rast, method = "ngb",
+                                     filename = paste0(pth_base,
+                                                       "harvHRFCCan2015_50.tif"))
+
+
+friD <- st_read("inputNV/ChurchillFRI/FMU_120trlake_175caribou_702lacseul/FMU_120trlake_175caribou_702lacseul.shp")
+ageD <- fasterize::fasterize(friD, tmplt_rast, field = "AGE")
+
+friLUD <- tibble(PLANFU = friD$PLANFU %>% levels(),
+                 code = 1:length(PLANFU)) %>%
+  left_join(read.csv("inputNV/ChurchillFRI/OLTBorealCaribouFURegionalForestUnitMapping.csv"),
+            by = c(PLANFU = "FU")) %>%
+  select(code, Regional.Forest.Unit) %>%
+  mutate(Regional.Forest.Unit = toupper(Regional.Forest.Unit))
+write.csv(friLUD,
+          paste0(pth_base, "friLookUp.csv"), row.names = FALSE)
+
+friD <- fasterize::fasterize(friD, tmplt_rast, field = "PLANFU")
+raster::writeRaster(friD, paste0(pth_base, "fri50.tif"))
+raster::writeRaster(ageD, paste0(pth_base, "age50.tif"))
