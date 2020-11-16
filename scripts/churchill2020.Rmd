@@ -1,17 +1,19 @@
 ---
 title: "Churchill Caribou Habitat 2020"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 ---
 
-
+We implemented the caribou Resource Selection Probability Function (RSPF) developed by Hornseth and Rempel (2015) for the Churchill range using the most recent available data. 
 
 ```{r setup, include=FALSE}
 # Current Situation in Churchill
 
 devtools::load_all(".")
+library(ggplot2)
 
 # load data
 pth_base <- "inputNV/ChurchillData/"
@@ -56,13 +58,14 @@ caribouResults <- caribouHabitat(
 ```
 ### Caribou probability of use
 
-```{r results1, fig.width=9, fig.height=8, echo=FALSE}
+```{r results1, fig.width=7.5, fig.height=6, echo=FALSE}
 plot(caribouResults, raster.title = "Probability\nof use")
 ```
 
 ### Explanatory variables
-Variables used in the model to predict the probability of caribou habitat use. These variables represent the porportion of each habitat type in a 5000 ha moving window, except for the eskers and linear features which represent the density of the feature in the 5000 ha moving window in m/ha. 
-```{r results2, fig.width=10, fig.height=10, echo=FALSE}
+Variables used in the model to predict the probability of caribou habitat use. These variables represent the porportion of each habitat type in a 5000 ha moving window, except for the eskers and linear features which represent the density of the feature in the 5000 ha moving window in m/ha. Note that the scales are different in each facet so colours should not be compared across facets.
+
+```{r results2, fig.width=7.5, fig.height=10, echo=FALSE}
 
 tmap::qtm(caribouResults@processedData[[c(1:6, 8:11)]] %>% 
             raster::mask(caribouResults@projectPoly),
@@ -78,14 +81,25 @@ tmap::qtm(caribouResults@processedData[[c(1:6, 8:11)]] %>%
 
 ### Model coefficients
 The coefficients used in the RSPF model give an indication of which variables have a large impact on the probability of caribou habitat use.
-```{r results3, fig.width=10, fig.height=10, echo=FALSE}
+
+```{r results3, fig.width=7.5, fig.height=5, echo=FALSE}
 coefTableHR %>% filter(Range == "Churchill") %>% 
-  pivot_wider(id_cols = Variable, names_from = Season, 
-              values_from = Coefficient) %>% 
-  arrange(Variable) %>% 
-  mutate(Variable = c("Dense conifer", "Constant", "Dense deciduous",
-                      "Natural burn", "Gravel esker", "Open peatland",
-                      "Conifer peatland", "Water", "Mixed deciduous and conifer",
-                      "Sparse conifer", "Linear features")) %>%
-  knitr::kable()
+  mutate(Coefficient = round(Coefficient, 3)) %>% 
+  # pivot_wider(id_cols = Variable, names_from = Season, 
+  #             values_from = Coefficient) %>% 
+  # arrange(Variable) %>% 
+  # mutate(Variable = c("Dense conifer", "Constant", "Dense deciduous",
+  #                     "Natural burn", "Gravel esker", "Open peatland",
+  #                     "Conifer peatland", "Water", "Mixed deciduous and conifer",
+  #                     "Sparse conifer", "Linear features")) %>%
+  
+  ggplot(aes(Season, Variable, fill = Coefficient))+
+  geom_tile(alpha = 0.7)+
+  geom_text(aes(label = Coefficient))+
+  scale_fill_viridis_c()+
+  theme_classic()+
+  scale_y_discrete(labels = c("Dense conifer", "Constant", "Dense deciduous",
+                              "Natural burn", "Gravel esker", "Open peatland",
+                              "Conifer peatland", "Water", "Mixed",
+                              "Sparse conifer", "Linear features"))
 ```

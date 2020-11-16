@@ -472,27 +472,84 @@ beepr::beep()
 
 # Convert Churchill data to 50 m res #==========================================
 
-pth_base <- "inputNV/ChurchillData/"
-
-plcD <- raster(paste0(pth_base, "plc.tif"))
+# plc
+plcD <- raster(paste0(outCHill, "plc.tif"))
 
 tmplt_rast <- raster::projectExtent(plcD, crsUseR) %>% raster::`res<-`(50)
 
 plcD <- raster::projectRaster(plcD, tmplt_rast, method = "ngb",
-                              filename = paste0(pth_base, "plc50.tif"))
+                              filename = paste0(outCHill, "plc50.tif"))
 
-natDistD <- st_read(paste0(pth_base, "fireAFFES2020.shp"))
+# fire AFFES
+fireAFFES2020 <- st_read(paste0(outCHill, "fireAFFES2020.shp"))
 
-natDistD <- fasterize::fasterize(natDistD, tmplt_rast, background = 0)
+fireAFFES2020 <- fasterize::fasterize(fireAFFES2020, tmplt_rast, background = 0)
 
-raster::writeRaster(natDistD, paste0(pth_base, "fireAFFES2020_50.tif"))
+raster::writeRaster(fireAFFES2020, paste0(outCHill, "fireAFFES2020_50.tif"))
 
-# change to MNRF Harvest database once aquired
-anthroDistD <- raster(paste0(pth_base, "harvHRFCCan2015.tif"))
+fireAFFES2010 <- st_read(paste0(outCHill, "fireAFFES2010.shp"))
 
-anthroDistD <- raster::projectRaster(anthroDistD, tmplt_rast, method = "ngb",
-                                     filename = paste0(pth_base,
+fireAFFES2010 <- fasterize::fasterize(fireAFFES2010, tmplt_rast, background = 0)
+
+raster::writeRaster(fireAFFES2010, paste0(outCHill, "fireAFFES2010_50.tif"))
+
+# HRFCCan
+harvHRFCCan2015 <- raster(paste0(outCHill, "harvHRFCCan2015.tif"))
+
+harvHRFCCan2015 <- raster::projectRaster(harvHRFCCan2015, tmplt_rast, 
+                                         method = "ngb",
+                                     filename = paste0(outCHill,
                                                        "harvHRFCCan2015_50.tif"))
+
+harvHRFCCan2010 <- raster(paste0(outCHill, "harvHRFCCan2010.tif"))
+
+harvHRFCCan2010 <- raster::projectRaster(harvHRFCCan2010, tmplt_rast, 
+                                         method = "ngb",
+                                     filename = paste0(outCHill,
+                                                       "harvHRFCCan2010_50.tif"))
+
+fireHRFCCan2015 <- raster(paste0(outCHill, "fireHRFCCan2015.tif"))
+
+fireHRFCCan2015 <- raster::projectRaster(fireHRFCCan2015, tmplt_rast, 
+                                         method = "ngb",
+                                         filename = paste0(outCHill,
+                                                           "fireHRFCCan2015_50.tif"))
+
+fireHRFCCan2010 <- raster(paste0(outCHill, "fireHRFCCan2010.tif"))
+
+fireHRFCCan2010 <- raster::projectRaster(fireHRFCCan2010, tmplt_rast, 
+                                         method = "ngb",
+                                         filename = paste0(outCHill,
+                                                           "fireHRFCCan2010_50.tif"))
+
+# CanLAD
+harvCanLad2015 <- raster(paste0(outCHill, "harvCanLad2015.tif"))
+
+harvCanLad2015 <- raster::projectRaster(harvCanLad2015, tmplt_rast, 
+                                         method = "ngb",
+                                         filename = paste0(outCHill,
+                                                           "harvCanLad2015_50.tif"))
+
+harvCanLad2010 <- raster(paste0(outCHill, "harvCanLad2010.tif"))
+
+harvCanLad2010 <- raster::projectRaster(harvCanLad2010, tmplt_rast, 
+                                         method = "ngb",
+                                         filename = paste0(outCHill,
+                                                           "harvCanLad2010_50.tif"))
+
+fireCanLad2015 <- raster(paste0(outCHill, "fireCanLad2015.tif"))
+
+fireCanLad2015 <- raster::projectRaster(fireCanLad2015, tmplt_rast, 
+                                         method = "ngb",
+                                         filename = paste0(outCHill,
+                                                           "fireCanLad2015_50.tif"))
+
+fireCanLad2010 <- raster(paste0(outCHill, "fireCanLad2010.tif"))
+
+fireCanLad2010 <- raster::projectRaster(fireCanLad2010, tmplt_rast, 
+                                         method = "ngb",
+                                         filename = paste0(outCHill,
+                                                           "fireCanLad2010_50.tif"))
 
 
 friD <- st_read("inputNV/ChurchillFRI/FMU_120trlake_175caribou_702lacseul/FMU_120trlake_175caribou_702lacseul.shp")
@@ -505,8 +562,8 @@ friLUD <- tibble(PLANFU = friD$PLANFU %>% levels(),
   select(code, Regional.Forest.Unit) %>%
   mutate(Regional.Forest.Unit = toupper(Regional.Forest.Unit))
 write.csv(friLUD,
-          paste0(pth_base, "friLookUp.csv"), row.names = FALSE)
+          paste0(outCHill, "friLookUp.csv"), row.names = FALSE)
 
 friD <- fasterize::fasterize(friD, tmplt_rast, field = "PLANFU")
-raster::writeRaster(friD, paste0(pth_base, "fri50.tif"))
-raster::writeRaster(ageD, paste0(pth_base, "age50.tif"))
+raster::writeRaster(friD, paste0(outCHill, "fri50.tif"))
+raster::writeRaster(ageD, paste0(outCHill, "age50.tif"))
