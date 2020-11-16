@@ -34,7 +34,8 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'\code{fri} data and disturbance information. All data sources can be provided
 #'either as filenames or as spatial files. The result is a CaribouHabitat object
 #'which has methods defined for plotting and extracting the results. To update
-#'an existing CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
+#'an existing CaribouHabitat object with new data see
+#'\link[caribouMetrics]{updateCaribou}.
 #'
 #'
 #'@param plc filename or RasterLayer. Provincial landcover class
@@ -65,6 +66,8 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  all the unique values in the supplied \code{fri} raster and the second must
 #'  contain the names of regional forest units matching those provided in the
 #'  table \code{rfuToResType}
+#'@param saveOutput character. The filename to save the rasterBrick of habitat
+#'  use probabilities to. Note this will overwrite any existing files. 
 #'
 #'@source Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource
 #'  selection probability functions for 13 caribou ranges in Northern Ontario.
@@ -109,8 +112,16 @@ setMethod(
     }
     x <- do.call(processData, c(x, processDataArgs))
     
-    return(updateCaribou(x))
+    x <- updateCaribou(x)
+    
+    if(!is.null(dots$saveOutput)){
+      
+      byLayer <- grepl("\\.asc$|\\.sdat$|\\.rst$", dots$saveOutput)
+ 
+      raster::writeRaster(x@habitatUse, filename = dots$saveOutput, 
+                          overwrite = TRUE, bylayer = byLayer, 
+                          suffix = "names")
+    }
+    
+    return(x)
   })
-
-
-# JH: add save method
