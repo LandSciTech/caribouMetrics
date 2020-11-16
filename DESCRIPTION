@@ -33,8 +33,6 @@ Imports:
     tidyselect
 Collate: 
     'AAAClassDefinitions.R'
-    'helperFns.R'
-    'bCaribouMetaAnalysisPredictors.R'
     'calcBinaryUse.R'
     'calcRSP.R'
     'caribouHabitat.R'
@@ -47,10 +45,6 @@ Collate:
     'getSyncSimData.R'
     'spatialAlignFns.R'
     'inputData.R'
-    'landscapeState.R'
-    'landscapeStateBCaribou.R'
-    'internalWrappers.R'
-    'lsBuffer.R'
     'movingWindowAvg.R'
     'plot.R'
     'processData.R'
