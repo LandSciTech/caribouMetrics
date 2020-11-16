@@ -238,9 +238,45 @@ test_that("error if friLU is missing values in fri raster", {
     anthroDist = anthroDistD, harv = harvD,
     linFeat = linFeatDras, projectPoly = projectPolyD,
     hexgridSave = paste0(pthBase, "hexgrid.shp"),
-    friLU = friLUD, 
+    friLU = friLUD, winArea = 500,
     caribouRange = "Churchill"),
     "All unique values in fri must be present in friLU")
+}) 
+
+test_that("error if caribouRange missing or doesn't match", {
+  expect_error(caribouHabitat(
+    plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
+    anthroDist = anthroDistD, harv = harvD,
+    linFeat = linFeatDras, projectPoly = projectPolyD,
+    hexgridSave = paste0(pthBase, "hexgrid.shp"),
+    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE),
+    winArea = 500),
+    "is missing, with no default")
+  expect_error(caribouHabitat(
+    plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
+    anthroDist = anthroDistD, harv = harvD,
+    linFeat = linFeatDras, projectPoly = projectPolyD,
+    caribouRange = "test",
+    hexgridSave = paste0(pthBase, "hexgrid.shp"),
+    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE),
+    winArea = 500),
+    "caribouRange must match one of")
+}) 
+
+test_that("error if friLU doesn't match rfuToResType", {
+  friLUD <- read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE)
+  friLUD <- mutate(friLUD, RFU = ifelse(RFU == "BFDOM", "test",
+                                        ifelse(RFU == "BWDOM", "test2", RFU)))
+  
+  expect_error(caribouHabitat(
+    plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
+    anthroDist = anthroDistD, harv = harvD,
+    linFeat = linFeatDras, projectPoly = projectPolyD,
+    hexgridSave = paste0(pthBase, "hexgrid.shp"),
+    winArea = 500,
+    friLU = friLUD, 
+    caribouRange = "Churchill"),
+    "The second column of friLU must match a regional forest unit")
 }) 
 
 test_that("error if spatial data doesn't align", {

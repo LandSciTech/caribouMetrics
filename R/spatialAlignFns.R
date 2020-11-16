@@ -22,10 +22,26 @@ aggregateIf <- function(x, y, nmx, nmy){
     if(all(raster::res(x) == raster::res(y))){
       return(x)
     } else {
-      message(nmx, " being aggregated to have resolution matching ", nmy,
-              " using the mode")
-      return(raster::aggregate(x, fact = res(y)[1]/res(x)[1],
-                               fun = raster::modal))
+      if(any(raster::res(x) < raster::res(y))){
+        message(nmx, " being aggregated to have resolution matching ", nmy,
+                " using the mode")
+        x <- raster::aggregate(x, fact = res(y)[1]/res(x)[1],
+                                 fun = raster::modal)
+      } 
+      if(any(raster::res(x) > raster::res(y))){
+        message(nmx, " being dis-aggregated to have resolution matching ", nmy,
+                " without interpolation")
+        x <- raster::disaggregate(x, fact = res(x)[1]/res(y)[1],
+                                    fun = raster::modal)
+        
+      }
+      if(!all(raster::res(x) == raster::res(y))){
+        stop("the resolution of ", nmx, " does not match ", nmy,
+             " and they cannot be aligned by aggregation. ",
+             "Please supply rasters with matching resolution.\n\n", call. = FALSE)
+      } else {
+        return(x)
+      }
     }
   }
   

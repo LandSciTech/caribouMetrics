@@ -18,7 +18,8 @@
   linFeat,
   projectPoly,
   processedData,
-  habitatUse
+  habitatUse,
+  attributes
 )
 }
 \description{

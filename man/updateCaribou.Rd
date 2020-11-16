@@ -7,20 +7,10 @@
 \usage{
 updateCaribou(x, newData, ...)
 
-\S4method{updateCaribou}{CaribouHabitat,list}(
-  x,
-  newData,
-  friLU,
-  caribouRange,
-  resultsOnly = FALSE,
-  winArea = NULL
-)
+\S4method{updateCaribou}{CaribouHabitat,list}(x, newData, friLU, resultsOnly = FALSE)
 }
 \arguments{
 \item{x}{CaribouHabitat object}
-
-\item{caribouRange}{character the range where caribou were located. See
-\code{unique(coefTableHR$Range)}}
 
 \item{fri, age, natDist, linFeat}{RasterLayer objects to be used to update x.
 fri is required, if the others are missing the layers from x will be used.}

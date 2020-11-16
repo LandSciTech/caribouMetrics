@@ -25,9 +25,9 @@ setGeneric("inputData", function(plc, esker, fri, age, natDist, anthroDist, harv
 #' @rdname inputData
 setMethod(
   "inputData", signature(plc = "RasterLayer"), 
-  function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat,  projectPoly, 
-           eskerSave = NULL, linFeatSave = NULL, 
-           winArea = NULL, padProjPoly = FALSE, caribouRange = NULL) {
+  function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, projectPoly, 
+           caribouRange, eskerSave = NULL, linFeatSave = NULL, 
+           winArea = NULL, padProjPoly = FALSE, friLU = NULL) {
 
     charIn <-  sapply(list(plc, esker, fri, age, natDist, anthroDist, harv, 
                            linFeat, projectPoly),
@@ -42,6 +42,8 @@ setMethod(
     if(raster::isLonLat(plc)){
       stop("plc must have a projected CRS", call. = FALSE)
     }
+    
+    .checkInputs(fri, caribouRange, friLU, winArea)
     
     if(st_crs(projectPoly) != st_crs(plc)){
       projectPoly <- st_transform(projectPoly, crs = st_crs(plc))
@@ -134,15 +136,17 @@ setMethod(
     return(new("CaribouHabitat", plc, esker, fri, age, natDist, anthroDist, harv,
                linFeat, projectPolyOrig,  
                processedData = raster(matrix(NA)), 
-               habitatUse = raster(matrix(NA))))
+               habitatUse = raster(matrix(NA)),
+               attributes = list(caribouRange = caribouRange, winArea = winArea,
+                                 padProjPoly = padProjPoly)))
 })
 
 #' @rdname inputData
 setMethod(
   "inputData", signature(plc = "character"), 
   function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat,  projectPoly,
-           eskerSave = NULL, linFeatSave = NULL, caribouRange = NULL, 
-           winArea = NULL) {
+           caribouRange, eskerSave = NULL, linFeatSave = NULL, 
+           winArea = NULL, padProjPoly = FALSE, friLU = NULL) {
     
     if(inherits(linFeat, "list")){
       indata <- lst(plc, esker, fri, age, natDist, anthroDist, harv, 
@@ -196,7 +200,8 @@ setMethod(
     
     return(inputData(indata$plc, indata$esker, indata$fri, indata$age,
                      indata$natDist, indata$anthroDist, indata$harv, linFeat, 
-                     indata$projectPoly, eskerSave, linFeatSave, 
-                     caribouRange = caribouRange, winArea = winArea))
+                     indata$projectPoly, caribouRange = caribouRange, 
+                     eskerSave, linFeatSave, winArea = winArea, 
+                     padProjPoly = padProjPoly, friLU = friLU))
     
   })

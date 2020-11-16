@@ -26,6 +26,7 @@ caribouHabitat(
   harv,
   linFeat,
   projectPoly,
+  caribouRange,
   ...
 )
 }

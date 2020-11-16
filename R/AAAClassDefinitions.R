@@ -40,7 +40,8 @@ CaribouHabitat <- setClass("CaribouHabitat",
                                      linFeat  = "RasterLayer", 
                                      projectPoly = "sf", 
                                      processedData = "Raster",
-                                     habitatUse = "Raster"),
+                                     habitatUse = "Raster",
+                                     attributes = "list"),
                            prototype = list(
                              plc = raster(matrix(NA)), 
                              esker  = raster(matrix(NA)),
@@ -51,7 +52,8 @@ CaribouHabitat <- setClass("CaribouHabitat",
                              projectPoly = st_sf(col1 = NA,
                                                  geometry = st_sfc(st_point(x = c(1,1)))),
                              processedData = raster::stack(raster(matrix(NA))),
-                             habitatUse = raster::stack(raster(matrix(NA)))
+                             habitatUse = raster::stack(raster(matrix(NA))),
+                             attributes = list()
                            ))
 
 #' Landscape State Class

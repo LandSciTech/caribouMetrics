@@ -86,17 +86,15 @@ procedData <- caribouHabitat(plcD, eskerDras, friD, ageD, natDistD,
 
 test_that("processData works for updated data", {
   updted <- processData(procedData, newData = list(natDist = natDistD2,
-                                                   age = ageD2), 
-                        caribouRange = "Churchill", 
-                        friLU = friLUD, winArea = 500)
+                                                   age = ageD2),  
+                        friLU = friLUD)
   expect_true(raster::cellStats(procedData@processedData$DTN != 
                                   updted@processedData$DTN, max) == 1)
   expect_true(raster::cellStats(procedData@processedData$TDENLF == 
                                   updted@processedData$TDENLF, min) == 1)
   
   updted2 <- processData(procedData, newData = list(linFeat = linFeatDras2), 
-                        caribouRange = "Churchill", 
-                        friLU = friLUD, winArea = 500)
+                         friLU = friLUD)
   expect_true(raster::cellStats(procedData@processedData$DTN == 
                                   updted2@processedData$DTN, min) == 1)
   expect_true(raster::cellStats(procedData@processedData$TDENLF != 
@@ -107,18 +105,15 @@ test_that("processData works for updated data", {
   
   expect_error(processData(procedData, newData = list(natDist = natDistD2,
                                                       age2 = ageD2), 
-                           caribouRange = "Churchill", 
-                           friLU = friLUD, winArea = 500),
+                           friLU = friLUD),
                "newData must be a named list")
   
   expect_error(processData(procedData, newData = list(natDist = natDistD2), 
-                           caribouRange = "Churchill", 
-                           friLU = friLUD, winArea = 500),
+                           friLU = friLUD),
                "both natDist and age must be provided")
   
   expect_error(processData(procedData, newData = list(fri = natDistD2), 
-                           caribouRange = "Churchill", 
-                           friLU = friLUD, winArea = 500),
+                           friLU = friLUD),
                "to use fri data either harv")
 })
 
@@ -126,23 +121,26 @@ test_that("process data works for updated data that is not aligned", {
   updted <- processData(procedData, 
                         newData = list(harv = harvD %>% 
                                          raster::extend(raster::extent(harvD)+251)),
-                        caribouRange = "Churchill", 
-                        friLU = friLUD, winArea = 500)
+                        friLU = friLUD)
   expect_equal(procedData@habitatUse, updted@habitatUse)
 
-  expect_error(processData(procedData, 
+  expect_message(processData(procedData, 
                            newData = list(harv = harvD %>% 
                                             raster::aggregate(4)),
-                           caribouRange = "Churchill", 
-                           friLU = friLUD, winArea = 500), 
-               "different extent")
+                          friLU = friLUD), 
+               "being dis-aggregated")
+  
+  expect_error(processData(procedData, 
+                             newData = list(harv = harvD %>% 
+                                              raster::`res<-`(1999)),
+                             friLU = friLUD), 
+                 "not match plc and they cannot be aligned by aggregation")
 })
 
 test_that("update process result is same with same data", {
   expect_error(updateCaribou(procedData, newData = list(friD), 
                              friLU = read.csv(paste0(pthBase, "friLU", ".csv"), 
-                                              stringsAsFactors = FALSE),
-                             caribouRange = "Churchill", winArea = 500), 
+                                              stringsAsFactors = FALSE)), 
                "newData must be a named list")
   
   update_data <- updateCaribou(procedData, 
@@ -151,8 +149,7 @@ test_that("update process result is same with same data", {
                                               anthroDist = anthroDistD, 
                                               linFeat = linFeatDras), 
                                friLU = read.csv(paste0(pthBase, "friLU", ".csv"), 
-                                                stringsAsFactors = FALSE),
-                               caribouRange = "Churchill", winArea = 500)
+                                                stringsAsFactors = FALSE))
   
   expect_equal(procedData@habitatUse, 
                update_data@habitatUse)

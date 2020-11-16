@@ -29,11 +29,12 @@ inputData(
   harv,
   linFeat,
   projectPoly,
+  caribouRange,
   eskerSave = NULL,
   linFeatSave = NULL,
   winArea = NULL,
   padProjPoly = FALSE,
-  caribouRange = NULL
+  friLU = NULL
 )
 
 \S4method{inputData}{character}(
@@ -46,10 +47,12 @@ inputData(
   harv,
   linFeat,
   projectPoly,
+  caribouRange,
   eskerSave = NULL,
   linFeatSave = NULL,
-  caribouRange = NULL,
-  winArea = NULL
+  winArea = NULL,
+  padProjPoly = FALSE,
+  friLU = NULL
 )
 }
 \arguments{

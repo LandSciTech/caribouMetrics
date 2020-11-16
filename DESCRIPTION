@@ -39,6 +39,7 @@ Collate:
     'calcRSP.R'
     'caribouHabitat.R'
     'caribouMetrics.R'
+    'checkInputs.R'
     'combineLinFeat.R'
     'convertRasterToLineSegments.R'
     'createNestedHexGrid.R'

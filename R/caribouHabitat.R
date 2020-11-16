@@ -6,7 +6,7 @@ NULL
 setMethod(f = "initialize", signature = "CaribouHabitat",
           definition = function(.Object, plc, esker, fri, age, natDist, 
                                 anthroDist, harv, linFeat, projectPoly,  
-                                processedData, habitatUse){
+                                processedData, habitatUse, attributes){
             .Object@plc <- plc 
             .Object@esker <- esker
             .Object@fri <- fri
@@ -18,6 +18,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
             .Object@projectPoly <- projectPoly
             .Object@processedData <- processedData
             .Object@habitatUse <- habitatUse 
+            .Object@attributes <- attributes
             return(.Object)
           })
 
@@ -77,28 +78,27 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  \url{https://doi.org/10.1139/cjz-2015-0101}
 #'
 #'@export
-setGeneric("caribouHabitat", function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, projectPoly, ...) standardGeneric("caribouHabitat"))
+setGeneric("caribouHabitat", function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, projectPoly, caribouRange, ...) standardGeneric("caribouHabitat"))
 
 setMethod(
   "caribouHabitat", 
   signature(plc = "ANY"), 
-  function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, projectPoly, ...) {
-    
+  function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, 
+           projectPoly, caribouRange, ...) {
+
     dots <- list(...)
     
-    inputDataArgs <- dots[c("winArea", "eskerSave", "linFeatSave", "padProjPoly", 
-                         "caribouRange")]
+    inputDataArgs <- dots[c("winArea", "eskerSave", "linFeatSave", "padProjPoly",
+                            "friLU")]
     
     inputDataArgs <- inputDataArgs[which(sapply(inputDataArgs, length) > 0)]
     
-    processDataArgs <- dots[c("friLU", "caribouRange", "winArea", "padProjPoly")]
+    processDataArgs <- dots[c("friLU")]
     processDataArgs <- processDataArgs[which(sapply(processDataArgs, length) > 0)]
     
-    updateArgs <- dots["caribouRange"]
-    updateArgs <- updateArgs[which(sapply(updateArgs, length) > 0)]
-    
     x <- do.call(inputData, c(lst(plc, esker, fri, age, natDist, anthroDist, harv,
-                                  linFeat, projectPoly), inputDataArgs))
+                                  linFeat, projectPoly, caribouRange), 
+                              inputDataArgs))
     
     if(is.null(processDataArgs$friLU)){
       warning("Argument friLU is required to process the data. The loaded", 
@@ -109,14 +109,7 @@ setMethod(
     }
     x <- do.call(processData, c(x, processDataArgs))
     
-    if(is.null(updateArgs$caribouRange)){
-      warning("Argument caribouRange is required to calculate use. The processed", 
-              " data is being returned. To calculate caribou habitat use pass ",
-              "the returned object to updateCaribou with the required arguments")
-      return(x)
-    }
-    
-    return(updateCaribou(x, caribouRange = updateArgs$caribouRange))
+    return(updateCaribou(x))
   })
 
 

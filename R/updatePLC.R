@@ -116,6 +116,7 @@ setMethod(
   }
 )
 
+# Not currently used
 setMethod(
   "updatePLC", 
   signature(x = "CaribouHabitat", newData = "list"), 

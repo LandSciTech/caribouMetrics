@@ -8,8 +8,6 @@ NULL
 #' @param fri,age,natDist,linFeat RasterLayer objects to be used to update x.
 #'   fri is required, if the others are missing the layers from x will be used.
 #'
-#' @param caribouRange character the range where caribou were located. See
-#'   \code{unique(coefTableHR$Range)}
 #'   
 
 #' @export
@@ -19,15 +17,9 @@ setGeneric("updateCaribou", function(x, newData, ...) standardGeneric("updateCar
 setMethod(
   "updateCaribou", 
   signature(x = "CaribouHabitat", newData = "missing"), 
-  function(x, caribouRange, ...) {
+  function(x, ...) {
     dots <- list(...)
-    
-    expectedRanges <- paste0(unique(coefTableHR$Range), collapse = ", ")
-    
-    if(stringr::str_detect(expectedRanges, caribouRange, negate = TRUE)){
-      stop("caribouRange must match one of: ", expectedRanges)
-    }
-    
+
     # process the data if not already done
     if(nrow(x@processedData) < 2){
       
@@ -35,11 +27,12 @@ setMethod(
         stop("friLU is required to process data")
       }
       
-      x <- processData(x, friLU = dots$friLU, caribouRange = caribouRange)
+      x <- processData(x, friLU = dots$friLU)
     }
     
     # calculate RSP
-    coefTable <- coefTableHR %>% filter(stringr::str_detect(Range, caribouRange))
+    coefTable <- coefTableHR %>% 
+      filter(stringr::str_detect(Range, x@attributes$caribouRange))
     
     x@habitatUse <- calcRSP(x@processedData, coefTable)
     
@@ -52,8 +45,7 @@ setMethod(
 setMethod(
   "updateCaribou", 
   signature(x = "CaribouHabitat", newData = "list"), 
-  function(x, newData, friLU, caribouRange, resultsOnly = FALSE,
-           winArea = NULL) {
+  function(x, newData, friLU, resultsOnly = FALSE) {
     
     # process the data if not already done
     if(nrow(x@processedData) < 2){
@@ -62,9 +54,9 @@ setMethod(
     }
     
     
-    x <- processData(x, newData, friLU, caribouRange, winArea)
+    x <- processData(x, newData, friLU)
     
-    x <- updateCaribou(x, caribouRange = caribouRange)
+    x <- updateCaribou(x)
     
     if(resultsOnly){
       return(x@habitatUse)

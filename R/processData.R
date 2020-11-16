@@ -2,6 +2,8 @@
 #' @include AAAClassDefinitions.R
 NULL
 
+#' Process data 
+#' Process the data after it is loaded and checked by inputData
 
 #' @export
 setGeneric("processData", function(inData, newData, ...) standardGeneric("processData"))
@@ -11,40 +13,9 @@ setGeneric("processData", function(inData, newData, ...) standardGeneric("proces
 #' @importFrom raster plot
 setMethod(
   "processData", signature(inData = "CaribouHabitat", newData = "missing"), 
-  function(inData, friLU, caribouRange, winArea = NULL, padProjPoly = FALSE) {
+  function(inData, friLU) {
     # TODO:
     # get fri lu from raster legend
-    
-    expectedRanges <- paste0(unique(coefTableHR$Range), collapse = ", ")
-    
-    if(stringr::str_detect(expectedRanges, caribouRange, negate = TRUE)){
-      stop("caribouRange must match one of: ", expectedRanges)
-    }
-    
-    # checks types and match names
-    if(!inherits(friLU, "data.frame")){
-      stop("friLU must be a data.frame", call. = FALSE)
-    }
-    if(!is.numeric(friLU[,1])){
-      stop("The first column of friLU must be numeric", 
-           call. = FALSE)
-    }
-    
-    if(any(is.na(friLU[,2]))){
-      warning("friLU contains NA in the second column. ", 
-              "Cells with these IDs will be replaced with values from plc ",
-              "in the calculation of probability of use", call. = FALSE)
-    }
-    
-    if(!all(unique(friLU[,2]) %in% c(unique(rfuToResType$RegionalForestUnit), NA))){
-      stop("The second column of friLU must match a regional forest unit: ", 
-           paste0(c(unique(rfuToResType$RegionalForestUnit), NA), sep = ", "),
-           call. = FALSE)
-    }
-    
-    if(!all(raster::unique(inData@fri) %in% friLU[,1])){
-      stop("All unique values in fri must be present in friLU", call. = FALSE)
-    }
     
     friLU <- friLU %>% set_names("ID", "RFU")
     
@@ -79,8 +50,6 @@ setMethod(
     inData@plc <- reclassify(inData@plc, rclPLC)
     
     inData@fri <- reclassify(inData@fri, rcl = rclFRI)
-    
-
     
     # Update PLC based on FRI, age and disturbance history
     updted <- updatePLC(plc = inData@plc, fri = inData@fri, age = inData@age, 
@@ -119,19 +88,16 @@ setMethod(
 
     
     # Get window area from table b/c some models used different sizes
-    if(is.null(winArea)){
-      winArea <- coefTableHR %>% filter(Range == caribouRange) %>% 
+    if(is.null(inData@attributes$winArea)){
+      inData@attributes$winArea <- coefTableHR %>% 
+        filter(Range == inData@attributes$caribouRange) %>% 
         pull(WinArea) %>% 
         max()
     }
     
-    if(!is.numeric(winArea)){
-      stop("winArea must be a number (in hectares)", call. = FALSE)
-    }
-    
     # window radius is radius of circle with winArea rounded to even number of
     # raster cells based on resolution
-    winRad <- (sqrt(winArea*10000/pi)/res(expVars[[1]])[1]) %>% 
+    winRad <- (sqrt(inData@attributes$winArea*10000/pi)/res(expVars[[1]])[1]) %>% 
       round(digits = 0)*res(expVars[[1]])[1] %>% round()
     
     # calculate moving window average for all explanatory variables
@@ -143,7 +109,7 @@ setMethod(
                       pull(resType) %>% as.character(),
                     "TDENLF", "ESK")
     
-    if(!padProjPoly){
+    if(!inData@attributes$padProjPoly){
       expVars <- raster::mask(expVars, inData@projectPoly)
     }
     
@@ -164,7 +130,7 @@ setMethod(
 setMethod(
   "processData", 
   signature(inData = "CaribouHabitat", newData = "list"), 
-  function(inData, newData, friLU, caribouRange, winArea = NULL) {
+  function(inData, newData, friLU) {
     
     if(is.null(names(newData)) ||
        !all(names(newData) %in% c("fri", "age", "natDist", "anthroDist", "harv", 
@@ -192,6 +158,9 @@ setMethod(
     }
     
     # check alignment of new data with plc
+    newData <- purrr::map_at(newData, c("harv", "age", "natDist", "fri"),
+                              ~aggregateIf(.x, inData@plc, names(.x), "plc"))
+    
     newData <- purrr::map2(newData, names(newData), 
                 ~checkAlign(.x, inData@plc, .y, "plc"))
     
@@ -202,10 +171,8 @@ setMethod(
       set_names(c("code", "resType")) %>% 
       mutate(resType = as.character(resType))
     
-    expectedRanges <- paste0(unique(coefTableHR$Range), collapse = ", ")
-    
-    if(stringr::str_detect(expectedRanges, caribouRange, negate = TRUE)){
-      stop("caribouRange must match one of: ", expectedRanges)
+    if(!"DTN" %in% resTypeLevels$resType){
+      resTypeLevels <- resTypeLevels %>% add_row(resType = "DTN", code = 99)
     }
     
     # convert from FRI to ResType using supplied fu to rfu and internal
@@ -230,14 +197,11 @@ setMethod(
     friLU <- friLU %>% set_names("ID", "RFU")
     
     # Get window area from table b/c some models used different sizes
-    if(is.null(winArea)){
-      winArea <- coefTableHR %>% filter(Range == caribouRange) %>% 
+    if(is.null(inData@attributes$winArea)){
+      inData@attributes$winArea <- coefTableHR %>% 
+        filter(Range == inData@attributes$caribouRange) %>% 
         pull(WinArea) %>% 
         max()
-    }
-    
-    if(!is.numeric(winArea)){
-      stop("winArea must be a number (in hectares)", call. = FALSE)
     }
     
     friLU <- left_join(friLU, rfuToResType, 
@@ -297,11 +261,11 @@ setMethod(
     if("linFeat" %in% names(newData) && PLCUpdated){
       expVars <- expVars %>% addLayer(inData@linFeat)
       
-      layernames <- c(raster::levels(inData@plc)[[1]] %>% arrange(ID) %>%
+      layernames <- c(resTypeLevels %>% arrange(code) %>%
                         pull(resType) %>% as.character(), "TDENLF")
     } else if (PLCUpdated){
-      layernames <- raster::levels(inData@plc)[[1]] %>% arrange(ID) %>%
-                        pull(resType) %>% as.character()
+      layernames <- resTypeLevels %>% arrange(code) %>%
+        pull(resType) %>% as.character()
     } else {
       expVars <- inData@linFeat
       
@@ -310,7 +274,7 @@ setMethod(
     
     # window radius is radius of circle with winArea rounded to even number of
     # raster cells based on resolution
-    winRad <- (sqrt(winArea*10000/pi)/res(expVars[[1]])[1]) %>% 
+    winRad <- (sqrt(inData@attributes$winArea*10000/pi)/res(expVars[[1]])[1]) %>% 
       round(digits = 0)*res(expVars[[1]])[1]
     
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,  
