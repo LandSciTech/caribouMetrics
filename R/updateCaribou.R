@@ -41,6 +41,9 @@ setMethod(
     
     x@habitatUse <- raster::mask(x@habitatUse, projRas )
     x@habitatUse <- raster::crop(x@habitatUse, x@projectPoly, snap = "out")
+    x@processedData <- raster::mask(x@processedData, projRas )
+    x@processedData <- raster::crop(x@processedData, x@projectPoly, snap = "out")
+    
     return(x)
   })
 

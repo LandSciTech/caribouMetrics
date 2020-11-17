@@ -28,7 +28,7 @@ rmdConclu <- "Changing to rasters instead of hexagons did not change the agreeme
 # slightly narrower offset improved slope to closer to 1 for all except TDENLF which got worse
 
 # based on folder of .rmd file as working directory
-rmdOutFile <- "../outputs/diagnosticRVsE_wRempelDataFixed7.html"
+rmdOutFile <- "../outputs/diagnosticRVsE_wRempelDataFixed8.html"
 
 # Load Data #===================================================================
  
@@ -65,7 +65,7 @@ projectPolyD <- st_read("./inputNV/caribouRanges/Caribou_Range_Boundary.shp",
 
 # plcD <- plcD %>% raster::crop((raster::extent(projectPolyD) + 100000)) %>% 
 #   raster::aggregate(fact = 10, fun = raster::modal)
-profvis::profvis({
+
   caribouResults <- caribouHabitat(
     plc = plcD, 
     esker = eskerD, 
@@ -86,7 +86,7 @@ profvis::profvis({
     # linFeatSave = "inputNV/HornsethRempelInfo/linFeatDen.tif"
   ) 
   beepr::beep()
-})
+
 
 
 # Rempel's results
