@@ -60,14 +60,16 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  used to avoid edge effects? If FALSE, the default, only data from inside the
 #'  \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
 #'  the other variables are clipped to the extent of the buffered area. Results
-#'  are always clipped to the original \code{projectPoly}.
+#'  are always clipped to the original \code{projectPoly}. It is ideal to set
+#'  this to TRUE and provide a dataset that is larger than the
+#'  \code{projectPoly} to avoid edge effects.
 #'@param friLU data.frame. A look up table to convert local forest units to
 #'  regional forest units. It should have two columns, the first must contain
 #'  all the unique values in the supplied \code{fri} raster and the second must
 #'  contain the names of regional forest units matching those provided in the
 #'  table \code{rfuToResType}
 #'@param saveOutput character. The filename to save the rasterBrick of habitat
-#'  use probabilities to. Note this will overwrite any existing files. 
+#'  use probabilities to. Note this will overwrite any existing files.
 #'
 #'@source Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource
 #'  selection probability functions for 13 caribou ranges in Northern Ontario.
