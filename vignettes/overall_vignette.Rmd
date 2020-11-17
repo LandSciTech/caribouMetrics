@@ -41,7 +41,7 @@ Several different data sets are used in the model to describe conditions that af
 
 
 ## Simple Example
-The example data set loaded below inlcudes a small area in the Churchill caribou range that we will use as an example. 
+The example data set loaded below includes a small area in the Churchill caribou range that we will use as an example. 
 
 ```{r load data}
 # load example data
@@ -71,11 +71,12 @@ carHab1 <- caribouHabitat(
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
     mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")),
   caribouRange = "Churchill", 
+  padFocal = TRUE, # assume data outside area is 0 for all variables
   winArea = 500 # only use in examples, leave as default for correct results
 )
 ```
 
-The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat` which has slots for the input data, the processed data, and the results. To access the results as a RasterStack object that can be used for ploting or graphing use the `results` function.
+The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat` which has slots for the input data, the processed data, and the results. To access the results as a RasterStack object that can be used for plotting or graphing use the `results` function.
 
 ```{r results1}
 str(carHab1, max.level = 2, give.attr = FALSE)
@@ -130,25 +131,43 @@ carHab3 <- caribouHabitat(
   linFeat = linFeatDshp, projectPoly = projectPolyD2,
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
     mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
-  caribouRange = "Churchill", padProjPoly = FALSE, winArea = 500
+  caribouRange = "Churchill", winArea = 500
 )
+
+carHab4 <- caribouHabitat(
+  plc = plcD, esker = eskerDshp, fri = dummyD, age = dummyD, natDist = dummyD, 
+  anthroDist = dummyD, harv =dummyD,
+  linFeat = linFeatDshp, projectPoly = projectPolyD2,
+  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
+    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
+  caribouRange = "Churchill", padProjPoly = FALSE, padFocal = TRUE,
+  winArea = 500
+)
+
 st_area(projectPolyD2)
 
 
-plot(carHab2, season = "Fall", title = "With padding", 
+plot(carHab2, season = "Fall", title = "Pad with data outside project", 
      raster.breaks = c(0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 1), 
      layout.legend.outside = TRUE)+
   tmap::qtm(carHab3@projectPoly, fill = NULL, borders = "red", 
             shape.is.master = TRUE)
 
-plot(carHab3, season = "Fall", title = "Without padding", 
+plot(carHab3, season = "Fall", title = "No padding", 
      raster.breaks = c(0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 1),
      layout.legend.outside = TRUE)+
   tmap::qtm(carHab3@projectPoly, fill = NULL, borders = "red", 
             shape.is.master = TRUE)
+
+plot(carHab4, season = "Fall", title = "Pad with 0 outside project", 
+     raster.breaks = c(0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 1),
+     layout.legend.outside = TRUE)+
+  tmap::qtm(carHab3@projectPoly, fill = NULL, borders = "red", 
+            shape.is.master = TRUE)
+
 ```
 
-The difference is large in this example because the project area is very small compared to the window size. Based on the PLC data in the previous map you can see that there is one DEC cell just outside the projectPoly on the right. DEC has a strong negative effect on caribou habitat use so in the version with padding cells on the right edge have lower probability of use than in the version without padding. In the top left corner the values in the version without padding are lower than with padding because the non padded version treats the cells outside the projectPoly as 0 when taking the weighted sum of values in the window. Therefore it is highly recommended to provide data for the area around the project and to use padProjPoly = TRUE.  
+The difference is large in this example because the project area is very small compared to the window size. The example with no padding is the default because it prevents users from relying on questionable results. The example with padding based on a larger data set is the preferred option since it makes use of all available information but it is not the default because it should only be used when the data provided is larger than the project area. The version where cells are padded with 0s gives results but they can be misleading. Based on the PLC data in the previous map you can see that there is one DEC cell just outside the projectPoly on the right. DEC has a strong negative effect on caribou habitat use so in the version padded with data cells on the right edge have lower probability of use than in the version with 0s as padding. In the top left corner the values in the version with 0s as padding are lower than with data padding because the cells outside the projectPoly are 0 when taking the weighted sum of values in the window. Therefore it is highly recommended to provide data for the area around the project and to use padProjPoly = TRUE.  
 
 ## Example with other inputs
 As mentioned above `caribouHabitat` can be called in several different ways. You can provide the data as filepaths instead of spatial objects, you can provide the eskers and linear features as vector files which will be updated, and you can provide roads, rail, and utilities as a list to be combined into the linear features. 
@@ -199,6 +218,7 @@ carHabLF1 <- caribouHabitat(
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
     mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
   caribouRange = "Churchill", 
+  padFocal = TRUE, 
   winArea = 500
 )
 

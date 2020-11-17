@@ -63,6 +63,11 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  are always clipped to the original \code{projectPoly}. It is ideal to set
 #'  this to TRUE and provide a dataset that is larger than the
 #'  \code{projectPoly} to avoid edge effects.
+#'@param padFocal logical. This value is passed to the pad argument in
+#'  \code{raster::focal}, if it is FALSE then cells near the edge will return
+#'  NA, if it is TRUE a value will be returned for each cell that assumes cells
+#'  outside the input data are 0 for all resource types. This is not a good
+#'  assumption and should be used with caution
 #'@param friLU data.frame. A look up table to convert local forest units to
 #'  regional forest units. It should have two columns, the first must contain
 #'  all the unique values in the supplied \code{fri} raster and the second must
@@ -94,7 +99,7 @@ setMethod(
     dots <- list(...)
     
     inputDataArgs <- dots[c("winArea", "eskerSave", "linFeatSave", "padProjPoly",
-                            "friLU")]
+                            "friLU", "padFocal")]
     
     inputDataArgs <- inputDataArgs[which(sapply(inputDataArgs, length) > 0)]
     

@@ -27,7 +27,7 @@ setMethod(
   "inputData", signature(plc = "RasterLayer"), 
   function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, projectPoly, 
            caribouRange, eskerSave = NULL, linFeatSave = NULL, 
-           winArea = NULL, padProjPoly = FALSE, friLU = NULL) {
+           winArea = NULL, padProjPoly = FALSE, padFocal = FALSE, friLU = NULL) {
 
     charIn <-  sapply(list(plc, esker, fri, age, natDist, anthroDist, harv, 
                            linFeat, projectPoly),
@@ -138,7 +138,7 @@ setMethod(
                processedData = raster(matrix(NA)), 
                habitatUse = raster(matrix(NA)),
                attributes = list(caribouRange = caribouRange, winArea = winArea,
-                                 padProjPoly = padProjPoly)))
+                                 padProjPoly = padProjPoly, padFocal = padFocal)))
 })
 
 #' @rdname inputData
@@ -146,7 +146,7 @@ setMethod(
   "inputData", signature(plc = "character"), 
   function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat,  projectPoly,
            caribouRange, eskerSave = NULL, linFeatSave = NULL, 
-           winArea = NULL, padProjPoly = FALSE, friLU = NULL) {
+           winArea = NULL, padProjPoly = FALSE, padFocal = FALSE, friLU = NULL) {
     
     if(inherits(linFeat, "list")){
       indata <- lst(plc, esker, fri, age, natDist, anthroDist, harv, 
@@ -202,6 +202,7 @@ setMethod(
                      indata$natDist, indata$anthroDist, indata$harv, linFeat, 
                      indata$projectPoly, caribouRange = caribouRange, 
                      eskerSave, linFeatSave, winArea = winArea, 
-                     padProjPoly = padProjPoly, friLU = friLU))
+                     padProjPoly = padProjPoly, padFocal = padFocal,
+                     friLU = friLU))
     
   })

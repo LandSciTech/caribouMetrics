@@ -125,7 +125,8 @@ setMethod(
     }
     
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,
-                                 nms = layernames, pad = TRUE)
+                               nms = layernames, 
+                               pad = inData@attributes$padFocal)
     
     inData@processedData <- expVars %>% 
       raster::addLayer(expVars[["MIX"]] + expVars[["DEC"]]) %>% 
@@ -289,7 +290,8 @@ setMethod(
       round(digits = 0)*res(expVars[[1]])[1]
     
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,  
-                               nms = layernames, pad = TRUE)
+                               nms = layernames, 
+                               pad = inData@attributes$padFocal)
     
     if(all(c("MIX","DEC") %in% names(expVars))){
       expVars <- expVars %>% 
