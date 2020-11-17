@@ -68,6 +68,7 @@ setMethod(
 
     # Resample linFeat and esker to 16 ha
     if(any(raster::res(inData@linFeat) < 400)){
+      message("resampling linFeat to match plc resolution")
       tmplt <- inData@plc %>% raster::`res<-`(c(400, 400))
       
       # lfFile <- tempfile()
@@ -76,6 +77,11 @@ setMethod(
       inData@linFeat <- raster::resample(inData@linFeat, tmplt,
                                          method = "bilinear")
     }
+    if(!compareRaster(expVars[[1]], inData@linFeat, stopiffalse = FALSE)){
+      stop("linFeat could not be aligned with plc.",
+           " Please provide a higher resolution raster or a shapefile",
+           call. = FALSE)
+    }
     
     if(any(raster::res(inData@esker) < 400)){
       # eskFile <- tempfile()
@@ -83,6 +89,11 @@ setMethod(
       
       inData@esker <- raster::resample(inData@esker, tmplt,
                                        method = "bilinear")
+    }
+    if(!compareRaster(expVars[[1]], inData@esker, stopiffalse = FALSE)){
+      stop("esker could not be aligned with plc.",
+           " Please provide a higher resolution raster or a shapefile",
+           call. = FALSE)
     }
 
 
@@ -114,7 +125,7 @@ setMethod(
     }
     
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,
-                                 nms = layernames)
+                                 nms = layernames, pad = TRUE)
     
     inData@processedData <- expVars %>% 
       raster::addLayer(expVars[["MIX"]] + expVars[["DEC"]]) %>% 
@@ -278,7 +289,7 @@ setMethod(
       round(digits = 0)*res(expVars[[1]])[1]
     
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,  
-                               nms = layernames)
+                               nms = layernames, pad = TRUE)
     
     if(all(c("MIX","DEC") %in% names(expVars))){
       expVars <- expVars %>% 

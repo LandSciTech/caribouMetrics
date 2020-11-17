@@ -36,7 +36,11 @@ setMethod(
     
     x@habitatUse <- calcRSP(x@processedData, coefTable)
     
-    x@habitatUse <- raster::mask(x@habitatUse, x@projectPoly)
+    projRas <- raster::rasterize(x@projectPoly, x@habitatUse[[1]], getCover=TRUE)
+    projRas[projRas==0] <- NA
+    
+    x@habitatUse <- raster::mask(x@habitatUse, projRas )
+    x@habitatUse <- raster::crop(x@habitatUse, x@projectPoly, snap = "out")
     return(x)
   })
 
