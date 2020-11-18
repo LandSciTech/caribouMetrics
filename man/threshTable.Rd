@@ -4,7 +4,8 @@
 \name{threshTable}
 \alias{threshTable}
 \title{Category 2 thresholds table}
-\format{A data frame with 48 rows and 6 variables: \describe{
+\format{
+A data frame with 48 rows and 6 variables: \describe{
   \item{Range}{the caribou range name} 
   \item{Season}{season, one of Spring, Summer, Fall, Winter}
   \item{Sensitivity}{the proportion of presences correctly predicted as presence}
@@ -13,7 +14,8 @@
   a predicted presence}
   \item{AUC}{the area under the resource operating characteristic (ROC) curve; 
   it ranges from 0-1 and indicates the overall success of the model for predicting
-   both presence and absence} }}
+   both presence and absence} }
+}
 \source{
 Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource 
  selection probability functions for 13 caribou ranges in Northern Ontario.
