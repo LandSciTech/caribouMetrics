@@ -30,7 +30,9 @@ Imports:
     spex,
     units,
     purrr,
-    tidyselect
+    tidyselect,
+    rsyncrosim,
+    spdep
 Collate: 
     'AAAClassDefinitions.R'
     'calcBinaryUse.R'
@@ -54,7 +56,6 @@ Collate:
     'updateCaribou.R'
     'updatePLC.R'
 Suggests: 
-    rsyncrosim,
     testthat,
     knitr,
     rmarkdown
