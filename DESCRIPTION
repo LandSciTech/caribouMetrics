@@ -32,7 +32,8 @@ Imports:
     purrr,
     tidyselect,
     rsyncrosim,
-    spdep
+    spdep,
+    rgdal
 Collate: 
     'AAAClassDefinitions.R'
     'calcBinaryUse.R'

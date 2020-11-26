@@ -1,8 +1,9 @@
 ---
 title: "Caribou Resource Selection Probability Function package"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Caribou RSPF package}
+  %\VignetteIndexEntry{Caribou Resource Selection Probability Function package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

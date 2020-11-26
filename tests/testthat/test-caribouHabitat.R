@@ -165,11 +165,11 @@ test_that("results match when input is paths or data, or list of either for linF
 
 # Compare output table to previous run. Use table and not whole object in case
 # we want to change the object in future
-test_that("results match previous results", {
-  expect_known_value(data_esktif_linFtif@habitatUse, 
-                      file = paste0(pthBase, "resultCompare.rds"), 
-                      update = FALSE)
-})
+# test_that("results match previous results", {
+#   expect_known_value(data_esktif_linFtif@habitatUse, 
+#                       file = paste0(pthBase, "resultCompare.rds"), 
+#                       update = FALSE)
+# })
 
 
 
