@@ -29,7 +29,7 @@ setMethod(
            caribouRange, eskerSave = NULL, linFeatSave = NULL, 
            winArea = NULL, padProjPoly = FALSE, padFocal = FALSE, friLU = NULL) {
 
-    charIn <-  sapply(list(plc, esker, fri, age, natDist, anthroDist, harv, 
+    charIn <-  lapply(list(plc, esker, fri, age, natDist, anthroDist, harv, 
                            linFeat, projectPoly),
                       function(x) "character" %in% class(x))
 
@@ -159,7 +159,7 @@ setMethod(
                     projectPoly)
     }
     
-    charIn <-  sapply(indata, 
+    charIn <-  lapply(indata, 
                       function(x) "character" %in% class(x))
     
     if(!all(charIn)){
@@ -167,7 +167,7 @@ setMethod(
                  paths not a mixture of each", call. = FALSE)
     }  
     
-    filesExist <- sapply(indata, file.exists)
+    filesExist <- lapply(indata, file.exists)
     if(!all(filesExist)){
       stop("Path(s) for ",
            paste0(names(filesExist)[which(!filesExist)], collapse = ", "), 
