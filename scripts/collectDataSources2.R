@@ -567,6 +567,88 @@ bSand <- caribouRanges %>% filter(RANGE_NAME == "Brightsand") %>%
 # friD <- fasterize::fasterize(friD, tmplt_rast, field = "PLANFU")
 # raster::writeRaster(friD, paste0(outCHill, "fri50.tif"))
 # raster::writeRaster(ageD, paste0(outCHill, "age50.tif"))
+# Convert Brightsand data to 50 m res #=========================================
+
+# plc
+plcD <- raster(paste0(outBSand, "plc.tif"))
+
+tmplt_rast <- raster::projectExtent(plcD, crsUseR) %>% raster::`res<-`(50)
+
+plcD <- raster::projectRaster(plcD, tmplt_rast, method = "ngb",
+                              filename = paste0(outBSand, "plc50.tif"))
+
+# fire AFFES
+fireAFFES2020 <- st_read(paste0(outBSand, "fireAFFES2020.shp"))
+
+fireAFFES2020 <- fasterize::fasterize(fireAFFES2020, tmplt_rast, background = 0)
+
+raster::writeRaster(fireAFFES2020, paste0(outBSand, "fireAFFES2020_50.tif"))
+
+fireAFFES2010 <- st_read(paste0(outBSand, "fireAFFES2010.shp"))
+
+fireAFFES2010 <- fasterize::fasterize(fireAFFES2010, tmplt_rast, background = 0)
+
+raster::writeRaster(fireAFFES2010, paste0(outBSand, "fireAFFES2010_50.tif"))
+
+# HRFCCan
+harvHRFCCan2015 <- raster(paste0(outBSand, "harvHRFCCan2015.tif"))
+
+harvHRFCCan2015 <- raster::projectRaster(harvHRFCCan2015, tmplt_rast,
+                                         method = "ngb",
+                                     filename = paste0(outBSand,
+                                                       "harvHRFCCan2015_50.tif"))
+
+harvHRFCCan2010 <- raster(paste0(outBSand, "harvHRFCCan2010.tif"))
+
+harvHRFCCan2010 <- raster::projectRaster(harvHRFCCan2010, tmplt_rast,
+                                         method = "ngb",
+                                     filename = paste0(outBSand,
+                                                       "harvHRFCCan2010_50.tif"))
+
+fireHRFCCan2015 <- raster(paste0(outBSand, "fireHRFCCan2015.tif"))
+
+fireHRFCCan2015 <- raster::projectRaster(fireHRFCCan2015, tmplt_rast,
+                                         method = "ngb",
+                                         filename = paste0(outBSand,
+                                                           "fireHRFCCan2015_50.tif"))
+
+fireHRFCCan2010 <- raster(paste0(outBSand, "fireHRFCCan2010.tif"))
+
+fireHRFCCan2010 <- raster::projectRaster(fireHRFCCan2010, tmplt_rast,
+                                         method = "ngb",
+                                         filename = paste0(outBSand,
+                                                           "fireHRFCCan2010_50.tif"))
+
+# CanLAD
+harvCanLad2015 <- raster(paste0(outBSand, "harvCanLad2015.tif"))
+
+harvCanLad2015 <- raster::projectRaster(harvCanLad2015, tmplt_rast,
+                                         method = "ngb",
+                                         filename = paste0(outBSand,
+                                                           "harvCanLad2015_50.tif"))
+
+harvCanLad2010 <- raster(paste0(outBSand, "harvCanLad2010.tif"))
+
+harvCanLad2010 <- raster::projectRaster(harvCanLad2010, tmplt_rast,
+                                         method = "ngb",
+                                         filename = paste0(outBSand,
+                                                           "harvCanLad2010_50.tif"))
+
+fireCanLad2015 <- raster(paste0(outBSand, "fireCanLad2015.tif"))
+
+fireCanLad2015 <- raster::projectRaster(fireCanLad2015, tmplt_rast,
+                                         method = "ngb",
+                                         filename = paste0(outBSand,
+                                                           "fireCanLad2015_50.tif"))
+
+fireCanLad2010 <- raster(paste0(outBSand, "fireCanLad2010.tif"))
+
+fireCanLad2010 <- raster::projectRaster(fireCanLad2010, tmplt_rast,
+                                         method = "ngb",
+                                         filename = paste0(outBSand,
+                                                           "fireCanLad2010_50.tif"))
+
+
 
 # Convert ROF data to 50 m res #================================================
 
