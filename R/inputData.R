@@ -167,7 +167,7 @@ setMethod(
                  paths not a mixture of each", call. = FALSE)
     }  
     
-    filesExist <- lapply(indata, file.exists)
+    filesExist <- sapply(indata, file.exists)
     if(!all(filesExist)){
       stop("Path(s) for ",
            paste0(names(filesExist)[which(!filesExist)], collapse = ", "), 

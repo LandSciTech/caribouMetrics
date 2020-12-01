@@ -5,15 +5,15 @@
 \alias{updateCaribou,CaribouHabitat,list-method}
 \title{updateCaribou}
 \usage{
-updateCaribou(x, newData, ...)
+updateCaribou(CarHab, newData, ...)
 
-\S4method{updateCaribou}{CaribouHabitat,list}(x, newData, friLU, resultsOnly = FALSE)
+\S4method{updateCaribou}{CaribouHabitat,list}(CarHab, newData, friLU, resultsOnly = FALSE)
 }
 \arguments{
-\item{x}{CaribouHabitat object}
+\item{CarHab}{CaribouHabitat object}
 
-\item{fri, age, natDist, linFeat}{RasterLayer objects to be used to update x.
-fri is required, if the others are missing the layers from x will be used.}
+\item{fri, age, natDist, linFeat}{RasterLayer objects to be used to update CarHab.
+fri is required, if the others are missing the layers from CarHab will be used.}
 }
 \description{
 updateCaribou
