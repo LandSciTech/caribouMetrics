@@ -4,12 +4,10 @@
 \name{rfuToResType}
 \alias{rfuToResType}
 \title{Lookup table for RFU to resource type}
-\format{
-A data frame with 17 rows and 2 variables: \describe{
+\format{A data frame with 17 rows and 2 variables: \describe{
   \item{RegionalForestUnit}{Regional forest unit 5 letter or number code}
   \item{ResourceType}{Resource type code} 
-}
-}
+}}
 \source{
 LSL script for work published in:
  \url{https://doi.org/10.1139/cjz-2015-0101}
