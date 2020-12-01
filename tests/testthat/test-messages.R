@@ -196,6 +196,39 @@ test_that("error if a path file is not found", {
   ), "do.es. not exist")
 })
 
+test_that("error if some args are paths and others spatial", {
+  expect_error(caribouHabitat(
+    plc = paste0(pthBase, "plc", ".tif"),
+    esker = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE),
+    fri = paste0(pthBase, "fri", ".tif"),
+    age = paste0(pthBase, "age", ".tif"),
+    natDist = paste0(pthBase, "natDist", ".tif"),
+    anthroDist = paste0(pthBase, "anthroDist", ".tif"),
+    harv = paste0(pthBase, "harv", ".tif"),
+    linFeat = paste0(pthBase, "linFeat", ".shp"),
+    projectPoly = paste0(pthBase, "projectPoly", ".shp"),
+    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
+    eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
+    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+    caribouRange = "Churchill"
+  ), ".*supplied as sf or raster objects or character.*")
+  expect_error(caribouHabitat(
+    plc = plcD,
+    esker = paste0(pthBase, "eskertest", ".shp"),
+    fri = paste0(pthBase, "fri", ".tif"),
+    age = paste0(pthBase, "age", ".tif"),
+    natDist = paste0(pthBase, "natDist", ".tif"),
+    anthroDist = paste0(pthBase, "anthroDist", ".tif"),
+    harv = paste0(pthBase, "harv", ".tif"),
+    linFeat = paste0(pthBase, "linFeat", ".shp"),
+    projectPoly = paste0(pthBase, "projectPoly", ".shp"),
+    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
+    eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
+    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+    caribouRange = "Churchill"
+  ), ".*supplied as sf or raster objects or character.*")
+})
+
 test_that("error if file is in wrong format",{
   expect_error(caribouHabitat(
     plc = paste0(pthBase, "linFeat", ".shp"),

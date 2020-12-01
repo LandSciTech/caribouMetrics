@@ -30,13 +30,12 @@ setMethod(
            winArea = NULL, padProjPoly = FALSE, padFocal = FALSE, friLU = NULL) {
 
     charIn <-  sapply(list(plc, esker, fri, age, natDist, anthroDist, harv, 
-                           linFeat, projectPoly),
-                      function(x) "character" %in% class(x))
+                           linFeat, projectPoly), 
+                      function(x) "character" %in% class(x)) 
 
     if(any(charIn)){
-      stop("All data must be supplied as sf and raster objects or character
-                 paths not a mixture of each",
-           call. = FALSE)
+      stop("All data must be supplied as sf or raster objects or character
+                 paths not a mixture of each", call. = FALSE)
     }
 
     if(raster::isLonLat(plc)){
@@ -159,10 +158,9 @@ setMethod(
                     projectPoly)
     }
     
-    charIn <-  sapply(indata, 
-                      function(x) "character" %in% class(x))
+    charIn <-  indata %>% unlist(recursive = FALSE) %>% is.character()
     
-    if(!all(charIn)){
+    if(!charIn){
       stop("All data must be supplied as sf or raster objects or character
                  paths not a mixture of each", call. = FALSE)
     }  
