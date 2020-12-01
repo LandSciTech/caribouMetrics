@@ -85,7 +85,7 @@ table \code{rfuToResType}}
 use probabilities to. Note this will overwrite any existing files.}
 }
 \description{
-Caluculate the probability of caribou habitat use in spring, summer, fall and
+Calculate the probability of caribou habitat use in spring, summer, fall and
 winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
 2016.
 }
