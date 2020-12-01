@@ -24,7 +24,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 
 #'caribouHabitat
 #'
-#'Caluculate the probability of caribou habitat use in spring, summer, fall and
+#'Calculate the probability of caribou habitat use in spring, summer, fall and
 #'winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
 #'2016.
 #'
@@ -88,26 +88,29 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  \url{https://doi.org/10.1139/cjz-2015-0101}
 #'
 #'@export
-setGeneric("caribouHabitat", function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, projectPoly, caribouRange, ...) standardGeneric("caribouHabitat"))
+setGeneric("caribouHabitat", 
+           function(plc, esker, fri, age, natDist, anthroDist, 
+                    harv, linFeat, projectPoly, caribouRange, ...) 
+             standardGeneric("caribouHabitat"))
 
 setMethod(
   "caribouHabitat", 
   signature(plc = "ANY"), 
-  function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, 
-           projectPoly, caribouRange, ...) {
+  function(plc, esker, fri, age, natDist, anthroDist, 
+           harv, linFeat, projectPoly, caribouRange, ...) {
 
     dots <- list(...)
     
-    inputDataArgs <- dots[c("winArea", "eskerSave", "linFeatSave", "padProjPoly",
-                            "friLU", "padFocal")]
+    inputDataArgs <- dots[c("winArea", "eskerSave", "linFeatSave", 
+                            "padProjPoly", "friLU", "padFocal")]
     
-    inputDataArgs <- inputDataArgs[which(sapply(inputDataArgs, length) > 0)]
+    inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]
     
     processDataArgs <- dots[c("friLU")]
-    processDataArgs <- processDataArgs[which(sapply(processDataArgs, length) > 0)]
+    processDataArgs <- processDataArgs[which(lapply(processDataArgs, length) > 0)]
     
-    x <- do.call(inputData, c(lst(plc, esker, fri, age, natDist, anthroDist, harv,
-                                  linFeat, projectPoly, caribouRange), 
+    x <- do.call(inputData, c(lst(plc, esker, fri, age, natDist, anthroDist, 
+                                  harv, linFeat, projectPoly, caribouRange), 
                               inputDataArgs))
     
     if(is.null(processDataArgs$friLU)){
