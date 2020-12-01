@@ -112,15 +112,18 @@ test_that("results match when input is paths",{
 # Test all different ways to run with data #====================================
 plcD = raster(paste0(pthBase, "plc", ".tif"))
 eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
-eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE)
+eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE) %>% 
+  st_set_agr("constant")
 friD = raster(paste0(pthBase, "fri", ".tif"))
 ageD = raster(paste0(pthBase, "age", ".tif"))
 natDistD = raster(paste0(pthBase, "natDist", ".tif"))
 anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
 harvD = raster(paste0(pthBase, "harv", ".tif"))
 linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
-projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
-linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE)
+projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE) %>% 
+  st_set_agr("constant")
+linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE) %>% 
+  st_set_agr("constant")
 
 data_esktif_linFtif <- caribouHabitat(
   plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD,
@@ -145,9 +148,12 @@ data_eskshp_linFshp <- caribouHabitat(
 data_list_linF <- caribouHabitat(
   plc = plcD, esker = eskerDshp, fri = friD, age = ageD, natDist = natDistD, 
   anthroDist = anthroDistD, harv = harvD,
-  linFeat = list(roads = st_read(paste0(pthBase, "roads.shp"), quiet = TRUE),
-                 rail = st_read(paste0(pthBase, "rail.shp"), quiet = TRUE),
-                 utilities = st_read(paste0(pthBase, "utilities.shp"), quiet = TRUE)), 
+  linFeat = list(roads = st_read(paste0(pthBase, "roads.shp"), quiet = TRUE) %>% 
+                   st_set_agr("constant"),
+                 rail = st_read(paste0(pthBase, "rail.shp"), quiet = TRUE) %>% 
+                   st_set_agr("constant"),
+                 utilities = st_read(paste0(pthBase, "utilities.shp"), quiet = TRUE)%>% 
+                   st_set_agr("constant")), 
   projectPoly = projectPolyD,
   eskerSave = paste0(pthBase, "eskerTif", ".tif"),
   linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
@@ -165,11 +171,11 @@ test_that("results match when input is paths or data, or list of either for linF
 
 # Compare output table to previous run. Use table and not whole object in case
 # we want to change the object in future
-# test_that("results match previous results", {
-#   expect_known_value(data_esktif_linFtif@habitatUse, 
-#                       file = paste0(pthBase, "resultCompare.rds"), 
-#                       update = FALSE)
-# })
+test_that("results match previous results", {
+  expect_known_value(data_esktif_linFtif@habitatUse,
+                      file = paste0(pthBase, "resultCompare.rds"),
+                      update = FALSE)
+})
 
 
 

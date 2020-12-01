@@ -33,5 +33,6 @@ combineLinFeat <- function(roads, rail, utilities){
     transmute(ID = 1, Type = "rail") %>% 
     st_transform(st_crs(roads))
   
-  rbind(roads, utilities, rail) %>% mutate(ID = 1:n())
+  rbind(roads, utilities, rail) %>% mutate(ID = 1:n()) %>% 
+    st_set_agr(st_agr(roads))
 }
