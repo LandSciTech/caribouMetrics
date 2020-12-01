@@ -34,6 +34,7 @@ inputData(
   linFeatSave = NULL,
   winArea = NULL,
   padProjPoly = FALSE,
+  padFocal = FALSE,
   friLU = NULL
 )
 
@@ -52,6 +53,7 @@ inputData(
   linFeatSave = NULL,
   winArea = NULL,
   padProjPoly = FALSE,
+  padFocal = FALSE,
   friLU = NULL
 )
 }

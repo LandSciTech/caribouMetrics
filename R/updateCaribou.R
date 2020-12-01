@@ -3,72 +3,72 @@ NULL
 
 #' updateCaribou
 #'
-#' @param x CaribouHabitat object
+#' @param CarHab CaribouHabitat object
 #'
-#' @param fri,age,natDist,linFeat RasterLayer objects to be used to update x.
-#'   fri is required, if the others are missing the layers from x will be used.
+#' @param fri,age,natDist,linFeat RasterLayer objects to be used to update CarHab.
+#'   fri is required, if the others are missing the layers from CarHab will be used.
 #'
 #'   
 
 #' @export
-setGeneric("updateCaribou", function(x, newData, ...) standardGeneric("updateCaribou"))
+setGeneric("updateCaribou", function(CarHab, newData, ...) standardGeneric("updateCaribou"))
 
 # method to get final calculation from processed data in CaribouHabitat object
 setMethod(
   "updateCaribou", 
-  signature(x = "CaribouHabitat", newData = "missing"), 
-  function(x, ...) {
+  signature(CarHab = "CaribouHabitat", newData = "missing"), 
+  function(CarHab, ...) {
     dots <- list(...)
 
     # process the data if not already done
-    if(nrow(x@processedData) < 2){
+    if(nrow(CarHab@processedData) < 2){
       
       if(is.null(dots$friLU)){
         stop("friLU is required to process data")
       }
       
-      x <- processData(x, friLU = dots$friLU)
+      CarHab <- processData(CarHab, friLU = dots$friLU)
     }
     
     # calculate RSP
     coefTable <- coefTableHR %>% 
-      filter(stringr::str_detect(Range, x@attributes$caribouRange))
+      filter(stringr::str_detect(Range, CarHab@attributes$caribouRange))
     
-    x@habitatUse <- calcRSP(x@processedData, coefTable)
+    CarHab@habitatUse <- calcRSP(CarHab@processedData, coefTable)
     
-    projRas <- raster::rasterize(x@projectPoly, x@habitatUse[[1]], getCover=TRUE)
+    projRas <- raster::rasterize(CarHab@projectPoly, CarHab@habitatUse[[1]], getCover=TRUE)
     projRas[projRas==0] <- NA
     
-    x@habitatUse <- raster::mask(x@habitatUse, projRas )
-    x@habitatUse <- raster::crop(x@habitatUse, x@projectPoly, snap = "out")
-    x@processedData <- raster::mask(x@processedData, projRas )
-    x@processedData <- raster::crop(x@processedData, x@projectPoly, snap = "out")
+    CarHab@habitatUse <- raster::mask(CarHab@habitatUse, projRas )
+    CarHab@habitatUse <- raster::crop(CarHab@habitatUse, CarHab@projectPoly, snap = "out")
+    CarHab@processedData <- raster::mask(CarHab@processedData, projRas )
+    CarHab@processedData <- raster::crop(CarHab@processedData, CarHab@projectPoly, snap = "out")
     
-    return(x)
+    return(CarHab)
   })
 
 # method to update processed data when new data is supplied 
 #' @rdname updateCaribou
 setMethod(
   "updateCaribou", 
-  signature(x = "CaribouHabitat", newData = "list"), 
-  function(x, newData, friLU, resultsOnly = FALSE) {
+  signature(CarHab = "CaribouHabitat", newData = "list"), 
+  function(CarHab, newData, friLU, resultsOnly = FALSE) {
     
     # process the data if not already done
-    if(nrow(x@processedData) < 2){
-      stop("x@processedData is empty. Run updateCaribou with no additional
+    if(nrow(CarHab@processedData) < 2){
+      stop("CarHab@processedData is empty. Run updateCaribou with no additional
            data to process the initial data before updating")
     }
     
     
-    x <- processData(x, newData, friLU)
+    CarHab <- processData(CarHab, newData, friLU)
     
-    x <- updateCaribou(x)
+    CarHab <- updateCaribou(CarHab)
     
     if(resultsOnly){
-      return(x@habitatUse)
+      return(CarHab@habitatUse)
     }
     
-    return(x)
+    return(CarHab)
   
   })

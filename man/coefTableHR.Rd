@@ -4,13 +4,15 @@
 \name{coefTableHR}
 \alias{coefTableHR}
 \title{Model coefficients for caribou ranges}
-\format{A data frame with 547 rows and 5 variables: \describe{
+\format{
+A data frame with 547 rows and 5 variables: \describe{
   \item{Season}{season, one of Spring, Summer, Fall, Winter}
   \item{Variable}{the shortform variable name for this resource type}
   \item{Coefficient}{modelled coefficients}
   \item{WinArea}{window area for moving window average}
   \item{Range}{the caribou range name} 
-}}
+}
+}
 \source{
 LSL script for work published in:
  \url{https://doi.org/10.1139/cjz-2015-0101}

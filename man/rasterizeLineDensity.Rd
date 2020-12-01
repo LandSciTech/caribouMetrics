@@ -7,12 +7,12 @@
 rasterizeLineDensity(x, r)
 }
 \arguments{
-\item{x}{an sf object containing lines}
-
 \item{r}{a RasterLayer object to be used as a template for the output raster}
+
+\item{linObj}{an sf object containing lines}
 }
 \value{
-a RasterLayer object with values representing the density of lines
+A RasterLayer object with values representing the density of lines
   per hectare.
 }
 \description{

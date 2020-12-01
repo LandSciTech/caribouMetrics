@@ -2,10 +2,10 @@
 #'
 #' Rasterize line density in meters per hectare.
 #'
-#' @param x an sf object containing lines
+#' @param linObj an sf object containing lines
 #' @param r a RasterLayer object to be used as a template for the output raster
 #'
-#' @return a RasterLayer object with values representing the density of lines
+#' @return A RasterLayer object with values representing the density of lines
 #'   per hectare.
 #' @export
 #'

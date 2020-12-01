@@ -56,7 +56,7 @@ harvD = raster(paste0(pthBase, "harv", ".tif"))
 linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
 projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
 
-# Calaulate habitat use
+# Calculate habitat use
 carHab1 <- caribouHabitat(
   plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
   anthroDist = anthroDistD, harv = harvD,

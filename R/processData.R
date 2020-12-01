@@ -2,7 +2,6 @@
 #' @include AAAClassDefinitions.R
 NULL
 
-#' Process data 
 #' Process the data after it is loaded and checked by inputData
 
 #' @export
@@ -27,7 +26,8 @@ setMethod(
     
     # reclassify plc and fri to resource types based on look up tables
     rclPLC <- plcToResType %>% 
-      mutate(ResourceTypeCode = as.factor(ResourceType) %>% as.numeric()) %>% 
+      mutate(ResourceTypeCode = as.factor(ResourceType) %>% 
+               as.numeric()) %>% 
       select(PLCCode, ResourceType, ResourceTypeCode)
     
     resTypeLevels <- rclPLC %>% 
@@ -109,7 +109,8 @@ setMethod(
     # window radius is radius of circle with winArea rounded to even number of
     # raster cells based on resolution
     winRad <- (sqrt(inData@attributes$winArea*10000/pi)/res(expVars[[1]])[1]) %>% 
-      round(digits = 0)*res(expVars[[1]])[1] %>% round()
+      round(digits = 0)*res(expVars[[1]])[1] %>% 
+      round()
     
     # calculate moving window average for all explanatory variables
     expVars <- expVars %>% 
@@ -117,7 +118,8 @@ setMethod(
       addLayer(inData@esker) 
     
     layernames <- c(resTypeLevels %>% arrange(code) %>%
-                      pull(resType) %>% as.character(),
+                      pull(resType) %>% 
+                      as.character(),
                     "TDENLF", "ESK")
     
     if(!inData@attributes$padProjPoly){

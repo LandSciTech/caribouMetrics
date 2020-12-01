@@ -65,16 +65,27 @@ should be linear feature density in m^2/ha}
 used to avoid edge effects? If FALSE, the default, only data from inside the
 \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
 the other variables are clipped to the extent of the buffered area. Results
-are always clipped to the original \code{projectPoly}.}
+are always clipped to the original \code{projectPoly}. It is ideal to set
+this to TRUE and provide a dataset that is larger than the
+\code{projectPoly} to avoid edge effects.}
+
+\item{padFocal}{logical. This value is passed to the pad argument in
+\code{raster::focal}, if it is FALSE then cells near the edge will return
+NA, if it is TRUE a value will be returned for each cell that assumes cells
+outside the input data are 0 for all resource types. This is not a good
+assumption and should be used with caution}
 
 \item{friLU}{data.frame. A look up table to convert local forest units to
 regional forest units. It should have two columns, the first must contain
 all the unique values in the supplied \code{fri} raster and the second must
 contain the names of regional forest units matching those provided in the
 table \code{rfuToResType}}
+
+\item{saveOutput}{character. The filename to save the rasterBrick of habitat
+use probabilities to. Note this will overwrite any existing files.}
 }
 \description{
-Caluculate the probability of caribou habitat use in spring, summer, fall and
+Calculate the probability of caribou habitat use in spring, summer, fall and
 winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
 2016.
 }
@@ -85,5 +96,6 @@ information is the \code{plc} but this is can be updated based on more recent
 \code{fri} data and disturbance information. All data sources can be provided
 either as filenames or as spatial files. The result is a CaribouHabitat object
 which has methods defined for plotting and extracting the results. To update
-an existing CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
+an existing CaribouHabitat object with new data see
+\link[caribouMetrics]{updateCaribou}.
 }

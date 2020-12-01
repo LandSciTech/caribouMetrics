@@ -50,11 +50,27 @@ setMethod(
     resourceProp <- st_drop_geometry(resourceProp)
   }
   
+  # Check inputs are of type data.frame
+  if(!is.data.frame(coefs)){
+    stop("coefs must be a dataframe")
+  }
+  
+  if(!is.data.frame(resourceProp)){
+    stop("resourceProp must be a dataframe")
+  }
+  
+  # Avoiding standard data.frames to ensure speed and follow SpaDES
+  # guidelines
+  resourceProp <- data.table::data.table(resourceProp)
+  coefs <- data.table::data.table(coefs)
+  
   # Check col names
+  # TODO This expected names bit really breaks the generalisability
   expectedColNamesResProp <- c("DEC", "MIX", "LGOP", "CON", "LGTP",
                                "LGMD", "ST", "LGW", "DTN", "ESK", "TDENLF")
   
-  missingColsResProp <- setdiff(expectedColNamesResProp, names(resourceProp))
+  missingColsResProp <- data.table::fsetdiff(expectedColNamesResProp, 
+                                             names(resourceProp))
   
   if(length(missingColsResProp > 0)){
     stop("The column names in resourceProp do not match the expected names: ",
@@ -63,19 +79,12 @@ setMethod(
   
   expectedColNamesCoefs <- c("Range", "Season", "Coefficient", "Variable")
   
-  missingColsCoefs <- setdiff(expectedColNamesCoefs, names(coefs))
+  missingColsCoefs <- data.table::fsetdiff(expectedColNamesCoefs, 
+                                           names(coefs))
   
   if(length(missingColsCoefs > 0)){
     stop("The column names in coefs do not match the expected names: ",
          paste0(expectedColNamesCoefs, sep = ", "))
-  }
-  
-  if(!is.data.frame(coefs)){
-    stop("coefs must be a dataframe")
-  }
-  
-  if(!is.data.frame(resourceProp)){
-    stop("resourceProp must be a dataframe")
   }
   
   if(!seasons %in% c("Spring", "Summer", "Fall", "Winter", "all")){
@@ -89,7 +98,6 @@ setMethod(
   
   # add seasons for each polygon
   resourceProp <- map_dfr(seasons, ~mutate(resourceProp, Season = .x))
-  
   
   # make predictions for each polygon and season
   resourceProp <- resourceProp %>% 
@@ -130,6 +138,8 @@ setMethod(
       stop("coefs must be a dataframe")
     }
     
+    coefs <- data.table::data.table(coefs)
+    
     expectedColNamesCoefs <- c("Range", "Season", "Coefficient", "Variable")
     
     missingColsCoefs <- setdiff(expectedColNamesCoefs, names(coefs))
@@ -149,8 +159,8 @@ setMethod(
     }
     
     # get coefficients and explanatory vars in same order
-    coefs2 <- data.frame(resType = resourceProp %>% names(),
-                         stringsAsFactors = FALSE) %>% 
+    coefs2 <- data.table::data.table(resType = resourceProp %>% names(),
+                                     stringsAsFactors = FALSE) %>% 
       mutate(order = 1:n()) %>% 
       full_join(coefs, by = c(resType = "Variable")) %>% 
       spread(Season, Coefficient, fill = 0) %>% 

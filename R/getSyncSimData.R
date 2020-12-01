@@ -23,7 +23,7 @@ setMethod(
     
     # mySC IDs to FUs
     scLookup <- datasheet(myResult[[1]], "STSim_StateClass", optional = TRUE) %>% 
-      mutate(FU = as.character(StateLabelXID))
+      dplyr::mutate(FU = as.character(StateLabelXID))
     
     rfus <-  read.csv(rfuLUPath, 
                       stringsAsFactors = FALSE)[,1:3]
@@ -62,7 +62,7 @@ setMethod(
   
   # mySC IDs to FUs
   scLookup <- datasheet(myResult[[1]], "STSim_StateClass", optional = TRUE) %>% 
-    mutate(FU = as.character(StateLabelXID) %>% toupper())
+    dplyr::mutate(FU = as.character(StateLabelXID) %>% toupper())
   
   rfus <-  read.csv(rfuLUPath, 
                     stringsAsFactors = FALSE)[,1:3]
