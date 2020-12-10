@@ -311,6 +311,17 @@ st_write(fireAFFESBSand2010, paste0(outBSand, "fireAFFES2010.shp"))
 rm(fireAFFES, fireAFFESCH2020, fireAFFESROF2020, fireAFFESBSand2020,
    fireAFFESCH2010, fireAFFESROF2010, fireAFFESBSand2010)
 
+# get fire for 2015 and convert to 50 m raster
+fireAFFESCH2015 <- st_filter(fireAFFES, cHill) %>%
+  filter(between(FIRE_YEAR, 1985, 2015))
+
+plcD <- raster(paste0(outCHill, "plc.tif"))
+
+tmplt_rast <- raster::projectExtent(plcD, crsUseR) %>% raster::`res<-`(50)
+
+fireAFFES2015 <- fasterize::fasterize(fireAFFESCH2015, tmplt_rast, background = 0)
+
+raster::writeRaster(fireAFFES2015, paste0(outCHill, "fireAFFES2015_50.tif"))
 
 # HRFCCan Disturbance #=========================================================
 # Harvest
@@ -830,7 +841,16 @@ harvMNRFCHill2010 <- fasterize::fasterize(harvMNRFCHill %>%
                                           tmpltRastCHill, 
                                           background = 0)
 raster::writeRaster(harvMNRFCHill2010, paste0(outCHill, "harvMNRF2010_50.tif"))
-rm(harvMNRFCHill, harvMNRFCHill2010, harvMNRFCHill2018)
+
+# add 2015 for Churchill
+harvMNRFCHill2015 <- fasterize::fasterize(harvMNRFCHill %>% 
+                                            filter(AR_YEAR <= 2015) %>% 
+                                            st_cast(),
+                                          tmpltRastCHill, 
+                                          background = 0)
+raster::writeRaster(harvMNRFCHill2015, paste0(outCHill, "harvMNRF2015_50.tif"))
+
+rm(harvMNRFCHill, harvMNRFCHill2010, harvMNRFCHill2018, harvMNRFCHill2015)
 # ROF
 harvMNRFROF2018 <- fasterize::fasterize(harvMNRFROF %>% st_cast(),
                                           tmpltRastROF, 
