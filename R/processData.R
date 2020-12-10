@@ -139,7 +139,9 @@ setMethod(
     
   })
 
-# method to update processed data when new data is supplied 
+# method to update processed data when new data is supplied avoids unnecessary
+# steps if new data is not provided for all variables
+
 #' @rdname processData
 setMethod(
   "processData", 
