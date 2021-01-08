@@ -11,3 +11,4 @@ inputNV/
 *.html
 inst/doc
 outputs/
+scripts/profiler_script.R
