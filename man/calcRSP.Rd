@@ -10,7 +10,9 @@ calcRSP(resourceProp, ...)
 \item{resourceProp}{A dataframe containing the proportions/densities of each
 resource in the polygon and identifying the range.}
 
-\item{coefs}{A dataframe containing coefficients for each season resource.}
+\item{coefs}{A dataframe containing coefficients for each season resource.
+With in the package \code{coefTableHR} which is supplied with the package
+is used and any other table must have the same column names.}
 
 \item{seasons}{A character vector containing "all" (default) or any of
 "Spring", "Summer", "Fall", "Winter".}
@@ -20,18 +22,18 @@ unique identifier for each polygon or an integer indicating its position.
 By default the first column is assumed to be the polygon id.}
 }
 \value{
-Returns a dataframe with polygon ID, and probability of use for each
-   season.
+Returns a RasterStack or dataframe with probability of use for each
+  season.
 }
 \description{
 Calculate the resource selection probability for northern Ontario caribou in
  each season and range based on Hornseth and Rempel 2016.
 }
 \details{
-This function takes a dataframe that identifies the range and the
+This function takes a raster or dataframe that identifies the range and the
  proportions of resource types and density of linear features for each
- polygon. A dataframe with coefficents must also be provided. The names of
- columns in the \code{resourceProp} and \code{coefs} dataframes must match
+ cell or polygon. A dataframe with coefficents must also be provided. The names of
+ of the \code{resourceProp} and \code{coefs} objects must match
  those expected. The following table explains the meaning of the resource
  type codes.
 

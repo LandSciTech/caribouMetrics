@@ -81,7 +81,7 @@ Using the coefficients for each range and season extracted from the Caribou_Rang
 devtools::load_all()
 library(tmap)
 
-pthBase <- "tests/testthat/data/"
+pthBase <- "../tests/testthat/data/"
 
 plcD = raster(paste0(pthBase, "plc", ".tif"))
 eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
@@ -150,7 +150,7 @@ plc <- mask(plc, yfNatDist, maskvalue = 1,
             updatevalue = DTNcode)
 
 if(!"DTN" %in% resTypeLevels$resType){
-      resTypeLevels <- resTypeLevels %>% add_row(resType = "DTN", code = 99)
+      resTypeLevels <- resTypeLevels %>% add_row(resType = "DTN", ID = 99)
     }
 
 tmapCatRast(plc, resTypeLevels$resType, "Post-update PLC to FRI data")
@@ -160,7 +160,7 @@ tmapCatRast(plc, resTypeLevels$resType, "Post-update PLC to FRI data")
 tmplt <- raster(plc) %>% raster::`res<-`(c(400, 400))
 plc <- raster::layerize(plc) %>% 
   raster::resample(tmplt, method = "bilinear") %>% 
-  `names<-`(c(resTypeLevels$resType, "DTN"))
+  `names<-`(resTypeLevels$resType)
 
 allDist16ha <- raster::stack(harv, anthroDist, 
                              natDist) %>% 
