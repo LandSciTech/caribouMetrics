@@ -171,12 +171,14 @@ test_that("results match when input is paths or data, or list of either for linF
 
 # Compare output table to previous run. Use table and not whole object in case
 # we want to change the object in future
-test_that("results match previous results", {
-  expect_known_value(data_esktif_linFtif@habitatUse,
-                      file = paste0(pthBase, "resultCompare.rds"),
-                      update = FALSE)
+# Do to changes in CRS order we simply check that the two rasters are
+# equivalent to each other
+resultCompare <- readRDS(paste0(pthBase, "resultCompare.rds"))
+
+testthat::test_that("results match previous results",{
+  testthat::expect_true(
+    raster::all.equal(resultCompare, 
+                      data_esktif_linFtif@habitatUse)
+  )
 })
-
-
-
 
