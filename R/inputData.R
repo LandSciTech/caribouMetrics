@@ -42,6 +42,17 @@ setMethod(
       stop("plc must have a projected CRS", call. = FALSE)
     }
     
+    # Get window area from table b/c some models used different sizes
+    if(is.null(winArea)){
+      winArea <- coefTableHR %>% filter(Range == caribouRange) %>% 
+        pull(WinArea) %>% 
+        max()
+    }
+    
+    if(!is.numeric(winArea)){
+      stop("winArea must be a number (in hectares)", call. = FALSE)
+    }
+    
     .checkInputs(fri, caribouRange, friLU, winArea)
     
     if(st_crs(projectPoly) != st_crs(plc)){
@@ -52,17 +63,7 @@ setMethod(
     projectPolyOrig <- projectPoly
     
     if(padProjPoly){
-      # Get window area from table b/c some models used different sizes
-      if(is.null(winArea)){
-        winArea <- coefTableHR %>% filter(Range == caribouRange) %>% 
-          pull(WinArea) %>% 
-          max()
-      }
-      
-      if(!is.numeric(winArea)){
-        stop("winArea must be a number (in hectares)", call. = FALSE)
-      }
-      
+
       # window radius is radius of circle with winArea rounded to even number of
       # raster cells based on resolution
       winRad <- (sqrt(winArea*10000/pi)/res(plc)[1]) %>% 
