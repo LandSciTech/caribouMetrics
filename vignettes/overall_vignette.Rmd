@@ -45,11 +45,15 @@ Several different data sets are used in the model to describe conditions that af
 The example data set loaded below includes a small area in the Churchill caribou range that we will use as an example. 
 
 ```{r load data}
-# load example data
-plcD = raster(paste0(pthBase, "plc", ".tif"))
+# load example data and classify plc and fri into Resource Types
+plcD = raster(paste0(pthBase, "plc", ".tif")) %>% 
+  reclassPLC()
 eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
 eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE)
-friD = raster(paste0(pthBase, "fri", ".tif"))
+friD = raster(paste0(pthBase, "fri", ".tif")) %>%
+  reclassFRI(friLU = read.csv(paste0(pthBase, "friLU", ".csv"),
+                                             stringsAsFactors = FALSE) %>%
+               mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")))
 ageD = raster(paste0(pthBase, "age", ".tif"))
 natDistD = raster(paste0(pthBase, "natDist", ".tif"))
 anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
@@ -66,7 +70,10 @@ utilitiesD = st_read(paste0(pthBase, "utilities.shp"), quiet = TRUE)
 
 ```{r caribouHabitat1}
 carHab1 <- caribouHabitat(
-  plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
+  plc = plcD , 
+  esker = eskerDras, 
+  fri = friD , 
+  age = ageD, natDist = natDistD, 
   anthroDist = anthroDistD, harv = harvD,
   linFeat = linFeatDras, projectPoly = projectPolyD,
   friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%

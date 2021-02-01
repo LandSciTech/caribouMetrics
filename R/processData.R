@@ -13,66 +13,29 @@ setGeneric("processData", function(inData, newData, ...) standardGeneric("proces
 setMethod(
   "processData", signature(inData = "CaribouHabitat", newData = "missing"), 
   function(inData, friLU) {
-    # TODO:
-    # get fri lu from raster legend
-    
-    friLU <- friLU %>% set_names("ID", "RFU")
-    
-    # convert from FRI and PLC to ResType using supplied fu to rfu and internal
-    # rfu to restype and plc to restype
-    friLU <- left_join(friLU, rfuToResType, 
-                       by = c("RFU" = "RegionalForestUnit")) %>% 
-      select(-RFU)
-    
-    # reclassify plc and fri to resource types based on look up tables
-    rclPLC <- plcToResType %>% 
-      mutate(ResourceTypeCode = as.factor(ResourceType) %>% 
-               as.numeric()) %>% 
-      select(PLCCode, ResourceType, ResourceTypeCode)
-    
-    resTypeLevels <- rclPLC %>% 
-      select(ResourceType, ResourceTypeCode) %>% 
-      distinct() %>% 
-      set_names(c("resType", "code")) %>% arrange(code)
-    
-    if(!"DTN" %in% resTypeLevels$resType){
-      resTypeLevels <- resTypeLevels %>% add_row(resType = "DTN", code = 99)
-    }
-    
-    rclPLC <- rclPLC %>% select(-ResourceType) %>% 
-      as.matrix(rclPLC, rownames.force = FALSE)
-    
-    rclFRI <-  friLU %>% select(ID, ResourceType) %>%
-      left_join(resTypeLevels, by = c("ResourceType" = "resType")) %>%
-      select(ID, code) %>% 
-      as.matrix()
-    
-    inData@plc <- reclassify(inData@plc, rclPLC)
-    
-    inData@fri <- reclassify(inData@fri, rcl = rclFRI)
-    
     # Update PLC based on FRI, age and disturbance history
     updted <- updatePLC(plc = inData@plc, fri = inData@fri, age = inData@age, 
                         natDist = inData@natDist, anthroDist = inData@anthroDist,
-                        harv = inData@harv, resTypeLevels = resTypeLevels)
+                        harv = inData@harv)
     
-    expVars <- updted$plc
     inData@natDist <- updted$natDist
+    
+    # resample to 16ha and flag cells with >35% disturbance
+    expVars <- applyDist(updted$plc, inData@natDist, inData@anthroDist, 
+                         inData@harv)
+    
     rm(updted)
     
     # create raster attribute table
     inData@plc <- raster::ratify(inData@plc)
     
     levels(inData@plc)[[1]] <- left_join(raster::levels(inData@plc)[[1]], 
-                                         resTypeLevels, by = c(ID = "code"))
+                                         resTypeCode, by = c(ID = "code"))
 
     # Resample linFeat and esker to 16 ha
     if(any(raster::res(inData@linFeat) < 400)){
       message("resampling linFeat to match plc resolution")
       tmplt <- inData@plc %>% raster::`res<-`(c(400, 400))
-      
-      # lfFile <- tempfile()
-      # raster::writeRaster(inData@linFeat, lfFile)
       
       inData@linFeat <- raster::resample(inData@linFeat, tmplt,
                                          method = "bilinear")
@@ -117,8 +80,8 @@ setMethod(
       addLayer(inData@linFeat) %>% 
       addLayer(inData@esker) 
     
-    layernames <- c(resTypeLevels %>% arrange(code) %>%
-                      pull(resType) %>% 
+    layernames <- c(resTypeCode %>% arrange(code) %>%
+                      pull(ResourceType) %>% 
                       as.character(),
                     "TDENLF", "ESK")
     
@@ -182,36 +145,6 @@ setMethod(
     
     #raster::compareRaster(newData, inData@plc)
     
-    # get resTypeLevels from inData@plc RAT
-    resTypeLevels <- inData@plc %>% raster::levels() %>% .[[1]] %>% 
-      set_names(c("code", "resType")) %>% 
-      mutate(resType = as.character(resType))
-    
-    if(!"DTN" %in% resTypeLevels$resType){
-      resTypeLevels <- resTypeLevels %>% add_row(resType = "DTN", code = 99)
-    }
-    
-    # convert from FRI to ResType using supplied fu to rfu and internal
-    # rfu to restype 
-    # checks types and match names
-    if(!is.numeric(friLU[,1])){
-      stop("The first column of friLU must be numeric", call. = FALSE)
-    }
-    
-    if(any(is.na(friLU[,2]))){
-      warning("friLU contains NA in the second column. ", 
-              "Cells with these IDs will be replaced with values from plc ",
-              "in the calculation of probability of use", call. = FALSE)
-    }
-    
-    if(!all(unique(friLU[,2]) %in% c(unique(rfuToResType$RegionalForestUnit), NA))){
-      stop("The second column of friLU must match a regional forest unit: ", 
-           paste0(c(unique(rfuToResType$RegionalForestUnit), NA), sep = ", "), 
-           call. = FALSE)
-    }
-    
-    friLU <- friLU %>% set_names("ID", "RFU")
-    
     # Get window area from table b/c some models used different sizes
     if(is.null(inData@attributes$winArea)){
       inData@attributes$winArea <- coefTableHR %>% 
@@ -220,19 +153,7 @@ setMethod(
         max()
     }
     
-    friLU <- left_join(friLU, rfuToResType, 
-                       by = c("RFU" = "RegionalForestUnit")) %>% 
-      select(-RFU)
-    
-    rclFRI <-  friLU %>% select(ID, ResourceType) %>%
-      left_join(resTypeLevels, by = c("ResourceType" = "resType")) %>%
-      select(ID, code) %>% 
-      as.matrix()
-    
-    if(!is.null(newData$fri)){
-      newData$fri <- reclassify(newData$fri, rcl = rclFRI)
-    }
-    
+   
     PLCUpdated <- any(names(newData) %in%
                              c("fri", "age", "natDist", "anthroDist", "harv"))
     
@@ -257,11 +178,14 @@ setMethod(
       # Update PLC based on FRI, age and disturbance history
       updted <- updatePLC(plc = inData@plc, fri = newData$fri, age = newData$age,
                           natDist = newData$natDist, 
-                          anthroDist = newData$anthroDist, harv = newData$harv,
-                          resTypeLevels = resTypeLevels)
+                          anthroDist = newData$anthroDist, harv = newData$harv)
       
-      expVars <- updted$plc
       inData@natDist <- updted$natDist
+      
+      expVars <- applyDist(updted$plc, natDist = newData$natDist, 
+                           anthroDist = newData$anthroDist,
+                           harv = newData$harv)
+      
       
       rm(updted) 
     } 
@@ -277,11 +201,11 @@ setMethod(
     if("linFeat" %in% names(newData) && PLCUpdated){
       expVars <- expVars %>% addLayer(inData@linFeat)
       
-      layernames <- c(resTypeLevels %>% arrange(code) %>%
-                        pull(resType) %>% as.character(), "TDENLF")
+      layernames <- c(resTypeCode %>% arrange(code) %>%
+                        pull(ResourceType) %>% as.character(), "TDENLF")
     } else if (PLCUpdated){
-      layernames <- resTypeLevels %>% arrange(code) %>%
-        pull(resType) %>% as.character()
+      layernames <- resTypeCode %>% arrange(code) %>%
+        pull(ResourceType) %>% as.character()
     } else {
       expVars <- inData@linFeat
       

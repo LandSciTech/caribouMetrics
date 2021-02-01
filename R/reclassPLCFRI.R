@@ -1,0 +1,72 @@
+#' Reclassify plc and fri
+#' 
+#' 
+#' @param fri raster. Forest resource inventory
+#' @param friLU data.frame. Lookup table to convert numbers in raster to regional forest unit codes
+#' @param rfuLU data.frame. Lookup table to convert RFU codes to resource types
+
+#' @param plc raster. Provincial land cover
+#' @param plcLU Lookup table to convert plc numbers to resource types 
+
+reclassFRI <- function(fri, friLU, rfuLU = rfuToResType){
+  # TODO: get fri lu from raster legend?
+  
+  # check look up matches up
+  if(!is.null(friLU)){
+    # checks types and match names
+    if(!inherits(friLU, "data.frame")){
+      stop("friLU must be a data.frame", call. = FALSE)
+    }
+    if(!is.numeric(friLU[,1])){
+      stop("The first column of friLU must be numeric", 
+           call. = FALSE)
+    }
+    
+    if(any(is.na(friLU[,2]))){
+      warning("friLU contains NA in the second column. ", 
+              "Cells with these IDs will be replaced with values from plc ",
+              "in the calculation of probability of use", call. = FALSE)
+    }
+    
+    if(!all(unique(friLU[,2]) %in% c(unique(rfuLU$RegionalForestUnit), NA))){
+      stop("The second column of friLU must match a regional forest unit: ", 
+           paste0(unique(friLU[,2])[which(!unique(friLU[,2]) %in%
+                                            c(unique(rfuToResType$RegionalForestUnit), NA))],
+                  sep = ", "),
+           " does not match",
+           call. = FALSE)
+    }
+    
+    if(!all(raster::unique(fri) %in% c(friLU[,1], NA))){
+      stop("All unique values in fri must be present in friLU",
+           paste0(raster::unique(fri)[which(!raster::unique(fri) %in% c(friLU[,1], NA))]),
+           call. = FALSE)
+    }
+    
+  }
+  
+  friLU <- friLU %>% set_names("ID", "RFU")
+  
+  # convert from FRI to ResType using supplied fu to rfu and internal
+  # rfu to restype
+  rclFRI <- left_join(friLU, rfuToResType, 
+                     by = c("RFU" = "RegionalForestUnit")) %>% 
+    left_join(resTypeCode, by = "ResourceType") %>% 
+    select(-RFU, -ResourceType) %>% 
+    as.matrix()
+  
+  fri <- reclassify(fri, rcl = rclFRI)
+}
+
+#' 
+#' @rdname reclassFRI
+reclassPLC <- function(plc, plcLU = plcToResType){
+  
+  # reclassify plc and fri to resource types based on look up tables
+  rclPLC <- plcToResType %>% 
+    left_join(resTypeCode, by = "ResourceType")%>% 
+    select(-ResourceType) %>% 
+    as.matrix(rclPLC, rownames.force = FALSE)
+  
+  plc <- reclassify(plc, rclPLC)
+}

@@ -46,8 +46,10 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'@param age filename or RasterLayer. Tree age in years
 #'@param natDist filename or RasterLayer. Presence or absence or natural
 #'  disturbance, primarily by fire
-#'@param anthroDist filename or RasterLayer. Anthropogenic disturbance
-#'@param harv filename or RasterLayer. Harvest history
+#'@param anthroDist filename or RasterLayer. Anthropogenic disturbance other
+#'  than harvest. This can have an effect on any type of landcover except water
+#'@param harv filename or RasterLayer. Harvest history. This can only have an
+#'  effect on forest landcover types and will not affect wetlands or water
 #'@param linFeat filename, RasterLayer, sf object or named list with elements
 #'  roads, rail, and utilities. Linear features. If it is a RasterLayer then it
 #'  should be linear feature density in m^2/ha
