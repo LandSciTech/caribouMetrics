@@ -8,9 +8,9 @@
 \usage{
 \S4method{initialize}{CaribouHabitat}(
   .Object,
-  plc,
+  landCover,
   esker,
-  fri,
+  updatedLC,
   age,
   natDist,
   anthroDist,
@@ -29,11 +29,11 @@ selection function
 \section{Slots}{
 
 \describe{
-\item{\code{plc}}{Raster of provincial land cover.}
+\item{\code{landCover}}{Raster of provincial land cover.}
 
 \item{\code{esker}}{Raster of esker density in m^2 per hectare.}
 
-\item{\code{fri}}{Raster of forest resource inventory.}
+\item{\code{updatedLC}}{Raster of forest resource inventory.}
 
 \item{\code{age}}{Raster of age in years from forest resource inventory.}
 

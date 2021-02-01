@@ -8,19 +8,19 @@
 #' LGOP)
 #' 
 #' 
-#' @param plc 
+#' @param landCover 
 #' @param harv 
 #' @param anthroDist 
 #' @param natDist 
 #' 
 #' @export
 
-applyDist <- function(plc, natDist, anthroDist, harv){
+applyDist <- function(landCover, natDist, anthroDist, harv){
   # convert to 16 ha resolution stack of ResType proportion to match 16 ha
   # hexagons in Rempel
-  tmplt <- raster(plc) %>% raster::`res<-`(c(400, 400))
+  tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
   
-  plc <- raster::layerize(plc, classes = resTypeCode$code) %>% 
+  landCover <- raster::layerize(landCover, classes = resTypeCode$code) %>% 
     raster::resample(tmplt, method = "bilinear")
   
   allDist16ha <- raster::stack(harv, anthroDist, 
@@ -33,7 +33,7 @@ applyDist <- function(plc, natDist, anthroDist, harv){
     pull(code)
   
   # get proportion land
-  land <- 1 - plc[[watCode]]
+  land <- 1 - landCover[[watCode]]
   
   # divide prop disturbance by prop land 
   propLandDist <- Vectorize(function(dist, land){
@@ -44,29 +44,29 @@ applyDist <- function(plc, natDist, anthroDist, harv){
   allDist16ha <- raster::overlay(allDist16ha, land, fun = propLandDist)
   
   
-  # make plc have 0 forest classes when 16 ha area disturbed > 0.35 by natural
+  # make landCover have 0 forest classes when 16 ha area disturbed > 0.35 by natural
   # disturbance or anthropogenic disturbance
   toChange <- resTypeCode %>% filter(!ResourceType %in% c("DTN", "LGW")) %>% 
     pull(code)
   
   for (i in toChange) {
-    plc[[i]] <- raster::mask(plc[[i]], max(allDist16ha[[2:3]] > 0.35),
-                             maskvalue = 1,
-                             updatevalue = 0)
+    landCover[[i]] <- raster::mask(landCover[[i]], max(allDist16ha[[2:3]] > 0.35),
+                                   maskvalue = 1,
+                                   updatevalue = 0)
   }
   
   
-  # make plc have 0 forest classes when 16 ha area disturbed > 0.35 by harvest
+  # make landCover have 0 forest classes when 16 ha area disturbed > 0.35 by harvest
   # disturbance but don't change wetlands
   toChange <- resTypeCode %>% 
     filter(!ResourceType %in% c("DTN", "LGW", "LGTP", "LGOP", "ST")) %>% 
     pull(code)
   
   for (i in toChange) {
-    plc[[i]] <- raster::mask(plc[[i]], allDist16ha[[1]] > 0.35,
-                             maskvalue = 1, 
-                             updatevalue = 0)
+    landCover[[i]] <- raster::mask(landCover[[i]], allDist16ha[[1]] > 0.35,
+                                   maskvalue = 1, 
+                                   updatevalue = 0)
   }
   
-  return(plc)
+  return(landCover)
 }

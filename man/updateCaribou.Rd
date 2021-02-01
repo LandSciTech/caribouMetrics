@@ -12,8 +12,8 @@ updateCaribou(CarHab, newData, ...)
 \arguments{
 \item{CarHab}{CaribouHabitat object}
 
-\item{fri, age, natDist, linFeat}{RasterLayer objects to be used to update CarHab.
-fri is required, if the others are missing the layers from CarHab will be used.}
+\item{updatedLC, age, natDist, linFeat}{RasterLayer objects to be used to update CarHab.
+updatedLC is required, if the others are missing the layers from CarHab will be used.}
 }
 \description{
 updateCaribou

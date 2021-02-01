@@ -16,37 +16,13 @@ Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource
  \url{https://doi.org/10.1139/cjz-2015-0101}
 }
 \usage{
-caribouHabitat(
-  plc,
-  esker,
-  fri,
-  age,
-  natDist,
-  anthroDist,
-  harv,
-  linFeat,
-  projectPoly,
-  caribouRange,
-  ...
-)
+caribouHabitat(landCover, esker, linFeat, projectPoly, caribouRange, ...)
 }
 \arguments{
-\item{plc}{filename or RasterLayer. Provincial landcover class}
+\item{landCover}{filename or RasterLayer. Provincial landcover class}
 
 \item{esker}{filename, RasterLayer or sf object. Eskers. If it is a
 RasterLayer then it should be esker density in m^2/ha.}
-
-\item{fri}{filename or RasterLayer. Forest resource inventory class ids must
-correspond to the ids in the \code{friLU}.}
-
-\item{age}{filename or RasterLayer. Tree age in years}
-
-\item{natDist}{filename or RasterLayer. Presence or absence or natural
-disturbance, primarily by fire}
-
-\item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance}
-
-\item{harv}{filename or RasterLayer. Harvest history}
 
 \item{linFeat}{filename, RasterLayer, sf object or named list with elements
 roads, rail, and utilities. Linear features. If it is a RasterLayer then it
@@ -56,6 +32,20 @@ should be linear feature density in m^2/ha}
 
 \item{caribouRange}{character. The range where caribou were located. See
 \code{unique(coefTableHR$Range)}}
+
+\item{updatedLC}{filename or RasterLayer. Forest resource inventory class ids must
+correspond to the ids in the \code{friLU}.}
+
+\item{age}{filename or RasterLayer. Tree age in years}
+
+\item{natDist}{filename or RasterLayer. Presence or absence or natural
+disturbance, primarily by fire}
+
+\item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance other
+than harvest. This can have an effect on any type of landcover except water}
+
+\item{harv}{filename or RasterLayer. Harvest history. This can only have an
+effect on forest landcover types and will not affect wetlands or water}
 
 \item{eskerSave}{filename to save rasterized esker data}
 
@@ -77,7 +67,7 @@ assumption and should be used with caution}
 
 \item{friLU}{data.frame. A look up table to convert local forest units to
 regional forest units. It should have two columns, the first must contain
-all the unique values in the supplied \code{fri} raster and the second must
+all the unique values in the supplied \code{updatedLC} raster and the second must
 contain the names of regional forest units matching those provided in the
 table \code{rfuToResType}}
 
@@ -92,8 +82,8 @@ winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
 \details{
 Caribou habitat use is calculated based on the availability of resources and
 the presence of disturbances on the landscape. The primary source of resource
-information is the \code{plc} but this is can be updated based on more recent
-\code{fri} data and disturbance information. All data sources can be provided
+information is the \code{landCover} but this is can be updated based on more recent
+\code{updatedLC} data and disturbance information. All data sources can be provided
 either as filenames or as spatial files. The result is a CaribouHabitat object
 which has methods defined for plotting and extracting the results. To update
 an existing CaribouHabitat object with new data see

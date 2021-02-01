@@ -4,12 +4,12 @@ NULL
 #' @name CaribouHabitat
 #' @rdname CaribouHabitat-class
 setMethod(f = "initialize", signature = "CaribouHabitat",
-          definition = function(.Object, plc, esker, fri, age, natDist, 
+          definition = function(.Object, landCover, esker, updatedLC, age, natDist, 
                                 anthroDist, harv, linFeat, projectPoly,  
                                 processedData, habitatUse, attributes){
-            .Object@plc <- plc 
+            .Object@landCover <- landCover 
             .Object@esker <- esker
-            .Object@fri <- fri
+            .Object@updatedLC <- updatedLC
             .Object@age <- age
             .Object@natDist <- natDist
             .Object@anthroDist <- anthroDist
@@ -30,18 +30,18 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'
 #'Caribou habitat use is calculated based on the availability of resources and
 #'the presence of disturbances on the landscape. The primary source of resource
-#'information is the \code{plc} but this is can be updated based on more recent
-#'\code{fri} data and disturbance information. All data sources can be provided
+#'information is the \code{landCover} but this is can be updated based on more recent
+#'\code{updatedLC} data and disturbance information. All data sources can be provided
 #'either as filenames or as spatial files. The result is a CaribouHabitat object
 #'which has methods defined for plotting and extracting the results. To update
 #'an existing CaribouHabitat object with new data see
 #'\link[caribouMetrics]{updateCaribou}.
 #'
 #'
-#'@param plc filename or RasterLayer. Provincial landcover class
+#'@param landCover filename or RasterLayer. Provincial landcover class
 #'@param esker filename, RasterLayer or sf object. Eskers. If it is a
 #'  RasterLayer then it should be esker density in m^2/ha.
-#'@param fri filename or RasterLayer. Forest resource inventory class ids must
+#'@param updatedLC filename or RasterLayer. Forest resource inventory class ids must
 #'  correspond to the ids in the \code{friLU}.
 #'@param age filename or RasterLayer. Tree age in years
 #'@param natDist filename or RasterLayer. Presence or absence or natural
@@ -72,7 +72,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  assumption and should be used with caution
 #'@param friLU data.frame. A look up table to convert local forest units to
 #'  regional forest units. It should have two columns, the first must contain
-#'  all the unique values in the supplied \code{fri} raster and the second must
+#'  all the unique values in the supplied \code{updatedLC} raster and the second must
 #'  contain the names of regional forest units matching those provided in the
 #'  table \code{rfuToResType}
 #'@param saveOutput character. The filename to save the rasterBrick of habitat
@@ -91,38 +91,27 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'
 #'@export
 setGeneric("caribouHabitat", 
-           function(plc, esker, fri, age, natDist, anthroDist, 
-                    harv, linFeat, projectPoly, caribouRange, ...) 
+           function(landCover, esker, linFeat, projectPoly, caribouRange, ...) 
              standardGeneric("caribouHabitat"))
 
 setMethod(
   "caribouHabitat", 
-  signature(plc = "ANY"), 
-  function(plc, esker, fri, age, natDist, anthroDist, 
-           harv, linFeat, projectPoly, caribouRange, ...) {
+  signature(landCover = "ANY"), 
+  function(landCover, esker, linFeat, projectPoly, caribouRange, ...) {
 
     dots <- list(...)
     
-    inputDataArgs <- dots[c("winArea", "eskerSave", "linFeatSave", 
+    inputDataArgs <- dots[c("updatedLC", "age", "natDist", "anthroDist", 
+                            "harv","winArea", "eskerSave", "linFeatSave", 
                             "padProjPoly", "friLU", "padFocal")]
     
     inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]
     
-    processDataArgs <- dots[c("friLU")]
-    processDataArgs <- processDataArgs[which(lapply(processDataArgs, length) > 0)]
-    
-    x <- do.call(inputData, c(lst(plc, esker, fri, age, natDist, anthroDist, 
-                                  harv, linFeat, projectPoly, caribouRange), 
+    x <- do.call(inputData, c(lst(landCover, esker, linFeat, projectPoly,
+                                  caribouRange), 
                               inputDataArgs))
     
-    if(is.null(processDataArgs$friLU)){
-      warning("Argument friLU is required to process the data. The loaded", 
-              " data is being returned. To calculate caribou habitat use pass ",
-              "the returned object to updateCaribou with the required arguments",
-              call. = FALSE)
-      return(x)
-    }
-    x <- do.call(processData, c(x, processDataArgs))
+    x <- processData(x)
     
     x <- updateCaribou(x)
     

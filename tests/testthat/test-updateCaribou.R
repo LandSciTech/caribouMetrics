@@ -1,13 +1,13 @@
-# test updatePLC
+# test updateLC
 context("Test updating process")
 #pthBase <- "tests/testthat/data/"
 pthBase <- "data/"
 
 
-plcD = raster(paste0(pthBase, "plc", ".tif"))
+landCoverD = raster(paste0(pthBase, "plc", ".tif"))
 eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
 eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE)
-friD = raster(paste0(pthBase, "fri", ".tif"))
+updatedLCD = raster(paste0(pthBase, "fri", ".tif"))
 ageD = raster(paste0(pthBase, "age", ".tif"))
 natDistD = raster(paste0(pthBase, "natDist", ".tif"))
 anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
@@ -46,41 +46,41 @@ pointCompare <- st_sf(ID = 1,
                                             (ext2@ymax - ext2@ymin)/2 + ext2@ymin))),
                       crs = st_crs(natDistD2))
 
-# process data to pass to updatePLC
-procedData <- caribouHabitat(plcD, eskerDras, friD, ageD, natDistD, 
+# process data to pass to updateLC
+procedData <- caribouHabitat(landCoverD, eskerDras, updatedLCD, ageD, natDistD, 
                              anthroDistD, harvD, linFeatDras, projectPolyD, 
                              friLU = friLUD, 
                              caribouRange = "Churchill", 
                              winArea = 500)     
 
 # Not using for now
-# test_that("updatePLC works with different newData", {
+# test_that("updateLC works with different newData", {
 # 
-#   # get resTypeLevels from procedData@plc RAT
-#   resTypeLevels <- procedData@plc %>% raster::levels() %>% .[[1]] %>% 
+#   # get resTypeLevels from procedData@landCover RAT
+#   resTypeLevels <- procedData@landCover %>% raster::levels() %>% .[[1]] %>% 
 #     set_names(c("code", "resType")) %>% 
 #     mutate(resType = as.character(resType))
 #   
-#   updted <- updatePLC(procedData, newData = list(natDist = natDistD2,
+#   updted <- updateLC(procedData, newData = list(natDist = natDistD2,
 #                                                  age = ageD2),
 #                       resTypeLevels = resTypeLevels)
 #   
 #   expect_equal(resTypeLevels %>% filter(resType == "DTN") %>% pull(code),
-#                raster::extract(updted$plc, pointCompare))
+#                raster::extract(updted$landCover, pointCompare))
 #   
-#   updted2 <- updatePLC(procedData, newData = list(harv = harvD2), 
+#   updted2 <- updateLC(procedData, newData = list(harv = harvD2), 
 #                        resTypeLevels = resTypeLevels)
 #   # TODO: update based on changes
 #   # expect_equal(resTypeLevels %>% filter(resType == "ATN") %>% pull(code),
-#   #              raster::extract(updted2$plc, pointCompare))
+#   #              raster::extract(updted2$landCover, pointCompare))
 #   
-#   updted3 <- updatePLC(procedData, newData = list(natDist = natDistD2,
+#   updted3 <- updateLC(procedData, newData = list(natDist = natDistD2,
 #                                                   age = ageD3,
-#                                                   fri = procedData@fri), 
+#                                                   updatedLC = procedData@updatedLC), 
 #                        resTypeLevels = resTypeLevels)
 #   
 #   expect_equal(resTypeLevels %>% filter(resType == "CON") %>% pull(code),
-#                raster::extract(updted3$plc, pointCompare))
+#                raster::extract(updted3$landCover, pointCompare))
 # 
 # })
 
@@ -112,9 +112,9 @@ test_that("processData works for updated data", {
                            friLU = friLUD),
                "both natDist and age must be provided")
   
-  expect_error(processData(procedData, newData = list(fri = natDistD2), 
+  expect_error(processData(procedData, newData = list(updatedLC = natDistD2), 
                            friLU = friLUD),
-               "to use fri data either harv")
+               "to use updatedLC data either harv")
 })
 
 test_that("process data works for updated data that is not aligned", {
@@ -134,17 +134,17 @@ test_that("process data works for updated data that is not aligned", {
                              newData = list(harv = harvD %>% 
                                               raster::`res<-`(1999)),
                              friLU = friLUD), 
-                 "not match plc and they cannot be aligned by aggregation")
+                 "not match landCover and they cannot be aligned by aggregation")
 })
 
 test_that("update process result is same with same data", {
-  expect_error(updateCaribou(procedData, newData = list(friD), 
+  expect_error(updateCaribou(procedData, newData = list(updatedLCD), 
                              friLU = read.csv(paste0(pthBase, "friLU", ".csv"), 
                                               stringsAsFactors = FALSE)), 
                "newData must be a named list")
   
   update_data <- updateCaribou(procedData, 
-                               newData = list(fri = friD, harv = harvD, 
+                               newData = list(updatedLC = updatedLCD, harv = harvD, 
                                               age = ageD, natDist = natDistD, 
                                               anthroDist = anthroDistD, 
                                               linFeat = linFeatDras), 

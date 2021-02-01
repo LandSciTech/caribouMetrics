@@ -11,9 +11,9 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #'
 #' @seealso See \code{\link{caribouHabitat}} for options when creating a
 #'   CaribouHabitatUse object.
-#' @slot plc Raster of provincial land cover.
+#' @slot landCover Raster of provincial land cover.
 #' @slot esker Raster of esker density in m^2 per hectare.
-#' @slot fri Raster of forest resource inventory.
+#' @slot updatedLC Raster of forest resource inventory.
 #' @slot age Raster of age in years from forest resource inventory.
 #' @slot natDist Raster of natural disturbance.
 #' @slot linFeat Raster of linear feature density in m^2 per hectare including
@@ -30,9 +30,9 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #' @importClassesFrom raster RasterLayer
 
 CaribouHabitat <- setClass("CaribouHabitat",
-                           slots = c(plc = "RasterLayer", 
+                           slots = c(landCover = "RasterLayer", 
                                      esker  = "RasterLayer",
-                                     fri  = "RasterLayer", 
+                                     updatedLC  = "RasterLayer", 
                                      age  = "RasterLayer",
                                      natDist  = "RasterLayer",
                                      anthroDist = "RasterLayer",
@@ -43,9 +43,9 @@ CaribouHabitat <- setClass("CaribouHabitat",
                                      habitatUse = "Raster",
                                      attributes = "list"),
                            prototype = list(
-                             plc = raster(matrix(NA)), 
+                             landCover = raster(matrix(NA)), 
                              esker  = raster(matrix(NA)),
-                             fri  = raster(matrix(NA)), 
+                             updatedLC  = raster(matrix(NA)), 
                              age  = raster(matrix(NA)),
                              natDist = raster(matrix(NA)),
                              linFeat  = raster(matrix(NA)),

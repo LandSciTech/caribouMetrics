@@ -36,6 +36,7 @@ Imports:
     rgdal
 Collate: 
     'AAAClassDefinitions.R'
+    'applyDist.R'
     'calcBinaryUse.R'
     'calcRSP.R'
     'caribouHabitat.R'
@@ -52,10 +53,11 @@ Collate:
     'plot.R'
     'processData.R'
     'rasterizeLineDensity.R'
+    'reclassPLCFRI.R'
     'results.R'
     'tmapCatRast.R'
     'updateCaribou.R'
-    'updatePLC.R'
+    'updateLC.R'
 Suggests: 
     testthat,
     knitr,

@@ -5,8 +5,8 @@ NULL
 #'
 #' @param CarHab CaribouHabitat object
 #'
-#' @param fri,age,natDist,linFeat RasterLayer objects to be used to update CarHab.
-#'   fri is required, if the others are missing the layers from CarHab will be used.
+#' @param updatedLC,age,natDist,linFeat RasterLayer objects to be used to update CarHab.
+#'   updatedLC is required, if the others are missing the layers from CarHab will be used.
 #'
 #'   
 

@@ -5,12 +5,12 @@
 #' Check the inputs that are needed in processData or updateCaribou so the
 #' errors happen before data is processed.
 #'
-#' @param fri fri data raster
+#' @param updatedLC updatedLC data raster
 #' @param ... other variables passed to caribouHabitat
 #'
 #'
 #' @examples
-.checkInputs <- function(caribouRange, winArea, plc, fri) {
+.checkInputs <- function(caribouRange, winArea, landCover, updatedLC) {
   expectedRanges <- paste0(unique(coefTableHR$Range), collapse = ", ")
   
   if(stringr::str_detect(expectedRanges, caribouRange, negate = TRUE)){
@@ -23,17 +23,22 @@
     }
   }
   
-  if(!all(raster::cellStats(plc, unique) %in% resTypeCode$code)){
-    stop("plc raster has values outside the range of: ", 
+  if(!all(raster::cellStats(landCover, unique) %in% resTypeCode$code)){
+    stop("landCover raster has values outside the range of: ", 
          paste0(resTypeCode$code, collapse = ", "), 
-         ". plc must be reclassified to resource types")
+         ". landCover must be reclassified to resource types",
+         call. = FALSE)
   }
   
-  if(!all(raster::cellStats(fri, unique) %in% resTypeCode$code)){
-    stop("plc raster has values outside the range of: ", 
-         paste0(resTypeCode$code, collapse = ", "), 
-         ". plc must be reclassified to resource types")
+  if(!is.null(updatedLC)){
+    if(!all(raster::cellStats(updatedLC, unique) %in% c(resTypeCode$code, NA))){
+      stop("updatedLC raster has values ", raster::cellStats(updatedLC, unique),
+           " outside the range of: ", 
+           paste0(resTypeCode$code, collapse = ", "), 
+           ". updatedLC must be reclassified to resource types", 
+           call. = FALSE)
+    }
   }
-  
+
 }
   
