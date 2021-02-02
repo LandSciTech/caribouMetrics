@@ -16,6 +16,28 @@
 #' @export
 
 applyDist <- function(landCover, natDist, anthroDist, harv){
+  # check harv, anthroDist and natDist are real if not make dummy
+  if(length(raster::unique(harv)) == 0){
+    harv <- landCover
+    harv[] <- 0
+  }
+  if(length(raster::unique(anthroDist)) == 0){
+    anthroDist <- landCover
+    anthroDist[] <- 0
+  }
+  if(length(raster::unique(natDist)) == 0){
+    natDist <- landCover
+    natDist[] <- 0
+  }
+  
+  # Transfer DTN from natDist to landCover
+  DTNcode <- resTypeCode %>%
+    filter(ResourceType == "DTN") %>%
+    pull(code)
+  
+  landCover <- mask(landCover, natDist, maskvalue = 1, 
+                    updatevalue = DTNcode)
+
   # convert to 16 ha resolution stack of ResType proportion to match 16 ha
   # hexagons in Rempel
   tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
@@ -23,6 +45,14 @@ applyDist <- function(landCover, natDist, anthroDist, harv){
   landCover <- raster::layerize(landCover, classes = resTypeCode$code) %>% 
     raster::resample(tmplt, method = "bilinear")
   
+  # if no distubance data provided return landCover
+  if(length(raster::unique(natDist)) == 0 &&
+     length(raster::unique(anthroDist)) == 0 &&
+     length(raster::unique(harv)) == 0){
+    return(landCover)
+  }
+  
+
   allDist16ha <- raster::stack(harv, anthroDist, 
                                natDist) %>% 
     raster::resample(tmplt, method = "bilinear")
