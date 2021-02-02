@@ -14,13 +14,13 @@
 combineLinFeat <- function(roads, rail, utilities){
   
   if(is.character(roads)){
-    roads <- st_read(roads, quiet = TRUE)
+    roads <- st_read(roads, quiet = TRUE, agr = "constant")
   }
   if(is.character(rail)){
-    rail <- st_read(rail, quiet = TRUE)
+    rail <- st_read(rail, quiet = TRUE, agr = "constant")
   }
   if(is.character(utilities)){
-    utilities <- st_read(utilities, quiet = TRUE)
+    utilities <- st_read(utilities, quiet = TRUE, agr = "constant")
   }
   
   roads <- roads %>% transmute(ID = 1, Type = "road") 
