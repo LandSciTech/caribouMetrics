@@ -161,21 +161,85 @@ data_list_linF <- caribouHabitat(
   caribouRange = "Churchill", 
   winArea = 500
 )
-
-data_noUpdatedLCD <- caribouHabitat(
-  landCover = landCoverD, esker = eskerDras, 
-  natDist = natDistD,
-  anthroDist = anthroDistD, harv = harvD,
-  linFeat = linFeatDras, projectPoly = projectPolyD,
-  caribouRange = "Churchill", 
-  winArea = 500
-)
-
 test_that("results match when input is paths or data, or list of either for linFeat",{
   expect_equal(data_esktif_linFtif@habitatUse, paths_eskshp_linFshp@habitatUse)
   expect_equal(data_eskshp_linFshp@habitatUse, data_esktif_linFtif@habitatUse)
   expect_equal(data_list_linF@habitatUse, data_esktif_linFtif@habitatUse)
 })
+
+test_that("results are different when disturbance is missing", {
+  data_noUpdatedLC <- caribouHabitat(
+    landCover = landCoverD, esker = eskerDras, 
+    natDist = natDistD,
+    anthroDist = anthroDistD, harv = harvD,
+    linFeat = linFeatDras, projectPoly = projectPolyD,
+    caribouRange = "Churchill", 
+    winArea = 500
+  )
+  
+  data_noAnthro <- caribouHabitat(
+    landCover = landCoverD, 
+    esker = eskerDras, 
+    #anthroDist = anthroDistD,
+    natDist = natDistD, 
+    harv = harvD,
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD,
+    caribouRange = "Churchill", 
+    winArea = 500
+  )
+  
+  data_noHarv <- caribouHabitat(
+    landCover = landCoverD, 
+    esker = eskerDras, 
+    anthroDist = anthroDistD,
+    natDist = natDistD, 
+    #harv = harvD,
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD,
+    caribouRange = "Churchill", 
+    winArea = 500
+  )
+  
+  data_noNatDist <- caribouHabitat(
+    landCover = landCoverD, 
+    esker = eskerDras, 
+    anthroDist = anthroDistD,
+    #natDist = natDistD, 
+    harv = harvD,
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD,
+    caribouRange = "Churchill", 
+    winArea = 500
+  )
+  
+  data_noDist <- caribouHabitat(
+    landCover = landCoverD, 
+    esker = eskerDras, 
+    #anthroDist = anthroDistD,
+    #natDist = natDistD, 
+    #harv = harvD,
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD,
+    caribouRange = "Churchill", 
+    winArea = 500
+  )
+  expect_false(identical(data_noUpdatedLC,  data_esktif_linFtif))
+  expect_false(identical(data_noAnthro,  data_esktif_linFtif))
+  expect_false(identical(data_noNatDist,  data_esktif_linFtif))
+  expect_false(identical(data_noHarv,  data_esktif_linFtif))
+  expect_false(identical(data_noDist,  data_esktif_linFtif))
+  
+  # plot(data_esktif_linFtif, raster.title = "Orig")
+  # plot(data_noUpdatedLC, raster.title = "No Updated")
+  # plot(data_noAnthro, raster.title = "No Anthro")
+  # plot(data_noHarv, raster.title = "No Harv")
+  # plot(data_noNatDist, raster.title = "No NatDist")
+
+  
+})
+
+
 
 
 # Compare output table to previous run. Use table and not whole object in case

@@ -55,7 +55,7 @@ test_that("error if a required arg is missing", {
     friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
     caribouRange = "Churchill"
   ), "is missing, with no default")
-  expect_error(caribouHabitat(
+  out <- caribouHabitat(
     landCover = paste0(pthBase, "plc", ".tif"),
     esker = paste0(pthBase, "esker", ".shp"),
     #updatedLC = paste0(pthBase, "fri", ".tif"),
@@ -68,38 +68,11 @@ test_that("error if a required arg is missing", {
     linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
     eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-    caribouRange = "Churchill"
-  ), "is missing, with no default")
-  expect_error(caribouHabitat(
-    landCover = paste0(pthBase, "plc", ".tif"),
-    esker = paste0(pthBase, "esker", ".shp"),
-    updatedLC = paste0(pthBase, "fri", ".tif"),
-    #age = paste0(pthBase, "age", ".tif"),
-    natDist = paste0(pthBase, "natDist", ".tif"),
-    anthroDist = paste0(pthBase, "anthroDist", ".tif"),
-    harv = paste0(pthBase, "harv", ".tif"),
-    linFeat = paste0(pthBase, "linFeat", ".shp"),
-    projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
-    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-    caribouRange = "Churchill"
-  ), "is missing, with no default")
-  expect_error(caribouHabitat(
-    landCover = paste0(pthBase, "plc", ".tif"),
-    esker = paste0(pthBase, "esker", ".shp"),
-    updatedLC = paste0(pthBase, "fri", ".tif"),
-    age = paste0(pthBase, "age", ".tif"),
-    #natDist = paste0(pthBase, "natDist", ".tif"),
-    anthroDist = paste0(pthBase, "anthroDist", ".tif"),
-    harv = paste0(pthBase, "harv", ".tif"),
-    linFeat = paste0(pthBase, "linFeat", ".shp"),
-    projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
-    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
-    caribouRange = "Churchill"
-  ), "is missing, with no default")
+    caribouRange = "Churchill", 
+    winArea = 500
+  )
+  expect_s4_class(out, "CaribouHabitat")
+
   expect_error(caribouHabitat(
     landCover = paste0(pthBase, "plc", ".tif"),
     esker = paste0(pthBase, "esker", ".shp"),
@@ -126,7 +99,6 @@ test_that("error if a required arg is missing", {
     linFeat = paste0(pthBase, "linFeat", ".shp"),
     #projectPoly = paste0(pthBase, "projectPoly", ".shp"),
     linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    
     eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
     caribouRange = "Churchill"
@@ -142,7 +114,6 @@ test_that("error if a required arg is missing", {
     linFeat = paste0(pthBase, "linFeat", ".shp"),
     projectPoly = paste0(pthBase, "projectPoly", ".shp"),
     linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    
     eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     #friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
     caribouRange = "Churchill"
@@ -158,7 +129,6 @@ test_that("error if a required arg is missing", {
     linFeat = paste0(pthBase, "linFeat", ".shp"),
     projectPoly = paste0(pthBase, "projectPoly", ".shp"),
     linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    
     eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
     #caribouRange = "Churchill"
@@ -177,7 +147,6 @@ test_that("error if a path file is not found", {
     linFeat = paste0(pthBase, "linFeat", ".shp"),
     projectPoly = paste0(pthBase, "projectPoly", ".shp"),
     linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    
     eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
     caribouRange = "Churchill"
@@ -227,7 +196,6 @@ test_that("error if some args are paths and others spatial", {
     projectPoly = paste0(pthBase, "projectPoly", ".shp"),
     linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
     eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
-    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
     caribouRange = "Churchill"
   ), ".*supplied as sf or raster objects or character.*")
 })
@@ -283,12 +251,16 @@ test_that("error if caribouRange missing or doesn't match", {
     winArea = 500),
     "is missing, with no default")
   expect_error(caribouHabitat(
-    landCover = landCoverD, esker = eskerDras, updatedLC = updatedLCD, age = ageD, natDist = natDistD, 
-    anthroDist = anthroDistD, harv = harvD,
-    linFeat = linFeatDras, projectPoly = projectPolyD,
+    landCover = landCoverD, 
+    esker = eskerDras, 
+    updatedLC = updatedLCD, 
+    age = ageD, 
+    natDist = natDistD, 
+    anthroDist = anthroDistD, 
+    harv = harvD,
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD,
     caribouRange = "test",
-    hexgridSave = paste0(pthBase, "hexgrid.shp"),
-    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE),
     winArea = 500),
     "caribouRange must match one of")
 }) 
@@ -306,10 +278,15 @@ test_that("error if spatial data doesn't align", {
   landCoverD2 <- raster::shift(landCoverD, 100)
 
   expect_error(caribouHabitat(
-    landCover = landCoverD2, esker = eskerDras, updatedLC = updatedLCD, age = ageD, natDist = natDistD, 
-    anthroDist = anthroDistD, harv = harvD,
-    linFeat = linFeatDras, projectPoly = projectPolyD,
-    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+    landCover = landCoverD2, 
+    esker = eskerDras, 
+    updatedLC = updatedLCD, 
+    age = ageD, 
+    natDist = natDistD, 
+    anthroDist = anthroDistD, 
+    harv = harvD,
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD, 
     caribouRange = "Churchill"),
     "different extent")
   
@@ -317,10 +294,15 @@ test_that("error if spatial data doesn't align", {
     st_set_crs(st_crs(projectPolyD))
   
   expect_error(caribouHabitat(
-    landCover = landCoverD, esker = eskerDras, updatedLC = updatedLCD, age = ageD, natDist = natDistD,  
-    anthroDist = anthroDistD, harv = harvD,
-    linFeat = linFeatDras, projectPoly = projectPolyD2,
-    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+    landCover = landCoverD, 
+    esker = eskerDras, 
+    updatedLC = updatedLCD, 
+    age = ageD, 
+    natDist = natDistD,  
+    anthroDist = anthroDistD, 
+    harv = harvD,
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD2, 
     caribouRange = "Churchill"),
     "landCover does not overlap with")
 }) 
@@ -330,11 +312,15 @@ test_that("error if landCover is in lonlat", {
                                   method = "ngb")
   
   expect_error(caribouHabitat(
-    landCover = landCoverD3, esker = eskerDras, updatedLC = updatedLCD, age = ageD, natDist = natDistD,  
-    anthroDist = anthroDistD, harv = harvD,
-    linFeat = linFeatDras, projectPoly = projectPolyD,
-    hexgrid = hexgridD,
-    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+    landCover = landCoverD3, 
+    esker = eskerDras, 
+    updatedLC = updatedLCD, 
+    age = ageD, 
+    natDist = natDistD,  
+    anthroDist = anthroDistD, 
+    harv = harvD,
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD,
     caribouRange = "Churchill"),
     "landCover must have a projected CRS")
 })
@@ -344,21 +330,27 @@ test_that("error if landCover or updatedLC is not in resource types", {
   
   expect_error(caribouHabitat(
     landCover = landCoverD4,
-    esker = eskerDras, updatedLC = updatedLCD,
-    age = ageD, natDist = natDistD,  
-    anthroDist = anthroDistD, harv = harvD,
-    linFeat = linFeatDras, projectPoly = projectPolyD,
-    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+    esker = eskerDras, 
+    updatedLC = updatedLCD,
+    age = ageD, 
+    natDist = natDistD,  
+    anthroDist = anthroDistD, 
+    harv = harvD,
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD,
     caribouRange = "Churchill"), 
     "resource types")
   
   expect_error(caribouHabitat(
     landCover = landCoverD,
-    esker = eskerDras, updatedLC = raster(paste0(pthBase, "fri", ".tif")) ,
-    age = ageD, natDist = natDistD,  
-    anthroDist = anthroDistD, harv = harvD,
-    linFeat = linFeatDras, projectPoly = projectPolyD,
-    friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
+    esker = eskerDras, 
+    updatedLC = raster(paste0(pthBase, "fri", ".tif")) ,
+    age = ageD, 
+    natDist = natDistD,  
+    anthroDist = anthroDistD,
+    harv = harvD,
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD, 
     caribouRange = "Churchill"), 
     "resource types")
 

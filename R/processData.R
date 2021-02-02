@@ -15,10 +15,12 @@ setMethod(
   function(inData) {
     if(inData@attributes$updateLC){
       # Update landCover based on updatedLC, age and disturbance history
-      updted <- updateLC(landCover = inData@landCover, updatedLC = inData@updatedLC, age = inData@age, 
-                         natDist = inData@natDist, anthroDist = inData@anthroDist,
+      updted <- updateLC(landCover = inData@landCover, 
+                         updatedLC = inData@updatedLC, 
+                         age = inData@age, 
+                         natDist = inData@natDist, 
                          harv = inData@harv)
-      
+      message("landCover updated using updatedLC and disturbance history")
       inData@natDist <- updted$natDist
     } else {
       updted <- list(landCover = inData@landCover)
@@ -114,11 +116,11 @@ setMethod(
 setMethod(
   "processData", 
   signature(inData = "CaribouHabitat", newData = "list"), 
-  function(inData, newData) {
-    
+  function(inData, newData, updateType = "disturbed") {
+   
     if(is.null(names(newData)) ||
-       !all(names(newData) %in% c("updatedLC", "age", "natDist", "anthroDist", "harv", 
-                                  "linFeat" ))){
+       !all(names(newData) %in% c("updatedLC", "age", "natDist", "anthroDist",
+                                  "harv", "linFeat" ))){
       stop("newData must be a named list with any of the names ",
            "updatedLC ", "age ", "natDist ", "anthroDist ", "harv ", "linFeat ", 
            "incorrect names provided are:  ", 
@@ -128,17 +130,8 @@ setMethod(
     }
     
     if(!all(sapply(newData, is, "RasterLayer"))){
-      stop("All data supplied in the newData list must be RasterLayer objects")
-    }
-    
-    # check combinations of data in newData make sense
-    if(!is.null(newData$updatedLC) && 
-       !any(c("age", "natDist", "harv") %in% names(newData))){
-      stop("to use updatedLC data either harv or natDist and age must be provided")
-    }
-    if(any(c("age", "natDist") %in% names(newData)) && 
-       !all(c("age", "natDist") %in% names(newData))){
-      stop("both natDist and age must be provided to use either")
+      stop("All data supplied in the newData list must be RasterLayer objects", 
+           call. = FALSE)
     }
     
     # check alignment of new data with landCover
@@ -148,27 +141,71 @@ setMethod(
     newData <- purrr::map2(newData, names(newData), 
                 ~checkAlign(.x, inData@landCover, .y, "landCover"))
     
-    #raster::compareRaster(newData, inData@landCover)
-    
-    # Get window area from table b/c some models used different sizes
-    if(is.null(inData@attributes$winArea)){
-      inData@attributes$winArea <- coefTableHR %>% 
-        filter(Range == inData@attributes$caribouRange) %>% 
-        pull(WinArea) %>% 
-        max()
+    if(updateType == "disturbed"){ 
+      # check combinations of data in newData make sense
+      if(!is.null(newData$updatedLC) && 
+         !any(c("age", "natDist", "harv") %in% names(newData))){
+        stop("to use updatedLC data with updateType 'disturbed'",
+             " either harv or natDist and age must be provided", 
+             call. = FALSE)
+      }
+      if(any(c("age", "natDist") %in% names(newData)) && 
+         !all(c("age", "natDist") %in% names(newData))){
+        stop("both natDist and age must be provided to use either", 
+             call. = FALSE)
+      }
+      
+      if(is.null(newData$updatedLC) && 
+         length(raster::unique(inData@updatedLC)) == 0 &&
+         any(c("age") %in% names(newData))){
+        stop("age cannot be used with out updatedLC", call. = FALSE)
+      }
+      
+      LCUpdated <- any(names(newData) %in%
+                         c("updatedLC", "age", "natDist", "anthroDist", "harv"))
+      
+      if(LCUpdated){
+        
+        if(is.null(newData$updatedLC)){
+          newData$updatedLC <- inData@updatedLC
+        }
+        if(is.null(newData$age)){
+          newData$age <- inData@age
+        }
+        if(is.null(newData$natDist)){
+          newData$natDist <- inData@natDist
+        }
+        if(is.null(newData$anthroDist)){
+          newData$anthroDist <- inData@anthroDist
+        }
+        if(is.null(newData$harv)){
+          newData$harv <- inData@harv
+        }
+        
+        # Update landCover based on updatedLC, age and disturbance history
+        updted <- updateLC(landCover = inData@landCover,
+                           updatedLC = newData$updatedLC, 
+                           age = newData$age,
+                           natDist = newData$natDist, 
+                           harv = newData$harv)
+        
+        message("landCover updated using updatedLC and disturbance history")
+        inData@natDist <- updted$natDist
+        
+        expVars <- applyDist(updted$landCover, natDist = inData@natDist, 
+                             anthroDist = newData$anthroDist,
+                             harv = newData$harv)
+        
+        
+        rm(updted) 
+      } 
     }
-    
-   
-    LCUpdated <- any(names(newData) %in%
-                             c("updatedLC", "age", "natDist", "anthroDist", "harv"))
-    
-    if(LCUpdated){
+    if(updateType == "entire"){
+      LCUpdated <- TRUE
       
       if(is.null(newData$updatedLC)){
-        newData$updatedLC <- inData@updatedLC
-      }
-      if(is.null(newData$age)){
-        newData$age <- inData@age
+        stop("updatedLC must be provided to use updateType 'entire'",
+             call. = FALSE)
       }
       if(is.null(newData$natDist)){
         newData$natDist <- inData@natDist
@@ -180,21 +217,11 @@ setMethod(
         newData$harv <- inData@harv
       }
       
-      # Update landCover based on updatedLC, age and disturbance history
-      updted <- updateLC(landCover = inData@landCover, updatedLC = newData$updatedLC, age = newData$age,
-                          natDist = newData$natDist, 
-                          anthroDist = newData$anthroDist, harv = newData$harv)
-      
-      inData@natDist <- updted$natDist
-      
-      expVars <- applyDist(updted$landCover, natDist = newData$natDist, 
+      expVars <- applyDist(newData$updatedLC, natDist = newData$natDist, 
                            anthroDist = newData$anthroDist,
                            harv = newData$harv)
-      
-      
-      rm(updted) 
-    } 
-    
+    }
+   
     # resample linFeat if provided
     if(!is.null(newData$linFeat)){
       newData$linFeat <- raster::resample(newData$linFeat, inData@linFeat, 
@@ -229,8 +256,7 @@ setMethod(
     if(all(c("MIX","DEC") %in% names(expVars))){
       expVars <- expVars %>% 
         raster::addLayer(expVars[["MIX"]] + expVars[["DEC"]]) %>% 
-        raster::addLayer(raster::setValues(expVars[[1]], 1)) %>% 
-        `names<-`(c(names(expVars), "LGMD", "CONST"))
+        `names<-`(c(names(expVars), "LGMD"))
     }
     
     notUpdated <- which(!names(inData@processedData) %in% names(expVars)) 

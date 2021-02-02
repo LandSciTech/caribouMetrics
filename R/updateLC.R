@@ -8,7 +8,6 @@
 #' @param updatedLC 
 #' @param age 
 #' @param natDist 
-#' @param anthroDist 
 #' @param harv 
 #'
 #' @return
@@ -21,7 +20,7 @@ setGeneric("updateLC", function(x, newData, ...) standardGeneric("updateLC"))
 setMethod(
   "updateLC", 
   signature(x = "missing", newData = "missing"), 
-  function(landCover, updatedLC, age, natDist, anthroDist, harv){
+  function(landCover, updatedLC, age, natDist, harv){
     
     # get code for DTN (natural disturbance)
     DTNcode <- resTypeCode %>%

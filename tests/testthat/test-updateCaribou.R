@@ -4,10 +4,13 @@ context("Test updating process")
 pthBase <- "data/"
 
 
-landCoverD = raster(paste0(pthBase, "plc", ".tif"))
+landCoverD = raster(paste0(pthBase, "plc", ".tif")) %>% 
+  reclassPLC()
 eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
 eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE)
-updatedLCD = raster(paste0(pthBase, "fri", ".tif"))
+friLUD = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE)
+updatedLCD = raster(paste0(pthBase, "fri", ".tif")) %>% 
+  reclassFRI(friLUD)
 ageD = raster(paste0(pthBase, "age", ".tif"))
 natDistD = raster(paste0(pthBase, "natDist", ".tif"))
 anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
@@ -16,7 +19,7 @@ linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
 projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
 hexgridD = st_read(paste0(pthBase, "hexgrid", ".shp"), quiet = TRUE)
 linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE)
-friLUD = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE)
+
 
 # newData versions to check updating. 
 ext <- raster::extent(natDistD)- 15000
@@ -47,9 +50,15 @@ pointCompare <- st_sf(ID = 1,
                       crs = st_crs(natDistD2))
 
 # process data to pass to updateLC
-procedData <- caribouHabitat(landCoverD, eskerDras, updatedLCD, ageD, natDistD, 
-                             anthroDistD, harvD, linFeatDras, projectPolyD, 
-                             friLU = friLUD, 
+procedData <- caribouHabitat(landCover = landCoverD,
+                             esker = eskerDras,
+                             updatedLC = updatedLCD,
+                             age = ageD,
+                             natDist = natDistD,
+                             anthroDist = anthroDistD,
+                             harv = harvD,
+                             linFeat = linFeatDras, 
+                             projectPoly = projectPolyD, 
                              caribouRange = "Churchill", 
                              winArea = 500)     
 
@@ -86,15 +95,13 @@ procedData <- caribouHabitat(landCoverD, eskerDras, updatedLCD, ageD, natDistD,
 
 test_that("processData works for updated data", {
   updted <- processData(procedData, newData = list(natDist = natDistD2,
-                                                   age = ageD2),  
-                        friLU = friLUD)
+                                                   age = ageD2))
   expect_true(raster::cellStats(procedData@processedData$DTN != 
                                   updted@processedData$DTN, max) == 1)
   expect_true(raster::cellStats(procedData@processedData$TDENLF == 
                                   updted@processedData$TDENLF, min) == 1)
   
-  updted2 <- processData(procedData, newData = list(linFeat = linFeatDras2), 
-                         friLU = friLUD)
+  updted2 <- processData(procedData, newData = list(linFeat = linFeatDras2))
   expect_true(raster::cellStats(procedData@processedData$DTN == 
                                   updted2@processedData$DTN, min) == 1)
   expect_true(raster::cellStats(procedData@processedData$TDENLF != 
@@ -104,54 +111,74 @@ test_that("processData works for updated data", {
                 raster::extract(updted2@linFeat, pointCompare))
   
   expect_error(processData(procedData, newData = list(natDist = natDistD2,
-                                                      age2 = ageD2), 
-                           friLU = friLUD),
+                                                      age2 = ageD2)),
                "newData must be a named list")
   
-  expect_error(processData(procedData, newData = list(natDist = natDistD2), 
-                           friLU = friLUD),
+  expect_error(processData(procedData, newData = list(natDist = natDistD2)),
                "both natDist and age must be provided")
   
-  expect_error(processData(procedData, newData = list(updatedLC = natDistD2), 
-                           friLU = friLUD),
-               "to use updatedLC data either harv")
+  expect_error(processData(procedData, newData = list(updatedLC = natDistD2)),
+               "to use updatedLC data .* either harv")
 })
 
 test_that("process data works for updated data that is not aligned", {
   updted <- processData(procedData, 
                         newData = list(harv = harvD %>% 
-                                         raster::extend(raster::extent(harvD)+251)),
-                        friLU = friLUD)
+                                         raster::extend(raster::extent(harvD)+251)))
   expect_equal(procedData@habitatUse, updted@habitatUse)
 
   expect_message(processData(procedData, 
                            newData = list(harv = harvD %>% 
-                                            raster::aggregate(4)),
-                          friLU = friLUD), 
+                                            raster::aggregate(4))), 
                "being dis-aggregated")
   
   expect_error(processData(procedData, 
                              newData = list(harv = harvD %>% 
-                                              raster::`res<-`(1999)),
-                             friLU = friLUD), 
+                                              raster::`res<-`(1999))), 
                  "not match landCover and they cannot be aligned by aggregation")
 })
 
 test_that("update process result is same with same data", {
-  expect_error(updateCaribou(procedData, newData = list(updatedLCD), 
-                             friLU = read.csv(paste0(pthBase, "friLU", ".csv"), 
-                                              stringsAsFactors = FALSE)), 
+  expect_error(updateCaribou(procedData, newData = list(updatedLCD)), 
                "newData must be a named list")
   
   update_data <- updateCaribou(procedData, 
-                               newData = list(updatedLC = updatedLCD, harv = harvD, 
-                                              age = ageD, natDist = natDistD, 
-                                              anthroDist = anthroDistD, 
-                                              linFeat = linFeatDras), 
-                               friLU = read.csv(paste0(pthBase, "friLU", ".csv"), 
-                                                stringsAsFactors = FALSE))
+                               newData = list(updatedLC = updatedLCD,
+                                              age = ageD,
+                                              natDist = natDistD,
+                                              anthroDist = anthroDistD,
+                                              harv = harvD, 
+                                              linFeat = linFeatDras))
   
   expect_equal(procedData@habitatUse, 
                update_data@habitatUse)
+
+})
+
+test_that("update works for type = entire",{
+  procedNoUpdate <- caribouHabitat(landCover = landCoverD,
+                                   esker = eskerDras,
+                                   age = ageD,
+                                   natDist = natDistD,
+                                   anthroDist = anthroDistD,
+                                   harv = harvD,
+                                   linFeat = linFeatDras, 
+                                   projectPoly = projectPolyD, 
+                                   caribouRange = "Churchill", 
+                                   winArea = 500)
   
+  updateEntire <- updateCaribou(procedNoUpdate, 
+                                newData = list(updatedLC = landCoverD), 
+                                updateType = "entire")
+  
+  # should be the same with same data
+  expect_equal(updateEntire@habitatUse, procedNoUpdate@habitatUse)
+  
+  updateEntire2 <- updateCaribou(procedNoUpdate, 
+                                 newData = list(updatedLC = updatedLCD), 
+                                 updateType = "entire")
+  
+  expect_false(raster::all.equal(updateEntire2@habitatUse, 
+                                 procedNoUpdate@habitatUse, 
+                                 showwarning = FALSE))
 })

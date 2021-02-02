@@ -40,6 +40,11 @@ setMethod(
       stop("All data must be supplied as sf or raster objects or character
                  paths not a mixture of each", call. = FALSE)
     }
+    
+    if(!is.null(updatedLC) && any(is.null(age), is.null(natDist), is.null(harv))){
+      stop("harv, age and natDist must be supplied to use updatedLC", 
+           call. = FALSE)
+    }
 
     if(raster::isLonLat(landCover)){
       stop("landCover must have a projected CRS", call. = FALSE)
@@ -153,16 +158,18 @@ setMethod(
                habitatUse = raster(matrix(NA)),
                attributes = list(caribouRange = caribouRange, winArea = winArea,
                                  padProjPoly = padProjPoly, padFocal = padFocal, 
-                                 updateLC = !is.na(updatedLC[1]))))
+                                 updateLC = length(raster::unique(updatedLC)) > 0)))
 })
 
 #' @rdname inputData
 setMethod(
   "inputData", signature(landCover = "character"), 
   function(landCover, esker, linFeat,  projectPoly, caribouRange, 
-           updatedLC, age, natDist, anthroDist, harv, 
+           updatedLC = NULL, age = NULL, natDist = NULL, 
+           anthroDist = NULL, harv = NULL, 
            eskerSave = NULL, linFeatSave = NULL, 
-           winArea = NULL, padProjPoly = FALSE, padFocal = FALSE, friLU = NULL) {
+           winArea = NULL, padProjPoly = FALSE, 
+           padFocal = FALSE, friLU = NULL) {
     
     if(inherits(linFeat, "list")){
       indata <- lst(landCover, esker, updatedLC, age, natDist, anthroDist, harv, 
@@ -174,6 +181,12 @@ setMethod(
       indata <- lst(landCover, esker, updatedLC, age, natDist, anthroDist, harv, linFeat,
                     projectPoly)
     }
+    
+
+    # remove NULLs from indata
+    indata <- indata[which(!vapply(indata, function(x) is.null(x), 
+                                   FUN.VALUE = TRUE))]
+
     
     charIn <-  indata %>% unlist(recursive = FALSE) %>% is.character()
     
@@ -206,7 +219,7 @@ setMethod(
     }
     
     
-    indata[vect] <- lapply(indata[vect], st_read, quiet = TRUE)
+    indata[vect] <- lapply(indata[vect], st_read, quiet = TRUE, agr = "constant")
     indata[rast]<- lapply(indata[rast], raster)
    
     if(is.character(linFeat)){
@@ -216,9 +229,16 @@ setMethod(
       stop("friLU is required when using the character method of caribouHabitat", 
            call. = FALSE)
     }
+    
+    if(!is.null(indata$updatedLC)){
+      if(is.null(friLU)){
+        stop("friLU is required when updatedLC is supplied")
+      }
+      indata$updatedLC <- indata$updatedLC %>% reclassFRI(friLU)
+    }
+    
     indata$landCover <- indata$landCover %>% reclassPLC()
-    indata$updatedLC <- indata$updatedLC %>% reclassFRI(friLU)
-
+  
     return(inputData(landCover = indata$landCover, esker = indata$esker, 
                      updatedLC = indata$updatedLC, age = indata$age, 
                      natDist = indata$natDist, anthroDist = indata$anthroDist, 
@@ -226,7 +246,6 @@ setMethod(
                      projectPoly = indata$projectPoly, 
                      caribouRange = caribouRange, eskerSave = eskerSave, 
                      linFeatSave = linFeatSave, winArea = winArea, 
-                     padProjPoly = padProjPoly, padFocal = padFocal,
-                     friLU = friLU))
+                     padProjPoly = padProjPoly, padFocal = padFocal))
     
   })

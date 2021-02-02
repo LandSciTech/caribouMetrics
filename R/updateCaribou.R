@@ -52,16 +52,15 @@ setMethod(
 setMethod(
   "updateCaribou", 
   signature(CarHab = "CaribouHabitat", newData = "list"), 
-  function(CarHab, newData, friLU, resultsOnly = FALSE) {
+  function(CarHab, newData, updateType = "disturbed", resultsOnly = FALSE) {
     
-    # process the data if not already done
     if(nrow(CarHab@processedData) < 2){
       stop("CarHab@processedData is empty. Run updateCaribou with no additional
            data to process the initial data before updating")
     }
     
     
-    CarHab <- processData(CarHab, newData, friLU)
+    CarHab <- processData(CarHab, newData, updateType)
     
     CarHab <- updateCaribou(CarHab)
     
