@@ -10,9 +10,14 @@ reclassFRI(fri, friLU, rfuLU = rfuToResType)
 reclassPLC(plc, plcLU = plcToResType)
 }
 \arguments{
-\item{fri}{raster. Forest resource inventory}
+\item{fri}{raster. Forest resource inventory. Forest resource inventory class
+ids must correspond to the ids in the \code{friLU}.}
 
-\item{friLU}{data.frame. Lookup table to convert numbers in raster to regional forest unit codes}
+\item{friLU}{data.frame. Lookup table to convert numbers in raster to
+regional forest unit codes. data.frame.  It should have two columns, the
+first must contain all the unique values in the supplied \code{updatedLC}
+raster and the second must contain the names of regional forest units
+matching those provided in the table \code{rfuToResType}}
 
 \item{rfuLU}{data.frame. Lookup table to convert RFU codes to resource types}
 

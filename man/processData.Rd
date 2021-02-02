@@ -10,7 +10,7 @@ processData(inData, newData, ...)
 
 \S4method{processData}{CaribouHabitat,missing}(inData)
 
-\S4method{processData}{CaribouHabitat,list}(inData, newData)
+\S4method{processData}{CaribouHabitat,list}(inData, newData, updateType = "disturbed")
 }
 \description{
 Process the data after it is loaded and checked by inputData

@@ -29,31 +29,36 @@ selection function
 \section{Slots}{
 
 \describe{
-\item{\code{landCover}}{Raster of provincial land cover.}
+\item{\code{landCover}}{Raster with land cover classified into resource types. See
+\code{resTypeCode} for a list.}
 
 \item{\code{esker}}{Raster of esker density in m^2 per hectare.}
 
-\item{\code{updatedLC}}{Raster of forest resource inventory.}
+\item{\code{updatedLC}}{Raster used to update landCover based on new data and
+disturbance.}
 
 \item{\code{age}}{Raster of age in years from forest resource inventory.}
 
 \item{\code{natDist}}{Raster of natural disturbance.}
 
+\item{\code{anthroDist}}{Raster of permanent anthropogenic disturbances.}
+
+\item{\code{harv}}{Raster of disturbance from forest harvesting.}
+
 \item{\code{linFeat}}{Raster of linear feature density in m^2 per hectare including
 roads, utilities, and rail.}
 
-\item{\code{hexgrid}}{Sf object with polygons in flat-topped hexagonal grid.}
-
 \item{\code{projectPoly}}{Sf object with polygon of project boundary.}
 
-\item{\code{processedData}}{Sf dataframe object with all data needed to calculate
-habitat use}
+\item{\code{processedData}}{RasterStack with named layers for each input variable
+used in the RSF}
 
-\item{\code{habitatUse}}{Sf dataframe object with habitat use for each season and
-explanatory variables}
+\item{\code{habitatUse}}{RasterStack named with layers for each season}
+
+\item{\code{attributes}}{A list of arguments from the \code{caribouHabtat} call.}
 }}
 
 \seealso{
 See \code{\link{caribouHabitat}} for options when creating a
-  CaribouHabitatUse object.
+  CaribouHabitat object.
 }

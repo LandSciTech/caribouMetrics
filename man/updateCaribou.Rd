@@ -3,18 +3,45 @@
 \name{updateCaribou}
 \alias{updateCaribou}
 \alias{updateCaribou,CaribouHabitat,list-method}
-\title{updateCaribou}
+\title{Update an existing CaribouHabitat Object}
 \usage{
 updateCaribou(CarHab, newData, ...)
 
-\S4method{updateCaribou}{CaribouHabitat,list}(CarHab, newData, friLU, resultsOnly = FALSE)
+\S4method{updateCaribou}{CaribouHabitat,list}(CarHab, newData, updateType = "disturbed", resultsOnly = FALSE)
 }
 \arguments{
 \item{CarHab}{CaribouHabitat object}
 
-\item{updatedLC, age, natDist, linFeat}{RasterLayer objects to be used to update CarHab.
-updatedLC is required, if the others are missing the layers from CarHab will be used.}
+\item{newData}{a named list of RasterLayer objects to be used to update
+CarHab. Potential names are: updatedLC, age, natDist, harv, anthroDist, and
+linFeat.}
+
+\item{updateType}{character. The default is "disturbed" which means that only
+disturbed areas are updated to updatedLC based on natDist, age, and harv
+following the process used by Rempel. If \code{updateType} is "entire" then
+the current landCover is replaced with updatedLC.}
+
+\item{resultsOnly}{logical. If FALSE the whole CaribouHabitat object is
+returned. If TRUE then only the habitatUse RasterStack is returned.}
+}
+\value{
+If \code{resultsOnly} is TRUE an updated CaribouHabitat object. If
+  \code{resultsOnly} is false a RasterStack with a layer for each season.
 }
 \description{
-updateCaribou
+Update a CaribouHabitat object in order to avoid reprocessing parts of the
+data that have not changed. New data is supplied as a named list and the
+object is updated depending on the elements provided in the list.
+}
+\details{
+If \code{newData} contains any of updatedLC, natDist, age, or harv and
+\code{updateType} is "disturbed" then the landCover is updated for disturbed
+areas and if any of updatedLC, natDist, age, or harv are missing the data
+stored in the CaribouHabitat object is reused. If \code{newData} contains
+only linFeat then only linear features will be updated.
+
+If \code{updateType} is "entire" then \code{newData} must contain updatedLC
+and the landCover in the CaribouHabitat object will be replaced and new
+projections made for the whole landscape. If natDist, harv, or anthroDist are
+not provided the the data stored in the CaribouHabitat object is reused.
 }

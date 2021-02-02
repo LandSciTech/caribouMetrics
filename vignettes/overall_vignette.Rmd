@@ -42,7 +42,7 @@ Several different data sets are used in the model to describe conditions that af
 
 
 ## Simple Example
-The example data set loaded below includes a small area in the Churchill caribou range that we will use as an example. 
+The example data set loaded below includes a small area in the Churchill caribou range that we will use as an example. The PLC and FRI data are converted to resource types based on look up tables provided in the package and the friLU which converts the forest units in the raster to regional forest units which are then converted to resource types.
 
 ```{r load data}
 # load example data and classify plc and fri into Resource Types
@@ -70,16 +70,17 @@ utilitiesD = st_read(paste0(pthBase, "utilities.shp"), quiet = TRUE)
 
 ```{r caribouHabitat1}
 carHab1 <- caribouHabitat(
-  plc = plcD , 
+  landCover = plcD , 
   esker = eskerDras, 
-  fri = friD , 
-  age = ageD, natDist = natDistD, 
-  anthroDist = anthroDistD, harv = harvD,
-  linFeat = linFeatDras, projectPoly = projectPolyD,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
-    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")),
+  updatedLC = friD , 
+  age = ageD, 
+  natDist = natDistD, 
+  anthroDist = anthroDistD, 
+  harv = harvD,
+  linFeat = linFeatDras, 
+  projectPoly = projectPolyD,
   caribouRange = "Churchill", 
-  padFocal = TRUE, # assume data outside area is 0 for all variables
+  #padFocal = TRUE, # assume data outside area is 0 for all variables
   winArea = 500 # only use in examples, leave as default for correct results
 )
 ```
@@ -111,22 +112,22 @@ projectPolyD2 <- st_bbox(ext) %>% st_as_sfc() %>% st_as_sf() %>% st_set_crs(st_c
 The information that is outside our project area is still useful for preventing edge effects in our results. To use this data you can set `padProjPoly = TRUE` in the `caribouHabitat` call which will set a buffer around the project area based on the size of the moving window used to scale variables for that range. 
 
 ```{r caribouHabitat2}
-# Use dummyD so that plc is not updated and is the main source of habitat info
-dummyD <- raster::setValues(plcD, NA)
-
+# Use if no updatedLC or disturbance are provided then all info will come from
+# that plc which will be easier to compare
 carHab2 <- caribouHabitat(
-  plc = plcD, esker = eskerDshp, fri = dummyD, age = dummyD, natDist = dummyD, 
-  anthroDist = dummyD, harv =dummyD,
-  linFeat = linFeatDshp, projectPoly = projectPolyD2,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
-  mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")),
-  caribouRange = "Churchill", padProjPoly = TRUE, winArea = 500
+  landCover = plcD, 
+  esker = eskerDshp, 
+  linFeat = linFeatDshp, 
+  projectPoly = projectPolyD2,
+  caribouRange = "Churchill", 
+  padProjPoly = TRUE, 
+  winArea = 500
 )
 ```
 
 ```{r inspect padded, fig.width=8, fig.height=5}
 tmap::qtm(plcD, raster = "black")+
-  tmapCatRast(carHab2@plc, lbls = raster::levels(carHab2@plc)[[1]][[2]], ttle = "PLC")+
+  tmapCatRast(carHab2@landCover, lbls = raster::levels(carHab2@landCover)[[1]][[2]], ttle = "PLC")+
   tmap::qtm(carHab2@projectPoly, fill = NULL, borders = "black")
 ```
 
@@ -134,21 +135,21 @@ The black area on the map above shows the extent of the original plc data, the r
 
 ```{r compare pad, fig.width=8, fig.height=5}
 carHab3 <- caribouHabitat(
-  plc = plcD, esker = eskerDshp, fri = dummyD, age = dummyD, natDist = dummyD, 
-  anthroDist = dummyD, harv =dummyD,
-  linFeat = linFeatDshp, projectPoly = projectPolyD2,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
-    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
-  caribouRange = "Churchill", winArea = 500
+  landCover = plcD, 
+  esker = eskerDshp, 
+  linFeat = linFeatDshp, 
+  projectPoly = projectPolyD2,
+  caribouRange = "Churchill",
+  winArea = 500
 )
 
 carHab4 <- caribouHabitat(
-  plc = plcD, esker = eskerDshp, fri = dummyD, age = dummyD, natDist = dummyD, 
-  anthroDist = dummyD, harv =dummyD,
-  linFeat = linFeatDshp, projectPoly = projectPolyD2,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
-    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
-  caribouRange = "Churchill", padProjPoly = FALSE, padFocal = TRUE,
+  landCover = plcD, esker = eskerDshp, 
+  linFeat = linFeatDshp,
+  projectPoly = projectPolyD2,
+  caribouRange = "Churchill", 
+  padProjPoly = FALSE, 
+  padFocal = TRUE,
   winArea = 500
 )
 
@@ -182,12 +183,15 @@ As mentioned above `caribouHabitat` can be called in several different ways. You
 
 ```{r carbiouHabitat4}
 carHab4 <- caribouHabitat(
-  plc = plcD, esker = eskerDshp, fri = friD, age = ageD, natDist = natDistD, 
-  anthroDist = anthroDistD, harv = harvD,
+  landCover = plcD, 
+  esker = eskerDshp, 
+  updatedLC = friD,
+  age = ageD,
+  natDist = natDistD,
+  anthroDist = anthroDistD,
+  harv = harvD,
   linFeat = list(roads = roadsD, rail = railD, utilities = utilitiesD),
   projectPoly = projectPolyD,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
-    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
   caribouRange = "Churchill",
   winArea = 500
 )
@@ -220,22 +224,22 @@ plot(linFeatDras)
 
 # Run caribouHabitat to process all the data once
 carHabLF1 <- caribouHabitat(
-  plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
-  anthroDist = anthroDistD, harv = harvD,
-  linFeat = linFeatDras1, projectPoly = projectPolyD,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
-    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")), 
+  landCover = plcD,
+  esker = eskerDras,
+  updatedLC = friD, 
+  age = ageD,
+  natDist = natDistD, 
+  anthroDist = anthroDistD, 
+  harv = harvD,
+  linFeat = linFeatDras1, 
+  projectPoly = projectPolyD, 
   caribouRange = "Churchill", 
   padFocal = TRUE, 
   winArea = 500
 )
 
 # Run updateCaribou with the new linFeat raster
-carHabLF2 <- updateCaribou(
-  carHabLF1, newData = list(linFeat = linFeatDras2),
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
-    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX"))
-)
+carHabLF2 <- updateCaribou(carHabLF1, newData = list(linFeat = linFeatDras2))
 
 # compare results
 plot(carHabLF1, season = "Fall", title = "linFeat 1", raster.breaks = 0:10/10, 
@@ -261,10 +265,7 @@ linFeatScns <- lst(linFeatDras2, linFeatDras3, linFeatDras)
 
 linFeatResults <- purrr::map(
   linFeatScns,
-  ~updateCaribou(carHabLF1, newData = list(linFeat = .x),
-                 friLU = read.csv(paste0(pthBase, "friLU", ".csv"), 
-                                  stringsAsFactors = FALSE) %>%
-                   mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")))
+  ~updateCaribou(carHabLF1, newData = list(linFeat = .x))
 )
 
 purrr::walk2(c(carHabLF1, linFeatResults), 
