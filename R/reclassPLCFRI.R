@@ -61,9 +61,42 @@ reclassFRI <- function(fri, friLU, rfuLU = rfuToResType){
 #' 
 #' @rdname reclassFRI
 reclassPLC <- function(plc, plcLU = plcToResType){
-  
-  # reclassify plc and fri to resource types based on look up tables
-  rclPLC <- plcToResType %>% 
+  if(!is.null(plcLU)){
+    # checks types and match names
+    if(!inherits(plcLU, "data.frame")){
+      stop("plcLU must be a data.frame", call. = FALSE)
+    }
+    if(!is.numeric(plcLU[,1])){
+      stop("The first column of plcLU must be numeric", 
+           call. = FALSE)
+    }
+    
+    if(any(is.na(plcLU[,2]))){
+      stop("plcLU contains NA in the second column. ", 
+           "All land cover classes must have a resource type. ",
+           "Use \"other\" for classes that do not fit another resource type ", 
+           call. = FALSE)
+    }
+    
+    if(!all(unique(plcLU[,2]) %in% unique(resTypeCode$ResourceType))){
+      stop("The second column of plcLU must match a resource type: ", 
+           paste0(unique(plcLU[,2])[which(!unique(plcLU[,2]) %in%
+                                            unique(resTypeCode$ResourceType))],
+                  sep = ", "),
+           " does not match",
+           call. = FALSE)
+    }
+    
+    if(!all(raster::unique(plc) %in% c(plcLU[,1], NA))){
+      stop("All unique values in plc must be present in plcLU",
+           paste0(raster::unique(plc)[which(!raster::unique(plc) %in%
+                                              c(plcLU[,1], NA))]),
+           call. = FALSE)
+    }
+    
+  }
+  # reclassify plc to resource types based on look up tables
+  rclPLC <- plcLU %>% 
     left_join(resTypeCode, by = "ResourceType")%>% 
     select(-ResourceType) %>% 
     as.matrix(rclPLC, rownames.force = FALSE)
