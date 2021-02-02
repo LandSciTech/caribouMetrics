@@ -15,8 +15,6 @@ updateLC(x, newData, ...)
 
 \item{natDist}{}
 
-\item{anthroDist}{}
-
 \item{harv}{}
 }
 \value{

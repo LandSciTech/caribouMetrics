@@ -30,34 +30,36 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'
 #'Caribou habitat use is calculated based on the availability of resources and
 #'the presence of disturbances on the landscape. The primary source of resource
-#'information is the \code{landCover} but this is can be updated based on more recent
-#'\code{updatedLC} data and disturbance information. All data sources can be provided
-#'either as filenames or as spatial files. The result is a CaribouHabitat object
-#'which has methods defined for plotting and extracting the results. To update
-#'an existing CaribouHabitat object with new data see
+#'information is the \code{landCover} but this is can be updated based on more
+#'recent \code{updatedLC} data and disturbance information. All data sources can
+#'be provided either as filenames or as spatial files. The result is a
+#'CaribouHabitat object which has methods defined for plotting and extracting
+#'the results. To update an existing CaribouHabitat object with new data see
 #'\link[caribouMetrics]{updateCaribou}.
 #'
 #'
 #'@param landCover filename or RasterLayer. Provincial landcover class
 #'@param esker filename, RasterLayer or sf object. Eskers. If it is a
 #'  RasterLayer then it should be esker density in m^2/ha.
-#'@param updatedLC filename or RasterLayer. Forest resource inventory class ids must
-#'  correspond to the ids in the \code{friLU}.
-#'@param age filename or RasterLayer. Tree age in years
-#'@param natDist filename or RasterLayer. Presence or absence or natural
-#'  disturbance, primarily by fire
+#'@param updatedLC filename or RasterLayer. Land cover data used to update the
+#'  landCover raster in areas that were disturbed since the landCover data was
+#'  created. If NULL, the default the landCover will not be updated
+#'@param age filename or RasterLayer. Tree age in years. Used to inform whether
+#'  a cell should be updated after disturbance
+#'@param natDist filename or RasterLayer. Presence or absence of natural
+#'  disturbance, primarily by fire.
 #'@param anthroDist filename or RasterLayer. Anthropogenic disturbance other
-#'  than harvest. This can have an effect on any type of landcover except water
+#'  than harvest. This can have an effect on any type of landcover except water.
 #'@param harv filename or RasterLayer. Harvest history. This can only have an
-#'  effect on forest landcover types and will not affect wetlands or water
+#'  effect on forest landcover types and will not affect wetlands or water.
 #'@param linFeat filename, RasterLayer, sf object or named list with elements
 #'  roads, rail, and utilities. Linear features. If it is a RasterLayer then it
-#'  should be linear feature density in m^2/ha
-#'@param projectPoly filename or sf object. Polygon defining the project area
+#'  should be linear feature density in m^2/ha.
+#'@param projectPoly filename or sf object. Polygon defining the project area.
 #'@param caribouRange character. The range where caribou were located. See
-#'  \code{unique(coefTableHR$Range)}
-#'@param eskerSave filename to save rasterized esker data
-#'@param linFeatSave filename to save rasterized linear feature data
+#'  \code{unique(coefTableHR$Range)} for options.
+#'@param eskerSave filename to save rasterized esker data.
+#'@param linFeatSave filename to save rasterized linear feature data.
 #'@param padProjPoly logical. Should the area around the \code{projectPoly} be
 #'  used to avoid edge effects? If FALSE, the default, only data from inside the
 #'  \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
@@ -69,12 +71,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  \code{raster::focal}, if it is FALSE then cells near the edge will return
 #'  NA, if it is TRUE a value will be returned for each cell that assumes cells
 #'  outside the input data are 0 for all resource types. This is not a good
-#'  assumption and should be used with caution
-#'@param friLU data.frame. A look up table to convert local forest units to
-#'  regional forest units. It should have two columns, the first must contain
-#'  all the unique values in the supplied \code{updatedLC} raster and the second must
-#'  contain the names of regional forest units matching those provided in the
-#'  table \code{rfuToResType}
+#'  assumption and should be used with caution.
 #'@param saveOutput character. The filename to save the rasterBrick of habitat
 #'  use probabilities to. Note this will overwrite any existing files.
 #'

@@ -7,7 +7,7 @@
 \usage{
 updateCaribou(CarHab, newData, ...)
 
-\S4method{updateCaribou}{CaribouHabitat,list}(CarHab, newData, friLU, resultsOnly = FALSE)
+\S4method{updateCaribou}{CaribouHabitat,list}(CarHab, newData, updateType = "disturbed", resultsOnly = FALSE)
 }
 \arguments{
 \item{CarHab}{CaribouHabitat object}
