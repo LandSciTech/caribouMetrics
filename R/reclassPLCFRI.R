@@ -12,7 +12,8 @@
 
 #' @param plc raster. Provincial land cover
 #' @param plcLU Lookup table to convert plc numbers to resource types 
-
+#' @export
+#' 
 reclassFRI <- function(fri, friLU, rfuLU = rfuToResType){
   # TODO: get fri lu from raster legend?
   
@@ -65,6 +66,7 @@ reclassFRI <- function(fri, friLU, rfuLU = rfuToResType){
 
 #' 
 #' @rdname reclassFRI
+#' @export
 reclassPLC <- function(plc, plcLU = plcToResType){
   if(!is.null(plcLU)){
     # checks types and match names
@@ -92,10 +94,10 @@ reclassPLC <- function(plc, plcLU = plcToResType){
            call. = FALSE)
     }
     
-    if(!all(raster::unique(plc) %in% c(plcLU[,1], NA))){
+    uniPLC <- raster::unique(plc)
+    if(!all(uniPLC %in% c(plcLU[,1], NA))){
       stop("All unique values in plc must be present in plcLU",
-           paste0(raster::unique(plc)[which(!raster::unique(plc) %in%
-                                              c(plcLU[,1], NA))]),
+           paste0(uniPLC[which(!uniPLC %in% c(plcLU[,1], NA))]),
            call. = FALSE)
     }
     
