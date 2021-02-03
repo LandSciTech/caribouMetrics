@@ -23,7 +23,7 @@
     }
   }
   
-  if(!all(raster::cellStats(landCover, unique) %in% resTypeCode$code)){
+  if(!all(raster::unique(landCover) %in% resTypeCode$code)){
     stop("landCover raster has values outside the range of: ", 
          paste0(resTypeCode$code, collapse = ", "), 
          ". landCover must be reclassified to resource types",
@@ -31,7 +31,7 @@
   }
   
   if(!is.null(updatedLC)){
-    if(!all(raster::cellStats(updatedLC, unique) %in% c(resTypeCode$code, NA))){
+    if(!all(raster::unique(updatedLC) %in% c(resTypeCode$code, NA))){
       stop("updatedLC raster has values ", raster::cellStats(updatedLC, unique),
            " outside the range of: ", 
            paste0(resTypeCode$code, collapse = ", "), 
