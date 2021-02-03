@@ -7,10 +7,10 @@ NULL
 #' 
 #' Load input data for calculating caribou habitat use.
 #' 
-#' @param plc 
+#' @param landCover 
 #'
 #' @param esker 
-#' @param fri 
+#' @param updatedLC 
 #' @param age 
 #' @param natDist 
 #' @param anthroDist
@@ -20,16 +20,19 @@ NULL
 #' @param ... 
 #'
 #' @export
-setGeneric("inputData", function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, projectPoly, ...) standardGeneric("inputData"))
+setGeneric("inputData", function(landCover, esker, linFeat, projectPoly, ...) standardGeneric("inputData"))
 
 #' @rdname inputData
 setMethod(
-  "inputData", signature(plc = "RasterLayer"), 
-  function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat, projectPoly, 
-           caribouRange, eskerSave = NULL, linFeatSave = NULL, 
-           winArea = NULL, padProjPoly = FALSE, padFocal = FALSE, friLU = NULL) {
+  "inputData", signature(landCover = "RasterLayer"), 
+  function(landCover, esker, linFeat, projectPoly, caribouRange,
+           updatedLC = NULL, age = NULL, natDist = NULL, 
+           anthroDist = NULL, harv = NULL,
+           eskerSave = NULL, linFeatSave = NULL, 
+           winArea = NULL, padProjPoly = FALSE,
+           padFocal = FALSE) {
 
-    charIn <-  sapply(list(plc, esker, fri, age, natDist, anthroDist, harv, 
+    charIn <-  sapply(list(landCover, esker, updatedLC, age, natDist, anthroDist, harv, 
                            linFeat, projectPoly), 
                       function(x) "character" %in% class(x)) 
 
@@ -37,9 +40,14 @@ setMethod(
       stop("All data must be supplied as sf or raster objects or character
                  paths not a mixture of each", call. = FALSE)
     }
+    
+    if(!is.null(updatedLC) && any(is.null(age), is.null(natDist), is.null(harv))){
+      stop("harv, age and natDist must be supplied to use updatedLC", 
+           call. = FALSE)
+    }
 
-    if(raster::isLonLat(plc)){
-      stop("plc must have a projected CRS", call. = FALSE)
+    if(raster::isLonLat(landCover)){
+      stop("landCover must have a projected CRS", call. = FALSE)
     }
     
     # Get window area from table b/c some models used different sizes
@@ -53,11 +61,11 @@ setMethod(
       stop("winArea must be a number (in hectares)", call. = FALSE)
     }
     
-    .checkInputs(fri, caribouRange, friLU, winArea)
+    .checkInputs(caribouRange, winArea, landCover, updatedLC)
     
-    if(st_crs(projectPoly) != st_crs(plc)){
-      projectPoly <- st_transform(projectPoly, crs = st_crs(plc))
-      message("projectPoly being transformed to have crs matching plc")
+    if(st_crs(projectPoly) != st_crs(landCover)){
+      projectPoly <- st_transform(projectPoly, crs = st_crs(landCover))
+      message("projectPoly being transformed to have crs matching landCover")
     }
     
     projectPolyOrig <- projectPoly
@@ -66,18 +74,18 @@ setMethod(
 
       # window radius is radius of circle with winArea rounded to even number of
       # raster cells based on resolution
-      winRad <- (sqrt(winArea*10000/pi)/res(plc)[1]) %>% 
-        round(digits = 0)*res(plc)[1]
+      winRad <- (sqrt(winArea*10000/pi)/res(landCover)[1]) %>% 
+        round(digits = 0)*res(landCover)[1]
       
       projectPoly <- st_buffer(projectPoly, winRad*3)
     }
     
-    plc <- checkAlign(plc, projectPoly, "plc", "projectPoly")
+    landCover <- checkAlign(landCover, projectPoly, "landCover", "projectPoly")
 
     # rasterize eskers
-    esker <- checkAlign(esker, plc, "esker", "plc")
+    esker <- checkAlign(esker, landCover, "esker", "landCover")
     if(inherits(esker, "sf")){
-      tmplt <- raster(plc) %>% raster::`res<-`(c(400, 400))
+      tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       esker <- rasterizeLineDensity(esker, tmplt)
     }
     if(!is.null(eskerSave)){
@@ -90,10 +98,10 @@ setMethod(
       linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
     }
     
-    linFeat <- checkAlign(linFeat, plc, "linFeat", "plc")
+    linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
     
     if(inherits(linFeat, "sf")){
-      tmplt <- raster(plc) %>% raster::`res<-`(c(400, 400))
+      tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       linFeat <- rasterizeLineDensity(linFeat, tmplt)
     }
     if(!is.null(linFeatSave)){
@@ -101,63 +109,84 @@ setMethod(
       linFeat <- raster(linFeatSave)
     }
     
-    # # Resample linFeat and esker to 16 ha
-    # tmplt <- plc %>% raster::`res<-`(c(400, 400))
-    # if(any(res(linFeat) < 400)){
-    #   linFeat <- raster::resample(inData@linFeat, tmplt,
-    #                               method = "bilinear")
-    # }
-    # 
-    # if(any(res(esker) < 400)){
-    #   esker <- raster::resample(inData@esker, tmplt,
-    #                             method = "bilinear")
-    # }
-    # 
     # check alignment of other layers
-    fri <- aggregateIf(fri, plc, "fri", "plc") %>% checkAlign(plc, "fri", "plc")
-    age <- aggregateIf(age, plc, "age", "plc") %>% checkAlign(plc, "age", "plc")
-    natDist <- aggregateIf(natDist, plc, "natDist", "plc") %>% 
-      checkAlign(plc, "natDist", "plc")
-    anthroDist <- aggregateIf(anthroDist, plc, "anthroDist", "plc") %>% 
-      checkAlign(plc, "anthroDist", "plc")
-    harv <- aggregateIf(harv, plc, "harv", "plc") %>%
-      checkAlign(plc, "harv", "plc")
-
-    # check crs, alignment, will give error if crs, extent, or res are different
-    # Error in compareRaster(plc, fri, age, natDist, linFeat, esker) :
-    #   different extent
-    # SE: seems clear enough to me for a user to understand
-    compareRaster(plc, fri, age, natDist, anthroDist, harv)
-
-    # # these don't need matching extent
-    # compareRaster(plc, linFeat, esker, crs = TRUE, res = TRUE,
-    #               extent = FALSE, rowcol = FALSE)
+    if(!is.null(updatedLC)){
+      updatedLC <- aggregateIf(updatedLC, landCover, "updatedLC", "landCover") %>%
+        checkAlign(landCover, "updatedLC", "landCover")
+      compareRaster(landCover, updatedLC)
+    } else {
+      updatedLC <- raster(matrix(NA))
+    }
     
-    return(new("CaribouHabitat", plc, esker, fri, age, natDist, anthroDist, harv,
+    if(!is.null(age)){
+      age <- aggregateIf(age, landCover, "age", "landCover") %>% 
+        checkAlign(landCover, "age", "landCover")
+      compareRaster(landCover, age)
+    } else {
+      age <- raster(matrix(NA))
+    }
+      
+    if(!is.null(natDist)){
+      natDist <- aggregateIf(natDist, landCover, "natDist", "landCover") %>% 
+        checkAlign(landCover, "natDist", "landCover")
+      compareRaster(landCover, natDist)
+    } else {
+      natDist <- raster(matrix(NA))
+    }
+        
+    if(!is.null(anthroDist)){
+      anthroDist <- aggregateIf(anthroDist, landCover, "anthroDist", "landCover") %>% 
+        checkAlign(landCover, "anthroDist", "landCover")
+      compareRaster(landCover, anthroDist)
+    } else {
+      anthroDist <- raster(matrix(NA))
+    }
+    
+    if(!is.null(harv)){
+      harv <- aggregateIf(harv, landCover, "harv", "landCover") %>%
+        checkAlign(landCover, "harv", "landCover")
+      compareRaster(landCover, harv)
+    } else {
+      harv <- raster(matrix(NA))
+    }
+
+
+    return(new("CaribouHabitat", landCover, esker, updatedLC, age, 
+               natDist, anthroDist, harv,
                linFeat, projectPolyOrig,  
                processedData = raster(matrix(NA)), 
                habitatUse = raster(matrix(NA)),
                attributes = list(caribouRange = caribouRange, winArea = winArea,
-                                 padProjPoly = padProjPoly, padFocal = padFocal)))
+                                 padProjPoly = padProjPoly, padFocal = padFocal, 
+                                 updateLC = length(raster::unique(updatedLC)) > 0)))
 })
 
 #' @rdname inputData
 setMethod(
-  "inputData", signature(plc = "character"), 
-  function(plc, esker, fri, age, natDist, anthroDist, harv, linFeat,  projectPoly,
-           caribouRange, eskerSave = NULL, linFeatSave = NULL, 
-           winArea = NULL, padProjPoly = FALSE, padFocal = FALSE, friLU = NULL) {
+  "inputData", signature(landCover = "character"), 
+  function(landCover, esker, linFeat,  projectPoly, caribouRange, 
+           updatedLC = NULL, age = NULL, natDist = NULL, 
+           anthroDist = NULL, harv = NULL, 
+           eskerSave = NULL, linFeatSave = NULL, 
+           winArea = NULL, padProjPoly = FALSE, 
+           padFocal = FALSE, friLU = NULL) {
     
     if(inherits(linFeat, "list")){
-      indata <- lst(plc, esker, fri, age, natDist, anthroDist, harv, 
+      indata <- lst(landCover, esker, updatedLC, age, natDist, anthroDist, harv, 
                     projectPoly)
       
       linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
       
     } else {
-      indata <- lst(plc, esker, fri, age, natDist, anthroDist, harv, linFeat,
+      indata <- lst(landCover, esker, updatedLC, age, natDist, anthroDist, harv, linFeat,
                     projectPoly)
     }
+    
+
+    # remove NULLs from indata
+    indata <- indata[which(!vapply(indata, function(x) is.null(x), 
+                                   FUN.VALUE = TRUE))]
+
     
     charIn <-  indata %>% unlist(recursive = FALSE) %>% is.character()
     
@@ -176,7 +205,7 @@ setMethod(
     vect <- names(indata)[which(grepl(".shp$", indata))]
     rast <- names(indata)[which(!grepl(".shp$", indata))]
     
-    neverVect <- c("plc", "fri", "age", "natDist", "anthroDist", "harv")
+    neverVect <- c("landCover", "updatedLC", "age", "natDist", "anthroDist", "harv")
     neverRast <- c("projectPoly")
     
     if(any(vect %in% neverVect)){
@@ -190,18 +219,33 @@ setMethod(
     }
     
     
-    indata[vect] <- lapply(indata[vect], st_read, quiet = TRUE)
+    indata[vect] <- lapply(indata[vect], st_read, quiet = TRUE, agr = "constant")
     indata[rast]<- lapply(indata[rast], raster)
    
     if(is.character(linFeat)){
       linFeat <- indata$linFeat
     }
+    if(is.null(friLU)){
+      stop("friLU is required when using the character method of caribouHabitat", 
+           call. = FALSE)
+    }
     
-    return(inputData(indata$plc, indata$esker, indata$fri, indata$age,
-                     indata$natDist, indata$anthroDist, indata$harv, linFeat, 
-                     indata$projectPoly, caribouRange = caribouRange, 
-                     eskerSave, linFeatSave, winArea = winArea, 
-                     padProjPoly = padProjPoly, padFocal = padFocal,
-                     friLU = friLU))
+    if(!is.null(indata$updatedLC)){
+      if(is.null(friLU)){
+        stop("friLU is required when updatedLC is supplied")
+      }
+      indata$updatedLC <- indata$updatedLC %>% reclassFRI(friLU)
+    }
+    
+    indata$landCover <- indata$landCover %>% reclassPLC()
+  
+    return(inputData(landCover = indata$landCover, esker = indata$esker, 
+                     updatedLC = indata$updatedLC, age = indata$age, 
+                     natDist = indata$natDist, anthroDist = indata$anthroDist, 
+                     harv = indata$harv, linFeat = linFeat, 
+                     projectPoly = indata$projectPoly, 
+                     caribouRange = caribouRange, eskerSave = eskerSave, 
+                     linFeatSave = linFeatSave, winArea = winArea, 
+                     padProjPoly = padProjPoly, padFocal = padFocal))
     
   })

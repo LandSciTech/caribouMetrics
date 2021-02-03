@@ -1,15 +1,37 @@
 #' @include AAAClassDefinitions.R
 NULL
 
-#' updateCaribou
+#' Update an existing CaribouHabitat Object
+#'
+#' Update a CaribouHabitat object in order to avoid reprocessing parts of the
+#' data that have not changed. New data is supplied as a named list and the
+#' object is updated depending on the elements provided in the list.
+#'
+#' If \code{newData} contains any of updatedLC, natDist, age, or harv and
+#' \code{updateType} is "disturbed" then the landCover is updated for disturbed
+#' areas and if any of updatedLC, natDist, age, or harv are missing the data
+#' stored in the CaribouHabitat object is reused. If \code{newData} contains
+#' only linFeat then only linear features will be updated.
+#'
+#' If \code{updateType} is "entire" then \code{newData} must contain updatedLC
+#' and the landCover in the CaribouHabitat object will be replaced and new
+#' projections made for the whole landscape. If natDist, harv, or anthroDist are
+#' not provided the the data stored in the CaribouHabitat object is reused.
 #'
 #' @param CarHab CaribouHabitat object
+#' @param newData a named list of RasterLayer objects to be used to update
+#'   CarHab. Potential names are: updatedLC, age, natDist, harv, anthroDist, and
+#'   linFeat.
+#' @param updateType character. The default is "disturbed" which means that only
+#'   disturbed areas are updated to updatedLC based on natDist, age, and harv
+#'   following the process used by Rempel. If \code{updateType} is "entire" then
+#'   the current landCover is replaced with updatedLC.
+#' @param resultsOnly logical. If FALSE the whole CaribouHabitat object is
+#'   returned. If TRUE then only the habitatUse RasterStack is returned.
 #'
-#' @param fri,age,natDist,linFeat RasterLayer objects to be used to update CarHab.
-#'   fri is required, if the others are missing the layers from CarHab will be used.
+#' @return If \code{resultsOnly} is TRUE an updated CaribouHabitat object. If
+#'   \code{resultsOnly} is false a RasterStack with a layer for each season.
 #'
-#'   
-
 #' @export
 setGeneric("updateCaribou", function(CarHab, newData, ...) standardGeneric("updateCaribou"))
 
@@ -23,11 +45,7 @@ setMethod(
     # process the data if not already done
     if(nrow(CarHab@processedData) < 2){
       
-      if(is.null(dots$friLU)){
-        stop("friLU is required to process data")
-      }
-      
-      CarHab <- processData(CarHab, friLU = dots$friLU)
+      CarHab <- processData(CarHab)
     }
     
     # calculate RSP
@@ -36,13 +54,17 @@ setMethod(
     
     CarHab@habitatUse <- calcRSP(CarHab@processedData, coefTable)
     
-    projRas <- raster::rasterize(CarHab@projectPoly, CarHab@habitatUse[[1]], getCover=TRUE)
+    projRas <- raster::rasterize(CarHab@projectPoly, CarHab@habitatUse[[1]],
+                                 getCover=TRUE)
     projRas[projRas==0] <- NA
     
     CarHab@habitatUse <- raster::mask(CarHab@habitatUse, projRas )
-    CarHab@habitatUse <- raster::crop(CarHab@habitatUse, CarHab@projectPoly, snap = "out")
+    CarHab@habitatUse <- raster::crop(CarHab@habitatUse, CarHab@projectPoly, 
+                                      snap = "out")
+    
     CarHab@processedData <- raster::mask(CarHab@processedData, projRas )
-    CarHab@processedData <- raster::crop(CarHab@processedData, CarHab@projectPoly, snap = "out")
+    CarHab@processedData <- raster::crop(CarHab@processedData, CarHab@projectPoly,
+                                         snap = "out")
     
     return(CarHab)
   })
@@ -52,16 +74,20 @@ setMethod(
 setMethod(
   "updateCaribou", 
   signature(CarHab = "CaribouHabitat", newData = "list"), 
-  function(CarHab, newData, friLU, resultsOnly = FALSE) {
+  function(CarHab, newData, updateType = "disturbed", resultsOnly = FALSE) {
     
-    # process the data if not already done
+    if(!updateType %in% c("disturbed", "entire")){
+      stop("updateType is not recognized please use 'disturbed' or 'entire'",
+           call. = FALSE)
+    }
+    
     if(nrow(CarHab@processedData) < 2){
       stop("CarHab@processedData is empty. Run updateCaribou with no additional
            data to process the initial data before updating")
     }
     
     
-    CarHab <- processData(CarHab, newData, friLU)
+    CarHab <- processData(CarHab, newData, updateType)
     
     CarHab <- updateCaribou(CarHab)
     

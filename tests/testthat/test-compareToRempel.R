@@ -22,24 +22,24 @@ if(interactive()){
     st_transform(crs = st_crs(plcD))
 
   caribouResults <- caribouHabitat(
-    plc = plcD, 
+    landCover = plcD, 
     esker = eskerD, 
-    fri = plcD %>% raster::setValues(NA), 
-    age = plcD %>% raster::setValues(NA), 
+    #fri = plcD %>% raster::setValues(NA), 
+    #age = plcD %>% raster::setValues(NA), 
     natDist = natDistD, 
     anthroDist = anthroDistD,
-    harv = plcD %>% raster::setValues(NA),
+    #harv = plcD %>% raster::setValues(NA),
     linFeat = list(roads = roadD, rail = railD,
                    utilities = utilD),
     projectPoly = projectPolyD, 
-    friLU = rfuToResType %>% mutate(ID = 1:n()) %>% select(ID, RegionalForestUnit),
+    #friLU = rfuToResType %>% mutate(ID = 1:n()) %>% select(ID, RegionalForestUnit),
     caribouRange = "Churchill", 
     padProjPoly = TRUE 
   ) 
   # Rempel's results
   rempelResults592 <- st_read(paste0(pthBase, "inputNV/HornsethRempelInfo",
                                      "/Churchill_4_592_1_Oct3/Churchill_4_592_1.shp"), quiet = TRUE) %>%
-    st_transform( crs = st_crs(caribouResults@plc))
+    st_transform( crs = st_crs(caribouResults@landCover))
   
   rempelResults592 <- rempelResults592 %>% mutate(LGMD_S5 = DEC_S5+MIX_S5)
   

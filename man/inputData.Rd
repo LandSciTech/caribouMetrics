@@ -6,49 +6,37 @@
 \alias{inputData,character-method}
 \title{Load input data}
 \usage{
-inputData(
-  plc,
-  esker,
-  fri,
-  age,
-  natDist,
-  anthroDist,
-  harv,
-  linFeat,
-  projectPoly,
-  ...
-)
+inputData(landCover, esker, linFeat, projectPoly, ...)
 
 \S4method{inputData}{RasterLayer}(
-  plc,
+  landCover,
   esker,
-  fri,
-  age,
-  natDist,
-  anthroDist,
-  harv,
   linFeat,
   projectPoly,
   caribouRange,
+  updatedLC = NULL,
+  age = NULL,
+  natDist = NULL,
+  anthroDist = NULL,
+  harv = NULL,
   eskerSave = NULL,
   linFeatSave = NULL,
   winArea = NULL,
   padProjPoly = FALSE,
-  padFocal = FALSE,
-  friLU = NULL
+  padFocal = FALSE
 )
 
 \S4method{inputData}{character}(
-  plc,
+  landCover,
   esker,
-  fri,
-  age,
-  natDist,
-  anthroDist,
-  harv,
   linFeat,
   projectPoly,
   caribouRange,
+  updatedLC = NULL,
+  age = NULL,
+  natDist = NULL,
+  anthroDist = NULL,
+  harv = NULL,
   eskerSave = NULL,
   linFeatSave = NULL,
   winArea = NULL,
@@ -58,21 +46,21 @@ inputData(
 )
 }
 \arguments{
-\item{plc}{}
+\item{landCover}{}
 
 \item{esker}{}
-
-\item{fri}{}
-
-\item{age}{}
-
-\item{natDist}{}
 
 \item{linFeat}{}
 
 \item{projectPoly}{}
 
 \item{...}{}
+
+\item{updatedLC}{}
+
+\item{age}{}
+
+\item{natDist}{}
 }
 \description{
 Load input data for calculating caribou habitat use.

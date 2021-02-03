@@ -10,7 +10,6 @@
 #' @param nmy
 #'
 #' @return
-#' @export
 #'
 #' @examples
 
@@ -19,7 +18,8 @@ aggregateIf <- function(x, y, nmx, nmy){
     return(x)
   }
   if(inherits(x,"RasterLayer")){
-    if(compareRaster(x, y, extent = FALSE, rowcol = FALSE, res = TRUE)){
+    if(compareRaster(x, y, extent = FALSE, rowcol = FALSE, res = TRUE, 
+                     stopiffalse = FALSE)){
       return(x)
     } else {
       if(any(raster::res(x) < raster::res(y))){

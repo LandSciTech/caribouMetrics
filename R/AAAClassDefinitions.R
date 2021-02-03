@@ -10,29 +10,32 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #' selection function
 #'
 #' @seealso See \code{\link{caribouHabitat}} for options when creating a
-#'   CaribouHabitatUse object.
-#' @slot plc Raster of provincial land cover.
+#'   CaribouHabitat object.
+#' @slot landCover Raster with land cover classified into resource types. See
+#'   \code{resTypeCode} for a list.
 #' @slot esker Raster of esker density in m^2 per hectare.
-#' @slot fri Raster of forest resource inventory.
+#' @slot updatedLC Raster used to update landCover based on new data and
+#'   disturbance.
 #' @slot age Raster of age in years from forest resource inventory.
 #' @slot natDist Raster of natural disturbance.
+#' @slot anthroDist Raster of permanent anthropogenic disturbances.
+#' @slot harv Raster of disturbance from forest harvesting.
 #' @slot linFeat Raster of linear feature density in m^2 per hectare including
 #'   roads, utilities, and rail.
-#' @slot hexgrid Sf object with polygons in flat-topped hexagonal grid.
 #' @slot projectPoly Sf object with polygon of project boundary.
-#' @slot processedData Sf dataframe object with all data needed to calculate
-#'   habitat use
-#' @slot habitatUse Sf dataframe object with habitat use for each season and
-#'   explanatory variables
+#' @slot processedData RasterStack with named layers for each input variable
+#'   used in the RSF
+#' @slot habitatUse RasterStack named with layers for each season
+#' @slot attributes A list of arguments from the \code{caribouHabtat} call. 
 #' @name CaribouHabitat-class
 #' @rdname CaribouHabitat-class
 #' @export CaribouHabitat
 #' @importClassesFrom raster RasterLayer
 
 CaribouHabitat <- setClass("CaribouHabitat",
-                           slots = c(plc = "RasterLayer", 
+                           slots = c(landCover = "RasterLayer", 
                                      esker  = "RasterLayer",
-                                     fri  = "RasterLayer", 
+                                     updatedLC  = "RasterLayer", 
                                      age  = "RasterLayer",
                                      natDist  = "RasterLayer",
                                      anthroDist = "RasterLayer",
@@ -43,9 +46,9 @@ CaribouHabitat <- setClass("CaribouHabitat",
                                      habitatUse = "Raster",
                                      attributes = "list"),
                            prototype = list(
-                             plc = raster(matrix(NA)), 
+                             landCover = raster(matrix(NA)), 
                              esker  = raster(matrix(NA)),
-                             fri  = raster(matrix(NA)), 
+                             updatedLC  = raster(matrix(NA)), 
                              age  = raster(matrix(NA)),
                              natDist = raster(matrix(NA)),
                              linFeat  = raster(matrix(NA)),
