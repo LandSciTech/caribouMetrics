@@ -3,10 +3,11 @@
 #' Calculates a moving window average for each raster cell using a circular
 #' window. If \code{veloxpkg = TRUE} it uses the velox package.
 #'
-#' @param rast a Raster* object 
+#' @param rast a Raster* object which must have equal x and y resolution or they
+#'   will be forced to match
 #' @param radius the radius of the circular window
 #' @param nms the names of each raster layer
-#' @param veloxpkg should the velox package be used? 
+#' @param veloxpkg should the velox package be used?
 
 movingWindowAvg <- function(rast, radius, nms, veloxpkg = FALSE, offset = TRUE, 
                             na.rm = TRUE, pad = FALSE, padValue = NA){
@@ -32,6 +33,9 @@ movingWindowAvg <- function(rast, radius, nms, veloxpkg = FALSE, offset = TRUE,
   } else {
 
     nl <- nlayers(rast)
+    if(raster::res(rast)[1] != raster::res(rast)[2]){
+      raster::res(rast) <- c(raster::res(rast)[1], raster::res(rast)[1])
+    }
     cf2 <- focalWeight(rast, radius, "circle")
     
     if(offset > 0){
