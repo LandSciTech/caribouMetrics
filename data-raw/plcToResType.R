@@ -29,7 +29,7 @@ plcToResType <- ".OWAT_PLC(j) = g.class.1(j)
                                   TRUE ~ ResourceType),
          PLCCode = as.numeric(PLCCode)) %>% 
   bind_rows(data.frame(ResourceType = "other", 
-                       PLCCode = which(!1:29 %in% .$PLCCode), 
+                       PLCCode = c(0:29)[which(!0:29 %in% .$PLCCode)], 
                        stringsAsFactors = FALSE)) %>% 
   select(PLCCode, ResourceType)
 

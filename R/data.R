@@ -43,7 +43,7 @@
 #' A table to convert Provincial Landcover Classes to resource types used in
 #' caribou resource selection model.
 #' 
-#' @format A data frame with 27 rows and 2 variables: \describe{
+#' @format A data frame with 30 rows and 2 variables: \describe{
 #'   \item{PLCCode}{Provincial landcover number code}
 #'   \item{ResourceType}{Resource type code} 
 #' } 
