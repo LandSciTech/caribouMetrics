@@ -90,7 +90,6 @@ The `caribouHabitat` function returns an S4 object with the class `CaribouHabita
 ```{r results1}
 str(carHab1, max.level = 2, give.attr = FALSE)
 results(carHab1)
-
 ```
 
 You can also create a plot of the results directly from the `CaribouHabitat` object. If `tmap` is installed it will be used to make a plot or if it is not `plot.raster` will be used. You can provide the season you wish to display and additional arguments that will be passed on to either `qtm` or `plot.raster`.  

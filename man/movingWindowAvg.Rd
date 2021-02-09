@@ -16,7 +16,8 @@ movingWindowAvg(
 )
 }
 \arguments{
-\item{rast}{a Raster* object}
+\item{rast}{a Raster* object which must have equal x and y resolution or they
+will be forced to match}
 
 \item{radius}{the radius of the circular window}
 

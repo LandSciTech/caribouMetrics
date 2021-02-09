@@ -68,7 +68,9 @@ outside the input data are 0 for all resource types. This is not a good
 assumption and should be used with caution.}
 
 \item{saveOutput}{character. The filename to save the rasterBrick of habitat
-use probabilities to. Note this will overwrite any existing files.}
+use probabilities to. Note this will overwrite any existing files. The .grd
+format is recommended because it will preserve layer names when the file is
+reloaded.}
 
 \item{winArea}{number. This is the area of the moving window that is used to
 average proportions of each resource type at broader spatial scales. The

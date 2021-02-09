@@ -77,7 +77,9 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  outside the input data are 0 for all resource types. This is not a good
 #'  assumption and should be used with caution.
 #'@param saveOutput character. The filename to save the rasterBrick of habitat
-#'  use probabilities to. Note this will overwrite any existing files.
+#'  use probabilities to. Note this will overwrite any existing files. The .grd
+#'  format is recommended because it will preserve layer names when the file is
+#'  reloaded.
 #'@param winArea number. This is the area of the moving window that is used to
 #'  average proportions of each resource type at broader spatial scales. The
 #'  Hornseth and Rempel (2016) models used specific window areas which are
@@ -130,6 +132,11 @@ setMethod(
     if(!is.null(dots$saveOutput)){
       
       byLayer <- grepl("\\.asc$|\\.sdat$|\\.rst$", dots$saveOutput)
+      if(!byLayer && !grepl("\\.grd", dots$saveOutput)){
+        warning("Saving output to ", dots$saveOutput, 
+                ". Layernames will not be preserved.",
+                " Use .grd format to preserve names")
+      }
  
       raster::writeRaster(x@habitatUse, filename = dots$saveOutput, 
                           overwrite = TRUE, bylayer = byLayer, 
