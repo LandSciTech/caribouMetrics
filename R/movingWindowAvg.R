@@ -33,10 +33,23 @@ movingWindowAvg <- function(rast, radius, nms, veloxpkg = FALSE, offset = TRUE,
   } else {
 
     nl <- nlayers(rast)
-    if(raster::res(rast)[1] != raster::res(rast)[2]){
-      raster::res(rast) <- c(raster::res(rast)[1], raster::res(rast)[1])
-    }
+    # if(raster::res(rast)[1] != raster::res(rast)[2]){
+    #   raster::res(rast) <- c(raster::res(rast)[1], raster::res(rast)[1])
+    # }
     cf2 <- focalWeight(rast, radius, "circle")
+    
+    if(nrow(cf2) > ncol(cf2)){
+      dif <- nrow(cf2) - ncol(cf2)
+      colsToAdd <- matrix(rep(0, times = nrow(cf2)*dif), nrow = nrow(cf2),
+                          ncol = dif)
+      cf2 <- cbind(cf2, colsToAdd)
+    }
+    if(ncol(cf2) > nrow(cf2)){
+      dif <- ncol(cf2) - nrow(cf2)
+      rowsToAdd <- matrix(rep(0, times = ncol(cf2)*dif), nrow = dif,
+                          ncol = ncol(cf2))
+      cf2 <- rbind(cf2, rowsToAdd)
+    }
     
     if(offset > 0){
       # add rows to make only far edge points overlap for 4 horizontal/vertical
@@ -58,15 +71,17 @@ movingWindowAvg <- function(rast, radius, nms, veloxpkg = FALSE, offset = TRUE,
       cf2_off9[(nToAdd2/2+1):(nToAdd2/2+nrow(cf2)), (nToAdd2/2+1):(nToAdd2/2+nrow(cf2))] <- cf2
       
       # find top left edge of circle
-      test <- FALSE
-      for (i in 1:nrow(cf2)) {
-        x <- which(cf2[i, ] > 0)
-        y <- which(cf2[, i] > 0)
-        test <- any(x == i & x == y)
-        if(test){
-          break
+      suppressWarnings({
+        test <- FALSE
+        for (i in 1:nrow(cf2)) {
+          x <- which(cf2[i, ] > 0)
+          y <- which(cf2[, i] > 0)
+          test <- any(x == i & x == y)
+          if(test){
+            break
+          }
         }
-      }
+      })
       
       # make cell at i,i overlap point for 4 diagonal offsets
       nToAdd <- nToAdd2-i-2

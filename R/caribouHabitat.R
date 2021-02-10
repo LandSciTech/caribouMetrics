@@ -85,6 +85,11 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  Hornseth and Rempel (2016) models used specific window areas which are
 #'  defined within this package and used as the default. You should only specify
 #'  a window size if you have good reason.
+#'@param coefTable data.frame. Optional table of coefficients to be used in the
+#'  model. Must match the format and naming of \code{coefTableHR}
+#'@param doScale logical. FALSE by default. Set to TRUE only if you have
+#'  supplied coefficients that were trained on standardized data which will
+#'  cause the input data to be scaled.
 #'
 #'@return A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
 #'
@@ -127,7 +132,11 @@ setMethod(
     
     x <- processData(x)
     
-    x <- updateCaribou(x)
+    updateArgs <- dots[c("coefTable", "doScale")]
+    
+    updateArgs <- updateArgs[which(lapply(updateArgs, length) > 0)]
+    
+    x <- do.call(updateCaribou, c(list(CarHab = x), updateArgs))
     
     if(!is.null(dots$saveOutput)){
       

@@ -45,7 +45,7 @@ setGeneric("calcRSP", function(resourceProp, ...) standardGeneric("calcRSP"))
 
 setMethod(
   "calcRSP", signature(resourceProp = "Raster"),
-  function(resourceProp, coefs, seasons = "all"){
+  function(resourceProp, coefs, seasons = "all", doScale = FALSE){
     # TODO This expected names bit really breaks the generalisability 
     # Note from SE: this function is really internal to the package so maybe an
     # easier solution is to just not export it and then since it is only getting
@@ -74,6 +74,11 @@ setMethod(
     
     if(!all(seasons %in% c("Spring", "Summer", "Fall", "Winter", "all"))){
       stop("seasons must be one of: Spring, Summer, Fall, Winter, all")
+    }
+    
+    if(doScale){
+      resourceProp <- raster::scale(resourceProp)
+      raster::values(resourceProp[["CONST"]]) <- 1
     }
     
     # Select relevant seasons
