@@ -127,7 +127,11 @@ setMethod(
     
     x <- processData(x)
     
-    x <- updateCaribou(x)
+    updateArgs <- dots[c("coefTable", "doScale")]
+    
+    updateArgs <- updateArgs[which(lapply(updateArgs, length) > 0)]
+    
+    x <- do.call(updateCaribou, c(list(CarHab = x), updateArgs))
     
     if(!is.null(dots$saveOutput)){
       

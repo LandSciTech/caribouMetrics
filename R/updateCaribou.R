@@ -39,9 +39,7 @@ setGeneric("updateCaribou", function(CarHab, newData, ...) standardGeneric("upda
 setMethod(
   "updateCaribou", 
   signature(CarHab = "CaribouHabitat", newData = "missing"), 
-  function(CarHab, ...) {
-    dots <- list(...)
-
+  function(CarHab, coefTable = coefTableHR, doScale = FALSE) {
     # process the data if not already done
     if(nrow(CarHab@processedData) < 2){
       
@@ -49,10 +47,11 @@ setMethod(
     }
     
     # calculate RSP
-    coefTable <- coefTableHR %>% 
+    coefTable <- coefTable %>% 
       filter(stringr::str_detect(Range, CarHab@attributes$caribouRange))
     
-    CarHab@habitatUse <- calcRSP(CarHab@processedData, coefTable)
+    CarHab@habitatUse <- calcRSP(CarHab@processedData, coefTable, 
+                                 doScale = doScale)
     
     projRas <- raster::rasterize(CarHab@projectPoly, CarHab@habitatUse[[1]],
                                  getCover=TRUE)
@@ -74,7 +73,8 @@ setMethod(
 setMethod(
   "updateCaribou", 
   signature(CarHab = "CaribouHabitat", newData = "list"), 
-  function(CarHab, newData, updateType = "disturbed", resultsOnly = FALSE) {
+  function(CarHab, newData, updateType = "disturbed", resultsOnly = FALSE, 
+           coefTable = coefTableHR, doScale = FALSE) {
     
     if(!updateType %in% c("disturbed", "entire")){
       stop("updateType is not recognized please use 'disturbed' or 'entire'",
@@ -89,7 +89,7 @@ setMethod(
     
     CarHab <- processData(CarHab, newData, updateType)
     
-    CarHab <- updateCaribou(CarHab)
+    CarHab <- updateCaribou(CarHab, coefTable = coefTable, doScale = doScale)
     
     if(resultsOnly){
       return(CarHab@habitatUse)

@@ -275,3 +275,22 @@ purrr::walk2(c(carHabLF1, linFeatResults),
 
 ```
 
+## Example with different coefficients
+Different coefficients can be supplied using the `coefTable` argument and if those coefficients are standardized the data can be standarized by supplying the argument `doScale = TRUE`.
+```{r}
+carHabStd <- caribouHabitat(
+  landCover = plcD,
+  esker = eskerDras,
+  natDist = natDistD, 
+  anthroDist = anthroDistD, 
+  harv = harvD,
+  linFeat = linFeatDras, 
+  projectPoly = projectPolyD, 
+  caribouRange = "James Bay", 
+  padFocal = TRUE, 
+  winArea = 500, 
+  coefTable = coefTableStd,
+  doScale = TRUE
+)
+```
+
