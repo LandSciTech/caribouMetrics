@@ -5,16 +5,19 @@
 \alias{results,CaribouHabitat-method}
 \title{Extract results}
 \usage{
-results(x)
+results(x, ...)
 
-\S4method{results}{CaribouHabitat}(x)
+\S4method{results}{CaribouHabitat}(x, type = "both")
 }
 \arguments{
 \item{x}{A caribouHabitat object.}
+
+\item{type}{string. Either "both" for the habitat use results and the
+processed data or "habitatUse" for just the habitat use results.}
 }
 \value{
 A RasterStack with explanatory varibales and predictions for each
-season.
+  season.
 }
 \description{
 Extract results from caribouHabitat object.
