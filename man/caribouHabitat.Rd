@@ -77,6 +77,13 @@ average proportions of each resource type at broader spatial scales. The
 Hornseth and Rempel (2016) models used specific window areas which are
 defined within this package and used as the default. You should only specify
 a window size if you have good reason.}
+
+\item{coefTable}{data.frame. Optional table of coefficients to be used in the
+model. Must match the format and naming of \code{coefTableHR}}
+
+\item{doScale}{logical. FALSE by default. Set to TRUE only if you have
+supplied coefficients that were trained on standardized data which will
+cause the input data to be scaled.}
 }
 \value{
 A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}

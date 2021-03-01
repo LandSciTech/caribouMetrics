@@ -266,3 +266,83 @@ setMethod(
     
     return(inData)
   })
+
+# Method for initial processing when no new data is provided
+#' @rdname processData
+#' @importFrom raster plot
+setMethod(
+  "processData", signature(inData = "DisturbanceMetrics", newData = "missing"), 
+  function(inData) {
+    #inData=dm
+        
+    harv <- inData@harv;harv[is.na(harv)]=0
+    anthroDist <- inData@anthroDist;anthroDist[is.na(anthroDist)]=0
+    natDist <- inData@natDist;natDist[is.na(natDist)]=0
+    landCover <- inData@landCover
+    
+    # check harv, anthroDist and natDist are real if not make dummy
+    if(length(raster::unique(harv)) == 0){
+      harv <- landCover
+      harv[] <- 0
+    }
+    if(length(raster::unique(anthroDist)) == 0){
+      anthroDist <- landCover
+      anthroDist[] <- 0
+    }
+    if(length(raster::unique(natDist)) == 0){
+      natDist <- landCover
+      natDist[] <- 0
+    }
+    
+    ############
+    #Buffer anthropogenic disturbance
+    expVars <- (anthroDist+harv)>0
+
+    # window radius 
+    winRad <- (inData@attributes$bufferWidth/res(expVars[[1]])[1]) %>% 
+      round(digits = 0)*res(expVars[[1]])[1] %>% 
+      round()
+    
+    layernames <- c("ANTHRO")
+    
+    if(!inData@attributes$padProjPoly){
+      expVars <- raster::mask(expVars, inData@projectPoly)
+    }
+    
+    expVars <- movingWindowAvg(rast = expVars, radius = winRad,
+                               nms = layernames, 
+                               pad = inData@attributes$padFocal,offset=F)
+    expVars <- expVars>0 
+
+    ##############
+    #Buffer linear features
+    #class(inData@linFeat)
+    #slotNames(inData)    
+    linBuff <- st_buffer(inData@linFeat,inData@attributes$bufferWidth)
+    #TO DO: faster rasterization?
+    linBuff <- raster::rasterize(linBuff,expVars)
+    linBuff <- linBuff>0;linBuff[is.na(linBuff)]=0
+    anthroBuff <- (linBuff+expVars)>0
+    natDistNonOverlap <- natDist;natDistNonOverlap[anthroBuff>0]=0;natDistNonOverlap[is.na(anthroBuff)]=NA
+    all <- (anthroBuff+natDist)>0
+
+    outStack <- raster::stack(anthroBuff,natDistNonOverlap,all)
+    names(outStack)=c("anthroBuff","natDistNonOverlap","totalDist")
+    
+    #set NAs from landcover
+    outStack[is.na(landCover)|(landCover==0)]=NA
+
+    inData@processedData <- outStack
+    
+    #######
+    #Range summaries
+    rr = raster::extract(outStack,inData@projectPoly,fun="sum",na.rm=T)
+    ss = raster::extract(!is.na(outStack),inData@projectPoly,fun="sum",na.rm=T)
+    dimnames(rr)[1]=inData@projectPoly$Range
+    rr=rr/ss
+    
+    rr=as.data.frame(rr)
+    inData@disturbanceMetrics = rr
+
+    return(inData)
+  })

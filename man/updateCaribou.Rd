@@ -7,7 +7,14 @@
 \usage{
 updateCaribou(CarHab, newData, ...)
 
-\S4method{updateCaribou}{CaribouHabitat,list}(CarHab, newData, updateType = "disturbed", resultsOnly = FALSE)
+\S4method{updateCaribou}{CaribouHabitat,list}(
+  CarHab,
+  newData,
+  updateType = "disturbed",
+  resultsOnly = FALSE,
+  coefTable = coefTableHR,
+  doScale = FALSE
+)
 }
 \arguments{
 \item{CarHab}{CaribouHabitat object}

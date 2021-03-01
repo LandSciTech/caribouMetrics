@@ -11,7 +11,7 @@
 
 movingWindowAvg <- function(rast, radius, nms, veloxpkg = FALSE, offset = TRUE, 
                             na.rm = TRUE, pad = FALSE, padValue = NA){
-  
+
   if(veloxpkg){
     if(!requireNamespace("velox", quietly = TRUE)){
       message("velox package not available, using raster package instead")

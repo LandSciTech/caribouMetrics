@@ -46,6 +46,7 @@ Collate:
     'convertRasterToLineSegments.R'
     'createNestedHexGrid.R'
     'data.R'
+    'disturbanceMetrics.R'
     'getSyncSimData.R'
     'spatialAlignFns.R'
     'inputData.R'
