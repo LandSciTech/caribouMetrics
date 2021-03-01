@@ -29,6 +29,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'   \item totalDist: Percent total non-overlapping fire and anthropogenic disturbance.
 #' }
 #'
+#' Note assume natDist, anthroDist and harv include 40 years of cumulative disturbance.
 #' Note that locations where landCover is NA or 0 are omitted from the tabulated area.
 #' Missing layers are omitted from the output, not interpreted as 0 disturbance.
 #' To update an existing CaribouHabitat object with new data see
@@ -37,11 +38,11 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'@param landCover filename or RasterLayer. 0 and NA values are assumed to be water and omitted from the tabulated area. 
 #'  Note landCover is also used to define the input grid, so must be provided even if all values are 1.
 #'@param natDist filename or RasterLayer. Presence or absence of natural
-#'  disturbance, primarily by fire.
+#'  disturbance, primarily by fire. Should include 40 years cumulative disturbance. Optional.
 #'@param anthroDist filename or RasterLayer. Anthropogenic disturbance other
-#'  than harvest. This can have an effect on any type of landcover except water. Optional.
+#'  than harvest. This can have an effect on any type of landcover except water. Should include 40 years cumulative disturbance. Optional.
 #'@param harv filename or RasterLayer. Harvest history. This can only have an
-#'  effect on forest landcover types and will not affect wetlands or water. Optional.
+#'  effect on forest landcover types and will not affect wetlands or water. Should include 40 years cumulative disturbance. Optional.
 #'@param linFeat filename, sf object or named list with elements
 #'  roads, rail, and utilities. Linear features. 
 #'@param projectPoly filename or sf object. Polygons defining range boundaries.
