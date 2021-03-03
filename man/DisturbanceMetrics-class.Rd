@@ -8,6 +8,7 @@
 \usage{
 \S4method{initialize}{DisturbanceMetrics}(
   .Object,
+  landCover,
   natDist,
   anthroDist,
   harv,
@@ -34,6 +35,8 @@ Missing layers are omitted from the output, not interpreted as 0 disturbance
 \section{Slots}{
 
 \describe{
+\item{\code{landCover}}{Raster distinguishing land from water. 0 or NA is water.}
+
 \item{\code{natDist}}{Raster of natural disturbance.}
 
 \item{\code{anthroDist}}{Raster of permanent anthropogenic disturbances.}

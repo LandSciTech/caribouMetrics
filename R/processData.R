@@ -319,7 +319,7 @@ setMethod(
     #class(inData@linFeat)
     #slotNames(inData)    
     linBuff <- st_buffer(inData@linFeat,inData@attributes$bufferWidth)
-    #TO DO: faster rasterization?
+    #TO DO: faster rasterization? use fasterize optionally.
     linBuff <- raster::rasterize(linBuff,expVars)
     linBuff <- linBuff>0;linBuff[is.na(linBuff)]=0
     anthroBuff <- (linBuff+expVars)>0
@@ -336,13 +336,13 @@ setMethod(
     
     #######
     #Range summaries
-    rr = raster::extract(outStack,inData@projectPoly,fun="sum",na.rm=T)
-    ss = raster::extract(!is.na(outStack),inData@projectPoly,fun="sum",na.rm=T)
-    dimnames(rr)[1]=inData@projectPoly$Range
-    rr=rr/ss
+    rr <- raster::extract(outStack,inData@projectPoly,fun="sum",na.rm=T)
+    ss <- raster::extract(!is.na(outStack),inData@projectPoly,fun="sum",na.rm=T)
+    dimnames(rr)[1] <- inData@projectPoly$Range
+    rr <- rr/ss
     
-    rr=as.data.frame(rr)
-    inData@disturbanceMetrics = rr
+    rr <- as.data.frame(rr)
+    inData@disturbanceMetrics <- rr
 
     return(inData)
   })
