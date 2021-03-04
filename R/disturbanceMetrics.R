@@ -43,7 +43,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'  than harvest. This can have an effect on any type of landcover except water. Should include 40 years cumulative disturbance. Optional.
 #'@param harv filename or RasterLayer. Harvest history. This can only have an
 #'  effect on forest landcover types and will not affect wetlands or water. Should include 40 years cumulative disturbance. Optional.
-#'@param linFeat filename, sf object or named list with elements
+#'@param linFeat filename, RasterLayer, sf object or named list with elements
 #'  roads, rail, and utilities. Linear features. 
 #'@param projectPoly filename or sf object. Polygons defining range boundaries.
 #'@param padProjPoly logical. Should the area around the \code{projectPoly} be

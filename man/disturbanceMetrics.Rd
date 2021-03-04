@@ -15,7 +15,7 @@ disturbanceMetrics(landCover, linFeat, projectPoly, ...)
 \item{landCover}{filename or RasterLayer. 0 and NA values are assumed to be water and omitted from the tabulated area. 
 Note landCover is also used to define the input grid, so must be provided even if all values are 1.}
 
-\item{linFeat}{filename, sf object or named list with elements
+\item{linFeat}{filename, RasterLayer, sf object or named list with elements
 roads, rail, and utilities. Linear features.}
 
 \item{projectPoly}{filename or sf object. Polygons defining range boundaries.}
