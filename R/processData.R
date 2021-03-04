@@ -129,6 +129,19 @@ setMethod(
                                     "harv", "linFeat" ))], call. = FALSE)
     }
     
+    if(!is.null(newData$linFeat)){
+      # rasterize linFeat
+      if(inherits(newData$linFeat, "list")){
+        newData$linFeat <- combineLinFeat(newData$linFeat$roads, newData$linFeat$rail, newData$linFeat$utilities)
+      }
+      
+      if(inherits(newData$linFeat, "sf")){
+        tmplt <- raster(inData@landCover) %>% raster::`res<-`(c(400, 400))
+        newData$linFeat <- rasterizeLineDensity(newData$linFeat, tmplt)
+      }
+      
+    }
+
     if(!all(sapply(newData, is, "RasterLayer"))){
       stop("All data supplied in the newData list must be RasterLayer objects", 
            call. = FALSE)
