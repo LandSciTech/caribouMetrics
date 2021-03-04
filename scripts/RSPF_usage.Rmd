@@ -292,6 +292,7 @@ makeLCCfromCohortData <- function(cohortData,
 In this example I hard code the look-up table to match values used by Tati Micheletti for the example sim object but that are likely to need to be adjusted to match the ID values used in the Ring of Fire
 ```{r message=FALSE, warning=FALSE}
 library(data.table)
+library(zip)
 
 lccClassTable = data.table(
   standLeading = c("pureCon_dense", "pureCon_open", "pureCon_sparse",
@@ -301,6 +302,10 @@ lccClassTable = data.table(
   LCCclass = c(1,6,8,32,
                2,11,11, 
                3,13,13)) # HARDCODED TO MATCH LCC05 
+
+zip::unzip(zipfile = paste0(pthBase, "landRData.zip"),
+           junkpaths = TRUE,
+           exdir = pthBase)
 
 cohortData <- readRDS(paste0(pthBase, "cohort_data.rds"))
 pixelGroupMap <- raster::raster(paste0(pthBase, "pixel_group_map.grd"))
