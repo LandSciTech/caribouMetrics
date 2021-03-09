@@ -9,33 +9,25 @@ Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in 
 Ottawa, Ontario.
 }
 \usage{
-disturbanceMetrics(
-  natDist,
-  anthroDist,
-  harv,
-  linFeat,
-  projectPoly,
-  caribouRange,
-  ...
-)
+disturbanceMetrics(landCover, linFeat, projectPoly, ...)
 }
 \arguments{
-\item{natDist}{filename or RasterLayer. Presence or absence of natural
-disturbance, primarily by fire.}
-
-\item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance other
-than harvest. This can have an effect on any type of landcover except water.}
-
-\item{harv}{filename or RasterLayer. Harvest history. This can only have an
-effect on forest landcover types and will not affect wetlands or water.}
+\item{landCover}{filename or RasterLayer. 0 and NA values are assumed to be water and omitted from the tabulated area. 
+Note landCover is also used to define the input grid, so must be provided even if all values are 1.}
 
 \item{linFeat}{filename, sf object or named list with elements
 roads, rail, and utilities. Linear features.}
 
-\item{projectPoly}{filename or sf object. Polygon defining the project area.}
+\item{projectPoly}{filename or sf object. Polygons defining range boundaries.}
 
-\item{caribouRange}{character. The range where caribou were located. See
-\code{unique(coefTableHR$Range)} for options.}
+\item{natDist}{filename or RasterLayer. Presence or absence of natural
+disturbance, primarily by fire. Should include 40 years cumulative disturbance. Optional.}
+
+\item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance other
+than harvest. This can have an effect on any type of landcover except water. Should include 40 years cumulative disturbance. Optional.}
+
+\item{harv}{filename or RasterLayer. Harvest history. This can only have an
+effect on forest landcover types and will not affect wetlands or water. Should include 40 years cumulative disturbance. Optional.}
 
 \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
 used to avoid edge effects? If FALSE, the default, only data from inside the
@@ -66,7 +58,8 @@ So far, the variables calculated by this function include:
 }
 }
 \details{
-Note that NA values are omitted from tabulated area.
+Note assume natDist, anthroDist and harv include 40 years of cumulative disturbance.
+Note that locations where landCover is NA or 0 are omitted from the tabulated area.
 Missing layers are omitted from the output, not interpreted as 0 disturbance.
 To update an existing CaribouHabitat object with new data see
 \link[caribouMetrics]{updateDisturbance}.

@@ -319,30 +319,46 @@ setMethod(
     #class(inData@linFeat)
     #slotNames(inData)    
     linBuff <- st_buffer(inData@linFeat,inData@attributes$bufferWidth)
-    #TO DO: faster rasterization?
-    linBuff <- raster::rasterize(linBuff,expVars)
-    linBuff <- linBuff>0;linBuff[is.na(linBuff)]=0
-    anthroBuff <- (linBuff+expVars)>0
-    natDistNonOverlap <- natDist;natDistNonOverlap[anthroBuff>0]=0;natDistNonOverlap[is.na(anthroBuff)]=NA
-    all <- (anthroBuff+natDist)>0
+    
+    # faster rasterization
+    if(requireNamespace("fasterize", quietly = TRUE)){
+      linBuff <- fasterize::fasterize(linBuff, expVars)
+    } else {
+      message("To speed up install fasterize package")
+      linBuff <- raster::rasterize(linBuff, expVars)
+    }
+  
+    linBuff <- linBuff > 0 
+    linBuff[is.na(linBuff)] = 0
+    anthroBuff <- (linBuff + expVars) > 0
+    natDistNonOverlap <- natDist
+    natDistNonOverlap[anthroBuff > 0] = 0
+    natDistNonOverlap[is.na(anthroBuff)] = NA
+    all <- (anthroBuff + natDist) > 0
 
-    outStack <- raster::stack(anthroBuff,natDistNonOverlap,all)
-    names(outStack)=c("anthroBuff","natDistNonOverlap","totalDist")
+    outStack <- raster::stack(anthroBuff, natDistNonOverlap, all)
+    names(outStack) = c("anthroBuff", "natDistNonOverlap", "totalDist")
     
     #set NAs from landcover
-    outStack[is.na(landCover)|(landCover==0)]=NA
+    outStack[is.na(landCover) | (landCover == 0)] = NA
 
     inData@processedData <- outStack
     
     #######
     #Range summaries
-    rr = raster::extract(outStack,inData@projectPoly,fun="sum",na.rm=T)
-    ss = raster::extract(!is.na(outStack),inData@projectPoly,fun="sum",na.rm=T)
-    dimnames(rr)[1]=inData@projectPoly$Range
-    rr=rr/ss
+    rr <- raster::extract(outStack,
+                         inData@projectPoly,
+                         fun = "sum",
+                         na.rm = T)
+    ss <- raster::extract(!is.na(outStack),
+                         inData@projectPoly,
+                         fun = "sum",
+                         na.rm = T)
+    dimnames(rr)[1] <-  inData@projectPoly$Range
+    rr <- rr / ss
     
-    rr=as.data.frame(rr)
-    inData@disturbanceMetrics = rr
+    rr <-  as.data.frame(rr)
+    inData@disturbanceMetrics <- rr
 
     return(inData)
   })

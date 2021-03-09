@@ -4,6 +4,7 @@
 \alias{processData}
 \alias{processData,CaribouHabitat,missing-method}
 \alias{processData,CaribouHabitat,list-method}
+\alias{processData,DisturbanceMetrics,missing-method}
 \title{Process the data after it is loaded and checked by inputData}
 \usage{
 processData(inData, newData, ...)
@@ -11,6 +12,8 @@ processData(inData, newData, ...)
 \S4method{processData}{CaribouHabitat,missing}(inData)
 
 \S4method{processData}{CaribouHabitat,list}(inData, newData, updateType = "disturbed")
+
+\S4method{processData}{DisturbanceMetrics,missing}(inData)
 }
 \description{
 Process the data after it is loaded and checked by inputData

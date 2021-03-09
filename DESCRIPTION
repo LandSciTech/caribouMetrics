@@ -50,6 +50,7 @@ Collate:
     'getSyncSimData.R'
     'spatialAlignFns.R'
     'inputData.R'
+    'inputDataDisturbance.R'
     'movingWindowAvg.R'
     'plot.R'
     'processData.R'
