@@ -16,7 +16,8 @@ utilitiesD = st_read(paste0(pthBase, "utilities.shp"), quiet = TRUE)
 
 devtools::load_all()
 
-#Note assumption here is natDist, anthroDist and harv include 40 years of cumulative disturbance.
+#Note assumption here is natDist, anthroDist and harv include 40 years of
+#cumulative disturbance.
 dm <- disturbanceMetrics(
   landCover=plcD,
   natDist = natDistD, 
@@ -31,4 +32,4 @@ dm <- disturbanceMetrics(
 dm@disturbanceMetrics
 plot(dm@processedData)
 
-#TO DO: testing, documentation, speeding up, etc.
+#TODO: testing, documentation, speeding up, etc.

@@ -311,12 +311,11 @@ setMethod(
     harv[is.na(harv)]=0;anthroDist[is.na(anthroDist)]=0;natDist[is.na(natDist)]=0
     ############
     #Buffer anthropogenic disturbance
+    #To speed calculations, include points from linFeat in raster.
     message("buffering anthropogenic disturbance")
     
     expVars <- (anthroDist+harv)>0
 
-    #To speed calculations, include points from linFeat in raster.
-    
     lfPt <- inData@linFeat %>% dplyr::filter(st_is(. , "POINT"))
     lfPt <- as(lfPt, "Spatial")
 
@@ -334,7 +333,6 @@ setMethod(
       expVars <- raster::mask(expVars, inData@projectPoly)
     }
 
-    #plot(expVars)    
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,
                                nms = layernames, 
                                pad = inData@attributes$padFocal,offset=F)
@@ -343,35 +341,45 @@ setMethod(
 
     ##############
     #Buffer linear features
-    #class(inData@linFeat)
-    #slotNames(inData)    
     message("buffering linear features")
     
     #Note points were included with polygons above.
     lf <- inData@linFeat %>% dplyr::filter(!st_is(. , "POINT"))
     
     linBuff <- st_buffer(lf,inData@attributes$bufferWidth)
-    #TO DO: faster rasterization? use fasterize optionally.
-    linBuff <- fasterize::fasterize(linBuff,expVars)
-    linBuff <- linBuff>0;linBuff[is.na(linBuff)]=0
-    anthroBuff <- (linBuff+expVars)>0
-    #natDistNonOverlap <- natDist;natDistNonOverlap[anthroBuff>0]=0;natDistNonOverlap[is.na(anthroBuff)]=NA
-    all <- (anthroBuff+natDist)>0
-  
-    outStack <- raster::stack(anthroBuff,natDist,all)
+    
+    # faster rasterization
+    if(requireNamespace("fasterize", quietly = TRUE)){
+      linBuff <- fasterize::fasterize(linBuff, expVars)
+    } else {
+      message("To speed up install fasterize package")
+      linBuff <- raster::rasterize(linBuff, expVars)
+    }
+    
+    linBuff <- linBuff > 0 
+    linBuff[is.na(linBuff)] = 0
+    anthroBuff <- (linBuff + expVars) > 0
+    all <- (anthroBuff + natDist) > 0
+    
+    
+    outStack <- raster::stack(anthroBuff, natDist, all)
+    names(outStack) = c("anthroBuff", "natDist", "totalDist")
     
     #set NAs from landcover
-    outStack[is.na(landCover)|(landCover==0)]=NA
-    names(outStack)=c("anthroBuff","natDist","totalDist")
+    outStack[is.na(landCover) | (landCover == 0)] = NA
     
     inData@processedData <- outStack
     
     #######
     #Range summaries
     message("calculating disturbance metrics")
-    
-    pp = fasterize::fasterize(inData@projectPoly,outStack[[1]])
-    #TO DO: speed up this step.
+    if(requireNamespace("fasterize", quietly = TRUE)){
+      pp = fasterize::fasterize(inData@projectPoly,outStack[[1]])
+    } else {
+      message("To speed up install fasterize package")
+      pp = raster::rasterize(inData@projectPoly,outStack[[1]])
+    }
+        
     rr <- raster::zonal(outStack,pp,fun="mean",na.rm=T)
     rr <- as.data.frame(rr)
     
