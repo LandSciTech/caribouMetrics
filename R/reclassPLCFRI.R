@@ -39,7 +39,7 @@ reclassFRI <- function(fri, friLU, rfuLU = rfuToResType){
            paste0(unique(friLU[,2])[which(!unique(friLU[,2]) %in%
                                             c(unique(rfuToResType$RegionalForestUnit), NA))],
                   sep = ", "),
-           " does not match",
+           " does not match. Options are: ",paste0(unique(rfuLU$RegionalForestUnit),sep =", "),
            call. = FALSE)
     }
     

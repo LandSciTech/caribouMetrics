@@ -63,6 +63,17 @@ setMethod(
     if(inherits(linFeat, "list")){
       linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
     }
+    if(!(is(linFeat, "sf") || is(linFeat, "sfc"))){
+      if(is(linFeat, "Spatial")){
+        linFeat <- sf::st_as_sf(linFeat)
+      } else if(is(linFeat, "Raster")){
+        # roads <- rasterToLineSegments(roads)
+        linFeat <- raster::rasterToPoints(linFeat, fun = function(x){x > 0}, 
+                                        spatial = TRUE) %>% 
+          sf::st_as_sf()
+      }
+    }
+    
     
     linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
     

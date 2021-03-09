@@ -23,6 +23,12 @@ combineLinFeat <- function(roads, rail, utilities){
     utilities <- st_read(utilities, quiet = TRUE, agr = "constant")
   }
   
+  if(is(roads, "Raster")){
+      roads <- raster::rasterToPoints(roads, fun = function(x){x > 0}, 
+                                        spatial = TRUE) %>% 
+        sf::st_as_sf()
+  }
+  
   roads <- roads %>% transmute(ID = 1, Type = "road") 
   
   utilities <- utilities %>% 
