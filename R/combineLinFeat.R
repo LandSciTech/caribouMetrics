@@ -28,7 +28,7 @@ combineLinFeat <- function(roads, rail, utilities){
                                         spatial = TRUE) %>% 
         sf::st_as_sf()
   }
-  
+
   roads <- roads %>% transmute(ID = 1, Type = "road") 
   
   utilities <- utilities %>% 

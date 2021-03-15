@@ -2,14 +2,17 @@
 #'
 #' Rasterize line density in meters per hectare.
 #'
-#' @param linObj an sf object containing lines
+#' @param x an sf object containing lines and/or points
 #' @param r a RasterLayer object to be used as a template for the output raster
+#' @param ptDensity a number giving the density to assign to points, in units of res(r). A value of 1 indicates one straight line crossing of the pixel. A value of 2+2*2^0.5 is horizontal, vertical, and diagonal crossings. If NULL, points in linObj will be ignored.  
 #'
 #' @return A RasterLayer object with values representing the density of lines
 #'   per hectare.
 #' @export
 #'
-rasterizeLineDensity <- function(x, r) {
+rasterizeLineDensity <- function(x, r,ptDensity=1) {
+  #ptDensity=1
+
   r[] <- 1:ncell(r)
   
   rPoly <- spex::polygonize(r) %>% set_names("ID", "geometry") %>% 
@@ -25,6 +28,22 @@ rasterizeLineDensity <- function(x, r) {
     mutate(length = replace_na(length, 0))
   
   r[] <- rp2$length
+ 
+  lfPt <- x %>% dplyr::filter(st_is(. , "POINT"))
+  
+  if(!is.null(ptDensity)){
+    if(nrow(lfPt)>0){
+      lfR = raster::rasterize(lfPt, r,field="ID")    
+      
+      lfR[!is.na(lfR)]= ptDensity*res(r)[1]
+      
+      warning("TO DO: expose ptDensity parameter in cariboutHabitat function.")
+      
+      lfR[is.na(lfR)]=0
+      lfR = round(lfR/(res(r)[1]*res(r)[2]/10000), digits = 1)
+      r=r+lfR
+    }
+  }
   
   return(r)
 }

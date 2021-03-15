@@ -97,7 +97,7 @@ setMethod(
     if(inherits(linFeat, "list")){
       linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
     }
-    
+
     linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
     
     if(inherits(linFeat, "sf")){

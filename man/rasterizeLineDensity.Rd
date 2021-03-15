@@ -4,12 +4,14 @@
 \alias{rasterizeLineDensity}
 \title{Rasterize line density}
 \usage{
-rasterizeLineDensity(x, r)
+rasterizeLineDensity(x, r, ptDensity = 1)
 }
 \arguments{
+\item{x}{an sf object containing lines and/or points}
+
 \item{r}{a RasterLayer object to be used as a template for the output raster}
 
-\item{linObj}{an sf object containing lines}
+\item{ptDensity}{a number giving the density to assign to points, in units of res(r). A value of 1 indicates one straight line crossing of the pixel. A value of 2+2*2^0.5 is horizontal, vertical, and diagonal crossings. If NULL, points in linObj will be ignored.}
 }
 \value{
 A RasterLayer object with values representing the density of lines
