@@ -1,0 +1,321 @@
+---
+title: "Caribou RSPF usage"
+author: "C.E. Simpkins"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Document purpose
+This document explains how to run the Ring of Fire Caribou resource selection probability function as implemented in the `caribouMetrics` R package. This document focuses on the types of inputs required to run the RSPF and recent differences with previous versions of the RSPF. For a more detailed explanation of the model itself, both background and code please refer to the `overall_vignette.Rmd` found in the `vignettes` folder of the `caribouMetrics` package.
+
+# Major changes
+The primary major recent change that has been implemented into the package is the renaming of the `plc` to `landCover` and `fri` to `updatedLC` variables, along with the removal of the `friLU` variable all from the `caribouHabitat()` function. Additionally, `updatedLC` is now an optional input.
+
+The reclassifying of the `landCover` (formerly `plc`) and `updatedLC` (formerly `fri`) into resource types now needs to be done explicitly before calling `caribouHabitat()` by using the `reclassPLC()` and `reclassFRI()` respectively. The `reclassFRI()` function required a look-up table (`friLU`) to convert the FRI forest units to RFUs, this is the same type of table formerly supplied to the `friLU` variable.
+
+# Simple example
+This document uses the same small area in the Churchill caribou range as used in the vignette. 
+
+```{r message=FALSE, warning=FALSE}
+# Required libraries
+
+library(caribouMetrics)
+library(tidyverse)
+library(raster)
+library(sf)
+```
+
+## Input descriptions
+The table below lists the inputs needed to run the caribou RSPF. Additional details are available in the vignette
+
+| Name        | Description                                                                                                                                                                                                                                                                                             | Format                                                                     | Required               |
+|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|------------------------|
+| landCover   | Land cover classes for the study area                                                                                                                                                                                                                                                                   | RasterLayer or file name                                                   | Yes                    |
+| updatedLC   | Land cover classes used to update the `landCover` variable in areas disturbed since `landCover` was created, assumed to represent newer information                                                                                                                                                     | RasterLayer                                                                | No                     |
+| esker       | Location of eskers. If data is supplied as a rasterLayer then esker density should be in m^2/ha                                                                                                                                                                                                         | RasterLayer or `sf` object or file name                                    | Yes                    |
+| age         | Tree age in years. Used to inform whether a cell should be updated after disturbance                                                                                                                                                                                                                    | RasterLayer or file name                                                   | No                     |
+| natDist     | Presence or absence of natural disturbance                                                                                                                                                                                                                                                              | Binary rasterLayer with 1 for disturbed and 0 for undisturbed or file name | No                     |
+| anthroDist  | Anthropogenic disturbance other than harvest. This can have an effect on any type of landcover except water.                                                                                                                                                                                            | Binary rasterLayer with 1 for disturbed and 0 for undisturbed or file name | No                     |
+| harv        | Harvest history. This can only have an effect on forest landcover types and will not affect wetlands or water.                                                                                                                                                                                          | Binary rasterLayer with 1 for harvested and 0 for unharvested or file name | No                     |
+| linFeat     | Location of linear feature elements (roads, rail, and utilities) If data is supplied as a rasterLayer then linear feature density should be in m^2/ha                                                                                                                                                   | RasterLayer, `sf` object, file name, or named list                         | Yes                    |
+| projectPoly | Polygon defining the project area.                                                                                                                                                                                                                                                                      | `sf` object or file name                                                   | Yes                    |
+| friLU       | Lookup table to convert numbers in raster to regional forest unit codes. It should have two columns, the first must contain all the unique values in the supplied `updatedLC` raster and the second must contain the names of regional forest units matching those provided in the table `rfuToResType` | data.frame                                                                 | If `updatedLC` is used |
+
+### Import data for example
+__*Note the use of*__ `reclassPLC()` __*and*__ `reclassFRI()`
+
+```{r message=FALSE, warning=FALSE}
+pthBase <- "../tests/testthat/data/" 
+
+plcD = raster(paste0(pthBase, "plc", ".tif")) %>% 
+  reclassPLC()
+
+eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
+
+friD = raster(paste0(pthBase, "fri", ".tif")) %>%
+  reclassFRI(friLU = read.csv(paste0(pthBase, "friLU", ".csv"),
+                                             stringsAsFactors = FALSE) %>%
+               mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")))
+
+ageD = raster(paste0(pthBase, "age", ".tif"))
+
+natDistD = raster(paste0(pthBase, "natDist", ".tif"))
+
+anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
+
+harvD = raster(paste0(pthBase, "harv", ".tif"))
+
+linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
+
+projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
+
+```
+
+## `caribouHabitat()`
+This is the main function in the `caribouMetrics` package, it does the majority of the data preparation and processing into explanatory variables and produces the final RSPF results. The easiest way to use this function is to supply each input variable as a spatial object (either a RasterLayer or an `sf` object). Additionally, the name of the caribou range that the project is located in must be supplied. In this example, and the vignette, we supply a value for `winArea` which is used to set he area of the window used to calculate a moving window average of the input variables, this is only for the purpose of keeping the example data small and should not be supplied in most cases.
+
+```{r message=FALSE, warning=FALSE}
+carHab1 <- caribouHabitat(
+  landCover = plcD , 
+  esker = eskerDras, 
+  updatedLC = friD , 
+  age = ageD, 
+  natDist = natDistD, 
+  anthroDist = anthroDistD, 
+  harv = harvD,
+  linFeat = linFeatDras, 
+  projectPoly = projectPolyD,
+  caribouRange = "Churchill", 
+  #padFocal = TRUE, # assume data outside area is 0 for all variables
+  winArea = 500 # only use in examples, leave as default for correct results
+)
+```
+
+## Output
+
+The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat` which has slots for the input data, the processed data, and the results. To access the results as a RasterStack object that can be used for plotting or graphing use the `results()` function.
+
+```{r}
+str(carHab1, max.level = 2, give.attr = FALSE)
+
+results(carHab1)
+```
+
+You can also create a plot of the results directly from the `CaribouHabitat` object. If `tmap` is installed it will be used to make a plot or if it is not plot.raster will be used. You can provide the season you wish to display and additional arguments that will be passed on to either `qtm` or `plot.raster`.
+
+```{r}
+plot(carHab1, season = c("Winter", "Summer"))
+```
+
+# Converting to rasters
+To convert inputs from polygons to rasterLayers, import the input as an `sf` object and then  use the `raster::rasterize()` function. It should be noted that `anthroDist`, `harv`, and `natDist` need to be both `rasterized` and converted into a binary. The function below converts `sf` objects directly into binary rasterLayers with the same coordinates as the `landCover` variable.
+
+```{r warning=FALSE}
+sfToBinRas <- function(anthroDist, landCover){
+  ## Check if input is a raster if not convert it
+  if (first(class(anthroDist) != "RasterLayer")){
+    message("anthroDist has been converted to type RasterLayer")
+    
+    anthroDist <- st_transform(anthroDist, 
+                               crs(landCover))
+    
+    anthroDist <- raster::rasterize(anthroDist, 
+                                    landCover, 
+                                    field = names(anthroDist)[1])
+    
+    anthroDist[is.na(anthroDist)] <- 0
+    
+    anthroDist[anthroDist>0] <- 1
+    
+    
+  }
+  
+  if (first(class(anthroDist) == "RasterLayer")){
+    crs(anthroDist) <- crs(landCover)
+  }
+  
+  return(anthroDist)
+}
+
+## EXAMPLE
+anthroDistPoly = st_read(paste0(pthBase, "AnthroPolygonExample", ".shp"), 
+                         quiet = TRUE)
+
+str(anthroDistPoly)
+
+anthroDistRas <- sfToBinRas(anthroDistPoly, plcD)
+
+str(anthroDistRas)
+```
+
+# `LandR` inputs
+
+The last type of input that may be required is that coming from LandR/firesense. Integrating this component into the RSPF has been a little difficult given the changing and relatively difficult to follow nature of LandR/firesense. In order to link the caribou RSPF to LandR/firesense, we need to ensure the land cover layer from LandR/firesense appropriately matches that of the RSPF in terms of extent and land cover ID values. If these are correct the LandR/firesense output can simply be included as the `updatedLC` variable.
+
+Below is a function that takes the `cohortData`, `pixelGroupMap`, and `rstLCC` included in the `sim` object produced by LandR/firesense and uses a look-up table in order to reclassify the land cover as dense/sparse deciduous/conifer/mixed and identify pixels which have changed during a simulation. The code relies heavily on code developed by Tati Micheletti. It has been run using a sample_sim object provided by Alex Chubaty but has not been tested on actual Ring of Fire data and as such should be treated as very early development code.
+
+*Note that outputs from the landR/firesense `sim` object can also be used to update `age` and `natDist`*
+
+## Accessing the data
+This assumes you have access to the `sim` object and have `SpaDES.core` correctly installed.
+
+Due to the high memory demands needed, both to store the data file and to import it into R, for just this basic example the code below is not actively run in this markdown file.
+```{r eval=FALSE}
+library(magrittr)
+library(qs)
+library(SpaDES.core)
+
+memory.limit(40000)
+LandR_fS <- qs::qread("data/LandR_fS12SEP20_10H48M20S-002.txt")
+
+times(LandR_fS)
+
+cohortData <- LandR_fS$cohortData
+
+pixelGroupMap <- LandR_fS$pixelGroupMap
+
+rstLCC <- LandR_fS$rstLCC
+
+```
+
+## Landcover from LandR function
+
+This function is divided into two broad steps. 1) Assigning each pixel as deciduous, conifer or mixed and 2) defining the level of openness in each pixel. 
+
+*Note that the level of openness does not change from the original landscape currently.*
+
+```{r}
+makeLCCfromCohortData <- function(cohortData,
+                                  pixelGroupMap,
+                                  rstLCC, 
+                                  lccClassTable){
+  
+  library(LandR)
+  library(data.table)
+  library(raster)
+  
+  ### Step 1: Define vegetation type ###
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+  # A) Assign type for each species based on equivalence table (using KNN)
+  sppEquivalencies <- LandR::sppEquivalencies_CA
+  
+  for (x in 1:length(unique(cohortData$speciesCode))) {
+    cohortData[speciesCode == unique(cohortData$speciesCode)[x],
+               Type := sppEquivalencies[KNN == unique(cohortData$speciesCode)[x]]$Type]
+  }
+  
+  cohortData[Type == "Deciduous"]$Type <- "deciduous"
+  cohortData[Type == "Conifer"]$Type <- "conifer"
+  
+  # B) Calculate species cover based on percent biomass
+  cohortData[, coverIndex := B]
+  cohortData[, totalCoverIndex := sum(coverIndex), by = c("pixelGroup")]
+  cohortData[, treeTypeCoverIndex := sum(coverIndex), by = c("pixelGroup", "Type")]
+  cohortData[, percTree := treeTypeCoverIndex/totalCoverIndex, 
+             by = c("pixelGroup", "Type") ]
+  
+  # B.1) Simplify and dcast cohortData to be able to compare the percentages
+  cohortDataSim <- unique(cohortData[, c("pixelGroup", "Type", "percTree")])
+  cohortDataD <- dcast(data = cohortDataSim, formula = pixelGroup ~ Type, 
+                       fill = 0)
+  
+  # C) Mark pure and mixed stands based on a 75% threshold
+  cohortDataD[, pureDec := fifelse(deciduous >= 0.75, 1, 0)]
+  cohortDataD[, pureCon := fifelse(conifer >= 0.75, 1, 0)]
+  cohortDataD[, standLeading := colnames(.SD)[max.col(.SD, ties.method="first")], 
+              .SDcols = c("pureDec", "pureCon")]
+  cohortDataD[, standLeading := fifelse(pureDec+pureCon == 0, "mixed", standLeading)]
+  
+  # D) Simplifying
+  cohortDataSim <- unique(cohortDataD[, c("pixelGroup", "standLeading")])
+  
+  ### Step 2: Define level of openness ###
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+  # A) Take original LCC classes and divide them into "dense" or "sparse"
+  sparsenessMap <- rstLCC
+  
+  sparsenessMap[!sparsenessMap[] %in% lccClassTable[["LCCclass"]]] <- NA
+  
+  sparse <- lccClassTable[["LCCclass"]][grep(pattern = "sparse", x = lccClassTable[["standLeading"]])]
+  open <- lccClassTable[["LCCclass"]][grep(pattern = "open", x = lccClassTable[["standLeading"]])]
+  dense <- lccClassTable[["LCCclass"]][grep(pattern = "dense", x = lccClassTable[["standLeading"]])]
+  
+  # dense = 1; open = 2; sparse =  3
+  sparsenessMap[sparsenessMap[] %in% dense] <- -1
+  sparsenessMap[sparsenessMap[] %in% open] <- -2
+  sparsenessMap[sparsenessMap[] %in% sparse] <- -3
+  
+  sparsenessMap <- -sparsenessMap
+  
+  sparsenessMap <- ratify(sparsenessMap)
+  rat <- raster::levels(sparsenessMap)[[1]]
+  rat$sparseness <- c("dense", "open", "sparse")
+  levels(sparsenessMap) <- rat
+  names(sparsenessMap) <- "sparsenessMap"
+  sparsenessMapDT <- unique(na.omit(data.table::data.table(getValues(stack(sparsenessMap, 
+                                                                           pixelGroupMap)))))
+  
+  finalDT  <- merge(cohortDataSim, sparsenessMapDT, all.x = TRUE)
+  
+  finalDT <- merge(finalDT, data.table(sparsenessMap = c(1,2,3), 
+                                       sparseness = c("dense", "open", "sparse")),
+                   by = "sparsenessMap", all.x = TRUE)
+  finalDT[, standLeading  := paste(standLeading, sparseness, sep = "_")]
+  
+  # Because we have 2 categories of pureCon_sparse (8 and 32 -- which is treed lichen bog or treed wetland),
+  # we need to remove one from the lccClassTable
+  lccClassTable <- unique(lccClassTable, by = "standLeading")
+  finalDT <- merge(finalDT, lccClassTable, by = "standLeading", all.x = TRUE)
+  
+  # Get the new classes to the LCC where they are supposed to be
+  newLCCClass <- SpaDES.tools::rasterizeReduced(reduced = finalDT, 
+                                                fullRaster = pixelGroupMap, 
+                                                newRasterCols = "LCCclass", 
+                                                mapcode = "pixelGroup")
+  
+  DT <- data.table(pixelID = 1:ncell(newLCCClass),
+                   getValues(stack(rstLCC, newLCCClass)))
+  names(DT) <- c("pixelID", "LCC", "newLCC")
+  DT[, updatedLCC := fifelse(!is.na(newLCC), newLCC, LCC)]
+  updatedLCCras <- raster::setValues(x = raster(rstLCC), 
+                                     values = DT[["updatedLCC"]])
+  
+  return(updatedLCCras)
+}
+
+```
+
+## Example
+In this example I hard code the look-up table to match values used by Tati Micheletti for the example sim object but that are likely to need to be adjusted to match the ID values used in the Ring of Fire
+```{r message=FALSE, warning=FALSE}
+library(data.table)
+library(zip)
+
+lccClassTable = data.table(
+  standLeading = c("pureCon_dense", "pureCon_open", "pureCon_sparse",
+                   "pureCon_sparse",
+                   "pureDec_dense", "pureDec_open", "pureDec_sparse",
+                   "mixed_dense", "mixed_open", "mixed_sparse"), 
+  LCCclass = c(1,6,8,32,
+               2,11,11, 
+               3,13,13)) # HARDCODED TO MATCH LCC05 
+
+zip::unzip(zipfile = paste0(pthBase, "landRData.zip"),
+           junkpaths = TRUE,
+           exdir = pthBase)
+
+cohortData <- readRDS(paste0(pthBase, "cohort_data.rds"))
+pixelGroupMap <- raster::raster(paste0(pthBase, "pixel_group_map.grd"))
+rstLCC <- raster::raster(paste0(pthBase, "rst_LCC.grd"))
+
+updatedLCCras <- makeLCCfromCohortData(cohortData,
+                                       pixelGroupMap,
+                                       rstLCC, 
+                                       lccClassTable)
+
+raster::plot(rstLCC - updatedLCCras, col = topo.colors(20))
+
+```
