@@ -84,6 +84,11 @@ model. Must match the format and naming of \code{coefTableHR}}
 \item{doScale}{logical. FALSE by default. Set to TRUE only if you have
 supplied coefficients that were trained on standardized data which will
 cause the input data to be scaled.}
+
+\item{ptDensity}{number. Only used if road input is a raster. The density to
+assign to points, in units of res(r). A value of 1 (the default) indicates
+one straight line crossing of the pixel. A value of 2+2*2^0.5 is horizontal,
+vertical, and diagonal crossings. If NULL, points in linObj will be ignored.}
 }
 \value{
 A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}

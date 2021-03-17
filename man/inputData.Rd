@@ -23,7 +23,8 @@ inputData(landCover, esker, linFeat, projectPoly, ...)
   linFeatSave = NULL,
   winArea = NULL,
   padProjPoly = FALSE,
-  padFocal = FALSE
+  padFocal = FALSE,
+  ptDensity = 1
 )
 
 \S4method{inputData}{character}(
@@ -42,7 +43,8 @@ inputData(landCover, esker, linFeat, projectPoly, ...)
   winArea = NULL,
   padProjPoly = FALSE,
   padFocal = FALSE,
-  friLU = NULL
+  friLU = NULL,
+  ptDensity = 1
 )
 }
 \arguments{

@@ -14,7 +14,11 @@
 combineLinFeat <- function(roads, rail, utilities){
   
   if(is.character(roads)){
-    roads <- st_read(roads, quiet = TRUE, agr = "constant")
+    if(grepl(".shp$", roads)){
+      roads <- st_read(roads, quiet = TRUE, agr = "constant")
+    } else {
+      roads <- raster::raster(roads)
+    }
   }
   if(is.character(rail)){
     rail <- st_read(rail, quiet = TRUE, agr = "constant")
@@ -26,7 +30,7 @@ combineLinFeat <- function(roads, rail, utilities){
   if(is(roads, "Raster")){
       roads <- raster::rasterToPoints(roads, fun = function(x){x > 0}, 
                                         spatial = TRUE) %>% 
-        sf::st_as_sf()
+        sf::st_as_sf() %>% sf::st_set_agr("constant")
   }
 
   roads <- roads %>% transmute(ID = 1, Type = "road") 

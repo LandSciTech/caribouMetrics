@@ -58,7 +58,9 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  effect on forest landcover types and will not affect wetlands or water.
 #'@param linFeat filename, RasterLayer, sf object or named list with elements
 #'  roads, rail, and utilities. Linear features. If it is a RasterLayer then it
-#'  should be linear feature density in m^2/ha.
+#'  should be linear feature density in m^2/ha. If a RasterLayer is provided for
+#'  element roads then ptDensity will be used to assign a density of roads in
+#'  the pixel (default is 1).
 #'@param projectPoly filename or sf object. Polygon defining the project area.
 #'@param caribouRange character. The range where caribou were located. See
 #'  \code{unique(coefTableHR$Range)} for options.
@@ -90,6 +92,10 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'@param doScale logical. FALSE by default. Set to TRUE only if you have
 #'  supplied coefficients that were trained on standardized data which will
 #'  cause the input data to be scaled.
+#'@param ptDensity number. Only used if road input is a raster. The density to
+#'  assign to points, in units of res(r). A value of 1 (the default) indicates
+#'  one straight line crossing of the pixel. A value of 2+2*2^0.5 is horizontal,
+#'  vertical, and diagonal crossings. If NULL, points in linObj will be ignored.
 #'
 #'@return A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
 #'
@@ -122,7 +128,7 @@ setMethod(
     
     inputDataArgs <- dots[c("updatedLC", "age", "natDist", "anthroDist", 
                             "harv","winArea", "eskerSave", "linFeatSave", 
-                            "padProjPoly", "friLU", "padFocal")]
+                            "padProjPoly", "friLU", "padFocal", "ptDensity")]
     
     inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]
     

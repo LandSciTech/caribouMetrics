@@ -30,7 +30,7 @@ setMethod(
            anthroDist = NULL, harv = NULL,
            eskerSave = NULL, linFeatSave = NULL, 
            winArea = NULL, padProjPoly = FALSE,
-           padFocal = FALSE) {
+           padFocal = FALSE, ptDensity = 1) {
 
     charIn <-  sapply(list(landCover, esker, updatedLC, age, natDist, anthroDist, harv, 
                            linFeat, projectPoly), 
@@ -102,7 +102,7 @@ setMethod(
     
     if(inherits(linFeat, "sf")){
       tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
-      linFeat <- rasterizeLineDensity(linFeat, tmplt)
+      linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)
     }
     if(!is.null(linFeatSave)){
       raster::writeRaster(linFeat, linFeatSave, overwrite = TRUE)
@@ -169,7 +169,7 @@ setMethod(
            anthroDist = NULL, harv = NULL, 
            eskerSave = NULL, linFeatSave = NULL, 
            winArea = NULL, padProjPoly = FALSE, 
-           padFocal = FALSE, friLU = NULL) {
+           padFocal = FALSE, friLU = NULL, ptDensity = 1) {
     
     if(inherits(linFeat, "list")){
       indata <- lst(landCover, esker, updatedLC, age, natDist, anthroDist, harv, 
@@ -246,6 +246,7 @@ setMethod(
                      projectPoly = indata$projectPoly, 
                      caribouRange = caribouRange, eskerSave = eskerSave, 
                      linFeatSave = linFeatSave, winArea = winArea, 
-                     padProjPoly = padProjPoly, padFocal = padFocal))
+                     padProjPoly = padProjPoly, padFocal = padFocal, 
+                     ptDensity = ptDensity))
     
   })

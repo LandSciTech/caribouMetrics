@@ -161,6 +161,39 @@ data_list_linF <- caribouHabitat(
   caribouRange = "Churchill", 
   winArea = 500
 )
+
+
+test_that("raster road input works as expected", {
+  data_list_linFrdRast1 <- caribouHabitat(
+    landCover = landCoverD, esker = eskerDshp, natDist = natDistD, 
+    anthroDist = anthroDistD, 
+    linFeat = list(roads = linFeatDras > 10,
+                   rail = st_read(paste0(pthBase, "rail.shp"), quiet = TRUE) %>% 
+                     st_set_agr("constant"),
+                   utilities = st_read(paste0(pthBase, "utilities.shp"), quiet = TRUE)%>% 
+                     st_set_agr("constant")), 
+    projectPoly = projectPolyD,
+    caribouRange = "Churchill", 
+    winArea = 500, 
+    ptDensity = 1
+  )
+  data_list_linFrdRast2 <- caribouHabitat(
+    landCover = landCoverD, esker = eskerDshp, natDist = natDistD, 
+    anthroDist = anthroDistD, 
+    linFeat = list(roads = linFeatDras > 10,
+                   rail = st_read(paste0(pthBase, "rail.shp"), quiet = TRUE) %>% 
+                     st_set_agr("constant"),
+                   utilities = st_read(paste0(pthBase, "utilities.shp"), quiet = TRUE)%>% 
+                     st_set_agr("constant")), 
+    projectPoly = projectPolyD,
+    caribouRange = "Churchill", 
+    winArea = 500, 
+    ptDensity = 2
+  )
+  expect_gt(data_list_linFrdRast2@linFeat %>% raster::cellStats(max),
+            data_list_linFrdRast1@linFeat %>% raster::cellStats(max))
+})
+
 test_that("results match when input is paths or data, or list of either for linFeat",{
   expect_equal(data_esktif_linFtif@habitatUse, paths_eskshp_linFshp@habitatUse)
   expect_equal(data_eskshp_linFshp@habitatUse, data_esktif_linFtif@habitatUse)
