@@ -28,9 +28,20 @@ combineLinFeat <- function(roads, rail, utilities){
   }
   
   if(is(roads, "Raster")){
-      roads <- raster::rasterToPoints(roads, fun = function(x){x > 0}, 
-                                        spatial = TRUE) %>% 
-        sf::st_as_sf() %>% sf::st_set_agr("constant")
+    roads <- raster::rasterToPoints(roads, fun = function(x){x > 0}, 
+                                    spatial = TRUE) %>% 
+      sf::st_as_sf() %>% sf::st_set_agr("constant")
+  } 
+  if(is(roads, "Spatial")){
+    roads <- sf::st_as_sf(roads) %>% sf::st_set_agr("constant")
+  }
+  
+  if(is(rail, "Spatial")){
+    rail <- sf::st_as_sf(rail) %>% sf::st_set_agr("constant")
+  }
+  
+  if(is(utilities, "Spatial")){
+    utilities <- sf::st_as_sf(utilities) %>% sf::st_set_agr("constant")
   }
 
   roads <- roads %>% transmute(ID = 1, Type = "road") 
