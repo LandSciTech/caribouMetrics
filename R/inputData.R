@@ -78,6 +78,9 @@ setMethod(
     
     projectPolyOrig <- projectPoly
     
+    # union together multiple range polygons for raster processing
+    projectPoly <- projectPoly %>% summarise()
+    
     if(padProjPoly){
 
       # window radius is radius of circle with winArea rounded to even number of
@@ -85,7 +88,7 @@ setMethod(
       winRad <- (sqrt(winArea*10000/pi)/res(landCover)[1]) %>% 
         round(digits = 0)*res(landCover)[1]
       
-      projectPoly <- projectPoly %>% summarise() %>% st_buffer(winRad*3)
+      projectPoly <- projectPoly %>% st_buffer(winRad*3)
     }
     
     landCover <- checkAlign(landCover, projectPoly, "landCover", "projectPoly")
