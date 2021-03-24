@@ -26,6 +26,7 @@ setGeneric("inputData", function(landCover, esker, linFeat, projectPoly, ...) st
 setMethod(
   "inputData", signature(landCover = "RasterLayer"), 
   function(landCover, esker, linFeat, projectPoly, caribouRange,
+           caribouRangesCoefs = caribouRange,
            updatedLC = NULL, age = NULL, natDist = NULL, 
            anthroDist = NULL, harv = NULL,
            eskerSave = NULL, linFeatSave = NULL, 
@@ -52,9 +53,16 @@ setMethod(
     
     # Get window area from table b/c some models used different sizes
     if(is.null(winArea)){
-      winArea <- coefTableHR %>% filter(Range == caribouRange) %>% 
+      winArea <- coefTableHR %>% filter(Range %in% caribouRange) %>% 
         pull(WinArea) %>% 
-        max()
+        unique()
+    }
+    
+    # Error if caribouRanges have different winAreas
+    if(length(winArea) > 1){
+      stop("If multiple caribouRanges are supplied they ",
+           "must all use the same winArea",
+           call. = FALSE)
     }
     
     if(!is.numeric(winArea)){
@@ -77,7 +85,7 @@ setMethod(
       winRad <- (sqrt(winArea*10000/pi)/res(landCover)[1]) %>% 
         round(digits = 0)*res(landCover)[1]
       
-      projectPoly <- st_buffer(projectPoly, winRad*3)
+      projectPoly <- projectPoly %>% summarise() %>% st_buffer(winRad*3)
     }
     
     landCover <- checkAlign(landCover, projectPoly, "landCover", "projectPoly")
