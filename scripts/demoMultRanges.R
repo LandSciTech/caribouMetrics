@@ -52,5 +52,15 @@ misCoefMultRange <- updateCaribou(sameCoefMultRange)
 
 plot(misCoefMultRange)
 
+# Try Nipigon (should error because different winArea)
+caribouRange <- data.frame(Range = caribouRanges, 
+                           coefRange = c("Missisa", "Nipigon", "Missisa"), 
+                           stringsAsFactors = FALSE)
 
-
+nipCoefMultRange <- caribouHabitat(landCover = landCover,
+                                    esker = esker, 
+                                    linFeat = linFeat,  
+                                    projectPoly = projectPoly, 
+                                    caribouRange = caribouRange, 
+                                    padProjPoly = TRUE)
+ 

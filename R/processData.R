@@ -71,7 +71,7 @@ setMethod(
     # Get window area from table b/c some models used different sizes
     if(is.null(inData@attributes$winArea)){
       inData@attributes$winArea <- coefTableHR %>% 
-        filter(Range %in% inData@attributes$caribouRange$Range) %>% 
+        filter(Range %in% inData@attributes$caribouRange$coefRange) %>% 
         pull(WinArea) %>% 
         unique()
     }
