@@ -32,8 +32,8 @@ the current landCover is replaced with updatedLC.}
 returned. If TRUE then only the habitatUse RasterStack is returned.}
 }
 \value{
-If \code{resultsOnly} is TRUE an updated CaribouHabitat object. If
-  \code{resultsOnly} is false a RasterStack with a layer for each season.
+If \code{resultsOnly} is FALSE an updated CaribouHabitat object. If
+  \code{resultsOnly} is TRUE a RasterStack with a layer for each season.
 }
 \description{
 Update a CaribouHabitat object in order to avoid reprocessing parts of the

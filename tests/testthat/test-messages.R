@@ -262,7 +262,7 @@ test_that("error if caribouRange missing or doesn't match", {
     projectPoly = projectPolyD,
     caribouRange = "test",
     winArea = 500),
-    "caribouRange must match one of")
+    "Caribou Range must match one of")
 }) 
 
 test_that("error if friLU doesn't match rfuToResType", {

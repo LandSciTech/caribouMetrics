@@ -26,7 +26,6 @@ setGeneric("inputData", function(landCover, esker, linFeat, projectPoly, ...) st
 setMethod(
   "inputData", signature(landCover = "RasterLayer"), 
   function(landCover, esker, linFeat, projectPoly, caribouRange,
-           caribouRangesCoefs = caribouRange,
            updatedLC = NULL, age = NULL, natDist = NULL, 
            anthroDist = NULL, harv = NULL,
            eskerSave = NULL, linFeatSave = NULL, 
@@ -51,9 +50,33 @@ setMethod(
       stop("landCover must have a projected CRS", call. = FALSE)
     }
     
+    if(!inherits(caribouRange, "data.frame")){
+      caribouRange <- data.frame(Range = caribouRange, 
+                                 coefRange = caribouRange, 
+                                 stringsAsFactors = FALSE)
+    } else {
+      if(any(names(caribouRange) != c("Range", "coefRange"))){
+        stop("If caribouRange is a data.frame the column names",
+             " must be Range and coefRange", call. = FALSE)
+      }
+    }
+    if(nrow(projectPoly) == 1){
+      projectPoly <- projectPoly %>% mutate(Range = caribouRange$Range)
+    } else {
+      if(!"Range" %in% names(projectPoly)){
+        stop("projectPoly must have a column Range that corresponds to the ",
+             "caribouRange$Range column", call. = FALSE)
+      } else {
+        if(!all(projectPoly$Range %in% caribouRange$Range)){
+          stop("All values of in projectPoly$Range must have matching",
+               " values in caribouRange$Range", call. = FALSE)
+        }
+      }
+    }
+    
     # Get window area from table b/c some models used different sizes
     if(is.null(winArea)){
-      winArea <- coefTableHR %>% filter(Range %in% caribouRange) %>% 
+      winArea <- coefTableHR %>% filter(Range %in% caribouRange$Range) %>% 
         pull(WinArea) %>% 
         unique()
     }
@@ -64,11 +87,6 @@ setMethod(
            "must all use the same winArea",
            call. = FALSE)
     }
-    
-    if(!is.numeric(winArea)){
-      stop("winArea must be a number (in hectares)", call. = FALSE)
-    }
-    
     .checkInputs(caribouRange, winArea, landCover, updatedLC)
     
     if(st_crs(projectPoly) != st_crs(landCover)){
