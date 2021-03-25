@@ -62,8 +62,15 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  element roads then ptDensity will be used to assign a density of roads in
 #'  the pixel (default is 1).
 #'@param projectPoly filename or sf object. Polygon defining the project area.
-#'@param caribouRange character. The range where caribou were located. See
-#'  \code{unique(coefTableHR$Range)} for options.
+#'  If caribouRange is a data.frame this must have a column called Range with
+#'  the name of the caribou range represented by the polygon which corresponds
+#'  to the Range column in the caribouRange data.frame
+#'@param caribouRange character or data.frame. If character the range where
+#'  caribou were located. See \code{unique(coefTableHR$Range)} for options. If
+#'  data.frame it must have two columns Range and coefRange. Range is the name
+#'  of the geographical area and is used to link the table the the provided
+#'  \code{projectPoly} polygons. coefRange is the name of the caribou range that
+#'  the coefficients should be used from.
 #'@param eskerSave filename to save rasterized esker data.
 #'@param linFeatSave filename to save rasterized linear feature data.
 #'@param padProjPoly logical. Should the area around the \code{projectPoly} be

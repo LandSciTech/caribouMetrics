@@ -8,13 +8,12 @@
 #' @param updatedLC updatedLC data raster
 #' @param ... other variables passed to caribouHabitat
 #'
-#'
-#' @examples
+
 .checkInputs <- function(caribouRange, winArea, landCover, updatedLC) {
   expectedRanges <- paste0(unique(coefTableHR$Range), collapse = ", ")
   
-  if(stringr::str_detect(expectedRanges, caribouRange, negate = TRUE)){
-    stop("caribouRange must match one of: ", expectedRanges, call. = FALSE)
+  if(any(stringr::str_detect(expectedRanges, caribouRange$Range, negate = TRUE))){
+    stop("Caribou Range must match one of: ", expectedRanges, call. = FALSE)
   }
   
   if(!is.null(winArea)){

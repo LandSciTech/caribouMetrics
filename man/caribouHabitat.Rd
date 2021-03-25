@@ -26,12 +26,21 @@ RasterLayer then it should be esker density in m^2/ha.}
 
 \item{linFeat}{filename, RasterLayer, sf object or named list with elements
 roads, rail, and utilities. Linear features. If it is a RasterLayer then it
-should be linear feature density in m^2/ha.}
+should be linear feature density in m^2/ha. If a RasterLayer is provided for
+element roads then ptDensity will be used to assign a density of roads in
+the pixel (default is 1).}
 
-\item{projectPoly}{filename or sf object. Polygon defining the project area.}
+\item{projectPoly}{filename or sf object. Polygon defining the project area.
+If caribouRange is a data.frame this must have a column called Range with
+the name of the caribou range represented by the polygon which corresponds
+to the Range column in the caribouRange data.frame}
 
-\item{caribouRange}{character. The range where caribou were located. See
-\code{unique(coefTableHR$Range)} for options.}
+\item{caribouRange}{character or data.frame. If character the range where
+caribou were located. See \code{unique(coefTableHR$Range)} for options. If
+data.frame it must have two columns Range and coefRange. Range is the name
+of the geographical area and is used to link the table the the provided
+\code{projectPoly} polygons. coefRange is the name of the caribou range that
+the coefficients should be used from.}
 
 \item{updatedLC}{filename or RasterLayer. Land cover data used to update the
 landCover raster in areas that were disturbed since the landCover data was

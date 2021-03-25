@@ -29,8 +29,8 @@ NULL
 #' @param resultsOnly logical. If FALSE the whole CaribouHabitat object is
 #'   returned. If TRUE then only the habitatUse RasterStack is returned.
 #'
-#' @return If \code{resultsOnly} is TRUE an updated CaribouHabitat object. If
-#'   \code{resultsOnly} is false a RasterStack with a layer for each season.
+#' @return If \code{resultsOnly} is FALSE an updated CaribouHabitat object. If
+#'   \code{resultsOnly} is TRUE a RasterStack with a layer for each season.
 #'
 #' @export
 setGeneric("updateCaribou", function(CarHab, newData, ...) standardGeneric("updateCaribou"))
@@ -46,24 +46,56 @@ setMethod(
       CarHab <- processData(CarHab)
     }
     
-    # calculate RSP
-    coefTable <- coefTable %>% 
-      filter(stringr::str_detect(Range, CarHab@attributes$caribouRange))
+
+    # which coefficients to use for which range
+    rangeCoefLst <- CarHab@projectPoly %>% 
+      left_join(CarHab@attributes$caribouRange, by = "Range") %>% 
+      split(.$coefRange)
     
-    CarHab@habitatUse <- calcRSP(CarHab@processedData, coefTable, 
-                                 doScale = doScale)
+    applyCalcRSP <- function(dat, rangeCoef, doScale, coefTable){
+      dat <- raster::mask(dat, rangeCoef)
+      
+      coefT <- coefTable %>% 
+        filter(Range %in% rangeCoef$coefRange)
+      
+      habitatUse <- calcRSP(dat, coefT, doScale = doScale)
+    }
     
-    projRas <- raster::rasterize(CarHab@projectPoly, CarHab@habitatUse[[1]],
-                                 getCover=TRUE)
-    projRas[projRas==0] <- NA
+    habUseLst <- lapply(rangeCoefLst, applyCalcRSP, dat = CarHab@processedData,
+                        doScale = doScale, coefTable = coefTable)
     
-    CarHab@habitatUse <- raster::mask(CarHab@habitatUse, projRas )
-    CarHab@habitatUse <- raster::crop(CarHab@habitatUse, CarHab@projectPoly, 
-                                      snap = "out")
+    if(length(habUseLst)> 1){
+      # do.call doesn't work with names
+      names(habUseLst) <- NULL
+      
+      habUseLst$fun <- function(...){sum(..., na.rm = TRUE)}
+      
+      CarHab@habitatUse <- do.call(raster::overlay, habUseLst)
+      
+      names(CarHab@habitatUse) <- names(habUseLst[[1]])
+      
+      # 0 created by sum when all are NA but 0 is impossible as result of RSF
+      # becasue it is logistic so safe to set 0 to NA
+      CarHab@habitatUse[CarHab@habitatUse == 0] <- NA
+    } else {
+      CarHab@habitatUse <- habUseLst[[1]]
+    }
+
     
-    CarHab@processedData <- raster::mask(CarHab@processedData, projRas )
-    CarHab@processedData <- raster::crop(CarHab@processedData, CarHab@projectPoly,
-                                         snap = "out")
+    
+    # Takes a long time not sure it is worth it
+    # # This keeps cells that are only partially in the polygon 
+    # projRas <- raster::rasterize(CarHab@projectPoly, CarHab@habitatUse[[1]],
+    #                              getCover=TRUE)
+    # projRas[projRas==0] <- NA
+    # 
+    # CarHab@habitatUse <- raster::mask(CarHab@habitatUse, projRas )
+    # CarHab@habitatUse <- raster::crop(CarHab@habitatUse, CarHab@projectPoly,
+    #                                   snap = "out")
+    # 
+    # CarHab@processedData <- raster::mask(CarHab@processedData, projRas )
+    # CarHab@processedData <- raster::crop(CarHab@processedData, CarHab@projectPoly,
+    #                                      snap = "out")
     
     return(CarHab)
   })

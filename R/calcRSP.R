@@ -46,11 +46,7 @@ setGeneric("calcRSP", function(resourceProp, ...) standardGeneric("calcRSP"))
 setMethod(
   "calcRSP", signature(resourceProp = "Raster"),
   function(resourceProp, coefs, seasons = "all", doScale = FALSE){
-    # TODO This expected names bit really breaks the generalisability 
-    # Note from SE: this function is really internal to the package so maybe an
-    # easier solution is to just not export it and then since it is only getting
-    # inputs from other functions in the package the naming shouldn't be a
-    # problem
+
     expectedColNamesResProp <- c("DEC", "MIX", "LGOP", "CON", "LGTP",
                                  "ST", "LGW", "DTN", "ESK", "TDENLF", "LGMD",
                                  "CONST")
@@ -97,7 +93,7 @@ setMethod(
       arrange(order) %>% 
       split(.$Season)
     
-    # calculate probability 
+    # calculate probability for each season
     out <-lapply(coefs2, function(y){
       1/(1+exp(-((resourceProp*y$Coefficient) %>% sum())))
     }) %>%

@@ -71,9 +71,9 @@ setMethod(
     # Get window area from table b/c some models used different sizes
     if(is.null(inData@attributes$winArea)){
       inData@attributes$winArea <- coefTableHR %>% 
-        filter(Range == inData@attributes$caribouRange) %>% 
+        filter(Range %in% inData@attributes$caribouRange$coefRange) %>% 
         pull(WinArea) %>% 
-        max()
+        unique()
     }
     
     # window radius is radius of circle with winArea rounded to even number of
