@@ -129,27 +129,101 @@ setGeneric("caribouHabitat",
 setMethod(
   "caribouHabitat", 
   signature(landCover = "ANY"), 
-  function(landCover, esker, linFeat, projectPoly, caribouRange, ...) {
+  function(landCover, esker, linFeat, projectPoly, caribouRange, 
+           coefTable = coefTableHR, ...) {
 
     dots <- list(...)
     
-    inputDataArgs <- dots[c("updatedLC", "age", "natDist", "anthroDist", 
-                            "harv","winArea", "eskerSave", "linFeatSave", 
-                            "padProjPoly", "friLU", "padFocal", "ptDensity")]
+    # make sure caribouRange is a dataframe
+    if(!inherits(caribouRange, "data.frame")){
+      caribouRange <- data.frame(Range = caribouRange, 
+                                 coefRange = caribouRange, 
+                                 stringsAsFactors = FALSE)
+    } else {
+      if(any(names(caribouRange) != c("Range", "coefRange"))){
+        stop("If caribouRange is a data.frame the column names",
+             " must be Range and coefRange", call. = FALSE)
+      }
+    }
     
-    inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]
+    # Get window area from table b/c some models used different sizes
+    if(is.null(dots$winArea)){
+      dots$winArea <- coefTable %>% filter(Range %in% caribouRange$coefRange) %>% 
+        pull(WinArea) %>% 
+        unique()
+    }
     
-    x <- do.call(inputData, c(lst(landCover, esker, linFeat, projectPoly,
-                                  caribouRange), 
-                              inputDataArgs))
-    
-    x <- processData(x)
-    
-    updateArgs <- dots[c("coefTable", "doScale")]
-    
-    updateArgs <- updateArgs[which(lapply(updateArgs, length) > 0)]
-    
-    x <- do.call(updateCaribou, c(list(CarHab = x), updateArgs))
+    # If multiple winAreas need to apply processData separately
+    if(length(dots$winArea) > 1){
+      
+      # polygons of ranges split into list with different winAreas
+      projPolyLst <- projectPoly %>% 
+        left_join(caribouRange, by = "Range") %>% 
+        left_join(coefTable %>% group_by(Range) %>%
+                    summarize(WinArea = first(WinArea)),
+                  by = c(coefRange = "Range")) %>% 
+        select(-coefRange) %>% 
+        split(.$WinArea)
+      
+      # caribouRange values for each winArea
+      carRangeLst <- caribouRange %>%
+        left_join(coefTable %>% group_by(Range) %>%
+                    summarize(WinArea = first(WinArea)),
+                  by = c(coefRange = "Range")) %>% 
+        split(.$WinArea, ) %>% 
+        purrr::map(~select(.x, -WinArea))
+      
+      resultLst <- purrr::map2(projPolyLst, carRangeLst,
+                        ~do.call(caribouHabitat, 
+                                list(landCover = landCover, 
+                                  esker = esker, 
+                                  linFeat = linFeat, 
+                                  projectPoly = .x, 
+                                  caribouRange = .y, 
+                                  coefTable = coefTable,
+                                  dots)))
+      
+      # Re-combine CarHab objects into one
+      x <- resultLst[[1]]
+      
+      doOverlay <- function(rastLst){
+        # do.call doesn't work with names
+        names(rastLst) <- NULL
+        
+        rastLst$fun <- function(...){sum(..., na.rm = TRUE)}
+        
+        out <- do.call(raster::overlay, rastLst)
+        
+        names(out) <- names(rastLst[[1]])
+        
+        # 0 created by sum when all are NA 
+        # TODO: make this return NA 
+
+        return(out)
+      }
+      
+      habUseLst <- lapply(resultLst, slot, name = "habitatUse")
+      x@habitatUse <- doOverlay(habUseLst)
+      
+    } else {
+      
+      inputDataArgs <- dots[c("updatedLC", "age", "natDist", "anthroDist", 
+                              "harv","winArea", "eskerSave", "linFeatSave", 
+                              "padProjPoly", "friLU", "padFocal", "ptDensity")]
+      
+      inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]
+      
+      x <- do.call(inputData, c(lst(landCover, esker, linFeat, projectPoly,
+                                    caribouRange, coefTable), 
+                                inputDataArgs))
+      x <- processData(x)
+      
+      updateArgs <- dots[c("coefTable", "doScale")]
+      
+      updateArgs <- updateArgs[which(lapply(updateArgs, length) > 0)]
+      
+      x <- do.call(updateCaribou, c(list(CarHab = x), updateArgs))
+    }
     
     if(!is.null(dots$saveOutput)){
       

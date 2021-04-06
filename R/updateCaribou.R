@@ -49,36 +49,45 @@ setMethod(
 
     # which coefficients to use for which range
     rangeCoefLst <- CarHab@projectPoly %>% 
-      left_join(CarHab@attributes$caribouRange, by = "Range") %>% 
-      split(.$coefRange)
+      left_join(CarHab@attributes$caribouRange, by = "Range")
     
-    applyCalcRSP <- function(dat, rangeCoef, doScale, coefTable){
-      dat <- raster::mask(dat, rangeCoef)
+    if(length(unique(rangeCoefLst$coefRange)) > 1){
       
-      coefT <- coefTable %>% 
-        filter(Range %in% rangeCoef$coefRange)
+      rangeCoefLst <- rangeCoefLst %>% 
+        split(.$coefRange)
       
-      habitatUse <- calcRSP(dat, coefT, doScale = doScale)
-    }
+      applyCalcRSP <- function(dat, rangeCoef, doScale, coefTable){
+        dat <- raster::mask(dat, rangeCoef)
+        
+        coefT <- coefTable %>% 
+          filter(Range %in% rangeCoef$coefRange)
+        
+        habitatUse <- calcRSP(dat, coefT, doScale = doScale)
+      }
+      
+      habUseLst <- lapply(rangeCoefLst, applyCalcRSP, dat = CarHab@processedData,
+                          doScale = doScale, coefTable = coefTable)
     
-    habUseLst <- lapply(rangeCoefLst, applyCalcRSP, dat = CarHab@processedData,
-                        doScale = doScale, coefTable = coefTable)
-    
-    if(length(habUseLst)> 1){
       # do.call doesn't work with names
       names(habUseLst) <- NULL
       
       habUseLst$fun <- function(...){sum(..., na.rm = TRUE)}
       
       CarHab@habitatUse <- do.call(raster::overlay, habUseLst)
+
+      # 0 created by sum when all are NA but reintroduce NA from processed
+      getNA <- !is.na(CarHab@processedData$CON)
+      getNA[getNA == 0] <- NA
+      CarHab@habitatUse <- CarHab@habitatUse * getNA
       
       names(CarHab@habitatUse) <- names(habUseLst[[1]])
-      
-      # 0 created by sum when all are NA but 0 is impossible as result of RSF
-      # becasue it is logistic so safe to set 0 to NA
-      CarHab@habitatUse[CarHab@habitatUse == 0] <- NA
     } else {
-      CarHab@habitatUse <- habUseLst[[1]]
+      coefT <- coefTable %>% 
+        filter(Range %in% rangeCoefLst$coefRange)
+      
+      CarHab@habitatUse <- calcRSP(CarHab@processedData, coefT, 
+                                   doScale = doScale)
+       
     }
 
     
