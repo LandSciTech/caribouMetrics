@@ -79,3 +79,29 @@ resTwoRangeDifWin <- caribouHabitat(
   coefTable = coefTableSmall
 )
 
+resRange1 <- caribouHabitat(
+  landCover = landCoverD, esker = eskerDras, updatedLC = updatedLCD, 
+  age = ageD, natDist = natDistD,
+  anthroDist = anthroDistD, harv = harvD,
+  linFeat = linFeatDras, projectPoly = twoRange %>% slice(1),
+  caribouRange = data.frame(Range = c("Missisa"), 
+                            coefRange = c("Nipigon"), 
+                            stringsAsFactors = FALSE), 
+  coefTable = coefTableSmall
+)
+
+resRange2 <- caribouHabitat(
+  landCover = landCoverD, esker = eskerDras, updatedLC = updatedLCD, 
+  age = ageD, natDist = natDistD,
+  anthroDist = anthroDistD, harv = harvD,
+  linFeat = linFeatDras, projectPoly = twoRange %>% slice(2),
+  caribouRange = data.frame(Range = c("Nipigon"), 
+                            coefRange = c("Missisa"), 
+                            stringsAsFactors = FALSE), 
+  coefTable = coefTableSmall
+)
+
+# TODO: figure out why these are so different
+plot(resTwoRangeDifWin@processedData$CON)
+plot(sum(resRange1@processedData$CON, resRange2@processedData$CON, 
+         na.rm = TRUE))

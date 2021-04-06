@@ -201,9 +201,15 @@ setMethod(
 
         return(out)
       }
+      # names of slots to iterate over
+      slotLst <- slotNames(resultLst[[1]])
+      slotLst <- slotLst[!slotLst %in% c("attributes", "projectPoly")]
       
-      habUseLst <- lapply(resultLst, slot, name = "habitatUse")
-      x@habitatUse <- doOverlay(habUseLst)
+      for(i in 1:length(slotLst)){
+        slotNm <- slotLst[i]
+        rastLst <- lapply(resultLst, slot, name = slotNm)
+        slot(x, slotNm) <- doOverlay(rastLst)
+      }
       
     } else {
       

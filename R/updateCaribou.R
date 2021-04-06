@@ -98,11 +98,11 @@ setMethod(
     #                              getCover=TRUE)
     # projRas[projRas==0] <- NA
     # 
-    # CarHab@habitatUse <- raster::mask(CarHab@habitatUse, projRas )
+    CarHab@habitatUse <- raster::mask(CarHab@habitatUse, CarHab@projectPoly)
     # CarHab@habitatUse <- raster::crop(CarHab@habitatUse, CarHab@projectPoly,
     #                                   snap = "out")
     # 
-    # CarHab@processedData <- raster::mask(CarHab@processedData, projRas )
+    CarHab@processedData <- raster::mask(CarHab@processedData, CarHab@projectPoly)
     # CarHab@processedData <- raster::crop(CarHab@processedData, CarHab@projectPoly,
     #                                      snap = "out")
     
