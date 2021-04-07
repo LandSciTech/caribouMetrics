@@ -155,6 +155,12 @@ setMethod(
     
     # If multiple winAreas need to apply processData separately
     if(length(dots$winArea) > 1){
+
+      # reassign to NULL so it will be redetermined from each call
+      dots$winArea <- NULL
+      
+      # provide template so resampled rasters will match
+      dots$tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       
       # polygons of ranges split into list with different winAreas
       projPolyLst <- projectPoly %>% 
@@ -163,7 +169,8 @@ setMethod(
                     summarize(WinArea = first(WinArea)),
                   by = c(coefRange = "Range")) %>% 
         select(-coefRange) %>% 
-        split(.$WinArea)
+        split(.$WinArea) %>% 
+        purrr::map(~select(.x, -WinArea))
       
       # caribouRange values for each winArea
       carRangeLst <- caribouRange %>%
@@ -172,27 +179,27 @@ setMethod(
                   by = c(coefRange = "Range")) %>% 
         split(.$WinArea, ) %>% 
         purrr::map(~select(.x, -WinArea))
-      
+   
       resultLst <- purrr::map2(projPolyLst, carRangeLst,
                         ~do.call(caribouHabitat, 
-                                list(landCover = landCover, 
+                                c(list(landCover = landCover, 
                                   esker = esker, 
                                   linFeat = linFeat, 
                                   projectPoly = .x, 
                                   caribouRange = .y, 
-                                  coefTable = coefTable,
+                                  coefTable = coefTable),
                                   dots)))
       
       # Re-combine CarHab objects into one
       x <- resultLst[[1]]
       
-      doOverlay <- function(rastLst){
+      doMosaic <- function(rastLst){
         # do.call doesn't work with names
         names(rastLst) <- NULL
         
-        rastLst$fun <- function(...){sum(..., na.rm = TRUE)}
+        rastLst$fun <- mean
         
-        out <- do.call(raster::overlay, rastLst)
+        out <- do.call(raster::mosaic, rastLst)
         
         names(out) <- names(rastLst[[1]])
         
@@ -208,14 +215,15 @@ setMethod(
       for(i in 1:length(slotLst)){
         slotNm <- slotLst[i]
         rastLst <- lapply(resultLst, slot, name = slotNm)
-        slot(x, slotNm) <- doOverlay(rastLst)
+        slot(x, slotNm) <- doMosaic(rastLst)
       }
       
     } else {
       
       inputDataArgs <- dots[c("updatedLC", "age", "natDist", "anthroDist", 
                               "harv","winArea", "eskerSave", "linFeatSave", 
-                              "padProjPoly", "friLU", "padFocal", "ptDensity")]
+                              "padProjPoly", "friLU", "padFocal", "ptDensity", 
+                              "tmplt")]
       
       inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]
       

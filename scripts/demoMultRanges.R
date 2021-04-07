@@ -2,7 +2,7 @@
 pth_base <- "../ChurchillAnalysis/inputNV/"
 devtools::load_all(".")
 
-caribouRanges <- c("Pagwachuan", "Missisa", "Ozhiski", "Nipigon")
+caribouRanges <- c("Pagwachuan", "Missisa", "Ozhiski", "Nipigon", "James Bay")
 caribouRangeCoefs <- rev(caribouRanges)
 
 projectPoly <- st_read(paste0(pth_base,
@@ -30,6 +30,7 @@ sameCoefMultRange <- caribouHabitat(landCover = landCover,
                                     projectPoly = projectPoly, 
                                     caribouRange = caribouRange, 
                                     padProjPoly = TRUE)
+beepr::beep()
 plot(sameCoefMultRange)
 
 # switch around the coefficients 
@@ -52,15 +53,3 @@ misCoefMultRange <- updateCaribou(sameCoefMultRange)
 
 plot(misCoefMultRange)
 
-# Try Nipigon (should error because different winArea)
-caribouRange <- data.frame(Range = caribouRanges, 
-                           coefRange = c("Missisa", "Nipigon", "Missisa", "Nipigon"), 
-                           stringsAsFactors = FALSE)
-
-nipCoefMultRange <- caribouHabitat(landCover = landCover,
-                                    esker = esker, 
-                                    linFeat = linFeat,  
-                                    projectPoly = projectPoly, 
-                                    caribouRange = caribouRange, 
-                                    padProjPoly = TRUE)
- 

@@ -31,7 +31,8 @@ setMethod(
            anthroDist = NULL, harv = NULL,
            eskerSave = NULL, linFeatSave = NULL, 
            winArea = NULL, padProjPoly = FALSE,
-           padFocal = FALSE, ptDensity = 1) {
+           padFocal = FALSE, ptDensity = 1, 
+           tmplt =  raster::`res<-`(raster(landCover), c(400, 400))) {
 
     charIn <-  sapply(list(landCover, esker, updatedLC, age, natDist, anthroDist, harv, 
                            linFeat, projectPoly), 
@@ -94,7 +95,7 @@ setMethod(
     # rasterize eskers
     esker <- checkAlign(esker, landCover, "esker", "landCover")
     if(inherits(esker, "sf")){
-      tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
+      #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       esker <- rasterizeLineDensity(esker, tmplt)
     }
     if(!is.null(eskerSave)){
@@ -110,7 +111,7 @@ setMethod(
     linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
     
     if(inherits(linFeat, "sf")){
-      tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
+      #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)
     }
     if(!is.null(linFeatSave)){
@@ -167,7 +168,8 @@ setMethod(
                habitatUse = raster(matrix(NA)),
                attributes = list(caribouRange = caribouRange, winArea = winArea,
                                  padProjPoly = padProjPoly, padFocal = padFocal, 
-                                 updateLC = length(raster::unique(updatedLC)) > 0)))
+                                 updateLC = length(raster::unique(updatedLC)) > 0,
+                                 tmplt = tmplt)))
 })
 
 #' @rdname inputData
