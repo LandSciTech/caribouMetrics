@@ -55,6 +55,7 @@ Collate:
     'plot.R'
     'processData.R'
     'rasterizeLineDensity.R'
+    'reclassDistHarv.R'
     'reclassPLCFRI.R'
     'results.R'
     'tmapCatRast.R'
