@@ -177,7 +177,7 @@ setMethod(
         left_join(coefTable %>% group_by(Range) %>%
                     summarize(WinArea = first(WinArea)),
                   by = c(coefRange = "Range")) %>% 
-        split(.$WinArea, ) %>% 
+        split(.$WinArea) %>% 
         purrr::map(~select(.x, -WinArea))
    
       resultLst <- purrr::map2(projPolyLst, carRangeLst,
@@ -192,22 +192,7 @@ setMethod(
       
       # Re-combine CarHab objects into one
       x <- resultLst[[1]]
-      
-      doMosaic <- function(rastLst){
-        # do.call doesn't work with names
-        names(rastLst) <- NULL
-        
-        rastLst$fun <- mean
-        
-        out <- do.call(raster::mosaic, rastLst)
-        
-        names(out) <- names(rastLst[[1]])
-        
-        # 0 created by sum when all are NA 
-        # TODO: make this return NA 
-
-        return(out)
-      }
+    
       # names of slots to iterate over
       slotLst <- slotNames(resultLst[[1]])
       slotLst <- slotLst[!slotLst %in% c("attributes", "projectPoly")]
@@ -217,6 +202,9 @@ setMethod(
         rastLst <- lapply(resultLst, slot, name = slotNm)
         slot(x, slotNm) <- doMosaic(rastLst)
       }
+      
+      # Only thing that will change about projectPoly is crs 
+      x@projectPoly <- projectPoly %>% st_transform(st_crs(landCover))
       
     } else {
       
@@ -255,3 +243,16 @@ setMethod(
     
     return(x)
   })
+
+doMosaic <- function(rastLst){
+  # do.call doesn't work with names
+  names(rastLst) <- NULL
+  
+  rastLst$fun <- mean
+  
+  out <- do.call(raster::mosaic, rastLst)
+  
+  names(out) <- names(rastLst[[1]])
+  
+  return(out)
+}
