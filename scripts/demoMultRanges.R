@@ -39,13 +39,15 @@ caribouRange <- data.frame(Range = caribouRanges,
                            stringsAsFactors = FALSE)
 
 # can just change the caribouRange attribute rather than recomputing all the
-# inputs. If we think this will be done often could do it inside updateCaribou
-sameCoefMultRange@attributes$caribouRange <- caribouRange
+# inputs. This should be done by the updateCaribou function so that it considers
+# changes in winArea that mean the whole area should be recalculated
 
-swapCoefMultRange <- updateCaribou(sameCoefMultRange)
+
+swapCoefMultRange <- updateCaribou(sameCoefMultRange, caribouRange)
 
 plot(swapCoefMultRange)
 
+# example of just changing the attribute, **NOT RECOMMENDED**
 # Use just the Missisa coefs for all
 sameCoefMultRange@attributes$caribouRange$coefRange <- "Missisa"
 
