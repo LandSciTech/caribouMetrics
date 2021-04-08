@@ -369,25 +369,28 @@ setMethod(
     }else{
       anthroBuff <- expVars>0
     }
+    
     all <- (anthroBuff + natDist) > 0
+    
     
     outStack <- raster::stack(anthroBuff, natDist, all)
     names(outStack) = c("anthroBuff", "natDist", "totalDist")
-    
-    #set NAs from landcover
-    outStack[is.na(landCover) | (landCover == 0)] = NA
-    
-    inData@processedData <- outStack
-    
-    #######
-    #Range summaries
-    message("calculating disturbance metrics")
+
     if(requireNamespace("fasterize", quietly = TRUE)){
       pp = fasterize::fasterize(inData@projectPoly,outStack[[1]])
     } else {
       message("To speed up install fasterize package")
       pp = raster::rasterize(inData@projectPoly,outStack[[1]])
     }
+    
+    #set NAs from landcover
+    outStack[is.na(landCover) | (landCover == 0)|is.na(pp)] = NA
+    
+    inData@processedData <- outStack
+    
+    #######
+    #Range summaries
+    message("calculating disturbance metrics")
         
     rr <- raster::zonal(outStack,pp,fun="mean",na.rm=T)
     rr <- as.data.frame(rr)
