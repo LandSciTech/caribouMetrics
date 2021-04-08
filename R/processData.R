@@ -315,6 +315,7 @@ setMethod(
     
     expVars <- (anthroDist+harv)>0
     
+
     if(class(inData@linFeat[[1]])=="RasterLayer"){
       
       expVars[inData@linFeat[[1]]>0]=1
