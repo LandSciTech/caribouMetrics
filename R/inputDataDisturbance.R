@@ -66,12 +66,12 @@ setMethod(
     if(!(is(linFeat, "sf") || is(linFeat, "sfc"))){
       if(is(linFeat, "Spatial")){
         linFeat <- sf::st_as_sf(linFeat)
-      } else if(is(linFeat, "Raster")){
+      } 
+        #else if(is(linFeat, "Raster")){
         # roads <- rasterToLineSegments(roads)
-        linFeat <- raster::rasterToPoints(linFeat, fun = function(x){x > 0}, 
-                                        spatial = TRUE) %>% 
-          sf::st_as_sf()
-      }
+        #linFeat <- raster::rasterToPoints(linFeat, fun = function(x){x > 0}, 
+        #                                spatial = TRUE) %>% 
+      #}
     }
     
     

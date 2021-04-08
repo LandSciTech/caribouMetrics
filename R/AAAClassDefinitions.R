@@ -1,5 +1,6 @@
 setClassUnion("missingOrNULL", c("missing", "NULL"))
 setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
+setClassUnion("sfOrRaster", c("RasterLayer", "sf"))
 
 # NOTE: Constructors for each class are defined in the R file bearing the name
 # of the class (lower case).
@@ -93,7 +94,7 @@ DisturbanceMetrics <- setClass("DisturbanceMetrics",
                                      natDist  = "RasterLayer",
                                      anthroDist = "RasterLayer",
                                      harv = "RasterLayer", 
-                                     linFeat  = "sf", 
+                                     linFeat  = "sfOrRaster", 
                                      projectPoly = "sf", 
                                      processedData = "Raster",
                                      disturbanceMetrics = "data.frame",

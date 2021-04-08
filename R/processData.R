@@ -315,12 +315,18 @@ setMethod(
     message("buffering anthropogenic disturbance")
     
     expVars <- (anthroDist+harv)>0
-
-    lfPt <- inData@linFeat %>% dplyr::filter(st_is(. , "POINT"))
-    lfPt <- as(lfPt, "Spatial")
-
-    lfR = raster::rasterize(lfPt, expVars,field="ID")    
-    expVars[!is.na(lfR)]=1
+    
+    if(class(inData@linFeat)=="RasterLayer"){
+      
+      expVars[inData@linFeat>0]=1
+    }else{
+      lfPt <- inData@linFeat %>% dplyr::filter(st_is(. , "POINT"))
+      lfPt <- as(lfPt, "Spatial")
+      
+      lfR = raster::rasterize(lfPt, expVars,field="ID")    
+      expVars[!is.na(lfR)]=1
+      
+    }
 
     # window radius 
     winRad <- (inData@attributes$bufferWidth/res(expVars[[1]])[1]) %>% 
@@ -339,28 +345,31 @@ setMethod(
     
     expVars <- expVars>0 
 
-    ##############
-    #Buffer linear features
-    message("buffering linear features")
-    
-    #Note points were included with polygons above.
-    lf <- inData@linFeat %>% dplyr::filter(!st_is(. , "POINT"))
-    
-    linBuff <- st_buffer(lf,inData@attributes$bufferWidth)
-    
-    # faster rasterization
-    if(requireNamespace("fasterize", quietly = TRUE)){
-      linBuff <- fasterize::fasterize(linBuff, expVars)
-    } else {
-      message("To speed up install fasterize package")
-      linBuff <- raster::rasterize(linBuff, expVars)
+    if(!class(inData@linFeat)=="RasterLayer"){
+      ##############
+      #Buffer linear features
+      message("buffering linear features")
+      
+      #Note points were included with polygons above.
+      lf <- inData@linFeat %>% dplyr::filter(!st_is(. , "POINT"))
+      
+      linBuff <- st_buffer(lf,inData@attributes$bufferWidth)
+      
+      # faster rasterization
+      if(requireNamespace("fasterize", quietly = TRUE)){
+        linBuff <- fasterize::fasterize(linBuff, expVars)
+      } else {
+        message("To speed up install fasterize package")
+        linBuff <- raster::rasterize(linBuff, expVars)
+      }
+      
+      linBuff <- linBuff > 0 
+      linBuff[is.na(linBuff)] = 0
+      anthroBuff <- (linBuff + expVars) > 0
+    }else{
+      anthroBuff <- expVars>0
     }
-    
-    linBuff <- linBuff > 0 
-    linBuff[is.na(linBuff)] = 0
-    anthroBuff <- (linBuff + expVars) > 0
     all <- (anthroBuff + natDist) > 0
-    
     
     outStack <- raster::stack(anthroBuff, natDist, all)
     names(outStack) = c("anthroBuff", "natDist", "totalDist")
