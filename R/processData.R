@@ -288,7 +288,6 @@ setMethod(
   function(inData) {
     #inData=dm
         
-    
     harv <- inData@harv
     anthroDist <- inData@anthroDist
     natDist <- inData@natDist
@@ -316,11 +315,12 @@ setMethod(
     
     expVars <- (anthroDist+harv)>0
     
-    if(class(inData@linFeat)=="RasterLayer"){
+    
+    if(class(inData@linFeat[[1]])=="RasterLayer"){
       
-      expVars[inData@linFeat>0]=1
+      expVars[inData@linFeat[[1]]>0]=1
     }else{
-      lfPt <- inData@linFeat %>% dplyr::filter(st_is(. , "POINT"))
+      lfPt <- inData@linFeat[[1]] %>% dplyr::filter(st_is(. , "POINT"))
       lfPt <- as(lfPt, "Spatial")
       
       lfR = raster::rasterize(lfPt, expVars,field="ID")    
@@ -345,13 +345,13 @@ setMethod(
     
     expVars <- expVars>0 
 
-    if(!class(inData@linFeat)=="RasterLayer"){
+    if(!class(inData@linFeat[[1]])=="RasterLayer"){
       ##############
       #Buffer linear features
       message("buffering linear features")
       
       #Note points were included with polygons above.
-      lf <- inData@linFeat %>% dplyr::filter(!st_is(. , "POINT"))
+      lf <- inData@linFeat[[1]] %>% dplyr::filter(!st_is(. , "POINT"))
       
       linBuff <- st_buffer(lf,inData@attributes$bufferWidth)
       

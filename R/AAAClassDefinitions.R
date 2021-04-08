@@ -1,6 +1,5 @@
 setClassUnion("missingOrNULL", c("missing", "NULL"))
 setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
-setClassUnion("sfOrRaster", c("RasterLayer", "sf"))
 
 # NOTE: Constructors for each class are defined in the R file bearing the name
 # of the class (lower case).
@@ -94,15 +93,14 @@ DisturbanceMetrics <- setClass("DisturbanceMetrics",
                                      natDist  = "RasterLayer",
                                      anthroDist = "RasterLayer",
                                      harv = "RasterLayer", 
-                                     linFeat  = "sfOrRaster", 
+                                     linFeat  = "list", #this is a hack - need to allow raster or sf, but can't setClassUnion because sf class is not exported from sf package. 
                                      projectPoly = "sf", 
                                      processedData = "Raster",
                                      disturbanceMetrics = "data.frame",
                                      attributes = "list"),
                            prototype = list(
                              landCover = raster(matrix(NA)),
-                             linFeat  = st_sf(col1 = NA,
-                                              geometry = st_sfc(st_point(x = c(1,1)))),
+                             linFeat  = list(),
                              projectPoly = st_sf(col1 = NA,
                                                  geometry = st_sfc(st_point(x = c(1,1)))),
                              processedData = raster::stack(raster(matrix(NA))),
