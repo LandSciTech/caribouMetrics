@@ -11,7 +11,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
             .Object@natDist <- natDist
             .Object@anthroDist <- anthroDist
             .Object@harv <- harv
-            .Object@linFeat <- linFeat
+            .Object@linFeat <- list(linFeat)
             .Object@projectPoly <- projectPoly
             .Object@processedData <- processedData
             .Object@disturbanceMetrics <- disturbanceMetrics 
