@@ -321,11 +321,14 @@ setMethod(
       expVars[inData@linFeat[[1]]>0]=1
     }else{
       lfPt <- inData@linFeat[[1]] %>% dplyr::filter(st_is(. , "POINT"))
-      lfPt <- as(lfPt, "Spatial")
       
-      lfR = raster::rasterize(lfPt, expVars,field="ID")    
-      expVars[!is.na(lfR)]=1
-      
+      if(nrow(lfPt)!=0){
+
+        lfPt <- as(lfPt, "Spatial")
+        
+        lfR = raster::rasterize(lfPt, expVars,field="ID")    
+        expVars[!is.na(lfR)]=1
+      }  
     }
 
     # window radius 
@@ -357,7 +360,7 @@ setMethod(
       
       # faster rasterization
       if(requireNamespace("fasterize", quietly = TRUE)){
-        linBuff <- fasterize::fasterize(linBuff, expVars)
+        linBuff <- fasterize::fasterize(st_collection_extract(linBuff, "POLYGON"), expVars)
       } else {
         message("To speed up install fasterize package")
         linBuff <- raster::rasterize(linBuff, expVars)

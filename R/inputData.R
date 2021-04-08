@@ -204,6 +204,17 @@ setMethod(
       indata <- lst(landCover, esker, updatedLC, age, natDist, anthroDist, harv, 
                     projectPoly)
       
+      expectNames = c("roads","rail","utilities")
+      if(is.null(names(linFeat))){
+        missingNames = expectNames  
+      }else{
+        missingNames = setdiff(names(linFeat),expectNames)
+        
+      }
+      if(length(missingNames)>0){
+        stop(paste0("Expecting names of linFeat list to include ",paste(expectNames,collapse=",")))
+      }    
+      
       linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
       
     } else {
