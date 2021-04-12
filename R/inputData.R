@@ -26,11 +26,13 @@ setGeneric("inputData", function(landCover, esker, linFeat, projectPoly, ...) st
 setMethod(
   "inputData", signature(landCover = "RasterLayer"), 
   function(landCover, esker, linFeat, projectPoly, caribouRange,
+           coefTable,
            updatedLC = NULL, age = NULL, natDist = NULL, 
            anthroDist = NULL, harv = NULL,
            eskerSave = NULL, linFeatSave = NULL, 
            winArea = NULL, padProjPoly = FALSE,
-           padFocal = FALSE, ptDensity = 1) {
+           padFocal = FALSE, ptDensity = 1, 
+           tmplt =  raster::`res<-`(raster(landCover), c(400, 400))) {
 
     charIn <-  sapply(list(landCover, esker, updatedLC, age, natDist, anthroDist, harv, 
                            linFeat, projectPoly), 
@@ -50,16 +52,7 @@ setMethod(
       stop("landCover must have a projected CRS", call. = FALSE)
     }
     
-    if(!inherits(caribouRange, "data.frame")){
-      caribouRange <- data.frame(Range = caribouRange, 
-                                 coefRange = caribouRange, 
-                                 stringsAsFactors = FALSE)
-    } else {
-      if(any(names(caribouRange) != c("Range", "coefRange"))){
-        stop("If caribouRange is a data.frame the column names",
-             " must be Range and coefRange", call. = FALSE)
-      }
-    }
+    # require column called Range
     if(nrow(projectPoly) == 1){
       projectPoly <- projectPoly %>% mutate(Range = caribouRange$Range)
     } else {
@@ -74,20 +67,7 @@ setMethod(
       }
     }
     
-    # Get window area from table b/c some models used different sizes
-    if(is.null(winArea)){
-      winArea <- coefTableHR %>% filter(Range %in% caribouRange$coefRange) %>% 
-        pull(WinArea) %>% 
-        unique()
-    }
-    
-    # Error if caribouRanges have different winAreas
-    if(length(winArea) > 1){
-      stop("If multiple caribouRanges are supplied they ",
-           "must all use the same winArea",
-           call. = FALSE)
-    }
-    .checkInputs(caribouRange, winArea, landCover, updatedLC)
+    .checkInputs(caribouRange, winArea, landCover, updatedLC, coefTable)
     
     if(st_crs(projectPoly) != st_crs(landCover)){
       projectPoly <- st_transform(projectPoly, crs = st_crs(landCover))
@@ -99,11 +79,12 @@ setMethod(
     # union together multiple range polygons for raster processing
     projectPoly <- projectPoly %>% summarise()
     
+    # pad projPoly to 3 times the window radius, using the larger if multiple
     if(padProjPoly){
 
       # window radius is radius of circle with winArea rounded to even number of
       # raster cells based on resolution
-      winRad <- (sqrt(winArea*10000/pi)/res(landCover)[1]) %>% 
+      winRad <- (sqrt(max(winArea)*10000/pi)/res(landCover)[1]) %>% 
         round(digits = 0)*res(landCover)[1]
       
       projectPoly <- projectPoly %>% st_buffer(winRad*3)
@@ -114,7 +95,7 @@ setMethod(
     # rasterize eskers
     esker <- checkAlign(esker, landCover, "esker", "landCover")
     if(inherits(esker, "sf")){
-      tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
+      #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       esker <- rasterizeLineDensity(esker, tmplt)
     }
     if(!is.null(eskerSave)){
@@ -130,7 +111,7 @@ setMethod(
     linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
     
     if(inherits(linFeat, "sf")){
-      tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
+      #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)
     }
     if(!is.null(linFeatSave)){
@@ -187,13 +168,14 @@ setMethod(
                habitatUse = raster(matrix(NA)),
                attributes = list(caribouRange = caribouRange, winArea = winArea,
                                  padProjPoly = padProjPoly, padFocal = padFocal, 
-                                 updateLC = length(raster::unique(updatedLC)) > 0)))
+                                 updateLC = length(raster::unique(updatedLC)) > 0,
+                                 tmplt = tmplt)))
 })
 
 #' @rdname inputData
 setMethod(
   "inputData", signature(landCover = "character"), 
-  function(landCover, esker, linFeat,  projectPoly, caribouRange, 
+  function(landCover, esker, linFeat,  projectPoly, caribouRange, coefTable,
            updatedLC = NULL, age = NULL, natDist = NULL, 
            anthroDist = NULL, harv = NULL, 
            eskerSave = NULL, linFeatSave = NULL, 
@@ -287,6 +269,6 @@ setMethod(
                      caribouRange = caribouRange, eskerSave = eskerSave, 
                      linFeatSave = linFeatSave, winArea = winArea, 
                      padProjPoly = padProjPoly, padFocal = padFocal, 
-                     ptDensity = ptDensity))
+                     ptDensity = ptDensity, coefTable = coefTable))
     
   })
