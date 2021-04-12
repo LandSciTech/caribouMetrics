@@ -13,6 +13,46 @@
 #'
 #' @examples
 
+# aggregateIf <- function(x, y, nmx, nmy){
+#   if(inherits(x, "sf")){
+#     message("entered sf section")
+#     return(x)
+#   }
+#   if(inherits(x,"RasterLayer")){
+#     message("entered raster section")
+#     if(compareRaster(x, y, extent = FALSE, rowcol = FALSE, res = TRUE, 
+#                      stopiffalse = FALSE)){
+#       message("entered rasters equal section")
+#       return(x)
+#     } else {
+#       message("entered rasters not equal section")
+#       if(any(raster::res(x) < raster::res(y))){
+#         message("entered raster::res(x) < raster::res(y) section")
+#         message(nmx, " being aggregated to have resolution matching ", nmy,
+#                 " using the mode")
+#         x <- raster::aggregate(x, fact = res(y)[1]/res(x)[1],
+#                                  fun = raster::modal)
+#       } 
+#       if(any(raster::res(x) > raster::res(y))){
+#         message("entered raster::res(x) > raster::res(y) section")
+#         message(nmx, " being dis-aggregated to have resolution matching ", nmy,
+#                 " without interpolation")
+#         x <- raster::disaggregate(x, fact = res(x)[1]/res(y)[1],
+#                                     fun = raster::modal)
+#         
+#       }
+#       if(!all(raster::res(x) == raster::res(y))){
+#         message("entered raster::res(x) == raster::res(y) section")
+#         stop("the resolution of ", nmx, " does not match ", nmy,
+#              " and they cannot be aligned by aggregation. ",
+#              "Please supply rasters with matching resolution HELLO.\n\n", call. = FALSE)
+#       } else {
+#         return(x)
+#       }
+#     }
+#   }
+# }
+
 aggregateIf <- function(x, y, nmx, nmy){
   if(inherits(x, "sf")){
     return(x)
@@ -26,16 +66,17 @@ aggregateIf <- function(x, y, nmx, nmy){
         message(nmx, " being aggregated to have resolution matching ", nmy,
                 " using the mode")
         x <- raster::aggregate(x, fact = res(y)[1]/res(x)[1],
-                                 fun = raster::modal)
+                               fun = raster::modal)
       } 
       if(any(raster::res(x) > raster::res(y))){
         message(nmx, " being dis-aggregated to have resolution matching ", nmy,
                 " without interpolation")
         x <- raster::disaggregate(x, fact = res(x)[1]/res(y)[1],
-                                    fun = raster::modal)
+                                  fun = raster::modal)
         
       }
-      if(!all(raster::res(x) == raster::res(y))){
+      if(!compareRaster(x, y, extent = FALSE, rowcol = FALSE, res = TRUE, 
+                        stopiffalse = FALSE)){
         stop("the resolution of ", nmx, " does not match ", nmy,
              " and they cannot be aligned by aggregation. ",
              "Please supply rasters with matching resolution.\n\n", call. = FALSE)
@@ -44,7 +85,6 @@ aggregateIf <- function(x, y, nmx, nmy){
       }
     }
   }
-  
 }
 
 transformIf <- function(x, y, nmx, nmy){
