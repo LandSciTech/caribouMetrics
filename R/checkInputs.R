@@ -31,7 +31,7 @@
   
   if(!is.null(updatedLC)){
     if(!all(raster::unique(updatedLC) %in% c(resTypeCode$code, NA))){
-      stop("updatedLC raster has values ", raster::cellStats(updatedLC, unique),
+      stop("updatedLC raster has values ", raster::unique(updatedLC),
            " outside the range of: ", 
            paste0(resTypeCode$code, collapse = ", "), 
            ". updatedLC must be reclassified to resource types", 
