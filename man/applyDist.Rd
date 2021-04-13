@@ -4,7 +4,7 @@
 \alias{applyDist}
 \title{Apply disturbances to land cover class data}
 \usage{
-applyDist(landCover, natDist, anthroDist, harv)
+applyDist(landCover, natDist, anthroDist, harv, tmplt)
 }
 \arguments{
 \item{landCover}{}

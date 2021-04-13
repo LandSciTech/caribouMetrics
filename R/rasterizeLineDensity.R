@@ -42,7 +42,7 @@ rasterizeLineDensity <- function(x, r, ptDensity = 1) {
     }
       
     if(nrow(lfPt)>0){
-      lfR <- raster::rasterize(lfPt, r, field = "ID")    
+      lfR <- raster::rasterize(lfPt, r, field = "linFID")    
       
       lfR[!is.na(lfR)] <- ptDensity * res(r)[1]
       

@@ -106,19 +106,7 @@ setMethod(
     # rasterize linFeat
     if(inherits(linFeat, "list")){
       
-      expectNames <- c("roads","rail","utilities")
-      
-      if(is.null(names(linFeat))){
-        missingNames = expectNames  
-      }else{
-        missingNames = setdiff(names(linFeat),expectNames)
-      }
-      if(length(missingNames)>0){
-        warning(paste0("Expecting names of linFeat list to include ",paste(expectNames,collapse=",")))
-        names(linFeat) <- expectNames 
-      }    
-      
-      linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
+      linFeat <- combineLinFeat(linFeat)
       
     }
 
@@ -200,19 +188,7 @@ setMethod(
       indata <- lst(landCover, esker, updatedLC, age, natDist, anthroDist, harv, 
                     projectPoly)
       
-      expectNames = c("roads","rail","utilities")
-      if(is.null(names(linFeat))){
-        missingNames = expectNames  
-      }else{
-        missingNames = setdiff(names(linFeat),expectNames)
-        
-      }
-      if(length(missingNames)>0){
-        warning(paste0("Expecting names of linFeat list to include ",paste(expectNames,collapse=",")))
-        names(linFeat) <- expectNames 
-      }    
-      
-      linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
+      linFeat <- combineLinFeat(linFeat)
       
     } else {
       indata <- lst(landCover, esker, updatedLC, age, natDist, anthroDist, harv, linFeat,

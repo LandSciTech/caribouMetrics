@@ -4,18 +4,20 @@
 \alias{combineLinFeat}
 \title{Combine linear features}
 \usage{
-combineLinFeat(roads, rail, utilities)
+combineLinFeat(linFeats)
 }
 \arguments{
-\item{roads}{}
-
-\item{rail}{}
-
-\item{utilities}{}
+\item{linFeats}{a list of linear feature data sets that will be combined.
+Data sets can be in the formats, SpatialLines, sf, raster, or a character
+vector with extension .shp or any extension accepted by the raster package}
 }
 \value{
 sf object
 }
 \description{
-Combine roads, rail and utilities in to one linear features object.
+Combine roads, rail and utilities in to one linear features object. All
+linear features will be combined into one vector file which will be used to
+calculate linear feature density. If the linear feature is provided as a
+raster it will be converted to points which are interpreted based on
+ptDensity parameter of \code{rasterizeLineDensity}.
 }

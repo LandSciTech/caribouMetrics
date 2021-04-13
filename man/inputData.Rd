@@ -14,6 +14,7 @@ inputData(landCover, esker, linFeat, projectPoly, ...)
   linFeat,
   projectPoly,
   caribouRange,
+  coefTable,
   updatedLC = NULL,
   age = NULL,
   natDist = NULL,
@@ -24,7 +25,8 @@ inputData(landCover, esker, linFeat, projectPoly, ...)
   winArea = NULL,
   padProjPoly = FALSE,
   padFocal = FALSE,
-  ptDensity = 1
+  ptDensity = 1,
+  tmplt = raster::`res<-`(raster(landCover), c(400, 400))
 )
 
 \S4method{inputData}{character}(
@@ -33,6 +35,7 @@ inputData(landCover, esker, linFeat, projectPoly, ...)
   linFeat,
   projectPoly,
   caribouRange,
+  coefTable,
   updatedLC = NULL,
   age = NULL,
   natDist = NULL,

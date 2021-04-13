@@ -136,9 +136,7 @@ setMethod(
     if(!is.null(newData$linFeat)){
       # rasterize linFeat
       if(inherits(newData$linFeat, "list")){
-        newData$linFeat <- combineLinFeat(newData$linFeat$roads, 
-                                          newData$linFeat$rail, 
-                                          newData$linFeat$utilities)
+        newData$linFeat <- combineLinFeat(newData$linFeat)
       }
       
       if(inherits(newData$linFeat, "sf")){
