@@ -50,6 +50,19 @@ setMethod(
       stop("landCover must have a projected CRS", call. = FALSE)
     }
     
+    rastLst <- list(landCover, updatedLC, age, natDist, 
+                    anthroDist, harv)
+    
+    # remove NULLs from indata
+    rastLst <- rastLst[which(!vapply(rastLst, function(x) is.null(x), 
+                                   FUN.VALUE = TRUE))]
+    
+    if(!do.call(raster::compareRaster, c(rastLst, list(res = TRUE, extent = FALSE, 
+                             rowcol = FALSE, stopiffalse = FALSE)))){
+      stop("all raster data sets must have matching resolution", call. = FALSE)
+    }
+    rm(rastLst)
+    
     if(!inherits(caribouRange, "data.frame")){
       caribouRange <- data.frame(Range = caribouRange, 
                                  coefRange = caribouRange, 
