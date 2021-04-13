@@ -17,7 +17,6 @@ anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
 harvD = raster(paste0(pthBase, "harv", ".tif"))
 linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
 projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
-hexgridD = st_read(paste0(pthBase, "hexgrid", ".shp"), quiet = TRUE)
 linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE)
 
 

@@ -25,11 +25,13 @@ setMethod(
     } else {
       updted <- list(landCover = inData@landCover)
     }
+    
+    tmplt <- inData@attributes$tmplt
 
     
     # resample to 16ha and flag cells with >35% disturbance
     expVars <- applyDist(updted$landCover, inData@natDist, inData@anthroDist, 
-                         inData@harv)
+                         inData@harv, tmplt)
     
     rm(updted)
     
@@ -42,7 +44,7 @@ setMethod(
     # Resample linFeat and esker to 16 ha
     if(any(raster::res(inData@linFeat) < 400)){
       message("resampling linFeat to match landCover resolution")
-      tmplt <- inData@landCover %>% raster::`res<-`(c(400, 400))
+      #tmplt <- inData@landCover %>% raster::`res<-`(c(400, 400))
       
       inData@linFeat <- raster::resample(inData@linFeat, tmplt,
                                          method = "bilinear")
@@ -70,7 +72,7 @@ setMethod(
     
     # Get window area from table b/c some models used different sizes
     if(is.null(inData@attributes$winArea)){
-      inData@attributes$winArea <- coefTableHR %>% 
+      inData@attributes$winArea <- coefTable %>% 
         filter(Range %in% inData@attributes$caribouRange$coefRange) %>% 
         pull(WinArea) %>% 
         unique()
@@ -129,14 +131,18 @@ setMethod(
                                     "harv", "linFeat" ))], call. = FALSE)
     }
     
+    tmplt <- inData@attributes$tmplt
+    
     if(!is.null(newData$linFeat)){
       # rasterize linFeat
       if(inherits(newData$linFeat, "list")){
-        newData$linFeat <- combineLinFeat(newData$linFeat$roads, newData$linFeat$rail, newData$linFeat$utilities)
+        newData$linFeat <- combineLinFeat(newData$linFeat$roads, 
+                                          newData$linFeat$rail, 
+                                          newData$linFeat$utilities)
       }
       
       if(inherits(newData$linFeat, "sf")){
-        tmplt <- raster(inData@landCover) %>% raster::`res<-`(c(400, 400))
+        #tmplt <- raster(inData@landCover) %>% raster::`res<-`(c(400, 400))
         newData$linFeat <- rasterizeLineDensity(newData$linFeat, tmplt)
       }
       
@@ -207,7 +213,7 @@ setMethod(
         
         expVars <- applyDist(updted$landCover, natDist = inData@natDist, 
                              anthroDist = newData$anthroDist,
-                             harv = newData$harv)
+                             harv = newData$harv, tmplt = tmplt)
         
         
         rm(updted) 
@@ -232,7 +238,7 @@ setMethod(
       
       expVars <- applyDist(newData$updatedLC, natDist = newData$natDist, 
                            anthroDist = newData$anthroDist,
-                           harv = newData$harv)
+                           harv = newData$harv, tmplt = tmplt)
     }
    
     # resample linFeat if provided
