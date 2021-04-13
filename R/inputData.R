@@ -53,7 +53,7 @@ setMethod(
     rastLst <- list(landCover, updatedLC, age, natDist, 
                     anthroDist, harv)
     
-    # remove NULLs from indata
+    # remove NULLs from rastLst
     rastLst <- rastLst[which(!vapply(rastLst, function(x) is.null(x), 
                                    FUN.VALUE = TRUE))]
     
@@ -122,14 +122,32 @@ setMethod(
       projectPoly <- projectPoly %>% st_buffer(winRad*3)
     }
     
-    landCover <- cropIf(landCover, projectPoly, "landCover", "projectPoly")
+    landCover <- checkOverlap(landCover, projectPoly, "landCover", "projectPoly") %>%
+      cropIf(projectPoly, "landCover", "projectPoly")
 
     # rasterize eskers
     esker <- checkAlign(esker, landCover, "esker", "landCover")
     if(inherits(esker, "sf")){
       tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       esker <- rasterizeLineDensity(esker, tmplt)
+    } else {
+      esker <- checkOverlap(esker, landCover, "esker", "landCover") %>% 
+        cropIf(landCover, "esker", "landCover")
+      
+      chk <- any(raster::compareRaster(esker, landCover, res = TRUE, 
+                                       extent = FALSE, rowcol = FALSE,
+                                       stopiffalse = FALSE), 
+                 raster::compareRaster(esker,
+                                       raster(landCover) %>%
+                                         raster::`res<-`(c(400, 400)),
+                                       res = TRUE, extent = FALSE, 
+                                       rowcol = FALSE,
+                                       stopiffalse = FALSE))
+      if(!chk){
+        stop("esker is not aligned with landCover")
+      }
     }
+    
     if(!is.null(eskerSave)){
       raster::writeRaster(esker, eskerSave, overwrite = TRUE)
       esker <- raster(eskerSave)
@@ -140,11 +158,27 @@ setMethod(
       linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
     }
 
-    linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
-    
     if(inherits(linFeat, "sf")){
+      linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
+      
       tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)
+    } else {
+      linFeat <- checkOverlap(linFeat, landCover, "linFeat", "landCover") %>% 
+        cropIf(landCover, "linFeat", "landCover")
+      
+      chk <- any(raster::compareRaster(linFeat, landCover, res = TRUE, 
+                                       extent = FALSE, rowcol = FALSE,
+                                       stopiffalse = FALSE), 
+                 raster::compareRaster(linFeat,
+                                       raster(landCover) %>%
+                                         raster::`res<-`(c(400, 400)),
+                                       res = TRUE, extent = FALSE, 
+                                       rowcol = FALSE,
+                                       stopiffalse = FALSE))
+      if(!chk){
+        stop("linFeat is not aligned with landCover")
+      }
     }
     if(!is.null(linFeatSave)){
       raster::writeRaster(linFeat, linFeatSave, overwrite = TRUE)

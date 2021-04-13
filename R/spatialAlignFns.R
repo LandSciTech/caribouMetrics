@@ -157,6 +157,6 @@ checkAlign <- function(x, y, nmx, nmy){
   x <- transformIf(x, y, nmx, nmy)
   x <- checkOverlap(x, y, nmx, nmy)
   x <- cropIf(x, y, nmx, nmy)
-  x <- extendIf(x, y, nmx, nmy)
+  #x <- extendIf(x, y, nmx, nmy)
   return(x)
 }

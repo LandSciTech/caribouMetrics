@@ -147,12 +147,17 @@ setMethod(
            call. = FALSE)
     }
     
-    # check alignment of new data with landCover
-    newData <- purrr::map_at(newData, c("harv", "age", "natDist", "updatedLC"),
-                              ~aggregateIf(.x, inData@landCover, names(.x), "landCover"))
+    # check alignment of new data with landCover except for linFeat
+    if(!do.call(raster::compareRaster, 
+                c(`names<-`(newData[which(names(newData) != "linFeat")], NULL),
+                  list(inData@landCover,inData@landCover,
+                       res = TRUE, extent = FALSE, 
+                       rowcol = FALSE, stopiffalse = FALSE)))){
+      stop("all raster data sets must have matching resolution", call. = FALSE)
+    }
     
     newData <- purrr::map2(newData, names(newData), 
-                ~checkAlign(.x, inData@landCover, .y, "landCover"))
+                ~cropIf(.x, inData@landCover, .y, "landCover"))
     
     if(updateType == "disturbed"){ 
       # check combinations of data in newData make sense
