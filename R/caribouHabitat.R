@@ -159,7 +159,10 @@ setMethod(
       # reassign to NULL so it will be redetermined from each call
       dots$winArea <- NULL
       
-      # provide template so resampled rasters will match
+      # provide template so resampled rasters will match 
+      
+      # NOTE: to adjust res of final model change this res and the res in
+      # default argument in inputData
       dots$tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       
       # polygons of ranges split into list with different winAreas
