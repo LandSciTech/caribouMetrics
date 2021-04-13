@@ -109,7 +109,7 @@ setMethod(
       projectPoly <- projectPoly %>% st_buffer(winRad*3)
     }
     
-    landCover <- checkAlign(landCover, projectPoly, "landCover", "projectPoly")
+    landCover <- cropIf(landCover, projectPoly, "landCover", "projectPoly")
 
     # rasterize eskers
     esker <- checkAlign(esker, landCover, "esker", "landCover")
@@ -140,40 +140,40 @@ setMethod(
     
     # check alignment of other layers
     if(!is.null(updatedLC)){
-      updatedLC <- aggregateIf(updatedLC, landCover, "updatedLC", "landCover") %>%
-        checkAlign(landCover, "updatedLC", "landCover")
+      updatedLC <- cropIf(updatedLC, landCover, "updatedLC", "landCover") 
+      
       compareRaster(landCover, updatedLC)
     } else {
       updatedLC <- raster(matrix(NA))
     }
     
     if(!is.null(age)){
-      age <- aggregateIf(age, landCover, "age", "landCover") %>% 
-        checkAlign(landCover, "age", "landCover")
+      age <- cropIf(age, landCover, "age", "landCover")
+
       compareRaster(landCover, age)
     } else {
       age <- raster(matrix(NA))
     }
       
     if(!is.null(natDist)){
-      natDist <- aggregateIf(natDist, landCover, "natDist", "landCover") %>% 
-        checkAlign(landCover, "natDist", "landCover")
+      natDist <- cropIf(natDist, landCover, "natDist", "landCover")
+
       compareRaster(landCover, natDist)
     } else {
       natDist <- raster(matrix(NA))
     }
         
     if(!is.null(anthroDist)){
-      anthroDist <- aggregateIf(anthroDist, landCover, "anthroDist", "landCover") %>% 
-        checkAlign(landCover, "anthroDist", "landCover")
+      anthroDist <- cropIf(anthroDist, landCover, "anthroDist", "landCover")
+
       compareRaster(landCover, anthroDist)
     } else {
       anthroDist <- raster(matrix(NA))
     }
     
     if(!is.null(harv)){
-      harv <- aggregateIf(harv, landCover, "harv", "landCover") %>%
-        checkAlign(landCover, "harv", "landCover")
+      harv <- cropIf(harv, landCover, "harv", "landCover")
+      
       compareRaster(landCover, harv)
     } else {
       harv <- raster(matrix(NA))

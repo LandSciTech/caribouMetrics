@@ -120,7 +120,7 @@ cropIf <- function(x, y, nmx, nmy){
     if(!compareRaster(x, y, extent = TRUE, rowcol = FALSE, crs = FALSE, 
                       orig = FALSE, stopiffalse = FALSE)){
       message("cropping ", nmx, " to extent of ", nmy)
-      return(raster::crop(x, y))
+      return(raster::crop(x, y, snap = "out"))
     } else {
       return(x)
     }
