@@ -124,7 +124,21 @@ setMethod(
 
     # rasterize linFeat
     if(inherits(linFeat, "list")){
+      
+      expectNames <- c("roads","rail","utilities")
+      
+      if(is.null(names(linFeat))){
+        missingNames = expectNames  
+      }else{
+        missingNames = setdiff(names(linFeat),expectNames)
+      }
+      if(length(missingNames)>0){
+        warning(paste0("Expecting names of linFeat list to include ",paste(expectNames,collapse=",")))
+        names(linFeat) <- expectNames 
+      }    
+      
       linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
+      
     }
 
     linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
@@ -212,7 +226,8 @@ setMethod(
         
       }
       if(length(missingNames)>0){
-        stop(paste0("Expecting names of linFeat list to include ",paste(expectNames,collapse=",")))
+        warning(paste0("Expecting names of linFeat list to include ",paste(expectNames,collapse=",")))
+        names(linFeat) <- expectNames 
       }    
       
       linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
