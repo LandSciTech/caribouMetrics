@@ -130,9 +130,7 @@ setMethod(
       chk <- any(raster::compareRaster(esker, landCover, res = TRUE, 
                                        extent = FALSE, rowcol = FALSE,
                                        stopiffalse = FALSE), 
-                 raster::compareRaster(esker,
-                                       raster(landCover) %>%
-                                         raster::`res<-`(c(400, 400)),
+                 raster::compareRaster(esker, tmplt,
                                        res = TRUE, extent = FALSE, 
                                        rowcol = FALSE,
                                        stopiffalse = FALSE))
@@ -164,9 +162,7 @@ setMethod(
       chk <- any(raster::compareRaster(linFeat, landCover, res = TRUE, 
                                        extent = FALSE, rowcol = FALSE,
                                        stopiffalse = FALSE), 
-                 raster::compareRaster(linFeat,
-                                       raster(landCover) %>%
-                                         raster::`res<-`(c(400, 400)),
+                 raster::compareRaster(linFeat, tmplt,
                                        res = TRUE, extent = FALSE, 
                                        rowcol = FALSE,
                                        stopiffalse = FALSE))
