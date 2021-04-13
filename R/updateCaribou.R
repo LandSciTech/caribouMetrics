@@ -49,36 +49,45 @@ setMethod(
 
     # which coefficients to use for which range
     rangeCoefLst <- CarHab@projectPoly %>% 
-      left_join(CarHab@attributes$caribouRange, by = "Range") %>% 
-      split(.$coefRange)
+      left_join(CarHab@attributes$caribouRange, by = "Range")
     
-    applyCalcRSP <- function(dat, rangeCoef, doScale, coefTable){
-      dat <- raster::mask(dat, rangeCoef)
+    if(length(unique(rangeCoefLst$coefRange)) > 1){
       
-      coefT <- coefTable %>% 
-        filter(Range %in% rangeCoef$coefRange)
+      rangeCoefLst <- rangeCoefLst %>% 
+        split(.$coefRange)
       
-      habitatUse <- calcRSP(dat, coefT, doScale = doScale)
-    }
+      applyCalcRSP <- function(dat, rangeCoef, doScale, coefTable){
+        dat <- raster::mask(dat, rangeCoef)
+        
+        coefT <- coefTable %>% 
+          filter(Range %in% rangeCoef$coefRange)
+        
+        habitatUse <- calcRSP(dat, coefT, doScale = doScale)
+      }
+      
+      habUseLst <- lapply(rangeCoefLst, applyCalcRSP, dat = CarHab@processedData,
+                          doScale = doScale, coefTable = coefTable)
     
-    habUseLst <- lapply(rangeCoefLst, applyCalcRSP, dat = CarHab@processedData,
-                        doScale = doScale, coefTable = coefTable)
-    
-    if(length(habUseLst)> 1){
       # do.call doesn't work with names
       names(habUseLst) <- NULL
       
       habUseLst$fun <- function(...){sum(..., na.rm = TRUE)}
       
       CarHab@habitatUse <- do.call(raster::overlay, habUseLst)
+
+      # 0 created by sum when all are NA but reintroduce NA from processed
+      getNA <- !is.na(CarHab@processedData$CON)
+      getNA[getNA == 0] <- NA
+      CarHab@habitatUse <- CarHab@habitatUse * getNA
       
       names(CarHab@habitatUse) <- names(habUseLst[[1]])
-      
-      # 0 created by sum when all are NA but 0 is impossible as result of RSF
-      # becasue it is logistic so safe to set 0 to NA
-      CarHab@habitatUse[CarHab@habitatUse == 0] <- NA
     } else {
-      CarHab@habitatUse <- habUseLst[[1]]
+      coefT <- coefTable %>% 
+        filter(Range %in% rangeCoefLst$coefRange)
+      
+      CarHab@habitatUse <- calcRSP(CarHab@processedData, coefT, 
+                                   doScale = doScale)
+       
     }
 
     
@@ -89,11 +98,11 @@ setMethod(
     #                              getCover=TRUE)
     # projRas[projRas==0] <- NA
     # 
-    # CarHab@habitatUse <- raster::mask(CarHab@habitatUse, projRas )
+    CarHab@habitatUse <- raster::mask(CarHab@habitatUse, CarHab@projectPoly)
     # CarHab@habitatUse <- raster::crop(CarHab@habitatUse, CarHab@projectPoly,
     #                                   snap = "out")
     # 
-    # CarHab@processedData <- raster::mask(CarHab@processedData, projRas )
+    CarHab@processedData <- raster::mask(CarHab@processedData, CarHab@projectPoly)
     # CarHab@processedData <- raster::crop(CarHab@processedData, CarHab@projectPoly,
     #                                      snap = "out")
     
@@ -129,4 +138,59 @@ setMethod(
     
     return(CarHab)
   
+  })
+
+# method to update processed data when new data is new caribouRange dataframe 
+#' @rdname updateCaribou
+setMethod(
+  "updateCaribou", 
+  signature(CarHab = "CaribouHabitat", newData = "data.frame"), 
+  function(CarHab, newData, resultsOnly = FALSE, 
+           coefTable = coefTableHR, doScale = FALSE){
+    
+    stop("this function is not finished yet")
+    
+    # get winAreas for old and new coefficients
+    coefAreas <- coefTable %>% group_by(Range) %>% 
+      summarize(WinArea = first(WinArea))
+    
+    newData <- newData %>% left_join(coefAreas, by = c(coefRange = "Range"))
+    
+    carRangeOld <- CarHab@attributes$caribouRange %>% 
+      left_join(coefAreas, by = c(coefRange = "Range"))
+    
+    compareWinArea <- left_join(newData, carRangeOld, by = "Range", 
+                                suffix = c("_new", "_old")) %>% 
+      mutate(winAreaChanged = WinArea_new != WinArea_old)
+    
+    # need to re-run caribouHabitat for areas with different winAreas, for
+    # others just need to re-run updateCaribou with new caribouRange
+    rngToReRun <- compareWinArea %>% filter(winAreaChanged) %>% pull(Range)
+    
+    rngToUpdate <- compareWinArea %>% filter(!winAreaChanged) %>% pull(Range)
+    
+    if(length(rngToReRun) > 0){
+      CarHabReRun <- CarHab
+      CarHabReRun@projectPoly <- CarHabReRun@projectPoly %>% 
+        filter(Range %in% rngToReRun)
+      
+      # call this with slot values from CarHabReRun object
+      CarHabReRun <- caribouHabitat()
+      
+    }
+    if(length(rngToUpdate) > 0){
+      
+      CarHabUpdated <- CarHab
+      CarHabUpdated@attributes$caribouRange <- newData
+      CarHabUpdated@projectPoly <- CarHabUpdated@projectPoly %>% 
+        filter(Range %in% rngToUpdate)
+      
+      # recalculate rsf based on new coefficients
+      CarHabUpdated <- updateCaribou(CarHab)
+    }
+    
+    # need to combine CarHabUpdated and CarHabReRun, input data is still the
+    # same, only processedData and habitatUse should need to change
+    # as should CarHab@attributes$caribouRange
+    
   })

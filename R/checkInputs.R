@@ -9,8 +9,8 @@
 #' @param ... other variables passed to caribouHabitat
 #'
 
-.checkInputs <- function(caribouRange, winArea, landCover, updatedLC) {
-  expectedRanges <- paste0(unique(coefTableHR$Range), collapse = ", ")
+.checkInputs <- function(caribouRange, winArea, landCover, updatedLC, coefTable) {
+  expectedRanges <- paste0(unique(coefTable$Range), collapse = ", ")
   
   if(any(stringr::str_detect(expectedRanges, caribouRange$Range, negate = TRUE))){
     stop("Caribou Range must match one of: ", expectedRanges, call. = FALSE)

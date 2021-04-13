@@ -15,7 +15,7 @@
 #' 
 #' @export
 
-applyDist <- function(landCover, natDist, anthroDist, harv){
+applyDist <- function(landCover, natDist, anthroDist, harv, tmplt){
   # check harv, anthroDist and natDist are real if not make dummy
   if(length(raster::unique(harv)) == 0){
     harv <- landCover
@@ -40,7 +40,7 @@ applyDist <- function(landCover, natDist, anthroDist, harv){
 
   # convert to 16 ha resolution stack of ResType proportion to match 16 ha
   # hexagons in Rempel
-  tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
+  #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
   
   landCover <- raster::layerize(landCover, classes = resTypeCode$code) %>% 
     raster::resample(tmplt, method = "bilinear")
