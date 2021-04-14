@@ -52,6 +52,30 @@ setMethod(
       stop("landCover must have a projected CRS", call. = FALSE)
     }
     
+    rastLst <- list(landCover, updatedLC, age, natDist, 
+                    anthroDist, harv)
+    
+    # remove NULLs from rastLst
+    rastLst <- rastLst[which(!vapply(rastLst, function(x) is.null(x), 
+                                   FUN.VALUE = TRUE))]
+    
+    if(!do.call(raster::compareRaster, c(rastLst, list(res = TRUE, extent = FALSE, 
+                             rowcol = FALSE, stopiffalse = FALSE)))){
+      stop("all raster data sets must have matching resolution", call. = FALSE)
+    }
+    rm(rastLst)
+    
+    if(!inherits(caribouRange, "data.frame")){
+      caribouRange <- data.frame(Range = caribouRange, 
+                                 coefRange = caribouRange, 
+                                 stringsAsFactors = FALSE)
+    } else {
+      if(any(names(caribouRange) != c("Range", "coefRange"))){
+        stop("If caribouRange is a data.frame the column names",
+             " must be Range and coefRange", call. = FALSE)
+      }
+    }
+
     # require column called Range
     if(nrow(projectPoly) == 1){
       projectPoly <- projectPoly %>% mutate(Range = caribouRange$Range)
@@ -90,14 +114,31 @@ setMethod(
       projectPoly <- projectPoly %>% st_buffer(winRad*3)
     }
     
-    landCover <- checkAlign(landCover, projectPoly, "landCover", "projectPoly")
+    landCover <- checkOverlap(landCover, projectPoly, "landCover", "projectPoly") %>%
+      cropIf(projectPoly, "landCover", "projectPoly")
 
     # rasterize eskers
-    esker <- checkAlign(esker, landCover, "esker", "landCover")
     if(inherits(esker, "sf")){
+      esker <- checkAlign(esker, landCover, "esker", "landCover")
+      
       #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       esker <- rasterizeLineDensity(esker, tmplt)
+    } else {
+      esker <- checkOverlap(esker, landCover, "esker", "landCover") %>% 
+        cropIf(landCover, "esker", "landCover")
+      
+      chk <- any(raster::compareRaster(esker, landCover, res = TRUE, 
+                                       extent = FALSE, rowcol = FALSE,
+                                       stopiffalse = FALSE), 
+                 raster::compareRaster(esker, tmplt,
+                                       res = TRUE, extent = FALSE, 
+                                       rowcol = FALSE,
+                                       stopiffalse = FALSE))
+      if(!chk){
+        stop("esker is not aligned with landCover")
+      }
     }
+    
     if(!is.null(eskerSave)){
       raster::writeRaster(esker, eskerSave, overwrite = TRUE)
       esker <- raster(eskerSave)
@@ -108,11 +149,26 @@ setMethod(
       linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
     }
 
-    linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
-    
     if(inherits(linFeat, "sf")){
+
+      linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
+      
       #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)
+    } else {
+      linFeat <- checkOverlap(linFeat, landCover, "linFeat", "landCover") %>% 
+        cropIf(landCover, "linFeat", "landCover")
+      
+      chk <- any(raster::compareRaster(linFeat, landCover, res = TRUE, 
+                                       extent = FALSE, rowcol = FALSE,
+                                       stopiffalse = FALSE), 
+                 raster::compareRaster(linFeat, tmplt,
+                                       res = TRUE, extent = FALSE, 
+                                       rowcol = FALSE,
+                                       stopiffalse = FALSE))
+      if(!chk){
+        stop("linFeat is not aligned with landCover")
+      }
     }
     if(!is.null(linFeatSave)){
       raster::writeRaster(linFeat, linFeatSave, overwrite = TRUE)
@@ -121,40 +177,40 @@ setMethod(
     
     # check alignment of other layers
     if(!is.null(updatedLC)){
-      updatedLC <- aggregateIf(updatedLC, landCover, "updatedLC", "landCover") %>%
-        checkAlign(landCover, "updatedLC", "landCover")
+      updatedLC <- cropIf(updatedLC, landCover, "updatedLC", "landCover") 
+      
       compareRaster(landCover, updatedLC)
     } else {
       updatedLC <- raster(matrix(NA))
     }
     
     if(!is.null(age)){
-      age <- aggregateIf(age, landCover, "age", "landCover") %>% 
-        checkAlign(landCover, "age", "landCover")
+      age <- cropIf(age, landCover, "age", "landCover")
+
       compareRaster(landCover, age)
     } else {
       age <- raster(matrix(NA))
     }
       
     if(!is.null(natDist)){
-      natDist <- aggregateIf(natDist, landCover, "natDist", "landCover") %>% 
-        checkAlign(landCover, "natDist", "landCover")
+      natDist <- cropIf(natDist, landCover, "natDist", "landCover")
+
       compareRaster(landCover, natDist)
     } else {
       natDist <- raster(matrix(NA))
     }
         
     if(!is.null(anthroDist)){
-      anthroDist <- aggregateIf(anthroDist, landCover, "anthroDist", "landCover") %>% 
-        checkAlign(landCover, "anthroDist", "landCover")
+      anthroDist <- cropIf(anthroDist, landCover, "anthroDist", "landCover")
+
       compareRaster(landCover, anthroDist)
     } else {
       anthroDist <- raster(matrix(NA))
     }
     
     if(!is.null(harv)){
-      harv <- aggregateIf(harv, landCover, "harv", "landCover") %>%
-        checkAlign(landCover, "harv", "landCover")
+      harv <- cropIf(harv, landCover, "harv", "landCover")
+      
       compareRaster(landCover, harv)
     } else {
       harv <- raster(matrix(NA))

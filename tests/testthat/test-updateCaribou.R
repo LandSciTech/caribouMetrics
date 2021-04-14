@@ -126,15 +126,11 @@ test_that("process data works for updated data that is not aligned", {
                                          raster::extend(raster::extent(harvD)+251)))
   expect_equal(procedData@habitatUse, updted@habitatUse)
 
-  expect_message(processData(procedData, 
+  expect_error(processData(procedData, 
                            newData = list(harv = harvD %>% 
                                             raster::aggregate(4))), 
-               "being dis-aggregated")
-  
-  expect_error(processData(procedData, 
-                             newData = list(harv = harvD %>% 
-                                              raster::`res<-`(1999))), 
-                 "not match landCover and they cannot be aligned by aggregation")
+               "all raster data sets must have matching resolution")
+
 })
 
 test_that("update process result is same with same data", {
