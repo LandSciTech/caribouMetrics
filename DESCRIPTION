@@ -2,7 +2,7 @@ Package: caribouMetrics
 Type: Package
 Title: Models and metrics of boreal caribou responses to forest landscapes
 Version: 0.1.0
-Author: Josie Hughes and Sarah Endicott
+Author: Sarah Endicott, Craig Simpkins, Josie Hughes, Her Majesty - see SpaDES DESCRIPTION example.
 Maintainer: Josie Hughes <josie.hughes@canada.ca>
 Description: This is a package in development. bCaribouMetaAnalysisPredictors 
     function calculates predictors described in Table 52 of Environment Canada 
