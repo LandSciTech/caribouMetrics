@@ -15,11 +15,8 @@ inputData(landCover, esker, linFeat, projectPoly, ...)
   projectPoly,
   caribouRange,
   coefTable,
-  updatedLC = NULL,
-  age = NULL,
   natDist = NULL,
   anthroDist = NULL,
-  harv = NULL,
   eskerSave = NULL,
   linFeatSave = NULL,
   winArea = NULL,
@@ -36,17 +33,13 @@ inputData(landCover, esker, linFeat, projectPoly, ...)
   projectPoly,
   caribouRange,
   coefTable,
-  updatedLC = NULL,
-  age = NULL,
   natDist = NULL,
   anthroDist = NULL,
-  harv = NULL,
   eskerSave = NULL,
   linFeatSave = NULL,
   winArea = NULL,
   padProjPoly = FALSE,
   padFocal = FALSE,
-  friLU = NULL,
   ptDensity = 1
 )
 }
@@ -60,10 +53,6 @@ inputData(landCover, esker, linFeat, projectPoly, ...)
 \item{projectPoly}{}
 
 \item{...}{}
-
-\item{updatedLC}{}
-
-\item{age}{}
 
 \item{natDist}{}
 }

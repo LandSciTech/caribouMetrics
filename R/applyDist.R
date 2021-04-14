@@ -3,24 +3,17 @@
 #' This sets the proportion of forest resource types to 0 when there is more
 #' than 35% disturbance in a 16ha area. Natural and anthropogenic disturbance
 #' will affect all resource types except water (LGW) and natural disturbance
-#' (DTN). Harvest disturbance will only affect forst resource types and in
-#' addition to water and natural disturbance does not affect wetlands (ST, LGTP,
-#' LGOP)
+#' (DTN). 
 #' 
 #' 
 #' @param landCover 
-#' @param harv 
 #' @param anthroDist 
 #' @param natDist 
 #' 
 #' @export
 
-applyDist <- function(landCover, natDist, anthroDist, harv, tmplt){
-  # check harv, anthroDist and natDist are real if not make dummy
-  if(length(raster::unique(harv)) == 0){
-    harv <- landCover
-    harv[] <- 0
-  }
+applyDist <- function(landCover, natDist, anthroDist, tmplt){
+  # check anthroDist and natDist are real if not make dummy
   if(length(raster::unique(anthroDist)) == 0){
     anthroDist <- landCover
     anthroDist[] <- 0
@@ -47,14 +40,12 @@ applyDist <- function(landCover, natDist, anthroDist, harv, tmplt){
   
   # if no distubance data provided return landCover
   if(length(raster::unique(natDist)) == 0 &&
-     length(raster::unique(anthroDist)) == 0 &&
-     length(raster::unique(harv)) == 0){
+     length(raster::unique(anthroDist)) == 0){
     return(landCover)
   }
   
 
-  allDist16ha <- raster::stack(harv, anthroDist, 
-                               natDist) %>% 
+  allDist16ha <- raster::stack(anthroDist, natDist) %>% 
     raster::resample(tmplt, method = "bilinear")
   
   # Get proportion of land in 16 ha area that has each type of disturbance
@@ -80,21 +71,8 @@ applyDist <- function(landCover, natDist, anthroDist, harv, tmplt){
     pull(code)
   
   for (i in toChange) {
-    landCover[[i]] <- raster::mask(landCover[[i]], max(allDist16ha[[2:3]] > 0.35),
+    landCover[[i]] <- raster::mask(landCover[[i]], max(allDist16ha > 0.35),
                                    maskvalue = 1,
-                                   updatevalue = 0)
-  }
-  
-  
-  # make landCover have 0 forest classes when 16 ha area disturbed > 0.35 by harvest
-  # disturbance but don't change wetlands
-  toChange <- resTypeCode %>% 
-    filter(!ResourceType %in% c("DTN", "LGW", "LGTP", "LGOP", "ST")) %>% 
-    pull(code)
-  
-  for (i in toChange) {
-    landCover[[i]] <- raster::mask(landCover[[i]], allDist16ha[[1]] > 0.35,
-                                   maskvalue = 1, 
                                    updatevalue = 0)
   }
   

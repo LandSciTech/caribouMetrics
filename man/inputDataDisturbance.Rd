@@ -14,7 +14,6 @@ inputDataDisturbance(landCover, linFeat, projectPoly, ...)
   projectPoly,
   natDist = NULL,
   anthroDist = NULL,
-  harv = NULL,
   bufferWidth = 500,
   padProjPoly = FALSE,
   padFocal = FALSE
@@ -26,7 +25,6 @@ inputDataDisturbance(landCover, linFeat, projectPoly, ...)
   projectPoly,
   natDist = NULL,
   anthroDist = NULL,
-  harv = NULL,
   bufferWidth = 500,
   padProjPoly = FALSE,
   padFocal = FALSE

@@ -9,13 +9,10 @@ landCoverD = raster(paste0(pthBase, "plc", ".tif")) %>%
 eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
 eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
-friLUD = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE)
-updatedLCD = raster(paste0(pthBase, "fri", ".tif")) %>% 
-  reclassFRI(friLUD)
-ageD = raster(paste0(pthBase, "age", ".tif"))
+
 natDistD = raster(paste0(pthBase, "natDist", ".tif"))
 anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
-harvD = raster(paste0(pthBase, "harv", ".tif"))
+
 linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
 projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
@@ -23,10 +20,8 @@ linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE) %>%
   st_set_agr("constant")
 
 data_esktif_linFtif <- caribouHabitat(
-  landCover = landCoverD, esker = eskerDras, updatedLC = updatedLCD, 
-  age = ageD, natDist = natDistD,
-  anthroDist = anthroDistD, harv = harvD,
-  linFeat = linFeatDras, projectPoly = projectPolyD,
+  landCover = landCoverD, esker = eskerDras,  natDist = natDistD,
+  anthroDist = anthroDistD, linFeat = linFeatDras, projectPoly = projectPolyD,
   caribouRange = "Churchill", 
   winArea = 500
 )
@@ -43,7 +38,7 @@ landCoverD2 <- raster::merge(landCoverD,
                              raster::shift(landCoverD, dx = 19851.6, 
                                            dy = raster::nrow(landCoverD)*
                                              raster::xres(landCoverD)))
-plot(landCoverD2)
+# plot(landCoverD2)
 # side by side polygons that might end up with different extent/origin
 # poly1 <- raster::drawPoly()
 # poly1 <- st_as_sf(poly1)
@@ -167,10 +162,8 @@ linFeatD2 <- linFeatDras %>%
 
 # same coefficients as range
 resTwoRange <- caribouHabitat(
-  landCover = landCoverD, esker = eskerDras, updatedLC = updatedLCD, 
-  age = ageD, natDist = natDistD,
-  anthroDist = anthroDistD, harv = harvD,
-  linFeat = linFeatDras, projectPoly = twoRange,
+  landCover = landCoverD, esker = eskerDras,  natDist = natDistD,
+  anthroDist = anthroDistD, linFeat = linFeatDras, projectPoly = twoRange,
   caribouRange = data.frame(Range = c("Missisa", "Nipigon"), 
                             coefRange = c("Missisa", "Nipigon"), 
                             stringsAsFactors = FALSE), 
@@ -179,10 +172,8 @@ resTwoRange <- caribouHabitat(
 
 # different coefficients as range
 resTwoRangeDif <- caribouHabitat(
-  landCover = landCoverD, esker = eskerDras, updatedLC = updatedLCD, 
-  age = ageD, natDist = natDistD,
-  anthroDist = anthroDistD, harv = harvD,
-  linFeat = linFeatDras, projectPoly = twoRange,
+  landCover = landCoverD, esker = eskerDras, natDist = natDistD,
+  anthroDist = anthroDistD, linFeat = linFeatDras, projectPoly = twoRange,
   caribouRange = data.frame(Range = c("Missisa", "Nipigon"), 
                             coefRange = c("Nipigon", "Missisa"), 
                             stringsAsFactors = FALSE), 

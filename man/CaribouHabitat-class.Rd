@@ -10,11 +10,8 @@
   .Object,
   landCover,
   esker,
-  updatedLC,
-  age,
   natDist,
   anthroDist,
-  harv,
   linFeat,
   projectPoly,
   processedData,
@@ -34,16 +31,9 @@ selection function
 
 \item{\code{esker}}{Raster of esker density in m^2 per hectare.}
 
-\item{\code{updatedLC}}{Raster used to update landCover based on new data and
-disturbance.}
-
-\item{\code{age}}{Raster of age in years from forest resource inventory.}
-
 \item{\code{natDist}}{Raster of natural disturbance.}
 
 \item{\code{anthroDist}}{Raster of permanent anthropogenic disturbances.}
-
-\item{\code{harv}}{Raster of disturbance from forest harvesting.}
 
 \item{\code{linFeat}}{Raster of linear feature density in m^2 per hectare including
 roads, utilities, and rail.}

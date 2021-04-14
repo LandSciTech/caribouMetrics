@@ -4,7 +4,7 @@
 \alias{applyDist}
 \title{Apply disturbances to land cover class data}
 \usage{
-applyDist(landCover, natDist, anthroDist, harv, tmplt)
+applyDist(landCover, natDist, anthroDist, tmplt)
 }
 \arguments{
 \item{landCover}{}
@@ -12,14 +12,10 @@ applyDist(landCover, natDist, anthroDist, harv, tmplt)
 \item{natDist}{}
 
 \item{anthroDist}{}
-
-\item{harv}{}
 }
 \description{
 This sets the proportion of forest resource types to 0 when there is more
 than 35% disturbance in a 16ha area. Natural and anthropogenic disturbance
 will affect all resource types except water (LGW) and natural disturbance
-(DTN). Harvest disturbance will only affect forst resource types and in
-addition to water and natural disturbance does not affect wetlands (ST, LGTP,
-LGOP)
+(DTN).
 }

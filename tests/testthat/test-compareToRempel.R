@@ -1,22 +1,27 @@
 if(interactive()){
   context("Compare results to Rempel's results")
   
-  pthBase <- "../../"
+  pthBase <- "../ChurchillAnalysis/"
   #pthBase <- ""
   
-  plcD <- raster("./inputNV/HornsethRempelInfo/Provincial-Landcover-2000/studyAreaMerged250.tif")
-  eskerD <- st_read("inputNV/HornsethRempelInfo/Eskers_Ontario/Eskers_Ontario.shp")
-  distTypeD <- raster("inputNV/HornsethRempelInfo/Dist_UtilLinesEtc_Churchill/Churchill_Dist_Type.tif")
+  plcD <- raster(paste0(pthBase, "inputNV/HornsethRempelInfo/Provincial-Landcover-2000/studyAreaMerged250.tif"))
+  plcD <- reclassPLC(plcD)
+  
+  eskerD <- st_read(paste0(pthBase, "inputNV/HornsethRempelInfo/Eskers_Ontario/Eskers_Ontario.shp"))
+  distTypeD <- raster(paste0(pthBase, "inputNV/HornsethRempelInfo/Dist_UtilLinesEtc_Churchill/Churchill_Dist_Type.tif"))
   distTypeD[is.na(distTypeD)] <- 0
   
   natDistD <- distTypeD == 1
   anthroDistD <- distTypeD == 2
   
-  roadD <- st_read("inputNV/HornsethRempelInfo/Dist_UtilLinesEtc_Churchill/Roads_Churchill.shp")
-  railD <- st_read("inputNV/HornsethRempelInfo/Dist_UtilLinesEtc_Churchill/Railyway_Churchill.shp")
-  utilD <- st_read("inputNV/HornsethRempelInfo/Dist_UtilLinesEtc_Churchill/UtilLines_Churchill.shp")
+  natDistD <- raster::resample(natDistD, plcD, method = "ngb")
+  anthroDistD <- raster::resample(anthroDistD, plcD, method = "ngb")
   
-  projectPolyD <- st_read("./inputNV/caribouRanges/Caribou_Range_Boundary.shp", 
+  roadD <- st_read(paste0(pthBase, "inputNV/HornsethRempelInfo/Dist_UtilLinesEtc_Churchill/Roads_Churchill.shp"))
+  railD <- st_read(paste0(pthBase, "inputNV/HornsethRempelInfo/Dist_UtilLinesEtc_Churchill/Railyway_Churchill.shp"))
+  utilD <- st_read(paste0(pthBase, "inputNV/HornsethRempelInfo/Dist_UtilLinesEtc_Churchill/UtilLines_Churchill.shp"))
+  
+  projectPolyD <- st_read(paste0(pthBase, "inputNV/caribouRanges/Caribou_Range_Boundary.shp"), 
                           quiet = TRUE) %>% 
     filter(RANGE_NAME == "Churchill") %>% 
     st_transform(crs = st_crs(plcD))
@@ -24,15 +29,11 @@ if(interactive()){
   caribouResults <- caribouHabitat(
     landCover = plcD, 
     esker = eskerD, 
-    #fri = plcD %>% raster::setValues(NA), 
-    #age = plcD %>% raster::setValues(NA), 
     natDist = natDistD, 
     anthroDist = anthroDistD,
-    #harv = plcD %>% raster::setValues(NA),
     linFeat = list(roads = roadD, rail = railD,
                    utilities = utilD),
     projectPoly = projectPolyD, 
-    #friLU = rfuToResType %>% mutate(ID = 1:n()) %>% select(ID, RegionalForestUnit),
     caribouRange = "Churchill", 
     padProjPoly = TRUE 
   ) 

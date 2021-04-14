@@ -42,21 +42,11 @@ of the geographical area and is used to link the table the the provided
 \code{projectPoly} polygons. coefRange is the name of the caribou range that
 the coefficients should be used from.}
 
-\item{updatedLC}{filename or RasterLayer. Land cover data used to update the
-landCover raster in areas that were disturbed since the landCover data was
-created. If NULL, the default the landCover will not be updated}
-
-\item{age}{filename or RasterLayer. Tree age in years. Used to inform whether
-a cell should be updated after disturbance}
-
 \item{natDist}{filename or RasterLayer. Presence or absence of natural
 disturbance, primarily by fire.}
 
 \item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance other
 than harvest. This can have an effect on any type of landcover except water.}
-
-\item{harv}{filename or RasterLayer. Harvest history. This can only have an
-effect on forest landcover types and will not affect wetlands or water.}
 
 \item{eskerSave}{filename to save rasterized esker data.}
 
@@ -108,19 +98,16 @@ winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
 \details{
 Caribou habitat use is calculated based on the availability of resources and
 the presence of disturbances on the landscape. The primary source of resource
-information is the \code{landCover} but this is can be updated based on more
-recent \code{updatedLC} data and disturbance information. All data sources can
-be provided either as filenames or as spatial files. If filenames are provided
-then the \code{landCover} is assumed to be the Provincial Landcover for
-Ontario and the \code{updatedLC} is assumed to be the Forest Resource
-Inventory and they are converted to resource types using \code{reclassPLC} and
-\code{reclassFRI} respectively. The result is a CaribouHabitat object which
-has methods defined for plotting and extracting the results. To update an
-existing CaribouHabitat object with new data see
-\link[caribouMetrics]{updateCaribou}.
+information is the \code{landCover} but this is updated based on disturbance
+information. All data sources can be provided either as filenames or as
+spatial files. If filenames are provided then the \code{landCover} is assumed
+to be the Provincial Landcover for Ontario and is converted to resource types
+using \code{reclassPLC}. The result is a CaribouHabitat object which has
+methods defined for plotting and extracting the results. To update an existing
+CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
 }
 \seealso{
 \code{\link{CaribouHabitat-class}} for information on the object
- returned and \code{\link{updateCaribou}} for updating and existing
+ returned and \code{\link{updateCaribou}} for updating an existing
  CaribouHabitat object.
 }

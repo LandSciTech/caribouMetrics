@@ -7,25 +7,18 @@ NULL
 #' data that have not changed. New data is supplied as a named list and the
 #' object is updated depending on the elements provided in the list.
 #'
-#' If \code{newData} contains any of updatedLC, natDist, age, or harv and
-#' \code{updateType} is "disturbed" then the landCover is updated for disturbed
-#' areas and if any of updatedLC, natDist, age, or harv are missing the data
-#' stored in the CaribouHabitat object is reused. If \code{newData} contains
-#' only linFeat then only linear features will be updated.
+#' If \code{newData} contains only linFeat then only linear features will be
+#' updated.
 #'
-#' If \code{updateType} is "entire" then \code{newData} must contain updatedLC
-#' and the landCover in the CaribouHabitat object will be replaced and new
-#' projections made for the whole landscape. If natDist, harv, or anthroDist are
-#' not provided the the data stored in the CaribouHabitat object is reused.
+#' If  \code{newData} contains landCover the landCover in the CaribouHabitat
+#' object will be replaced and new projections made for the whole landscape. If
+#' natDist or anthroDist are not provided then the data stored in the
+#' CaribouHabitat object is reused.
 #'
 #' @param CarHab CaribouHabitat object
 #' @param newData a named list of RasterLayer objects to be used to update
-#'   CarHab. Potential names are: updatedLC, age, natDist, harv, anthroDist, and
+#'   CarHab. Potential names are: landCover, natDist, anthroDist, and
 #'   linFeat.
-#' @param updateType character. The default is "disturbed" which means that only
-#'   disturbed areas are updated to updatedLC based on natDist, age, and harv
-#'   following the process used by Rempel. If \code{updateType} is "entire" then
-#'   the current landCover is replaced with updatedLC.
 #' @param resultsOnly logical. If FALSE the whole CaribouHabitat object is
 #'   returned. If TRUE then only the habitatUse RasterStack is returned.
 #'
@@ -90,8 +83,6 @@ setMethod(
        
     }
 
-    
-    
     # Takes a long time not sure it is worth it
     # # This keeps cells that are only partially in the polygon 
     # projRas <- raster::rasterize(CarHab@projectPoly, CarHab@habitatUse[[1]],
@@ -114,21 +105,16 @@ setMethod(
 setMethod(
   "updateCaribou", 
   signature(CarHab = "CaribouHabitat", newData = "list"), 
-  function(CarHab, newData, updateType = "disturbed", resultsOnly = FALSE, 
+  function(CarHab, newData, resultsOnly = FALSE, 
            coefTable = coefTableHR, doScale = FALSE) {
-    
-    if(!updateType %in% c("disturbed", "entire")){
-      stop("updateType is not recognized please use 'disturbed' or 'entire'",
-           call. = FALSE)
-    }
-    
+
     if(nrow(CarHab@processedData) < 2){
       stop("CarHab@processedData is empty. Run updateCaribou with no additional
            data to process the initial data before updating")
     }
     
     
-    CarHab <- processData(CarHab, newData, updateType)
+    CarHab <- processData(CarHab, newData)
     
     CarHab <- updateCaribou(CarHab, coefTable = coefTable, doScale = doScale)
     
@@ -173,7 +159,7 @@ setMethod(
       CarHabReRun <- CarHab
       CarHabReRun@projectPoly <- CarHabReRun@projectPoly %>% 
         filter(Range %in% rngToReRun)
-      
+      # TODO: Finish from here
       # call this with slot values from CarHabReRun object
       CarHabReRun <- caribouHabitat()
       

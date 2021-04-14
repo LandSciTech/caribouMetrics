@@ -39,7 +39,7 @@ carHab_Pag <- caribouHabitat(
   landCover = plcROF, 
   esker = esker, 
   natDist = fire_AFFES_2010,  
-  harv = harv_MNRF_2010,
+  anthroDist = harv_MNRF_2010,
   linFeat = road_2010, 
   projectPoly = pagwachuan,
   caribouRange = "Pagwachuan",

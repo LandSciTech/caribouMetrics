@@ -10,7 +10,6 @@ NULL
 #' @param landCover 
 #' @param natDist 
 #' @param anthroDist
-#' @param harv
 #' @param linFeat 
 #' @param projectPoly 
 #' @param ... 
@@ -22,11 +21,11 @@ setGeneric("inputDataDisturbance", function(landCover,linFeat, projectPoly, ...)
 setMethod(
   "inputDataDisturbance", signature(landCover = "RasterLayer"), 
   function(landCover, linFeat, projectPoly, 
-           natDist=NULL,anthroDist = NULL, harv = NULL,
+           natDist=NULL,anthroDist = NULL,
            bufferWidth = 500, padProjPoly = FALSE,
            padFocal = FALSE) {
 
-    charIn <-  sapply(list(landCover,natDist, anthroDist, harv, 
+    charIn <-  sapply(list(landCover,natDist, anthroDist,  
                            linFeat, projectPoly), 
                       function(x) "character" %in% class(x)) 
 
@@ -95,16 +94,7 @@ setMethod(
       anthroDist <- raster(matrix(NA))
     }
     
-    if(!is.null(harv)){
-      harv <- aggregateIf(harv, landCover, "harv", "landCover") %>%
-        checkAlign(landCover, "harv", "landCover")
-      compareRaster(landCover, harv)
-    } else {
-      harv <- raster(matrix(NA))
-    }
-    
-
-    return(new("DisturbanceMetrics", landCover, natDist, anthroDist, harv,
+    return(new("DisturbanceMetrics", landCover, natDist, anthroDist, 
                linFeat, projectPolyOrig,  
                processedData = raster(matrix(NA)), 
                disturbanceMetrics = data.frame(),
@@ -116,18 +106,17 @@ setMethod(
 setMethod(
   "inputDataDisturbance", signature(landCover = "character"), 
   function(landCover, linFeat, projectPoly,
-           natDist=NULL,anthroDist = NULL, harv = NULL,
+           natDist=NULL,anthroDist = NULL,
            bufferWidth = 500, padProjPoly = FALSE,
            padFocal = FALSE) {
     
     if(inherits(linFeat, "list")){
-      indata <- lst(natDist, anthroDist, harv, 
-                    projectPoly)
+      indata <- lst(natDist, anthroDist, projectPoly)
       
       linFeat <- combineLinFeat(linFeat)
       
     } else {
-      indata <- lst(landCover,natDist, anthroDist, harv, linFeat,
+      indata <- lst(landCover,natDist, anthroDist, linFeat,
                     projectPoly)
     }
     
@@ -154,7 +143,7 @@ setMethod(
     vect <- names(indata)[which(grepl(".shp$", indata))]
     rast <- names(indata)[which(!grepl(".shp$", indata))]
     
-    neverVect <- c("natDist", "anthroDist", "harv")
+    neverVect <- c("natDist", "anthroDist")
     neverRast <- c("projectPoly")
     
     if(any(vect %in% neverVect)){
@@ -177,7 +166,7 @@ setMethod(
 
     return(inputDataDisturbance(landCover=indata$landCover, 
                      natDist = indata$natDist, anthroDist = indata$anthroDist, 
-                     harv = indata$harv, linFeat = linFeat, 
+                     linFeat = linFeat, 
                      projectPoly = indata$projectPoly, 
                      bufferWidth = bufferWidth, 
                      padProjPoly = padProjPoly, padFocal = padFocal))
