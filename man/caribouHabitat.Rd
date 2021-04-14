@@ -24,11 +24,11 @@ caribouHabitat(landCover, esker, linFeat, projectPoly, caribouRange, ...)
 \item{esker}{filename, RasterLayer or sf object. Eskers. If it is a
 RasterLayer then it should be esker density in m^2/ha.}
 
-\item{linFeat}{filename, RasterLayer, sf object or named list with elements
-roads, rail, and utilities. Linear features. If it is a RasterLayer then it
-should be linear feature density in m^2/ha. If a RasterLayer is provided for
-element roads then ptDensity will be used to assign a density of roads in
-the pixel (default is 1).}
+\item{linFeat}{filename, RasterLayer, sf object or a list of these that will
+be combined. Linear features. If it is a RasterLayer then it should be
+linear feature density in m^2/ha. If a RasterLayer is provided as a list
+element then ptDensity will be used to assign a density of linear features
+in the pixel (default is 1).}
 
 \item{projectPoly}{filename or sf object. Polygon defining the project area.
 If caribouRange is a data.frame this must have a column called Range with
@@ -94,10 +94,8 @@ model. Must match the format and naming of \code{coefTableHR}}
 supplied coefficients that were trained on standardized data which will
 cause the input data to be scaled.}
 
-\item{ptDensity}{number. Only used if road input is a raster. The density to
-assign to points, in units of res(r). A value of 1 (the default) indicates
-one straight line crossing of the pixel. A value of 2+2*2^0.5 is horizontal,
-vertical, and diagonal crossings. If NULL, points in linObj will be ignored.}
+\item{ptDensity}{number. Only used if a list element in linFeat is a raster.
+See \code{\link{rasterizeLineDensity}}.}
 }
 \value{
 A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}

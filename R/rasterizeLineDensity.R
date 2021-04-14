@@ -22,7 +22,7 @@ rasterizeLineDensity <- function(x, r, ptDensity = 1) {
     st_set_agr("constant")
   
   rp2 <- st_intersection(rPoly, st_set_agr(x, "constant")) %>% 
-    mutate(length = st_length(geometry) %>% units::drop_units()) %>% 
+    mutate(length = st_length(geometry) %>% units::set_units(NULL)) %>% 
     select(ID, length, geometry) %>% st_drop_geometry() %>% 
     group_by(ID) %>% 
     summarise(length = round(sum(length, na.rm = TRUE)/(res(r)[1]*res(r)[2]/10000), digits = 1))
@@ -42,7 +42,7 @@ rasterizeLineDensity <- function(x, r, ptDensity = 1) {
     }
       
     if(nrow(lfPt)>0){
-      lfR <- raster::rasterize(lfPt, r, field = "ID")    
+      lfR <- raster::rasterize(lfPt, r, field = "linFID")    
       
       lfR[!is.na(lfR)] <- ptDensity * res(r)[1]
       

@@ -4,7 +4,7 @@
 \alias{.checkInputs}
 \title{Check inputs to caribouHabitat}
 \usage{
-.checkInputs(caribouRange, winArea, landCover, updatedLC)
+.checkInputs(caribouRange, winArea, landCover, updatedLC, coefTable)
 }
 \arguments{
 \item{updatedLC}{updatedLC data raster}

@@ -1,59 +1,52 @@
 
 #' Combine linear features
-#' 
-#' Combine roads, rail and utilities in to one linear features object.
 #'
-#' @param roads 
-#' @param rail 
-#' @param utilities 
+#' Combine roads, rail and utilities in to one linear features object. All
+#' linear features will be combined into one vector file which will be used to
+#' calculate linear feature density. If the linear feature is provided as a
+#' raster it will be converted to points which are interpreted based on
+#' ptDensity parameter of \code{rasterizeLineDensity}.
+#'
+#' @param linFeats a list of linear feature data sets that will be combined.
+#'   Data sets can be in the formats, SpatialLines, sf, raster, or a character
+#'   vector with extension .shp or any extension accepted by the raster package
 #'
 #' @return sf object
 #' @export
 #'
 #' @examples
-combineLinFeat <- function(roads, rail, utilities){
+combineLinFeat <- function(linFeats){
   
-  if(is.character(roads)){
-    if(grepl(".shp$", roads)){
-      roads <- st_read(roads, quiet = TRUE, agr = "constant")
+  crsUse <- processLinFeat(linFeats[[1]]) %>% st_crs()
+  
+  linFeats <- purrr::map(linFeats, processLinFeat, crsUse = crsUse)
+  
+  names(linFeats) <- NULL
+  
+  do.call(rbind, linFeats) %>% mutate(linFID = 1:n()) %>% 
+    st_set_agr("constant")
+}
+
+processLinFeat <- function(x, crsUse = NULL){
+  if(is.character(x)){
+    if(grepl(".shp$", x)){
+      x <- st_read(x, quiet = TRUE, agr = "constant")
     } else {
-      roads <- raster::raster(roads)
+      x <- raster::raster(x)
     }
   }
-  if(is.character(rail)){
-    rail <- st_read(rail, quiet = TRUE, agr = "constant")
-  }
-  if(is.character(utilities)){
-    utilities <- st_read(utilities, quiet = TRUE, agr = "constant")
-  }
-  
-  if(is(roads, "Raster")){
-    roads <- raster::rasterToPoints(roads, fun = function(x){x > 0}, 
+  if(is(x, "Raster")){
+    x <- raster::rasterToPoints(x, fun = function(x){x > 0}, 
                                     spatial = TRUE) %>% 
       sf::st_as_sf() %>% sf::st_set_agr("constant")
   } 
-  if(is(roads, "Spatial")){
-    roads <- sf::st_as_sf(roads) %>% sf::st_set_agr("constant")
+  if(is(x, "Spatial")){
+    x <- sf::st_as_sf(x) %>% sf::st_set_agr("constant")
   }
-  
-  if(is(rail, "Spatial")){
-    rail <- sf::st_as_sf(rail) %>% sf::st_set_agr("constant")
+  if(is.null(crsUse)){
+    return(x)
   }
-  
-  if(is(utilities, "Spatial")){
-    utilities <- sf::st_as_sf(utilities) %>% sf::st_set_agr("constant")
-  }
-
-  roads <- roads %>% transmute(ID = 1, Type = "road") 
-  
-  utilities <- utilities %>% 
-    transmute(ID = 1, Type = "utility") %>% 
-    st_transform(st_crs(roads))
-  
-  rail <- rail %>% 
-    transmute(ID = 1, Type = "rail") %>% 
-    st_transform(st_crs(roads))
-  
-  rbind(roads, utilities, rail) %>% mutate(ID = 1:n()) %>% 
-    st_set_agr(st_agr(roads))
+  x <- x %>% 
+    transmute(linFID = 1) %>% 
+    st_transform(crsUse) 
 }

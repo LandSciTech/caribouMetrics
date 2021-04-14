@@ -61,17 +61,8 @@ setMethod(
     
     # combine linFeat
     if(inherits(linFeat, "list")){
-      expectNames = c("roads","rail","utilities")
-      if(is.null(names(linFeat))){
-        missingNames = expectNames  
-      }else{
-        missingNames = setdiff(names(linFeat),expectNames)
-        
-      }
-      if(length(missingNames)>0){
-        stop(paste0("Expecting names of linFeat list to include ",paste(expectNames,collapse=",")))
-      }    
-      linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
+     
+      linFeat <- combineLinFeat(linFeat)
     }
     if(!(is(linFeat, "sf") || is(linFeat, "sfc"))){
       if(is(linFeat, "Spatial")){
@@ -133,7 +124,7 @@ setMethod(
       indata <- lst(natDist, anthroDist, harv, 
                     projectPoly)
       
-      linFeat <- combineLinFeat(linFeat$roads, linFeat$rail, linFeat$utilities)
+      linFeat <- combineLinFeat(linFeat)
       
     } else {
       indata <- lst(landCover,natDist, anthroDist, harv, linFeat,
