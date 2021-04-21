@@ -406,7 +406,7 @@ setMethod(
         
     rr <- raster::zonal(outStack,pp,fun="mean",na.rm=T)
     rr <- as.data.frame(rr)
-    
+    stop()
     polyInfo = as.data.frame(inData@projectPoly)
     polyInfo$geometry=NULL
     polyInfo$zone = seq(1:nrow(polyInfo))
