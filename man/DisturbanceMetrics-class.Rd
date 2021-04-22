@@ -41,8 +41,6 @@ Missing layers are omitted from the output, not interpreted as 0 disturbance
 
 \item{\code{anthroDist}}{Raster of permanent anthropogenic disturbances.}
 
-\item{\code{harv}}{Raster of disturbance from forest harvesting.}
-
 \item{\code{linFeat}}{Sf object with linear features including roads, utilities, and rail.}
 
 \item{\code{projectPoly}}{Sf object with polygon of project boundary.}

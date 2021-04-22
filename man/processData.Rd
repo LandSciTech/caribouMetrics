@@ -11,7 +11,7 @@ processData(inData, newData, ...)
 
 \S4method{processData}{CaribouHabitat,missing}(inData)
 
-\S4method{processData}{CaribouHabitat,list}(inData, newData, updateType = "disturbed")
+\S4method{processData}{CaribouHabitat,list}(inData, newData)
 
 \S4method{processData}{DisturbanceMetrics,missing}(inData)
 }

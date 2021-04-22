@@ -4,16 +4,14 @@ NULL
 #' @name CaribouHabitat
 #' @rdname CaribouHabitat-class
 setMethod(f = "initialize", signature = "CaribouHabitat",
-          definition = function(.Object, landCover, esker, updatedLC, age, natDist, 
-                                anthroDist, harv, linFeat, projectPoly,  
+          definition = function(.Object, landCover, esker, 
+                                natDist, anthroDist, 
+                                linFeat, projectPoly,  
                                 processedData, habitatUse, attributes){
             .Object@landCover <- landCover 
             .Object@esker <- esker
-            .Object@updatedLC <- updatedLC
-            .Object@age <- age
             .Object@natDist <- natDist
             .Object@anthroDist <- anthroDist
-            .Object@harv <- harv
             .Object@linFeat <- linFeat
             .Object@projectPoly <- projectPoly
             .Object@processedData <- processedData
@@ -30,32 +28,22 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'
 #'Caribou habitat use is calculated based on the availability of resources and
 #'the presence of disturbances on the landscape. The primary source of resource
-#'information is the \code{landCover} but this is can be updated based on more
-#'recent \code{updatedLC} data and disturbance information. All data sources can
-#'be provided either as filenames or as spatial files. If filenames are provided
-#'then the \code{landCover} is assumed to be the Provincial Landcover for
-#'Ontario and the \code{updatedLC} is assumed to be the Forest Resource
-#'Inventory and they are converted to resource types using \code{reclassPLC} and
-#'\code{reclassFRI} respectively. The result is a CaribouHabitat object which
-#'has methods defined for plotting and extracting the results. To update an
-#'existing CaribouHabitat object with new data see
-#'\link[caribouMetrics]{updateCaribou}.
+#'information is the \code{landCover} but this is updated based on disturbance
+#'information. All data sources can be provided either as filenames or as
+#'spatial files. If filenames are provided then the \code{landCover} is assumed
+#'to be the Provincial Landcover for Ontario and is converted to resource types
+#'using \code{reclassPLC}. The result is a CaribouHabitat object which has
+#'methods defined for plotting and extracting the results. To update an existing
+#'CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
 #'
 #'
 #'@param landCover filename or RasterLayer. Provincial landcover class
 #'@param esker filename, RasterLayer or sf object. Eskers. If it is a
 #'  RasterLayer then it should be esker density in m^2/ha.
-#'@param updatedLC filename or RasterLayer. Land cover data used to update the
-#'  landCover raster in areas that were disturbed since the landCover data was
-#'  created. If NULL, the default the landCover will not be updated
-#'@param age filename or RasterLayer. Tree age in years. Used to inform whether
-#'  a cell should be updated after disturbance
 #'@param natDist filename or RasterLayer. Presence or absence of natural
 #'  disturbance, primarily by fire.
-#'@param anthroDist filename or RasterLayer. Anthropogenic disturbance other
-#'  than harvest. This can have an effect on any type of landcover except water.
-#'@param harv filename or RasterLayer. Harvest history. This can only have an
-#'  effect on forest landcover types and will not affect wetlands or water.
+#'@param anthroDist filename or RasterLayer. Anthropogenic disturbance including
+#'  harvest. This can have an effect on any type of landcover except water.
 #'@param linFeat filename, RasterLayer, sf object or a list of these that will
 #'  be combined. Linear features. If it is a RasterLayer then it should be
 #'  linear feature density in m^2/ha. If a RasterLayer is provided as a list
@@ -105,7 +93,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'@return A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
 #'
 #'@seealso \code{\link{CaribouHabitat-class}} for information on the object
-#'  returned and \code{\link{updateCaribou}} for updating and existing
+#'  returned and \code{\link{updateCaribou}} for updating an existing
 #'  CaribouHabitat object.
 #'
 #'@source Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource
@@ -209,9 +197,9 @@ setMethod(
       
     } else {
       
-      inputDataArgs <- dots[c("updatedLC", "age", "natDist", "anthroDist", 
-                              "harv","winArea", "eskerSave", "linFeatSave", 
-                              "padProjPoly", "friLU", "padFocal", "ptDensity", 
+      inputDataArgs <- dots[c("natDist", "anthroDist", 
+                              "winArea", "eskerSave", "linFeatSave", 
+                              "padProjPoly", "padFocal", "ptDensity", 
                               "tmplt")]
       
       inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]

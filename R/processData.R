@@ -13,27 +13,12 @@ setGeneric("processData", function(inData, newData, ...) standardGeneric("proces
 setMethod(
   "processData", signature(inData = "CaribouHabitat", newData = "missing"), 
   function(inData) {
-    if(inData@attributes$updateLC){
-      # Update landCover based on updatedLC, age and disturbance history
-      updted <- updateLC(landCover = inData@landCover, 
-                         updatedLC = inData@updatedLC, 
-                         age = inData@age, 
-                         natDist = inData@natDist, 
-                         harv = inData@harv)
-      message("landCover updated using updatedLC and disturbance history")
-      inData@natDist <- updted$natDist
-    } else {
-      updted <- list(landCover = inData@landCover)
-    }
-    
+
     tmplt <- inData@attributes$tmplt
 
-    
     # resample to 16ha and flag cells with >35% disturbance
-    expVars <- applyDist(updted$landCover, inData@natDist, inData@anthroDist, 
-                         inData@harv, tmplt)
-    
-    rm(updted)
+    expVars <- applyDist(inData@landCover, inData@natDist, inData@anthroDist, 
+                         tmplt)
     
     # create raster attribute table
     inData@landCover <- raster::ratify(inData@landCover)
@@ -42,9 +27,8 @@ setMethod(
                                          resTypeCode, by = c(ID = "code"))
 
     # Resample linFeat and esker to 16 ha
-    if(any(raster::res(inData@linFeat) < 400)){
+    if(any(raster::res(inData@linFeat) < raster::res(tmplt)[1])){
       message("resampling linFeat to match landCover resolution")
-      #tmplt <- inData@landCover %>% raster::`res<-`(c(400, 400))
       
       inData@linFeat <- raster::resample(inData@linFeat, tmplt,
                                          method = "bilinear")
@@ -55,10 +39,8 @@ setMethod(
            call. = FALSE)
     }
     
-    if(any(raster::res(inData@esker) < 400)){
-      # eskFile <- tempfile()
-      # raster::writeRaster(inData@esker, eskFile)
-      
+    if(any(raster::res(inData@esker) < raster::res(tmplt)[1])){
+
       inData@esker <- raster::resample(inData@esker, tmplt,
                                        method = "bilinear")
     }
@@ -68,8 +50,6 @@ setMethod(
            call. = FALSE)
     }
 
-
-    
     # Get window area from table b/c some models used different sizes
     if(is.null(inData@attributes$winArea)){
       inData@attributes$winArea <- coefTable %>% 
@@ -118,17 +98,17 @@ setMethod(
 setMethod(
   "processData", 
   signature(inData = "CaribouHabitat", newData = "list"), 
-  function(inData, newData, updateType = "disturbed") {
+  function(inData, newData) {
    
     if(is.null(names(newData)) ||
-       !all(names(newData) %in% c("updatedLC", "age", "natDist", "anthroDist",
-                                  "harv", "linFeat" ))){
+       !all(names(newData) %in% c("landCover", "natDist", "anthroDist",
+                                  "linFeat" ))){
       stop("newData must be a named list with any of the names ",
-           "updatedLC ", "age ", "natDist ", "anthroDist ", "harv ", "linFeat ", 
+           "landCover ", "natDist ", "anthroDist ",  "linFeat ", 
            "incorrect names provided are:  ", 
            names(newData)[which(!names(newData) %in% 
-                                  c("updatedLC", "age", "natDist", "anthroDist",
-                                    "harv", "linFeat" ))], call. = FALSE)
+                                  c("landCover", "natDist", "anthroDist",
+                                    "linFeat" ))], call. = FALSE)
     }
     
     tmplt <- inData@attributes$tmplt
@@ -141,7 +121,7 @@ setMethod(
       
       if(inherits(newData$linFeat, "sf")){
         #tmplt <- raster(inData@landCover) %>% raster::`res<-`(c(400, 400))
-        newData$linFeat <- rasterizeLineDensity(newData$linFeat, tmplt)
+        inData@linFeat <- rasterizeLineDensity(newData$linFeat, tmplt)
       }
       
     }
@@ -163,101 +143,44 @@ setMethod(
     newData <- purrr::map2(newData, names(newData), 
                 ~cropIf(.x, inData@landCover, .y, "landCover"))
     
-    if(updateType == "disturbed"){ 
-      # check combinations of data in newData make sense
-      if(!is.null(newData$updatedLC) && 
-         !any(c("age", "natDist", "harv") %in% names(newData))){
-        stop("to use updatedLC data with updateType 'disturbed'",
-             " either harv or natDist and age must be provided", 
-             call. = FALSE)
-      }
-      if(any(c("age", "natDist") %in% names(newData)) && 
-         !all(c("age", "natDist") %in% names(newData))){
-        stop("both natDist and age must be provided to use either", 
-             call. = FALSE)
+    if(any(names(newData) %in% c("landCover", "natDist", "anthroDist" ))){
+      
+      # TODO: should you be able to update only Nat or Anthro dist?
+      if(is.null(newData$landCover)){
+        newData$landCover <- inData@landCover
+        warning("existing landCover being updated with new disturbance", 
+                call. = FALSE)
       }
       
-      if(is.null(newData$updatedLC) && 
-         length(raster::unique(inData@updatedLC)) == 0 &&
-         any(c("age") %in% names(newData))){
-        stop("age cannot be used with out updatedLC", call. = FALSE)
-      }
-      
-      LCUpdated <- any(names(newData) %in%
-                         c("updatedLC", "age", "natDist", "anthroDist", "harv"))
-      
-      if(LCUpdated){
-        
-        if(is.null(newData$updatedLC)){
-          newData$updatedLC <- inData@updatedLC
-        }
-        if(is.null(newData$age)){
-          newData$age <- inData@age
-        }
-        if(is.null(newData$natDist)){
-          newData$natDist <- inData@natDist
-        }
-        if(is.null(newData$anthroDist)){
-          newData$anthroDist <- inData@anthroDist
-        }
-        if(is.null(newData$harv)){
-          newData$harv <- inData@harv
-        }
-        
-        # Update landCover based on updatedLC, age and disturbance history
-        updted <- updateLC(landCover = inData@landCover,
-                           updatedLC = newData$updatedLC, 
-                           age = newData$age,
-                           natDist = newData$natDist, 
-                           harv = newData$harv)
-        
-        message("landCover updated using updatedLC and disturbance history")
-        inData@natDist <- updted$natDist
-        
-        expVars <- applyDist(updted$landCover, natDist = inData@natDist, 
-                             anthroDist = newData$anthroDist,
-                             harv = newData$harv, tmplt = tmplt)
-        
-        
-        rm(updted) 
-      } 
-    }
-    if(updateType == "entire"){
-      LCUpdated <- TRUE
-      
-      if(is.null(newData$updatedLC)){
-        stop("updatedLC must be provided to use updateType 'entire'",
-             call. = FALSE)
-      }
       if(is.null(newData$natDist)){
         newData$natDist <- inData@natDist
+        warning("existing natDist being used to update landCover", 
+                call. = FALSE)
       }
       if(is.null(newData$anthroDist)){
         newData$anthroDist <- inData@anthroDist
+        warning("existing anthroDist being used to update landCover", 
+                call. = FALSE)
       }
-      if(is.null(newData$harv)){
-        newData$harv <- inData@harv
-      }
-      
-      expVars <- applyDist(newData$updatedLC, natDist = newData$natDist, 
-                           anthroDist = newData$anthroDist,
-                           harv = newData$harv, tmplt = tmplt)
+
+      expVars <- applyDist(newData$landCover, natDist = newData$natDist, 
+                           anthroDist = newData$anthroDist, tmplt = tmplt)
     }
    
     # resample linFeat if provided
-    if(!is.null(newData$linFeat)){
+    if(inherits(newData$linFeat, "Raster")){
       newData$linFeat <- raster::resample(newData$linFeat, inData@linFeat, 
                                           method = "bilinear")
       inData@linFeat <- newData$linFeat
     } 
 
     # calculate moving window average for changed explanatory variables
-    if("linFeat" %in% names(newData) && LCUpdated){
+    if(all(c("linFeat", "landCover") %in% names(newData))){
       expVars <- expVars %>% addLayer(inData@linFeat)
       
       layernames <- c(resTypeCode %>% arrange(code) %>%
                         pull(ResourceType) %>% as.character(), "TDENLF")
-    } else if (LCUpdated){
+    } else if ("landCover" %in% names(newData)){
       layernames <- resTypeCode %>% arrange(code) %>%
         pull(ResourceType) %>% as.character()
     } else {
@@ -296,17 +219,12 @@ setMethod(
   "processData", signature(inData = "DisturbanceMetrics", newData = "missing"), 
   function(inData) {
     #inData=dm
-        
-    harv <- inData@harv
+
     anthroDist <- inData@anthroDist
     natDist <- inData@natDist
     landCover <- inData@landCover
     
-    # check harv, anthroDist and natDist are real if not make dummy
-    if(length(raster::unique(harv)) == 0){
-      harv <- landCover
-      harv[] <- 0
-    }
+    # check anthroDist and natDist are real if not make dummy
     if(length(raster::unique(anthroDist)) == 0){
       anthroDist <- landCover
       anthroDist[] <- 0
@@ -316,13 +234,14 @@ setMethod(
       natDist[] <- 0
     }
     
-    harv[is.na(harv)]=0;anthroDist[is.na(anthroDist)]=0;natDist[is.na(natDist)]=0
+    anthroDist[is.na(anthroDist)] = 0
+    natDist[is.na(natDist)] = 0
     ############
     #Buffer anthropogenic disturbance
     #To speed calculations, include points from linFeat in raster.
     message("buffering anthropogenic disturbance")
     
-    expVars <- (anthroDist+harv)>0
+    expVars <- (anthroDist)>0
     
 
     if(class(inData@linFeat[[1]])=="RasterLayer"){

@@ -70,16 +70,12 @@ pthBase <- "data/"
 paths_eskshp_linFshp <- caribouHabitat(
   landCover = paste0(pthBase, "plc", ".tif"),
   esker = paste0(pthBase, "esker", ".shp"),
-  updatedLC = paste0(pthBase, "fri", ".tif"),
-  age = paste0(pthBase, "age", ".tif"),
   natDist = paste0(pthBase, "natDist", ".tif"),
   anthroDist = paste0(pthBase, "anthroDist", ".tif"),
-  harv = paste0(pthBase, "harv", ".tif"),
   linFeat = paste0(pthBase, "linFeat", ".shp"),
   projectPoly = paste0(pthBase, "projectPoly", ".shp"),
   linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
   eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
   caribouRange = "Churchill", 
   winArea = 500
 )
@@ -87,18 +83,14 @@ paths_eskshp_linFshp <- caribouHabitat(
 paths_list_linF <- caribouHabitat(
   landCover = paste0(pthBase, "plc", ".tif"),
   esker = paste0(pthBase, "esker", ".shp"),
-  updatedLC = paste0(pthBase, "fri", ".tif"),
-  age = paste0(pthBase, "age", ".tif"),
   natDist = paste0(pthBase, "natDist", ".tif"),
   anthroDist = paste0(pthBase, "anthroDist", ".tif"),
-  harv = paste0(pthBase, "harv", ".tif"),
   linFeat = list(roads = paste0(pthBase, "roads.shp"),
                  rail = paste0(pthBase, "rail.shp"),
                  utilities = paste0(pthBase, "utilities.shp")), 
   projectPoly = paste0(pthBase, "projectPoly", ".shp"),
   linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
   eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE), 
   caribouRange = "Churchill", 
   winArea = 500
 )
@@ -115,13 +107,8 @@ landCoverD = raster(paste0(pthBase, "plc", ".tif")) %>%
 eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
 eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
-friLUD = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE)
-updatedLCD = raster(paste0(pthBase, "fri", ".tif")) %>% 
-  reclassFRI(friLUD)
-ageD = raster(paste0(pthBase, "age", ".tif"))
 natDistD = raster(paste0(pthBase, "natDist", ".tif"))
 anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
-harvD = raster(paste0(pthBase, "harv", ".tif"))
 linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
 projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
@@ -129,17 +116,15 @@ linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE) %>%
   st_set_agr("constant")
 
 data_esktif_linFtif <- caribouHabitat(
-  landCover = landCoverD, esker = eskerDras, updatedLC = updatedLCD, age = ageD, natDist = natDistD,
-  anthroDist = anthroDistD, harv = harvD,
-  linFeat = linFeatDras, projectPoly = projectPolyD,
+  landCover = landCoverD, esker = eskerDras, natDist = natDistD,
+  anthroDist = anthroDistD, linFeat = linFeatDras, projectPoly = projectPolyD,
   caribouRange = "Churchill", 
   winArea = 500
 )
 
 data_eskshp_linFshp <- caribouHabitat(
-  landCover = landCoverD, esker = eskerDshp, updatedLC = updatedLCD, age = ageD, natDist = natDistD, 
-  anthroDist = anthroDistD, harv = harvD,
-  linFeat = linFeatDshp, projectPoly = projectPolyD,
+  landCover = landCoverD, esker = eskerDshp, natDist = natDistD, 
+  anthroDist = anthroDistD, linFeat = linFeatDshp, projectPoly = projectPolyD,
   eskerSave = paste0(pthBase, "eskerTif", ".tif"),
   linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
   caribouRange = "Churchill", 
@@ -147,8 +132,8 @@ data_eskshp_linFshp <- caribouHabitat(
 )
 
 data_list_linF <- caribouHabitat(
-  landCover = landCoverD, esker = eskerDshp, updatedLC = updatedLCD, age = ageD, natDist = natDistD, 
-  anthroDist = anthroDistD, harv = harvD,
+  landCover = landCoverD, esker = eskerDshp, natDist = natDistD, 
+  anthroDist = anthroDistD, 
   linFeat = list(roads = st_read(paste0(pthBase, "roads.shp"), quiet = TRUE) %>% 
                    st_set_agr("constant"),
                  rail = st_read(paste0(pthBase, "rail.shp"), quiet = TRUE) %>% 
@@ -201,33 +186,12 @@ test_that("results match when input is paths or data, or list of either for linF
 })
 
 test_that("results are different when disturbance is missing", {
-  data_noUpdatedLC <- caribouHabitat(
-    landCover = landCoverD, esker = eskerDras, 
-    natDist = natDistD,
-    anthroDist = anthroDistD, harv = harvD,
-    linFeat = linFeatDras, projectPoly = projectPolyD,
-    caribouRange = "Churchill", 
-    winArea = 500
-  )
-  
+
   data_noAnthro <- caribouHabitat(
     landCover = landCoverD, 
     esker = eskerDras, 
     #anthroDist = anthroDistD,
     natDist = natDistD, 
-    harv = harvD,
-    linFeat = linFeatDras, 
-    projectPoly = projectPolyD,
-    caribouRange = "Churchill", 
-    winArea = 500
-  )
-  
-  data_noHarv <- caribouHabitat(
-    landCover = landCoverD, 
-    esker = eskerDras, 
-    anthroDist = anthroDistD,
-    natDist = natDistD, 
-    #harv = harvD,
     linFeat = linFeatDras, 
     projectPoly = projectPolyD,
     caribouRange = "Churchill", 
@@ -239,7 +203,6 @@ test_that("results are different when disturbance is missing", {
     esker = eskerDras, 
     anthroDist = anthroDistD,
     #natDist = natDistD, 
-    harv = harvD,
     linFeat = linFeatDras, 
     projectPoly = projectPolyD,
     caribouRange = "Churchill", 
@@ -251,35 +214,33 @@ test_that("results are different when disturbance is missing", {
     esker = eskerDras, 
     #anthroDist = anthroDistD,
     #natDist = natDistD, 
-    #harv = harvD,
     linFeat = linFeatDras, 
     projectPoly = projectPolyD,
     caribouRange = "Churchill", 
     winArea = 500
   )
-  expect_false(identical(data_noUpdatedLC,  data_esktif_linFtif))
+  
   expect_false(identical(data_noAnthro,  data_esktif_linFtif))
   expect_false(identical(data_noNatDist,  data_esktif_linFtif))
-  expect_false(identical(data_noHarv,  data_esktif_linFtif))
   expect_false(identical(data_noDist,  data_esktif_linFtif))
   
-  # plot(data_esktif_linFtif, raster.title = "Orig")
-  # plot(data_noUpdatedLC, raster.title = "No Updated")
-  # plot(data_noAnthro, raster.title = "No Anthro")
-  # plot(data_noHarv, raster.title = "No Harv")
-  # plot(data_noNatDist, raster.title = "No NatDist")
+  if(interactive()){
+    plot(data_esktif_linFtif, raster.title = "Orig")
+    plot(data_noAnthro, raster.title = "No Anthro")
+    plot(data_noNatDist, raster.title = "No NatDist")
+    plot(data_noDist, raster.title = "No Dist")
+  }
 
-  
 })
 
-
-
-
-# Compare output table to previous run. Use table and not whole object in case
+# Compare output raster to previous run. Use raster and not whole object in case
 # we want to change the object in future
 # Do to changes in CRS order we simply check that the two rasters are
 # equivalent to each other
 resultCompare <- readRDS(paste0(pthBase, "resultCompare.rds"))
+
+# To update
+# saveRDS(data_esktif_linFtif@habitatUse, paste0(pthBase, "resultCompare.rds"))
 
 testthat::test_that("results match previous results",{
   testthat::expect_true(

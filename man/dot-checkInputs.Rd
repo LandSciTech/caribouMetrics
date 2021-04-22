@@ -4,11 +4,9 @@
 \alias{.checkInputs}
 \title{Check inputs to caribouHabitat}
 \usage{
-.checkInputs(caribouRange, winArea, landCover, updatedLC, coefTable)
+.checkInputs(caribouRange, winArea, landCover, coefTable)
 }
 \arguments{
-\item{updatedLC}{updatedLC data raster}
-
 \item{...}{other variables passed to caribouHabitat}
 }
 \description{
