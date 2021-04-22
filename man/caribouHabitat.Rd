@@ -45,8 +45,8 @@ the coefficients should be used from.}
 \item{natDist}{filename or RasterLayer. Presence or absence of natural
 disturbance, primarily by fire.}
 
-\item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance other
-than harvest. This can have an effect on any type of landcover except water.}
+\item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance including
+harvest. This can have an effect on any type of landcover except water.}
 
 \item{eskerSave}{filename to save rasterized esker data.}
 

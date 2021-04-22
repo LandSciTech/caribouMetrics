@@ -11,7 +11,6 @@
   landCover,
   natDist,
   anthroDist,
-  harv,
   linFeat,
   projectPoly,
   processedData,
@@ -39,7 +38,7 @@ Missing layers are omitted from the output, not interpreted as 0 disturbance
 
 \item{\code{natDist}}{Raster of natural disturbance.}
 
-\item{\code{anthroDist}}{Raster of permanent anthropogenic disturbances.}
+\item{\code{anthroDist}}{Raster of anthropogenic disturbances.}
 
 \item{\code{linFeat}}{Sf object with linear features including roads, utilities, and rail.}
 

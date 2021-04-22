@@ -4,16 +4,17 @@
 \alias{disturbanceMetrics}
 \title{disturbanceMetrics}
 \source{
-Environment Canada. 2011. Scientific Assessment to Inform the Identification of Critical 
-Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in Canada:2011 Update. 
-Ottawa, Ontario.
+Environment Canada. 2011. Scientific Assessment to Inform the
+ Identification of Critical Habitat for Woodland Caribou (Rangifer tarandus
+ caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
 }
 \usage{
 disturbanceMetrics(landCover, linFeat, projectPoly, ...)
 }
 \arguments{
-\item{landCover}{filename or RasterLayer. 0 and NA values are assumed to be water and omitted from the tabulated area. 
-Note landCover is also used to define the input grid, so must be provided even if all values are 1.}
+\item{landCover}{filename or RasterLayer. 0 and NA values are assumed to be
+water and omitted from the tabulated area. Note landCover is also used to
+define the input grid, so must be provided even if all values are 1.}
 
 \item{linFeat}{filename, RasterLayer, sf object or a list of these that will
 be combined. Linear features.}
@@ -21,13 +22,12 @@ be combined. Linear features.}
 \item{projectPoly}{filename or sf object. Polygons defining range boundaries.}
 
 \item{natDist}{filename or RasterLayer. Presence or absence of natural
-disturbance, primarily by fire. Should include 40 years cumulative disturbance. Optional.}
+disturbance, primarily by fire. Should include 40 years cumulative
+disturbance. Optional.}
 
-\item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance other
-than harvest. This can have an effect on any type of landcover except water. Should include 40 years cumulative disturbance. Optional.}
-
-\item{harv}{filename or RasterLayer. Harvest history. This can only have an
-effect on forest landcover types and will not affect wetlands or water. Should include 40 years cumulative disturbance. Optional.}
+\item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance including
+harvest. This can have an effect on any type of landcover except water.
+Should include 40 years cumulative disturbance. Optional.}
 
 \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
 used to avoid edge effects? If FALSE, the default, only data from inside the
@@ -43,25 +43,26 @@ NA, if it is TRUE a value will be returned for each cell that assumes cells
 outside the input data are 0 for all resource types. This is not a good
 assumption and should be used with caution.}
 
-\item{bufferWidth}{number. Width of buffer applied to anthropogenic disturbance in metres. Default is 500.}
+\item{bufferWidth}{number. Width of buffer applied to anthropogenic
+disturbance in metres. Default is 500.}
 }
 \value{
 A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
 }
 \description{
-Calculate the predictors described in Table 52 of Environment Canada (2011) Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
-So far, the variables calculated by this function include:
-\itemize{
-  \item fire: % fire
-  \item anthro: % non-overlapping anthropogenic disturbance. 
-  \item totalDist: Percent total non-overlapping fire and anthropogenic disturbance.
-}
+Calculate the predictors described in Table 52 of Environment Canada (2011)
+Scientific Assessment to Inform the Identification of Critical Habitat for
+Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in
+Canada:2011 Update. Ottawa, Ontario. So far, the variables calculated by this
+function include: \itemize{ \item fire: % fire \item anthro: % non-overlapping
+anthropogenic disturbance. \item totalDist: Percent total non-overlapping fire
+and anthropogenic disturbance. }
 }
 \details{
-Note assume natDist, anthroDist and harv include 40 years of cumulative disturbance.
-Note that locations where landCover is NA or 0 are omitted from the tabulated area.
-Missing layers are omitted from the output, not interpreted as 0 disturbance.
-To update an existing CaribouHabitat object with new data see
+Note assume natDist and anthroDist include 40 years of cumulative disturbance.
+Note that locations where landCover is NA or 0 are omitted from the tabulated
+area. Missing layers are omitted from the output, not interpreted as 0
+disturbance. To update an existing CaribouHabitat object with new data see
 \link[caribouMetrics]{updateDisturbance}.
 }
 \seealso{

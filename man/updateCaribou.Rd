@@ -28,16 +28,11 @@ updateCaribou(CarHab, newData, ...)
 \item{CarHab}{CaribouHabitat object}
 
 \item{newData}{a named list of RasterLayer objects to be used to update
-CarHab. Potential names are: updatedLC, age, natDist, harv, anthroDist, and
+CarHab. Potential names are: landCover, natDist, anthroDist, and
 linFeat.}
 
 \item{resultsOnly}{logical. If FALSE the whole CaribouHabitat object is
 returned. If TRUE then only the habitatUse RasterStack is returned.}
-
-\item{updateType}{character. The default is "disturbed" which means that only
-disturbed areas are updated to updatedLC based on natDist, age, and harv
-following the process used by Rempel. If \code{updateType} is "entire" then
-the current landCover is replaced with updatedLC.}
 }
 \value{
 If \code{resultsOnly} is FALSE an updated CaribouHabitat object. If
@@ -54,6 +49,6 @@ updated.
 
 If  \code{newData} contains landCover the landCover in the CaribouHabitat
 object will be replaced and new projections made for the whole landscape. If
-natDist, harv, or anthroDist are not provided then the data stored in the
+natDist or anthroDist are not provided then the data stored in the
 CaribouHabitat object is reused.
 }

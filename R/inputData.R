@@ -107,8 +107,10 @@ setMethod(
       projectPoly <- projectPoly %>% st_buffer(winRad*3)
     }
     
+    
     landCover <- checkOverlap(landCover, projectPoly, "landCover", "projectPoly") %>%
       cropIf(projectPoly, "landCover", "projectPoly")
+    
 
     # rasterize eskers
     if(inherits(esker, "sf")){
@@ -172,9 +174,18 @@ setMethod(
     
     # check alignment of other layers
     if(!is.null(natDist)){
-      natDist <- cropIf(natDist, landCover, "natDist", "landCover")
 
-      compareRaster(landCover, natDist)
+      natDist <- cropIf(natDist, landCover, "natDist", "landCover")
+      
+      #NOTE: problem is here. 
+      #Even if natDist and landCover start out comparable, they may no longer be so at this point because
+      #line 111 above. This cropIf fix doesn't work. Problem will occur for other compareRaster calls throughout package.
+      #fix?
+
+      tt = try(compareRaster(landCover, natDist),silent=T)
+      if(class(tt)=="try-error"){
+        stop("landcover and natDist rasters do not have the same have the same extent, number of rows and columns, projection, resolution, or origin. Use raster::compareRaster() to identify the problem.")
+      }
     } else {
       natDist <- raster(matrix(NA))
     }
