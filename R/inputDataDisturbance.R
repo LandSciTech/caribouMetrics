@@ -24,20 +24,34 @@ setMethod(
            natDist=NULL,anthroDist = NULL,
            bufferWidth = 500, padProjPoly = FALSE,
            padFocal = FALSE) {
-
+    
     charIn <-  sapply(list(landCover,natDist, anthroDist,  
                            linFeat, projectPoly), 
                       function(x) "character" %in% class(x)) 
-
+    
     if(any(charIn)){
       stop("All data must be supplied as sf or raster objects or character
                  paths not a mixture of each", call. = FALSE)
     }
     
-
+    
     if(raster::isLonLat(landCover)){
       stop("landCover must have a projected CRS", call. = FALSE)
     }
+    
+    rastLst <- list(landCover, 
+                    natDist, anthroDist)
+    
+    # remove NULLs from rastLst
+    rastLst <- rastLst[which(!vapply(rastLst, function(x) is.null(x), 
+                                     FUN.VALUE = TRUE))]
+    
+    if(!do.call(raster::compareRaster, c(rastLst, list(landCover, res = TRUE, extent = FALSE, 
+                                                       rowcol = FALSE, stopiffalse = FALSE)))){
+      stop("all raster data sets must have matching resolution", call. = FALSE)
+    }
+    rm(rastLst)
+    
     
     if(st_crs(projectPoly) != st_crs(landCover)){
       projectPoly <- st_transform(projectPoly, crs = st_crs(landCover))
@@ -46,8 +60,11 @@ setMethod(
     
     projectPolyOrig <- projectPoly
     
+    # union together multiple range polygons for raster processing
+    projectPoly <- projectPoly %>% summarise()
+    
     if(padProjPoly){
-
+      
       # window radius is radius of circle with winArea rounded to even number of
       # raster cells based on resolution
       winRad <- (sqrt(winArea*10000/pi)/res(landCover)[1]) %>% 
@@ -56,21 +73,22 @@ setMethod(
       projectPoly <- st_buffer(projectPoly, winRad*3)
     }
     
-    landCover <- checkAlign(landCover, projectPoly, "landCover", "projectPoly")
+    landCover <- checkOverlap(landCover, projectPoly, "landCover", "projectPoly") %>%
+      cropIf(projectPoly, "landCover", "projectPoly")
     
     # combine linFeat
     if(inherits(linFeat, "list")){
-     
+      
       linFeat <- combineLinFeat(linFeat)
     }
     if(!(is(linFeat, "sf") || is(linFeat, "sfc"))){
       if(is(linFeat, "Spatial")){
         linFeat <- sf::st_as_sf(linFeat)
       } 
-        #else if(is(linFeat, "Raster")){
-        # roads <- rasterToLineSegments(roads)
-        #linFeat <- raster::rasterToPoints(linFeat, fun = function(x){x > 0}, 
-        #                                spatial = TRUE) %>% 
+      #else if(is(linFeat, "Raster")){
+      # roads <- rasterToLineSegments(roads)
+      #linFeat <- raster::rasterToPoints(linFeat, fun = function(x){x > 0}, 
+      #                                spatial = TRUE) %>% 
       #}
     }
     
@@ -79,17 +97,26 @@ setMethod(
     
     # check alignment of other layers
     if(!is.null(natDist)){
-      natDist <- aggregateIf(natDist, landCover, "natDist", "landCover") %>% 
-        checkAlign(landCover, "natDist", "landCover")
-      compareRaster(landCover, natDist)
+      natDist <- checkOverlap(natDist, projectPoly, "natDist", "projectPoly") %>%
+        cropIf(projectPoly, "natDist", "projectPoly")
+      
+      tt = try(compareRaster(landCover, natDist),silent=T)
+      if(class(tt)=="try-error"){
+        stop("landcover and natDist rasters do not have the same have the same extent, number of rows and columns, projection, resolution, or origin. Use raster::compareRaster() to identify the problem.")
+      }
     } else {
       natDist <- raster(matrix(NA))
     }
     
     if(!is.null(anthroDist)){
-      anthroDist <- aggregateIf(anthroDist, landCover, "anthroDist", "landCover") %>% 
-        checkAlign(landCover, "anthroDist", "landCover")
-      compareRaster(landCover, anthroDist)
+      anthroDist <- checkOverlap(anthroDist, projectPoly, "anthroDist", "projectPoly") %>%
+        cropIf(projectPoly, "anthroDist", "projectPoly")
+      #anthroDist <- cropIf(anthroDist, landCover, "anthroDist", "landCover")
+      
+      tt = try(compareRaster(landCover, anthroDist),silent=T)
+      if(class(tt)=="try-error"){
+        stop("landcover and anthroDist rasters do not have the same have the same extent, number of rows and columns, projection, resolution, or origin. Use raster::compareRaster() to identify the problem.")
+      }
     } else {
       anthroDist <- raster(matrix(NA))
     }
@@ -100,7 +127,7 @@ setMethod(
                disturbanceMetrics = data.frame(),
                attributes = list(bufferWidth = bufferWidth,
                                  padProjPoly = padProjPoly, padFocal = padFocal)))
-})
+  })
 
 #' @rdname inputDataDisturbance
 setMethod(
@@ -120,11 +147,11 @@ setMethod(
                     projectPoly)
     }
     
-
+    
     # remove NULLs from indata
     indata <- indata[which(!vapply(indata, function(x) is.null(x), 
                                    FUN.VALUE = TRUE))]
-
+    
     
     charIn <-  indata %>% unlist(recursive = FALSE) %>% is.character()
     
@@ -159,16 +186,16 @@ setMethod(
     
     indata[vect] <- lapply(indata[vect], st_read, quiet = TRUE, agr = "constant")
     indata[rast]<- lapply(indata[rast], raster)
-   
+    
     if(is.character(linFeat)){
       linFeat <- indata$linFeat
     }
-
+    
     return(inputDataDisturbance(landCover=indata$landCover, 
-                     natDist = indata$natDist, anthroDist = indata$anthroDist, 
-                     linFeat = linFeat, 
-                     projectPoly = indata$projectPoly, 
-                     bufferWidth = bufferWidth, 
-                     padProjPoly = padProjPoly, padFocal = padFocal))
+                                natDist = indata$natDist, anthroDist = indata$anthroDist, 
+                                linFeat = linFeat, 
+                                projectPoly = indata$projectPoly, 
+                                bufferWidth = bufferWidth, 
+                                padProjPoly = padProjPoly, padFocal = padFocal))
     
   })

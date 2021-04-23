@@ -207,6 +207,7 @@ setMethod(
       x <- do.call(inputData, c(lst(landCover, esker, linFeat, projectPoly,
                                     caribouRange, coefTable), 
                                 inputDataArgs))
+      
       x <- processData(x)
       
       updateArgs <- dots[c("coefTable", "doScale")]

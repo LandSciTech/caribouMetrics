@@ -45,6 +45,9 @@ setMethod(
       stop("landCover must have a projected CRS", call. = FALSE)
     }
     
+    
+    #Note linear features can also be rasters here. And natDist/anthroDist can be polygons.
+    #also - should we be requiring fully aligned rasters, not just same resolution?
     rastLst <- list(landCover, 
                     natDist, anthroDist)
     
@@ -119,8 +122,8 @@ setMethod(
       #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       esker <- rasterizeLineDensity(esker, tmplt)
     } else {
-      esker <- checkOverlap(esker, landCover, "esker", "landCover") %>% 
-        cropIf(landCover, "esker", "landCover")
+      esker <- checkOverlap(esker, projectPoly, "esker", "projectPoly") %>% 
+        cropIf(projectPoly, "esker", "projectPoly")
       
       chk <- any(raster::compareRaster(esker, landCover, res = TRUE, 
                                        extent = FALSE, rowcol = FALSE,
@@ -153,8 +156,8 @@ setMethod(
       #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)
     } else {
-      linFeat <- checkOverlap(linFeat, landCover, "linFeat", "landCover") %>% 
-        cropIf(landCover, "linFeat", "landCover")
+      linFeat <- checkOverlap(linFeat, projectPoly, "linFeat", "projectPoly") %>% 
+        cropIf(projectPoly, "linFeat", "projectPoly")
       
       chk <- any(raster::compareRaster(linFeat, landCover, res = TRUE, 
                                        extent = FALSE, rowcol = FALSE,
@@ -175,12 +178,11 @@ setMethod(
     # check alignment of other layers
     if(!is.null(natDist)){
 
-      natDist <- cropIf(natDist, landCover, "natDist", "landCover")
-      
-      #NOTE: problem is here. 
-      #Even if natDist and landCover start out comparable, they may no longer be so at this point because
-      #line 111 above. This cropIf fix doesn't work. Problem will occur for other compareRaster calls throughout package.
-      #fix?
+      natDist <- checkOverlap(natDist, projectPoly, "natDist", "projectPoly") %>%
+        cropIf(projectPoly, "natDist", "projectPoly")
+      #natDist <- cropIf(natDist, landCover, "natDist", "landCover")
+      #Note: orginally all cropIf calls used landcover, but that led to compareRaster errors.
+      #Switching to projectPoly appears to solve this problem, but may introduce others. Will see.
 
       tt = try(compareRaster(landCover, natDist),silent=T)
       if(class(tt)=="try-error"){
@@ -191,9 +193,14 @@ setMethod(
     }
         
     if(!is.null(anthroDist)){
-      anthroDist <- cropIf(anthroDist, landCover, "anthroDist", "landCover")
-
-      compareRaster(landCover, anthroDist)
+      anthroDist <- checkOverlap(anthroDist, projectPoly, "anthroDist", "projectPoly") %>%
+        cropIf(projectPoly, "anthroDist", "projectPoly")
+      #anthroDist <- cropIf(anthroDist, landCover, "anthroDist", "landCover")
+      
+      tt = try(compareRaster(landCover, anthroDist),silent=T)
+      if(class(tt)=="try-error"){
+        stop("landcover and anthroDist rasters do not have the same have the same extent, number of rows and columns, projection, resolution, or origin. Use raster::compareRaster() to identify the problem.")
+      }
     } else {
       anthroDist <- raster(matrix(NA))
     }
