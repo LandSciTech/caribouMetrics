@@ -95,7 +95,7 @@ setMethod(
     
     # calculate probability for each season
     out <-lapply(coefs2, function(y){
-      1/(1+exp(-((resourceProp*y$Coefficient) %>% sum())))
+      1/(1+exp(-((resourceProp*y$Coefficient) %>% sum(na.rm = TRUE))))
     }) %>%
       raster::stack()
     
