@@ -2,9 +2,8 @@
 devtools::load_all()
 pthBase <- "./tests/testthat/data/"
 
-# load example data and classify plc and fri into Resource Types
-plcD = raster(paste0(pthBase, "plc", ".tif")) 
-plcD[plcD==1]=NA #Assume 1 is water, all other values are irrelevant
+# load example data
+plcD = raster(paste0(pthBase, "plc", ".tif")) # Defines the study area - NA values are omitted from calculation, everything else is included.
 natDistD = raster(paste0(pthBase, "natDist", ".tif"))
 anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
 projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
