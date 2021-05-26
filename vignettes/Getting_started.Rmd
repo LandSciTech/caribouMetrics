@@ -1,0 +1,158 @@
+---
+title: "Getting started"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+The `caribouMetrics` R package contains a set of functions which enable the creation and interrogation of resource selection probability functions (RSPF) for caribou in the Ring of Fire (RoF) region, Ontario. The RSPFs built are recreations of those described in [Hornseth and Rempel (2018)](https://doi.org/10.1139/cjz-2015-0101), which were originally built in the LSL coding language. Although the LSL code is what this implementation is based on there are some differences, these are mainly due to a difference in the grid shape used to develop the models and limited access to primary data with which to adjust the implementation.
+
+## Sourced Data
+Several different data sets are used in the model to describe conditions that affect caribou habitat selection. These data sets were chosen to match those in [Hornseth and Rempel (2018)](https://doi.org/10.1139/cjz-2015-0101), however a number of these are more recent iterations of the same measures. The data includes types of forest, wetlands, eskers, and linear features. There are also several data sets used to update this information using more recent data and disturbance histories (though these are not required, or recommended, for the normal usage of the packages functions). The table below describes each data set, its source and what it is used for. 
+
+| Name                            | Description                                                     | Purpose                                                                                                                                 | Source                                                                           |
+|---------------------------------|-----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| Provincial land cover (PLC)      | 27 land-cover classes interpreted from 1999 to 2000 imagery     | Grouped into 7 resource types based on patterns believed sufficient to discriminate habitat selection                                   | [link](https://geohub.lio.gov.on.ca/datasets/7aa998fdf100434da27a41f1c637382c)   |
+| Eskers                          | Location of eskers                                              | Used to calculate the density of eskers                                                                                                 | Rob Rempel                                                                       |
+| Roads                           | Road network                                                    | Combined to calculate density of linear features which was used as a proxy for human disturbance                                        | Josie Hughes MNRF with ORN                                                         |
+| Utilities                       | Transmission lines, pipelines etc.                              | Combined to calculate density of linear features which was used as a proxy for human disturbance                                        | [link](https://geohub.lio.gov.on.ca/datasets/mnrf::utility-line)                 |
+| Rail                            | Rail network                                                    | Combined to calculate density of linear features which was used as a proxy for human disturbance                                        | [link](https://geohub.lio.gov.on.ca/datasets/mnrf::ontario-railway-network-orwn) |
+| Forest resource inventory (FRI) | MNRF data on composition of forests                             | Used to update the PLC based forest type if it had been disturbed since 2001 or if it was disturbed before 2001 and the age is now > 35 | Josie Hughes                                                                     |
+| Age                             | Age of forest stands in 10 year classes                         | Used to determine if PLC should be updated                                                                                              | Josie Hughes                                                                     |
+| Natural disturbance             | Fire, wind or insect damage since 1990 (i.e. 10 years before PLC) | Used to determine if PLC should be updated and to set forest classes to 0 if > 35% disturbed                                                                                              | Stephen Mayer, OFRI Disturbance History database                                 |
+| Harvest disturbance             | Whether a stand was harvested after PLC data collection         | Used to determine if PLC should be updated and to set forest classes to 0 if > 35% disturbed                                                                                              | Stephen Mayer, OFRI Disturbance History database                                 |
+| Anthropogenic disturbance       | Presence of anthropogenic disturbance                           | Used to determine if PLC should be updated and to set forest classes to 0 if > 35% disturbed                                                                                              | Josie Hughes                                                  |
+
+# Use Case Example
+
+## Uploading Parameter Data
+To run the most basic implementation of `caribouMetrics`, data for five input parameters are required: 1) `landCover` a raster of classed provincial land covers; 2) `esker` a raster of sf object identifying eskers (deposited ridges of sediment) in the region, if presented as a raster later data must be in m$^2$/ha; 3) `linFeat` a raster, sf object, or list of these identifying the location of linear features (e.g. roads), again if presented as a raster later data must be in m$^2$/ha; 4) `projectPoly` an sf object containing the polygon defining the project area. If `caribouRange` is a data.frame `projectPoly` must contain a column called Range with the name of the caribou range represented by the polygon corresponding to that Range column in the `caribouRange` data.frame; 5) `caribouRange` a character or data frame identifying the caribou range (and corresponding coefficients) to use when generating the RSPF. See `unique(coefTableHR$Range)` for options. If provided as a data frame, it must be formatted as to contain two columns `Range` and `coefRange`. `Range` is the name of the geographical area and is used to link the table to the `projectPoly` polygons. `coefRange` is the name of the caribou range that the coefficients should be used from.
+
+```{r setup}
+knitr::opts_chunk$set(warning = FALSE)
+devtools::load_all()
+#library(caribouMetrics)
+library(dplyr)
+library(raster)
+library(sf)
+
+pth_base <- "Example_data/"
+
+caribouRanges <- c("Pagwachuan", "Missisa", "Ozhiski", "Nipigon", "James Bay")
+caribouRangeCoefs <- rev(caribouRanges)
+
+projectPoly <- st_read(paste0(pth_base,
+                              "caribouRanges/Caribou_Range_Boundary.shp")) %>% 
+  filter(RANGE_NAME %in% caribouRanges) %>% 
+  rename(Range = RANGE_NAME)
+
+singlePoly <- projectPoly[1,] #Polygon for Nipigon range
+```
+
+As the RSPF is generated using a set of specific resource classes which may not match those of standard land-cover classes there is a reclassing function (`reclassPLC`) which uses a look-up table to convert the PLC values into the correct resource classes to use in later functions
+
+```{r data in}
+landCover <- raster(paste0(pth_base, "plc50.tif")) %>% 
+  reclassPLC() %>% 
+  raster::aggregate(5, fun = raster::modal)
+
+esker <- st_read(paste0(pth_base, "esker.shp"))
+
+linFeat <- list(roads = st_read(paste0(pth_base, 
+                                       "road_ORNMNRFROF2010.shp")),
+                rail = st_read(paste0(pth_base, "rail.shp")),
+                utilities = st_read(paste0(pth_base, "util2010.shp")))
+
+```
+
+## `caribouHabitat()`
+`caribouHabitat` is the one of two main functions in the package. It takes the input data and uses the coefficients described by [Hornseth and Rempel (2018)](https://doi.org/10.1139/cjz-2015-0101) to calculate the probability of habitat use by caribou in each season at each location. The function can be run for a single range or a list of ranges simultaneously.
+
+### Single Range
+The most basic method is to supply a single character vector for `caribouRange`. This method also is the quickest to run.
+
+```{r single example, warning=FALSE}
+carHab1 <- caribouHabitat(
+  landCover = landCover,
+  esker = esker,
+  linFeat = linFeat,
+  projectPoly = singlePoly,
+  caribouRange = "Nipigon"
+)
+
+```
+
+The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat`. To access the results as a RasterStack object that can be used for plotting or graphing use the `results` function.
+
+```{r results1}
+str(carHab1, max.level = 2, give.attr = FALSE)
+results(carHab1)
+```
+
+You can create a plot of the results directly from the `CaribouHabitat` object. If `tmap` is installed it will be used to make a plot, if not `plot.raster` will be used. You can provide the season you wish to display and additional arguments that will be passed on to either `qtm` or `plot.raster`. 
+
+```{r plot1, fig.width=8, fig.height=5}
+plot(carHab1, season = c("Fall", "Summer"))
+```
+
+### Multi-Range
+`caribouHabitat` can also be run over multiple ranges simultaneously, allowing a user to create an RSPF of the RoF at one time. For multiple ranges to be run the caribou ranges must be formatted into a data frame with two columns `Range` indicating the name of the caribou range (must match `projectPoly`) and `coefRange` indicating the matching range coefficients as derived by [Hornseth and Rempel (2018)](https://doi.org/10.1139/cjz-2015-0101). While it is possible to run the function with range coefficients swapped between ranges, this is not recommended as the resulting predictions have been shown to be highly inaccurate.
+
+```{r multi example}
+caribouRange <- data.frame(Range = caribouRanges, 
+                           coefRange = caribouRanges, 
+                           stringsAsFactors = FALSE)
+
+MultRange <- caribouHabitat(landCover = landCover,
+                            esker = esker, 
+                            linFeat = linFeat,  
+                            projectPoly = projectPoly, 
+                            caribouRange = caribouRange, 
+                            padProjPoly = TRUE)
+```
+
+The same S4 object as that created by a single range run is produced, allowing the same type of interogation of the results.
+
+```{r results2}
+str(MultRange, max.level = 2, give.attr = FALSE)
+results(MultRange)
+
+plot(MultRange, season = c("Winter", "Spring"))
+```
+
+It is also possible to change just the `caribouRange` attribute without recomputing the entire function using the `updateCaribou` function
+
+```{r update}
+carHab1@attributes$caribouRange$coefRange <- "Missisa"
+
+misCoefMultRange <- updateCaribou(carHab1)
+
+plot(misCoefMultRange)
+```
+
+## `disturbanceMetrics()`
+`disturbanceMetrics()` is the second main function of `caribouMetrics`, this function calculates the predictors described in Table 52 of Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update. The function calculates:
+- fire: % fire
+- anthro: % non-overlapping anthropogenic disturbance
+- totalDist: Percent total non-overlapping fire and anthropogenic disturbance
+
+`disturbanceMetrics()` is run in a similar manner to `caribouHabitat` and uses a subset of the same inputs (at it most basic), these are 1)`landCover`, 2) `linFeat`, and 3) `projectPoly`
+
+```{r disturbance}
+disturb <- disturbanceMetrics(landCover = landCover,
+                              linFeat = linFeat,
+                              projectPoly = singlePoly)
+```
+
+*For additional details of functions in the package see the help documentation*
