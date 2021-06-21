@@ -307,7 +307,6 @@ setMethod(
     
     
     outStack <- raster::stack(anthroBuff, natDist, all)
-    names(outStack) = c("anthroBuff", "natDist", "totalDist")
 
     if(requireNamespace("fasterize", quietly = TRUE)){
       pp = fasterize::fasterize(inData@projectPoly,outStack[[1]])
@@ -318,6 +317,8 @@ setMethod(
     
     #set NAs from landcover
     outStack[is.na(landCover) | (landCover == 0)|is.na(pp)] = NA
+    
+    names(outStack) = c("anthroBuff", "natDist", "totalDist")
     
     inData@processedData <- outStack
     
