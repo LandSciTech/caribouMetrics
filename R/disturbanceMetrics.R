@@ -5,7 +5,7 @@ NULL
 #' @rdname DisturbanceMetrics-class
 setMethod(f = "initialize", signature = "DisturbanceMetrics",
           definition = function(.Object, landCover, natDist, 
-                                anthroDist, linFeat, projectPoly,  
+                                anthroDist, linFeat, projectPoly, is.percent = FALSE, 
                                 processedData, disturbanceMetrics, attributes){
             .Object@landCover <- landCover
             .Object@natDist <- natDist
@@ -73,13 +73,13 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'
 #'@export
 setGeneric("disturbanceMetrics", 
-           function(landCover, linFeat, projectPoly, ...) 
+           function(landCover, linFeat, projectPoly, is.percent = FALSE, ...) 
              standardGeneric("disturbanceMetrics"))
 
 setMethod(
   "disturbanceMetrics", 
   signature(landCover = "ANY"), 
-  function(landCover, linFeat, projectPoly, ...) {
+  function(landCover, linFeat, projectPoly, is.percent = FALSE, ...) {
 
     dots <- list(...)
     
@@ -103,6 +103,12 @@ setMethod(
       raster::writeRaster(x@habitatUse, filename = dots$saveOutput, 
                           overwrite = TRUE, bylayer = byLayer, 
                           suffix = "names")
+    }
+    
+    if (is.percent == TRUE) {
+      x@disturbanceMetrics$anthroBuff <- x@disturbanceMetrics$anthroBuff * 100
+      x@disturbanceMetrics$natDist <- x@disturbanceMetrics$natDist * 100
+      x@disturbanceMetrics$totalDist <- x@disturbanceMetrics$totalDist * 100
     }
     
     return(x)
