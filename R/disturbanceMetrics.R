@@ -73,7 +73,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'
 #'@export
 setGeneric("disturbanceMetrics", 
-           function(landCover, linFeat, projectPoly, is.percent = FALSE, ...) 
+           function(landCover, linFeat, projectPoly, is.percent = TRUE, ...) 
              standardGeneric("disturbanceMetrics"))
 
 setMethod(
@@ -109,6 +109,7 @@ setMethod(
       x@disturbanceMetrics$anthroBuff <- x@disturbanceMetrics$anthroBuff * 100
       x@disturbanceMetrics$natDist <- x@disturbanceMetrics$natDist * 100
       x@disturbanceMetrics$totalDist <- x@disturbanceMetrics$totalDist * 100
+      x@disturbanceMetrics$fire_excl_anthro <- x@disturbanceMetrics$fire_excl_anthro * 100
     }
     
     return(x)

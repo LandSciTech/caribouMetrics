@@ -303,10 +303,20 @@ setMethod(
       anthroBuff <- expVars>0
     }
     
+    fire_excl_anthro <- raster::overlay(natDist, 
+                                        anthroBuff,
+                                        fun = function(x, y){
+                                          x[!is.na(y[])] <- NA
+                                          return(x)
+                                        })
+    
     all <- (anthroBuff + natDist) > 0
     
     
-    outStack <- raster::stack(anthroBuff, natDist, all)
+    outStack <- raster::stack(anthroBuff, 
+                              natDist, 
+                              all, 
+                              fire_excl_anthro)
 
     if(requireNamespace("fasterize", quietly = TRUE)){
       pp = fasterize::fasterize(inData@projectPoly,outStack[[1]])
@@ -318,7 +328,10 @@ setMethod(
     #set NAs from landcover
     outStack[is.na(landCover) | (landCover == 0)|is.na(pp)] = NA
     
-    names(outStack) = c("anthroBuff", "natDist", "totalDist")
+    names(outStack) = c("anthroBuff", 
+                        "natDist", 
+                        "totalDist",
+                        "fire_excl_anthro")
     
     inData@processedData <- outStack
     
