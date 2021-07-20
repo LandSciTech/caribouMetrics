@@ -45,22 +45,6 @@ setMethod(
       stop("landCover must have a projected CRS", call. = FALSE)
     }
     
-    
-    #Note linear features can also be rasters here. And natDist/anthroDist can be polygons.
-    #also - should we be requiring fully aligned rasters, not just same resolution?
-    rastLst <- list(landCover, 
-                    natDist, anthroDist)
-    
-    # remove NULLs from rastLst
-    rastLst <- rastLst[which(!vapply(rastLst, function(x) is.null(x), 
-                                   FUN.VALUE = TRUE))]
-    
-    if(!do.call(raster::compareRaster, c(rastLst, list(landCover, res = TRUE, extent = FALSE, 
-                             rowcol = FALSE, stopiffalse = FALSE)))){
-      stop("all raster data sets must have matching resolution", call. = FALSE)
-    }
-    rm(rastLst)
-    
     if(!inherits(caribouRange, "data.frame")){
       caribouRange <- data.frame(Range = caribouRange, 
                                  coefRange = caribouRange, 
@@ -89,64 +73,23 @@ setMethod(
     
     .checkInputs(caribouRange, winArea, landCover, coefTable)
     
-    if(st_crs(projectPoly) != st_crs(landCover)){
-      projectPoly <- st_transform(projectPoly, crs = st_crs(landCover))
-      message("projectPoly being transformed to have crs matching landCover")
-    }
-    
-    projectPolyOrig <- projectPoly
-    
-    # union together multiple range polygons for raster processing
-    projectPoly <- projectPoly %>% summarise()
-    
-    # pad projPoly to 3 times the window radius, using the larger if multiple
-    if(padProjPoly){
-
-      # window radius is radius of circle with winArea rounded to even number of
-      # raster cells based on resolution
-      winRad <- (sqrt(max(winArea)*10000/pi)/res(landCover)[1]) %>% 
-        round(digits = 0)*res(landCover)[1]
-      
-      projectPoly <- projectPoly %>% st_buffer(winRad*3)
-    }
-    
-    
-    landCover <- checkOverlap(landCover, projectPoly, "landCover", "projectPoly") %>%
-      cropIf(projectPoly, "landCover", "projectPoly")
-    
+    # prep projectPoly
+    projPolyOut <- prepProjPoly(projectPoly, landCover, winArea, padProjPoly)
+    projectPoly <- projPolyOut[["projectPoly"]]
+    projectPolyOrig <- projPolyOut[["projectPolyOrig"]]
+    rm(projPolyOut)
 
     # rasterize eskers
     if(inherits(esker, "sf")){
-      esker <- checkAlign(esker, landCover, "esker", "landCover")
+      esker <- checkAlign(esker, projectPoly, "esker", "projectPoly")
       
       #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       esker <- rasterizeLineDensity(esker, tmplt)
-    } else {
-      esker <- checkOverlap(esker, projectPoly, "esker", "projectPoly") %>% 
-        cropIf(projectPoly, "esker", "projectPoly")
-      
-      chk <- any(raster::compareRaster(esker, landCover, res = TRUE, 
-                                       extent = FALSE, rowcol = FALSE,
-                                       stopiffalse = FALSE), 
-                 raster::compareRaster(esker, tmplt,
-                                       res = TRUE, extent = FALSE, 
-                                       rowcol = FALSE,
-                                       stopiffalse = FALSE))
-      if(!chk){
-        stop("esker is not aligned with landCover")
-      }
-    }
-    
-    if(!is.null(eskerSave)){
-      raster::writeRaster(esker, eskerSave, overwrite = TRUE)
-      esker <- raster(eskerSave)
-    }
+    } 
 
     # rasterize linFeat
     if(inherits(linFeat, "list")){
-      
       linFeat <- combineLinFeat(linFeat)
-      
     }
     
     if(is(linFeat, "Spatial")){
@@ -154,63 +97,38 @@ setMethod(
     } 
 
     if(inherits(linFeat, "sf")){
-
-      linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
+      linFeat <- checkAlign(linFeat, projectPoly, "linFeat", "projectPoly")
       
-      #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)
-    } else {
-      linFeat <- checkOverlap(linFeat, projectPoly, "linFeat", "projectPoly") %>% 
-        cropIf(projectPoly, "linFeat", "projectPoly")
-      
-      chk <- any(raster::compareRaster(linFeat, landCover, res = TRUE, 
-                                       extent = FALSE, rowcol = FALSE,
-                                       stopiffalse = FALSE), 
-                 raster::compareRaster(linFeat, tmplt,
-                                       res = TRUE, extent = FALSE, 
-                                       rowcol = FALSE,
-                                       stopiffalse = FALSE))
-      if(!chk){
-        stop("linFeat is not aligned with landCover")
-      }
-    }
-    if(!is.null(linFeatSave)){
-      raster::writeRaster(linFeat, linFeatSave, overwrite = TRUE)
-      linFeat <- raster(linFeatSave)
-    }
+    } 
     
-    # check alignment of other layers
-    if(!is.null(natDist)){
-
-      natDist <- checkOverlap(natDist, projectPoly, "natDist", "projectPoly") %>%
-        cropIf(projectPoly, "natDist", "projectPoly")
-      #natDist <- cropIf(natDist, landCover, "natDist", "landCover")
-      #Note: orginally all cropIf calls used landcover, but that led to compareRaster errors.
-      #Switching to projectPoly appears to solve this problem, but may introduce others. Will see.
-
-      tt = try(compareRaster(landCover, natDist),silent=T)
-      if(class(tt)=="try-error"){
-        stop("landcover and natDist rasters do not have the same have the same extent, number of rows and columns, projection, resolution, or origin. Use raster::compareRaster() to identify the problem.")
-      }
-    } else {
-      natDist <- raster(matrix(NA))
+    # check alignment of all raster layers
+    rastLst <- lst(natDist, anthroDist, esker, linFeat)
+    
+    rastLst <- prepRasts(rastLst, landCover, projectPoly, tmplt, 
+                          useTmplt = c("esker", "linFeat"))
+    
+    if(is.null(natDist)){
+      rastLst$natDist <- raster(matrix(NA))
     }
         
-    if(!is.null(anthroDist)){
-      anthroDist <- checkOverlap(anthroDist, projectPoly, "anthroDist", "projectPoly") %>%
-        cropIf(projectPoly, "anthroDist", "projectPoly")
-      #anthroDist <- cropIf(anthroDist, landCover, "anthroDist", "landCover")
-      
-      tt = try(compareRaster(landCover, anthroDist),silent=T)
-      if(class(tt)=="try-error"){
-        stop("landcover and anthroDist rasters do not have the same have the same extent, number of rows and columns, projection, resolution, or origin. Use raster::compareRaster() to identify the problem.")
-      }
-    } else {
-      anthroDist <- raster(matrix(NA))
+    if(is.null(anthroDist)){
+      rastLst$anthroDist <- raster(matrix(NA))
     }
     
-    return(new("CaribouHabitat", landCover, esker, natDist, anthroDist,
-               linFeat, projectPolyOrig,  
+    if(!is.null(linFeatSave)){
+      raster::writeRaster(rastLst$linFeat, linFeatSave, overwrite = TRUE)
+      rastLst$linFeat <- raster(linFeatSave)
+    }
+    
+    if(!is.null(eskerSave)){
+      raster::writeRaster(rastLst$esker, eskerSave, overwrite = TRUE)
+      rastLst$esker <- raster(eskerSave)
+    }
+    
+    return(new("CaribouHabitat", rastLst$landCover, rastLst$esker, 
+               rastLst$natDist, rastLst$anthroDist,
+               rastLst$linFeat, projectPolyOrig,  
                processedData = raster(matrix(NA)), 
                habitatUse = raster(matrix(NA)),
                attributes = list(caribouRange = caribouRange, winArea = winArea,
@@ -242,46 +160,8 @@ setMethod(
                     projectPoly)
     }
     
-
-    # remove NULLs from indata
-    indata <- indata[which(!vapply(indata, function(x) is.null(x), 
-                                   FUN.VALUE = TRUE))]
-
+    indata <- loadFromFile(indata)
     
-    charIn <-  indata %>% unlist(recursive = FALSE) %>% is.character()
-    
-    if(!charIn){
-      stop("All data must be supplied as sf or raster objects or character
-                 paths not a mixture of each", call. = FALSE)
-    }  
-    
-    filesExist <- sapply(indata, file.exists)
-    if(!all(filesExist)){
-      stop("Path(s) for ",
-           paste0(names(filesExist)[which(!filesExist)], collapse = ", "), 
-           " do(es) not exist")
-    }
-    
-    vect <- names(indata)[which(grepl(".shp$", indata))]
-    rast <- names(indata)[which(!grepl(".shp$", indata))]
-    
-    neverVect <- c("landCover", "natDist", "anthroDist")
-    neverRast <- c("projectPoly")
-    
-    if(any(vect %in% neverVect)){
-      stop("Extension is .shp but a raster file must be provided for: ",
-           paste0(vect[which(vect %in% neverVect)], collapse = ", "))
-    }
-    
-    if(any(rast %in% neverRast)){
-      stop("Extension is not .shp but a shapefile must be provided for: ",
-           paste0(rast[which(rast %in% neverRast)], collapse = ", "))
-    }
-    
-    
-    indata[vect] <- lapply(indata[vect], st_read, quiet = TRUE, agr = "constant")
-    indata[rast]<- lapply(indata[rast], raster)
-   
     if(is.character(linFeat)){
       linFeat <- indata$linFeat
     }
