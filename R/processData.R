@@ -243,21 +243,22 @@ setMethod(
     #To speed calculations, include points from linFeat in raster.
     message("buffering anthropogenic disturbance")
     
-    expVars <- (anthroDist)>0
+    expVars <- (anthroDist) > 0
     
-
-    if(class(inData@linFeat[[1]])=="RasterLayer"){
+    # TODO: Why is inData@linFeat a list?
+    if(class(inData@linFeat[[1]]) == "RasterLayer"){
       
-      expVars[inData@linFeat[[1]]>0]=1
+      expVars[inData@linFeat[[1]] > 0] <- 1
     }else{
       lfPt <- inData@linFeat[[1]] %>% dplyr::filter(st_is(. , "POINT"))
       
-      if(nrow(lfPt)!=0){
-
+      if(nrow(lfPt) != 0){
+        
+        #TODO:is this needed rasterize accepts sf
         lfPt <- as(lfPt, "Spatial")
         
-        lfR = raster::rasterize(lfPt, expVars,field="ID")    
-        expVars[!is.na(lfR)]=1
+        lfR = raster::rasterize(lfPt, expVars, field = "ID")    
+        expVars[!is.na(lfR)] <- 1
       }  
     }
 
@@ -274,11 +275,12 @@ setMethod(
 
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,
                                nms = layernames, 
-                               pad = inData@attributes$padFocal,offset=F)
+                               pad = inData@attributes$padFocal, 
+                               offset = FALSE)
     
-    expVars <- expVars>0 
+    expVars <- expVars > 0 
 
-    if(!class(inData@linFeat[[1]])=="RasterLayer"){
+    if(!class(inData@linFeat[[1]]) == "RasterLayer"){
       ##############
       #Buffer linear features
       message("buffering linear features")
@@ -286,21 +288,22 @@ setMethod(
       #Note points were included with polygons above.
       lf <- inData@linFeat[[1]] %>% dplyr::filter(!st_is(. , "POINT"))
       
-      linBuff <- st_buffer(lf,inData@attributes$bufferWidth)
+      linBuff <- st_buffer(lf, inData@attributes$bufferWidth)
       
       # faster rasterization
       if(requireNamespace("fasterize", quietly = TRUE)){
-        linBuff <- fasterize::fasterize(st_collection_extract(linBuff, "POLYGON"), expVars)
+        linBuff <- fasterize::fasterize(st_collection_extract(linBuff, "POLYGON"), 
+                                        expVars)
       } else {
         message("To speed up install fasterize package")
         linBuff <- raster::rasterize(linBuff, expVars)
       }
       
       linBuff <- linBuff > 0 
-      linBuff[is.na(linBuff)] = 0
+      linBuff[is.na(linBuff)] <- 0
       anthroBuff <- (linBuff + expVars) > 0
     }else{
-      anthroBuff <- expVars>0
+      anthroBuff <- expVars > 0
     }
     
     all <- (anthroBuff + natDist) > 0
@@ -309,10 +312,10 @@ setMethod(
     outStack <- raster::stack(anthroBuff, natDist, all)
 
     if(requireNamespace("fasterize", quietly = TRUE)){
-      pp = fasterize::fasterize(inData@projectPoly,outStack[[1]])
+      pp = fasterize::fasterize(inData@projectPoly, outStack[[1]])
     } else {
       message("To speed up install fasterize package")
-      pp = raster::rasterize(inData@projectPoly,outStack[[1]])
+      pp = raster::rasterize(inData@projectPoly, outStack[[1]])
     }
     
     #set NAs from landcover
@@ -325,13 +328,13 @@ setMethod(
     #######
     #Range summaries
     message("calculating disturbance metrics")
-        
-    rr <- raster::zonal(outStack,pp,fun="mean",na.rm=T)
+    
+    rr <- raster::zonal(outStack, pp, fun = "mean", na.rm = T)
     rr <- as.data.frame(rr)
-    polyInfo = as.data.frame(inData@projectPoly)
-    polyInfo$geometry=NULL
-    polyInfo$zone = seq(1:nrow(polyInfo))
-    rr=merge(rr,polyInfo)
+    polyInfo <- as.data.frame(inData@projectPoly)
+    polyInfo$geometry <- NULL
+    polyInfo$zone <- seq(1:nrow(polyInfo))
+    rr <- merge(rr, polyInfo)
     
     inData@disturbanceMetrics <- rr
 

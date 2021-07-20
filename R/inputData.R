@@ -148,6 +148,10 @@ setMethod(
       linFeat <- combineLinFeat(linFeat)
       
     }
+    
+    if(is(linFeat, "Spatial")){
+      linFeat <- sf::st_as_sf(linFeat)
+    } 
 
     if(inherits(linFeat, "sf")){
 
