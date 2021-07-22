@@ -33,7 +33,10 @@ Imports:
     tidyselect,
     rsyncrosim,
     spdep,
-    rgdal
+    rgdal,
+    matrixStats,
+    tictoc,
+    simstudy
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
