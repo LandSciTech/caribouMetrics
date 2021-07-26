@@ -10,11 +10,6 @@
 #' @param useQuantiles
 #' @param interannualVar
 #' 
-#' 
-#' @description ...
-#' 
-#' @return ...
-#' 
 #' @export
 
 generatePopGrowthPredictions <- function(covTable,

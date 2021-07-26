@@ -8,10 +8,6 @@
 #' @param Type
 #' @param populationGrowthTable
 #' 
-#' @description ...
-#' 
-#' @return ...
-#' 
 #' @export
 
 calcDemoParams <- function(replicates,

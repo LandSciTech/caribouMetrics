@@ -12,10 +12,6 @@
 #' @param r_max
 #' @param interannualVar
 #' 
-#' 
-#' @description ...
-#' 
-#' @return ...
 
 popGrowthJohnson <- function(N,
                              numSteps,

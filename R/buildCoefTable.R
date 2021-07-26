@@ -3,10 +3,6 @@
 #' @param caribouCoefTable
 #' @param nBootstrap
 #' 
-#' @description ...
-#' 
-#' @return ...
-#' 
 #' @export
 
 buildCoefTable <- function(caribouCoefTable, nBootstrap){

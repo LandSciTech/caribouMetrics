@@ -8,10 +8,6 @@
 #' @param useQuantiles
 #' @param interannualVar
 #' 
-#' @description ...
-#' 
-#' @return ...
-#' 
 #' @export
 
 calcDemoPredictions <- function(covTable,

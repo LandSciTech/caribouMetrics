@@ -7,10 +7,6 @@
 #' @param modVer
 #' @param modNum
 #' 
-#' @description ...
-#' 
-#' @return ...
-#' 
 #' @export
 #' 
 

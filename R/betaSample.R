@@ -4,10 +4,6 @@
 #' @param phi
 #' @param useQuantiles
 #' 
-#' 
-#' @description ...
-#' 
-#' @return ...
 
 betaSample <- function(x,phi,useQuantiles=F){
   bShapes = betaGetShapes(x,phi) 
