@@ -23,18 +23,18 @@ calcDemoParams <- function(replicates,
   populationGrowthTable <- data.table(populationGrowthTable)
   
   DT_S <- makePopDT(populationGrowthTable, 
-                             responseVariable = "femaleSurvival", 
-                             modelVersion = modelVersion, 
-                             modelNumber = survivalModelNumber)[[1]]
+                    resVar = "femaleSurvival", 
+                    modVer = modelVersion, 
+                    modNum = survivalModelNumber)[[1]]
   
-  coeffTable_S <- buildCoefficientsTable(DT_S, replicates)
+  coeffTable_S <- buildCoefTable(DT_S, replicates)
   
   DT_R <- makePopDT(populationGrowthTable, 
-                    responseVariable = "recruitment",
-                    modelVersion = modelVersion, 
-                    modelNumber = recruitmentModelNumber)[[1]]
+                    resVar = "recruitment",
+                    modVer = modelVersion, 
+                    modNum = recruitmentModelNumber)[[1]]
   
-  coeffTable_R <- buildCoefficientsTable(DT_R, replicates)
+  coeffTable_R <- buildCoefTable(DT_R, replicates)
   
   return(list(modelVersion = modelVersion,
               coeffTable_Survival = coeffTable_S,

@@ -10,12 +10,12 @@ buildCoefTable <- function(caribouCoefTable, nBootstrap){
   allCoeffs <- caribouCoefTable[["Coefficient"]]
   coeffTable <- lapply(X = allCoeffs, function(coeff){
     if (0) {
-      return(rep(as.numeric(caribouCoefTable[Coefficient == coeff, "Value"]), 
+      return(rep(as.numeric(caribouCoefTable[caribouCoefTable$Coefficient == coeff, "Value"]), 
                  times = nBootstrap))
     } else {
       vec <- rnorm(n = nBootstrap, 
-                   mean = as.numeric(caribouCoefTable[Coefficient == coeff, "Value"]),
-                   sd = as.numeric(caribouCoefTable[Coefficient == coeff, "StdErr"]))
+                   mean = as.numeric(caribouCoefTable[caribouCoefTable$Coefficient == coeff, "Value"]),
+                   sd = as.numeric(caribouCoefTable[caribouCoefTable$Coefficient == coeff, "StdErr"]))
       return(vec)
     }
   })

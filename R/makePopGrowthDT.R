@@ -12,8 +12,11 @@
 
 makePopDT <- function(populationGrowthTable,
                       resVar,
-                      modelVer,
+                      modVer,
                       modNum){
+  
+  populationGrowthTable = as.data.table(populationGrowthTable)
+  
   ## Check that both a modVer and modNum parameter have been supplied.
   ## Not required for recruitment models
   if (resVar == "femaleSurvival"){
@@ -41,15 +44,18 @@ makePopDT <- function(populationGrowthTable,
   }
   
   DTs <- lapply(seq_along(modVer), FUN = function(modelIndex){
-    DT <- populationGrowthTable[responseVariable %in% resVar &
-                                  modelVersion  %in% modVer[modelIndex] &
-                                  ModelNumber %in% modNum[modelIndex] &
-                                  Type %in% modType[modelIndex],]
+    populationGrowthTable = as.data.table(populationGrowthTable)
+    DT <- populationGrowthTable[populationGrowthTable$responseVariable %in% resVar &
+                                  populationGrowthTable$modelVersion  %in% modVer[modelIndex] &
+                                  populationGrowthTable$ModelNumber %in% modNum[modelIndex] &
+                                  populationGrowthTable$Type %in% modType[modelIndex],]
     if (any(is.na(DT[["StdErr"]]))){ 
+      DT = as.data.table(DT)
       stdErrCalc <- calcFromCI(ci_lower = DT[["lowerCI"]],
                                ci_upper = DT[["upperCI"]])
-      stdErrCalc[!is.na(DT[["StdErr"]])]=DT[["StdErr"]][!is.na(DT[["StdErr"]])]
-      DT[, StdErr := stdErrCalc]
+      stdErrCalc[!is.na(DT[["StdErr"]])] = DT[["StdErr"]][!is.na(DT[["StdErr"]])]
+      #DT[, StdErr := stdErrCalc]
+      DT$StdErr = stdErrCalc
     }
     return(DT)
   })
