@@ -9,7 +9,6 @@
 #' @param interannualVar
 #' 
 #' @export
-
 calcDemoPredictions <- function(covTable,
                                 popGrowthPars,
                                 ignorePrecision = T,
@@ -32,25 +31,41 @@ calcDemoPredictions <- function(covTable,
     }
   }
   
+  if((length(useQuantiles)==1)&&(!useQuantiles)){
+    popGrowthPars$coeffTable_S$quantiles=useQuantiles
+    popGrowthPars$coeffTable_R$quantiles=useQuantiles
+    
+  }else{
+    q=getQuantiles(nrow(popGrowthPars$coeffTable_S$coeffTable))
+    
+    if(is.null(popGrowthPars$coeffTable_S$quantiles)){
+      popGrowthPars$coeffTable_S$quantiles=sample(q,replace=F)
+    }
+    if(is.null(popGrowthPars$coeffTable_R$quantiles)){
+      popGrowthPars$coeffTable_R$quantiles=sample(q,replace=F)
+    }
+    
+  }
+  
   pred_S <- generatePopGrowthPredictions(covTable = covTable,
                                          coeffTable = popGrowthPars$coeffTable_Survival[["coeffTable"]],
                                          coeffValues = popGrowthPars$coeffTable_Survival[["coeffValues"]],
-                                         modelType =  popGrowthPars$modelVersion,
+                                         modelType =  popGrowthPars$modelVersion,                                       
+                                         useQuantiles = popGrowthPars$coeffTable_S[["quantiles"]],
                                          model = "femaleSurvival",
                                          ignorePrecision = ignorePrecision,
-                                         returnSample = returnSample,
-                                         useQuantiles = useQuantiles,
-                                         interannualVar = interannualVar$S)
+                                         returnSample=returnSample,
+                                         interannualVar=interannualVar$S)
   
   pred_R <- generatePopGrowthPredictions(covTable = covTable,
                                          coeffTable = popGrowthPars$coeffTable_Recruitment[["coeffTable"]],
                                          coeffValues = popGrowthPars$coeffTable_Recruitment[["coeffValues"]],
+                                         useQuantiles = popGrowthPars$coeffTable_R[["quantiles"]],
                                          modelType =  popGrowthPars$modelVersion,
                                          model = "recruitment",
                                          ignorePrecision = ignorePrecision,
-                                         returnSample = returnSample,
-                                         useQuantiles = useQuantiles,
-                                         interannualVar = interannualVar$Rec)
+                                         returnSample=returnSample,
+                                         interannualVar=interannualVar$Rec)
   rateSamples = pred_S
   names(rateSamples)[names(rateSamples) == "value"] = "S_bar"
   names(rateSamples)[names(rateSamples) == "average"] = "S_bar"

@@ -5,7 +5,7 @@
 \title{Create and the correct values in a data table used in for the population growth model. 
 This is a base level function with no defaults set.}
 \usage{
-makePopDT(populationGrowthTable, resVar, modelVer, modNum)
+makePopDT(populationGrowthTable, resVar, modVer, modNum)
 }
 \arguments{
 \item{modNum}{}

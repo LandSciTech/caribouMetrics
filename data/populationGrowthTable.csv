@@ -1,6 +1,9 @@
 modelVersion,responseVariable,ModelNumber,Type,Coefficient,Value,StdErr,lowerCI,upperCI
+ECCC,femaleSurvival,M1,National,Intercept,0.85,0,NA,NA
+ECCC,femaleSurvival,M1,National,Precision,0,0,NA,NA
 ECCC,recruitment,M3,National,Intercept,44.265,2.942,NA,NA
 ECCC,recruitment,M3,National,Total_dist,-0.429,0.061,NA,NA
+ECCC,recruitment,M3,National,Precision,0.06,0,NA,NA
 ECCC,recruitment,M7,National,Intercept,43.702,3.263,NA,NA
 ECCC,recruitment,M7,National,Anthro,-0.432,0.062,NA,NA
 ECCC,recruitment,M7,National,Fire,-0.373,0.143,NA,NA

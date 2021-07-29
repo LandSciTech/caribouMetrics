@@ -10,6 +10,7 @@ calcDemoParams(
   modelVersion = "Johnson",
   survivalModelNumber = "M1",
   recruitmentModelNumber = "M4",
+  randomQuantiles = T,
   populationGrowthTable = read.csv("./data/populationGrowthTable.csv")
 )
 }
