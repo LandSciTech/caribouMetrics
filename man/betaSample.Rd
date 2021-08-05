@@ -5,10 +5,14 @@
 \title{Take a sample from a beta distribution}
 \usage{
 betaSample(x, phi, useQuantiles = F)
+
+betaSample(x, phi, useQuantiles = F)
 }
 \arguments{
 \item{useQuantiles}{}
 }
 \description{
+Take a sample from a beta distribution
+
 Take a sample from a beta distribution
 }

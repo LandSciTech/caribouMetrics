@@ -4,7 +4,6 @@
 #' @param phi
 #' @param useQuantiles
 #' 
-
 betaSample<-function(x,phi,useQuantiles=F){
   #x=predictedTableSD[1,]
   bShapes = betaGetShapes(x,phi) 
@@ -69,3 +68,78 @@ lnormSample<-function(x,sd,useQuantiles=F){
     return(qq)
   }
 }
+
+#' Take a sample from a beta distribution
+#'
+#' @param x
+#' @param phi
+#' @param useQuantiles
+#' 
+betaSample<-function(x,phi,useQuantiles=F){
+  #x=predictedTableSD[1,]
+  bShapes = betaGetShapes(x,phi) 
+  
+  if((length(useQuantiles)==1)&&!useQuantiles){
+    return(rbeta(length(x),bShapes$shape1,bShapes$shape2))
+  }else{
+    if(length(useQuantiles)!=length(x)){
+      q=getQuantiles(x)
+    }else{
+      q=useQuantiles
+    }
+    
+    qq = qbeta(q,bShapes$shape1,bShapes$shape2)
+    return(qq)
+  }
+}
+
+
+estBetaParams <- function(mu, sigma){
+  
+  if(any(mu<0)){
+    print("ERROR (estBetaParam): mu must not be less than 0. Returning NULL.")
+    return()
+  } 
+  
+  if(any(mu>1)){
+    print("ERROR (estBetaParam): mu must not be greater than 1. Returning NULL.")
+    return()
+  } 
+  
+  if(any(sigma<0)){
+    print("ERROR (estBetaParam): sigma must not be negative. Returning NULL.")
+    return()
+  } 
+  
+  alpha <- ((1-mu)/sigma^2 - 1/mu) * mu^2
+  beta <- alpha * (1/mu - 1)
+  return(list(alpha=alpha, beta=beta))
+  
+}
+
+addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
+  #bar= rep(Rec_bar,length.out=100);type="Rec";minV=rep(minRec,length.out=100);maxV=rep(maxRec,length.out=100)
+  if(is.element(paste0(type,"_CV"),names(interannualVar))){
+    #reproducing ECCC_CaribouPopnProjection - see line 143 etc of functions.R
+    ProcVar <- (bar * interannualVar[[paste0(type,"_CV")]])^2
+    BetaPars  <- estBetaParams(bar, ProcVar)
+    BetaPars$alpha[BetaPars$alpha < 0] <- 0.01
+    BetaPars$beta[BetaPars$beta < 0] <- 0.01
+    interannualVar[[paste0(type,"_alpha")]]=BetaPars$alpha
+    interannualVar[[paste0(type,"_beta")]]=BetaPars$beta
+  }
+  if(is.element(paste0(type,"_phi"),names(interannualVar))){
+    bShapes = betaGetShapes(bar,interannualVar[[paste0(type,"_phi")]]) 
+    interannualVar[[paste0(type,"_alpha")]]=bShapes$shape1
+    interannualVar[[paste0(type,"_beta")]]=bShapes$shape2
+  }
+  
+  bar_t = rtrunc(length(bar), 
+                 spec="beta", 
+                 shape1=interannualVar[[paste0(type,"_alpha")]], 
+                 shape2= interannualVar[[paste0(type,"_beta")]],
+                 a=minV,
+                 b=maxV)
+  return(bar_t)
+}
+

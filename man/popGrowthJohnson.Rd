@@ -16,8 +16,12 @@ popGrowthJohnson(
   Kmultiplier = 100,
   r_max = 1.3,
   sexRatio = 0.5,
-  interannualVar = list(Rec_shape1 = 1.62, Rec_shape2 = 3.44, S_shape1 = 13.98,
-    S_shape2 = 2.51)
+  minRec = 0,
+  maxRec = 0.41,
+  minSadF = 0.61,
+  maxSadF = 1,
+  interannualVar = list(Rec_alpha = 1.62, Rec_beta = 3.44, S_alpha = 13.98, S_beta =
+    2.51)
 )
 }
 \arguments{

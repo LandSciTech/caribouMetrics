@@ -25,17 +25,28 @@ popGrowthJohnson <- function(N,
                              Kmultiplier = 100,
                              r_max = 1.3,
                              sexRatio=0.5,
-                             interannualVar = list(Rec_shape1=1.62,Rec_shape2=3.44,S_shape1=13.98,S_shape2=2.51)){
+                             minRec=0,
+                             maxRec=0.41,
+                             minSadF=0.61,
+                             maxSadF=1,
+                             interannualVar = list(Rec_alpha=1.62,Rec_beta=3.44,S_alpha=13.98,S_beta=2.51)){
   #N=pars$N0;numSteps=numSteps;Rec_bar=pars$R_bar;S_bar=pars$S_bar;interannualVar=list(Rec_shape1=1.62,Rec_shape2=3.44,S_shape1=13.98,S_shape2=2.51);P_0=0.95;P_K=0.6;alpha=1;beta=4;Kmultiplier=100;r_max=1.3
-  #N=48;numSteps=20;Rec_bar=0.2436859;S_bar=0.8933278;sexRatio=0.5;interannualVar=NA;P_0=0.95;P_K=0.6;alpha=1;beta=4;Kmultiplier=100;r_max=1.3
+  #N=48;numSteps=20;Rec_bar=0.2436859;S_bar=0.8933278;sexRatio=0.5;interannualVar=list(Rec_CV=0.79,S_CV=0.12);P_0=0.99;P_K=0.7;alpha=1;beta=4;Kmultiplier=100;r_max=1.3;minRec=0;maxRec=0.41;minSadF=0.61;maxSadF=1
+  
   
   rr=data.frame(N=N)
   rK <- Kmultiplier * N
   Rec_bar[Rec_bar<0]=0
   S_bar[S_bar<0]=0
-  
-  Rec_bar=sexRatio*Rec_bar 
-  rK <- Kmultiplier * N
+
+  if(!is.element("Rec_phi",names(interannualVar))){
+    Rec_bar=sexRatio*Rec_bar 
+  }else{
+    #Phi is precision of calf cow ratio, not recruitment.
+    minRec=minRec/sexRatio
+    maxRec=maxRec/sexRatio
+  }
+  rK <- Kmultiplier * N #Note in Glenn's code this happens inside the loop. Seems like an error.
   
   for(t in 1:numSteps){
     print(paste("projecting step ",t))
@@ -44,22 +55,17 @@ popGrowthJohnson <- function(N,
     #TO DO: interannual variability should be in generatePopGrowthPredictions function, not here.
     #Note interannual variability slows things down a lot, and doesn't make much difference unless initial population size is very low.
     #If worrying about small populations sizes need to switch from continuous to stochastic model with discrete number of births/deaths. 
-    if(is.null(interannualVar)||is.na(interannualVar)||((length(interannualVar)==1)&!interannualVar)){
+    if(is.null(interannualVar)||is.na(interannualVar)||((length(interannualVar)==1)&&!interannualVar)){
       Rec_t= Rec_bar
       S_t = S_bar
     }else{
-      Rec_phi = unique(interannualVar$Rec_shape1+interannualVar$Rec_shape2)
-      if(length(Rec_phi)>1){
-        stop("handle vector of recruitment precision parameters")
-      }
-      S_phi = unique(interannualVar$S_shape1+interannualVar$S_shape2)
-      if(length(S_phi)>1){
-        stop("handle vector of survival precision parameters")
-      }
-      
-      Rec_t = betaSample(Rec_bar,Rec_phi)
-      S_t = betaSample(S_bar,S_phi)
+      Rec_t = addInterannualVar(Rec_bar,interannualVar,type="Rec",minV =minRec,maxV=maxRec)      
+      S_t = addInterannualVar(S_bar,interannualVar,type="S",minV =minSadF,maxV=maxSadF)      
     }
+
+    if(is.element("Rec_phi",names(interannualVar))){
+      Rec_t=sexRatio*Rec_t 
+    }  
     
     Ntm1=N
     
