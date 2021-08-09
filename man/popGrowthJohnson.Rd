@@ -20,12 +20,12 @@ popGrowthJohnson(
   maxRec = 0.41,
   minSadF = 0.61,
   maxSadF = 1,
-  interannualVar = list(Rec_alpha = 1.62, Rec_beta = 3.44, S_alpha = 13.98, S_beta =
-    2.51)
+  interannualVar = list(Rec_phi = 1.62 + 3.44, S_phi = 13.98 + 2.51),
+  matchJohnson2020 = F
 )
 }
 \arguments{
-\item{interannualVar}{}
+\item{matchJohnson2020}{}
 }
 \description{
 Implementation of the Johnson 2020 population model

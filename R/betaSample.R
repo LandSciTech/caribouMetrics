@@ -116,12 +116,17 @@ estBetaParams <- function(mu, sigma){
   return(list(alpha=alpha, beta=beta))
   
 }
+fillNAsWithMean <- function(vector) {
+  vector[is.na(vector)] <- mean(vector, na.rm = TRUE)
+  vector
+}
 
 addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
-  #bar= rep(Rec_bar,length.out=100);type="Rec";minV=rep(minRec,length.out=100);maxV=rep(maxRec,length.out=100)
+  #bar=pars$expectedRec;type="Rec";minV=pars$minRec; maxV=pars$maxRec; interannualVar = list(Rec_CV=pars$procEARCV,S_CV=pars$procESadFCV)
   if(is.element(paste0(type,"_CV"),names(interannualVar))){
     #reproducing ECCC_CaribouPopnProjection - see line 143 etc of functions.R
     ProcVar <- (bar * interannualVar[[paste0(type,"_CV")]])^2
+    ProcVar=fillNAsWithMean(ProcVar)
     BetaPars  <- estBetaParams(bar, ProcVar)
     BetaPars$alpha[BetaPars$alpha < 0] <- 0.01
     BetaPars$beta[BetaPars$beta < 0] <- 0.01
@@ -140,6 +145,7 @@ addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
                  shape2= interannualVar[[paste0(type,"_beta")]],
                  a=minV,
                  b=maxV)
+  
   return(bar_t)
 }
 
