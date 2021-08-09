@@ -36,7 +36,8 @@ Imports:
     rgdal,
     matrixStats,
     tictoc,
-    simstudy
+    simstudy,
+    truncdist
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
