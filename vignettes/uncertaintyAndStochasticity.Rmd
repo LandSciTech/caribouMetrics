@@ -14,22 +14,9 @@ library(data.table)
 library(tictoc)
 library(simstudy)
 
-#I called in libraries from Tati's module just to avoid package dependency issues
-# require("Require")
-# Require("testthat")
-# Require("SpaDES")
-# Require("raster")
-# Require("simstudy")
-library(caribouMetrics)
+#library(caribouMetrics)
 library(tidyverse)
 
-# baseDir = "C:/Users/HughesJo/Documents/gitprojects/RoFBooAnalysis"
-# setwd(baseDir)
-# scriptDir = paste0(baseDir,"/R")
-# source(paste0(scriptDir,"/makeDTforPopGrowth_DYSON.R"))
-# source(paste0(scriptDir,"/buildCoefficientsTable_DYSON.R"))
-# source(paste0(scriptDir,"/generatePopGrowthPredictions_DYSON.R"))
-# source(paste0(scriptDir,"/wrappers.R"))
 covTableSim <- expand.grid(Anthro=seq(0,100,by=2),Fire=seq(0,70,by=10)) 
 covTableSim$polygon = paste0("Missisa_",covTableSim$Anthro+1)
 covTableSim$area = "FarNorth"

@@ -9,7 +9,7 @@ popGrowthJohnson(
   numSteps,
   Rec_bar,
   S_bar,
-  P_0 = 0.95,
+  P_0 = 1,
   P_K = 0.6,
   alpha = 1,
   beta = 4,
@@ -20,12 +20,12 @@ popGrowthJohnson(
   maxRec = 0.41,
   minSadF = 0.61,
   maxSadF = 1,
-  interannualVar = list(Rec_phi = 1.62 + 3.44, S_phi = 13.98 + 2.51),
-  matchJohnson2020 = F
+  interannualVar = list(Rec_CV = 0.46, S_CV = 0.08696),
+  probOption = "binomial"
 )
 }
 \arguments{
-\item{matchJohnson2020}{}
+\item{probOption}{Choices are "binomial","continuous" or "matchJohnson2020". matchJohnson2020 option reproduces rounding error.}
 }
 \description{
 Implementation of the Johnson 2020 population model

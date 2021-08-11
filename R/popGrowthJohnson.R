@@ -12,14 +12,14 @@
 #' @param r_max
 #' @param sexRatio
 #' @param interannualVar
-#' @param matchJohnson2020
+#' @param probOption Choices are "binomial","continuous" or "matchJohnson2020". matchJohnson2020 option reproduces rounding error.
 #' 
 
 popGrowthJohnson <- function(N,
                              numSteps,
                              Rec_bar,
                              S_bar,
-                             P_0 = 0.95,
+                             P_0 = 1,
                              P_K = 0.6,
                              alpha = 1,
                              beta = 4,
@@ -30,8 +30,9 @@ popGrowthJohnson <- function(N,
                              maxRec=0.41,
                              minSadF=0.61,
                              maxSadF=1,
-                             interannualVar = list(Rec_phi=1.62+3.44,S_phi=13.98+2.51),
-                             matchJohnson2020=F){
+                             interannualVar = list(Rec_CV=0.46,S_CV=0.08696),
+                             probOption="binomial"){
+  #Note interannual var parameters here are made up. I don't know what the precision parameters should be. Glenn specified a CV for each scenario, but I don't know what that should be either.
   #N=pars$N0;numSteps=numSteps;Rec_bar=pars$R_bar;S_bar=pars$S_bar;interannualVar=list(Rec_shape1=1.62,Rec_shape2=3.44,S_shape1=13.98,S_shape2=2.51);P_0=0.95;P_K=0.6;alpha=1;beta=4;Kmultiplier=100;r_max=1.3
   #N=48;numSteps=20;Rec_bar=0.2436859;S_bar=0.8933278;sexRatio=0.5;interannualVar=list(Rec_CV=0.79,S_CV=0.12);P_0=0.99;P_K=0.7;alpha=1;beta=4;Kmultiplier=100;r_max=1.3;minRec=0;maxRec=0.41;minSadF=0.61;maxSadF=1
   #N=pars$expectedN0;numSteps=numSteps;Rec_bar=pars$expectedRec;S_bar=pars$expectedSadF;P_0 = pars$DDPRec0;P_K = pars$DDPRecK
@@ -49,10 +50,17 @@ popGrowthJohnson <- function(N,
     minRec=minRec/sexRatio
     maxRec=maxRec/sexRatio
   }
-  if(matchJohnson2020){
+  if(probOption=="matchJohnson2020"){
     roundDigits=0
+    doBinomial=F
   }else{
-    roundDigits=50
+    if(probOption=="continuous"){
+      roundDigits=100
+      doBinomial=F
+    }else{
+      roundDigits=0
+      doBinomial=T
+    }
     rK <- Kmultiplier * N #Note in Glenn's code this happens inside the loop. Seems like an error.
   }
   
@@ -78,47 +86,71 @@ popGrowthJohnson <- function(N,
     Ntm1=N
     
     #Note: following SpaDES code from ECCC_CaribouPopnProjections.Rmd. Description in the paper is not adequate for reproducing the model.  
-    n_deaths <- round(N * (1 - S_t),roundDigits) #note this is not the right way to do stochastic modelling
-    #bernoulli sampling would be the way to go, but slower to vectorize
+    if(doBinomial){
+      n_deaths <- rbinom(length(N),N,(1 - S_t))
+    }else{
+      n_deaths <- round(N * (1 - S_t),roundDigits) #note this is not the right way to do stochastic modelling
+    }
+    #Binomial sampling is better and slower
     #Sutherland implementation uses rounding, which in turn yields wierd results for low population sizes with no interannual variability
     
     surviving_adFemales <- N - n_deaths
 
-    if(matchJohnson2020){
+    if(probOption=="matchJohnson2020"){
       rK <- Kmultiplier * N #Note in Glenn's code this happens inside the loop. Seems like an error.
     }
     
-    n_recruitsUnadjDD <- round(surviving_adFemales * Rec_t,roundDigits) # projected rec (after DD effects):cow at yr end
+    #n_recruitsUnadjDD <- round(surviving_adFemales * Rec_t,roundDigits) # projected rec (after DD effects):cow at yr end
+    n_recruitsUnadjDD <- surviving_adFemales * Rec_t # projected rec (after DD effects):cow at yr end
     
     adjDDRtProportion <- (P_0 -
                             ((P_0 - P_K) *
                                (surviving_adFemales/rK)^beta)) * 
-      (surviving_adFemales/((surviving_adFemales+1e-6) + alpha))
+      surviving_adFemales/(surviving_adFemales+1e-6 + alpha)
     
     adjDDRtProportion[adjDDRtProportion<0] <- 0
     adjDDRtProportion[adjDDRtProportion>1] <- 1
-    n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits) # projected rec (after DD effects):cow at yr end
     
-    N <- surviving_adFemales + n_recruits;
-    
-    if(matchJohnson2020){
-      ad = adjustN(N,Ntm1,r_max,denominatorAdjust=1e-06)
+    if(doBinomial){
+      n_recruits <- rbinom(length(N),surviving_adFemales,Rec_t*adjDDRtProportion)
     }else{
-      ad = adjustN(N,Ntm1,r_max)
+      n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits) # projected rec (after DD effects):cow at yr end
+    }  
+    N <- surviving_adFemales + n_recruits
+
+    if(probOption=="matchJohnson2020"){
+      ad = adjustN(N,Ntm1,r_max,denominatorAdjust=1e-06,roundDigits=roundDigits)
+    }else{
+      ad = adjustN(N,Ntm1,r_max,roundDigits=roundDigits)
     }
+    if(sum(is.na(ad$N))>0){stop()}
+    
     N=ad$N
     rr[paste0("lam",t)]=ad$Lambda    
   }
   
   lamBits = names(rr)[grepl("lam",names(rr))]
-  #if(matchJohnson2020){
-  #  rr$lambda=ad$Lambda #Glenn's output table includes Lambda for each year - summary over years is done elsewhere.
-  #}else{
-  rr$lambda=matrixStats::rowMedians(as.matrix(subset(rr,select=lamBits)))
-  #}
+  rr$lambda=matrixStats::rowMeans2(as.matrix(subset(rr,select=lamBits)),na.rm=T)
   rr=subset(rr,select=setdiff(names(rr),lamBits))
   rr$N=N #report final population size
   return(rr)
+}
+
+adjustN<-function(N,Ntm1,r_max=NA,denominatorAdjust=0,roundDigits=50){
+  N[N<0]=0
+  N[Ntm1==0]=0
+  Lambda = N/(Ntm1+ denominatorAdjust)
+  
+  if(!is.na(r_max)){
+    Lambda[Ntm1==0]=0
+    N[Lambda>r_max]=round(Ntm1[Lambda>r_max] * r_max,roundDigits)
+    Lambda = N/(Ntm1+ denominatorAdjust)
+  }
+  
+  if(denominatorAdjust==0){
+    Lambda[Ntm1==0]=0
+  }
+  return(list(N=N,Lambda=Lambda))
 }
 
 #' Implementation of the ECCC 2011 population model
@@ -197,25 +229,9 @@ popGrowthECCC2011 <- function(N,
   }
   
   lamBits = names(rr)[grepl("lam",names(rr))]
-  rr$lambda=matrixStats::rowMeans2(as.matrix(subset(rr,select=lamBits)),na.rm=T)
+  rr$lambda=matrixStats::rowMeans2(as.matrix(subset(rr,select=lamBits)))
   rr=subset(rr,select=setdiff(names(rr),lamBits))
   rr$N=N #report final population size
   return(rr)
 }
 
-adjustN<-function(N,Ntm1,r_max=NA,denominatorAdjust=0){
-  N[N<0]=0
-  N[Ntm1==0]=0
-  Lambda = N/(Ntm1+ denominatorAdjust)
-  
-  if(!is.na(r_max)){
-    Lambda[Ntm1==0]=0
-    N[Lambda>r_max]=(Ntm1[Lambda>r_max] * r_max)
-    Lambda = N/(Ntm1+ denominatorAdjust)
-  }
-  
-  if(denominatorAdjust==0){
-    Lambda[Ntm1==0]=NA
-  }
-  return(list(N=N,Lambda=Lambda))
-}
