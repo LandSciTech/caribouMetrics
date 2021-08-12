@@ -2,22 +2,51 @@
 % Please edit documentation in R/calcDemoParams.R
 \name{calcDemoParams}
 \alias{calcDemoParams}
-\title{Wrapper function to generate the population growth model parameters under
-default conditions that match those needed by most users}
+\title{Generate default population growth model parameters}
 \usage{
 calcDemoParams(
   replicates,
   modelVersion = "Johnson",
   survivalModelNumber = "M1",
   recruitmentModelNumber = "M4",
-  randomQuantiles = T,
-  populationGrowthTable = read.csv("./data/populationGrowthTable.csv")
+  randomQuantiles = TRUE,
+  populationGrowthTable = popGrowthTableJohnsonECCC
 )
 }
 \arguments{
-\item{populationGrowthTable}{}
+\item{replicates}{integer. Number replicates to use to account for
+uncertainty in the model}
+
+\item{modelVersion}{character. Which model version to use. Options are "ECCC"
+for the model used in the ECCC Report (2011) and "Johnson" for the model
+used in Johnson et. al. (2020)}
+
+\item{survivalModelNumber, recruitmentModelNumber}{character. Which model
+number to use see \code{populationGrowthTable} for options.}
+
+\item{randomQuantiles}{logical. Should randomly sorted quantiles be used for
+sampling the distribution of population predictions around the national
+mean?}
+
+\item{populationGrowthTable}{data.frame. By default
+\code{populationGrowthTable} is used. A custom table of model parameters
+can be provided but it must match the column names of
+\code{populationGrowthTable}.}
 }
 \description{
 Wrapper function to generate the population growth model parameters under
-default conditions that match those needed by most users
+default conditions that match those needed by most users.
+}
+\references{
+ECCC. 2011. Scientific assessment to inform the identification of
+  critical habitat for woodland caribou (Rangifer tarandus caribou), boreal
+  population, in Canada. Canadian Wildlife Service, Ottawa.
+  \url{http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf}.
+   Accessed 26 Mar 2021.
+
+  Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
+  Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking
+  population dynamics to habitat for a threatened species in Canada. Journal
+  of Applied Ecology, 57(7), pp.1314-1327.
+  \url{https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637}
 }
