@@ -10,12 +10,9 @@ fig_caption: yes
 knitr::opts_chunk$set(echo = TRUE)
 if(!require(bookdown)){install.packages("bookdown")}
 
-library(data.table)
-library(tictoc)
-library(simstudy)
 devtools::load_all(".")
 #library(caribouMetrics)
-library(tidyverse)
+library(ggplot2)
 
 covTableSim <- expand.grid(Anthro = seq(0, 90, by = 2), 
                            Fire = seq(0, 70, by = 10)) 

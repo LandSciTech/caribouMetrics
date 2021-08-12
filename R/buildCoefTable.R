@@ -23,7 +23,7 @@ buildCoefTable <- function(caribouCoefTable, nBootstrap){
   
   coeffMatrix <- do.call(cbind, coeffTable)
   
-  coeffValues <- data.table(t(caribouCoefTable[, "Value"]))
+  coeffValues <- data.table::data.table(t(caribouCoefTable[, "Value"]))
   names(coeffValues) <- caribouCoefTable[["Coefficient"]]
   
   modList <- list(coeffTable = coeffMatrix,

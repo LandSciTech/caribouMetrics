@@ -6,7 +6,7 @@
 #' 
 betaSample<-function(x,phi,useQuantiles=F){
   #x=predictedTableSD[1,]
-  bShapes = betaGetShapes(x,phi) 
+  bShapes = simstudy::betaGetShapes(x,phi) 
   
   if((length(useQuantiles)==1)&&!useQuantiles){
     return(rbeta(length(x),bShapes$shape1,bShapes$shape2))
@@ -77,7 +77,7 @@ lnormSample<-function(x,sd,useQuantiles=F){
 #' 
 betaSample<-function(x,phi,useQuantiles=F){
   #x=predictedTableSD[1,]
-  bShapes = betaGetShapes(x,phi) 
+  bShapes = simstudy::betaGetShapes(x,phi) 
   
   if((length(useQuantiles)==1)&&!useQuantiles){
     return(rbeta(length(x),bShapes$shape1,bShapes$shape2))
@@ -137,7 +137,7 @@ addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
     interannualVar[[paste0(type,"_beta")]]=BetaPars$beta
   }
   if(is.element(paste0(type,"_phi"),names(interannualVar))){
-    bShapes = betaGetShapes(bar,interannualVar[[paste0(type,"_phi")]]) 
+    bShapes = simstudy::betaGetShapes(bar,interannualVar[[paste0(type,"_phi")]]) 
     interannualVar[[paste0(type,"_alpha")]]=bShapes$shape1
     interannualVar[[paste0(type,"_beta")]]=bShapes$shape2
   }

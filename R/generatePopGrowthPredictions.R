@@ -22,7 +22,7 @@ generatePopGrowthPredictions <- function(covTable,
                                          useQuantiles,
                                          interannualVar){
   
-  tic(paste0("Elapsed time for caribou prediction for ",
+  tictoc::tic(paste0("Elapsed time for caribou prediction for ",
              model, " for ", modelType,":"))
   
   whichCovariates <- names(coeffValues)[!names(coeffValues) %in% c("Intercept", 
@@ -145,10 +145,10 @@ generatePopGrowthPredictions <- function(covTable,
   
   if (returnSample) {
     
-    predLong = data.table(predictedTableSD)
+    predLong = data.table::data.table(predictedTableSD)
     covTable$scnID = seq(1:nrow(covTable))
     predLong$scnID = seq(1:nrow(predLong))
-    predLong = melt(predLong,
+    predLong = data.table::melt(predLong,
                     id.vars = "scnID",
                     variable.name = "replicate",
                     value.name = "value")
@@ -169,7 +169,7 @@ generatePopGrowthPredictions <- function(covTable,
       resultDT$PIhigh = qqs[[2]]
     }  
   }  
-  toc()
+  tictoc::toc()
   
   return(resultDT)
 }

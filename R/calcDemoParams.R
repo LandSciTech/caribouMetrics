@@ -21,7 +21,7 @@ calcDemoParams <- function(replicates,
     stop("Please supply a directory containing a populationGrowthTable")
   }
   
-  populationGrowthTable <- data.table(populationGrowthTable)
+  populationGrowthTable <- data.table::data.table(populationGrowthTable)
   
   DT_S <- makePopDT(populationGrowthTable, 
                     resVar = "femaleSurvival", 
