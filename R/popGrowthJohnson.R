@@ -38,7 +38,8 @@ popGrowthJohnson <- function(N,
   #N=pars$expectedN0;numSteps=numSteps;Rec_bar=pars$expectedRec;S_bar=pars$expectedSadF;P_0 = pars$DDPRec0;P_K = pars$DDPRecK
   #alpha = pars$DDAEAlpha;beta = pars$DDBeta;Kmultiplier = pars$K;r_max = pars$RMax;sexRatio=1;minRec=pars$minRec
   #maxRec=pars$maxRec;minSadF=pars$minSadF;maxSadF=pars$maxSadF;interannualVar = list(Rec_CV=pars$procEARCV,S_CV=pars$procESadFCV)
-  
+  #N=745;numSteps=20;Rec_bar=0.34309;S_bar=0.8686355;probOption="continuous";interannualVar=F
+  #sexRatio=0.5;P_0=1;P_K=0.6;alpha=1;beta=4;Kmultiplier=100;r_max=1.3;minRec=0;maxRec=0.41;minSadF=0.61;maxSadF=1
   rr=data.frame(N=N)
   Rec_bar[Rec_bar<0]=0
   S_bar[S_bar<0]=0
@@ -102,7 +103,7 @@ popGrowthJohnson <- function(N,
     
     #n_recruitsUnadjDD <- round(surviving_adFemales * Rec_t,roundDigits) # projected rec (after DD effects):cow at yr end
     n_recruitsUnadjDD <- surviving_adFemales * Rec_t # projected rec (after DD effects):cow at yr end
-    
+
     adjDDRtProportion <- (P_0 -
                             ((P_0 - P_K) *
                                (surviving_adFemales/rK)^beta)) * 
@@ -117,7 +118,7 @@ popGrowthJohnson <- function(N,
       n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits) # projected rec (after DD effects):cow at yr end
     }  
     N <- surviving_adFemales + n_recruits
-
+    
     if(probOption=="matchJohnson2020"){
       ad = adjustN(N,Ntm1,r_max,denominatorAdjust=1e-06,roundDigits=roundDigits)
     }else{
