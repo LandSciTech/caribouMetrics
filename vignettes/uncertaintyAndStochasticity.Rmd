@@ -35,7 +35,7 @@ popGrowthPars <- calcDemoParams(500,
                                modelVersion = "Johnson",
                                survivalModelNumber = "M1",
                                recruitmentModelNumber = "M4",
-                               populationGrowthTable = read.csv("../data/populationGrowthTable.csv"))
+                               populationGrowthTable = popGrowthTableJohnsonECCC)
 
 popGrowthParsSmall <- calcDemoParams(35,
                                     modelVersion = "Johnson",

@@ -63,6 +63,7 @@ Collate:
     'movingWindowAvg.R'
     'plot.R'
     'popGrowthJohnson.R'
+    'popGrowthTableJohnsonECCC.R'
     'processData.R'
     'rasterizeLineDensity.R'
     'reclassDistHarv.R'
