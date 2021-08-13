@@ -14,35 +14,40 @@ demographicRates(
 )
 }
 \arguments{
-\item{covTable}{data.frame. A table of covariate values to be used. 
- Column names must match the coefficient names in
-\code{popGrowthTableJohnson}. Each row is a different scenario.}
+\item{covTable}{data.frame. A table of covariate values to be used. Column
+names must match the coefficient names in \code{popGrowthTableJohnsonECCC}. 
+Each row is a different scenario.}
 
-\item{popGrowthPars}{list. Coefficient values returned by \code{demographicCoefficients}}
+\item{popGrowthPars}{list. Coefficient values returned by
+\code{demographicCoefficients}}
 
 \item{ignorePrecision}{logical. Should the precision of the model be used if
 it is available? When precision is used variance among populations around the
-around the National mean responses is considered in addition to the
-uncertainty about the coefficient estimates.}
+National mean responses is considered in addition to the uncertainty about 
+the coefficient estimates.}
 
 \item{returnSample}{logical. If TRUE the returned data.frame has replicates *
 scenarios rows. If FALSE the returned data.frame has one row per scenario
 and additional columns summarizing the variation among replicates. See
 Value for details.}
 
-\item{useQuantiles}{logical. Only relevant when ignorePrecision=F and returnSample=T. 
-If useQuantiles=T, each replicate population is assigned to a quantile of the distribution of variation 
-around the expected values, and remains in that quantile as covariates change. 
-If useQuantiles=F, sampling is done independently for each combination of scenario and replicate, 
-so the value for a particular replicate population in one scenario is unrelated to the values for that replicate in other 
-scenarios. If interested in projecting impacts of changing disturbance on the trajectories of replicate populations set useQuantiles=T.}
+\item{useQuantiles}{logical. Only relevant when \code{ignorePrecision = FALSE} and
+\code{returnSample = TRUE}. If \code{useQuantiles = TRUE}, each replicate population is
+assigned to a quantile of the distribution of variation around the expected
+values, and remains in that quantile as covariates change. If
+\code{useQuantiles = FALSE}, sampling is done independently for each combination of
+scenario and replicate, so the value for a particular replicate population
+in one scenario is unrelated to the values for that replicate in other
+scenarios. If interested in projecting impacts of changing disturbance on
+the trajectories of replicate populations set \code{useQuantiles = TRUE}.}
 
 \item{interannualVar}{logical or a list with names "S" and "Rec". Should the
 interannual variation in population growth be considered? If TRUE a sample
 is taken from the beta distribution with precision 5.06 for the recruitment
 model and 16.49 for the survival model. If a list the values in "S" and
 "Rec" are used for the precision for survival and recruitment,
-respectively. TO DO: either remove this option from demographicParameters function, or update to align with popGrowthJohnson.}
+respectively. TO DO: either remove this option from demographicParameters 
+function, or update to align with popGrowthJohnson.}
 }
 \value{
 A data.frame of predictions. The data.frame includes all columns in
@@ -68,9 +73,9 @@ A data.frame of predictions. The data.frame includes all columns in
   }
 }
 \description{
-A wrapper around \code{\link{generatePopGrowthPredictions}} to sample 
+A wrapper around \code{\link{sampleRates}} to sample 
 survival and recruitment rates.
 }
 \seealso{
-\code{\link{generatePopGrowthPredictions}} for more details
+\code{\link{sampleRates}} for more details
 }

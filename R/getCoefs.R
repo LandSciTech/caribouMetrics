@@ -1,19 +1,32 @@
-#' Create and the correct values in a data table used in for the population growth model. 
-#' This is a base level function with no defaults set.
+#' Get coefficients for model version
 #'
+#' Get the coefficients for the chosen model version(s), number(s) and response
+#' variable from a table of coefficients for many models. If the table does not
+#' contain the standard error it is calculated from the confidence interval.
 #'
-#' @param populationGrowthTable
-#' @param resVar
-#' @param modVer
-#' @param modNum
-#' 
+#' @param populationGrowthTable data.frame. \code{popGrowthTableJohnsonECCC} is
+#'   included in the package and should be used in most cases. A custom table of
+#'   model parameters can be provided but it must match the column names of
+#'   \code{popGrowthTableJohnsonECCC}.
+#' @param resVar character. Response variable, typically "femaleSurvival" or
+#'   "recruitment"
+#' @param modVer character vector. Which model version(s) to use. Options are
+#'   typically "ECCC" for the model used in the ECCC Report (2011) and "Johnson"
+#'   for the model used in Johnson et. al. (2020)
+#' @param modNum character vector. Which model number(s) to use see
+#'   \code{popGrowthTableJohnsonECCC$ModelNumber} for typical options.
+#'
+#' @return a named list with one element per model version. The names are
+#'   \code{modVer}_\code{modNum}_Type. Each element contains a data.frame that
+#'   is a subset of \code{populationGrowthTable} for the selected model
+#'
 #' @export
 #' 
 
-makePopDT <- function(populationGrowthTable,
-                      resVar,
-                      modVer,
-                      modNum){
+getCoefs <- function(populationGrowthTable,
+                     resVar,
+                     modVer,
+                     modNum){
   
   populationGrowthTable = data.table::as.data.table(populationGrowthTable)
   

@@ -1,45 +1,94 @@
-#' Create table of coefficients to use in population models, generated using bootstrapping
+#' Sample Demographic Rates
 #'
-#' @param covTable
-#' @param coeffTable
-#' @param coeffValues
-#' @param modelType
-#' @param model
-#' @param ignorePrecision
-#' @param returnSample
-#' @param useQuantiles
-#' @param interannualVar
-#' 
+#' Sample expected survival or recruitment rates based on samples of coefficient
+#' values and optionally the model precision and interannual variation.
+#'
+#' \code{coefSamples} and \code{coefValues} can be created with
+#' \code{\link{sampleCoefs}}
+#'
+#' @param coefSamples matrix. Bootstrapped coefficients with one row per
+#'   replicate and one column per coefficient
+#' @param coefValues data.table. One row table with expected values for each
+#'   coefficient
+#' @param modVer character. Which model version is being used. Options are
+#'   currently, "ECCC" for the model used in the ECCC Report (2011) and
+#'   "Johnson" for the model used in Johnson et. al. (2020)
+#' @param resVar character. Response variable, typically "femaleSurvival" or
+#'   "recruitment"
+#' @param useQuantiles logical or numeric vector. Only relevant when
+#'   \code{ignorePrecision = FALSE} and \code{returnSample = TRUE}. If
+#'   \code{useQuantiles = TRUE}, each replicate population is assigned to a
+#'   quantile of the distribution of variation around the expected values, and
+#'   remains in that quantile as covariates change. If \code{useQuantiles} is a
+#'   vector it is used as the quantiles. If \code{useQuantiles = FALSE},
+#'   sampling is done independently for each combination of scenario and
+#'   replicate, so the value for a particular replicate population in one
+#'   scenario is unrelated to the values for that replicate in other scenarios.
+#'   If interested in projecting impacts of changing disturbance on the
+#'   trajectories of replicate populations set \code{useQuantiles = TRUE}.
+#' @param interannualVar numeric or FALSE. Should the interannual variation in
+#'   population growth be considered? If numeric it is the precision of the
+#'   sample taken from the beta distribution.  TO DO: either remove this
+#'   option from demographicParameters function, or update to align with
+#'   popGrowthJohnson.
+#'
+#' @inheritParams demographicRates
+#'
+#' @return A data.frame of predictions. The data.frame includes all columns in
+#'   \code{covTable} with additional columns depending on \code{returnSample}.
+#'   
+#'   If \code{returnSample = FALSE} the number of rows is the same as the 
+#'   number of rows in \code{covTable}, additional columns are:
+#'   \describe{
+#'     \item{"average"}{The mean estimated values of the response variable)}
+#'     \item{"stdErr"}{Standard error of the estimated values}
+#'     \item{"PIlow"/"PIhigh"}{95% Prediction interval for estimated values}
+#'   } 
+#'   If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
+#'    replicates} additional columns are:
+#'   \describe{
+#'     \item{"scnID"}{A unique identifier for scenarios provided in
+#'        \code{covTable}}
+#'     \item{"replicate"}{A replicate identifier, unique within each scenario}
+#'     \item{value}{The expected values of the response variable}
+#'   } 
+#'
 #' @export
 
-generatePopGrowthPredictions <- function(covTable,
-                                         coeffTable,
-                                         coeffValues,
-                                         modelType,
-                                         model,
-                                         ignorePrecision,
-                                         returnSample,
-                                         useQuantiles,
-                                         interannualVar){
+sampleRates <- function(covTable,
+                        coefSamples,
+                        coefValues,
+                        modVer,
+                        resVar,
+                        ignorePrecision,
+                        returnSample,
+                        useQuantiles,
+                        interannualVar){
   
   tictoc::tic(paste0("Elapsed time for caribou prediction for ",
-             model, " for ", modelType,":"))
+             resVar, " for ", modVer,":"))
   
-  whichCovariates <- names(coeffValues)[!names(coeffValues) %in% c("Intercept", 
+  if ((!is.numeric(interannualVar) && interannualVar != FALSE) || 
+      length(interannualVar) > 1) {
+      stop("Expecting interannualVar to be a numeric precision parameter with length 1.")
+    }
+  
+  
+  whichCovariates <- names(coefValues)[!names(coefValues) %in% c("Intercept", 
                                                                    "intercept",
                                                                    "precision",
                                                                    "Precision")]
   
   covTableRed <- covTable[, whichCovariates]
   
-  if (grepl(x = modelType, pattern = "Johnson")) {
-    intt <- coeffTable[, which(colnames(coeffTable) %in% c("Intercept", 
+  if (grepl(x = modVer, pattern = "Johnson")) {
+    intt <- coefSamples[, which(colnames(coefSamples) %in% c("Intercept", 
                                                            "intercept"))]
-    phi <- coeffTable[, which(colnames(coeffTable) %in% c("Precision", 
+    phi <- coefSamples[, which(colnames(coefSamples) %in% c("Precision", 
                                                           "precision"))]
     
     predictedTableSD <- as.matrix(covTableRed) %*%
-      t(coeffTable[,-which(colnames(coeffTable) %in% c("Intercept",
+      t(coefSamples[,-which(colnames(coefSamples) %in% c("Intercept",
                                                        "intercept",
                                                        "precision",
                                                        "Precision"))])
@@ -83,28 +132,28 @@ generatePopGrowthPredictions <- function(covTable,
     qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = c(0.025,0.975))
     
     # Now the model calculations
-    predicted <- as.numeric(exp(as.matrix(coeffValues)[
-      which(colnames(coeffValues) %in% c("Intercept", "intercept"))] +
+    predicted <- as.numeric(exp(as.matrix(coefValues)[
+      which(colnames(coefValues) %in% c("Intercept", "intercept"))] +
         as.matrix(covTableRed) %*% 
-        as.matrix(coeffValues)[-which(colnames(coeffValues) %in% 
+        as.matrix(coefValues)[-which(colnames(coefValues) %in% 
                                         c("Intercept", 
                                           "intercept",
                                           "precision",
                                           "Precision"))]))
   } 
   else {
-    if (grepl(x = modelType, pattern = "ECCC")) {
+    if (grepl(x = modVer, pattern = "ECCC")) {
       
-      intt <- coeffTable[, which(colnames(coeffTable) %in% c("Intercept", "intercept"))]
-      phi <- coeffTable[, which(colnames(coeffTable) %in% c("Precision", 
+      intt <- coefSamples[, which(colnames(coefSamples) %in% c("Intercept", "intercept"))]
+      phi <- coefSamples[, which(colnames(coefSamples) %in% c("Precision", 
                                                             "precision"))]
       
       predictedTableSD <- as.matrix(covTableRed) %*%
-        t(coeffTable[,-which(colnames(coeffTable) %in% c("Intercept","intercept","precision","Precision"))])
+        t(coefSamples[,-which(colnames(coefSamples) %in% c("Intercept","intercept","precision","Precision"))])
       
       predictedTableSD<-t(apply(predictedTableSD,1,function(x,intt){(intt+x)},intt=intt))
       
-      if(model=="recruitment"){
+      if(resVar == "recruitment"){
         predictedTableSD=predictedTableSD/100
       }
       
@@ -129,12 +178,12 @@ generatePopGrowthPredictions <- function(covTable,
       qqs <- matrixStats::rowQuantiles(predictedTableSD,probs=c(0.025,0.975))
       
       # Now the model calculations
-      predicted <- as.numeric((as.matrix(coeffValues)[which(colnames(coeffValues) %in% c("Intercept",
+      predicted <- as.numeric((as.matrix(coefValues)[which(colnames(coefValues) %in% c("Intercept",
                                                                                          "intercept"))] +
                                  as.matrix(covTableRed) %*%
-                                 as.matrix(coeffValues)[-which(colnames(coeffValues) %in% c("Intercept",
+                                 as.matrix(coefValues)[-which(colnames(coefValues) %in% c("Intercept",
                                                                                             "intercept","precision","Precision"))]))
-      if(model=="recruitment"){
+      if(resVar == "recruitment"){
         predicted=predicted/100
       }
     } 
