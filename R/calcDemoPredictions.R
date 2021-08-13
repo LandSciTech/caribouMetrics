@@ -1,20 +1,61 @@
-#' Wrapper function to generate the population growth model predictions under
-#' default conditions that match those needed by most users
+#' Generate default population growth model predictions
 #'
-#' @param covTable
-#' @param popGrowthPars
-#' @param ignorePrecision
-#' @param returnSample
-#' @param useQuantiles
-#' @param interannualVar
-#' 
+#' A wrapper around \code{\link{generatePopGrowthPredictions}} to generate the 
+#' population growth model predictions for both survival and recruitment under
+#' default conditions that match those needed by most users. 
+#'
+#' @param covTable data.frame. A table of covariate values to be used in
+#'   predictions. Column names must match the coefficient names in
+#'   \code{popGrowthTableJohnson}. Each row is a different scenario.
+#' @param popGrowthPars list. The result of \code{calcDemoParams}
+#' @param ignorePrecision logical. Should the precision of the model be used if
+#'   it is available? When precision is used the variance of each population
+#'   around the National mean response is considered in addition to the
+#'   uncertainty in the coefficient estimates.
+#' @param returnSample logical. If TRUE the returned data.frame has replicates *
+#'   scenarios rows. If FALSE the returned data.frame has one row per scenario
+#'   and additional columns summarizing the variation among replicates. See
+#'   Value for details.
+#' @param useQuantiles logical. Should the sampling around the National mean use
+#'   quantiles or random sampling?
+#' @param interannualVar logical or a list with names "S" and "Rec". Should the
+#'   interannual variation in population growth be considered? If TRUE a sample
+#'   is taken from the beta distribution with precision 5.06 for the recruitment
+#'   model and 16.49 for the survival model. If a list the values in "S" and
+#'   "Rec" are used for the precision for survival and recruitment,
+#'   respectively.
+#'
+#' @return A data.frame of predictions. The data.frame includes all columns in
+#'   \code{covTable} with additional columns depending on \code{returnSample}.
+#'   
+#'   If \code{returnSample = FALSE} the number of rows is the same as the 
+#'   number of rows in \code{covTable}, additional columns are:
+#'   \describe{
+#'     \item{"S_bar" and "R_bar"}{The mean estimated values of survival and 
+#'       recruitment (calves per cow)}
+#'     \item{"S_stdErr" and "R_stdErr"}{Standard error of the estimated values}
+#'     \item{"S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh"}{95% Prediction 
+#'       interval for estimated values}
+#'   } 
+#'   If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
+#'    replicates} additional columns are:
+#'   \describe{
+#'     \item{"scnID"}{A unique identifier for scenarios provided in
+#'        \code{covTable}}
+#'     \item{"replicate"}{A replicate identifier, unique within each scenario}
+#'     \item{"S_bar" and "R_bar"}{The estimated values of survival and 
+#'       recruitment (calves per cow)}
+#'   } 
+#'
+#' @seealso \code{\link{generatePopGrowthPredictions}} for more details
+#'
 #' @export
 calcDemoPredictions <- function(covTable,
                                 popGrowthPars,
-                                ignorePrecision = T,
-                                returnSample = F,
-                                useQuantiles = F,
-                                interannualVar = F){
+                                ignorePrecision = TRUE,
+                                returnSample = FALSE,
+                                useQuantiles = FALSE,
+                                interannualVar = FALSE){
   
   if (class(interannualVar) == "list") {
     if (length(setdiff(c("Rec","S"), names(interannualVar))) > 0) {

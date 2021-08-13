@@ -33,9 +33,29 @@ mean?}
 can be provided but it must match the column names of
 \code{populationGrowthTable}.}
 }
+\value{
+A list with elements:
+\describe{
+    \item{"modelVersion"}{The name of the model version}
+    \item{"coeffTable_Survival" and "coeffTable_Recruitment"}{
+      lists with elements:
+       \describe{
+          \item{"coeffTable"}{Bootstrapped coefficients with \code{replicates} 
+            rows}
+          \item{"coeffValues"}{Coefficient values taken from 
+            \code{populationGrowthTable}}
+          \item{"quantiles"}{A vector of randomly ordered quantiles between
+             0.025 and 0.975 with length \code{replicates}}
+        }
+      }
+  }
+}
 \description{
-Wrapper function to generate the population growth model parameters under
-default conditions that match those needed by most users.
+A wrapper around \code{\link{makePopDT}} to select coefficients for the
+appropriate model version and \code{\link{buildCoefTable}} to get
+bootstrapped coefficients for each replicate, for both the survival and 
+recruitment models. Also optionally, generates quantiles with
+\code{\link{getQuantiles}}.
 }
 \references{
 ECCC. 2011. Scientific assessment to inform the identification of
