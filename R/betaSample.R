@@ -12,7 +12,7 @@ betaSample<-function(x,phi,useQuantiles=F){
     return(rbeta(length(x),bShapes$shape1,bShapes$shape2))
   }else{
     if(length(useQuantiles)!=length(x)){
-      q=getQuantiles(x)
+      q=getQuantiles(length(x))
     }else{
       q=useQuantiles
     }
@@ -68,31 +68,6 @@ lnormSample<-function(x,sd,useQuantiles=F){
     return(qq)
   }
 }
-
-#' Take a sample from a beta distribution
-#'
-#' @param x
-#' @param phi
-#' @param useQuantiles
-#' 
-betaSample<-function(x,phi,useQuantiles=F){
-  #x=predictedTableSD[1,]
-  bShapes = simstudy::betaGetShapes(x,phi) 
-  
-  if((length(useQuantiles)==1)&&!useQuantiles){
-    return(rbeta(length(x),bShapes$shape1,bShapes$shape2))
-  }else{
-    if(length(useQuantiles)!=length(x)){
-      q=getQuantiles(x)
-    }else{
-      q=useQuantiles
-    }
-    
-    qq = qbeta(q,bShapes$shape1,bShapes$shape2)
-    return(qq)
-  }
-}
-
 
 estBetaParams <- function(mu, sigma){
   
