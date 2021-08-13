@@ -1,21 +1,19 @@
-#' Generate default population growth model parameters
+#' Sample demographic regression model coefficients
 #'
 #' A wrapper around \code{\link{makePopDT}} to select coefficients for the
-#' appropriate model version and \code{\link{buildCoefTable}} to get
-#' bootstrapped coefficients for each replicate, for both the survival and 
+#' appropriate model version and \code{\link{buildCoefTable}} to sample
+#' coefficients for each replicate population, for both the survival and 
 #' recruitment models. Also optionally, generates quantiles with
 #' \code{\link{getQuantiles}}.
 #'
-#' @param replicates integer. Number replicates to use to account for
-#'   uncertainty in the model
+#' @param replicates integer. Number of replicate populations.
 #' @param modelVersion character. Which model version to use. Options are "ECCC"
 #'   for the model used in the ECCC Report (2011) and "Johnson" for the model
 #'   used in Johnson et. al. (2020)
 #' @param survivalModelNumber,recruitmentModelNumber character. Which model
 #'   number to use see \code{populationGrowthTable} for options.
-#' @param randomQuantiles logical. Should randomly sorted quantiles be used for
-#'   sampling the distribution of population predictions around the national
-#'   mean?
+#' @param randomQuantiles logical. Should each replicate population be assigned a random quantile to be used for
+#'   sampling the from the distribution of demographic parameters around the means?
 #' @param populationGrowthTable data.frame. By default
 #'   \code{populationGrowthTable} is used. A custom table of model parameters
 #'   can be provided but it must match the column names of
@@ -31,7 +29,7 @@
 #'             rows}
 #'           \item{"coeffValues"}{Coefficient values taken from 
 #'             \code{populationGrowthTable}}
-#'           \item{"quantiles"}{A vector of randomly ordered quantiles between
+#'           \item{"quantiles"}{A vector of randomly selected quantiles between
 #'              0.025 and 0.975 with length \code{replicates}}
 #'         }
 #'       }
@@ -51,7 +49,7 @@
 #'
 #' @export
 
-calcDemoParams <- function(replicates,
+demographicCoefficients <- function(replicates,
                            modelVersion = "Johnson",
                            survivalModelNumber = "M1",
                            recruitmentModelNumber = "M4",

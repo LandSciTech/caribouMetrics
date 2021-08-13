@@ -31,19 +31,19 @@ covTableSim$fire_excl_anthro = covTableSim$Fire
 #' @param Type
 #' @param populationGrowthTable
 
-popGrowthPars <- calcDemoParams(500,
+popGrowthPars <- demographicCoefficients(500,
                                modelVersion = "Johnson",
                                survivalModelNumber = "M1",
                                recruitmentModelNumber = "M4",
                                populationGrowthTable = popGrowthTableJohnsonECCC)
 
-popGrowthParsSmall <- calcDemoParams(35,
+popGrowthParsSmall <- demographicCoefficients(35,
                                     modelVersion = "Johnson",
                                     survivalModelNumber = "M1",
                                     recruitmentModelNumber = "M4",
                                     populationGrowthTable = read.csv("../data/populationGrowthTable.csv"))
 
-popGrowthParsInterannual <- calcDemoParams(5,
+popGrowthParsInterannual <- demographicCoefficients(5,
                                           modelVersion = "Johnson",
                                           survivalModelNumber = "M1",
                                           recruitmentModelNumber = "M4",
@@ -51,7 +51,7 @@ popGrowthParsInterannual <- calcDemoParams(5,
 ```
 
 ```{r}
-rateSamples <- calcDemoPredictions(
+rateSamples <- demographicRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthParsSmall,
   ignorePrecision = FALSE,
@@ -60,7 +60,7 @@ rateSamples <- calcDemoPredictions(
   interannualVar = FALSE
 )
 
-rateSamplesInterannual <- calcDemoPredictions(
+rateSamplesInterannual <- demographicRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthParsInterannual,
   ignorePrecision = FALSE,
@@ -69,7 +69,7 @@ rateSamplesInterannual <- calcDemoPredictions(
   interannualVar = TRUE
 )
 
-rateSummaries <- calcDemoPredictions(
+rateSummaries <- demographicRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthPars,
   ignorePrecision = FALSE,
@@ -78,7 +78,7 @@ rateSummaries <- calcDemoPredictions(
   interannualVar = FALSE
 )
 
-rateSummariesIgnorePrecision <- calcDemoPredictions(
+rateSummariesIgnorePrecision <- demographicRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthPars,
   ignorePrecision = TRUE,
