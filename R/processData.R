@@ -243,7 +243,7 @@ setMethod(
     #To speed calculations, include points from linFeat in raster.
     message("buffering anthropogenic disturbance")
     
-    expVars <- (anthroDist) > 0
+    expVars <- anthroDist > 0
     
 
     if(is(inData@linFeat[[1]], "RasterLayer")){
@@ -256,8 +256,8 @@ setMethod(
 
         lfPt <- as(lfPt, "Spatial")
         
-        lfR = raster::rasterize(lfPt, expVars, field = "ID")    
-        expVars[!is.na(lfR)] = 1
+        lfR <- raster::rasterize(lfPt, expVars, field = 1)    
+        expVars[!is.na(lfR)] <- 1
       }  
     }
 
