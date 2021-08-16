@@ -256,8 +256,8 @@ setMethod(
 
         lfPt <- as(lfPt, "Spatial")
         
-        lfR <- raster::rasterize(lfPt, expVars, field = 1)    
-        expVars[!is.na(lfR)] <- 1
+        lfR <- raster::rasterize(lfPt, expVars, field = 1, background = 0)    
+        expVars <- (lfR + expVars) > 0
       }  
     }
 
