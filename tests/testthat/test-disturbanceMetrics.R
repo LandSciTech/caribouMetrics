@@ -32,8 +32,8 @@ dm <- disturbanceMetrics(
   bufferWidth = 500
 )
 
-dm@disturbanceMetrics
-plot(dm@processedData)
+# dm@disturbanceMetrics
+# plot(dm@processedData)
 
 dm_path <- disturbanceMetrics(
   landCover = paste0(pthBase, "landCover", ".tif"),
@@ -65,11 +65,21 @@ test_that("results match when input is paths or data or list for linFeat",{
   expect_equal(dm@disturbanceMetrics, dm_lflist@disturbanceMetrics)
 })
 
+test_that("error if rasters don't align",{
+  expect_error(disturbanceMetrics(
+    landCover = plcD,
+    natDist = natDistD, 
+    anthroDist = anthroDistD, 
+    linFeat = linFeatDras, 
+    projectPoly = projectPolyD
+  ), "rasters do not have the same")
+})
+
 dm_lfrast <- disturbanceMetrics(
   landCover = plcD,
   natDist = natDistD, 
   anthroDist = anthroDistD, 
-  linFeat = linFeatDras, 
+  linFeat = roads::rasterizeLine(linFeatDshp, plcD, value = 0), 
   projectPoly = projectPolyD,
   padFocal = FALSE, # assume data outside area is 0 for all variables
   bufferWidth = 500
@@ -77,7 +87,7 @@ dm_lfrast <- disturbanceMetrics(
 
 test_that("results are similar with rast vs sf linFeat",{
   expect_equal(dm@disturbanceMetrics, dm_lfrast@disturbanceMetrics,
-               tolerance = 0.01)
+               tolerance = 0.05)
 })
 
 dm_noAnthro <- disturbanceMetrics(
@@ -110,15 +120,38 @@ dm_noDist <- disturbanceMetrics(
   bufferWidth = 500
 )
 
-
 test_that("results are different without disturbances",{
   expect_false(identical(dm_noAnthro,  dm))
   expect_false(identical(dm_noNat,  dm))
   expect_false(identical(dm_noDist,  dm))
 })
-# things to test
-# linFeat sf with some points and lines?
-# anthro or nat Dist missing
+
+test_that("fire_excl_anthro lt fire",
+          expect_lt(dm@disturbanceMetrics$fire_excl_anthro, 
+                    dm@disturbanceMetrics$natDist)
+)
+
+test_that("line sf with points works", {
+  # make points
+  pts <- st_sf(linFID = 1:10, geometry = st_sample(projectPolyD, 10))
+  
+  linFeatDpts <- linFeatDshp %>% bind_rows(pts) %>% st_set_agr("constant")
+  
+  dm_pts <- disturbanceMetrics(
+    landCover = plcD,
+    natDist = natDistD, 
+    anthroDist = anthroDistD, 
+    linFeat = linFeatDpts, 
+    projectPoly = projectPolyD,
+    padFocal = FALSE, # assume data outside area is 0 for all variables
+    bufferWidth = 500
+  )
+  
+  expect_gt(dm_pts@disturbanceMetrics$anthroBuff, 
+            dm@disturbanceMetrics$anthroBuff)
+  
+})
+
 
 # Compare output to previous run. This will raise a flag if the result has
 # changed. Update the stored result if the change was expected.

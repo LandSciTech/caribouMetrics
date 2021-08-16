@@ -12,14 +12,14 @@ context("Overall process to run caribouHabitat")
 #   railP = paste0(pth_base, "rail.shp"),
 #   utilitiesP = paste0(pth_base, "util2010.shp")
 # )
-# landCoverD <- raster(allData$landCoverP)
+# anthroDistD <- raster(allData$anthroDistP)
 # 
 # # Interactively get box extent
-# # plot(landCoverD)
+# # plot(anthroDistD)
 # # ext <- raster::drawExtent()
 # 
-# ext <- raster::extent(c(xmin = 523186.5, xmax = 611352.8,
-#                         ymin = 12546526, ymax = 12634693))
+# ext <- raster::extent(c(xmin = 682454.7, xmax = 770621,
+#                         ymin = 12563591, ymax = 12640381))
 # box <- st_bbox(ext) %>% st_as_sfc() %>% st_as_sf() %>% st_set_crs(st_crs(landCoverD))
 # 
 # # convert all to modern crs
@@ -34,16 +34,16 @@ context("Overall process to run caribouHabitat")
 #     dat <- st_read(pth)
 #     cropBox <- st_transform(cropBox, st_crs(dat))
 #     dat <- dat %>%
-#       st_crop(cropBox) %>% 
+#       st_crop(cropBox) %>%
 #       st_transform(use_crs)
 #     st_write(dat, paste0(savePth, ".shp"), append = FALSE)
 #   }
 #   if(grepl(".tif$", pth)){
 #     dat <- raster(pth)
 #     cropBox <- st_transform(cropBox, st_crs(dat))
-#     dat <- dat %>% raster::crop(cropBox) %>% 
+#     dat <- dat %>% raster::crop(cropBox) %>%
 #       raster::projectRaster(crs = use_crs$wkt)
-#     
+# 
 #     raster::writeRaster(dat, paste0(savePth, ".tif"), overwrite = TRUE)
 #   }
 # }
