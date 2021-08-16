@@ -133,7 +133,7 @@ setMethod(
            call. = FALSE)
     }
     
-    # check alignment of new data with landCover except for linFeat
+    # check alignment of new data with projectPoly except for linFeat
     if(!do.call(raster::compareRaster, 
                 c(`names<-`(newData[which(names(newData) != "linFeat")], NULL),
                   list(inData@landCover,inData@landCover,
@@ -143,7 +143,7 @@ setMethod(
     }
     
     newData <- purrr::map2(newData, names(newData), 
-                ~cropIf(.x, inData@landCover, .y, "landCover"))
+                ~cropIf(.x, inData@projectPoly, .y, "projectPoly"))
     
     if(any(names(newData) %in% c("landCover", "natDist", "anthroDist" ))){
       
@@ -171,7 +171,8 @@ setMethod(
    
     # resample linFeat if provided
     if(inherits(newData$linFeat, "Raster")){
-      newData$linFeat <- raster::resample(newData$linFeat, inData@linFeat, 
+      message("resampling linFeat to match landCover resolution")
+      newData$linFeat <- raster::resample(newData$linFeat, tmplt, 
                                           method = "bilinear")
       inData@linFeat <- newData$linFeat
     } 
@@ -194,9 +195,12 @@ setMethod(
     # window radius is radius of circle with winArea rounded to even number of
     # raster cells based on resolution
     winRad <- (sqrt(inData@attributes$winArea*10000/pi)/res(expVars[[1]])[1]) %>% 
-      round(digits = 0)*res(expVars[[1]])[1]
+      round(digits = 0)*res(expVars[[1]])[1] %>% 
+      round()
+
+    message("Applying moving window.")
     
-    expVars <- movingWindowAvg(rast = expVars, radius = winRad,  
+    expVars <- movingWindowAvg(rast = expVars, radius = winRad,
                                nms = layernames, 
                                pad = inData@attributes$padFocal)
     

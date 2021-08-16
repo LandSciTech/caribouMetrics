@@ -53,13 +53,19 @@ context("Overall process to run caribouHabitat")
 # 
 # st_write(box %>% st_transform(use_crs),
 #          "tests/testthat/data/projectPoly.shp", append = FALSE)
-# st_write(
-#   combineLinFeat(list(roads = "tests/testthat/data/roads.shp",
-#                       rail = "tests/testthat/data/rail.shp",
-#                       utilities = "tests/testthat/data/utilities.shp")),
-#   paste0("tests/testthat/data/linFeat.shp"),
-#   append = FALSE
-# )
+# 
+# linFeatD <- combineLinFeat(list(roads = "tests/testthat/data/roads.shp",
+#                                 rail = "tests/testthat/data/rail.shp",
+#                                 utilities = "tests/testthat/data/utilities.shp"))
+# st_write(linFeatD, "tests/testthat/data/linFeat.shp", append = FALSE)
+# 
+# linFeatDras <- rasterizeLineDensity(linFeatD, anthroDistD)
+# writeRaster(linFeatDras, "tests/testthat/data/linFeatTif.tif", overwrite = TRUE)
+# 
+# eskerDras <- rasterizeLineDensity(st_read("tests/testthat/data/esker.shp"),
+#                                   anthroDistD)
+# 
+# writeRaster(eskerDras, "tests/testthat/data/eskerTif.tif", overwrite = TRUE)
 
 # Test all different ways to run from paths #===================================
 
@@ -75,8 +81,8 @@ paths_eskshp_linFshp <- caribouHabitat(
   anthroDist = paste0(pthBase, "anthroDist", ".tif"),
   linFeat = paste0(pthBase, "linFeat", ".shp"),
   projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-  linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-  eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
+  linFeatSave = paste0(pthBase, "linFeatTif400", ".tif"),
+  eskerSave = paste0(pthBase, "eskerTif400", ".tif"), 
   caribouRange = "Churchill", 
   winArea = 500
 )
@@ -89,9 +95,7 @@ paths_list_linF <- caribouHabitat(
   linFeat = list(roads = paste0(pthBase, "roads.shp"),
                  rail = paste0(pthBase, "rail.shp"),
                  utilities = paste0(pthBase, "utilities.shp")), 
-  projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-  linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-  eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
+  projectPoly = paste0(pthBase, "projectPoly", ".shp"), 
   caribouRange = "Churchill", 
   winArea = 500
 )
@@ -105,12 +109,12 @@ test_that("results match when input is paths",{
 # Test all different ways to run with data #====================================
 landCoverD = raster(paste0(pthBase, "landCover", ".tif")) %>% 
   reclassPLC()
-eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
+eskerDras = raster(paste0(pthBase, "eskerTif400", ".tif"))
 eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 natDistD = raster(paste0(pthBase, "natDist", ".tif"))
 anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
-linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
+linFeatDras = raster(paste0(pthBase, "linFeatTif400", ".tif"))
 projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE) %>% 
@@ -126,8 +130,6 @@ data_esktif_linFtif <- caribouHabitat(
 data_eskshp_linFshp <- caribouHabitat(
   landCover = landCoverD, esker = eskerDshp, natDist = natDistD, 
   anthroDist = anthroDistD, linFeat = linFeatDshp, projectPoly = projectPolyD,
-  eskerSave = paste0(pthBase, "eskerTif", ".tif"),
-  linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
   caribouRange = "Churchill", 
   winArea = 500
 )
@@ -142,8 +144,6 @@ data_list_linF <- caribouHabitat(
                  utilities = st_read(paste0(pthBase, "utilities.shp"), quiet = TRUE)%>% 
                    st_set_agr("constant")), 
   projectPoly = projectPolyD,
-  eskerSave = paste0(pthBase, "eskerTif", ".tif"),
-  linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
   caribouRange = "Churchill", 
   winArea = 500
 )

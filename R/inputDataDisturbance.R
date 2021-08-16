@@ -84,8 +84,18 @@ setMethod(
     if(!(is(linFeat, "sf") || is(linFeat, "sfc"))){
       if(is(linFeat, "Spatial")){
         linFeat <- sf::st_as_sf(linFeat)
-      }
-    } else if(is(linFeat, "Raster")){
+      } 
+      # roads <- rasterToLineSegments(roads)
+      #linFeat <- raster::rasterToPoints(linFeat, fun = function(x){x > 0}, 
+      #                                spatial = TRUE) %>% 
+    }
+    
+    
+    
+    
+    linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
+    
+    if(is(linFeat, "Raster")){
       
       tt = try(compareRaster(landCover, linFeat), silent = TRUE)
       if(class(tt)=="try-error"){
@@ -94,14 +104,7 @@ setMethod(
              "resolution, or origin. Use raster::compareRaster() to ",
              "identify the problem.", call. = FALSE)
       }
-      # roads <- rasterToLineSegments(roads)
-      #linFeat <- raster::rasterToPoints(linFeat, fun = function(x){x > 0}, 
-      #                                spatial = TRUE) %>% 
     }
-    
-    
-    
-    linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
     
     # check alignment of other layers
     if(!is.null(natDist)){

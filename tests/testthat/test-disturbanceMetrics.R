@@ -70,7 +70,7 @@ test_that("error if rasters don't align",{
     landCover = plcD,
     natDist = natDistD, 
     anthroDist = anthroDistD, 
-    linFeat = linFeatDras, 
+    linFeat = raster(paste0(pthBase, "linFeatTif400.tif")), 
     projectPoly = projectPolyD
   ), "rasters do not have the same")
 })
@@ -79,7 +79,7 @@ dm_lfrast <- disturbanceMetrics(
   landCover = plcD,
   natDist = natDistD, 
   anthroDist = anthroDistD, 
-  linFeat = roads::rasterizeLine(linFeatDshp, plcD, value = 0), 
+  linFeat = linFeatDras, 
   projectPoly = projectPolyD,
   padFocal = FALSE, # assume data outside area is 0 for all variables
   bufferWidth = 500

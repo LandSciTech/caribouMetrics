@@ -8,7 +8,7 @@ context("caribouHabitat messages")
 pthBase <- "data/"
 
 # load data for tests
-landCoverD = raster(paste0(pthBase, "plc", ".tif")) %>% 
+landCoverD = raster(paste0(pthBase, "landCover", ".tif")) %>% 
   reclassPLC()
 eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
 eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE)
@@ -20,99 +20,83 @@ linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE)
 
 test_that("error if a required arg is missing", {
   expect_error(caribouHabitat(
-    #landCover = paste0(pthBase, "plc", ".tif"),
+    #landCover = paste0(pthBase, "landCover", ".tif"),
     esker = paste0(pthBase, "esker", ".shp"),
     natDist = paste0(pthBase, "natDist", ".tif"),
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     linFeat = paste0(pthBase, "linFeat", ".shp"),
     projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     caribouRange = "Churchill"
   ), "is missing, with no default")
   expect_error(caribouHabitat(
-    landCover = paste0(pthBase, "plc", ".tif"),
+    landCover = paste0(pthBase, "landCover", ".tif"),
     #esker = paste0(pthBase, "esker", ".shp"),
     natDist = paste0(pthBase, "natDist", ".tif"),
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     linFeat = paste0(pthBase, "linFeat", ".shp"),
     projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     caribouRange = "Churchill"
   ), "is missing, with no default")
 
   expect_error(caribouHabitat(
-    landCover = paste0(pthBase, "plc", ".tif"),
+    landCover = paste0(pthBase, "landCover", ".tif"),
     esker = paste0(pthBase, "esker", ".shp"),
     natDist = paste0(pthBase, "natDist", ".tif"),
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     #linFeat = paste0(pthBase, "linFeat", ".shp"),
     projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     caribouRange = "Churchill"
   ), "is missing, with no default")
   expect_error(caribouHabitat(
-    landCover = paste0(pthBase, "plc", ".tif"),
+    landCover = paste0(pthBase, "landCover", ".tif"),
     esker = paste0(pthBase, "esker", ".shp"),
     natDist = paste0(pthBase, "natDist", ".tif"),
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     linFeat = paste0(pthBase, "linFeat", ".shp"),
     #projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"),  
     caribouRange = "Churchill"
   ), "is missing, with no default")
  
   expect_error(caribouHabitat(
-    landCover = paste0(pthBase, "plc", ".tif"),
+    landCover = paste0(pthBase, "landCover", ".tif"),
     esker = paste0(pthBase, "esker", ".shp"),
     natDist = paste0(pthBase, "natDist", ".tif"),
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     linFeat = paste0(pthBase, "linFeat", ".shp"),
-    projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"),  
+    projectPoly = paste0(pthBase, "projectPoly", ".shp"),  
     #caribouRange = "Churchill"
   ), "is missing, with no default")
 })
 
 test_that("error if a path file is not found", {
   expect_error(caribouHabitat(
-    landCover = paste0(pthBase, "plctest", ".tif"),
+    landCover = paste0(pthBase, "landCovertest", ".tif"),
     esker = paste0(pthBase, "esker", ".shp"),
     natDist = paste0(pthBase, "natDist", ".tif"),
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     linFeat = paste0(pthBase, "linFeat", ".shp"),
-    projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"),  
+    projectPoly = paste0(pthBase, "projectPoly", ".shp"), 
     caribouRange = "Churchill"
   ), "do.es. not exist")
   expect_error(caribouHabitat(
-    landCover = paste0(pthBase, "plctest", ".tif"),
+    landCover = paste0(pthBase, "landCovertest", ".tif"),
     esker = paste0(pthBase, "eskertest", ".shp"),
     natDist = paste0(pthBase, "natDist", ".tif"),
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     linFeat = paste0(pthBase, "linFeat", ".shp"),
     projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     caribouRange = "Churchill"
   ), "do.es. not exist")
 })
 
 test_that("error if some args are paths and others spatial", {
   expect_error(caribouHabitat(
-    landCover = paste0(pthBase, "plc", ".tif"),
+    landCover = paste0(pthBase, "landCover", ".tif"),
     esker = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE),
     natDist = paste0(pthBase, "natDist", ".tif"),
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     linFeat = paste0(pthBase, "linFeat", ".shp"),
-    projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"),  
+    projectPoly = paste0(pthBase, "projectPoly", ".shp"), 
     caribouRange = "Churchill"
   ), ".*supplied as sf or raster objects or character.*")
   expect_error(caribouHabitat(
@@ -122,8 +106,6 @@ test_that("error if some args are paths and others spatial", {
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     linFeat = paste0(pthBase, "linFeat", ".shp"),
     projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     caribouRange = "Churchill"
   ), ".*supplied as sf or raster objects or character.*")
 })
@@ -136,19 +118,15 @@ test_that("error if file is in wrong format",{
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     linFeat = paste0(pthBase, "linFeat", ".shp"),
     projectPoly = paste0(pthBase, "projectPoly", ".shp"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"), 
     caribouRange = "Churchill"
   ), "raster file must be provided for")
   expect_error(caribouHabitat(
-    landCover = paste0(pthBase, "plc", ".tif"),
+    landCover = paste0(pthBase, "landCover", ".tif"),
     esker = paste0(pthBase, "esker", ".shp"),
     natDist = paste0(pthBase, "natDist", ".tif"),
     anthroDist = paste0(pthBase, "anthroDist", ".tif"),
     linFeat = paste0(pthBase, "linFeat", ".shp"),
-    projectPoly = paste0(pthBase, "plc", ".tif"),
-    linFeatSave = paste0(pthBase, "linFeatTif", ".tif"),
-    eskerSave = paste0(pthBase, "eskerTif", ".tif"),  
+    projectPoly = paste0(pthBase, "landCover", ".tif"),
     caribouRange = "Churchill"
   ), "shapefile must be provided for")
 })
@@ -183,9 +161,9 @@ test_that("error if spatial data doesn't align", {
     linFeat = linFeatDras, 
     projectPoly = projectPolyD, 
     caribouRange = "Churchill"),
-    "different extent")
+    "do not have the same have the same")
   
-    projectPolyD2 <- mutate(projectPolyD, geometry = geometry + 20000) %>% 
+    projectPolyD2 <- mutate(projectPolyD, geometry = geometry + 200000) %>% 
     st_set_crs(st_crs(projectPolyD))
   
   expect_error(caribouHabitat(
@@ -215,7 +193,7 @@ test_that("error if landCover is in lonlat", {
 })
 
 test_that("error if landCover is not in resource types", {
-  landCoverD4 <- raster(paste0(pthBase, "plc", ".tif"))
+  landCoverD4 <- raster(paste0(pthBase, "landCover", ".tif"))
   
   expect_error(caribouHabitat(
     landCover = landCoverD4,
