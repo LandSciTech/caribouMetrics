@@ -246,18 +246,18 @@ setMethod(
     expVars <- (anthroDist)>0
     
 
-    if(class(inData@linFeat[[1]])=="RasterLayer"){
+    if(is(inData@linFeat[[1]], "RasterLayer")){
       
-      expVars[inData@linFeat[[1]]>0]=1
+      expVars[inData@linFeat[[1]] > 0] = 1
     }else{
       lfPt <- inData@linFeat[[1]] %>% dplyr::filter(st_is(. , "POINT"))
       
-      if(nrow(lfPt)!=0){
+      if(nrow(lfPt) > 0){
 
         lfPt <- as(lfPt, "Spatial")
         
-        lfR = raster::rasterize(lfPt, expVars,field="ID")    
-        expVars[!is.na(lfR)]=1
+        lfR = raster::rasterize(lfPt, expVars, field = "ID")    
+        expVars[!is.na(lfR)] = 1
       }  
     }
 
@@ -274,11 +274,12 @@ setMethod(
 
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,
                                nms = layernames, 
-                               pad = inData@attributes$padFocal,offset=F)
+                               pad = inData@attributes$padFocal, 
+                               offset = FALSE)
     
-    expVars <- expVars>0 
+    expVars <- expVars > 0 
 
-    if(!class(inData@linFeat[[1]])=="RasterLayer"){
+    if(!class(inData@linFeat[[1]]) == "RasterLayer"){
       ##############
       #Buffer linear features
       message("buffering linear features")
@@ -300,7 +301,7 @@ setMethod(
       linBuff[is.na(linBuff)] = 0
       anthroBuff <- (linBuff + expVars) > 0
     }else{
-      anthroBuff <- expVars>0
+      anthroBuff <- expVars > 0
     }
     
     fire_excl_anthro <- raster::overlay(natDist, 
