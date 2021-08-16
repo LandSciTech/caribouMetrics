@@ -243,7 +243,7 @@ setMethod(
     #To speed calculations, include points from linFeat in raster.
     message("buffering anthropogenic disturbance")
     
-    expVars <- (anthroDist)>0
+    expVars <- (anthroDist) > 0
     
 
     if(is(inData@linFeat[[1]], "RasterLayer")){
@@ -279,7 +279,7 @@ setMethod(
     
     expVars <- expVars > 0 
 
-    if(!class(inData@linFeat[[1]]) == "RasterLayer"){
+    if(!is(inData@linFeat[[1]], "RasterLayer")){
       ##############
       #Buffer linear features
       message("buffering linear features")
@@ -307,7 +307,8 @@ setMethod(
     fire_excl_anthro <- raster::overlay(natDist, 
                                         anthroBuff,
                                         fun = function(x, y){
-                                          x[!is.na(y[])] <- NA
+                                          x <- x - y 
+                                          x <- x > 0
                                           return(x)
                                         })
     
