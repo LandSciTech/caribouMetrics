@@ -117,7 +117,7 @@ setMethod(
 
     # rasterize eskers
     if(inherits(esker, "sf")){
-      esker <- checkAlign(esker, landCover, "esker", "landCover")
+      esker <- checkAlign(esker, projectPoly, "esker", "projectPoly")
       
       #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       esker <- rasterizeLineDensity(esker, tmplt)
@@ -151,7 +151,7 @@ setMethod(
 
     if(inherits(linFeat, "sf")){
 
-      linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
+      linFeat <- checkAlign(linFeat, projectPoly, "linFeat", "projectPoly")
       
       #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
       linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)
