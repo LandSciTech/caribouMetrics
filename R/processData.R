@@ -289,9 +289,13 @@ setMethod(
       
       linBuff <- st_buffer(lf,inData@attributes$bufferWidth)
       
+      if(st_geometry_type(linBuff, by_geometry = FALSE) == "GEOMETRY"){
+        linBuff <- st_collection_extract(linBuff, "POLYGON")
+      }
+      
       # faster rasterization
       if(requireNamespace("fasterize", quietly = TRUE)){
-        linBuff <- fasterize::fasterize(st_collection_extract(linBuff, "POLYGON"), expVars)
+        linBuff <- fasterize::fasterize(linBuff, expVars)
       } else {
         message("To speed up install fasterize package")
         linBuff <- raster::rasterize(linBuff, expVars)
