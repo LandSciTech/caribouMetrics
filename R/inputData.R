@@ -97,6 +97,7 @@ setMethod(
     } 
 
     if(inherits(linFeat, "sf")){
+
       linFeat <- checkAlign(linFeat, projectPoly, "linFeat", "projectPoly")
       
       linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)

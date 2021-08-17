@@ -50,13 +50,14 @@ setMethod(
     if(inherits(linFeat, "list")){
       linFeat <- combineLinFeat(linFeat)
     }
-    
+
     if(is(linFeat, "Spatial")){
       linFeat <- sf::st_as_sf(linFeat)
     } 
     
     if(is(linFeat, "Raster")){
       rastLst <- lst(natDist, anthroDist, linFeat)
+
     } else {
       rastLst <- lst(natDist, anthroDist)
       linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")

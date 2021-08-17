@@ -4,7 +4,7 @@
 pthBase <- "data/"
 
 
-landCoverD = raster(paste0(pthBase, "plc", ".tif")) %>% 
+landCoverD = raster(paste0(pthBase, "landCover", ".tif")) %>% 
   reclassPLC()
 eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
 eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE) %>% 
@@ -35,7 +35,9 @@ twoRange <- st_sfc(st_polygon(list(projPolyPts[c(1, 2, 3 ,1),])),
   st_set_crs(st_crs(projectPolyD))
 
 landCoverD2 <- raster::merge(landCoverD, 
-                             raster::shift(landCoverD, dx = 19851.6, 
+                             raster::shift(landCoverD, 
+                                           dx = raster::nrow(landCoverD)*
+                                             raster::xres(landCoverD), 
                                            dy = raster::nrow(landCoverD)*
                                              raster::xres(landCoverD)))
 # plot(landCoverD2)
@@ -50,16 +52,16 @@ poly1 <-
         list(structure(
           list(structure(
             c(
-              375883.834871147,
-              382980.752147705,
-              388658.285968951,
-              376416.103666888,
-              375883.834871147,
-              12729145.8750217,
-              12730387.8355451,
-              12726661.9539749,
-              12723290.9182686,
-              12729145.8750217
+              700170.862790608,
+              751689.250606358,
+              749481.319699969,
+              701642.816728201,
+              700170.862790608,
+              12619084.4908842,
+              12617612.5369466,
+              12581549.6654756,
+              12584493.5733508,
+              12619084.4908842
             ),
             .Dim = c(5L, 2L)
           )), class = c("XY", "POLYGON",
@@ -69,10 +71,10 @@ poly1 <-
         precision = 0,
         bbox = structure(
           c(
-            xmin = 375883.834871147,
-            ymin = 12723290.9182686,
-            xmax = 388658.285968951,
-            ymax = 12730387.8355451
+            xmin = 700170.862790608,
+            ymin = 12581549.6654756,
+            xmax = 751689.250606358,
+            ymax = 12619084.4908842
           ),
           class = "bbox"
         ),
@@ -102,18 +104,18 @@ poly2 <-
         list(structure(
           list(structure(
             c(
-              396819.740836993,
-              402497.274658239,
-              406578.00209226,
-              402142.428794411,
-              395045.511517853,
-              396819.740836993,
-              12748839.8204642,
-              12749726.9351238,
-              12748130.1287365,
-              12739968.6738685,
-              12741920.3261195,
-              12748839.8204642
+              778184.42148303,
+              804679.592359701,
+              830438.786267577,
+              823814.993548409,
+              778184.42148303,
+              778184.42148303,
+              12707401.7271398,
+              12712553.5659214,
+              12691946.2107951,
+              12656619.3162928,
+              12670602.8787,
+              12707401.7271398
             ),
             .Dim = c(6L,
                      2L)
@@ -124,10 +126,10 @@ poly2 <-
         precision = 0,
         bbox = structure(
           c(
-            xmin = 395045.511517853,
-            ymin = 12739968.6738685,
-            xmax = 406578.00209226,
-            ymax = 12749726.9351238
+            xmin = 778184.42148303,
+            ymin = 12656619.3162928,
+            xmax = 830438.786267577,
+            ymax = 12712553.5659214
           ),
           class = "bbox"
         ),
@@ -152,12 +154,18 @@ twoRange2 <- rbind(poly1, poly2) %>% mutate(Range = c("Missisa", "Nipigon")) %>%
   st_set_crs(st_crs(landCoverD2))
 # supply polygon with multiple ranges
 
-eskerD2 <- eskerDras %>% raster::merge(raster::shift(eskerDras, dx = 400*49, 
-                                                     dy = 400*40)) %>% 
-  raster::projectRaster(to = landCoverD2)
+eskerD2 <- eskerDras %>%
+  raster::merge(raster::shift(eskerDras, 
+                              dx = raster::nrow(eskerDras)*
+                                raster::xres(eskerDras), 
+                              dy = raster::nrow(eskerDras)*
+                                raster::xres(eskerDras))) 
 linFeatD2 <- linFeatDras %>% 
-  raster::merge(raster::shift(linFeatDras, dx = 400*49, dy = 400*40)) %>% 
-  raster::projectRaster(to = landCoverD2)
+  raster::merge(raster::shift(linFeatDras, 
+                              dx = raster::nrow(linFeatDras)*
+                                raster::xres(linFeatDras), 
+                              dy = raster::nrow(linFeatDras)*
+                                raster::xres(linFeatDras))) 
 
 
 # same coefficients as range
