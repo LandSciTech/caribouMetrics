@@ -161,7 +161,7 @@ test_that("error if spatial data doesn't align", {
     linFeat = linFeatDras, 
     projectPoly = projectPolyD, 
     caribouRange = "Churchill"),
-    "do not have the same have the same")
+    "rasters do not have the same")
   
     projectPolyD2 <- mutate(projectPolyD, geometry = geometry + 200000) %>% 
     st_set_crs(st_crs(projectPolyD))

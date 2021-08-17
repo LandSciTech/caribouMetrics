@@ -26,9 +26,14 @@ prepProjPoly <- function(projectPoly, landCover, winArea, padProjPoly){
 }
 
 prepRasts <- function(rastLst, landCover, projectPoly, tmplt = NULL, 
-                      useTmplt = ""){
+                      useTmplt = NULL){
+  
   landCover <- checkAlign(landCover, projectPoly, "landCover", "projectPoly") 
   
+  if(is.null(tmplt)){
+    tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
+  }
+    
   # remove NULLs from rastLst
   rastLst <- rastLst[which(!vapply(rastLst, function(x) is.null(x), 
                                    FUN.VALUE = TRUE))]
@@ -43,9 +48,12 @@ prepRasts <- function(rastLst, landCover, projectPoly, tmplt = NULL,
   rastLst <- purrr::map2(rastLst, names(rastLst),
               ~checkAlign(.x, projectPoly, .y, "projectPoly")) 
   
+  # need to crop tmplt too so that it will match extent
+  #tmplt <- cropIf(tmplt, projectPoly, "tmplt", "projectPoly")
+  
   # tmplt is usually res 400 400 raster that linFeat and esker are rasterized to
   tmpltUse <- rep_len(list(), length(rastLst)) %>% as.list()
-  if(!is.null(tmplt)){
+  if(!is.null(useTmplt)){
     tmpltUseInd <- which(names(rastLst) %in% useTmplt)
     for (i in tmpltUseInd) {
       tmpltUse[[i]] <- tmplt

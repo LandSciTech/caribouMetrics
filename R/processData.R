@@ -40,6 +40,7 @@ setMethod(
     }
     
     if(any(raster::res(inData@esker) < raster::res(tmplt)[1])){
+      message("resampling esker to match landCover resolution")
 
       inData@esker <- raster::resample(inData@esker, tmplt,
                                        method = "bilinear")

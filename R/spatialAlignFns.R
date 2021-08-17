@@ -161,12 +161,12 @@ checkCompRast <- function(x, y, nmx, nmy, y2 = NULL){
   if(!is.null(y2)){
     chk2 <- raster::compareRaster(x, y2, stopiffalse = FALSE)
   } else {
-    chk2 <- TRUE
+    chk2 <- FALSE
   }
 
   if(all(!chk1, !chk2)){
     stop(nmx, " and ",  nmy,
-         " rasters do not have the same have the same extent,",
+         " rasters do not have the same extent,",
          " number of rows and columns, projection, resolution, or origin. ",
          "Use raster::compareRaster() to identify the problem.")
   }

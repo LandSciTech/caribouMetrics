@@ -29,7 +29,7 @@ setMethod(
            eskerSave = NULL, linFeatSave = NULL, 
            winArea = NULL, padProjPoly = FALSE,
            padFocal = FALSE, ptDensity = 1, 
-           tmplt =  raster::`res<-`(raster(landCover), c(400, 400))) {
+           tmplt = NULL) {
 
     charIn <-  sapply(list(landCover, esker, 
                            natDist, anthroDist,  
@@ -79,32 +79,10 @@ setMethod(
     projectPolyOrig <- projPolyOut[["projectPolyOrig"]]
     rm(projPolyOut)
 
-    # rasterize eskers
-    if(inherits(esker, "sf")){
-      esker <- checkAlign(esker, projectPoly, "esker", "projectPoly")
-      
-      #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
-      esker <- rasterizeLineDensity(esker, tmplt)
-    } 
-
-    # rasterize linFeat
-    if(inherits(linFeat, "list")){
-      linFeat <- combineLinFeat(linFeat)
-    }
-    
-    if(is(linFeat, "Spatial")){
-      linFeat <- sf::st_as_sf(linFeat)
-    } 
-
-    if(inherits(linFeat, "sf")){
-
-      linFeat <- checkAlign(linFeat, projectPoly, "linFeat", "projectPoly")
-      
-      linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)
-    } 
-    
-    # check alignment of all raster layers
+    # check alignment of all raster layers esker and linFeat added if needed
     rastLst <- lst(natDist, anthroDist, esker, linFeat)
+    
+    rastLst <- purrr::keep(rastLst, is, "RasterLayer")
     
     rastLst <- prepRasts(rastLst, landCover, projectPoly, tmplt, 
                           useTmplt = c("esker", "linFeat"))
@@ -117,13 +95,51 @@ setMethod(
       rastLst$anthroDist <- raster(matrix(NA))
     }
     
+    if(is.null(tmplt)){
+      tmplt <- raster(rastLst$landCover) %>% raster::`res<-`(c(400, 400))
+    } 
+    
+    
+    # rasterize eskers
+    if(inherits(esker, "sf")){
+      esker <- checkAlign(esker, projectPoly, "esker", "projectPoly")
+      
+      esker <- rasterizeLineDensity(esker, tmplt)
+      
+    } 
+    
+    # rasterize linFeat
+    if(inherits(linFeat, "list")){
+      linFeat <- combineLinFeat(linFeat)
+    }
+    
+    if(is(linFeat, "Spatial")){
+      linFeat <- sf::st_as_sf(linFeat)
+    } 
+    
+    if(inherits(linFeat, "sf")){
+      
+      linFeat <- checkAlign(linFeat, projectPoly, "linFeat", "projectPoly")
+      
+      linFeat <- rasterizeLineDensity(linFeat, tmplt, ptDensity)
+    } 
+    
+    if(is.null(rastLst$linFeat)){
+      rastLst <- c(rastLst, linFeat = linFeat)
+    }
+    
+    if(is.null(rastLst$esker)){
+      rastLst <- c(rastLst, esker = esker)
+    }
+    
     if(!is.null(linFeatSave)){
-      raster::writeRaster(rastLst$linFeat, linFeatSave, overwrite = TRUE)
+      raster::writeRaster(rastLst[["linFeat"]], 
+                          linFeatSave, overwrite = TRUE)
       rastLst$linFeat <- raster(linFeatSave)
     }
     
     if(!is.null(eskerSave)){
-      raster::writeRaster(rastLst$esker, eskerSave, overwrite = TRUE)
+      raster::writeRaster(rastLst[["esker"]], eskerSave, overwrite = TRUE)
       rastLst$esker <- raster(eskerSave)
     }
     
