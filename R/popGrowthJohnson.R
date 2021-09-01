@@ -69,7 +69,7 @@ popGrowthJohnson <- function(N,
     print(paste("projecting step ",t))
     #t=1
 
-    #TO DO: interannual variability should be in generatePopGrowthPredictions function, not here.
+    #TO DO: interannual variability should be in sampleRates (generatePopGrowthPredictions) function, not here.
     #Note interannual variability slows things down a lot, and doesn't make much difference unless initial population size is very low.
     #If worrying about small populations sizes need to switch from continuous to stochastic model with discrete number of births/deaths. 
     if(is.null(interannualVar)||is.na(interannualVar)||((length(interannualVar)==1)&&!interannualVar)){
@@ -193,7 +193,7 @@ popGrowthECCC2011 <- function(N,
     print(paste("projecting step ",t))
     #t=1
     
-    #TO DO: interannual variability should be in generatePopGrowthPredictions function, not here.
+    #TO DO: interannual variability should be in sampleRates (generatePopGrowthPredictions) function, not here.
     #Note interannual variability slows things down a lot, and doesn't make much difference unless initial population size is very low.
     #If worrying about small populations sizes need to switch from continuous to stochastic model with discrete number of births/deaths. 
     if(is.null(interannualVar)||is.na(interannualVar)||((length(interannualVar)==1)&!interannualVar)){

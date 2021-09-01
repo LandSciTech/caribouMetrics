@@ -21,26 +21,26 @@ for the model used in the ECCC Report (2011) and "Johnson" for the model
 used in Johnson et. al. (2020)}
 
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
-number to use see \code{populationGrowthTable} for options.}
+number to use see \code{popGrowthTableJohnsonECCC} for options.}
 
 \item{randomQuantiles}{logical. Should each replicate population be assigned a random quantile to be used for
 sampling the from the distribution of demographic parameters around the means?}
 
 \item{populationGrowthTable}{data.frame. By default
-\code{populationGrowthTable} is used. A custom table of model parameters
+\code{popGrowthTableJohnsonECCC} is used. A custom table of model parameters
 can be provided but it must match the column names of
-\code{populationGrowthTable}.}
+\code{popGrowthTableJohnsonECCC}.}
 }
 \value{
 A list with elements:
 \describe{
     \item{"modelVersion"}{The name of the model version}
-    \item{"coeffTable_Survival" and "coeffTable_Recruitment"}{
+    \item{"coefSamples_Survival" and "coefSamples_Recruitment"}{
       lists with elements:
        \describe{
-          \item{"coeffTable"}{Bootstrapped coefficients with \code{replicates} 
+          \item{"coefSamples"}{Bootstrapped coefficients with \code{replicates} 
             rows}
-          \item{"coeffValues"}{Coefficient values taken from 
+          \item{"coefValues"}{Coefficient values taken from 
             \code{populationGrowthTable}}
           \item{"quantiles"}{A vector of randomly selected quantiles between
              0.025 and 0.975 with length \code{replicates}}
@@ -49,8 +49,8 @@ A list with elements:
   }
 }
 \description{
-A wrapper around \code{\link{makePopDT}} to select coefficients for the
-appropriate model version and \code{\link{buildCoefTable}} to sample
+A wrapper around \code{\link{getCoefs}} to select coefficients for the
+appropriate model version and \code{\link{sampleCoefs}} to sample
 coefficients for each replicate population, for both the survival and 
 recruitment models. Also optionally, generates quantiles with
 \code{\link{getQuantiles}}.
