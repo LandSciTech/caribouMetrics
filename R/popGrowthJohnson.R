@@ -14,7 +14,7 @@
 #' @param interannualVar
 #' @param probOption Choices are "binomial","continuous" or "matchJohnson2020". matchJohnson2020 option reproduces rounding error.
 #' 
-
+#' @export
 popGrowthJohnson <- function(N,
                              numSteps,
                              Rec_bar,
