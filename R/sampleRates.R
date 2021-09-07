@@ -31,6 +31,8 @@
 #'   sample taken from the beta distribution.  TO DO: either remove this
 #'   option from demographicParameters function, or update to align with
 #'   popGrowthJohnson.
+#' @param predInterval numeric vector with length 2. The prediction interval to
+#'   use the default is 95% ie(\code{c(0.025,0.975)})
 #'
 #' @inheritParams demographicRates
 #'
@@ -63,7 +65,8 @@ sampleRates <- function(covTable,
                         ignorePrecision,
                         returnSample,
                         useQuantiles,
-                        interannualVar){
+                        interannualVar, 
+                        predInterval = c(0.025,0.975)){
   
   tictoc::tic(paste0("Elapsed time for caribou prediction for ",
              resVar, " for ", modVer,":"))
@@ -129,7 +132,7 @@ sampleRates <- function(covTable,
     # Uncertainty across replicates
     predictedSD <- matrixStats::rowSds(predictedTableSD)
     
-    qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = c(0.025,0.975))
+    qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = predInterval)
     
     # Now the model calculations
     predicted <- as.numeric(exp(as.matrix(coefValues)[
@@ -175,7 +178,7 @@ sampleRates <- function(covTable,
       # Uncertainty across replicates
       predictedSD <- matrixStats::rowSds(predictedTableSD)
       
-      qqs <- matrixStats::rowQuantiles(predictedTableSD,probs=c(0.025,0.975))
+      qqs <- matrixStats::rowQuantiles(predictedTableSD, probs = predInterval)
       
       # Now the model calculations
       predicted <- as.numeric((as.matrix(coefValues)[which(colnames(coefValues) %in% c("Intercept",
