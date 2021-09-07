@@ -63,7 +63,7 @@ setMethod(
     
     missingColsCoefs <- setdiff(expectedColNamesCoefs, names(coefs))
     
-    if(length(missingColsCoefs > 0)){
+    if(length(missingColsCoefs) > 0){
       stop("The column names in coefs do not match the expected names: ",
            paste0(expectedColNamesCoefs, sep = ", "))
     }
@@ -74,7 +74,11 @@ setMethod(
     
     if(doScale){
       resourceProp <- raster::scale(resourceProp)
-      raster::values(resourceProp[["CONST"]]) <- 1
+      
+      # memory safe assigning values
+      resourceProp[["CONST"]] <- raster::init(resourceProp[["CONST"]], 
+                                              fun = function(x){rep(1, x)}, 
+                                              filename = raster::rasterTmpFile())
     }
     
     # Select relevant seasons
