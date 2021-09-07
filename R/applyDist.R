@@ -15,12 +15,14 @@
 applyDist <- function(landCover, natDist, anthroDist, tmplt){
   # check anthroDist and natDist are real if not make dummy
   if(length(raster::unique(anthroDist)) == 0){
-    anthroDist <- landCover
-    anthroDist[] <- 0
+    anthroDist <- raster::init(landCover, 
+                               fun = function(x){rep(0, x)}, 
+                               filename = raster::rasterTmpFile())
   }
   if(length(raster::unique(natDist)) == 0){
-    natDist <- landCover
-    natDist[] <- 0
+    natDist <- raster::init(landCover, 
+                            fun = function(x){rep(0, x)}, 
+                            filename = raster::rasterTmpFile())
   }
   
   # Transfer DTN from natDist to landCover

@@ -40,6 +40,7 @@ setMethod(
     }
     
     if(any(raster::res(inData@esker) < raster::res(tmplt)[1])){
+      message("resampling esker to match landCover resolution")
 
       inData@esker <- raster::resample(inData@esker, tmplt,
                                        method = "bilinear")
@@ -133,7 +134,7 @@ setMethod(
            call. = FALSE)
     }
     
-    # check alignment of new data with landCover except for linFeat
+    # check alignment of new data with projectPoly except for linFeat
     if(!do.call(raster::compareRaster, 
                 c(`names<-`(newData[which(names(newData) != "linFeat")], NULL),
                   list(inData@landCover,inData@landCover,
@@ -143,7 +144,7 @@ setMethod(
     }
     
     newData <- purrr::map2(newData, names(newData), 
-                ~cropIf(.x, inData@landCover, .y, "landCover"))
+                ~cropIf(.x, inData@projectPoly, .y, "projectPoly"))
     
     if(any(names(newData) %in% c("landCover", "natDist", "anthroDist" ))){
       
@@ -171,7 +172,8 @@ setMethod(
    
     # resample linFeat if provided
     if(inherits(newData$linFeat, "Raster")){
-      newData$linFeat <- raster::resample(newData$linFeat, inData@linFeat, 
+      message("resampling linFeat to match landCover resolution")
+      newData$linFeat <- raster::resample(newData$linFeat, tmplt, 
                                           method = "bilinear")
       inData@linFeat <- newData$linFeat
     } 
@@ -194,9 +196,12 @@ setMethod(
     # window radius is radius of circle with winArea rounded to even number of
     # raster cells based on resolution
     winRad <- (sqrt(inData@attributes$winArea*10000/pi)/res(expVars[[1]])[1]) %>% 
-      round(digits = 0)*res(expVars[[1]])[1]
+      round(digits = 0)*res(expVars[[1]])[1] %>% 
+      round()
+
+    message("Applying moving window.")
     
-    expVars <- movingWindowAvg(rast = expVars, radius = winRad,  
+    expVars <- movingWindowAvg(rast = expVars, radius = winRad,
                                nms = layernames, 
                                pad = inData@attributes$padFocal)
     
@@ -236,28 +241,28 @@ setMethod(
       natDist[] <- 0
     }
     
-    anthroDist[is.na(anthroDist)] = 0
-    natDist[is.na(natDist)] = 0
+    anthroDist[is.na(anthroDist)] <- 0
+    natDist[is.na(natDist)] <- 0
     ############
     #Buffer anthropogenic disturbance
     #To speed calculations, include points from linFeat in raster.
     message("buffering anthropogenic disturbance")
     
-    expVars <- (anthroDist)>0
+    expVars <- anthroDist > 0
     
 
-    if(class(inData@linFeat[[1]])=="RasterLayer"){
+    if(is(inData@linFeat[[1]], "RasterLayer")){
       
-      expVars[inData@linFeat[[1]]>0]=1
+      expVars[inData@linFeat[[1]] > 0] <- 1
     }else{
       lfPt <- inData@linFeat[[1]] %>% dplyr::filter(st_is(. , "POINT"))
       
-      if(nrow(lfPt)!=0){
+      if(nrow(lfPt) > 0){
 
         lfPt <- as(lfPt, "Spatial")
         
-        lfR = raster::rasterize(lfPt, expVars,field="ID")    
-        expVars[!is.na(lfR)]=1
+        lfR <- raster::rasterize(lfPt, expVars, field = 1, background = 0)    
+        expVars <- (lfR + expVars) > 0
       }  
     }
 
@@ -274,11 +279,12 @@ setMethod(
 
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,
                                nms = layernames, 
-                               pad = inData@attributes$padFocal,offset=F)
+                               pad = inData@attributes$padFocal, 
+                               offset = FALSE)
     
-    expVars <- expVars>0 
+    expVars <- expVars > 0 
 
-    if(!class(inData@linFeat[[1]])=="RasterLayer"){
+    if(!is(inData@linFeat[[1]], "RasterLayer")){
       ##############
       #Buffer linear features
       message("buffering linear features")
@@ -286,27 +292,32 @@ setMethod(
       #Note points were included with polygons above.
       lf <- inData@linFeat[[1]] %>% dplyr::filter(!st_is(. , "POINT"))
       
-      linBuff <- st_buffer(lf,inData@attributes$bufferWidth)
+      linBuff <- st_buffer(lf, inData@attributes$bufferWidth)
+      
+      if(st_geometry_type(linBuff, by_geometry = FALSE) == "GEOMETRY"){
+        linBuff <- st_collection_extract(linBuff, "POLYGON")
+      }
       
       # faster rasterization
       if(requireNamespace("fasterize", quietly = TRUE)){
-        linBuff <- fasterize::fasterize(st_collection_extract(linBuff, "POLYGON"), expVars)
+        linBuff <- fasterize::fasterize(linBuff, expVars)
       } else {
         message("To speed up install fasterize package")
         linBuff <- raster::rasterize(linBuff, expVars)
       }
       
       linBuff <- linBuff > 0 
-      linBuff[is.na(linBuff)] = 0
+      linBuff[is.na(linBuff)] <- 0
       anthroBuff <- (linBuff + expVars) > 0
     }else{
-      anthroBuff <- expVars>0
+      anthroBuff <- expVars > 0
     }
     
     fire_excl_anthro <- raster::overlay(natDist, 
                                         anthroBuff,
                                         fun = function(x, y){
-                                          x[!is.na(y[])] <- NA
+                                          x <- x - y 
+                                          x <- x > 0
                                           return(x)
                                         })
     
@@ -319,10 +330,10 @@ setMethod(
                               fire_excl_anthro)
 
     if(requireNamespace("fasterize", quietly = TRUE)){
-      pp = fasterize::fasterize(inData@projectPoly,outStack[[1]])
+      pp = fasterize::fasterize(inData@projectPoly, outStack[[1]])
     } else {
       message("To speed up install fasterize package")
-      pp = raster::rasterize(inData@projectPoly,outStack[[1]])
+      pp = raster::rasterize(inData@projectPoly, outStack[[1]])
     }
     
     #set NAs from landcover
@@ -338,13 +349,13 @@ setMethod(
     #######
     #Range summaries
     message("calculating disturbance metrics")
-        
-    rr <- raster::zonal(outStack,pp,fun="mean",na.rm=T)
+    
+    rr <- raster::zonal(outStack, pp, fun = "mean", na.rm = T)
     rr <- as.data.frame(rr)
-    polyInfo = as.data.frame(inData@projectPoly)
-    polyInfo$geometry=NULL
-    polyInfo$zone = seq(1:nrow(polyInfo))
-    rr=merge(rr,polyInfo)
+    polyInfo <- as.data.frame(inData@projectPoly)
+    polyInfo$geometry <- NULL
+    polyInfo$zone <- seq(1:nrow(polyInfo))
+    rr <- merge(rr, polyInfo)
     
     inData@disturbanceMetrics <- rr
 

@@ -4,7 +4,7 @@ context("Test updating process")
 pthBase <- "data/"
 
 
-landCoverD = raster(paste0(pthBase, "plc", ".tif")) %>% 
+landCoverD = raster(paste0(pthBase, "landCover", ".tif")) %>% 
   reclassPLC()
 eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
 eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE)
@@ -51,7 +51,9 @@ procedData <- caribouHabitat(landCover = landCoverD,
                              winArea = 500)     
 
 test_that("processData works for updated data", {
-  updted <- processData(procedData, newData = list(natDist = natDistD2))
+  expect_warning(updted <- processData(procedData, 
+                                       newData = list(natDist = natDistD2)))
+  
   expect_true(raster::cellStats(procedData@processedData$DTN != 
                                   updted@processedData$DTN, max) == 1)
   expect_true(raster::cellStats(procedData@processedData$TDENLF == 
@@ -72,9 +74,11 @@ test_that("processData works for updated data", {
 })
 
 test_that("process data works for updated data that is not aligned", {
-  updted <- processData(procedData, 
+  expect_warning({
+    updted <- processData(procedData, 
                         newData = list(natDist = natDistD %>% 
                                          raster::extend(raster::extent(natDistD)+251)))
+  })
   expect_equal(procedData@habitatUse, updted@habitatUse)
 
   expect_error(processData(procedData, 
@@ -93,8 +97,11 @@ test_that("update process result is same with same data", {
                                               natDist = natDistD,
                                               anthroDist = anthroDistD, 
                                               linFeat = linFeatDras))
-  
+  #TODO: this is different by a small amount but only along the edges. Not sure
+  #why but also not very important
   expect_equal(procedData@habitatUse, 
-               update_data@habitatUse)
+               update_data@habitatUse, 
+               label = "",
+               expected.label = "different by a small amount but only along the edges. Not sure why but also not very important")
 
 })

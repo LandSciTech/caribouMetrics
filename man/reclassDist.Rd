@@ -7,7 +7,7 @@
 reclassDist(distYr, endYr = 0, numCumYrs, template, dateField)
 }
 \arguments{
-\item{distYr}{\code{sf object}. A simple feature collection covering the focal area and including the year of disturbance (preferred method) or time since disturbance as well as geometry (multipolygon) of the disturbance.}
+\item{distYr}{\code{sf object or rasterLayer}. A simple feature collection (preferred) or raster layer covering the focal area and including the year of disturbance (preferred method) or time since disturbance as well as geometry (multipolygon) of the disturbance.}
 
 \item{endYr}{\code{numeric} default 0. Four digit date indicating the latest year to include from \code{distYr}. If no value is included function assumes \code{dateField} values indicate time since disturbance.}
 
