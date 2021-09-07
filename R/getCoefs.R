@@ -4,10 +4,10 @@
 #' variable from a table of coefficients for many models. If the table does not
 #' contain the standard error it is calculated from the confidence interval.
 #'
-#' @param populationGrowthTable data.frame. \code{popGrowthTableJohnsonECCC} is
+#' @param populationGrowthTable data.frame. \code{\link{popGrowthTableJohnsonECCC}} is
 #'   included in the package and should be used in most cases. A custom table of
 #'   model parameters can be provided but it must match the column names of
-#'   \code{popGrowthTableJohnsonECCC}.
+#'   \code{\link{popGrowthTableJohnsonECCC}}.
 #' @param resVar character. Response variable, typically "femaleSurvival" or
 #'   "recruitment"
 #' @param modVer character vector. Which model version(s) to use. Options are
