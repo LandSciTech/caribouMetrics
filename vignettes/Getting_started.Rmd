@@ -158,4 +158,30 @@ disturb <- disturbanceMetrics(landCover = landCover,
                               projectPoly = singlePoly)
 ```
 
+## Demographic Models
+
+Another feature of `caribouMetrics` is an implementation of the population dynamics models in *Science to inform policy: linking population dynamics to habitat for a threatened species in Canada* by Johnson et. al. (2020) and the "Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update" report.
+`demographicCoefficients()` selects coefficients for the selected model and then samples them for each replicate. `demographicRates()` samples expected survival or recruitment rates based on samples of coefficient values and optionally the model precision and interannual variation. These are wrapper functions what use sensible defaults but lower level functions are also available.
+ 
+```{r demographics}
+demCoefs <- demographicCoefficients(replicates = 10)
+demRates <- demographicRates(covTable = disturb@disturbanceMetrics,
+                             popGrowthPars = demCoefs)
+```
+
 *For additional details of functions in the package see the help documentation*
+
+# References
+
+ECCC. 2011. Scientific assessment to inform the identification of critical
+habitat for woodland caribou (*Rangifer tarandus caribou*), boreal population, in
+Canada. Canadian Wildlife Service, Ottawa.
+<http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf>.
+Accessed 26 Mar 2021.
+
+Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C.
+and McLoughlin, P.D., 2020. Science to inform policy: linking population
+dynamics to habitat for a threatened species in Canada. Journal of Applied
+Ecology, 57(7), pp.1314-1327.
+<https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637>
+
