@@ -42,11 +42,11 @@ landCoverD2 <- raster::merge(landCoverD,
                                              raster::xres(landCoverD)))
 # plot(landCoverD2)
 # side by side polygons that might end up with different extent/origin
-# poly1 <- raster::drawPoly()
-# poly1 <- st_as_sf(poly1)
+# poly3 <- raster::drawPoly()
+# poly3 <- st_as_sf(poly3)
+# dput(poly3)
 
-poly1 <-
-  structure(
+poly1 <- {structure(
     list(
       geometry = structure(
         list(structure(
@@ -94,11 +94,9 @@ poly1 <-
                  "aggregate", "identity"),
       .Names = character(0)
     )
-  )
-# poly2 <- raster::drawPoly()
-# poly2 <- st_as_sf(poly2)
-poly2 <-
-  structure(
+  )}
+
+poly2 <- {structure(
     list(
       geometry = structure(
         list(structure(
@@ -149,8 +147,64 @@ poly2 <-
                  "aggregate", "identity"),
       .Names = character(0)
     )
+  )}
+
+poly3 <- {
+  structure(
+    list(
+      geometry = structure(
+        list(structure(
+          list(structure(
+            c(
+              770242.699723159,
+              825231.135383378,
+              763577.434794648,
+              770242.699723159,
+              12671265.8150613,
+              12652936.3365079,
+              12645715.6328353,
+              12671265.8150613
+            ),
+            .Dim = c(4L,
+                     2L)
+          )), class = c("XY", "POLYGON", "sfg")
+        )),
+        class = c("sfc_POLYGON",
+                  "sfc"),
+        precision = 0,
+        bbox = structure(
+          c(
+            xmin = 763577.434794648,
+            ymin = 12645715.6328353,
+            xmax = 825231.135383378,
+            ymax = 12671265.8150613
+          ),
+          class = "bbox"
+        ),
+        crs = structure(list(input = NA_character_,
+                             wkt = NA_character_), class = "crs"),
+        n_empty = 0L
+      )
+    ),
+    row.names = 1L,
+    class = c("sf",
+              "data.frame"),
+    sf_column = "geometry",
+    agr = structure(
+      integer(0),
+      class = "factor",
+      .Label = c("constant",
+                 "aggregate", "identity"),
+      .Names = character(0)
+    )
   )
+}
+
 twoRange2 <- rbind(poly1, poly2) %>% mutate(Range = c("Missisa", "Nipigon")) %>% 
+  st_set_crs(st_crs(landCoverD2))
+
+threeRange <- rbind(poly1, poly2, poly3) %>% 
+  mutate(Range = c("Missisa", "Nipigon", "Pagwachuan")) %>% 
   st_set_crs(st_crs(landCoverD2))
 # supply polygon with multiple ranges
 
@@ -252,4 +306,14 @@ if(interactive()){
   plot(resRange1@processedData$CON, add = T)
   plot(resRange2@processedData$CON, add = T)
 }
+
+# Try with three ranges so both apply with same window and with different
+resThreeRange <- caribouHabitat(
+  landCover = landCoverD2, esker = eskerD2, 
+  linFeat = linFeatD2, projectPoly = twoRange2,
+  caribouRange = data.frame(Range = c("Missisa", "Nipigon", "Pagwachuan"), 
+                            coefRange = c("Missisa", "Nipigon", "Pagwachuan"),
+                            stringsAsFactors = FALSE), 
+  coefTable = coefTableSmall
+)
 

@@ -57,7 +57,7 @@ setMethod(
     }
 
     # require column called Range
-    if(nrow(projectPoly) == 1){
+    if(nrow(projectPoly) == 1 & !"Range" %in% names(projectPoly)){
       projectPoly <- projectPoly %>% mutate(Range = caribouRange$Range)
     } else {
       if(!"Range" %in% names(projectPoly)){
