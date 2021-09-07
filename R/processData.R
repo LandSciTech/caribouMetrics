@@ -339,9 +339,9 @@ setMethod(
     #set NAs from landcover
     outStack[is.na(landCover) | (landCover == 0)|is.na(pp)] = NA
     
-    names(outStack) = c("anthroBuff", 
-                        "natDist", 
-                        "totalDist",
+    names(outStack) = c("Anthro", 
+                        "Fire", 
+                        "Total_dist",
                         "fire_excl_anthro")
     
     inData@processedData <- outStack

@@ -87,7 +87,7 @@ dm_lfrast <- disturbanceMetrics(
 
 test_that("results are similar with rast vs sf linFeat",{
   expect_equal(dm@disturbanceMetrics, dm_lfrast@disturbanceMetrics,
-               tolerance = 0.05)
+               tolerance = 5)
 })
 
 dm_noAnthro <- disturbanceMetrics(
@@ -128,7 +128,7 @@ test_that("results are different without disturbances",{
 
 test_that("fire_excl_anthro lt fire",
           expect_lt(dm@disturbanceMetrics$fire_excl_anthro, 
-                    dm@disturbanceMetrics$natDist)
+                    dm@disturbanceMetrics$Fire)
 )
 
 test_that("line sf with points works", {
@@ -147,8 +147,8 @@ test_that("line sf with points works", {
     bufferWidth = 500
   )
   
-  expect_gt(dm_pts@disturbanceMetrics$anthroBuff, 
-            dm@disturbanceMetrics$anthroBuff)
+  expect_gt(dm_pts@disturbanceMetrics$Anthro, 
+            dm@disturbanceMetrics$Anthro)
   
 })
 
