@@ -313,7 +313,7 @@ setMethod(
       linBuff <- reclassify(linBuff, cbind(NA, 0))
       anthroBuff <- (linBuff + expVars) > 0
     }else{
-      anthroBuff <- expVars > 0
+      anthroBuff <- expVars
     }
     
     fire_excl_anthro <- raster::overlay(natDist, 
@@ -332,6 +332,8 @@ setMethod(
                               all, 
                               fire_excl_anthro)
     
+    rm(anthroBuff, anthroDist, natDist, all, fire_excl_anthro, expVars)
+    
     if(requireNamespace("fasterize", quietly = TRUE)){
       pp = fasterize::fasterize(inData@projectPoly, outStack[[1]])
     } else {
@@ -340,11 +342,13 @@ setMethod(
     }
     
     #set NAs from landcover
-    #outStack[is.na(landCover) | (landCover == 0)|is.na(pp)] = NA
-    
-    outStack <- mask(outStack, landCover, maskvalue = NA, updatevalue = NA)
-    outStack <- mask(outStack, landCover, maskvalue = 0, updatevalue = NA)
-    outStack <- mask(outStack, pp, maskvalue = NA, updatevalue = NA)
+    toNA <- raster::overlay(landCover, pp,
+                                fun = function(x, y){
+                                  ifelse(is.na(x) |x == 0| is.na(y), NA, 1)
+                                })
+
+    outStack <- raster::overlay(outStack, toNA, fun = function(x, y){x * y})
+    rm(toNA, pp)
     
     names(outStack) = c("Anthro", 
                         "Fire", 
@@ -357,13 +361,13 @@ setMethod(
     #Range summaries
     message("calculating disturbance metrics")
     
-    rr <- raster::zonal(outStack, pp, fun = "mean", na.rm = T)
-    rr <- as.data.frame(rr)
-    polyInfo <- as.data.frame(inData@projectPoly)
-    polyInfo$geometry <- NULL
-    polyInfo$zone <- seq(1:nrow(polyInfo))
-    rr <- merge(rr, polyInfo)
-    
+    # 4 times faster and 7 times less memeory needed vs usin raster::zonal
+    rr <- exactextractr::exact_extract(outStack, inData@projectPoly, 
+                                       fun = "mean", append_cols = TRUE) %>% 
+      select(contains("mean."), everything()) %>% 
+      rename_with(~gsub("mean\\.", "", .x)) %>% 
+      mutate(zone = 1:n(), .before = everything())
+
     inData@disturbanceMetrics <- rr
     
     return(inData)
