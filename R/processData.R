@@ -87,7 +87,8 @@ setMethod(
     
     inData@processedData <- expVars %>% 
       raster::addLayer(expVars[["MIX"]] + expVars[["DEC"]]) %>% 
-      raster::addLayer(raster::setValues(expVars[[1]], 1)) %>% 
+      raster::addLayer(raster::init(expVars[[1]], 
+                                    fun = function(x){rep(1, x)})) %>% 
       `names<-`(c(names(expVars), "LGMD", "CONST"))
     
     return(inData)
