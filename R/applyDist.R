@@ -14,12 +14,15 @@
 
 applyDist <- function(landCover, natDist, anthroDist, tmplt){
   # check anthroDist and natDist are real if not make dummy
-  if(length(raster::unique(anthroDist)) == 0){
+  anthroDummy <- raster::ncell(anthroDist) == 1
+  natDummy <- raster::ncell(natDist) == 1
+
+  if(anthroDummy){
     anthroDist <- raster::init(landCover, 
                                fun = function(x){rep(0, x)}, 
                                filename = raster::rasterTmpFile())
   }
-  if(length(raster::unique(natDist)) == 0){
+  if(natDummy){
     natDist <- raster::init(landCover, 
                             fun = function(x){rep(0, x)}, 
                             filename = raster::rasterTmpFile())
@@ -41,12 +44,10 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
     raster::resample(tmplt, method = "bilinear")
   
   # if no distubance data provided return landCover
-  if(length(raster::unique(natDist)) == 0 &&
-     length(raster::unique(anthroDist)) == 0){
+  if(anthroDummy && natDummy){
     return(landCover)
   }
   
-
   allDist16ha <- raster::stack(anthroDist, natDist) %>% 
     raster::resample(tmplt, method = "bilinear")
   
