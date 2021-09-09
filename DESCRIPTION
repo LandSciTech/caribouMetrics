@@ -2,8 +2,14 @@ Package: caribouMetrics
 Type: Package
 Title: Models and metrics of boreal caribou responses to forest landscapes
 Version: 0.1.0
-Author: Sarah Endicott, Craig Simpkins, Josie Hughes, Her Majesty - see SpaDES DESCRIPTION example.
-Maintainer: Josie Hughes <josie.hughes@canada.ca>
+Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@canada.ca"),
+    person("Sarah", "Endicott", email = "sarah.endicott@canada.ca", 
+           role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
+    person("Craig", "Simpkins", email = simpkinscraig063@gmail.com, role = "aut"),
+    person("Eliot", "McIntire", email = "eliot.mcintire@canada.ca", role = "aut"),
+    person("Tati", "Michelleti", email = "tati.micheletti@gmail.com", role = "aut"),
+    person(given="Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change",
+           role = "cph"))
 Description: This is a package in development. bCaribouMetaAnalysisPredictors 
     function calculates predictors described in Table 52 of Environment Canada 
     (2011) Scientific Assessment to Inform the Identification of Critical Habitat
