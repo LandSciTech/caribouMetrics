@@ -14,12 +14,10 @@
 #' @export
 #' 
 rasterizeLineDensity <- function(x, r, ptDensity = 1) {
-
-
-  r[] <- 1:ncell(r)
+  r <- raster::init(r, fun = "cell")
   
   rPoly <- spex::polygonize(r) %>% set_names("ID", "geometry") %>% 
-    st_set_agr("constant")
+    st_set_agr("constant") %>% st_set_crs(st_crs(r))
   
   rp2 <- st_intersection(rPoly, st_set_agr(x, "constant")) %>% 
     mutate(length = st_length(geometry) %>% units::set_units(NULL)) %>% 
@@ -30,8 +28,8 @@ rasterizeLineDensity <- function(x, r, ptDensity = 1) {
   rp2 <- left_join(rPoly %>% st_drop_geometry(), rp2, by = "ID") %>% 
     mutate(length = replace_na(length, 0))
   
-  r[] <- rp2$length
- 
+  r <- raster::init(r, fun = function(x){rp2$length})
+
   lfPt <- x %>% dplyr::filter(st_is(. , "POINT"))
   
   if(!is.null(ptDensity)){
