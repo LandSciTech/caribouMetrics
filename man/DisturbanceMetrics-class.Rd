@@ -13,6 +13,7 @@
   anthroDist,
   linFeat,
   projectPoly,
+  is.percent = FALSE,
   processedData,
   disturbanceMetrics,
   attributes

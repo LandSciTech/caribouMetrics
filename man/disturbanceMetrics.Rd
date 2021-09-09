@@ -9,7 +9,7 @@ Environment Canada. 2011. Scientific Assessment to Inform the
  caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
 }
 \usage{
-disturbanceMetrics(landCover, linFeat, projectPoly, ...)
+disturbanceMetrics(landCover, linFeat, projectPoly, is.percent = TRUE, ...)
 }
 \arguments{
 \item{landCover}{filename or RasterLayer. 0 and NA values are assumed to be

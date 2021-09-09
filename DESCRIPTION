@@ -33,7 +33,8 @@ Imports:
     tidyselect,
     rsyncrosim,
     spdep,
-    rgdal
+    rgdal,
+    exactextractr
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
@@ -45,6 +46,7 @@ Collate:
     'combineLinFeat.R'
     'convertRasterToLineSegments.R'
     'data.R'
+    'dataPrepFns.R'
     'disturbanceMetrics.R'
     'getSyncSimData.R'
     'spatialAlignFns.R'
@@ -59,7 +61,6 @@ Collate:
     'results.R'
     'tmapCatRast.R'
     'updateCaribou.R'
-    'dataPrepFns.R'
 Suggests: 
     testthat (>= 2.1.0),
     knitr,

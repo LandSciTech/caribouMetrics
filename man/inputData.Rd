@@ -23,7 +23,7 @@ inputData(landCover, esker, linFeat, projectPoly, ...)
   padProjPoly = FALSE,
   padFocal = FALSE,
   ptDensity = 1,
-  tmplt = raster::`res<-`(raster(landCover), c(400, 400))
+  tmplt = NULL
 )
 
 \S4method{inputData}{character}(
