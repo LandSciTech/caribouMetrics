@@ -1,15 +1,14 @@
 context("test combineLinFeat function")
 
-#pthBase <- "tests/testthat/data/"
-pthBase <- "data/"
+pthBase <- system.file("extdata", package = "caribouMetrics")
 
-roads <- st_read(paste0(pthBase, "roads.shp"), quiet = TRUE) %>% 
+roads <- st_read(file.path(pthBase, "roads.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 
 # these are actually empty
-rail <- st_read(paste0(pthBase, "rail.shp"), quiet = TRUE) %>% 
+rail <- st_read(file.path(pthBase, "rail.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
-utilities <- st_read(paste0(pthBase, "utilities.shp"), quiet = TRUE)%>% 
+utilities <- st_read(file.path(pthBase, "utilities.shp"), quiet = TRUE)%>% 
   st_set_agr("constant")
 
 rail <- st_sf(geometry = st_sfc(st_bbox(roads) %>% matrix(ncol = 2, byrow = T) %>%
@@ -22,7 +21,7 @@ utilities <- st_sf(geometry = st_sfc(st_bbox(roads) %>%
                                        st_linestring()))%>% 
   st_set_crs(st_crs(roads))
 
-linFeatDras <- raster::raster(paste0(pthBase, "linFeatTif.tif"))
+linFeatDras <- raster::raster(file.path(pthBase, "linFeatTif.tif"))
 
 roadsSp <- as_Spatial(roads)
 
@@ -32,7 +31,7 @@ test_that("results are same with different input formats",{
   
   out2 <- combineLinFeat(lst(roadsSp, rail, utilities))
   
-  out3 <- combineLinFeat(lst(paste0(pthBase, "roads.shp"),
+  out3 <- combineLinFeat(lst(file.path(pthBase, "roads.shp"),
                              rail,
                              utilities))
   expect_equal(out1, out2)

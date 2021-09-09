@@ -47,31 +47,40 @@ library(dplyr)
 library(raster)
 library(sf)
 
-pth_base <- "Example_data/"
+pth_base <- system.file("extdata", package = "caribouMetrics")
 
-caribouRanges <- c("Pagwachuan", "Missisa", "Ozhiski", "Nipigon", "James Bay")
-caribouRangeCoefs <- rev(caribouRanges)
+caribouRanges <- c("Pagwachuan", "Missisa", "Nipigon", "James Bay")
 
-projectPoly <- st_read(paste0(pth_base,
-                              "caribouRanges/Caribou_Range_Boundary.shp")) %>% 
-  filter(RANGE_NAME %in% caribouRanges) %>% 
-  rename(Range = RANGE_NAME)
-
-singlePoly <- projectPoly[1,] #Polygon for Nipigon range
 ```
 
 As the RSPF is generated using a set of specific resource classes which may not match those of standard land-cover classes there is a reclassing function (`reclassPLC`) which uses a look-up table to convert the PLC values into the correct resource classes to use in later functions
 
 ```{r data in}
-landCover <- raster(paste0(pth_base, "plc250.tif"))%>%
+landCover <- raster(file.path(pth_base, "landCover.tif")) %>%
   reclassPLC()
 
-esker <- st_read(paste0(pth_base, "esker.shp"))
+esker <- read_sf(file.path(pth_base, "esker.shp"))
 
-linFeat <- list(roads = st_read(paste0(pth_base, 
-                                       "road_ORNMNRFROF2010.shp")),
-                rail = st_read(paste0(pth_base, "rail.shp")),
-                utilities = st_read(paste0(pth_base, "util2010.shp")))
+linFeat <- list(roads = read_sf(file.path(pth_base, 
+                                       "roads.shp")),
+                rail = read_sf(file.path(pth_base, "rail.shp")),
+                utilities = read_sf(file.path(pth_base, "utilities.shp")))
+
+natDist <- raster(file.path(pth_base, "natDist.tif"))
+
+singlePoly <- st_bbox(landCover) %>% st_as_sfc() %>% st_as_sf()
+
+corners <- rbind(st_coordinates(singlePoly)[1:4,1:2],
+                 st_centroid(singlePoly) %>% st_coordinates())
+# split the area into 4 polygons
+projectPoly <- st_sf(Range = caribouRanges,
+                     geometry = st_sfc(st_polygon(list(corners[c(1,2,5, 1),])),
+                                       st_polygon(list(corners[c(2,3,5, 2),])),
+                                       st_polygon(list(corners[c(3,4,5, 3),])),
+                                       st_polygon(list(corners[c(4,1,5, 4),])))) %>% 
+  st_set_crs(st_crs(singlePoly))
+
+plot(projectPoly, key.pos = 1)
 
 ```
 
@@ -86,6 +95,7 @@ carHab1 <- caribouHabitat(
   landCover = landCover,
   esker = esker,
   linFeat = linFeat,
+  natDist = natDist,
   projectPoly = singlePoly,
   caribouRange = "Nipigon"
 )
@@ -149,9 +159,6 @@ plot(misCoefMultRange)
 `disturbanceMetrics()` is run in a similar manner to `caribouHabitat` and uses a subset of the same inputs (at it most basic), these are 1)`landCover`, 2) `linFeat`, and 3) `projectPoly`
 
 ```{r disturbance}
-
-natDist <- raster(paste0(pth_base, "natDist250.tif"))
-
 disturb <- disturbanceMetrics(landCover = landCover,
                               linFeat = linFeat,  
                               natDist = natDist,

@@ -1,18 +1,18 @@
 # test updateLC
 context("Test updating process")
-#pthBase <- "tests/testthat/data/"
-pthBase <- "data/"
+
+pthBase <- system.file("extdata", package = "caribouMetrics")
 
 
-landCoverD = raster(paste0(pthBase, "landCover", ".tif")) %>% 
+landCoverD = raster(file.path(pthBase, "landCover.tif")) %>% 
   reclassPLC()
-eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
-eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE)
-natDistD = raster(paste0(pthBase, "natDist", ".tif"))
-anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
-linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
-projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
-linFeatDshp = st_read(paste0(pthBase, "linFeat", ".shp"), quiet = TRUE)
+eskerDras = raster(file.path(pthBase, "eskerTif.tif"))
+eskerDshp = st_read(file.path(pthBase, "esker.shp"), quiet = TRUE)
+natDistD = raster(file.path(pthBase, "natDist.tif"))
+anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
+linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
+projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE)
+linFeatDshp = st_read(file.path(pthBase, "linFeat.shp"), quiet = TRUE)
 
 
 # newData versions to check updating. 
