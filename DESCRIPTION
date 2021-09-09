@@ -59,6 +59,7 @@ Collate:
     'results.R'
     'tmapCatRast.R'
     'updateCaribou.R'
+    'dataPrepFns.R'
 Suggests: 
     testthat (>= 2.1.0),
     knitr,

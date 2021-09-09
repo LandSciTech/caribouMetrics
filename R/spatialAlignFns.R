@@ -97,13 +97,7 @@ transformIf <- function(x, y, nmx, nmy){
     }
   }
   if(inherits(x,"RasterLayer")){
-    if(st_crs(x) == st_crs(y)){
-      return(x)
-    } else {
-      message(nmx, " being transformed to have crs matching ", nmy,
-              " using nearest neighbour")
-      return(raster::projectRaster(x, to = y, method = "ngb"))
-    }
+    return(x)
   }
 }
 
@@ -160,3 +154,23 @@ checkAlign <- function(x, y, nmx, nmy){
   #x <- extendIf(x, y, nmx, nmy)
   return(x)
 }
+
+checkCompRast <- function(x, y, nmx, nmy, y2 = NULL){
+  chk1 <- raster::compareRaster(x, y, stopiffalse = FALSE)
+  
+  if(!is.null(y2)){
+    chk2 <- raster::compareRaster(x, y2, stopiffalse = FALSE)
+  } else {
+    chk2 <- FALSE
+  }
+
+  if(all(!chk1, !chk2)){
+    stop(nmx, " and ",  nmy,
+         " rasters do not have the same extent,",
+         " number of rows and columns, projection, resolution, or origin. ",
+         "Use raster::compareRaster() to identify the problem.")
+  }
+
+  invisible(TRUE)
+}
+

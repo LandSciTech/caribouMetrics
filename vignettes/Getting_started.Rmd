@@ -63,9 +63,8 @@ singlePoly <- projectPoly[1,] #Polygon for Nipigon range
 As the RSPF is generated using a set of specific resource classes which may not match those of standard land-cover classes there is a reclassing function (`reclassPLC`) which uses a look-up table to convert the PLC values into the correct resource classes to use in later functions
 
 ```{r data in}
-landCover <- raster(paste0(pth_base, "plc50.tif")) %>% 
-  reclassPLC() %>% 
-  raster::aggregate(5, fun = raster::modal)
+landCover <- raster(paste0(pth_base, "plc250.tif"))%>%
+  reclassPLC()
 
 esker <- st_read(paste0(pth_base, "esker.shp"))
 
@@ -150,8 +149,12 @@ plot(misCoefMultRange)
 `disturbanceMetrics()` is run in a similar manner to `caribouHabitat` and uses a subset of the same inputs (at it most basic), these are 1)`landCover`, 2) `linFeat`, and 3) `projectPoly`
 
 ```{r disturbance}
+
+natDist <- raster(paste0(pth_base, "natDist250.tif"))
+
 disturb <- disturbanceMetrics(landCover = landCover,
-                              linFeat = linFeat,
+                              linFeat = linFeat,  
+                              natDist = natDist,
                               projectPoly = singlePoly)
 ```
 
