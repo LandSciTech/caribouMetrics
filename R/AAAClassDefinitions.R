@@ -53,12 +53,16 @@ CaribouHabitat <- setClass("CaribouHabitat",
 
 #' Disturbance Metrics class
 #'
-#' An object containing data and results for predictors described in Table 52 of Environment Canada (2011) Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
-#' So far, output variables include:
+#' An object containing data and results for predictors described in Table 52 of
+#' Environment Canada (2011) Scientific Assessment to Inform the Identification
+#' of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal
+#' Population, in Canada: 2011 Update. Ottawa, Ontario. Output variables
+#' include:
 #' \itemize{
-#'   \item fire: % fire
-#'   \item anthro: % non-overlapping anthropogenic disturbance.
-#'   \item totalDist: Percent total non-overlapping fire and anthropogenic disturbance.
+#'   \item {Fire:} {% fire}
+#'   \item {Anthro:} {% non-overlapping anthropogenic disturbance.}
+#'   \item {Total_dist:} {Percent total non-overlapping fire and anthropogenic disturbance.}
+#'   \item {fire_excl_anthro:} {% fire not overlapping with anthropogenic disturbance.}
 #' }
 #'
 #' Note that NA values are omitted from tabulated area.
@@ -66,6 +70,7 @@ CaribouHabitat <- setClass("CaribouHabitat",
 #'
 #' @seealso See \code{\link{disturbanceMetrics}} for options when creating a
 #'   DisturbanceMetrics object.
+#'   
 #' @slot landCover Raster distinguishing land from water. 0 or NA is water.
 #' @slot natDist Raster of natural disturbance.
 #' @slot anthroDist Raster of anthropogenic disturbances.
@@ -78,6 +83,7 @@ CaribouHabitat <- setClass("CaribouHabitat",
 #' @rdname DisturbanceMetrics-class
 #' @export DisturbanceMetrics
 #' @importClassesFrom raster RasterLayer
+
 DisturbanceMetrics <- setClass("DisturbanceMetrics",
                            slots = c(landCover  = "RasterLayer",
                                      natDist  = "RasterLayer",

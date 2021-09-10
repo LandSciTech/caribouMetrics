@@ -50,20 +50,14 @@ disturbance in metres. Default is 500.}
 A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
 }
 \description{
-Calculate the predictors described in Table 52 of Environment Canada (2011)
-Scientific Assessment to Inform the Identification of Critical Habitat for
-Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in
-Canada:2011 Update. Ottawa, Ontario. So far, the variables calculated by this
-function include: \itemize{ \item fire: % fire \item anthro: % non-overlapping
-anthropogenic disturbance. \item totalDist: Percent total non-overlapping fire
-and anthropogenic disturbance. }
+
 }
 \details{
 Note assume natDist and anthroDist include 40 years of cumulative disturbance.
 Note that locations where landCover is NA or 0 are omitted from the tabulated
 area. Missing layers are omitted from the output, not interpreted as 0
-disturbance. To update an existing CaribouHabitat object with new data see
-\link[caribouMetrics]{updateDisturbance}.
+disturbance. To update an existing DisturbanceMetrics object with new data see
+\code{\link[caribouMetrics]{updateDisturbance}}.
 }
 \seealso{
 \code{\link{DisturbanceMetrics-class}} for information on the object

@@ -20,13 +20,7 @@
 )
 }
 \description{
-An object containing data and results for predictors described in Table 52 of Environment Canada (2011) Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
-So far, output variables include:
-\itemize{
-  \item fire: % fire
-  \item anthro: % non-overlapping anthropogenic disturbance.
-  \item totalDist: Percent total non-overlapping fire and anthropogenic disturbance.
-}
+
 }
 \details{
 Note that NA values are omitted from tabulated area.
