@@ -30,17 +30,6 @@ inputDataDisturbance(landCover, linFeat, projectPoly, ...)
   padFocal = FALSE
 )
 }
-\arguments{
-\item{landCover}{}
-
-\item{linFeat}{}
-
-\item{projectPoly}{}
-
-\item{...}{}
-
-\item{natDist}{}
-}
 \description{
 Load input data for calculating disturbance metrics.
 }

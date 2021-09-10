@@ -7,16 +7,8 @@ NULL
 #' 
 #' Load input data for calculating caribou habitat use.
 #' 
-#' @param landCover 
-#'
-#' @param esker 
-#' @param natDist 
-#' @param anthroDist
-#' @param linFeat 
-#' @param projectPoly 
-#' @param ... 
-#'
-#' @export
+
+
 setGeneric("inputData", function(landCover, esker, linFeat, projectPoly, ...) standardGeneric("inputData"))
 
 #' @rdname inputData

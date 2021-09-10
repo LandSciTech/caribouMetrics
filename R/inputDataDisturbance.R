@@ -7,14 +7,7 @@ NULL
 #' 
 #' Load input data for calculating disturbance metrics.
 #' 
-#' @param landCover 
-#' @param natDist 
-#' @param anthroDist
-#' @param linFeat 
-#' @param projectPoly 
-#' @param ... 
-#'
-#' @export
+
 setGeneric("inputDataDisturbance", function(landCover,linFeat, projectPoly, ...) standardGeneric("inputDataDisturbance"))
 
 #' @rdname inputDataDisturbance

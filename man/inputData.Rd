@@ -43,19 +43,6 @@ inputData(landCover, esker, linFeat, projectPoly, ...)
   ptDensity = 1
 )
 }
-\arguments{
-\item{landCover}{}
-
-\item{esker}{}
-
-\item{linFeat}{}
-
-\item{projectPoly}{}
-
-\item{...}{}
-
-\item{natDist}{}
-}
 \description{
 Load input data for calculating caribou habitat use.
 }

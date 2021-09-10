@@ -4,7 +4,6 @@ NULL
 
 #' Process the data after it is loaded and checked by inputData
 
-#' @export
 setGeneric("processData", function(inData, newData, ...) standardGeneric("processData"))
 
 # Method for initial processing when no new data is provided

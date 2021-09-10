@@ -7,11 +7,11 @@
 applyDist(landCover, natDist, anthroDist, tmplt)
 }
 \arguments{
-\item{landCover}{}
+\item{landCover}{landCover raster}
 
-\item{natDist}{}
+\item{natDist}{binary raster}
 
-\item{anthroDist}{}
+\item{anthroDist}{binary raster}
 }
 \description{
 This sets the proportion of forest resource types to 0 when there is more
