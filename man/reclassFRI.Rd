@@ -2,12 +2,9 @@
 % Please edit documentation in R/reclassPLCFRI.R
 \name{reclassFRI}
 \alias{reclassFRI}
-\alias{reclassPLC}
-\title{Reclassify plc and fri}
+\title{Reclassify fri}
 \usage{
 reclassFRI(fri, friLU, rfuLU = rfuToResType)
-
-reclassPLC(plc, plcLU = plcToResType)
 }
 \arguments{
 \item{fri}{raster. Forest resource inventory. Forest resource inventory class
@@ -20,11 +17,7 @@ raster and the second must contain the names of regional forest units
 matching those provided in the table \code{rfuToResType}}
 
 \item{rfuLU}{data.frame. Lookup table to convert RFU codes to resource types}
-
-\item{plc}{raster. Provincial land cover}
-
-\item{plcLU}{Lookup table to convert plc numbers to resource types}
 }
 \description{
-Reclassify plc and fri
+Reclassify fri
 }

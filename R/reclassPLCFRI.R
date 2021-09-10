@@ -1,5 +1,4 @@
-#' Reclassify plc and fri
-#'
+#' Reclassify fri
 #'
 #' @param fri raster. Forest resource inventory. Forest resource inventory class
 #'   ids must correspond to the ids in the \code{friLU}.
@@ -9,10 +8,6 @@
 #'   raster and the second must contain the names of regional forest units
 #'   matching those provided in the table \code{rfuToResType}
 #' @param rfuLU data.frame. Lookup table to convert RFU codes to resource types
-
-#' @param plc raster. Provincial land cover
-#' @param plcLU Lookup table to convert plc numbers to resource types 
-#' @export
 #' 
 reclassFRI <- function(fri, friLU, rfuLU = rfuToResType){
   # TODO: get fri lu from raster legend?
@@ -64,8 +59,18 @@ reclassFRI <- function(fri, friLU, rfuLU = rfuToResType){
   fri <- reclassify(fri, rcl = rclFRI)
 }
 
-#' 
-#' @rdname reclassFRI
+#' Reclassify provincial land cover
+#'
+#' Reclassify provincial land cover classes into resource types use for
+#' \code{caribouHabitat}. The default lookup table \code{plcToResType} is
+#' provided with the package and assumes Ontario 2001 land cover classes.
+#'
+#' @param plc raster. Provincial land cover
+#' @param plcLU Lookup table to convert plc classes to resource types
+#'
+#' @return a RasterLayer with classes matching \code{resTypeCode}
+#'
+#' @rdname reclassPLC
 #' @export
 reclassPLC <- function(plc, plcLU = plcToResType){
   if(!is.null(plcLU)){

@@ -7,9 +7,9 @@
 #' @param ptDensity a number giving the density to assign to points, in units of
 #'   res(r). A value of 1 indicates one straight line crossing of the pixel. A
 #'   value of 2+2*2^0.5 is horizontal, vertical, and diagonal crossings. If
-#'   NULL, points in linObj will be ignored.
+#'   NULL, points in x will be ignored.
 #'
-#' @return A RasterLayer object with values representing the density of lines
+#' @return A RasterLayer object with values representing the density of lines in meters
 #'   per hectare.
 #' @export
 #' 

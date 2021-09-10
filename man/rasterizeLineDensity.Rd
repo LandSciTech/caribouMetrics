@@ -14,10 +14,10 @@ rasterizeLineDensity(x, r, ptDensity = 1)
 \item{ptDensity}{a number giving the density to assign to points, in units of
 res(r). A value of 1 indicates one straight line crossing of the pixel. A
 value of 2+2*2^0.5 is horizontal, vertical, and diagonal crossings. If
-NULL, points in linObj will be ignored.}
+NULL, points in x will be ignored.}
 }
 \value{
-A RasterLayer object with values representing the density of lines
+A RasterLayer object with values representing the density of lines in meters
   per hectare.
 }
 \description{

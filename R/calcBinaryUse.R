@@ -11,9 +11,8 @@ NULL
 #'   data.frame with columns PID, Spring, Summer, Fall, Winter, or a numeric
 #'   vector containing ID values, in which case spring, summer, fall and winter
 #'   must also be supplied
-#' @param caribouRange string. The caribou range of the CaribouHabitat object
 #' @param tholdTable By default \code{threshTable} which contains thresholds
-#'   determimed by Rempel and Hornseth (2018) using Youden's J and a false
+#'   determimed by Rempel (2021) using Youden's J and a false
 #'   negative cost of 5. Change at own risk.
 #' @param bySeason logical. If FALSE (the default) the result is a single value
 #'   of 1 when the habitat use was >= threshold in any season and 0 if not. If
@@ -31,14 +30,14 @@ NULL
 #'  If \code{bySeason} is \code{TRUE} and \code{x} is a vector then the result is a data.frame.  
 #'
 #' @export
-#'
-#' @examples
 setGeneric("calcBinaryUse", function(x, ...) standardGeneric("calcBinaryUse"))
 
 #' @rdname calcBinaryUse
 setMethod(
   "calcBinaryUse", signature(x = "CaribouHabitat"), 
-  function(x, caribouRange, tholdTable = threshTable, bySeason = FALSE){
+  function(x, tholdTable = threshTable, bySeason = FALSE){
+    caribouRange <- x@attributes$caribouRange$coefRange
+    
     tTable <- threshTable %>% filter(Range == caribouRange) %>% 
       arrange(Season) %>% select(Season, Threshold)
     
