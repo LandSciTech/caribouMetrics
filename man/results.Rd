@@ -3,22 +3,26 @@
 \name{results}
 \alias{results}
 \alias{results,CaribouHabitat-method}
+\alias{results,DisturbanceMetrics-method}
 \title{Extract results}
 \usage{
 results(x, ...)
 
 \S4method{results}{CaribouHabitat}(x, type = "both")
+
+\S4method{results}{DisturbanceMetrics}(x, type = "disturbanceMetrics")
 }
 \arguments{
-\item{x}{A caribouHabitat object.}
+\item{x}{A CaribouHabitat or DisturbanceMetrics object.}
 
-\item{type}{string. Either "both" for the habitat use results and the
-processed data or "habitatUse" for just the habitat use results.}
+\item{type}{string. The name of the slot to return. If x is a CaribouHabitat
+object the default is "both" and the habitatUse and processedData will be
+returned as a RasterStack.}
 }
 \value{
-A RasterStack with explanatory varibales and predictions for each
-  season.
+By default a RasterStack if x is a CaribouHabitat object and a
+  data.frame if x is a DisturbanceMetrics object.
 }
 \description{
-Extract results from caribouHabitat object.
+Extract results from CaribouHabitat or DisturbanceMetrics object.
 }

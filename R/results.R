@@ -3,14 +3,15 @@ NULL
 
 #' Extract results
 #'
-#' Extract results from caribouHabitat object.
+#' Extract results from CaribouHabitat or DisturbanceMetrics object.
 #'
-#' @param x A caribouHabitat object.
-#' @param type string. Either "both" for the habitat use results and the
-#'   processed data or "habitatUse" for just the habitat use results.
+#' @param x A CaribouHabitat or DisturbanceMetrics object.
+#' @param type string. The name of the slot to return. If x is a CaribouHabitat
+#'   object the default is "both" and the habitatUse and processedData will be
+#'   returned as a RasterStack.
 #'
-#' @return A RasterStack with explanatory varibales and predictions for each
-#'   season.
+#' @return By default a RasterStack if x is a CaribouHabitat object and a
+#'   data.frame if x is a DisturbanceMetrics object. 
 #'
 #' @export
 setGeneric("results", function(x, ...) standardGeneric("results"))
@@ -28,8 +29,11 @@ setMethod("results", signature(x = "CaribouHabitat"), function(x, type = "both")
     return(result)
   }
   
-  if(type =="habitatUse"){
-    return(x@habitatUse)
-  }
+  return(slot(x, type))
 
+})
+
+#' @rdname results
+setMethod("results", signature(x = "DisturbanceMetrics"), function(x, type = "disturbanceMetrics"){
+  slot(x, type)
 })
