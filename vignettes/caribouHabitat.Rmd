@@ -225,7 +225,7 @@ purrr::walk2(c(carHabLF1, linFeatResults),
 
 It is also possible to change just the `caribouRange` attribute without recomputing the entire function using the `updateCaribou` function. In the example below the coefRange is changed from Nipigon to Missisa and the predictions are re-calculated using the coefficients from the Missisa model
 
-```{r update}
+```{r update, fig.width=8, fig.height=5}
 carHab1@attributes$caribouRange$coefRange <- "Missisa"
 
 misCoef <- updateCaribou(carHab1)
@@ -248,4 +248,16 @@ carHabStd <- caribouHabitat(
   doScale = TRUE
 )
 ```
+
+## Binary usage
+
+You can also determine a binary high or low caribou use result either by season or for the range as a whole using `calcBinaryUse`
+
+```{r binUse, fig.width=8, fig.height=5}
+binCarHab1 <- calcBinaryUse(carHab1)
+binCarHab1Seasons <- calcBinaryUse(carHab1, bySeason = TRUE)
+tmap::qtm(binCarHab1)
+tmap::qtm(binCarHab1Seasons)
+```
+
 
