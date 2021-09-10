@@ -147,15 +147,6 @@ results(MultRange)
 plot(MultRange, season = c("Winter", "Spring"))
 ```
 
-It is also possible to change just the `caribouRange` attribute without recomputing the entire function using the `updateCaribou` function
-
-```{r update}
-carHab1@attributes$caribouRange$coefRange <- "Missisa"
-
-misCoefMultRange <- updateCaribou(carHab1)
-
-plot(misCoefMultRange)
-```
 
 ## `disturbanceMetrics()`
 `disturbanceMetrics()` is the second main function of `caribouMetrics`, this function calculates the metrics described in Table 52 of Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update. The metrics included are:
