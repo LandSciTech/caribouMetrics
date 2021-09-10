@@ -3,20 +3,11 @@
 \name{updateCaribou}
 \alias{updateCaribou}
 \alias{updateCaribou,CaribouHabitat,list-method}
-\alias{updateCaribou,CaribouHabitat,data.frame-method}
 \title{Update an existing CaribouHabitat Object}
 \usage{
 updateCaribou(CarHab, newData, ...)
 
 \S4method{updateCaribou}{CaribouHabitat,list}(
-  CarHab,
-  newData,
-  resultsOnly = FALSE,
-  coefTable = coefTableHR,
-  doScale = FALSE
-)
-
-\S4method{updateCaribou}{CaribouHabitat,data.frame}(
   CarHab,
   newData,
   resultsOnly = FALSE,
