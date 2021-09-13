@@ -9,8 +9,7 @@ demographicRates(
   popGrowthPars,
   ignorePrecision = TRUE,
   returnSample = FALSE,
-  useQuantiles = FALSE,
-  interannualVar = FALSE
+  useQuantiles = FALSE
 )
 }
 \arguments{
@@ -40,14 +39,6 @@ scenario and replicate, so the value for a particular replicate population
 in one scenario is unrelated to the values for that replicate in other
 scenarios. If interested in projecting impacts of changing disturbance on
 the trajectories of replicate populations set \code{useQuantiles = TRUE}.}
-
-\item{interannualVar}{logical or a list with names "S" and "Rec". Should the
-interannual variation in population growth be considered? If TRUE a sample
-is taken from the beta distribution with precision 5.06 for the recruitment
-model and 16.49 for the survival model. If a list the values in "S" and
-"Rec" are used for the precision for survival and recruitment,
-respectively. TO DO: either remove this option from demographicParameters 
-function, or update to align with popGrowthJohnson.}
 }
 \value{
 A data.frame of predictions. The data.frame includes all columns in

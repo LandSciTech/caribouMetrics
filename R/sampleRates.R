@@ -1,7 +1,7 @@
 #' Sample Demographic Rates
 #'
 #' Sample expected survival or recruitment rates based on samples of coefficient
-#' values and optionally the model precision and interannual variation.
+#' values and optionally the model precision.
 #'
 #' \code{coefSamples} and \code{coefValues} can be created with
 #' \code{\link{sampleCoefs}}
@@ -26,11 +26,6 @@
 #'   scenario is unrelated to the values for that replicate in other scenarios.
 #'   If interested in projecting impacts of changing disturbance on the
 #'   trajectories of replicate populations set \code{useQuantiles = TRUE}.
-#' @param interannualVar numeric or FALSE. Should the interannual variation in
-#'   population growth be considered? If numeric it is the precision of the
-#'   sample taken from the beta distribution.  TO DO: either remove this
-#'   option from demographicParameters function, or update to align with
-#'   popGrowthJohnson.
 #' @param predInterval numeric vector with length 2. The prediction interval to
 #'   use the default is 95% ie(\code{c(0.025,0.975)})
 #'
@@ -65,17 +60,10 @@ sampleRates <- function(covTable,
                         ignorePrecision,
                         returnSample,
                         useQuantiles,
-                        interannualVar, 
                         predInterval = c(0.025,0.975)){
   
   tictoc::tic(paste0("Elapsed time for caribou prediction for ",
              resVar, " for ", modVer,":"))
-  
-  if ((!is.numeric(interannualVar) && interannualVar != FALSE) || 
-      length(interannualVar) > 1) {
-      stop("Expecting interannualVar to be a numeric precision parameter with length 1.")
-    }
-  
   
   whichCovariates <- names(coefValues)[!names(coefValues) %in% c("Intercept", 
                                                                    "intercept",
@@ -114,13 +102,6 @@ sampleRates <- function(covTable,
       predictedTableSD = t(apply(predictedTableSD,1,betaSample,phi=phi,useQuantiles=useQuantiles))
     }
     
-    if(interannualVar){
-      pp = apply(predictedTableSD,1,betaSample,phi=interannualVar)
-      
-      pp=t(pp)
-      predictedTableSD=pp
-      
-    }
     #Note: more relevant measure of uncertainty is perhaps bootstrap prediction interval
     #https://stats.stackexchange.com/questions/226565/bootstrap-prediction-interval
     #When precision is included points are not Gaussian distributed, and SD isn't an overly useful summary metric. 

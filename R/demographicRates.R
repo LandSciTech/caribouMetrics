@@ -25,13 +25,6 @@
 #'   in one scenario is unrelated to the values for that replicate in other
 #'   scenarios. If interested in projecting impacts of changing disturbance on
 #'   the trajectories of replicate populations set \code{useQuantiles = TRUE}.
-#' @param interannualVar logical or a list with names "S" and "Rec". Should the
-#'   interannual variation in population growth be considered? If TRUE a sample
-#'   is taken from the beta distribution with precision 5.06 for the recruitment
-#'   model and 16.49 for the survival model. If a list the values in "S" and
-#'   "Rec" are used for the precision for survival and recruitment,
-#'   respectively. TO DO: either remove this option from demographicParameters 
-#'   function, or update to align with popGrowthJohnson.
 #'
 #' @return A data.frame of predictions. The data.frame includes all columns in
 #'   \code{covTable} with additional columns depending on \code{returnSample}.
@@ -62,26 +55,10 @@ demographicRates <- function(covTable,
                                 popGrowthPars,
                                 ignorePrecision = TRUE,
                                 returnSample = FALSE,
-                                useQuantiles = FALSE,
-                                interannualVar = FALSE){
-  #covTable=covTableSim; popGrowthPars = popGrowthParsSmall; ignorePrecision = FALSE; returnSample = TRUE;useQuantiles = TRUE;interannualVar = FALSE
+                                useQuantiles = FALSE){
+  #covTable=covTableSim; popGrowthPars = popGrowthParsSmall; ignorePrecision = FALSE; returnSample = TRUE;useQuantiles = TRUE
   
-  if (class(interannualVar) == "list") {
-    if (length(setdiff(c("Rec","S"), names(interannualVar))) > 0) {
-      stop("Expecting interannualVar to be a named list of precision parameters for Rec and S.")
-    }
-  }
-  else {
-    if (is.null(interannualVar) || !interannualVar) {
-      interannualVar = list(S = F,Rec = F)
-    }
-    else{
-      interannualVar = list(Rec = 1.62 + 3.44, 
-                            S= 13.98 + 2.51)      
-    }
-  }
-  
-  if((length(useQuantiles)==1)&&(!useQuantiles)){
+ if((length(useQuantiles)==1)&&(!useQuantiles)){
     popGrowthPars$coefSamples_S$quantiles=useQuantiles
     popGrowthPars$coefSamples_R$quantiles=useQuantiles
     
@@ -104,8 +81,7 @@ demographicRates <- function(covTable,
                         useQuantiles = popGrowthPars$coefSamples_S[["quantiles"]],
                         resVar = "femaleSurvival",
                         ignorePrecision = ignorePrecision,
-                        returnSample = returnSample,
-                        interannualVar = interannualVar$S)
+                        returnSample = returnSample)
   
   pred_R <- sampleRates(covTable = covTable,
                         coefSamples = popGrowthPars$coefSamples_Recruitment[["coefSamples"]],
@@ -114,8 +90,7 @@ demographicRates <- function(covTable,
                         modVer =  popGrowthPars$modelVersion,
                         resVar = "recruitment",
                         ignorePrecision = ignorePrecision,
-                        returnSample = returnSample,
-                        interannualVar = interannualVar$Rec)
+                        returnSample = returnSample)
   rateSamples = pred_S
   names(rateSamples)[names(rateSamples) == "value"] = "S_bar"
   names(rateSamples)[names(rateSamples) == "average"] = "S_bar"
