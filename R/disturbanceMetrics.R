@@ -83,7 +83,7 @@ setGeneric("disturbanceMetrics",
 setMethod(
   "disturbanceMetrics", 
   signature(landCover = "ANY"), 
-  function(landCover, linFeat, projectPoly, is.percent = FALSE, ...) {
+  function(landCover, linFeat, projectPoly, is.percent = TRUE, ...) {
 
     dots <- list(...)
     
@@ -110,9 +110,9 @@ setMethod(
     }
     
     if (is.percent == TRUE) {
-      x@disturbanceMetrics$anthroBuff <- x@disturbanceMetrics$anthroBuff * 100
-      x@disturbanceMetrics$natDist <- x@disturbanceMetrics$natDist * 100
-      x@disturbanceMetrics$totalDist <- x@disturbanceMetrics$totalDist * 100
+      x@disturbanceMetrics$Anthro <- x@disturbanceMetrics$Anthro * 100
+      x@disturbanceMetrics$Fire <- x@disturbanceMetrics$Fire * 100
+      x@disturbanceMetrics$Total_dist <- x@disturbanceMetrics$Total_dist * 100
       x@disturbanceMetrics$fire_excl_anthro <- x@disturbanceMetrics$fire_excl_anthro * 100
     }
     
