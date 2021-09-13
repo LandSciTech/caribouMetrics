@@ -43,6 +43,7 @@ library(caribouMetrics)
 library(dplyr)
 library(raster)
 library(sf)
+library(ggplot2)
 
 ```
 
@@ -177,11 +178,28 @@ Another feature of `caribouMetrics` is an implementation of the population dynam
  
 ```{r demographics}
 demCoefs <- demographicCoefficients(replicates = 10)
-demRates <- demographicRates(covTable = disturb@disturbanceMetrics,
+
+# Compare the current conditions to a scenario with 10% more anthropogenic
+# disturbance
+exTable <- bind_rows(results(disturb),
+                     results(disturb) %>% 
+                       mutate(Anthro = Anthro + 10, 
+                              Total_dist = Total_dist + 10))
+
+demRates <- demographicRates(covTable = exTable,
                              popGrowthPars = demCoefs)
+
+ggplot(demRates, aes(Anthro, S_bar))+
+  geom_point()+
+  geom_errorbar(aes(ymin = S_PIlow, ymax = S_PIhigh), width = 0.1)+
+  scale_y_continuous(breaks = 5:10/10, limits = c(0.5,1))+
+  xlab("Anthropogenic Disturbance (%)")+
+  ylab("Adult Female Survival")+
+  theme_bw()
+
 ```
 
-*For additional details of functions in the package see the help documentation*
+*For additional details on functions in the package see the help documentation*
 
 # References
 
