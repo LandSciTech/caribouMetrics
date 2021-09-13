@@ -1,9 +1,13 @@
-#' caribouMetrics: A package for calculating caribou resource selection
-#' probability.
+#' caribouMetrics: Models and metrics of boreal caribou responses to forest
+#' landscapes
 #'
-#' The caribouMetrics package provides three important functions: .... These can
-#' be used to calculate the probability of caribou habitat use for ranges in
-#' Ontario.
+#' The caribouMetrics package provides implementations of several different
+#' models for boreal caribou. These include the resource selection probability
+#' functions (RSPF) described in [Hornseth and Rempel
+#' (2016)](https://doi.org/10.1139/cjz-2015-0101) and the disturbance metrics
+#' described in Table 52 of Environment Canada Scientific Assessment to Inform
+#' the Identification of Critical Habitat for Woodland Caribou (\emph{Rangifer
+#' tarandus caribou}), Boreal Population, in Canada 2011 Update.
 #'
 #' @docType package
 #' @name caribouMetrics

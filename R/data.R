@@ -4,19 +4,17 @@
 #' resource selection probability functions for 13 caribou ranges in Northern
 #' Ontario.
 #'
-#' @format A data frame with 547 rows and 5 variables: 
-#' \describe{
+#' @format A data frame with 547 rows and 5 variables: \describe{
 #'   \item{Season}{season, one of Spring, Summer, Fall, Winter}
 #'   \item{Variable}{the shortform variable name for this resource type}
 #'   \item{Coefficient}{modelled coefficients} 
 #'   \item{WinArea}{window area for moving window average} 
-#'   \item{Range}{the caribou range name} }
-#'   
-#' @source LSL script for work published in: Rempel, R. and M. Hornseth. 2018.
-#'   Range-specific seasonal resource selection probability functions for 13
-#'   caribou ranges in Northern Ontario. Ontario Ministry of Natural Resources
-#'   and Forestry, Science and Research Branch, Peterborough, ON. Science and
-#'   Research Internal File Report IFR-01. 42 p. + appends.
+#'   \item{Range}{the caribou range name}}
+#'
+#' @source Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
+#'   C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+#'   J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+#'   Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
 "coefTableHR"
 
 #' Model coefficients from standardized data for caribou ranges
@@ -31,7 +29,10 @@
 #'   \item{Coefficient}{modelled coefficients} 
 #'   \item{WinArea}{window area for moving window average} 
 #'   \item{Range}{the caribou range name} }
-#' @source Table 3 of: \url{https://doi.org/10.1139/cjz-2015-0101}
+#' @source Table 3 of: Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource
+#'   selection of woodland caribou (Rangifer tarandus caribou) across a gradient
+#'   of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+#'   \url{https://doi.org/10.1139/cjz-2015-0101}
 "coefTableStd"
 
 #' Category 2 thresholds table
@@ -50,11 +51,10 @@
 #'   \item{AUC}{the area under the resource operating characteristic (ROC) curve; 
 #'   it ranges from 0-1 and indicates the overall success of the model for predicting
 #'    both presence and absence} }
-#' @source Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource 
-#'  selection probability functions for 13 caribou ranges in Northern Ontario.
-#'  Ontario Ministry of Natural Resources and Forestry, Science and Research Branch, 
-#'  Peterborough, ON. Science and Research Internal File Report IFR-01. 
-#'  42 p. + appends.
+#' @source Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
+#'   C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+#'   J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+#'   Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
 "threshTable"
 
 #' Lookup table for PLC to resource type
@@ -67,6 +67,9 @@
 #'   \item{ResourceType}{Resource type code} 
 #' } 
 #' @source LSL script for work published in:
+#'  Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+#'  woodland caribou (Rangifer tarandus caribou) across a gradient of
+#'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 #'  \url{https://doi.org/10.1139/cjz-2015-0101}
 "plcToResType"
 
@@ -79,5 +82,8 @@
 #'   \item{ResourceType}{Resource type code} 
 #' } 
 #' @source LSL script for work published in:
+#'  Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+#'  woodland caribou (Rangifer tarandus caribou) across a gradient of
+#'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 #'  \url{https://doi.org/10.1139/cjz-2015-0101}
 "rfuToResType"
