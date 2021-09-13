@@ -198,6 +198,13 @@ ggplot(demRates, aes(Anthro, S_bar))+
   theme_bw()
 
 ```
+```{r}
+popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, Rec_bar = demRates$R_bar, 
+                            S_bar = demRates$S_bar)
+
+popGrow
+```
+
 
 *For additional details on functions in the package see the help documentation*
 

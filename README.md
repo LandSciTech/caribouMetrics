@@ -82,8 +82,49 @@ disturb <- disturbanceMetrics(landCover = landCoverD,
 #> calculating disturbance metrics
 
 results(disturb)
-#>   zone    Anthro       Fire Total_dist fire_excl_anthro FID
-#> 1    1 0.3997933 0.01734581  0.4056555      0.005862182   0
+#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID
+#> 1    1 39.97933 1.734581   40.56555        0.5862182   0
+
+# Calculate demographic rates
+demCoefs <- demographicCoefficients(replicates = 10)
+
+demRates <- demographicRates(covTable = results(disturb),
+                             popGrowthPars = demCoefs)
+#> Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.01 sec elapsed
+#> Elapsed time for caribou prediction for recruitment for Johnson:: 0 sec elapsed
+demRates
+#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
+#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.01266392
+#>     S_PIlow  S_PIhigh     R_bar   R_stdErr   R_PIlow  R_PIhigh
+#> 1 0.8307805 0.8672211 0.1813372 0.01528162 0.1451552 0.1928328
+
+# Simulate population growth
+popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, Rec_bar = demRates$R_bar, 
+                            S_bar = demRates$S_bar)
+#> [1] "projecting step  1"
+#> [1] "projecting step  2"
+#> [1] "projecting step  3"
+#> [1] "projecting step  4"
+#> [1] "projecting step  5"
+#> [1] "projecting step  6"
+#> [1] "projecting step  7"
+#> [1] "projecting step  8"
+#> [1] "projecting step  9"
+#> [1] "projecting step  10"
+#> [1] "projecting step  11"
+#> [1] "projecting step  12"
+#> [1] "projecting step  13"
+#> [1] "projecting step  14"
+#> [1] "projecting step  15"
+#> [1] "projecting step  16"
+#> [1] "projecting step  17"
+#> [1] "projecting step  18"
+#> [1] "projecting step  19"
+#> [1] "projecting step  20"
+
+popGrow
+#>     N    lambda
+#> 1 337 0.9150479
 ```
 
 More detailed examples are provided in the vignettes.

@@ -75,6 +75,19 @@ disturb <- disturbanceMetrics(landCover = landCoverD,
 
 results(disturb)
 
+# Calculate demographic rates
+demCoefs <- demographicCoefficients(replicates = 10)
+
+demRates <- demographicRates(covTable = results(disturb),
+                             popGrowthPars = demCoefs)
+demRates
+
+# Simulate population growth
+popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, Rec_bar = demRates$R_bar, 
+                            S_bar = demRates$S_bar)
+
+popGrow
+
 ```
 
 More detailed examples are provided in the vignettes.
