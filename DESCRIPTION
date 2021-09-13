@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@canada.ca"),
     person("Sarah", "Endicott", email = "sarah.endicott@canada.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
-    person("Craig", "Simpkins", email = simpkinscraig063@gmail.com, role = "aut"),
+    person("Craig", "Simpkins", email = "simpkinscraig063@gmail.com", role = "aut"),
     person("Eliot", "McIntire", email = "eliot.mcintire@canada.ca", role = "aut"),
     person("Tati", "Michelleti", email = "tati.micheletti@gmail.com", role = "aut"),
     person(given="Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change",
@@ -40,7 +40,8 @@ Imports:
     rsyncrosim,
     spdep,
     rgdal,
-    exactextractr
+    exactextractr,
+    methods
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
@@ -69,7 +70,8 @@ Collate:
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    tmap
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)

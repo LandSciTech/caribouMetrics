@@ -20,7 +20,7 @@
 #' @importFrom tidyselect all_of
 #' @importFrom raster compareRaster cover crs focal focalWeight layerize mask
 #'   ncell nlayers projectRaster raster reclassify res addLayer
-#'
+#' @importFrom methods as is new slot slot<- slotNames
 #'
 #'   
 NULL
