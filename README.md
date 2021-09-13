@@ -4,17 +4,15 @@
 # caribouMetrics
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 caribouMetrics is built off of two different models, one calculates
 predictors described in Table 52 of Environment Canada (2011) Scientific
 Assessment to Inform the Identification of Critical Habitat for Woodland
 Caribou and the other implements the caribou resource selection
-probability functions described in Rempel, R. and M. Hornseth. 2018.
-Range-specific seasonal resource selection probability functions for 13
-caribou ranges in Northern Ontario. The second part of the package is
-the actively developed part and the rest of the README focuses on it.
+probability functions described in Hornseth and Rempel (2016) Seasonal
+resource selection of woodland caribou (*Rangifer tarandus caribou*)
+across a gradient of anthropogenic disturbance.
 
 ## Installation
 
@@ -28,51 +26,42 @@ devtools::install_github("LandSciTech/caribouMetrics")
 
 ## Example
 
-This is a basic example which shows you how to use the primary function:
+This is a basic example which shows you how to use the main functions:
 
 ``` r
-#library(caribouMetrics)
-devtools::load_all()
-#> Loading caribouMetrics
-#> Skipping missing files: lstools.R
-#> Adding files missing in collate: caribouMetrics.R
-pthBase <- "tests/testthat/data/"
+library(caribouMetrics)
+
+pthBase <- system.file("extdata", package = "caribouMetrics")
 
 # load example data
-plcD = raster(paste0(pthBase, "plc", ".tif"))
-eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
-eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE)
-friD = raster(paste0(pthBase, "fri", ".tif"))
-ageD = raster(paste0(pthBase, "age", ".tif"))
-natDistD = raster(paste0(pthBase, "natDist", ".tif"))
-anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
-harvD = raster(paste0(pthBase, "harv", ".tif"))
-linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
-projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
+landCoverD <- raster::raster(file.path(pthBase, "landCover.tif")) 
+  # convert PLC classes to resource types used in the model 
+landCoverD <- reclassPLC(landCoverD)
+eskerDras <- raster::raster(file.path(pthBase, "eskerTif.tif"))
+eskerDshp <- sf::read_sf(file.path(pthBase, "esker.shp"))
+natDistD <- raster::raster(file.path(pthBase, "natDist.tif"))
+anthroDistD <-raster::raster(file.path(pthBase, "anthroDist.tif"))
+linFeatDras <- raster::raster(file.path(pthBase, "linFeatTif.tif"))
+projectPolyD <- sf::read_sf(file.path(pthBase, "projectPoly.shp"))
 
-# Calaulate habitat use
+# Calculate habitat use
 carHab1 <- caribouHabitat(
-  plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
-  anthroDist = anthroDistD, harv = harvD,
-  linFeat = linFeatDras, projectPoly = projectPolyD,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
-    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")),
-  caribouRange = "Churchill", 
-  winArea = 500
+  landCover = landCoverD,
+  esker = eskerDras, 
+  natDist = natDistD, 
+  anthroDist = anthroDistD, 
+  linFeat = linFeatDras, 
+  projectPoly = projectPolyD,
+  caribouRange = "Churchill"
 )
-#> projectPoly being transformed to have crs matching plc
-#> cropping plc to extent of projectPoly
-#> extending plc to extent of projectPoly
-#> cropping esker to extent of plc
-#> extending esker to extent of plc
-#> cropping linFeat to extent of plc
-#> extending linFeat to extent of plc
-#> Warning in .checkLevels(levels(x)[[1]], value): the number of rows in the raster
-#> attributes (factors) data.frame is unexpected
-#> Warning in sort(newv[, 1]) == sort(old[, 1]): longer object length is not a
-#> multiple of shorter object length
-#> Warning in .checkLevels(levels(x)[[1]], value): the values in the "ID" column in
-#> the raster attributes (factors) data.frame have changed
+#> cropping landCover to extent of projectPoly
+#> cropping natDist to extent of projectPoly
+#> cropping anthroDist to extent of projectPoly
+#> cropping esker to extent of projectPoly
+#> cropping linFeat to extent of projectPoly
+#> resampling linFeat to match landCover resolution
+#> resampling esker to match landCover resolution
+#> Applying moving window.
 
 # plot the results
 plot(carHab1)
@@ -80,5 +69,21 @@ plot(carHab1)
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
-More detailed examples are provided in the
-vignettes/overall\_vignette.Rmd and in scripts/notesOnHandRModel.Rmd
+``` r
+# calculate disturbance 
+disturb <- disturbanceMetrics(landCover = landCoverD,
+                              linFeat = linFeatDras,  
+                              natDist = natDistD,
+                              projectPoly = projectPolyD)
+#> cropping landCover to extent of projectPoly
+#> cropping natDist to extent of projectPoly
+#> cropping linFeat to extent of projectPoly
+#> buffering anthropogenic disturbance
+#> calculating disturbance metrics
+
+results(disturb)
+#>   zone    Anthro       Fire Total_dist fire_excl_anthro FID
+#> 1    1 0.3997933 0.01734581  0.4056555      0.005862182   0
+```
+
+More detailed examples are provided in the vignettes.

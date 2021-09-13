@@ -38,8 +38,8 @@ In addition to the arguments listed in the table above the `caribouRange` is als
 
 ```{r setup, results=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
-devtools::load_all()
-#library(caribouMetrics)
+
+library(caribouMetrics)
 library(dplyr)
 library(raster)
 library(sf)

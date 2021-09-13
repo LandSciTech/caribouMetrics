@@ -19,7 +19,10 @@ knitr::opts_chunk$set(
 This vignette gives details on the use of the `caribouHabitat` function. See `vignette("Getting_started", package = "caribouMetrics")` for an overview of the function. This function implements the caribou resource selection probability functions (RSPF) described in [Hornseth and Rempel, 2016](https://doi.org/10.1139/cjz-2015-0101) in R. They were previously written in LSL and the goal of this package is to make them more accessible to a wider range of users. 
 
 ```{r setup}
-devtools::load_all()
+library(caribouMetrics)
+library(dplyr)
+library(raster)
+library(sf)
 pthBase <- system.file("extdata", package = "caribouMetrics")
 ```
 
