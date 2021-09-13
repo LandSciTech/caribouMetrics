@@ -87,6 +87,6 @@ demographicCoefficients <- function(replicates,
               coefSamples_Recruitment = coefSamples_R))  
 }
 
-getQuantiles<-function(x,low=0.025,high=0.95){
-  return(low+(seq(0,x-1)/(x-1))*high)
+getQuantiles<-function(x,low=0.025,high=0.975){
+  return(low+(seq(0,x-1)/(x-1))*(high-low))
 }

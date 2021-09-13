@@ -10,8 +10,8 @@ fig_caption: yes
 knitr::opts_chunk$set(echo = TRUE)
 if(!require(bookdown)){install.packages("bookdown")}
 
-devtools::load_all(".")
-#library(caribouMetrics)
+#devtools::load_all(".")
+library(caribouMetrics)
 library(ggplot2)
 
 covTableSim <- expand.grid(Anthro = seq(0, 90, by = 2), 

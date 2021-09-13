@@ -111,11 +111,7 @@ sampleRates <- function(covTable,
         stop("This code assumes at least one row.")
       }
       
-      pp = apply(predictedTableSD,1,betaSample,phi=phi,useQuantiles=useQuantiles)
-      
-      pp=t(pp)
-      predictedTableSD=pp
-      
+      predictedTableSD = t(apply(predictedTableSD,1,betaSample,phi=phi,useQuantiles=useQuantiles))
     }
     
     if(interannualVar){
@@ -132,8 +128,21 @@ sampleRates <- function(covTable,
     # Uncertainty across replicates
     predictedSD <- matrixStats::rowSds(predictedTableSD)
     
-    qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = predInterval)
-    
+    if((length(useQuantiles)==1)&&!useQuantiles){
+      qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = predInterval)
+    }else{
+      if(length(setdiff(predInterval,useQuantiles))==0){
+        colnames(predictedTableSD) <- useQuantiles
+        
+        selectCols = colnames(predictedTableSD)[grepl(predInterval[[1]],colnames(predictedTableSD),fixed=T)|grepl(predInterval[[2]],colnames(predictedTableSD),fixed=T)]
+        if(length(selectCols)>length(predInterval)){
+          stop("Handle case of replicates in useQuantiles.")
+        }
+        qqs <- subset(predictedTableSD,select=as.character(predInterval))
+      }else{
+        stop("If useQuantiles and predInterval are both specified, predInterval should be a subset of useQuantiles.")
+      }
+    }  
     # Now the model calculations
     predicted <- as.numeric(exp(as.matrix(coefValues)[
       which(colnames(coefValues) %in% c("Intercept", "intercept"))] +
@@ -170,14 +179,14 @@ sampleRates <- function(covTable,
         
         pp = apply(predictedTableSD,1,normalSample,sd=phi,useQuantiles=useQuantiles)
         
-        pp=t(pp)
-        predictedTableSD=pp
+        predictedTableSD=t(pp)
         
       }
       
       # Uncertainty across replicates
       predictedSD <- matrixStats::rowSds(predictedTableSD)
       
+      #TO DO: fix this - if using quantiles, pick appropriate quantiles from the set we have
       qqs <- matrixStats::rowQuantiles(predictedTableSD, probs = predInterval)
       
       # Now the model calculations
@@ -215,8 +224,7 @@ sampleRates <- function(covTable,
     if (!is.null(nrow(qqs))) {
       resultDT$PIlow = qqs[,1]  
       resultDT$PIhigh = qqs[,2]  
-    } 
-    else {
+    } else {
       resultDT$PIlow = qqs[[1]]  
       resultDT$PIhigh = qqs[[2]]
     }  

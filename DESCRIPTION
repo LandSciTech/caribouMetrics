@@ -50,6 +50,7 @@ Collate:
     'combineLinFeat.R'
     'convertRasterToLineSegments.R'
     'data.R'
+    'dataPrepFns.R'
     'demographicCoefficients.R'
     'demographicRates.R'
     'disturbanceMetrics.R'
@@ -71,7 +72,6 @@ Collate:
     'sampleRates.R'
     'tmapCatRast.R'
     'updateCaribou.R'
-    'dataPrepFns.R'
 Suggests: 
     testthat (>= 2.1.0),
     knitr,

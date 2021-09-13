@@ -64,6 +64,7 @@ demographicRates <- function(covTable,
                                 returnSample = FALSE,
                                 useQuantiles = FALSE,
                                 interannualVar = FALSE){
+  #covTable=covTableSim; popGrowthPars = popGrowthParsSmall; ignorePrecision = FALSE; returnSample = TRUE;useQuantiles = TRUE;interannualVar = FALSE
   
   if (class(interannualVar) == "list") {
     if (length(setdiff(c("Rec","S"), names(interannualVar))) > 0) {

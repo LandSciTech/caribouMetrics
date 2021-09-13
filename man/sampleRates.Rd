@@ -13,12 +13,13 @@ sampleRates(
   ignorePrecision,
   returnSample,
   useQuantiles,
-  interannualVar
+  interannualVar,
+  predInterval = c(0.025, 0.975)
 )
 }
 \arguments{
 \item{covTable}{data.frame. A table of covariate values to be used. Column
-names must match the coefficient names in \code{popGrowthTableJohnsonECCC}. 
+names must match the coefficient names in \code{\link{popGrowthTableJohnsonECCC}}. 
 Each row is a different scenario.}
 
 \item{coefSamples}{matrix. Bootstrapped coefficients with one row per
@@ -61,6 +62,9 @@ population growth be considered? If numeric it is the precision of the
 sample taken from the beta distribution.  TO DO: either remove this
 option from demographicParameters function, or update to align with
 popGrowthJohnson.}
+
+\item{predInterval}{numeric vector with length 2. The prediction interval to
+use the default is 95% ie(\code{c(0.025,0.975)})}
 }
 \value{
 

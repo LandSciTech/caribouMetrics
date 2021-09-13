@@ -25,7 +25,7 @@ popGrowthJohnson(
 )
 }
 \arguments{
-\item{probOption}{Choices are "binomial","continuous" or "matchJohnson2020". matchJohnson2020 option reproduces rounding error.}
+\item{probOption}{Choices are "binomial","continuous" or "matchJohnson2020".}
 }
 \description{
 Implementation of the Johnson 2020 population model
