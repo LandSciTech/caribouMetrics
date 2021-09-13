@@ -30,7 +30,9 @@ scenarios rows. If FALSE the returned data.frame has one row per scenario
 and additional columns summarizing the variation among replicates. See
 Value for details.}
 
-\item{useQuantiles}{logical. Only relevant when \code{ignorePrecision = FALSE} and
+\item{useQuantiles}{logical or numeric. If it is a numeric
+vector it must be length 2 and give the low and high limits of the
+quantiles to use. Only relevant when \code{ignorePrecision = FALSE} and
 \code{returnSample = TRUE}. If \code{useQuantiles = TRUE}, each replicate population is
 assigned to a quantile of the distribution of variation around the expected
 values, and remains in that quantile as covariates change. If

@@ -16,7 +16,9 @@
 #'   scenarios rows. If FALSE the returned data.frame has one row per scenario
 #'   and additional columns summarizing the variation among replicates. See
 #'   Value for details.
-#' @param useQuantiles logical. Only relevant when \code{ignorePrecision = FALSE} and
+#' @param useQuantiles logical or numeric. If it is a numeric
+#'   vector it must be length 2 and give the low and high limits of the
+#'   quantiles to use. Only relevant when \code{ignorePrecision = FALSE} and
 #'   \code{returnSample = TRUE}. If \code{useQuantiles = TRUE}, each replicate population is
 #'   assigned to a quantile of the distribution of variation around the expected
 #'   values, and remains in that quantile as covariates change. If
@@ -58,18 +60,31 @@ demographicRates <- function(covTable,
                                 useQuantiles = FALSE){
   #covTable=covTableSim; popGrowthPars = popGrowthParsSmall; ignorePrecision = FALSE; returnSample = TRUE;useQuantiles = TRUE
   
- if((length(useQuantiles)==1)&&(!useQuantiles)){
+  if(length(useQuantiles) == 2){
+    if(!all(min(useQuantiles) >= 0, max(useQuantiles) <= 1)){
+      stop("useQuantiles must be between 0 and 1")
+    }
+    quantsToUse <- useQuantiles
+    useQuantiles <- TRUE
+  } else if(length(useQuantiles) == 1){
+    quantsToUse <- c(0.025, 0.975)
+  } else {
+    stop("useQuantiles must have length 1 or 2")
+  }
+  if((length(useQuantiles)==1)&&(!useQuantiles)){
     popGrowthPars$coefSamples_S$quantiles=useQuantiles
     popGrowthPars$coefSamples_R$quantiles=useQuantiles
     
   }else{
-    q=getQuantiles(nrow(popGrowthPars$coefSamples_S$coefSamples))
+    q <- getQuantiles(nrow(popGrowthPars$coefSamples_S$coefSamples),
+                      low = quantsToUse[1],
+                      high = quantsToUse[2])
     
     if(is.null(popGrowthPars$coefSamples_S$quantiles)){
-      popGrowthPars$coefSamples_S$quantiles=sample(q,replace=F)
+      popGrowthPars$coefSamples_S$quantiles <- sample(q, replace = FALSE)
     }
     if(is.null(popGrowthPars$coefSamples_R$quantiles)){
-      popGrowthPars$coefSamples_R$quantiles=sample(q,replace=F)
+      popGrowthPars$coefSamples_R$quantiles <- sample(q, replace = FALSE)
     }
     
   }
