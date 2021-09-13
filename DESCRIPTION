@@ -41,9 +41,14 @@ Imports:
     spdep,
     rgdal,
     exactextractr
+    matrixStats,
+    tictoc,
+    simstudy,
+    truncdist
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
+    'betaSample.R'
     'calcBinaryUse.R'
     'calcRSP.R'
     'caribouHabitat.R'
@@ -53,18 +58,25 @@ Collate:
     'convertRasterToLineSegments.R'
     'data.R'
     'dataPrepFns.R'
+    'demographicCoefficients.R'
+    'demographicRates.R'
     'disturbanceMetrics.R'
+    'getCoefs.R'
     'getSyncSimData.R'
     'spatialAlignFns.R'
     'inputData.R'
     'inputDataDisturbance.R'
     'movingWindowAvg.R'
     'plot.R'
+    'popGrowthJohnson.R'
+    'popGrowthTableJohnsonECCC.R'
     'processData.R'
     'rasterizeLineDensity.R'
     'reclassDistHarv.R'
     'reclassPLCFRI.R'
     'results.R'
+    'sampleCoefs.R'
+    'sampleRates.R'
     'tmapCatRast.R'
     'updateCaribou.R'
 Suggests: 

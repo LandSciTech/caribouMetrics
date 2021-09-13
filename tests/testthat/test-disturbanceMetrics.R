@@ -84,7 +84,7 @@ dm_lfrast <- disturbanceMetrics(
 
 test_that("results are similar with rast vs sf linFeat",{
   expect_equal(dm@disturbanceMetrics, dm_lfrast@disturbanceMetrics,
-               tolerance = 0.05)
+               tolerance = 5)
 })
 
 dm_noAnthro <- disturbanceMetrics(
