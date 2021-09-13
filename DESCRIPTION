@@ -40,7 +40,7 @@ Imports:
     rsyncrosim,
     spdep,
     rgdal,
-    exactextractr
+    exactextractr,
     matrixStats,
     tictoc,
     simstudy,
