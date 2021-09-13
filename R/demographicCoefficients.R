@@ -12,8 +12,9 @@
 #'   used in Johnson et. al. (2020)
 #' @param survivalModelNumber,recruitmentModelNumber character. Which model
 #'   number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.
-#' @param randomQuantiles logical. Should each replicate population be assigned a random quantile to be used for
-#'   sampling the from the distribution of demographic parameters around the means?
+#' @param useQuantiles logical. Should each replicate population be assigned
+#'   a random quantile to be used for sampling the from the distribution of
+#'   demographic parameters around the means?
 #' @param populationGrowthTable data.frame. By default
 #'   \code{\link{popGrowthTableJohnsonECCC}} is used. A custom table of model parameters
 #'   can be provided but it must match the column names of
@@ -53,7 +54,7 @@ demographicCoefficients <- function(replicates,
                            modelVersion = "Johnson",
                            survivalModelNumber = "M1",
                            recruitmentModelNumber = "M4",
-                           randomQuantiles = TRUE,
+                           useQuantiles = TRUE,
                            populationGrowthTable = popGrowthTableJohnsonECCC){
   
   if(!all(colnames(popGrowthTableJohnsonECCC) %in% 
@@ -77,10 +78,12 @@ demographicCoefficients <- function(replicates,
   
   coefSamples_R <- sampleCoefs(DT_R, replicates)
   
-  if(randomQuantiles){
-    coefSamples_S$quantiles=sample(getQuantiles(nrow(coefSamples_S$coefSamples)),replace=F)
-    coefSamples_R$quantiles=sample(getQuantiles(nrow(coefSamples_R$coefSamples)),replace=F)
-  }  
+  if(useQuantiles){
+  coefSamples_S$quantiles <- sample(getQuantiles(nrow(coefSamples_S$coefSamples)), 
+                                    replace = FALSE)
+  coefSamples_R$quantiles <- sample(getQuantiles(nrow(coefSamples_R$coefSamples)),
+                                    replace = FALSE)
+}
   
   return(list(modelVersion = modelVersion,
               coefSamples_Survival = coefSamples_S,

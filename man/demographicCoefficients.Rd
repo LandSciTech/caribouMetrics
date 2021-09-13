@@ -9,7 +9,7 @@ demographicCoefficients(
   modelVersion = "Johnson",
   survivalModelNumber = "M1",
   recruitmentModelNumber = "M4",
-  randomQuantiles = TRUE,
+  useQuantiles = TRUE,
   populationGrowthTable = popGrowthTableJohnsonECCC
 )
 }
@@ -23,8 +23,9 @@ used in Johnson et. al. (2020)}
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
 number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.}
 
-\item{randomQuantiles}{logical. Should each replicate population be assigned a random quantile to be used for
-sampling the from the distribution of demographic parameters around the means?}
+\item{useQuantiles}{logical. Should each replicate population be assigned
+a random quantile to be used for sampling the from the distribution of
+demographic parameters around the means?}
 
 \item{populationGrowthTable}{data.frame. By default
 \code{\link{popGrowthTableJohnsonECCC}} is used. A custom table of model parameters
