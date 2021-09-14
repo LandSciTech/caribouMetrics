@@ -13,7 +13,6 @@ sampleRates(
   ignorePrecision,
   returnSample,
   useQuantiles,
-  interannualVar,
   predInterval = c(0.025, 0.975)
 )
 }
@@ -57,12 +56,6 @@ scenario is unrelated to the values for that replicate in other scenarios.
 If interested in projecting impacts of changing disturbance on the
 trajectories of replicate populations set \code{useQuantiles = TRUE}.}
 
-\item{interannualVar}{numeric or FALSE. Should the interannual variation in
-population growth be considered? If numeric it is the precision of the
-sample taken from the beta distribution.  TO DO: either remove this
-option from demographicParameters function, or update to align with
-popGrowthJohnson.}
-
 \item{predInterval}{numeric vector with length 2. The prediction interval to
 use the default is 95% ie(\code{c(0.025,0.975)})}
 }
@@ -71,7 +64,7 @@ use the default is 95% ie(\code{c(0.025,0.975)})}
 }
 \description{
 Sample expected survival or recruitment rates based on samples of coefficient
-values and optionally the model precision and interannual variation.
+values and optionally the model precision.
 }
 \details{
 \code{coefSamples} and \code{coefValues} can be created with
