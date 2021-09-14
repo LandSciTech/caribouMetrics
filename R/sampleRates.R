@@ -139,6 +139,7 @@ sampleRates <- function(covTable,
           stop("Handle case of replicates in useQuantiles.")
         }
         qqs <- subset(predictedTableSD,select=as.character(predInterval))
+        colnames(predictedTableSD)=NULL
       }else{
         stop("If useQuantiles and predInterval are both specified, predInterval should be a subset of useQuantiles.")
       }
