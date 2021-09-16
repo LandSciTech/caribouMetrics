@@ -88,14 +88,17 @@ popGrowthJohnson <- function(N,
 
     n_recruitsUnadjDD <- surviving_adFemales * Rec_t 
 
-    adjDDRtProportion <- (P_0 -
-                            ((P_0 - P_K) *
-                               (surviving_adFemales/rK)^beta)) * 
-      surviving_adFemales/(surviving_adFemales+1e-6 + alpha)
-    
-    adjDDRtProportion[adjDDRtProportion<0] <- 0
-    adjDDRtProportion[adjDDRtProportion>1] <- 1
-    
+    if(Kmultiplier){
+      adjDDRtProportion <- (P_0 -
+                              ((P_0 - P_K) *
+                                 (surviving_adFemales/rK)^beta)) * 
+        surviving_adFemales/(surviving_adFemales+1e-6 + alpha)
+      
+      adjDDRtProportion[adjDDRtProportion<0] <- 0
+      adjDDRtProportion[adjDDRtProportion>1] <- 1
+    }else{
+      adjDDRtProportion=1
+    }
     if(doBinomial){
       n_recruits <- rbinom(length(N),surviving_adFemales,Rec_t*adjDDRtProportion)
     }else{
