@@ -57,7 +57,7 @@ If interested in projecting impacts of changing disturbance on the
 trajectories of replicate populations set \code{useQuantiles = TRUE}.}
 
 \item{predInterval}{numeric vector with length 2. The prediction interval to
-use the default is 95% ie(\code{c(0.025,0.975)})}
+use the default is 95\% ie(\code{c(0.025,0.975)})}
 }
 \value{
 
