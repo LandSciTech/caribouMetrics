@@ -70,6 +70,13 @@ sampleRates <- function(covTable,
                                                                    "precision",
                                                                    "Precision")]
   
+  missingCovs <- setdiff(whichCovariates, colnames(covTable))
+  
+  if(length(missingCovs) > 0){
+    stop("Covariates missing in covTable: ", paste0(missingCovs, collapse = ", "), 
+         call. = FALSE)
+  }
+  
   covTableRed <- covTable[, whichCovariates]
   
   if (grepl(x = modVer, pattern = "Johnson")) {
