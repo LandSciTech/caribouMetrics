@@ -37,7 +37,7 @@
 #'     \item{"S_bar" and "R_bar"}{The mean estimated values of survival and 
 #'       recruitment (calves per cow)}
 #'     \item{"S_stdErr" and "R_stdErr"}{Standard error of the estimated values}
-#'     \item{"S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh"}{95% Prediction 
+#'     \item{"S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh"}{95\% Prediction 
 #'       interval for estimated values}
 #'   } 
 #'   If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *

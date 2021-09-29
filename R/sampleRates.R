@@ -39,7 +39,7 @@
 #'   \describe{
 #'     \item{"average"}{The mean estimated values of the response variable)}
 #'     \item{"stdErr"}{Standard error of the estimated values}
-#'     \item{"PIlow"/"PIhigh"}{95% Prediction interval for estimated values}
+#'     \item{"PIlow"/"PIhigh"}{95\% Prediction interval for estimated values}
 #'   } 
 #'   If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
 #'    replicates} additional columns are:

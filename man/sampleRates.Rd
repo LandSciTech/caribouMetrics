@@ -60,7 +60,24 @@ trajectories of replicate populations set \code{useQuantiles = TRUE}.}
 use the default is 95\% ie(\code{c(0.025,0.975)})}
 }
 \value{
-
+A data.frame of predictions. The data.frame includes all columns in
+  \code{covTable} with additional columns depending on \code{returnSample}.
+  
+  If \code{returnSample = FALSE} the number of rows is the same as the 
+  number of rows in \code{covTable}, additional columns are:
+  \describe{
+    \item{"average"}{The mean estimated values of the response variable)}
+    \item{"stdErr"}{Standard error of the estimated values}
+    \item{"PIlow"/"PIhigh"}{95\% Prediction interval for estimated values}
+  } 
+  If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
+   replicates} additional columns are:
+  \describe{
+    \item{"scnID"}{A unique identifier for scenarios provided in
+       \code{covTable}}
+    \item{"replicate"}{A replicate identifier, unique within each scenario}
+    \item{value}{The expected values of the response variable}
+  }
 }
 \description{
 Sample expected survival or recruitment rates based on samples of coefficient
