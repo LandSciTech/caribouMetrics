@@ -47,8 +47,9 @@ reclassDist <- function(distYr, endYr = 0, numCumYrs, template, dateField){
   # TODO find quicker more efficient version
   # If distYr is supplied as a raster convert it to an sf object
   if(inherits(distYr, "RasterLayer")){
-    tmp <- stars::st_as_stars(distYr)
-    distYr <- sf::st_as_sf(distYr, as_points = FALSE, merge = TRUE)
+    tmp <- stars::st_as_stars(distYr %>% raster::as.factor())
+    distYr <- sf::st_as_sf(tmp,
+                           as_points = FALSE, merge = TRUE)
   }
   
   # If no endYr is defined assume years relate to time since disturbance, and 
