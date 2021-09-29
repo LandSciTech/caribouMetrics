@@ -4,7 +4,7 @@
 \alias{calcRSP}
 \title{Calculate resource selection probability}
 \usage{
-calcRSP(resourceProp, ...)
+calcRSP(resourceProp, coefs, seasons = "all", doScale = FALSE)
 }
 \arguments{
 \item{resourceProp}{A dataframe containing the proportions/densities of each

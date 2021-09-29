@@ -8,7 +8,6 @@ movingWindowAvg(
   rast,
   radius,
   nms,
-  veloxpkg = FALSE,
   offset = TRUE,
   na.rm = TRUE,
   pad = FALSE,

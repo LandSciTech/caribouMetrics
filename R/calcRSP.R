@@ -41,11 +41,7 @@
 #'
 #'   
 
-setGeneric("calcRSP", function(resourceProp, ...) standardGeneric("calcRSP"))
-
-setMethod(
-  "calcRSP", signature(resourceProp = "Raster"),
-  function(resourceProp, coefs, seasons = "all", doScale = FALSE){
+calcRSP <- function(resourceProp, coefs, seasons = "all", doScale = FALSE){
 
     expectedColNamesResProp <- c("DEC", "MIX", "LGOP", "CON", "LGTP",
                                  "ST", "LGW", "DTN", "ESK", "TDENLF", "LGMD",
@@ -104,91 +100,5 @@ setMethod(
       raster::stack()
     
     return(out)
-  })
+  }
 
-# Note this method is a relic and not currently used by the package. But it
-# might be useful for calculating RSP outside of the rest of the package so it
-# is being kept
-setMethod(
-  "calcRSP", signature(resourceProp = "data.frame"),
-  function(resourceProp, coefs, seasons = "all", polygonIdCol = 1){
-    polygonIdColNm <- names(resourceProp)[polygonIdCol]
-    resourceProp <- resourceProp %>% rename(PID = all_of(polygonIdCol))
-    
-    if("sf" %in% class(resourceProp)){
-      resourceProp <- st_drop_geometry(resourceProp)
-    }
-    
-    # Check inputs are of type data.frame
-    if(!is.data.frame(coefs)){
-      stop("coefs must be a dataframe")
-    }
-    
-    if(!is.data.frame(resourceProp)){
-      stop("resourceProp must be a dataframe")
-    }
-    
-    # Avoiding standard data.frames to ensure speed and follow SpaDES
-    # guidelines
-    resourceProp <- data.table::data.table(resourceProp)
-    coefs <- data.table::data.table(coefs)
-    
-    # Check col names
-    # TODO This expected names bit really breaks the generalisability
-    expectedColNamesResProp <- c("DEC", "MIX", "LGOP", "CON", "LGTP",
-                                 "LGMD", "ST", "LGW", "DTN", "ESK", "TDENLF")
-    
-    missingColsResProp <- data.table::fsetdiff(expectedColNamesResProp, 
-                                               names(resourceProp))
-    
-    if(length(missingColsResProp > 0)){
-      stop("The column names in resourceProp do not match the expected names: ",
-           paste0(expectedColNamesResProp, sep = ", "))
-    }
-    
-    expectedColNamesCoefs <- c("Range", "Season", "Coefficient", "Variable")
-    
-    missingColsCoefs <- data.table::fsetdiff(expectedColNamesCoefs, 
-                                             names(coefs))
-    
-    if(length(missingColsCoefs > 0)){
-      stop("The column names in coefs do not match the expected names: ",
-           paste0(expectedColNamesCoefs, sep = ", "))
-    }
-    
-    if(!seasons %in% c("Spring", "Summer", "Fall", "Winter", "all")){
-      stop("seasons must be one of: Spring, Summer, Fall, Winter, all")
-    }
-    
-    # Select relevant seasons
-    if (seasons == "all"){
-      seasons <- c("Spring", "Summer", "Fall", "Winter")
-    }
-    
-    # add seasons for each polygon
-    resourceProp <- map_dfr(seasons, ~mutate(resourceProp, Season = .x))
-    
-    # make predictions for each polygon and season
-    resourceProp <- resourceProp %>% 
-      mutate(CONST = 1) %>% 
-      select(PID, all_of(expectedColNamesResProp), CONST, Season) %>% 
-      gather("Variable", "Value", -Season, -PID) %>% 
-      left_join(coefs %>% select(Season, Range, Variable, Coefficient),
-                by = c("Season", "Variable")) %>% 
-      
-      # some resource types are not in the model for all ranges
-      mutate(Coefficient = replace_na(Coefficient, 0), 
-             Pred1 = Coefficient * Value) %>% 
-      group_by(PID, Season) %>% 
-      
-      # log odds
-      summarise(Probability = sum(Pred1)) %>% 
-      ungroup() %>% 
-      
-      # probability
-      mutate(Probability = 1/(1 + exp(-Probability))) %>% 
-      spread(Season, Probability) %>% 
-      rename(!!polygonIdColNm := PID)
-    
-    return(resourceProp)
-  })

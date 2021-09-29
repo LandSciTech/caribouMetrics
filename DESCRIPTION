@@ -75,7 +75,7 @@ Collate:
     'processData.R'
     'rasterizeLineDensity.R'
     'reclassDist.R'
-    'reclassPLCFRI.R'
+    'reclassPLC.R'
     'results.R'
     'sampleCoefs.R'
     'sampleRates.R'
