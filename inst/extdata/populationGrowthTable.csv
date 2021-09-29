@@ -28,7 +28,7 @@ Johnson,recruitment,M4,National,fire_excl_anthro,-0.0081,NA,-0.012,-0.004
 Johnson,recruitment,M4,National,Precision,19.86188658,2.22865544,NA,NA
 Johnson,recruitment,M5,National,Intercept,-1.012,NA,-1.222,-0.011
 Johnson,recruitment,M5,National,Total_dist,-0.014,NA,-0.018,-0.011
-Johnson,recruitment,M5,National,fire_ prop_dist,0.072,NA,-0.16,0.304
+Johnson,recruitment,M5,National,fire_prop_dist,0.072,NA,-0.16,0.304
 Johnson,femaleSurvival,M1,National,Intercept,-0.142,NA,-0.158,-0.127
 Johnson,femaleSurvival,M1,National,Anthro,-0.0008,NA,-0.001,-0.0005
 Johnson,femaleSurvival,M1,National,Precision,63.43723654,8.27273095,NA,NA
@@ -42,4 +42,4 @@ Johnson,femaleSurvival,M4,National,fire_excl_anthro,0.0002,NA,-0.0004,0.0008
 Johnson,femaleSurvival,M4,National,Precision,63.73339563,8.31146249,NA,NA
 Johnson,femaleSurvival,M5,National,Intercept,-0.175,NA,-0.205,-0.145
 Johnson,femaleSurvival,M5,National,Total_dist,-0.0004,NA,-0.0008,0
-Johnson,femaleSurvival,M5,National,fire_ prop_dist,0.052,NA,0.02,0.083
+Johnson,femaleSurvival,M5,National,fire_prop_dist,0.052,NA,0.02,0.083
