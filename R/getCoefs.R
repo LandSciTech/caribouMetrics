@@ -28,7 +28,8 @@ getCoefs <- function(populationGrowthTable,
                      modVer,
                      modNum){
   
-  populationGrowthTable = data.table::as.data.table(populationGrowthTable)
+  populationGrowthTable <- filter(populationGrowthTable, responseVariable == resVar)
+  populationGrowthTable <- data.table::as.data.table(populationGrowthTable)
   
   ## Check that both a modVer and modNum parameter have been supplied.
   ## Not required for recruitment models
@@ -37,9 +38,23 @@ getCoefs <- function(populationGrowthTable,
       modVer <- rep(modVer, times = length(modNum))}
   }
   
-  testthat::expect_true(length(modVer) == length(modNum), 
-                        label = "Please provide one modNum for modVer.
-                        length(modVer) == length(modNum)")
+  if(length(modVer) != length(modNum)){
+    stop("Please provide one modNum for each modVer. length(modVer) == length(modNum)",
+         call. = FALSE)
+  } 
+  selectedMods <- data.frame(modelVersion = modVer, responseVariable = resVar, 
+                             ModelNumber = modNum)
+  
+  missingMods <- anti_join(selectedMods, populationGrowthTable, 
+                             by = c("modelVersion", "ModelNumber", "responseVariable"))
+  
+  if(nrow(missingMods) > 0){
+    stop("Model not available. There is no model: ", paste0(missingMods$modelVersion, ", ",
+                                                           missingMods$responseVariable, ", ",
+                                                           missingMods$ModelNumber, 
+                                                           collapse = "\r\n"),
+         call. = FALSE)
+  }
   
   Type <- "National"
   

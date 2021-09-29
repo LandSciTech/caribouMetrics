@@ -58,6 +58,12 @@ demographicCoefficients <- function(replicates,
     stop("populationGrowthTable must contain all colnames in popGrowthTableJohnsonECCC")
   }
   
+  if(any(length(modelVersion) > 1, length(survivalModelNumber) > 1, 
+         length(recruitmentModelNumber) > 1)){
+    stop("Multiple models. modelVersion, survivalModelNumber, ",
+         "and recruitmentModelNumber must have length 1", call. = FALSE)
+  }
+  
   if(length(useQuantiles) == 2){
     if(!all(min(useQuantiles) >= 0, max(useQuantiles) <= 1)){
       stop("useQuantiles must be between 0 and 1")
