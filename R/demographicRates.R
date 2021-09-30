@@ -55,7 +55,7 @@
 #' @export
 demographicRates <- function(covTable,
                                 popGrowthPars,
-                                ignorePrecision = TRUE,
+                                ignorePrecision = FALSE,
                                 returnSample = FALSE,
                                 useQuantiles = FALSE){
   #covTable=covTableSim; popGrowthPars = popGrowthParsSmall; ignorePrecision = FALSE; returnSample = TRUE;useQuantiles = TRUE

@@ -27,7 +27,7 @@ popGrowthJohnson <- function(N,
                              r_max = 1.3,
                              sexRatio=0.5,
                              minRec=0,
-                             maxRec=0.41,
+                             maxRec=0.82,
                              minSadF=0.61,
                              maxSadF=1,
                              interannualVar = list(Rec_CV=0.46,S_CV=0.08696),
@@ -35,6 +35,7 @@ popGrowthJohnson <- function(N,
   rr=data.frame(N=N)
   Rec_bar[Rec_bar<0]=0
   S_bar[S_bar<0]=0
+  maxRec = sexRatio*maxRec
 
   if(!is.element("Rec_phi",names(interannualVar))){
     Rec_bar=sexRatio*Rec_bar 
@@ -46,6 +47,7 @@ popGrowthJohnson <- function(N,
   if(probOption=="matchJohnson2020"){
     roundDigits=0
     doBinomial=F
+    alpha = alpha+1e-6
   }else{
     if(probOption=="continuous"){
       roundDigits=100
@@ -57,6 +59,9 @@ popGrowthJohnson <- function(N,
     rK <- Kmultiplier * N 
   }
   
+  if(alpha<=0){
+    stop("alpha should be greater than 0")
+  }
   for(t in 1:numSteps){
     print(paste("projecting step ",t))
     if(is.null(interannualVar)||is.na(interannualVar)||((length(interannualVar)==1)&&!interannualVar)){
@@ -89,11 +94,15 @@ popGrowthJohnson <- function(N,
     n_recruitsUnadjDD <- surviving_adFemales * Rec_t 
 
     if(Kmultiplier){
+      
+      #rK = 1000
+      #surviving_adFemales=seq(1,rK)
       adjDDRtProportion <- (P_0 -
                               ((P_0 - P_K) *
                                  (surviving_adFemales/rK)^beta)) * 
-        surviving_adFemales/(surviving_adFemales+1e-6 + alpha)
+        surviving_adFemales/(surviving_adFemales + alpha)
       
+      #plot(adjDDRtProportion~surviving_adFemales)
       adjDDRtProportion[adjDDRtProportion<0] <- 0
       adjDDRtProportion[adjDDRtProportion>1] <- 1
     }else{

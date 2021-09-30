@@ -17,7 +17,7 @@ popGrowthJohnson(
   r_max = 1.3,
   sexRatio = 0.5,
   minRec = 0,
-  maxRec = 0.41,
+  maxRec = 0.82,
   minSadF = 0.61,
   maxSadF = 1,
   interannualVar = list(Rec_CV = 0.46, S_CV = 0.08696),

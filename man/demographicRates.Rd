@@ -7,7 +7,7 @@
 demographicRates(
   covTable,
   popGrowthPars,
-  ignorePrecision = TRUE,
+  ignorePrecision = FALSE,
   returnSample = FALSE,
   useQuantiles = FALSE
 )
