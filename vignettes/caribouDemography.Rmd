@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ## Introduction
 This vignette gives details on the use of the `disturbanceMetrics`, `demographicCoefficients`, `demographicRates`, and `popGrowthJohnson` functions. Together, these functions represent an implementation of the aspatial caribou demographic model developed by Johnson et al. [2020](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637), and modified by Dyson et al. (in prep) and Stewart et al. (in prep). 
 
-```{r setup, results='hide',message=F, warning=F}
+```{r setup, results='hide',message=F, warning=T}
 library(caribouMetrics)
 library(dplyr)
 library(raster)
@@ -32,7 +32,7 @@ pthBase <- system.file("extdata", package = "caribouMetrics")
 ## Disturbance metrics
 The example data set loaded below includes a small area in the Nipigon caribou range that we will use as an example.
 
-```{r load data, results='hide',message=F, warning=F}
+```{r load data, results='hide',message=F, warning=T}
 # load example data and classify plc into Resource Types
 landCoverD = raster(file.path(pthBase, "landCover.tif")) %>% 
   reclassPLC()
@@ -48,7 +48,7 @@ utilitiesD = st_read(file.path(pthBase, "utilities.shp"), quiet = TRUE)
 
 `disturbanceMetrics` will prepare the data and then calculate disturbance metrics used as predictor variables by Johnson et al. [2020]. The function can be run in several different ways, and the simplest is to provide spatial objects for each input. 
 
-```{r disturbanceMetricsRaster, results='hide',message=F, warning=F}
+```{r disturbanceMetricsRaster, results='hide',message=F, warning=T}
       disturbance <- disturbanceMetrics(
         landCover=!is.na(landCoverD),
         natDist = natDistD,
@@ -63,7 +63,7 @@ plot(disturbance@processedData)
 ```
 Multiple linear feature inputs can also be provided in vector form. See `vignette("caribouHabitat.Rmd", package = "caribouMetrics")` for other data processing and input options. 
 
-```{r disturbanceMetricsVector, results='hide',message=F, warning=F}
+```{r disturbanceMetricsVector, results='hide',message=F, warning=T}
       disturbanceV <- disturbanceMetrics(
         landCover=!is.na(landCoverD),
         natDist = natDistD,
@@ -82,7 +82,7 @@ plot(disturbanceV@processedData)
 A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. We begin by sample coefficients for 500 replicate populations using default models M1 and M4. Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. We set an the initial population size for each sample population to 100, and project population dynamics for 20 years using the `popGrowthJohnson` function with default parameter values. Anthropogenic disturbance is high on this example landscape, so projected population growth rate for most sample populations is below 1, but uncertainty in the model means that a few sample populations persist.
 
 
-```{r simpleProjection, results='hide',message=F, warning=F}
+```{r simpleProjection, results='hide',message=F, warning=T}
    popGrowthPars <- demographicCoefficients(500)
    rateSamples <- demographicRates(
           covTable = disturbanceV@disturbanceMetrics,
@@ -92,7 +92,7 @@ A simple case for demographic projection is multiple stochastic projections from
           useQuantiles = FALSE)     
    rateSamples$N0=100
    demography <- cbind(rateSamples,popGrowthJohnson(N=rateSamples$N0,numSteps=20,
-                                                    Rec_bar=rateSamples$R_bar,
+                                                    R_bar=rateSamples$R_bar,
                                                     S_bar=rateSamples$S_bar))
 
 ```
@@ -110,7 +110,7 @@ plot(d1)
 
 We can project demographic rates over a range of landscape conditions to recreate figures 3 and 5 from Johnson et al. 2020 and see the effects of changing disturbance on model behaviour. First we create a table of disturbance scenarios across a range of different levels of fire and anthropogenic disturbance.
 
-```{r disturbanceCovariates, results='hide',message=F, warning=F}
+```{r disturbanceCovariates, results='hide',message=F, warning=T}
 covTableSim <- expand.grid(Anthro = seq(0, 90, by = 2), 
                            fire_excl_anthro = seq(0, 70, by = 10)) 
 covTableSim$Total_dist = covTableSim$Anthro + covTableSim$fire_excl_anthro
@@ -118,7 +118,7 @@ covTableSim$Total_dist = covTableSim$Anthro + covTableSim$fire_excl_anthro
 
 We again sample coefficients from default models M1 and M4. The sample of 500 is used to calculate averages, while the sample of 35 is used to show variability among populations.
 
-```{r popGrowthParameters, results='hide',message=F, warning=F}
+```{r popGrowthParameters, results='hide',message=F, warning=T}
 popGrowthPars <- demographicCoefficients(
   500,
   modelVersion = "Johnson",
@@ -138,7 +138,7 @@ popGrowthParsSmall <- demographicCoefficients(
 
 Next we calculate demographic rates given sampled model coefficients. For the smaller sample we set `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. Setting `useQuantiles = TRUE` assigns each sample population to a quantile of the regression model error distributions for survival and recruitment, which allow us to see how demographic rates change . For the larger sample we set `returnSample = FALSE` and the result has one row for each scenario and includes summary statistics of the uncertainty across the samples. We do this twice, once with `ignorePrecision = TRUE` and once with `ignorePrecision = FALSE` to demonstrate the effect of considering the  variance among populations around the National mean in addition to the uncertainty about the coefficient estimates.
 
-```{r demographicRates, results='hide',message=F, warning=F}
+```{r demographicRates, results='hide',message=F, warning=T}
 rateSamples <- demographicRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthParsSmall,
@@ -236,7 +236,7 @@ plot_recruitment3
 
 In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade. We set `interannualVar = FALSE`, `K = FALSE`, and  `probOption = "continuous"` to use a simpler 2-stage demographic model without interannual variability, density dependence, or discrete numbers of animals, as in Stewart et al. in prep.
 
-```{r projectionOverTime, results='hide',message=F, warning=F}
+```{r projectionOverTime, results='hide',message=F, warning=T}
 numTimesteps = 5
 stepLength=10
 N0 = 100
