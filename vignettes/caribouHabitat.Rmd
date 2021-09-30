@@ -69,7 +69,6 @@ In most cases you will have a project area that is smaller than the environmenta
 
 ```{r create projPoly}
 ext <- raster::extent(landCoverD) - 30000
-
 projectPolyD2 <- st_bbox(ext) %>% st_as_sfc() %>% st_as_sf() %>% st_set_crs(st_crs(landCoverD))
 ```
 

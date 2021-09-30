@@ -56,7 +56,6 @@ utilitiesD = st_read(file.path(pthBase, "utilities.shp"), quiet = TRUE)
         linFeat = linFeatDras,
         projectPoly = projectPolyD
       )
-
 ```
 
 ```{r plotDisturbance, fig.width=8, fig.height=5}
@@ -72,7 +71,6 @@ Multiple linear feature inputs can also be provided in vector form. See `vignett
         linFeat = list(roads = roadsD, rail = railD, utilities = utilitiesD),
         projectPoly = projectPolyD
       )
-
 ```
 
 ```{r plotDisturbanceVector, fig.width=8, fig.height=5}
@@ -111,6 +109,7 @@ plot(d1)
 ## Effects of disturbance on demographic rates
 
 We can project demographic rates over a range of landscape conditions to recreate figures 3 and 5 from Johnson et al. 2020 and see the effects of changing disturbance on model behaviour. First we create a table of disturbance scenarios across a range of different levels of fire and anthropogenic disturbance.
+
 ```{r disturbanceCovariates, results='hide',message=F, warning=F}
 covTableSim <- expand.grid(Anthro = seq(0, 90, by = 2), 
                            fire_excl_anthro = seq(0, 70, by = 10)) 
@@ -164,16 +163,14 @@ rateSummariesIgnorePrecision <- demographicRates(
   useQuantiles = FALSE
 )
 ```
-Prepare for graphing by randomly sorting the samples.
-```{r, results='hide',message=F, warning=F}
+### No precision
+Johnson 2020 model with parameter uncertainty but no precision. The bands are the 2.5% and 97.5% quantiles of 500 sample parameter values.
+```{r parameterUncertaintyOnly,echo=FALSE, fig.width=8, fig.height=5}
 rateSamples$rep = as.factor(rateSamples$replicate)
 levels(rateSamples$rep) = sample(unique(rateSamples$replicate),replace = FALSE)
 rateSamples$rep = as.character(rateSamples$rep)
 rateSamples$fullGrp = paste(rateSamples$rep, rateSamples$fire_excl_anthro)
-```
-### No precision
-Johnson 2020 model with parameter uncertainty but no precision. The bands are the 2.5% and 97.5% quantiles of 500 sample parameter values.
-```{r parameterUncertaintyOnly,echo=FALSE, fig.width=8, fig.height=5}
+
 base1 <- ggplot(data = rateSummariesIgnorePrecision, 
                 aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh))+
   geom_line(colour = "black", size = 2)+
@@ -233,12 +230,11 @@ plot_recruitment3 <- ggplot(data = rateSummaries,
   xlab("Anthropogenic disturbance (%)")+
   ylab("Recruitment (calves per 100 cows)")
 plot_recruitment3
-
 ```
 
 ## Projection population growth over time on a changing landscape
 
-In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade. We set `interannualVar = FALSE`, `Kmultiplier = FALSE`, and  `probOption = "continuous"` to use a simpler 2-stage demographic model without interannual variability, density dependence, or discrete numbers of animals, as in Stewart et al. in prep.
+In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade. We set `interannualVar = FALSE`, `K = FALSE`, and  `probOption = "continuous"` to use a simpler 2-stage demographic model without interannual variability, density dependence, or discrete numbers of animals, as in Stewart et al. in prep.
 
 ```{r projectionOverTime, results='hide',message=F, warning=F}
 numTimesteps = 5
@@ -263,8 +259,8 @@ AnthroChange=5 #For illustration assume 5% increase in anthropogenic disturbance
         names(pars)[names(pars)=="N"]="N0"
     }
     pars=merge(pars,rateSamples)
-    pars = cbind(pars,popGrowthJohnson(pars$N0,Rec_bar=pars$R_bar,S_bar=pars$S_bar,
-                                     numSteps=stepLength,interannualVar=F,Kmultiplier=F,
+    pars = cbind(pars,popGrowthJohnson(pars$N0,R_bar=pars$R_bar,S_bar=pars$S_bar,
+                                     numSteps=stepLength,interannualVar=F,K=F,
                                      probOption="continuous"))
 
     # add results to output set
@@ -283,7 +279,6 @@ AnthroChange=5 #For illustration assume 5% increase in anthropogenic disturbance
 popMetrics$MetricTypeID=as.character(popMetrics$MetricTypeID)
 popMetrics$Replicate=paste0("x",popMetrics$Replicate)
 popMetrics=subset(popMetrics,!MetricTypeID=="N")
-
 ```
 
 ```{r changeOverTime, echo=FALSE, fig.width=8, fig.height=10}
@@ -291,8 +286,6 @@ base1 <- ggplot(data = popMetrics, aes(x = Timestep,y=Amount,colour=Replicate,gr
   geom_line()+facet_wrap(~MetricTypeID,scales="free")+
   xlab("Time")+ theme(legend.position = "none")
 base1
-
-
 ```
 
 

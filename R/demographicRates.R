@@ -58,8 +58,7 @@ demographicRates <- function(covTable,
                                 ignorePrecision = FALSE,
                                 returnSample = FALSE,
                                 useQuantiles = FALSE){
-  #covTable=covTableSim; popGrowthPars = popGrowthParsSmall; ignorePrecision = FALSE; returnSample = TRUE;useQuantiles = TRUE
-  
+
   if(length(useQuantiles) == 2){
     if(!all(min(useQuantiles) >= 0, max(useQuantiles) <= 1)){
       stop("useQuantiles must be between 0 and 1")
