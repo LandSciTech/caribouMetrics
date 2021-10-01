@@ -3,7 +3,7 @@
 #' @param x
 #' @param phi
 #' @param useQuantiles
-#' 
+#'
 betaSample<-function(x,phi,useQuantiles=F){
   #x=predictedTableSD[1,]
   bShapes = simstudy::betaGetShapes(x,phi) 
@@ -28,7 +28,6 @@ betaSample<-function(x,phi,useQuantiles=F){
 #' @param sd
 #' @param useQuantiles
 #' 
-
 normalSample<-function(x,sd,useQuantiles=F){
   #x=predictedTableSD[1,]
   
@@ -51,10 +50,7 @@ normalSample<-function(x,sd,useQuantiles=F){
 #' @param sd
 #' @param useQuantiles
 #' 
-
 lnormSample<-function(x,sd,useQuantiles=F){
-  #x=predictedTableSD[1,]
-  
   if((length(useQuantiles)==1)&&!useQuantiles){
     return(rnorm(length(x),sd))
   }else{
@@ -97,9 +93,6 @@ fillNAsWithMean <- function(vector) {
 }
 
 addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
-  #bar=pars$expectedRec;type="Rec";minV=pars$minRec; maxV=pars$maxRec; interannualVar = list(Rec_CV=pars$procEARCV,S_CV=pars$procESadFCV)
-  #bar=pars$expectedSadF;type="S";minV=pars$minSadF; maxV=pars$maxSadF; interannualVar = list(Rec_CV=pars$procEARCV,S_CV=pars$procESadFCV)
-  
   if(is.element(paste0(type,"_CV"),names(interannualVar))){
     #reproducing ECCC_CaribouPopnProjection - see line 143 etc of functions.R
     ProcVar <- (bar * interannualVar[[paste0(type,"_CV")]])^2
@@ -107,7 +100,6 @@ addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
     BetaPars  <- estBetaParams(bar, ProcVar)
     BetaPars$alpha[BetaPars$alpha < 0] <- 0.01
     BetaPars$beta[BetaPars$beta < 0] <- 0.01
-    #median(BetaPars$alpha+BetaPars$beta)
     interannualVar[[paste0(type,"_alpha")]]=BetaPars$alpha
     interannualVar[[paste0(type,"_beta")]]=BetaPars$beta
   }
