@@ -51,6 +51,17 @@
 #'   } 
 #'
 #' @seealso \code{\link{sampleRates}} for more details
+#' 
+#' @examples 
+#' # get coefficient samples
+#' coefs <- demographicCoefficients(10)
+#' 
+#' # table of different scenarios to test
+#' covTableSim <- expand.grid(Anthro = seq(0, 90, by = 20), 
+#'                            fire_excl_anthro = seq(0, 70, by = 20)) 
+#' covTableSim$Total_dist = covTableSim$Anthro + covTableSim$fire_excl_anthro
+#' 
+#' demographicRates(covTableSim, coefs)
 #'
 #' @export
 demographicRates <- function(covTable,

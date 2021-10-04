@@ -76,6 +76,31 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'@source Environment Canada. 2011. Scientific Assessment to Inform the
 #'  Identification of Critical Habitat for Woodland Caribou (Rangifer tarandus
 #'  caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
+#'  
+#' @examples 
+#' # create example rasters
+#' lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+#' nd <- lc
+#' nd[1:3, 1:3] <- 1
+#' ad <- lc
+#' ad[3:5, 3:5] <- 1
+#' lc[] <- 1
+#' 
+#' # create sf objects
+#' lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10, 10), 
+#'                                                             ncol = 2, byrow = TRUE))),
+#'                               crs = 5070))
+#' projPol <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(ad)))
+#' 
+#' # calculate disturbance
+#' disturbanceMetrics(landCover = lc,
+#'                    linFeat = lf,
+#'                    natDist = nd,
+#'                    anthroDist = ad,
+#'                    projectPoly = projPol,
+#'                    padFocal = TRUE,
+#'                    bufferWidth = 1)
+#'
 #'
 #'@export
 setGeneric("disturbanceMetrics", 

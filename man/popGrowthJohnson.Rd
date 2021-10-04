@@ -25,13 +25,16 @@ popGrowthJohnson(
 )
 }
 \arguments{
-\item{N}{Number or vector of numbers. Initial population size for one or more sample populations.}
+\item{N}{Number or vector of numbers. Initial population size for one or more
+sample populations.}
 
 \item{numSteps}{Number. Number of years to project.}
 
-\item{R_bar}{Number or vector of numbers. Expected recruitment rate (calf:cow ratio) for one or more sample populations.}
+\item{R_bar}{Number or vector of numbers. Expected recruitment rate (calf:cow
+ratio) for one or more sample populations.}
 
-\item{S_bar}{Number or vector of numbers. Expected adult female survival for one or more sample populations.}
+\item{S_bar}{Number or vector of numbers. Expected adult female survival for
+one or more sample populations.}
 
 \item{P_0}{Number. Maximum recruitment multiplier.}
 
@@ -43,7 +46,7 @@ popGrowthJohnson(
 
 \item{K}{Number. Carrying capacity multiplier.}
 
-\item{r_max}{Number.Maximum population growth rate.}
+\item{r_max}{Number. Maximum population growth rate.}
 
 \item{s}{Number. Sex ratio.}
 
@@ -55,18 +58,25 @@ popGrowthJohnson(
 
 \item{h_S}{Number. Maximum survival.}
 
-\item{interannualVar}{list or logical. List containing interannual variability parameters. These can be either coefficients of variation (R_CV,S_CV) or beta precision parameters (R_phi,S_phi). Set interannualVar=F to ignore interannual variability.}
+\item{interannualVar}{list or logical. List containing interannual
+variability parameters. These can be either coefficients of variation
+(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to
+\code{FALSE} ignore interannual variability.}
 
-\item{probOption}{Character. Choices are "binomial","continuous" or "matchJohnson2020". See description for details.}
+\item{probOption}{Character. Choices are "binomial","continuous" or
+"matchJohnson2020". See description for details.}
 }
 \value{
-A data.frame of population size (N) and average growth rate (lambda) projections for each sample population.
+A data.frame of population size (N) and average growth rate (lambda)
+  projections for each sample population.
 }
 \description{
-Given default parameter values, this is an implementation of the 2-stage population growth model described in Dyson et al. (in Prep).
-Set \code{probOption="matchJohnson2020"} to reproduce the model used in Johnson et al. 2020.
-Set \code{probOption="continuous"}, \code{interannualVar=F}, and \code{K=F} to reproduce the simpler 
-2-stage demographic model without interannual variability, density dependence, 
-or discrete numbers of animals used by Stewart et al. (in prep).
-See caribouDemography vignette for additional details and examples.
+Given default parameter values, this is an implementation of the 2-stage
+population growth model described in Dyson et al. (in Prep). Set
+\code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson
+et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar =
+FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
+model without interannual variability, density dependence, or discrete
+numbers of animals used by Stewart et al. (in prep). See caribouDemography
+vignette for additional details and examples.
 }

@@ -42,7 +42,14 @@
 #'   population dynamics to habitat for a threatened species in Canada. Journal
 #'   of Applied Ecology, 57(7), pp.1314-1327.
 #'   \url{https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637}
-#'
+#'   
+#' @examples 
+#' # sample coefficients for default models
+#' demographicCoefficients(10)
+#'  
+#' # try a different model
+#' demographicCoefficients(10, modelVersion = "ECCC", survivalModelNumber = "M1", 
+#'                         recruitmentModelNumber = "M3")
 #'
 #' @export
 

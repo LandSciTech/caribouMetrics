@@ -51,6 +51,15 @@ coefficients for each replicate population, for both the survival and
 recruitment models. Also optionally, generates quantiles with
 \code{\link{getQuantiles}}.
 }
+\examples{
+# sample coefficients for default models
+demographicCoefficients(10)
+ 
+# try a different model
+demographicCoefficients(10, modelVersion = "ECCC", survivalModelNumber = "M1", 
+                        recruitmentModelNumber = "M3")
+
+}
 \references{
 ECCC. 2011. Scientific assessment to inform the identification of
   critical habitat for woodland caribou (Rangifer tarandus caribou), boreal
