@@ -45,12 +45,25 @@ assumption and should be used with caution.}
 
 \item{bufferWidth}{number. Width of buffer applied to anthropogenic
 disturbance in metres. Default is 500.}
+
+\item{linBuffMethod}{character. The method used to buffer linear features if
+they are supplied as sf lines. The default is "raster" in which case they
+are rasterized using the stars package and buffered using a moving window
+method. If "sf" then the lines are buffered with st_buffer and then
+rasterized. Either way points are included in the raster output.}
 }
 \value{
 A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
 }
 \description{
-
+Calculate the predictors described in Table 52 of Environment Canada (2011)
+Scientific Assessment to Inform the Identification of Critical Habitat for
+Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in
+Canada:2011 Update. Ottawa, Ontario.The variables calculated by this function
+include: \itemize{ \item {Fire:} {\% fire} \item {Anthro:} {\% non-overlapping
+anthropogenic disturbance.} \item {Total_dist:} {Percent total non-overlapping
+fire and anthropogenic disturbance.} \item {fire_excl_anthro:} {\% fire not
+overlapping with anthropogenic disturbance.} }
 }
 \details{
 Note assume natDist and anthroDist include 40 years of cumulative disturbance.

@@ -149,6 +149,18 @@ test_that("line sf with points works", {
   
 })
 
+test_that("linBuffMethod sf works",{
+  dm_sf <- disturbanceMetrics(
+    landCover = plcD,
+    natDist = natDistD, 
+    anthroDist = anthroDistD, 
+    linFeat = linFeatDshp, 
+    projectPoly = projectPolyD,
+    bufferWidth = 500,
+    linBuffMethod = "sf"
+  )
+})
+
 # Compare output to previous run. This will raise a flag if the result has
 # changed. Update the stored result if the change was expected.
 resultCompare <- readRDS(file.path("data", "dm_resultCompare.rds"))

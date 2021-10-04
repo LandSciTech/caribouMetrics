@@ -23,14 +23,11 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'Calculate the predictors described in Table 52 of Environment Canada (2011)
 #'Scientific Assessment to Inform the Identification of Critical Habitat for
 #'Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in
-#'Canada:2011 Update. Ottawa, Ontario.The variables calculated by this
-#'function include: 
-#' \itemize{
-#'   \item {Fire:} {% fire}
-#'   \item {Anthro:} {% non-overlapping anthropogenic disturbance.}
-#'   \item {Total_dist:} {Percent total non-overlapping fire and anthropogenic disturbance.}
-#'   \item {fire_excl_anthro:} {% fire not overlapping with anthropogenic disturbance.}
-#' }
+#'Canada:2011 Update. Ottawa, Ontario.The variables calculated by this function
+#'include: \itemize{ \item {Fire:} {\% fire} \item {Anthro:} {\% non-overlapping
+#'anthropogenic disturbance.} \item {Total_dist:} {Percent total non-overlapping
+#'fire and anthropogenic disturbance.} \item {fire_excl_anthro:} {\% fire not
+#'overlapping with anthropogenic disturbance.} }
 #'
 #'Note assume natDist and anthroDist include 40 years of cumulative disturbance.
 #'Note that locations where landCover is NA or 0 are omitted from the tabulated
@@ -64,6 +61,11 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'  assumption and should be used with caution.
 #'@param bufferWidth number. Width of buffer applied to anthropogenic
 #'  disturbance in metres. Default is 500.
+#'@param linBuffMethod character. The method used to buffer linear features if
+#'  they are supplied as sf lines. The default is "raster" in which case they
+#'  are rasterized using the stars package and buffered using a moving window
+#'  method. If "sf" then the lines are buffered with st_buffer and then
+#'  rasterized. Either way points are included in the raster output.
 #'
 #'@return A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
 #'
@@ -93,7 +95,14 @@ setMethod(
     
     x <- do.call(inputDataDisturbance, c(lst(landCover,linFeat, projectPoly), 
                               inputDataArgs))
-    x <- processData(x)
+    
+    linBuffMethod <- dots[["linBuffMethod"]]
+    
+    if(length(linBuffMethod) == 0){
+      linBuffMethod <- "raster"
+    }
+    
+    x <- processData(x, linBuffMethod = linBuffMethod)
 
     if(!is.null(dots$saveOutput)){
       
