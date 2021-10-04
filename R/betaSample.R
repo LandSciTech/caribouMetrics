@@ -109,12 +109,19 @@ addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
     interannualVar[[paste0(type,"_beta")]]=bShapes$shape2
   }
   
-  bar_t = truncdist::rtrunc(length(bar), 
+  bar_t = withCallingHandlers(
+    # using calling handler because of problem in truncdist package. Have flagged to developer
+    truncdist::rtrunc(length(bar), 
                  spec="beta", 
                  shape1=interannualVar[[paste0(type,"_alpha")]], 
                  shape2= interannualVar[[paste0(type,"_beta")]],
                  a=minV,
-                 b=maxV)
+                 b=maxV),
+    warning = function(cnd){
+      if (startsWith(conditionMessage(cnd), "the condition has length > 1"))
+        invokeRestart("muffleWarning")
+    }
+  )
   
   return(bar_t)
 }
