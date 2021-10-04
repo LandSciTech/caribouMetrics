@@ -47,7 +47,8 @@ Imports:
     matrixStats,
     tictoc,
     simstudy,
-    truncdist
+    truncdist,
+    stars
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'

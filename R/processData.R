@@ -250,89 +250,91 @@ setMethod(
     #To speed calculations, include points from linFeat in raster.
     message("buffering anthropogenic disturbance")
     
-    expVars <- anthroDist > 0
+    anthroDist <- anthroDist > 0
     
     
-    if(is(inData@linFeat[[1]], "RasterLayer")){
-      expVars <- raster::mask(expVars, inData@linFeat[[1]], inverse = TRUE,
-                              maskvalue = 0, updatevalue = 1)
+    if(!is(inData@linFeat[[1]], "RasterLayer")){
+      # rasterize roads to template
+      tmplt <- stars::st_as_stars(sf::st_bbox(anthroDist), nx = raster::ncol(anthroDist),
+                                  ny = raster::nrow(anthroDist), values = 0)
+      
+      lfRas <- stars::st_rasterize(inData@linFeat[[1]][attr(inData@linFeat[[1]], "sf_geometry")],
+                                      template = tmplt,
+                                      options = "ALL_TOUCHED=TRUE") %>%
+        as("Raster")
       
     }else{
-      lfPt <- inData@linFeat[[1]] %>% dplyr::filter(st_is(. , "POINT"))
-      
-      if(nrow(lfPt) > 0){
-        
-        lfPt <- as(lfPt, "Spatial")
-        
-        lfR <- raster::rasterize(lfPt, expVars, field = 1, background = 0)    
-        expVars <- (lfR + expVars) > 0
-      }  
+      lfRas <- inData@linFeat[[1]]
     }
     
+    anthroDist <- raster::mask(anthroDist, lfRas, inverse = TRUE,
+                            maskvalue = 0, updatevalue = 1)
     # window radius 
-    winRad <- (inData@attributes$bufferWidth/res(expVars[[1]])[1]) %>% 
-      round(digits = 0)*res(expVars[[1]])[1] %>% 
+    winRad <- (inData@attributes$bufferWidth/res(anthroDist[[1]])[1]) %>% 
+      round(digits = 0)*res(anthroDist[[1]])[1] %>% 
       round()
-    
-    layernames <- c("ANTHRO")
-    
+
     if(!inData@attributes$padProjPoly){
-      expVars <- raster::mask(expVars, inData@projectPoly)
+      anthroDist <- raster::mask(anthroDist, inData@projectPoly)
     }
     
-    expVars <- movingWindowAvg(rast = expVars, radius = winRad,
-                               nms = layernames, 
+    anthroDist <- movingWindowAvg(rast = anthroDist, radius = winRad,
+                               nms = "ANTHRO", 
                                pad = inData@attributes$padFocal, 
                                offset = FALSE)
     
-    expVars <- expVars > 0 
+    anthroDist <- anthroDist > 0 
     
-    if(!is(inData@linFeat[[1]], "RasterLayer")){
+    #if(!is(inData@linFeat[[1]], "RasterLayer")){
       ##############
-      #Buffer linear features
-      message("buffering linear features")
+      ##Buffer linear features
+      # message("buffering linear features")
       
-      #Note points were included with polygons above.
-      lf <- inData@linFeat[[1]] %>% dplyr::filter(!st_is(. , "POINT"))
-      
-      linBuff <- st_buffer(lf, inData@attributes$bufferWidth)
-      
-      if(st_geometry_type(linBuff, by_geometry = FALSE) == "GEOMETRY"){
-        linBuff <- st_collection_extract(linBuff, "POLYGON")
-      }
-      
-      # faster rasterization
-      if(requireNamespace("fasterize", quietly = TRUE)){
-        linBuff <- fasterize::fasterize(linBuff, expVars)
-      } else {
-        message("To speed up install fasterize package")
-        linBuff <- raster::rasterize(linBuff, expVars)
-      }
-      
-      linBuff <- linBuff > 0 
-      linBuff <- reclassify(linBuff, cbind(NA, 0))
-      anthroBuff <- (linBuff + expVars) > 0
-    }else{
-      anthroBuff <- expVars
-    }
+      ##Note points were included with polygons above.
+      # lf <- inData@linFeat[[1]] %>% dplyr::filter(!st_is(. , "POINT"))
+      # lf <- st_simplify(lf, dTolerance = res(anthroDist)[1])
+      # linBuff <- st_buffer(lf, inData@attributes$bufferWidth)
+      # 
+      # if(st_geometry_type(linBuff, by_geometry = FALSE) == "GEOMETRY"){
+      #   linBuff <- st_collection_extract(linBuff, "POLYGON")
+      # }
+      # 
+      # # faster rasterization
+      # if(requireNamespace("fasterize", quietly = TRUE)){
+      #   linBuff <- fasterize::fasterize(linBuff, anthroDist)
+      # } else {
+      #   message("To speed up install fasterize package")
+      #   linBuff <- raster::rasterize(linBuff, anthroDist)
+      # }
+      # lfRas <- roads::rasterizeLine(lf, landCover, 0)
+      # linBuff <- movingWindowAvg(rast = lfRas, radius = winRad,
+      #                            nms = "linFeat", 
+      #                            pad = inData@attributes$padFocal, 
+      #                            offset = FALSE)
+      # linBuff <- linBuff > 0 
+      # linBuff <- reclassify(linBuff, cbind(NA, 0))
+      # anthroDist <- (linBuff + anthroDist) > 0
+    # }else{
+    #   anthroDist <- anthroDist
+    # }
     
     fire_excl_anthro <- raster::overlay(natDist, 
-                                        anthroBuff,
+                                        anthroDist,
                                         fun = function(x, y){
                                           x <- x - y 
                                           x <- x > 0
                                           return(x)
                                         })
     
-    all <- (anthroBuff + natDist) > 0
+    all <- (anthroDist + natDist) > 0
     
     
-    outStack <- raster::stack(anthroBuff, 
+    outStack <- raster::stack(anthroDist, 
                               natDist, 
                               all, 
                               fire_excl_anthro)
     
-    rm(anthroBuff, anthroDist, natDist, all, fire_excl_anthro, expVars)
+    rm(anthroDist, natDist, all, fire_excl_anthro)
     
     if(requireNamespace("fasterize", quietly = TRUE)){
       pp = fasterize::fasterize(inData@projectPoly, outStack[[1]])
