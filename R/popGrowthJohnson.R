@@ -1,33 +1,43 @@
 #' Caribou demographic model
-#' 
-#' Given default parameter values, this is an implementation of the 2-stage population growth model described in Dyson et al. (in Prep).
-#' Set \code{probOption="matchJohnson2020"} to reproduce the model used in Johnson et al. 2020.
-#' Set \code{probOption="continuous"}, \code{interannualVar=F}, and \code{K=F} to reproduce the simpler 
-#' 2-stage demographic model without interannual variability, density dependence, 
-#' or discrete numbers of animals used by Stewart et al. (in prep).
-#' See caribouDemography vignette for additional details and examples.
 #'
-#' @param N Number or vector of numbers. Initial population size for one or more sample populations.
+#' Given default parameter values, this is an implementation of the 2-stage
+#' population growth model described in Dyson et al. (in Prep). Set
+#' \code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson
+#' et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar =
+#' FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
+#' model without interannual variability, density dependence, or discrete
+#' numbers of animals used by Stewart et al. (in prep). See caribouDemography
+#' vignette for additional details and examples.
+#'
+#' @param N Number or vector of numbers. Initial population size for one or more
+#'   sample populations.
 #' @param numSteps Number. Number of years to project.
-#' @param R_bar Number or vector of numbers. Expected recruitment rate (calf:cow ratio) for one or more sample populations.
-#' @param S_bar Number or vector of numbers. Expected adult female survival for one or more sample populations.
+#' @param R_bar Number or vector of numbers. Expected recruitment rate (calf:cow
+#'   ratio) for one or more sample populations.
+#' @param S_bar Number or vector of numbers. Expected adult female survival for
+#'   one or more sample populations.
 #' @param P_0 Number. Maximum recruitment multiplier.
 #' @param P_K Number. Recruitment multiplier at carrying capacity.
 #' @param a Number. Density dependence shape parameter.
 #' @param b Number. Allee effect parameter.
 #' @param K Number. Carrying capacity multiplier.
-#' @param r_max Number.Maximum population growth rate.
+#' @param r_max Number. Maximum population growth rate.
 #' @param s Number. Sex ratio.
 #' @param l_R Number. Minimum recruitment.
 #' @param h_R Number. Maximum recruitment.
 #' @param l_S Number. Minimum survival.
 #' @param h_S Number. Maximum survival.
-#' @param interannualVar list or logical. List containing interannual variability parameters. These can be either coefficients of variation (R_CV,S_CV) or beta precision parameters (R_phi,S_phi). Set interannualVar=F to ignore interannual variability.
-#' @param probOption Character. Choices are "binomial","continuous" or "matchJohnson2020". See description for details.
-#' 
-#' @return A data.frame of population size (N) and average growth rate (lambda) projections for each sample population.
-#'   
-#' 
+#' @param interannualVar list or logical. List containing interannual
+#'   variability parameters. These can be either coefficients of variation
+#'   (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to
+#'   \code{FALSE} ignore interannual variability.
+#' @param probOption Character. Choices are "binomial","continuous" or
+#'   "matchJohnson2020". See description for details.
+#'
+#' @return A data.frame of population size (N) and average growth rate (lambda)
+#'   projections for each sample population.
+#'
+#'
 #' @export
 popGrowthJohnson <- function(N,
                              numSteps,
