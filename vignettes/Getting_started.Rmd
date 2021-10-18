@@ -16,22 +16,24 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-The `caribouMetrics` R package contains a set of functions which implement the caribou resource selection probability functions (RSPF)  described in [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) and the disturbance metrics described in Table 52 of Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update. 
+The `caribouMetrics` R package contains a set of functions which implement the caribou resource selection probability functions (RSPF)  described in [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) and an implementation of the population and demographic models described in [Johnson et. al. (2020)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637) and [ECCC (2011)](http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf). These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.
+
+This vignette provides an overview of how to use the `caribouMetrics` package. There are more detailed vignettes available for the `caribouHabitat` function (`vignette("caribouHabitat", package = "caribouMetrics")`) and for the demographic models (`vignette("caribouDemography", package = "caribouMetrics")`).
 
 ## Data Needed
-Several different data sets are used in RSPF model to describe conditions that affect caribou habitat selection. The data includes types of forest, wetlands, eskers, and linear features and disturbance histories. The table below describes each data set, and what it is used for. 
+Several different data sets are used in the RSPF model to describe conditions that affect caribou habitat selection. The data includes types of forest, wetlands, eskers, and linear features and disturbance histories. The table below describes each data set, and what it is used for. 
 
 | Name (Argument) | Description| Purpose|
 |-------------------------------------------------------|------------------------------------------------------------------|-------------------------------------------------------------------------------------|
 | Land cover (landCover) | A raster of land cover classified into 7 forest or wetland resource types | Covariates in RSPF model  |
 | Eskers (esker) | A raster or sf object identifying eskers (deposited ridges of sediment), if presented as a raster data must be in m/ha | Covariate in RSPF model |
-| Linear features (linFeat) | a raster, sf object, or list of these identifying the location of linear features (e.g. roads, rail), again if presented as a raster later data must be in m/ha | Covariate in RSPF model|
+| Linear features (linFeat) | a raster, sf object, or list of these identifying the location of linear features (e.g. roads, rail), if presented as a raster later data must be in m/ha | Covariate in RSPF model|
 | Natural disturbance (natDist) | Cumulative natural disturbance (mostly fire) over the past 40 years |Covariate in RSPF model and used to set forest classes in grid cell to 0 if > 35% disturbed|
 | Anthropogenic disturbance (anthroDist)| Presence of anthropogenic disturbance | Used to set forest classes in grid cell to 0 if > 35% disturbed|
 |Project polygon (projPoly)| An sf object containing polygon(s) of the study area(s), must contain a Range column| Used to set the boundaries of the analysis and link range-specific coefficients to spatial data|
 
 ## `caribouHabitat()`
-`caribouHabitat` is the one of two main functions in the package. It takes the input data and uses the coefficients described by [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) to calculate the probability of habitat use by caribou in each season at each location. The function can be run for a single range or a list of ranges simultaneously.
+`caribouHabitat` is the function used to run the RSPF model. It takes the input data and uses the coefficients described by [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) to calculate the probability of habitat use by caribou in each season at each location. The function can be run for a single range or a list of ranges simultaneously. 
 
 ## Arguments to `caribouHabitat()`
 In addition to the arguments listed in the table above the `caribouRange` is also needed. `caribouRange` is a character or data frame identifying the caribou range and corresponding coefficients to use when generating the RSPF. It must contain a `Range` column with the name of the geographical area and is used to link the table to the `projectPoly` polygons and a `coefRange` column with the name of the caribou range that the coefficients should be used from. Generally `Range` and `coefRange` will be the same.  
@@ -48,7 +50,7 @@ library(ggplot2)
 ```
 
 ## Example Data
-An example dataset taken from part of the Nipigon caribou range in Ontario is provided with the package. It uses the provincial land cover classes to determine the `landCover`. As the RSPF is generated using a set of specific resource classes which may not match those of standard land-cover classes there is a re-classing function (`reclassPLC`) which uses a look-up table to convert Ontario provincial land cover classes into the correct resource classes to use in RSPF model.
+An example dataset taken from part of the Nipigon caribou range in Ontario is provided with the package. It uses the provincial land cover classes to determine the `landCover`. As the RSPF is generated using a set of specific resource classes which may not match those of standard land-cover classes there is a re-classing function (`reclassPLC`) which uses a look-up table to convert Ontario provincial land cover classes into the correct resource classes to use in the RSPF model.
 
 
 ```{r data in}
@@ -95,7 +97,7 @@ carHab1 <- caribouHabitat(
 
 ```
 
-The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat`. To access a RasterStack object with a layer for each covariate in RSPF model and the predictions for each season use the `results` function.
+The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat`. To access a RasterStack object with a layer for each covariate in the RSPF model and the predictions for each season use the `results` function.
 
 ```{r results1}
 str(carHab1, max.level = 2, give.attr = FALSE)
@@ -109,7 +111,7 @@ plot(carHab1, season = c("Fall", "Summer"))
 ```
 
 ### Multi-Range
-`caribouHabitat` can also be run over multiple ranges simultaneously. For multiple ranges to be run the `caribouRanges` argument must be a data frame with two columns `Range` indicating the name of the caribou range (must match `projectPoly`) and `coefRange` indicating the matching range coefficients as derived by [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101). It is possible to run the function with range coefficients swapped between ranges but this is not recommended as the models were trained separately on each range. For our example we have split the area of our dataset into four polygons and arbitrarily assigned them caribou range names to demonstrate the difference in predictions depending on the coefficients associated with that range. 
+`caribouHabitat` can also be run over multiple ranges simultaneously. For multiple ranges to be run the `caribouRanges` argument must be a data frame with two columns, `Range` indicating the name of the caribou range (must match `projectPoly`) and `coefRange` indicating the matching range coefficients as derived by [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101). It is possible to run the function with range coefficients swapped between ranges but this is not recommended as the models were trained separately on each range. For our example we have split the area of our data set into four polygons and arbitrarily assigned them caribou range names to demonstrate the difference in predictions depending on the coefficients associated with that range. 
 
 ```{r multi example, fig.width=8, fig.height=5}
 # split the area into 4 polygons
@@ -150,7 +152,7 @@ plot(MultRange, season = c("Winter", "Spring"))
 
 
 ## `disturbanceMetrics()`
-`disturbanceMetrics()` is the second main function of `caribouMetrics`, this function calculates the metrics described in Table 52 of Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update. The metrics included are:
+The `disturbanceMetrics()` function is used to calculate the metrics described in Table 52 of Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update. The metrics included are:
 - Fire: % non-overlapping fire 
 - Anthro: % non-overlapping anthropogenic disturbance
 - Total_dist: % total non-overlapping fire and anthropogenic disturbance
@@ -174,7 +176,7 @@ results(disturb)
 ## Demographic Models
 
 Another feature of `caribouMetrics` is an implementation of the population dynamics models in *Science to inform policy: linking population dynamics to habitat for a threatened species in Canada* by Johnson et. al. (2020) and the "Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update" report.
-`demographicCoefficients()` selects coefficients for the selected model and then samples them for each replicate. `demographicRates()` samples expected survival or recruitment rates based on samples of coefficient values and optionally the model precision and interannual variation. These are wrapper functions what use sensible defaults but lower level functions are also available.
+`demographicCoefficients()` selects coefficients for the chosen model and then samples them for each replicate. `demographicRates()` samples expected survival or recruitment rates based on samples of coefficient values and optionally the model precision and interannual variation. These are wrapper functions what use sensible defaults but lower level functions are also available.
  
 ```{r demographics}
 demCoefs <- demographicCoefficients(replicates = 10)
@@ -198,6 +200,9 @@ ggplot(demRates, aes(Anthro, S_bar))+
   theme_bw()
 
 ```
+
+Finally, we can model population growth using `popGrowthJohnson()` which is an implementation of the 2-stage population growth model used in Johnson et al. (2020) but with some differences described in Dyson et al. (in Prep). 
+
 ```{r}
 popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
@@ -222,3 +227,7 @@ dynamics to habitat for a threatened species in Canada. Journal of Applied
 Ecology, 57(7), pp.1314-1327.
 <https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637>
 
+Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+woodland caribou (Rangifer tarandus caribou) across a gradient of
+anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+https://doi.org/10.1139/cjz-2015-0101
