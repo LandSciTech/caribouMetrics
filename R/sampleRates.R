@@ -99,8 +99,9 @@ sampleRates <- function(covTable,
     #Easier to understand the principles by thinking about a simpler linear regression example. 
     #Using the notation in the regression analysis section of this wikipedia article, predictedTableSD is sample from distribution of yhat_d, rather than y_d: https://en.wikipedia.org/wiki/Prediction_interval 
     if(!ignorePrecision){
-      if(sum(phi)==0){
-        warning("Missing precision parameter.")
+      if(length(phi)==0){
+        stop("Missing precision parameter. Set ignorePrecision = TRUE or",
+             " add a precision column to coefSamples", call. = FALSE)
       }
       if(nrow(predictedTableSD)<1){
         stop("This code assumes at least one row.")
@@ -159,8 +160,9 @@ sampleRates <- function(covTable,
       }
       
       if(!ignorePrecision){
-        if(sum(phi)==0){
-          warning("Missing precision parameter.")
+        if(length(phi)==0){
+          stop("Missing precision parameter. Set ignorePrecision = TRUE or",
+               " add a precision column to coefSamples", call. = FALSE)
         }
         if(nrow(predictedTableSD)<1){
           stop("This code assumes at least one row.")

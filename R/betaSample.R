@@ -32,10 +32,10 @@ normalSample<-function(x,sd,useQuantiles=F){
   #x=predictedTableSD[1,]
   
   if((length(useQuantiles)==1)&&!useQuantiles){
-    return(rnorm(length(x),sd))
+    return(rnorm(length(x), mean = x, sd = sd))
   }else{
     if(length(useQuantiles)!=length(x)){
-      q=getQuantiles(x)
+      q=getQuantiles(length(x))
     }else{
       q=useQuantiles
     }

@@ -109,7 +109,8 @@ test_that("all model versions in table work", {
                           ~demographicRates(covTableSim, 
                                             demographicCoefficients(10, modelVersion = .x, 
                                                                     survivalModelNumber = .y, 
-                                                                    recruitmentModelNumber = .y)))
+                                                                    recruitmentModelNumber = .y),
+                                            ignorePrecision = TRUE))
   expect_equal(nrow(versJ), length(allJmods))
   
   # only 1 femaleSurvival model
@@ -121,7 +122,8 @@ test_that("all model versions in table work", {
                           ~demographicRates(covTableSim, 
                                             demographicCoefficients(10, modelVersion = "ECCC", 
                                                                     survivalModelNumber = "M1", 
-                                                                    recruitmentModelNumber = .x)))
+                                                                    recruitmentModelNumber = .x),
+                                            ignorePrecision = TRUE))
 })
 
 test_that("demoCoefs has reasonable errors", {
@@ -142,6 +144,11 @@ test_that("demoRates has reasonable errors",{
   expect_error(demographicRates(rename(covTableSim, ant = Anthro),
                    demographicCoefficients(10)),
                "Covariates missing")
+  
+  expect_error(demographicRates(covTableSim,
+                                demographicCoefficients(10, modelVersion = "ECCC", 
+                                                        recruitmentModelNumber = "M7")),
+               "Missing precision")
 })
 
 # Compare output to previous run. This will raise a flag if the result has
