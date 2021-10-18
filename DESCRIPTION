@@ -23,7 +23,7 @@ Description: caribouMetrics provides implementations of several different models
     Population, in Canada 2011 Update" report. These functions allow users to 
     calculate metrics of disturbance, predict demographic rates for a given level 
     of disturbance and simulate population growth over time. 
-License: GPL-3
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
@@ -88,7 +88,8 @@ Suggests:
     rmarkdown,
     tmap,
     tmaptools,
-    ggplot2
+    ggplot2,
+    fasterize
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)

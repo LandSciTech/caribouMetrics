@@ -6,11 +6,17 @@
 \title{caribouMetrics: Models and metrics of boreal caribou responses to forest
 landscapes}
 \description{
-The caribouMetrics package provides implementations of several different
-models for boreal caribou. These include the resource selection probability
-functions (RSPF) described in [Hornseth and Rempel
-(2016)](https://doi.org/10.1139/cjz-2015-0101) and the disturbance metrics
-described in Table 52 of Environment Canada Scientific Assessment to Inform
-the Identification of Critical Habitat for Woodland Caribou (\emph{Rangifer
-tarandus caribou}), Boreal Population, in Canada 2011 Update.
+caribouMetrics provides implementations of several different models.
+Firstly, it implements the caribou resource selection probability functions 
+described in Hornseth and Rempel (2016) Seasonal resource selection of woodland 
+caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance.
+This allows for a spatial prediction of caribou habitat use across 13 caribou ranges
+in Ontario. The package also includes an implementation of the population and
+demographic models in Science to inform policy: linking population dynamics 
+to habitat for a threatened species in Canada by Johnson et. al. (2020) and 
+the "Environment Canada Scientific Assessment to Inform the Identification of
+    Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal 
+    Population, in Canada 2011 Update" report. These functions allow users to 
+calculate metrics of disturbance, predict demographic rates for a given level 
+of disturbance and simulate population growth over time.
 }

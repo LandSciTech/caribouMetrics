@@ -69,7 +69,13 @@ reclassDist <- function(distYr, endYr = 0, numCumYrs, template, dateField){
                                         endYr))
   }
   
-  out <- fasterize::fasterize(out, template, background = 0)
+  if(requireNamespace("fasterize", quietly = TRUE)){
+    out <- fasterize::fasterize(out, template, background = 0)
+  } else {
+    message("To speed up install fasterize package")
+    out <- raster::rasterize(out, template)
+  }
+  
   
   return(out)
 }

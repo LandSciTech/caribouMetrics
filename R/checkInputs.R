@@ -11,7 +11,7 @@
 .checkInputs <- function(caribouRange, winArea, landCover, coefTable) {
   expectedRanges <- paste0(unique(coefTable$Range), collapse = ", ")
   
-  if(any(stringr::str_detect(expectedRanges, caribouRange$Range, negate = TRUE))){
+  if(any(!caribouRange$Range %in% expectedRanges)){
     stop("Caribou Range must match one of: ", expectedRanges, call. = FALSE)
   }
   
