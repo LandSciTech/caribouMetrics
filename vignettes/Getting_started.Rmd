@@ -199,7 +199,7 @@ ggplot(demRates, aes(Anthro, S_bar))+
 
 ```
 ```{r}
-popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, Rec_bar = demRates$R_bar, 
+popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
 popGrow
