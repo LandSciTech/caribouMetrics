@@ -91,7 +91,7 @@ popGrowthJohnson <- function(N,
   
   for(t in 1:numSteps){
     print(paste("projecting step ",t))
-    if(is.null(interannualVar)||is.na(interannualVar)||((length(interannualVar)==1)&&!interannualVar)){
+    if(is.null(interannualVar)||any(is.na(interannualVar))||((length(interannualVar)==1)&&!interannualVar)){
       R_t= R_bar
       S_t = S_bar
     }else{
