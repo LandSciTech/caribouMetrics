@@ -12,7 +12,7 @@ sampleRates(
   resVar,
   ignorePrecision,
   returnSample,
-  useQuantiles,
+  quantilesToUse = NULL,
   predInterval = c(0.025, 0.975)
 )
 }
@@ -35,7 +35,7 @@ currently, "ECCC" for the model used in the ECCC Report (2011) and
 "recruitment"}
 
 \item{ignorePrecision}{logical. Should the precision of the model be used if
-it is available? When precision is used variance among populations around the
+it is available? When precision is used variation among populations around the
 National mean responses is considered in addition to the uncertainty about 
 the coefficient estimates.}
 
@@ -44,20 +44,17 @@ scenarios rows. If FALSE the returned data.frame has one row per scenario
 and additional columns summarizing the variation among replicates. See
 Value for details.}
 
-\item{useQuantiles}{logical or numeric vector. Only relevant when
-\code{ignorePrecision = FALSE} and \code{returnSample = TRUE}. If
-\code{useQuantiles = TRUE}, each replicate population is assigned to a
-quantile of the distribution of variation around the expected values, and
-remains in that quantile as covariates change. If \code{useQuantiles} is a
-vector it is used as the quantiles. If \code{useQuantiles = FALSE},
-sampling is done independently for each combination of scenario and
-replicate, so the value for a particular replicate population in one
+\item{quantilesToUse}{numeric vector of length \code{coefSamples}. Only relevant when
+\code{ignorePrecision = FALSE}. Each replicate population is assigned to a quantile 
+of the distribution of variation around the expected values, and remains in that 
+quantile as covariates change. If NULL sampling is done independently for each combination 
+of scenario and replicate, so the value for a particular replicate population in one
 scenario is unrelated to the values for that replicate in other scenarios.
-If interested in projecting impacts of changing disturbance on the
-trajectories of replicate populations set \code{useQuantiles = TRUE}.}
+Useful for projecting impacts of changing disturbance on the
+trajectories of replicate populations.}
 
-\item{predInterval}{numeric vector with length 2. The prediction interval to
-use the default is 95\% ie(\code{c(0.025,0.975)})}
+\item{predInterval}{numeric vector with length 2. The default 95\% interval is
+(\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and \code{quantilesToUse = NULL}.}
 }
 \value{
 A data.frame of predictions. The data.frame includes all columns in
@@ -68,7 +65,8 @@ A data.frame of predictions. The data.frame includes all columns in
   \describe{
     \item{"average"}{The mean estimated values of the response variable)}
     \item{"stdErr"}{Standard error of the estimated values}
-    \item{"PIlow"/"PIhigh"}{95\% Prediction interval for estimated values}
+    \item{"PIlow"/"PIhigh"}{If \code{quantilesToUse = NULL} these are the percentiles given by predInterval. 
+      If using quantiles, maximum and minimum values are returned.}
   } 
   If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
    replicates} additional columns are:

@@ -1,57 +1,45 @@
 #' Take a sample from a beta distribution
 #'
+#'
 #' @noRd
-betaSample<-function(x,phi,useQuantiles=F){
+betaSample<-function(x,phi,quantilesToUse=NULL){
   #x=predictedTableSD[1,]
   bShapes = simstudy::betaGetShapes(x,phi) 
   
-  if((length(useQuantiles)==1)&&!useQuantiles){
+  if(is.null(quantilesToUse)){
     return(rbeta(length(x),bShapes$shape1,bShapes$shape2))
   }else{
-    if(length(useQuantiles)!=length(x)){
-      q=getQuantiles(length(x))
-    }else{
-      q=useQuantiles
-    }
-    
-    qq = qbeta(q,bShapes$shape1,bShapes$shape2)
+    qq = qbeta(quantilesToUse,bShapes$shape1,bShapes$shape2)
     return(qq)
   }
 }
 
 #' Take a sample from a normal distribution
 #'
+#' 
 #' @noRd
-normalSample<-function(x,sd,useQuantiles=F){
+#' 
+normalSample<-function(x,sd,quantilesToUse=NULL){
   #x=predictedTableSD[1,]
   
-  if((length(useQuantiles)==1)&&!useQuantiles){
+  if(is.null(quantilesToUse)){
     return(rnorm(length(x), mean = x, sd = sd))
   }else{
-    if(length(useQuantiles)!=length(x)){
-      q=getQuantiles(length(x))
-    }else{
-      q=useQuantiles
-    }
-    qq = qnorm(q,mean=x,sd=sd)
+    qq = qnorm(quantilesToUse,mean=x,sd=sd)
     return(qq)
   }
 }
 
 #' Take a sample from a lognormal distribution
 #'
+#' 
 #' @noRd
-lnormSample<-function(x,sd,useQuantiles=F){
-  if((length(useQuantiles)==1)&&!useQuantiles){
+#' 
+lnormSample<-function(x,sd,quantilesToUse=NULL){
+  if(is.null(quantilesToUse)){
     return(rnorm(length(x),sd))
   }else{
-    if(length(useQuantiles)!=length(x)){
-      q=getQuantiles(x)
-    }else{
-      q=useQuantiles
-    }
-    
-    qq = qlnorm(q,sd)
+    qq = qlnorm(quantilesToUse,sd)
     return(qq)
   }
 }

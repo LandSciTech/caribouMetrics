@@ -6,10 +6,10 @@
 #' @param covTable data.frame. A table of covariate values to be used. Column
 #'   names must match the coefficient names in \code{\link{popGrowthTableJohnsonECCC}}. 
 #'   Each row is a different scenario.
-#' @param popGrowthPars list. Coefficient values returned by
-#'  \code{demographicCoefficients}
+#' @param popGrowthPars list. Coefficient values and (optionally) quantiles returned by
+#'  \code{demographicCoefficients}.
 #' @param ignorePrecision logical. Should the precision of the model be used if
-#'   it is available? When precision is used variance among populations around the
+#'   it is available? When precision is used variation among populations around the
 #'   National mean responses is considered in addition to the uncertainty about 
 #'   the coefficient estimates.
 #' @param returnSample logical. If TRUE the returned data.frame has replicates *
@@ -18,16 +18,18 @@
 #'   Value for details.
 #' @param useQuantiles logical or numeric. If it is a numeric
 #'   vector it must be length 2 and give the low and high limits of the
-#'   quantiles to use. Only relevant when \code{ignorePrecision = FALSE} and
-#'   \code{returnSample = TRUE}. If \code{useQuantiles = TRUE}, each replicate population is
+#'   quantiles to use. Only relevant when \code{ignorePrecision = FALSE}. 
+#'   If \code{useQuantiles != FALSE}, each replicate population is
 #'   assigned to a quantile of the distribution of variation around the expected
-#'   values, and remains in that quantile as covariates change. If
-#'   \code{useQuantiles = FALSE}, sampling is done independently for each combination of
+#'   values, and remains in that quantile as covariates change. 
+#'   If \code{useQuantiles != FALSE} and popGrowthPars contains quantiles, those quantiles will be used.
+#'   If \code{useQuantiles = TRUE} and popGrowthPars does not contain quantiles, replicate populations 
+#'   will be assigned to quantiles in the default range of 0.025 and 0.975.    
+#'   If \code{useQuantiles = FALSE}, sampling is done independently for each combination of
 #'   scenario and replicate, so the value for a particular replicate population
 #'   in one scenario is unrelated to the values for that replicate in other
-#'   scenarios. If interested in projecting impacts of changing disturbance on
-#'   the trajectories of replicate populations set \code{useQuantiles = TRUE}.
-#'
+#'   scenarios. Useful for projecting impacts of changing disturbance on the
+#'   trajectories of replicate populations.
 #' @return A data.frame of predictions. The data.frame includes all columns in
 #'   \code{covTable} with additional columns depending on \code{returnSample}.
 #'   
@@ -37,8 +39,9 @@
 #'     \item{"S_bar" and "R_bar"}{The mean estimated values of survival and 
 #'       recruitment (calves per cow)}
 #'     \item{"S_stdErr" and "R_stdErr"}{Standard error of the estimated values}
-#'     \item{"S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh"}{95\% Prediction 
-#'       interval for estimated values}
+#'     \item{"S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh"}{If not using quantiles, 
+#'       95\% of values fall within this range. 
+#'       If using quantiles, maximum and minimum values are returned.}
 #'   } 
 #'   If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
 #'    replicates} additional columns are:
@@ -103,7 +106,7 @@ demographicRates <- function(covTable,
                         coefSamples = popGrowthPars$coefSamples_Survival[["coefSamples"]],
                         coefValues = popGrowthPars$coefSamples_Survival[["coefValues"]],
                         modVer =  popGrowthPars$modelVersion,                                       
-                        useQuantiles = popGrowthPars$coefSamples_S[["quantiles"]],
+                        quantilesToUse = popGrowthPars$coefSamples_S[["quantiles"]],
                         resVar = "femaleSurvival",
                         ignorePrecision = ignorePrecision,
                         returnSample = returnSample)
@@ -111,7 +114,7 @@ demographicRates <- function(covTable,
   pred_R <- sampleRates(covTable = covTable,
                         coefSamples = popGrowthPars$coefSamples_Recruitment[["coefSamples"]],
                         coefValues = popGrowthPars$coefSamples_Recruitment[["coefValues"]],
-                        useQuantiles = popGrowthPars$coefSamples_R[["quantiles"]],
+                        quantilesToUse = popGrowthPars$coefSamples_R[["quantiles"]],
                         modVer =  popGrowthPars$modelVersion,
                         resVar = "recruitment",
                         ignorePrecision = ignorePrecision,
