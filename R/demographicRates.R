@@ -84,11 +84,7 @@ demographicRates <- function(covTable,
   } else {
     stop("useQuantiles must have length 1 or 2")
   }
-  if((length(useQuantiles)==1)&&(!useQuantiles)){
-    popGrowthPars$coefSamples_S$quantiles=useQuantiles
-    popGrowthPars$coefSamples_R$quantiles=useQuantiles
-    
-  }else{
+  if(useQuantiles){
     q <- getQuantiles(nrow(popGrowthPars$coefSamples_S$coefSamples),
                       low = quantsToUse[1],
                       high = quantsToUse[2])
