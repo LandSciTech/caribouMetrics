@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 caribouMetrics provides implementations of several different models. Firstly, it
 implements the caribou resource selection probability functions described in
-Hornseth and Rempel (2016) in *Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance*. This allows for a spatial prediction of caribou habitat use across 13 caribou ranges in Ontario. The package also includes an implementation of the population and demographic models in *Science to inform policy: linking population dynamics to habitat for a threatened species in Canada* by Johnson et. al. (2020) and the "Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update" report. These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.  
+Hornseth and Rempel (2016) *Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance*. This allows for a spatial prediction of caribou habitat use across 13 caribou ranges in Ontario. The package also includes an implementation of the population and demographic models in *Science to inform policy: linking population dynamics to habitat for a threatened species in Canada* by Johnson et. al. (2020) and the "Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update" report. These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.  
 
 ## Installation
 
@@ -80,7 +80,7 @@ demRates <- demographicRates(covTable = results(disturb),
 demRates
 
 # Simulate population growth
-popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, Rec_bar = demRates$R_bar, 
+popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
 popGrow
@@ -88,3 +88,22 @@ popGrow
 ```
 
 More detailed examples are provided in the vignettes.
+
+# References
+
+ECCC. 2011. Scientific assessment to inform the identification of critical
+habitat for woodland caribou (*Rangifer tarandus caribou*), boreal population, in
+Canada. Canadian Wildlife Service, Ottawa.
+<http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf>.
+Accessed 26 Mar 2021.
+
+Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C.
+and McLoughlin, P.D., 2020. Science to inform policy: linking population
+dynamics to habitat for a threatened species in Canada. Journal of Applied
+Ecology, 57(7), pp.1314-1327.
+<https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637>
+
+Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+woodland caribou (Rangifer tarandus caribou) across a gradient of
+anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+https://doi.org/10.1139/cjz-2015-0101

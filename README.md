@@ -8,7 +8,7 @@
 
 caribouMetrics provides implementations of several different models.
 Firstly, it implements the caribou resource selection probability
-functions described in Hornseth and Rempel (2016) in *Seasonal resource
+functions described in Hornseth and Rempel (2016) *Seasonal resource
 selection of woodland caribou (Rangifer tarandus caribou) across a
 gradient of anthropogenic disturbance*. This allows for a spatial
 prediction of caribou habitat use across 13 caribou ranges in Ontario.
@@ -98,16 +98,16 @@ demCoefs <- demographicCoefficients(replicates = 10)
 
 demRates <- demographicRates(covTable = results(disturb),
                              popGrowthPars = demCoefs)
-#> Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.02 sec elapsed
-#> Elapsed time for caribou prediction for recruitment for Johnson:: 0 sec elapsed
+#> Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.03 sec elapsed
+#> Elapsed time for caribou prediction for recruitment for Johnson:: 0.01 sec elapsed
 demRates
-#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar    S_stdErr
-#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.006842678
-#>     S_PIlow  S_PIhigh     R_bar   R_stdErr   R_PIlow  R_PIhigh
-#> 1 0.8292118 0.8515073 0.1813372 0.01110083 0.1658933 0.1989235
+#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
+#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.04680671
+#>     S_PIlow  S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh
+#> 1 0.7796476 0.8927702 0.1813372 0.1363773 0.09102343 0.5044036
 
 # Simulate population growth
-popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, Rec_bar = demRates$R_bar, 
+popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 #> [1] "projecting step  1"
 #> [1] "projecting step  2"
@@ -132,7 +132,26 @@ popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, Rec_bar = demRates$R_bar,
 
 popGrow
 #>     N    lambda
-#> 1 315 0.9118624
+#> 1 369 0.9191211
 ```
 
 More detailed examples are provided in the vignettes.
+
+# References
+
+ECCC. 2011. Scientific assessment to inform the identification of
+critical habitat for woodland caribou (*Rangifer tarandus caribou*),
+boreal population, in Canada. Canadian Wildlife Service, Ottawa.
+<http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf>.
+Accessed 26 Mar 2021.
+
+Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
+Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+linking population dynamics to habitat for a threatened species in
+Canada. Journal of Applied Ecology, 57(7), pp.1314-1327.
+<https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637>
+
+Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+woodland caribou (Rangifer tarandus caribou) across a gradient of
+anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+<https://doi.org/10.1139/cjz-2015-0101>
