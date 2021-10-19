@@ -3,8 +3,7 @@
 #' A wrapper around \code{\link{getCoefs}} to select coefficients for the
 #' appropriate model version and \code{\link{sampleCoefs}} to sample
 #' coefficients for each replicate population, for both the survival and
-#' recruitment models. Also optionally, generates quantiles with
-#' \code{\link{getQuantiles}}.
+#' recruitment models. Also optionally, generates quantiles.
 #'
 #' @param replicates integer. Number of replicate populations.
 #' @param modelVersion character. Which model version to use. Options are "ECCC"
@@ -13,7 +12,7 @@
 #' @param survivalModelNumber,recruitmentModelNumber character. Which model
 #'   number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.
 #' @param useQuantiles logical or numeric. Should each replicate population be
-#'   assigned a random quantile to be used for sampling the from the
+#'   assigned a random quantile to be used for sampling from the
 #'   distribution of demographic parameters around the means? If it is a numeric
 #'   vector it must be length 2 and give the low and high limits of the
 #'   quantiles to use.

@@ -32,14 +32,13 @@
 #'   is used and any other table must have the same column names.
 #' @param seasons A character vector containing "all" (default) or any of
 #'   "Spring", "Summer", "Fall", "Winter".
-#' @param polygonIdCol A character vector giving the name of the column with a
-#'   unique identifier for each polygon or an integer indicating its position.
-#'   By default the first column is assumed to be the polygon id.
+#' @param doScale logical. Are the coefs standardized and therefore the
+#'   predictors should be scaled?
 #'
 #' @return Returns a RasterStack or dataframe with probability of use for each
 #'   season.
 #'
-#'   
+#' @noRd
 
 calcRSP <- function(resourceProp, coefs, seasons = "all", doScale = FALSE){
 

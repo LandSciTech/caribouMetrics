@@ -7,7 +7,10 @@
 #'   will be forced to match
 #' @param radius the radius of the circular window
 #' @param nms the names of each raster layer
-#' @param veloxpkg should the velox package be used?
+#' @param offset Should offsetting be used to match Hornseth and Rempel 2016
+#' @param na.rm,pad,padValue arguments passed on to raster::focal
+#' 
+#' @noRd
 
 movingWindowAvg <- function(rast, radius, nms, offset = TRUE, 
                             na.rm = TRUE, pad = FALSE, padValue = NA){

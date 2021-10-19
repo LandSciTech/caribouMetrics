@@ -1,11 +1,9 @@
 #' @include AAAClassDefinitions.R
 NULL
 
-#' @name DisturbanceMetrics
-#' @rdname DisturbanceMetrics-class
 setMethod(f = "initialize", signature = "DisturbanceMetrics",
           definition = function(.Object, landCover, natDist, 
-                                anthroDist, linFeat, projectPoly, is.percent = FALSE, 
+                                anthroDist, linFeat, projectPoly, isPercent = FALSE, 
                                 processedData, disturbanceMetrics, attributes){
             .Object@landCover <- landCover
             .Object@natDist <- natDist
@@ -38,35 +36,39 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'@param landCover filename or RasterLayer. 0 and NA values are assumed to be
 #'  water and omitted from the tabulated area. Note landCover is also used to
 #'  define the input grid, so must be provided even if all values are 1.
-#'@param natDist filename or RasterLayer. Presence or absence of natural
-#'  disturbance, primarily by fire. Should include 40 years cumulative
-#'  disturbance. Optional.
-#'@param anthroDist filename or RasterLayer. Anthropogenic disturbance including
-#'  harvest. This can have an effect on any type of landcover except water.
-#'  Should include 40 years cumulative disturbance. Optional.
 #'@param linFeat filename, RasterLayer, sf object or a list of these that will
 #'  be combined. Linear features.
 #'@param projectPoly filename or sf object. Polygons defining range boundaries.
-#'@param padProjPoly logical. Should the area around the \code{projectPoly} be
-#'  used to avoid edge effects? If FALSE, the default, only data from inside the
-#'  \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
-#'  the other variables are clipped to the extent of the buffered area. Results
-#'  are always clipped to the original \code{projectPoly}. It is ideal to set
-#'  this to TRUE and provide a dataset that is larger than the
-#'  \code{projectPoly} to avoid edge effects.
-#'@param padFocal logical. This value is passed to the pad argument in
-#'  \code{raster::focal}, if it is FALSE then cells near the edge will return
-#'  NA, if it is TRUE a value will be returned for each cell that assumes cells
-#'  outside the input data are 0 for all resource types. This is not a good
-#'  assumption and should be used with caution.
-#'@param bufferWidth number. Width of buffer applied to anthropogenic
-#'  disturbance in metres. Default is 500.
-#'@param linBuffMethod character. The method used to buffer linear features if
-#'  they are supplied as sf lines. The default is "raster" in which case they
-#'  are rasterized using the stars package and buffered using a moving window
-#'  method. If "sf" then the lines are buffered with st_buffer and then
-#'  rasterized. Either way points are included in the raster output.
-#'
+#'@param isPercent logical. Should the results be returned as a percentage? 
+#'@param ... optional arguments:
+#' \describe{
+#'   \item{natDist}{filename or RasterLayer. Presence or absence of natural
+#'   disturbance, primarily by fire. Should include 40 years cumulative
+#'   disturbance.}
+#'   \item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance including
+#'   harvest. This can have an effect on any type of landcover except water.
+#'   Should include 40 years cumulative disturbance.}
+#'   \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
+#'   used to avoid edge effects? If FALSE, the default, only data from inside the
+#'   \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
+#'   the other variables are clipped to the extent of the buffered area. Results
+#'   are always clipped to the original \code{projectPoly}. It is ideal to set
+#'   this to TRUE and provide a dataset that is larger than the
+#'   \code{projectPoly} to avoid edge effects.}
+#'   \item{padFocal}{logical. This value is passed to the pad argument in
+#'   \code{raster::focal}, if it is FALSE then cells near the edge will return
+#'   NA, if it is TRUE a value will be returned for each cell that assumes cells
+#'   outside the input data are 0 for all resource types. This is not a good
+#'   assumption and should be used with caution.}
+#'   \item{bufferWidth}{number. Width of buffer applied to anthropogenic
+#'   disturbance in metres. Default is 500.}
+#'   \item{linBuffMethod}{character. The method used to buffer linear features if
+#'   they are supplied as sf lines. The default is "raster" in which case they
+#'   are rasterized using the stars package and buffered using a moving window
+#'   method. If "sf" then the lines are buffered with st_buffer and then
+#'   rasterized. Either way points are included in the raster output.}
+#' }
+#' 
 #'@return A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
 #'
 #'@seealso \code{\link{DisturbanceMetrics-class}} for information on the object
@@ -104,13 +106,14 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'
 #'@export
 setGeneric("disturbanceMetrics", 
-           function(landCover, linFeat, projectPoly, is.percent = TRUE, ...) 
+           function(landCover, linFeat, projectPoly, isPercent = TRUE, ...) 
              standardGeneric("disturbanceMetrics"))
 
+#' @rdname disturbanceMetrics
 setMethod(
   "disturbanceMetrics", 
   signature(landCover = "ANY"), 
-  function(landCover, linFeat, projectPoly, is.percent = TRUE, ...) {
+  function(landCover, linFeat, projectPoly, isPercent = TRUE, ...) {
 
     dots <- list(...)
     
@@ -143,7 +146,7 @@ setMethod(
                           suffix = "names")
     }
     
-    if (is.percent == TRUE) {
+    if (isPercent == TRUE) {
       x@disturbanceMetrics$Anthro <- x@disturbanceMetrics$Anthro * 100
       x@disturbanceMetrics$Fire <- x@disturbanceMetrics$Fire * 100
       x@disturbanceMetrics$Total_dist <- x@disturbanceMetrics$Total_dist * 100

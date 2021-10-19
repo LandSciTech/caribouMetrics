@@ -12,3 +12,5 @@ inputNV/
 inst/doc
 outputs/
 scripts/profiler_script.R
+/doc/
+/Meta/

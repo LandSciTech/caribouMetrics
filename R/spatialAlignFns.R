@@ -4,14 +4,8 @@
 #' Helper functions for cropping, transforming and checking the overlap of
 #' spatial objects
 #'
-#' @param x
-#' @param y
-#' @param nmx
-#' @param nmy
 #'
-#' @return
-#'
-#' @examples
+#' @noRd
 
 transformIf <- function(x, y, nmx, nmy){
   if(inherits(x, "sf")){

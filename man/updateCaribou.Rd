@@ -2,10 +2,13 @@
 % Please edit documentation in R/updateCaribou.R
 \name{updateCaribou}
 \alias{updateCaribou}
+\alias{updateCaribou,CaribouHabitat,missing-method}
 \alias{updateCaribou,CaribouHabitat,list-method}
 \title{Update an existing CaribouHabitat Object}
 \usage{
 updateCaribou(CarHab, newData, ...)
+
+\S4method{updateCaribou}{CaribouHabitat,missing}(CarHab, coefTable = coefTableHR, doScale = FALSE)
 
 \S4method{updateCaribou}{CaribouHabitat,list}(
   CarHab,
@@ -21,6 +24,15 @@ updateCaribou(CarHab, newData, ...)
 \item{newData}{a named list of RasterLayer objects to be used to update
 CarHab. Potential names are: landCover, natDist, anthroDist, and
 linFeat.}
+
+\item{...}{other arguments passed to methods. Not currently used.}
+
+\item{coefTable}{data.frame. Optional table of coefficients to be used in the
+model. Must match the format and naming of \code{coefTableHR}}
+
+\item{doScale}{logical. FALSE by default. Set to TRUE only if you have
+supplied coefficients that were trained on standardized data which will
+cause the input data to be scaled.}
 
 \item{resultsOnly}{logical. If FALSE the whole CaribouHabitat object is
 returned. If TRUE then only the habitatUse RasterStack is returned.}

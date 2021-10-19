@@ -30,6 +30,8 @@ data.frame with columns PID, Spring, Summer, Fall, Winter, or a numeric
 vector containing ID values, in which case spring, summer, fall and winter
 must also be supplied}
 
+\item{...}{passed to methods}
+
 \item{tholdTable}{By default \code{threshTable} which contains thresholds
 determimed by Rempel (2021) using Youden's J and a false
 negative cost of 5. Change at own risk.}
@@ -37,6 +39,8 @@ negative cost of 5. Change at own risk.}
 \item{bySeason}{logical. If FALSE (the default) the result is a single value
 of 1 when the habitat use was >= threshold in any season and 0 if not. If
 TRUE then the result is a 0 or 1 for each season.}
+
+\item{caribouRange}{character. The name of the caribou range}
 
 \item{spring, summer, fall, winter}{numeric vectors of habitat use probability
 in each season}

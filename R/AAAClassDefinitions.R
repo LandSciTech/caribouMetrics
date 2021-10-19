@@ -59,10 +59,10 @@ CaribouHabitat <- setClass("CaribouHabitat",
 #' Population, in Canada: 2011 Update. Ottawa, Ontario. Output variables
 #' include:
 #' \itemize{
-#'   \item {Fire:} {% fire}
-#'   \item {Anthro:} {% non-overlapping anthropogenic disturbance.}
+#'   \item {Fire:} {\% fire}
+#'   \item {Anthro:} {\% non-overlapping anthropogenic disturbance.}
 #'   \item {Total_dist:} {Percent total non-overlapping fire and anthropogenic disturbance.}
-#'   \item {fire_excl_anthro:} {% fire not overlapping with anthropogenic disturbance.}
+#'   \item {fire_excl_anthro:} {\% fire not overlapping with anthropogenic disturbance.}
 #' }
 #'
 #' Note that NA values are omitted from tabulated area.

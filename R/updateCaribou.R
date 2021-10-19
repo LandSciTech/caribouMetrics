@@ -21,6 +21,12 @@ NULL
 #'   linFeat.
 #' @param resultsOnly logical. If FALSE the whole CaribouHabitat object is
 #'   returned. If TRUE then only the habitatUse RasterStack is returned.
+#' @param coefTable data.frame. Optional table of coefficients to be used in the
+#'   model. Must match the format and naming of \code{coefTableHR}
+#' @param doScale logical. FALSE by default. Set to TRUE only if you have
+#'   supplied coefficients that were trained on standardized data which will
+#'   cause the input data to be scaled.
+#' @param ... other arguments passed to methods. Not currently used.
 #'
 #' @return If \code{resultsOnly} is FALSE an updated CaribouHabitat object. If
 #'   \code{resultsOnly} is TRUE a RasterStack with a layer for each season.
@@ -28,6 +34,7 @@ NULL
 #' @export
 setGeneric("updateCaribou", function(CarHab, newData, ...) standardGeneric("updateCaribou"))
 
+#' @rdname updateCaribou
 # method to get final calculation from processed data in CaribouHabitat object
 setMethod(
   "updateCaribou", 

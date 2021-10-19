@@ -9,7 +9,9 @@
 #' @param landCover landCover raster
 #' @param anthroDist binary raster
 #' @param natDist binary raster
+#' @param tmplt template
 #' 
+#' @noRd
 
 
 applyDist <- function(landCover, natDist, anthroDist, tmplt){

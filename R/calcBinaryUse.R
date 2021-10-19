@@ -19,6 +19,8 @@ NULL
 #'   TRUE then the result is a 0 or 1 for each season.
 #' @param spring,summer,fall,winter numeric vectors of habitat use probability
 #'   in each season
+#' @param caribouRange character. The name of the caribou range
+#' @param ... passed to methods
 #'
 #'
 #' @return

@@ -1,8 +1,6 @@
 #' @include AAAClassDefinitions.R
 NULL
 
-#' @name CaribouHabitat
-#' @rdname CaribouHabitat-class
 setMethod(f = "initialize", signature = "CaribouHabitat",
           definition = function(.Object, landCover, esker, 
                                 natDist, anthroDist, 
@@ -40,10 +38,6 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'@param landCover filename or RasterLayer. Provincial landcover class
 #'@param esker filename, RasterLayer or sf object. Eskers. If it is a
 #'  RasterLayer then it should be esker density in m^2/ha.
-#'@param natDist filename or RasterLayer. Presence or absence of natural
-#'  disturbance, primarily by fire.
-#'@param anthroDist filename or RasterLayer. Anthropogenic disturbance including
-#'  harvest. This can have an effect on any type of landcover except water.
 #'@param linFeat filename, RasterLayer, sf object or a list of these that will
 #'  be combined. Linear features. If it is a RasterLayer then it should be
 #'  linear feature density in m^2/ha. If a RasterLayer is provided as a list
@@ -59,37 +53,44 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  of the geographical area and is used to link the table the the provided
 #'  \code{projectPoly} polygons. coefRange is the name of the caribou range that
 #'  the coefficients should be used from.
-#'@param eskerSave filename to save rasterized esker data.
-#'@param linFeatSave filename to save rasterized linear feature data.
-#'@param padProjPoly logical. Should the area around the \code{projectPoly} be
-#'  used to avoid edge effects? If FALSE, the default, only data from inside the
-#'  \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
-#'  the other variables are clipped to the extent of the buffered area. Results
-#'  are always clipped to the original \code{projectPoly}. It is ideal to set
-#'  this to TRUE and provide a dataset that is larger than the
-#'  \code{projectPoly} to avoid edge effects.
-#'@param padFocal logical. This value is passed to the pad argument in
-#'  \code{raster::focal}, if it is FALSE then cells near the edge will return
-#'  NA, if it is TRUE a value will be returned for each cell that assumes cells
-#'  outside the input data are 0 for all resource types. This is not a good
-#'  assumption and should be used with caution.
-#'@param saveOutput character. The filename to save the rasterBrick of habitat
-#'  use probabilities to. Note this will overwrite any existing files. The .grd
-#'  format is recommended because it will preserve layer names when the file is
-#'  reloaded.
-#'@param winArea number. This is the area of the moving window that is used to
-#'  average proportions of each resource type at broader spatial scales. The
-#'  Hornseth and Rempel (2016) models used specific window areas which are
-#'  defined within this package and used as the default. You should only specify
-#'  a window size if you have good reason.
-#'@param coefTable data.frame. Optional table of coefficients to be used in the
-#'  model. Must match the format and naming of \code{coefTableHR}
-#'@param doScale logical. FALSE by default. Set to TRUE only if you have
-#'  supplied coefficients that were trained on standardized data which will
-#'  cause the input data to be scaled.
-#'@param ptDensity number. Only used if a list element in linFeat is a raster.
-#'  See \code{\link{rasterizeLineDensity}}.
-#'
+#'@param coefTable data.frame. table of coefficients to be used in the
+#'   model. Must match the format and naming of the default \code{coefTableHR}
+#'@param ... optional arguments:
+#' \describe{
+#'   \item{natDist:}{filename or RasterLayer. Presence or absence of natural 
+#'   disturbance, primarily by fire.}
+#'   \item{anthroDist:}{filename or RasterLayer. Anthropogenic disturbance including 
+#'   harvest. This can have an effect on any type of land cover except water.}
+#'   \item{eskerSave}{filename to save rasterized esker data.}
+#'   \item{linFeatSave}{filename to save rasterized linear feature data.}
+#'   \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
+#'   used to avoid edge effects? If FALSE, the default, only data from inside the
+#'   \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
+#'   the other variables are clipped to the extent of the buffered area. Results
+#'   are always clipped to the original \code{projectPoly}. It is ideal to set
+#'   this to TRUE and provide a data set that is larger than the
+#'   \code{projectPoly} to avoid edge effects.}
+#'   \item{padFocal}{logical. This value is passed to the pad argument in
+#'   \code{raster::focal}, if it is FALSE then cells near the edge will return
+#'   NA, if it is TRUE a value will be returned for each cell that assumes cells
+#'   outside the input data are 0 for all resource types. This is not a good
+#'   assumption and should be used with caution.}
+#'   \item{saveOutput}{character. The filename to save the rasterBrick of habitat
+#'   use probabilities to. Note this will overwrite any existing files. The .grd
+#'   format is recommended because it will preserve layer names when the file is
+#'   reloaded.}
+#'   \item{winArea}{number. This is the area of the moving window that is used to
+#'   average proportions of each resource type at broader spatial scales. The
+#'   Hornseth and Rempel (2016) models used specific window areas which are
+#'   defined within this package and used as the default. You should only specify
+#'   a window size if you have good reason.}
+#'   \item{doScale}{logical. FALSE by default. Set to TRUE only if you have
+#'   supplied coefficients that were trained on standardized data which will
+#'   cause the input data to be scaled.}
+#'   \item{ptDensity}{number. Only used if a list element in linFeat is a raster.
+#'   See \code{\link{rasterizeLineDensity}}.}
+#' }
+#' 
 #'@return A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
 #'
 #'@seealso \code{\link{CaribouHabitat-class}} for information on the object
@@ -110,7 +111,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 setGeneric("caribouHabitat", 
            function(landCover, esker, linFeat, projectPoly, caribouRange, ...) 
              standardGeneric("caribouHabitat"))
-
+#' @rdname caribouHabitat
 setMethod(
   "caribouHabitat", 
   signature(landCover = "ANY"), 

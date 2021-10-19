@@ -9,6 +9,7 @@ NULL
 #' @param type string. The name of the slot to return. If x is a CaribouHabitat
 #'   object the default is "both" and the habitatUse and processedData will be
 #'   returned as a RasterStack.
+#' @param ... arguments passed to methods
 #'
 #' @return By default a RasterStack if x is a CaribouHabitat object and a
 #'   data.frame if x is a DisturbanceMetrics object. 

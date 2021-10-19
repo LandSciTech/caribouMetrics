@@ -3,11 +3,11 @@
 NULL
 
 #' Process the data after it is loaded and checked by inputData
-
+#' @noRd
 setGeneric("processData", function(inData, newData, ...) standardGeneric("processData"))
 
 # Method for initial processing when no new data is provided
-#' @rdname processData
+#' @noRd
 #' @importFrom raster plot
 setMethod(
   "processData", signature(inData = "CaribouHabitat", newData = "missing"), 
@@ -97,7 +97,7 @@ setMethod(
 # method to update processed data when new data is supplied avoids unnecessary
 # steps if new data is not provided for all variables
 
-#' @rdname processData
+#' @noRd
 setMethod(
   "processData", 
   signature(inData = "CaribouHabitat", newData = "list"), 
@@ -220,8 +220,7 @@ setMethod(
   })
 
 # Method for initial processing when no new data is provided
-#' @rdname processData
-#' @importFrom raster plot
+#' @noRd
 setMethod(
   "processData", signature(inData = "DisturbanceMetrics", newData = "missing"), 
   function(inData, linBuffMethod = "raster") {

@@ -2,6 +2,7 @@
 % Please edit documentation in R/disturbanceMetrics.R
 \name{disturbanceMetrics}
 \alias{disturbanceMetrics}
+\alias{disturbanceMetrics,ANY-method}
 \title{disturbanceMetrics}
 \source{
 Environment Canada. 2011. Scientific Assessment to Inform the
@@ -9,7 +10,9 @@ Environment Canada. 2011. Scientific Assessment to Inform the
  caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
 }
 \usage{
-disturbanceMetrics(landCover, linFeat, projectPoly, is.percent = TRUE, ...)
+disturbanceMetrics(landCover, linFeat, projectPoly, isPercent = TRUE, ...)
+
+\S4method{disturbanceMetrics}{ANY}(landCover, linFeat, projectPoly, isPercent = TRUE, ...)
 }
 \arguments{
 \item{landCover}{filename or RasterLayer. 0 and NA values are assumed to be
@@ -21,36 +24,36 @@ be combined. Linear features.}
 
 \item{projectPoly}{filename or sf object. Polygons defining range boundaries.}
 
-\item{natDist}{filename or RasterLayer. Presence or absence of natural
-disturbance, primarily by fire. Should include 40 years cumulative
-disturbance. Optional.}
+\item{isPercent}{logical. Should the results be returned as a percentage?}
 
-\item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance including
-harvest. This can have an effect on any type of landcover except water.
-Should include 40 years cumulative disturbance. Optional.}
-
-\item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
-used to avoid edge effects? If FALSE, the default, only data from inside the
-\code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
-the other variables are clipped to the extent of the buffered area. Results
-are always clipped to the original \code{projectPoly}. It is ideal to set
-this to TRUE and provide a dataset that is larger than the
-\code{projectPoly} to avoid edge effects.}
-
-\item{padFocal}{logical. This value is passed to the pad argument in
-\code{raster::focal}, if it is FALSE then cells near the edge will return
-NA, if it is TRUE a value will be returned for each cell that assumes cells
-outside the input data are 0 for all resource types. This is not a good
-assumption and should be used with caution.}
-
-\item{bufferWidth}{number. Width of buffer applied to anthropogenic
-disturbance in metres. Default is 500.}
-
-\item{linBuffMethod}{character. The method used to buffer linear features if
-they are supplied as sf lines. The default is "raster" in which case they
-are rasterized using the stars package and buffered using a moving window
-method. If "sf" then the lines are buffered with st_buffer and then
-rasterized. Either way points are included in the raster output.}
+\item{...}{optional arguments:
+\describe{
+  \item{natDist}{filename or RasterLayer. Presence or absence of natural
+  disturbance, primarily by fire. Should include 40 years cumulative
+  disturbance.}
+  \item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance including
+  harvest. This can have an effect on any type of landcover except water.
+  Should include 40 years cumulative disturbance.}
+  \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
+  used to avoid edge effects? If FALSE, the default, only data from inside the
+  \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
+  the other variables are clipped to the extent of the buffered area. Results
+  are always clipped to the original \code{projectPoly}. It is ideal to set
+  this to TRUE and provide a dataset that is larger than the
+  \code{projectPoly} to avoid edge effects.}
+  \item{padFocal}{logical. This value is passed to the pad argument in
+  \code{raster::focal}, if it is FALSE then cells near the edge will return
+  NA, if it is TRUE a value will be returned for each cell that assumes cells
+  outside the input data are 0 for all resource types. This is not a good
+  assumption and should be used with caution.}
+  \item{bufferWidth}{number. Width of buffer applied to anthropogenic
+  disturbance in metres. Default is 500.}
+  \item{linBuffMethod}{character. The method used to buffer linear features if
+  they are supplied as sf lines. The default is "raster" in which case they
+  are rasterized using the stars package and buffered using a moving window
+  method. If "sf" then the lines are buffered with st_buffer and then
+  rasterized. Either way points are included in the raster output.}
+}}
 }
 \value{
 A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}

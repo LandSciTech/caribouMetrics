@@ -1,9 +1,6 @@
 #' Take a sample from a beta distribution
 #'
-#' @param x
-#' @param phi
-#' @param useQuantiles
-#'
+#' @noRd
 betaSample<-function(x,phi,useQuantiles=F){
   #x=predictedTableSD[1,]
   bShapes = simstudy::betaGetShapes(x,phi) 
@@ -24,10 +21,7 @@ betaSample<-function(x,phi,useQuantiles=F){
 
 #' Take a sample from a normal distribution
 #'
-#' @param x
-#' @param sd
-#' @param useQuantiles
-#' 
+#' @noRd
 normalSample<-function(x,sd,useQuantiles=F){
   #x=predictedTableSD[1,]
   
@@ -46,10 +40,7 @@ normalSample<-function(x,sd,useQuantiles=F){
 
 #' Take a sample from a lognormal distribution
 #'
-#' @param x
-#' @param sd
-#' @param useQuantiles
-#' 
+#' @noRd
 lnormSample<-function(x,sd,useQuantiles=F){
   if((length(useQuantiles)==1)&&!useQuantiles){
     return(rnorm(length(x),sd))

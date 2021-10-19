@@ -15,6 +15,8 @@ results(x, ...)
 \arguments{
 \item{x}{A CaribouHabitat or DisturbanceMetrics object.}
 
+\item{...}{arguments passed to methods}
+
 \item{type}{string. The name of the slot to return. If x is a CaribouHabitat
 object the default is "both" and the habitatUse and processedData will be
 returned as a RasterStack.}

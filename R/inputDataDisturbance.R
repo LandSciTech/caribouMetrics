@@ -7,10 +7,11 @@ NULL
 #' 
 #' Load input data for calculating disturbance metrics.
 #' 
-
+#' @noRd
 setGeneric("inputDataDisturbance", function(landCover,linFeat, projectPoly, ...) standardGeneric("inputDataDisturbance"))
 
 #' @rdname inputDataDisturbance
+#' @noRd
 setMethod(
   "inputDataDisturbance", signature(landCover = "RasterLayer"), 
   function(landCover, linFeat, projectPoly, 
@@ -80,6 +81,7 @@ setMethod(
                                  padProjPoly = padProjPoly, padFocal = padFocal)))
   })
 
+#' @noRd
 #' @rdname inputDataDisturbance
 setMethod(
   "inputDataDisturbance", signature(landCover = "character"), 

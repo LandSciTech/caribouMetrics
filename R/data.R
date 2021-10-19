@@ -87,3 +87,8 @@
 #'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 #'  \url{https://doi.org/10.1139/cjz-2015-0101}
 "rfuToResType"
+
+#' Lookup table for resource type codes
+#' 
+#' A table to get numeric value associated with each resource type in rasters.
+"resTypeCode"
