@@ -80,7 +80,6 @@ Collate:
     'results.R'
     'sampleCoefs.R'
     'sampleRates.R'
-    'tmapCatRast.R'
     'updateCaribou.R'
 Suggests: 
     testthat (>= 2.1.0),

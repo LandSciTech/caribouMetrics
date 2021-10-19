@@ -5,7 +5,7 @@
 #' @param x an sf object containing lines and/or points
 #' @param r a RasterLayer object to be used as a template for the output raster
 #' @param ptDensity a number giving the density to assign to points, in units of
-#'   res(r). A value of 1 indicates one straight line crossing of the pixel. A
+#'   \code{res(r)}. A value of 1 indicates one straight line crossing of the pixel. A
 #'   value of 2+2*2^0.5 is horizontal, vertical, and diagonal crossings. If
 #'   NULL, points in x will be ignored.
 #'

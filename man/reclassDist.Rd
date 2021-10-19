@@ -12,7 +12,7 @@ reclassDist(distYr, endYr = 0, numCumYrs, template, dateField)
 of disturbance (preferred method) or time since disturbance as well as
 geometry (multipolygon) of the disturbance.}
 
-\item{endYr}{\code{numeric} default 0. Four digit date indicating the latest
+\item{endYr}{\code{numeric} default 0. Four digit year indicating the latest
 year to include from \code{distYr}. If no value is included function
 assumes \code{dateField} values indicate time since disturbance.}
 
@@ -20,7 +20,7 @@ assumes \code{dateField} values indicate time since disturbance.}
 include.}
 
 \item{template}{\code{rasterLayer}. A raster of the focal region, used as a
-template over which disturbance information is projected. Thus this layers
+template to which disturbance information is projected. This layers
 dimensions determine the dimensions of the output. It is recommended to use
 the \code{landcover} raster layer used in \code{caribouMetrics()} or
 \code{disturbanceMetrics()} to ensure equal dimensions}
@@ -33,7 +33,7 @@ Returns a binary \code{RasterLayer} with the same dimensions as the
   \code{template} input. Values of 1 represent areas of disturbance
 }
 \description{
-Classify disturbances/harvests that have occurred in a user defined time
+Classify disturbances that have occurred in a user defined time
 period. The output from this function can be used as either the
 \code{natDist} or \code{anthroDist} inputs for \code{caribouMetrics()} or
 \code{disturbanceMetrics()}.

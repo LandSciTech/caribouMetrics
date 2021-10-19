@@ -18,9 +18,9 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
             return(.Object)
           })
 
-#'caribouHabitat
+#' Calculate relative probability of caribou habitat use
 #'
-#'Calculate the probability of caribou habitat use in spring, summer, fall and
+#'Calculate the relative probability of caribou habitat use in spring, summer, fall and
 #'winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
 #'2016.
 #'
@@ -30,7 +30,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'information. All data sources can be provided either as filenames or as
 #'spatial files. If filenames are provided then the \code{landCover} is assumed
 #'to be the Provincial Landcover for Ontario and is converted to resource types
-#'using \code{reclassPLC}. The result is a CaribouHabitat object which has
+#'using \link{\code{reclassPLC}}. The result is a CaribouHabitat object which has
 #'methods defined for plotting and extracting the results. To update an existing
 #'CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
 #'
@@ -50,7 +50,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'@param caribouRange character or data.frame. If character the range where
 #'  caribou were located. See \code{unique(coefTableHR$Range)} for options. If
 #'  data.frame it must have two columns Range and coefRange. Range is the name
-#'  of the geographical area and is used to link the table the the provided
+#'  of the geographical area and is used to link the table to the provided
 #'  \code{projectPoly} polygons. coefRange is the name of the caribou range that
 #'  the coefficients should be used from.
 #'@param coefTable data.frame. table of coefficients to be used in the
@@ -58,9 +58,10 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'@param ... optional arguments:
 #' \describe{
 #'   \item{natDist:}{filename or RasterLayer. Presence or absence of natural 
-#'   disturbance, primarily by fire.}
+#'   disturbance, primarily by fire. This should reflect cumulative natural 
+#'   disturbance over the preceding 30 years}
 #'   \item{anthroDist:}{filename or RasterLayer. Anthropogenic disturbance including 
-#'   harvest. This can have an effect on any type of land cover except water.}
+#'   harvest.}
 #'   \item{eskerSave}{filename to save rasterized esker data.}
 #'   \item{linFeatSave}{filename to save rasterized linear feature data.}
 #'   \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be

@@ -1,4 +1,4 @@
-#' Sample Coefficients
+#' Sample coefficients
 #'
 #' Sample coefficient values from the normal distribution based on the
 #' coefficient and standard error

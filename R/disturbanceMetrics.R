@@ -16,7 +16,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
             return(.Object)
           })
 
-#'disturbanceMetrics
+#'Calculate metrics of natural and anthropogenic disturbance
 #'
 #'Calculate the predictors described in Table 52 of Environment Canada (2011)
 #'Scientific Assessment to Inform the Identification of Critical Habitat for

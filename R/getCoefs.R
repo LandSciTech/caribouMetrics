@@ -17,7 +17,7 @@
 #'   \code{popGrowthTableJohnsonECCC$ModelNumber} for typical options.
 #'
 #' @return a named list with one element per model version. The names are
-#'   \code{modVer}_\code{modNum}_Type. Each element contains a data.frame that
+#'   \code{modVer_modNum_Type}. Each element contains a data.frame that
 #'   is a subset of \code{populationGrowthTable} for the selected model
 #'
 #' @export

@@ -91,4 +91,8 @@
 #' Lookup table for resource type codes
 #' 
 #' A table to get numeric value associated with each resource type in rasters.
+#' @format A data frame with 9 rows and 2 columns: \describe{
+#'   \item{ResourceType}{Letter code indicating the resource type}
+#'   \item{code}{the raster value corresponding to the resource type}
+#'   }
 "resTypeCode"

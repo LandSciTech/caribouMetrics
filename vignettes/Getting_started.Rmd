@@ -28,7 +28,7 @@ Several different data sets are used in the RSPF model to describe conditions th
 | Land cover (landCover) | A raster of land cover classified into 7 forest or wetland resource types | Covariates in RSPF model  |
 | Eskers (esker) | A raster or sf object identifying eskers (deposited ridges of sediment), if presented as a raster data must be in m/ha | Covariate in RSPF model |
 | Linear features (linFeat) | a raster, sf object, or list of these identifying the location of linear features (e.g. roads, rail), if presented as a raster data must be in m/ha | Covariate in RSPF model|
-| Natural disturbance (natDist) | Cumulative natural disturbance (mostly fire) over the past 40 years |Covariate in RSPF model and used to set forest classes in grid cell to 0 if > 35% disturbed|
+| Natural disturbance (natDist) | Cumulative natural disturbance (mostly fire) over the past 30 years |Covariate in RSPF model and used to set forest classes in grid cell to 0 if > 35% disturbed|
 | Anthropogenic disturbance (anthroDist)| Presence of anthropogenic disturbance | Used to set forest classes in grid cell to 0 if > 35% disturbed|
 |Project polygon (projPoly)| An sf object containing polygon(s) of the study area(s), must contain a Range column| Used to set the boundaries of the analysis and link range-specific coefficients to spatial data|
 

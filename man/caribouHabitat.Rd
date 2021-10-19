@@ -3,7 +3,7 @@
 \name{caribouHabitat}
 \alias{caribouHabitat}
 \alias{caribouHabitat,ANY-method}
-\title{caribouHabitat}
+\title{Calculate relative probability of caribou habitat use}
 \source{
 Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
   C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
@@ -48,16 +48,17 @@ to the Range column in the caribouRange data.frame}
 \item{caribouRange}{character or data.frame. If character the range where
 caribou were located. See \code{unique(coefTableHR$Range)} for options. If
 data.frame it must have two columns Range and coefRange. Range is the name
-of the geographical area and is used to link the table the the provided
+of the geographical area and is used to link the table to the provided
 \code{projectPoly} polygons. coefRange is the name of the caribou range that
 the coefficients should be used from.}
 
 \item{...}{optional arguments:
 \describe{
   \item{natDist:}{filename or RasterLayer. Presence or absence of natural 
-  disturbance, primarily by fire.}
+  disturbance, primarily by fire. This should reflect cumulative natural 
+  disturbance over the preceding 30 years}
   \item{anthroDist:}{filename or RasterLayer. Anthropogenic disturbance including 
-  harvest. This can have an effect on any type of land cover except water.}
+  harvest.}
   \item{eskerSave}{filename to save rasterized esker data.}
   \item{linFeatSave}{filename to save rasterized linear feature data.}
   \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
@@ -95,7 +96,7 @@ model. Must match the format and naming of the default \code{coefTableHR}}
 A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
 }
 \description{
-Calculate the probability of caribou habitat use in spring, summer, fall and
+Calculate the relative probability of caribou habitat use in spring, summer, fall and
 winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
 2016.
 }
@@ -106,7 +107,7 @@ information is the \code{landCover} but this is updated based on disturbance
 information. All data sources can be provided either as filenames or as
 spatial files. If filenames are provided then the \code{landCover} is assumed
 to be the Provincial Landcover for Ontario and is converted to resource types
-using \code{reclassPLC}. The result is a CaribouHabitat object which has
+using \link{\code{reclassPLC}}. The result is a CaribouHabitat object which has
 methods defined for plotting and extracting the results. To update an existing
 CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
 }

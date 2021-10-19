@@ -1,6 +1,6 @@
 #' Reclassify provincial land cover
 #'
-#' Reclassify provincial land cover classes into resource types use for
+#' Reclassify provincial land cover classes into resource types used for
 #' \code{caribouHabitat}. The default lookup table \code{plcToResType} is
 #' provided with the package and assumes Ontario 2001 land cover classes.
 #'

@@ -88,7 +88,12 @@ carHab2 <- caribouHabitat(
 
 ```{r inspect padded, fig.width=8, fig.height=5}
 tmap::qtm(landCoverD, raster = "black")+
-  tmapCatRast(carHab2@landCover, lbls = raster::levels(carHab2@landCover)[[1]][[2]], ttle = "PLC")+
+    tmap::tm_shape(carHab2@landCover)+
+    tmap::tm_raster(style = "cat", 
+              palette = tmaptools::get_brewer_pal("Accent", n = 9, plot = FALSE), 
+              labels = resTypeCode$ResourceType,
+              title = "PLC")+
+    tmap::tm_legend(bg.color = "white", legend.outside = TRUE)+
   tmap::qtm(carHab2@projectPoly, fill = NULL, borders = "black")
 ```
 

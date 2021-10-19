@@ -1,4 +1,4 @@
-#' Sample Demographic Rates
+#' Sample demographic rates
 #'
 #' Sample expected survival or recruitment rates based on samples of coefficient
 #' values and optionally the model precision.

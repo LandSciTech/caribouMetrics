@@ -3,7 +3,7 @@
 \name{disturbanceMetrics}
 \alias{disturbanceMetrics}
 \alias{disturbanceMetrics,ANY-method}
-\title{disturbanceMetrics}
+\title{Calculate metrics of natural and anthropogenic disturbance}
 \source{
 Environment Canada. 2011. Scientific Assessment to Inform the
  Identification of Critical Habitat for Woodland Caribou (Rangifer tarandus

@@ -12,16 +12,15 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #' @seealso See \code{\link{caribouHabitat}} for options when creating a
 #'   CaribouHabitat object.
 #' @slot landCover Raster with land cover classified into resource types. See
-#'   \code{resTypeCode} for a list.
+#'   \code{resTypeCode} for a legend.
 #' @slot esker Raster of esker density in m^2 per hectare.
 #' @slot natDist Raster of natural disturbance.
-#' @slot anthroDist Raster of permanent anthropogenic disturbances.
-#' @slot linFeat Raster of linear feature density in m^2 per hectare including
-#'   roads, utilities, and rail.
+#' @slot anthroDist Raster of anthropogenic disturbances.
+#' @slot linFeat Raster of linear feature density in m^2 per hectare.
 #' @slot projectPoly Sf object with polygon of project boundary.
 #' @slot processedData RasterStack with named layers for each input variable
 #'   used in the RSF
-#' @slot habitatUse RasterStack named with layers for each season
+#' @slot habitatUse RasterStack with named layers for each season
 #' @slot attributes A list of arguments from the \code{caribouHabtat} call. 
 #' @name CaribouHabitat-class
 #' @rdname CaribouHabitat-class

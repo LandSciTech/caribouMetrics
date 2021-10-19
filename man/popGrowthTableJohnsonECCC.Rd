@@ -3,7 +3,7 @@
 \docType{data}
 \name{popGrowthTableJohnsonECCC}
 \alias{popGrowthTableJohnsonECCC}
-\title{Population Growth Model Table for ECCC and Johnson Models}
+\title{Population growth model table for ECCC and Johnson models}
 \format{
 An object of class \code{data.frame} with 44 rows and 9 columns.
 }

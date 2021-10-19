@@ -2,7 +2,7 @@
 % Please edit documentation in R/sampleRates.R
 \name{sampleRates}
 \alias{sampleRates}
-\title{Sample Demographic Rates}
+\title{Sample demographic rates}
 \usage{
 sampleRates(
   covTable,

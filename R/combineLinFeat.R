@@ -12,6 +12,7 @@
 #'   vector with extension .shp or any extension accepted by the raster package
 #'
 #' @return sf object
+#' @noRd
 
 combineLinFeat <- function(linFeats){
   
