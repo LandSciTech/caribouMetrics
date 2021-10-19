@@ -12,11 +12,13 @@
 #'   used in Johnson et. al. (2020)
 #' @param survivalModelNumber,recruitmentModelNumber character. Which model
 #'   number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.
-#' @param useQuantiles logical or numeric. Should each replicate population be
-#'   assigned a random quantile to be used for sampling the from the
-#'   distribution of demographic parameters around the means? If it is a numeric
+#' @param useQuantiles logical or numeric. If it is a numeric
 #'   vector it must be length 2 and give the low and high limits of the
-#'   quantiles to use.
+#'   quantiles to use. If \code{useQuantiles != FALSE}, each replicate population is
+#'   assigned to a quantile of the distribution of variation around the expected
+#'   values, and remains in that quantile as covariates change. 
+#'   If \code{useQuantiles = TRUE}, replicate populations 
+#'   will be assigned to quantiles in the default range of 0.025 and 0.975.    
 #' @param populationGrowthTable data.frame. By default
 #'   \code{\link{popGrowthTableJohnsonECCC}} is used. A custom table of model
 #'   parameters can be provided but it must match the column names of
