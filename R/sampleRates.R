@@ -172,10 +172,10 @@ sampleRates <- function(covTable,
       # Uncertainty across replicates
       predictedSD <- matrixStats::rowSds(predictedTableSD)
       
-      if((length(useQuantiles)==1)&&!useQuantiles){
-        qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = predInterval)
+      if(is.null(quantilesToUse)){
+        qqs <- matrixStats::rowQuantiles(predictedTableSD, probs = predInterval)
       }else{
-        qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = c(0,1))
+        qqs <- matrixStats::rowQuantiles(predictedTableSD, probs = c(0,1))
       }  
       
       # Now the model calculations

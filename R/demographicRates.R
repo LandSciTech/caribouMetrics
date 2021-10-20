@@ -71,11 +71,15 @@ demographicRates <- function(covTable,
                                 popGrowthPars,
                                 ignorePrecision = FALSE,
                                 returnSample = FALSE,
-                                useQuantiles = FALSE){
+                                useQuantiles = TRUE){
 
   if(length(useQuantiles) == 2){
     if(!all(min(useQuantiles) >= 0, max(useQuantiles) <= 1)){
       stop("useQuantiles must be between 0 and 1")
+    }
+    if(!is.null(popGrowthPars$coefSamples_S$quantiles)){
+      warning("popGrowthPars contains quantiles so they are used and useQuantiles is ignored",
+              call. = FALSE)
     }
     quantsToUse <- useQuantiles
     useQuantiles <- TRUE
@@ -84,17 +88,21 @@ demographicRates <- function(covTable,
   } else {
     stop("useQuantiles must have length 1 or 2")
   }
-  if(useQuantiles){
+  if((length(useQuantiles)==1)&&(!useQuantiles)){
+    popGrowthPars$coefSamples_S$quantiles <- NULL
+    popGrowthPars$coefSamples_R$quantiles <- NULL
+    
+  }else{
     q <- getQuantiles(nrow(popGrowthPars$coefSamples_S$coefSamples),
                       low = quantsToUse[1],
                       high = quantsToUse[2])
     
     if(is.null(popGrowthPars$coefSamples_S$quantiles)){
       popGrowthPars$coefSamples_S$quantiles <- sample(q, replace = FALSE)
-    }
+    } 
     if(is.null(popGrowthPars$coefSamples_R$quantiles)){
       popGrowthPars$coefSamples_R$quantiles <- sample(q, replace = FALSE)
-    }
+    } 
     
   }
   
