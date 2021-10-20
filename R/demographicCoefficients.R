@@ -4,6 +4,7 @@
 #' appropriate model version and \code{\link{sampleCoefs}} to sample
 #' coefficients for each replicate population, for both the survival and
 #' recruitment models. Also optionally, generates quantiles.
+#' 
 #'
 #' @param replicates integer. Number of replicate populations.
 #' @param modelVersion character. Which model version to use. Options are "ECCC"
