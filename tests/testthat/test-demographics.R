@@ -30,7 +30,7 @@ test_that("basic example works", {
 test_that("useQuantiles works as expected", {
   demCoefswQ <- demographicCoefficients(replicates = 10)
   demCoefsnQ <- demographicCoefficients(replicates = 10, useQuantiles = FALSE)
-
+  
   expect_gt(length(demCoefswQ$coefSamples_Survival), 
             length(demCoefsnQ$coefSamples_Survival))
   
@@ -44,12 +44,14 @@ test_that("useQuantiles works as expected", {
   demRates1 <- demographicRates(covTable = covTableSim,
                                 popGrowthPars = demCoefswQ,
                                 returnSample = TRUE,
-                                ignorePrecision = FALSE)
+                                ignorePrecision = FALSE, 
+                                useQuantiles = FALSE)
   
   demRates2 <- demographicRates(covTable = covTableSim,
                                 popGrowthPars = demCoefsnQ,
                                 returnSample = TRUE, 
-                                ignorePrecision = FALSE)
+                                ignorePrecision = FALSE,
+                                useQuantiles = FALSE)
   
   demRates3 <- demographicRates(covTable = covTableSim,
                                 popGrowthPars = demCoefswQ,
@@ -78,14 +80,32 @@ test_that("useQuantiles works as expected", {
   expect_false(sum(lmQF2[["coefficients"]][, 4] < 0.01) > 5)
   expect_true(sum(lmQT2[["coefficients"]][, 4] < 0.01) > 5)
   
-  expect_error(
   # Try using different quantiles
+  # in demRates
   demRates5 <- demographicRates(covTable = covTableSim,
                                 popGrowthPars = demCoefsnQ,
                                 returnSample = TRUE,
                                 useQuantiles = c(0.001, 0.999))
+  
+  expect_gt(max(demRates5$S_bar), max(demRates4$S_bar))
+  
+  # from demCoefs
+  # should override quantiles added in demRates
+  expect_warning(demRates6 <- demographicRates(covTable = covTableSim,
+                                popGrowthPars = demCoefsCustomQ,
+                                returnSample = TRUE,
+                                useQuantiles = c(0.001, 0.999)))
+  
+  expect_gt(max(demRates4$S_bar), max(demRates6$S_bar))
+  
+  demRates7 <- demographicRates(covTable = covTableSim,
+                                popGrowthPars = demCoefsCustomQ,
+                                returnSample = TRUE)
+  
+  expect_gt(max(demRates4$S_bar), max(demRates6$S_bar))
+
   # currently causes error see issue #74
-  )
+  
 })
 
 test_that("ignorePrecision works as expected", {
