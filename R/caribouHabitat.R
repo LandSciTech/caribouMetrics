@@ -30,7 +30,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'information. All data sources can be provided either as filenames or as
 #'spatial files. If filenames are provided then the \code{landCover} is assumed
 #'to be the Provincial Landcover for Ontario and is converted to resource types
-#'using \link{\code{reclassPLC}}. The result is a CaribouHabitat object which has
+#'using \code{\link{reclassPLC}}. The result is a CaribouHabitat object which has
 #'methods defined for plotting and extracting the results. To update an existing
 #'CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
 #'
