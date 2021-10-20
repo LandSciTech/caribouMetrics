@@ -1,7 +1,7 @@
-#' Sample Demographic Rates
+#' Sample demographic rates
 #'
 #' Sample expected survival or recruitment rates based on samples of coefficient
-#' values and optionally the model precision and interannual variation.
+#' values and optionally the model precision.
 #'
 #' \code{coefSamples} and \code{coefValues} can be created with
 #' \code{\link{sampleCoefs}}
@@ -15,24 +15,24 @@
 #'   "Johnson" for the model used in Johnson et. al. (2020)
 #' @param resVar character. Response variable, typically "femaleSurvival" or
 #'   "recruitment"
-#' @param useQuantiles logical or numeric vector. Only relevant when
-#'   \code{ignorePrecision = FALSE} and \code{returnSample = TRUE}. If
-#'   \code{useQuantiles = TRUE}, each replicate population is assigned to a
-#'   quantile of the distribution of variation around the expected values, and
-#'   remains in that quantile as covariates change. If \code{useQuantiles} is a
-#'   vector it is used as the quantiles. If \code{useQuantiles = FALSE},
-#'   sampling is done independently for each combination of scenario and
-#'   replicate, so the value for a particular replicate population in one
+#' @param ignorePrecision logical. Should the precision of the model be used if
+#'   it is available? When precision is used variation among populations around the
+#'   National mean responses is considered in addition to the uncertainty about 
+#'   the coefficient estimates.
+#' @param returnSample logical. If TRUE the returned data.frame has replicates *
+#'   scenarios rows. If FALSE the returned data.frame has one row per scenario
+#'   and additional columns summarizing the variation among replicates. See
+#'   Value for details.
+#' @param quantilesToUse numeric vector of length \code{coefSamples}. Only relevant when
+#'   \code{ignorePrecision = FALSE}. Each replicate population is assigned to a quantile 
+#'   of the distribution of variation around the expected values, and remains in that 
+#'   quantile as covariates change. If NULL sampling is done independently for each combination 
+#'   of scenario and replicate, so the value for a particular replicate population in one
 #'   scenario is unrelated to the values for that replicate in other scenarios.
-#'   If interested in projecting impacts of changing disturbance on the
-#'   trajectories of replicate populations set \code{useQuantiles = TRUE}.
-#' @param interannualVar numeric or FALSE. Should the interannual variation in
-#'   population growth be considered? If numeric it is the precision of the
-#'   sample taken from the beta distribution.  TO DO: either remove this
-#'   option from demographicParameters function, or update to align with
-#'   popGrowthJohnson.
-#' @param predInterval numeric vector with length 2. The prediction interval to
-#'   use the default is 95% ie(\code{c(0.025,0.975)})
+#'   Useful for projecting impacts of changing disturbance on the
+#'   trajectories of replicate populations.
+#' @param predInterval numeric vector with length 2. The default 95\% interval is
+#'   (\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and \code{quantilesToUse = NULL}. 
 #'
 #' @inheritParams demographicRates
 #'
@@ -44,7 +44,8 @@
 #'   \describe{
 #'     \item{"average"}{The mean estimated values of the response variable)}
 #'     \item{"stdErr"}{Standard error of the estimated values}
-#'     \item{"PIlow"/"PIhigh"}{95% Prediction interval for estimated values}
+#'     \item{"PIlow"/"PIhigh"}{If \code{quantilesToUse = NULL} these are the percentiles given by predInterval. 
+#'       If using quantiles, maximum and minimum values are returned.}
 #'   } 
 #'   If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
 #'    replicates} additional columns are:
@@ -64,23 +65,23 @@ sampleRates <- function(covTable,
                         resVar,
                         ignorePrecision,
                         returnSample,
-                        useQuantiles,
-                        interannualVar, 
+                        quantilesToUse=NULL,
                         predInterval = c(0.025,0.975)){
   
   tictoc::tic(paste0("Elapsed time for caribou prediction for ",
              resVar, " for ", modVer,":"))
   
-  if ((!is.numeric(interannualVar) && interannualVar != FALSE) || 
-      length(interannualVar) > 1) {
-      stop("Expecting interannualVar to be a numeric precision parameter with length 1.")
-    }
-  
-  
   whichCovariates <- names(coefValues)[!names(coefValues) %in% c("Intercept", 
                                                                    "intercept",
                                                                    "precision",
                                                                    "Precision")]
+  
+  missingCovs <- setdiff(whichCovariates, colnames(covTable))
+  
+  if(length(missingCovs) > 0){
+    stop("Covariates missing in covTable: ", paste0(missingCovs, collapse = ", "), 
+         call. = FALSE)
+  }
   
   covTableRed <- covTable[, whichCovariates]
   
@@ -104,23 +105,17 @@ sampleRates <- function(covTable,
     #Easier to understand the principles by thinking about a simpler linear regression example. 
     #Using the notation in the regression analysis section of this wikipedia article, predictedTableSD is sample from distribution of yhat_d, rather than y_d: https://en.wikipedia.org/wiki/Prediction_interval 
     if(!ignorePrecision){
-      if(sum(phi)==0){
-        warning("Missing precision parameter.")
+      if(length(phi)==0){
+        stop("Missing precision parameter. Set ignorePrecision = TRUE or",
+             " add a precision column to coefSamples", call. = FALSE)
       }
       if(nrow(predictedTableSD)<1){
         stop("This code assumes at least one row.")
       }
       
-      predictedTableSD = t(apply(predictedTableSD,1,betaSample,phi=phi,useQuantiles=useQuantiles))
+      predictedTableSD = t(apply(predictedTableSD,1,betaSample,phi=phi,quantilesToUse=quantilesToUse))
     }
     
-    if(interannualVar){
-      pp = apply(predictedTableSD,1,betaSample,phi=interannualVar)
-      
-      pp=t(pp)
-      predictedTableSD=pp
-      
-    }
     #Note: more relevant measure of uncertainty is perhaps bootstrap prediction interval
     #https://stats.stackexchange.com/questions/226565/bootstrap-prediction-interval
     #When precision is included points are not Gaussian distributed, and SD isn't an overly useful summary metric. 
@@ -128,20 +123,10 @@ sampleRates <- function(covTable,
     # Uncertainty across replicates
     predictedSD <- matrixStats::rowSds(predictedTableSD)
     
-    if((length(useQuantiles)==1)&&!useQuantiles){
+    if(is.null(quantilesToUse)){
       qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = predInterval)
     }else{
-      if(length(setdiff(predInterval,useQuantiles))==0){
-        colnames(predictedTableSD) <- useQuantiles
-        
-        selectCols = colnames(predictedTableSD)[grepl(predInterval[[1]],colnames(predictedTableSD),fixed=T)|grepl(predInterval[[2]],colnames(predictedTableSD),fixed=T)]
-        if(length(selectCols)>length(predInterval)){
-          stop("Handle case of replicates in useQuantiles.")
-        }
-        qqs <- subset(predictedTableSD,select=as.character(predInterval))
-      }else{
-        stop("If useQuantiles and predInterval are both specified, predInterval should be a subset of useQuantiles.")
-      }
+      qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = c(0,1))
     }  
     # Now the model calculations
     predicted <- as.numeric(exp(as.matrix(coefValues)[
@@ -170,14 +155,15 @@ sampleRates <- function(covTable,
       }
       
       if(!ignorePrecision){
-        if(sum(phi)==0){
-          warning("Missing precision parameter.")
+        if(length(phi)==0){
+          stop("Missing precision parameter. Set ignorePrecision = TRUE or",
+               " add a precision column to coefSamples", call. = FALSE)
         }
         if(nrow(predictedTableSD)<1){
           stop("This code assumes at least one row.")
         }
         
-        pp = apply(predictedTableSD,1,normalSample,sd=phi,useQuantiles=useQuantiles)
+        pp = apply(predictedTableSD,1,normalSample,sd=phi,quantilesToUse=quantilesToUse)
         
         predictedTableSD=t(pp)
         
@@ -186,8 +172,11 @@ sampleRates <- function(covTable,
       # Uncertainty across replicates
       predictedSD <- matrixStats::rowSds(predictedTableSD)
       
-      #TO DO: fix this - if using quantiles, pick appropriate quantiles from the set we have
-      qqs <- matrixStats::rowQuantiles(predictedTableSD, probs = predInterval)
+      if((length(useQuantiles)==1)&&!useQuantiles){
+        qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = predInterval)
+      }else{
+        qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = c(0,1))
+      }  
       
       # Now the model calculations
       predicted <- as.numeric((as.matrix(coefValues)[which(colnames(coefValues) %in% c("Intercept",

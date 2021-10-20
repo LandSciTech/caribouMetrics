@@ -12,9 +12,8 @@
 #'   vector with extension .shp or any extension accepted by the raster package
 #'
 #' @return sf object
-#' @export
-#'
-#' @examples
+#' @noRd
+
 combineLinFeat <- function(linFeats){
   
   crsUse <- processLinFeat(linFeats[[1]]) %>% st_crs()

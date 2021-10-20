@@ -1,70 +1,45 @@
 #' Take a sample from a beta distribution
 #'
-#' @param x
-#' @param phi
-#' @param useQuantiles
-#' 
-betaSample<-function(x,phi,useQuantiles=F){
+#'
+#' @noRd
+betaSample<-function(x,phi,quantilesToUse=NULL){
   #x=predictedTableSD[1,]
   bShapes = simstudy::betaGetShapes(x,phi) 
   
-  if((length(useQuantiles)==1)&&!useQuantiles){
+  if(is.null(quantilesToUse)){
     return(rbeta(length(x),bShapes$shape1,bShapes$shape2))
   }else{
-    if(length(useQuantiles)!=length(x)){
-      q=getQuantiles(length(x))
-    }else{
-      q=useQuantiles
-    }
-    
-    qq = qbeta(q,bShapes$shape1,bShapes$shape2)
+    qq = qbeta(quantilesToUse,bShapes$shape1,bShapes$shape2)
     return(qq)
   }
 }
 
 #' Take a sample from a normal distribution
 #'
-#' @param x
-#' @param sd
-#' @param useQuantiles
 #' 
-
-normalSample<-function(x,sd,useQuantiles=F){
+#' @noRd
+#' 
+normalSample<-function(x,sd,quantilesToUse=NULL){
   #x=predictedTableSD[1,]
   
-  if((length(useQuantiles)==1)&&!useQuantiles){
-    return(rnorm(length(x),sd))
+  if(is.null(quantilesToUse)){
+    return(rnorm(length(x), mean = x, sd = sd))
   }else{
-    if(length(useQuantiles)!=length(x)){
-      q=getQuantiles(x)
-    }else{
-      q=useQuantiles
-    }
-    qq = qnorm(q,mean=x,sd=sd)
+    qq = qnorm(quantilesToUse,mean=x,sd=sd)
     return(qq)
   }
 }
 
 #' Take a sample from a lognormal distribution
 #'
-#' @param x
-#' @param sd
-#' @param useQuantiles
 #' 
-
-lnormSample<-function(x,sd,useQuantiles=F){
-  #x=predictedTableSD[1,]
-  
-  if((length(useQuantiles)==1)&&!useQuantiles){
+#' @noRd
+#' 
+lnormSample<-function(x,sd,quantilesToUse=NULL){
+  if(is.null(quantilesToUse)){
     return(rnorm(length(x),sd))
   }else{
-    if(length(useQuantiles)!=length(x)){
-      q=getQuantiles(x)
-    }else{
-      q=useQuantiles
-    }
-    
-    qq = qlnorm(q,sd)
+    qq = qlnorm(quantilesToUse,sd)
     return(qq)
   }
 }
@@ -97,9 +72,6 @@ fillNAsWithMean <- function(vector) {
 }
 
 addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
-  #bar=pars$expectedRec;type="Rec";minV=pars$minRec; maxV=pars$maxRec; interannualVar = list(Rec_CV=pars$procEARCV,S_CV=pars$procESadFCV)
-  #bar=pars$expectedSadF;type="S";minV=pars$minSadF; maxV=pars$maxSadF; interannualVar = list(Rec_CV=pars$procEARCV,S_CV=pars$procESadFCV)
-  
   if(is.element(paste0(type,"_CV"),names(interannualVar))){
     #reproducing ECCC_CaribouPopnProjection - see line 143 etc of functions.R
     ProcVar <- (bar * interannualVar[[paste0(type,"_CV")]])^2
@@ -107,7 +79,6 @@ addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
     BetaPars  <- estBetaParams(bar, ProcVar)
     BetaPars$alpha[BetaPars$alpha < 0] <- 0.01
     BetaPars$beta[BetaPars$beta < 0] <- 0.01
-    #median(BetaPars$alpha+BetaPars$beta)
     interannualVar[[paste0(type,"_alpha")]]=BetaPars$alpha
     interannualVar[[paste0(type,"_beta")]]=BetaPars$beta
   }
@@ -117,12 +88,19 @@ addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
     interannualVar[[paste0(type,"_beta")]]=bShapes$shape2
   }
   
-  bar_t = truncdist::rtrunc(length(bar), 
+  bar_t = withCallingHandlers(
+    # using calling handler because of problem in truncdist package. Have flagged to developer
+    truncdist::rtrunc(length(bar), 
                  spec="beta", 
                  shape1=interannualVar[[paste0(type,"_alpha")]], 
                  shape2= interannualVar[[paste0(type,"_beta")]],
                  a=minV,
-                 b=maxV)
+                 b=maxV),
+    warning = function(cnd){
+      if (startsWith(conditionMessage(cnd), "the condition has length > 1"))
+        invokeRestart("muffleWarning")
+    }
+  )
   
   return(bar_t)
 }

@@ -7,19 +7,10 @@ NULL
 #' 
 #' Load input data for calculating caribou habitat use.
 #' 
-#' @param landCover 
-#'
-#' @param esker 
-#' @param natDist 
-#' @param anthroDist
-#' @param linFeat 
-#' @param projectPoly 
-#' @param ... 
-#'
-#' @export
+
+#' @noRd
 setGeneric("inputData", function(landCover, esker, linFeat, projectPoly, ...) standardGeneric("inputData"))
 
-#' @rdname inputData
 setMethod(
   "inputData", signature(landCover = "RasterLayer"), 
   function(landCover, esker, linFeat, projectPoly, caribouRange,
@@ -153,7 +144,7 @@ setMethod(
                                  tmplt = tmplt)))
 })
 
-#' @rdname inputData
+#' @noRd
 setMethod(
   "inputData", signature(landCover = "character"), 
   function(landCover, esker, linFeat,  projectPoly, caribouRange, coefTable,

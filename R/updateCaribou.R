@@ -21,6 +21,12 @@ NULL
 #'   linFeat.
 #' @param resultsOnly logical. If FALSE the whole CaribouHabitat object is
 #'   returned. If TRUE then only the habitatUse RasterStack is returned.
+#' @param coefTable data.frame. Optional table of coefficients to be used in the
+#'   model. Must match the format and naming of \code{coefTableHR}
+#' @param doScale logical. FALSE by default. Set to TRUE only if you have
+#'   supplied coefficients that were trained on standardized data which will
+#'   cause the input data to be scaled.
+#' @param ... other arguments passed to methods. Not currently used.
 #'
 #' @return If \code{resultsOnly} is FALSE an updated CaribouHabitat object. If
 #'   \code{resultsOnly} is TRUE a RasterStack with a layer for each season.
@@ -28,6 +34,7 @@ NULL
 #' @export
 setGeneric("updateCaribou", function(CarHab, newData, ...) standardGeneric("updateCaribou"))
 
+#' @rdname updateCaribou
 # method to get final calculation from processed data in CaribouHabitat object
 setMethod(
   "updateCaribou", 
@@ -126,57 +133,3 @@ setMethod(
   
   })
 
-# method to update processed data when new data is new caribouRange dataframe 
-#' @rdname updateCaribou
-setMethod(
-  "updateCaribou", 
-  signature(CarHab = "CaribouHabitat", newData = "data.frame"), 
-  function(CarHab, newData, resultsOnly = FALSE, 
-           coefTable = coefTableHR, doScale = FALSE){
-    
-    stop("this function is not finished yet")
-    
-    # get winAreas for old and new coefficients
-    coefAreas <- coefTable %>% group_by(Range) %>% 
-      summarize(WinArea = first(WinArea))
-    
-    newData <- newData %>% left_join(coefAreas, by = c(coefRange = "Range"))
-    
-    carRangeOld <- CarHab@attributes$caribouRange %>% 
-      left_join(coefAreas, by = c(coefRange = "Range"))
-    
-    compareWinArea <- left_join(newData, carRangeOld, by = "Range", 
-                                suffix = c("_new", "_old")) %>% 
-      mutate(winAreaChanged = WinArea_new != WinArea_old)
-    
-    # need to re-run caribouHabitat for areas with different winAreas, for
-    # others just need to re-run updateCaribou with new caribouRange
-    rngToReRun <- compareWinArea %>% filter(winAreaChanged) %>% pull(Range)
-    
-    rngToUpdate <- compareWinArea %>% filter(!winAreaChanged) %>% pull(Range)
-    
-    if(length(rngToReRun) > 0){
-      CarHabReRun <- CarHab
-      CarHabReRun@projectPoly <- CarHabReRun@projectPoly %>% 
-        filter(Range %in% rngToReRun)
-      # TODO: Finish from here
-      # call this with slot values from CarHabReRun object
-      CarHabReRun <- caribouHabitat()
-      
-    }
-    if(length(rngToUpdate) > 0){
-      
-      CarHabUpdated <- CarHab
-      CarHabUpdated@attributes$caribouRange <- newData
-      CarHabUpdated@projectPoly <- CarHabUpdated@projectPoly %>% 
-        filter(Range %in% rngToUpdate)
-      
-      # recalculate rsf based on new coefficients
-      CarHabUpdated <- updateCaribou(CarHab)
-    }
-    
-    # need to combine CarHabUpdated and CarHabReRun, input data is still the
-    # same, only processedData and habitatUse should need to change
-    # as should CarHab@attributes$caribouRange
-    
-  })

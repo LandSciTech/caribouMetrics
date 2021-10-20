@@ -13,7 +13,10 @@ A data frame with 224 rows and 5 variables: \describe{
   \item{Range}{the caribou range name} }
 }
 \source{
-Table 3 of: \url{https://doi.org/10.1139/cjz-2015-0101}
+Table 3 of: Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource
+  selection of woodland caribou (Rangifer tarandus caribou) across a gradient
+  of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+  \url{https://doi.org/10.1139/cjz-2015-0101}
 }
 \usage{
 coefTableStd

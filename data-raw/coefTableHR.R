@@ -5,6 +5,7 @@ library(tidyverse)
 #_S5 = 5000 and _S6 = 10000
 
 # copied from lines 4962 - 6266 of Caribou_Range_Specific_RSPF.lsl
+# edited for Pagwachuan Fall because DEC was missing but was in tables in report/paper
 inText <- {"#region Model code for Berens Caribou Range
 					If RR1 = 1 Then
 						If gs1.S_area(j) >= Threshold Then	
@@ -518,6 +519,7 @@ inText <- {"#region Model code for Berens Caribou Range
 							
 							#region Code for Fall Use Model
 							logitFA_Use = _
+              (-39.0287 * gs.DEC_S6(j)) + _
 							(-34.2672 * gs.DTN_S6(j)) + _
 							(-14.1546 * gs.MIX_S6(j)) + _
 							(-13.7814 * gs.ST_S6(j)) + _

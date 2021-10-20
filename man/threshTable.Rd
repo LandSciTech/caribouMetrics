@@ -17,11 +17,10 @@ A data frame with 48 rows and 6 variables: \describe{
    both presence and absence} }
 }
 \source{
-Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource 
- selection probability functions for 13 caribou ranges in Northern Ontario.
- Ontario Ministry of Natural Resources and Forestry, Science and Research Branch, 
- Peterborough, ON. Science and Research Internal File Report IFR-01. 
- 42 p. + appends.
+Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
+  C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+  J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+  Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
 }
 \usage{
 threshTable

@@ -12,6 +12,9 @@ A data frame with 30 rows and 2 variables: \describe{
 }
 \source{
 LSL script for work published in:
+ Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+ woodland caribou (Rangifer tarandus caribou) across a gradient of
+ anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
  \url{https://doi.org/10.1139/cjz-2015-0101}
 }
 \usage{

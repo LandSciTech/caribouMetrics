@@ -2,13 +2,13 @@
 % Please edit documentation in R/caribouHabitat.R
 \name{caribouHabitat}
 \alias{caribouHabitat}
-\title{caribouHabitat}
+\alias{caribouHabitat,ANY-method}
+\title{Calculate relative probability of caribou habitat use}
 \source{
-Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource
- selection probability functions for 13 caribou ranges in Northern Ontario.
- Ontario Ministry of Natural Resources and Forestry, Science and Research
- Branch, Peterborough, ON. Science and Research Internal File Report IFR-01.
- 42 p. + appends.
+Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
+  C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+  J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+  Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
 
  Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
  woodland caribou (Rangifer tarandus caribou) across a gradient of
@@ -17,6 +17,16 @@ Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource
 }
 \usage{
 caribouHabitat(landCover, esker, linFeat, projectPoly, caribouRange, ...)
+
+\S4method{caribouHabitat}{ANY}(
+  landCover,
+  esker,
+  linFeat,
+  projectPoly,
+  caribouRange,
+  coefTable = coefTableHR,
+  ...
+)
 }
 \arguments{
 \item{landCover}{filename or RasterLayer. Provincial landcover class}
@@ -38,60 +48,55 @@ to the Range column in the caribouRange data.frame}
 \item{caribouRange}{character or data.frame. If character the range where
 caribou were located. See \code{unique(coefTableHR$Range)} for options. If
 data.frame it must have two columns Range and coefRange. Range is the name
-of the geographical area and is used to link the table the the provided
+of the geographical area and is used to link the table to the provided
 \code{projectPoly} polygons. coefRange is the name of the caribou range that
 the coefficients should be used from.}
 
-\item{natDist}{filename or RasterLayer. Presence or absence of natural
-disturbance, primarily by fire.}
+\item{...}{optional arguments:
+\describe{
+  \item{natDist:}{filename or RasterLayer. Presence or absence of natural 
+  disturbance, primarily by fire. This should reflect cumulative natural 
+  disturbance over the preceding 30 years}
+  \item{anthroDist:}{filename or RasterLayer. Anthropogenic disturbance including 
+  harvest.}
+  \item{eskerSave}{filename to save rasterized esker data.}
+  \item{linFeatSave}{filename to save rasterized linear feature data.}
+  \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
+  used to avoid edge effects? If FALSE, the default, only data from inside the
+  \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
+  the other variables are clipped to the extent of the buffered area. Results
+  are always clipped to the original \code{projectPoly}. It is ideal to set
+  this to TRUE and provide a data set that is larger than the
+  \code{projectPoly} to avoid edge effects.}
+  \item{padFocal}{logical. This value is passed to the pad argument in
+  \code{raster::focal}, if it is FALSE then cells near the edge will return
+  NA, if it is TRUE a value will be returned for each cell that assumes cells
+  outside the input data are 0 for all resource types. This is not a good
+  assumption and should be used with caution.}
+  \item{saveOutput}{character. The filename to save the rasterBrick of habitat
+  use probabilities to. Note this will overwrite any existing files. The .grd
+  format is recommended because it will preserve layer names when the file is
+  reloaded.}
+  \item{winArea}{number. This is the area of the moving window that is used to
+  average proportions of each resource type at broader spatial scales. The
+  Hornseth and Rempel (2016) models used specific window areas which are
+  defined within this package and used as the default. You should only specify
+  a window size if you have good reason.}
+  \item{doScale}{logical. FALSE by default. Set to TRUE only if you have
+  supplied coefficients that were trained on standardized data which will
+  cause the input data to be scaled.}
+  \item{ptDensity}{number. Only used if a list element in linFeat is a raster.
+  See \code{\link{rasterizeLineDensity}}.}
+}}
 
-\item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance including
-harvest. This can have an effect on any type of landcover except water.}
-
-\item{eskerSave}{filename to save rasterized esker data.}
-
-\item{linFeatSave}{filename to save rasterized linear feature data.}
-
-\item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
-used to avoid edge effects? If FALSE, the default, only data from inside the
-\code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
-the other variables are clipped to the extent of the buffered area. Results
-are always clipped to the original \code{projectPoly}. It is ideal to set
-this to TRUE and provide a dataset that is larger than the
-\code{projectPoly} to avoid edge effects.}
-
-\item{padFocal}{logical. This value is passed to the pad argument in
-\code{raster::focal}, if it is FALSE then cells near the edge will return
-NA, if it is TRUE a value will be returned for each cell that assumes cells
-outside the input data are 0 for all resource types. This is not a good
-assumption and should be used with caution.}
-
-\item{saveOutput}{character. The filename to save the rasterBrick of habitat
-use probabilities to. Note this will overwrite any existing files. The .grd
-format is recommended because it will preserve layer names when the file is
-reloaded.}
-
-\item{winArea}{number. This is the area of the moving window that is used to
-average proportions of each resource type at broader spatial scales. The
-Hornseth and Rempel (2016) models used specific window areas which are
-defined within this package and used as the default. You should only specify
-a window size if you have good reason.}
-
-\item{coefTable}{data.frame. Optional table of coefficients to be used in the
-model. Must match the format and naming of \code{coefTableHR}}
-
-\item{doScale}{logical. FALSE by default. Set to TRUE only if you have
-supplied coefficients that were trained on standardized data which will
-cause the input data to be scaled.}
-
-\item{ptDensity}{number. Only used if a list element in linFeat is a raster.
-See \code{\link{rasterizeLineDensity}}.}
+\item{coefTable}{data.frame. table of coefficients to be used in the
+model. Must match the format and naming of the default \code{coefTableHR}}
 }
 \value{
 A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
 }
 \description{
-Calculate the probability of caribou habitat use in spring, summer, fall and
+Calculate the relative probability of caribou habitat use in spring, summer, fall and
 winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
 2016.
 }
@@ -102,7 +107,7 @@ information is the \code{landCover} but this is updated based on disturbance
 information. All data sources can be provided either as filenames or as
 spatial files. If filenames are provided then the \code{landCover} is assumed
 to be the Provincial Landcover for Ontario and is converted to resource types
-using \code{reclassPLC}. The result is a CaribouHabitat object which has
+using \code{\link{reclassPLC}}. The result is a CaribouHabitat object which has
 methods defined for plotting and extracting the results. To update an existing
 CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
 }

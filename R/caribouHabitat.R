@@ -1,8 +1,6 @@
 #' @include AAAClassDefinitions.R
 NULL
 
-#' @name CaribouHabitat
-#' @rdname CaribouHabitat-class
 setMethod(f = "initialize", signature = "CaribouHabitat",
           definition = function(.Object, landCover, esker, 
                                 natDist, anthroDist, 
@@ -20,9 +18,9 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
             return(.Object)
           })
 
-#'caribouHabitat
+#' Calculate relative probability of caribou habitat use
 #'
-#'Calculate the probability of caribou habitat use in spring, summer, fall and
+#'Calculate the relative probability of caribou habitat use in spring, summer, fall and
 #'winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
 #'2016.
 #'
@@ -32,7 +30,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'information. All data sources can be provided either as filenames or as
 #'spatial files. If filenames are provided then the \code{landCover} is assumed
 #'to be the Provincial Landcover for Ontario and is converted to resource types
-#'using \code{reclassPLC}. The result is a CaribouHabitat object which has
+#'using \code{\link{reclassPLC}}. The result is a CaribouHabitat object which has
 #'methods defined for plotting and extracting the results. To update an existing
 #'CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
 #'
@@ -40,10 +38,6 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'@param landCover filename or RasterLayer. Provincial landcover class
 #'@param esker filename, RasterLayer or sf object. Eskers. If it is a
 #'  RasterLayer then it should be esker density in m^2/ha.
-#'@param natDist filename or RasterLayer. Presence or absence of natural
-#'  disturbance, primarily by fire.
-#'@param anthroDist filename or RasterLayer. Anthropogenic disturbance including
-#'  harvest. This can have an effect on any type of landcover except water.
 #'@param linFeat filename, RasterLayer, sf object or a list of these that will
 #'  be combined. Linear features. If it is a RasterLayer then it should be
 #'  linear feature density in m^2/ha. If a RasterLayer is provided as a list
@@ -56,51 +50,58 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'@param caribouRange character or data.frame. If character the range where
 #'  caribou were located. See \code{unique(coefTableHR$Range)} for options. If
 #'  data.frame it must have two columns Range and coefRange. Range is the name
-#'  of the geographical area and is used to link the table the the provided
+#'  of the geographical area and is used to link the table to the provided
 #'  \code{projectPoly} polygons. coefRange is the name of the caribou range that
 #'  the coefficients should be used from.
-#'@param eskerSave filename to save rasterized esker data.
-#'@param linFeatSave filename to save rasterized linear feature data.
-#'@param padProjPoly logical. Should the area around the \code{projectPoly} be
-#'  used to avoid edge effects? If FALSE, the default, only data from inside the
-#'  \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
-#'  the other variables are clipped to the extent of the buffered area. Results
-#'  are always clipped to the original \code{projectPoly}. It is ideal to set
-#'  this to TRUE and provide a dataset that is larger than the
-#'  \code{projectPoly} to avoid edge effects.
-#'@param padFocal logical. This value is passed to the pad argument in
-#'  \code{raster::focal}, if it is FALSE then cells near the edge will return
-#'  NA, if it is TRUE a value will be returned for each cell that assumes cells
-#'  outside the input data are 0 for all resource types. This is not a good
-#'  assumption and should be used with caution.
-#'@param saveOutput character. The filename to save the rasterBrick of habitat
-#'  use probabilities to. Note this will overwrite any existing files. The .grd
-#'  format is recommended because it will preserve layer names when the file is
-#'  reloaded.
-#'@param winArea number. This is the area of the moving window that is used to
-#'  average proportions of each resource type at broader spatial scales. The
-#'  Hornseth and Rempel (2016) models used specific window areas which are
-#'  defined within this package and used as the default. You should only specify
-#'  a window size if you have good reason.
-#'@param coefTable data.frame. Optional table of coefficients to be used in the
-#'  model. Must match the format and naming of \code{coefTableHR}
-#'@param doScale logical. FALSE by default. Set to TRUE only if you have
-#'  supplied coefficients that were trained on standardized data which will
-#'  cause the input data to be scaled.
-#'@param ptDensity number. Only used if a list element in linFeat is a raster.
-#'  See \code{\link{rasterizeLineDensity}}.
-#'
+#'@param coefTable data.frame. table of coefficients to be used in the
+#'   model. Must match the format and naming of the default \code{coefTableHR}
+#'@param ... optional arguments:
+#' \describe{
+#'   \item{natDist:}{filename or RasterLayer. Presence or absence of natural 
+#'   disturbance, primarily by fire. This should reflect cumulative natural 
+#'   disturbance over the preceding 30 years}
+#'   \item{anthroDist:}{filename or RasterLayer. Anthropogenic disturbance including 
+#'   harvest.}
+#'   \item{eskerSave}{filename to save rasterized esker data.}
+#'   \item{linFeatSave}{filename to save rasterized linear feature data.}
+#'   \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
+#'   used to avoid edge effects? If FALSE, the default, only data from inside the
+#'   \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
+#'   the other variables are clipped to the extent of the buffered area. Results
+#'   are always clipped to the original \code{projectPoly}. It is ideal to set
+#'   this to TRUE and provide a data set that is larger than the
+#'   \code{projectPoly} to avoid edge effects.}
+#'   \item{padFocal}{logical. This value is passed to the pad argument in
+#'   \code{raster::focal}, if it is FALSE then cells near the edge will return
+#'   NA, if it is TRUE a value will be returned for each cell that assumes cells
+#'   outside the input data are 0 for all resource types. This is not a good
+#'   assumption and should be used with caution.}
+#'   \item{saveOutput}{character. The filename to save the rasterBrick of habitat
+#'   use probabilities to. Note this will overwrite any existing files. The .grd
+#'   format is recommended because it will preserve layer names when the file is
+#'   reloaded.}
+#'   \item{winArea}{number. This is the area of the moving window that is used to
+#'   average proportions of each resource type at broader spatial scales. The
+#'   Hornseth and Rempel (2016) models used specific window areas which are
+#'   defined within this package and used as the default. You should only specify
+#'   a window size if you have good reason.}
+#'   \item{doScale}{logical. FALSE by default. Set to TRUE only if you have
+#'   supplied coefficients that were trained on standardized data which will
+#'   cause the input data to be scaled.}
+#'   \item{ptDensity}{number. Only used if a list element in linFeat is a raster.
+#'   See \code{\link{rasterizeLineDensity}}.}
+#' }
+#' 
 #'@return A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
 #'
 #'@seealso \code{\link{CaribouHabitat-class}} for information on the object
 #'  returned and \code{\link{updateCaribou}} for updating an existing
 #'  CaribouHabitat object.
 #'
-#'@source Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource
-#'  selection probability functions for 13 caribou ranges in Northern Ontario.
-#'  Ontario Ministry of Natural Resources and Forestry, Science and Research
-#'  Branch, Peterborough, ON. Science and Research Internal File Report IFR-01.
-#'  42 p. + appends.
+#' @source Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
+#'   C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+#'   J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+#'   Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
 #'
 #'  Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
 #'  woodland caribou (Rangifer tarandus caribou) across a gradient of
@@ -111,7 +112,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 setGeneric("caribouHabitat", 
            function(landCover, esker, linFeat, projectPoly, caribouRange, ...) 
              standardGeneric("caribouHabitat"))
-
+#' @rdname caribouHabitat
 setMethod(
   "caribouHabitat", 
   signature(landCover = "ANY"), 

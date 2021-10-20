@@ -1,4 +1,4 @@
-#' Population Growth Model Table for ECCC and Johnson Models
+#' Population growth model table for ECCC and Johnson models
 #'
 #' A table of population growth model coefficients and standard errors or
 #' confidence intervals for the models described in the ECCC Report (2011) and

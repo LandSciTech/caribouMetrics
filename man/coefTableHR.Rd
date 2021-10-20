@@ -5,20 +5,18 @@
 \alias{coefTableHR}
 \title{Model coefficients for caribou ranges}
 \format{
-A data frame with 547 rows and 5 variables: 
-\describe{
+A data frame with 547 rows and 5 variables: \describe{
   \item{Season}{season, one of Spring, Summer, Fall, Winter}
   \item{Variable}{the shortform variable name for this resource type}
   \item{Coefficient}{modelled coefficients} 
   \item{WinArea}{window area for moving window average} 
-  \item{Range}{the caribou range name} }
+  \item{Range}{the caribou range name}}
 }
 \source{
-LSL script for work published in: Rempel, R. and M. Hornseth. 2018.
-  Range-specific seasonal resource selection probability functions for 13
-  caribou ranges in Northern Ontario. Ontario Ministry of Natural Resources
-  and Forestry, Science and Research Branch, Peterborough, ON. Science and
-  Research Internal File Report IFR-01. 42 p. + appends.
+Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
+  C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+  J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+  Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
 }
 \usage{
 coefTableHR

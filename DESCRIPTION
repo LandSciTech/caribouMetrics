@@ -5,23 +5,25 @@ Version: 0.1.0
 Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@canada.ca"),
     person("Sarah", "Endicott", email = "sarah.endicott@canada.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
-    person("Craig", "Simpkins", email = simpkinscraig063@gmail.com, role = "aut"),
-    person("Eliot", "McIntire", email = "eliot.mcintire@canada.ca", role = "aut"),
+    person("Craig", "Simpkins", email = "simpkinscraig063@gmail.com", role = "aut"),
     person("Tati", "Michelleti", email = "tati.micheletti@gmail.com", role = "aut"),
+    person("Eliot", "McIntire", email = "eliot.mcintire@canada.ca", role = "aut"),
     person(given="Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change",
            role = "cph"))
-Description: This is a package in development. bCaribouMetaAnalysisPredictors 
-    function calculates predictors described in Table 52 of Environment Canada 
-    (2011) Scientific Assessment to Inform the Identification of Critical Habitat
-    for Woodland Caribou (Rangifer tarandus caribou), Boreal Population, 
-    in Canada:2011 Update. Ottawa, Ontario. caribouHabitat function implements the 
-    caribou resource selection probability functions described in Rempel, R.
-    and M. Hornseth. 2018. Range-specific seasonal resource selection
-    probability functions for 13 caribou ranges in Northern Ontario.
-    Ontario Ministry of Natural Resources and Forestry, Science and Research Branch, 
-    Peterborough, ON. Science and Research Internal File Report IFR-01. 
-    42 p. + appends.
-License: file LICENSE
+Description: caribouMetrics provides implementations of several different models.
+    Firstly, it implements the caribou resource selection probability functions 
+    described in Hornseth and Rempel (2016) Seasonal resource selection of woodland 
+    caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance.
+    This allows for a spatial prediction of caribou habitat use across 13 caribou ranges
+    in Ontario. The package also includes an implementation of the population and
+    demographic models in Science to inform policy: linking population dynamics 
+    to habitat for a threatened species in Canada by Johnson et. al. (2020) and 
+    the "Environment Canada Scientific Assessment to Inform the Identification of
+    Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal 
+    Population, in Canada 2011 Update" report. These functions allow users to 
+    calculate metrics of disturbance, predict demographic rates for a given level 
+    of disturbance and simulate population growth over time. 
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
@@ -40,11 +42,13 @@ Imports:
     rsyncrosim,
     spdep,
     rgdal,
+    methods,
     exactextractr,
     matrixStats,
     tictoc,
     simstudy,
-    truncdist
+    truncdist,
+    stars
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
@@ -55,7 +59,6 @@ Collate:
     'caribouMetrics.R'
     'checkInputs.R'
     'combineLinFeat.R'
-    'convertRasterToLineSegments.R'
     'data.R'
     'dataPrepFns.R'
     'demographicCoefficients.R'
@@ -72,17 +75,21 @@ Collate:
     'popGrowthTableJohnsonECCC.R'
     'processData.R'
     'rasterizeLineDensity.R'
-    'reclassDistHarv.R'
-    'reclassPLCFRI.R'
+    'reclassDist.R'
+    'reclassPLC.R'
     'results.R'
     'sampleCoefs.R'
     'sampleRates.R'
-    'tmapCatRast.R'
     'updateCaribou.R'
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    tmap,
+    tmaptools,
+    ggplot2,
+    fasterize
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
+URL: https://landscitech.github.io/caribouMetrics

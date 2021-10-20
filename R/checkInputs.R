@@ -5,13 +5,12 @@
 #' Check the inputs that are needed in processData or updateCaribou so the
 #' errors happen before data is processed.
 #'
-#' @param ... other variables passed to caribouHabitat
-#'
+#' @noRd
 
 .checkInputs <- function(caribouRange, winArea, landCover, coefTable) {
-  expectedRanges <- paste0(unique(coefTable$Range), collapse = ", ")
+  expectedRanges <- unique(coefTable$Range)
   
-  if(any(stringr::str_detect(expectedRanges, caribouRange$Range, negate = TRUE))){
+  if(any(!caribouRange$Range %in% expectedRanges)){
     stop("Caribou Range must match one of: ", expectedRanges, call. = FALSE)
   }
   

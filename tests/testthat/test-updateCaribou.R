@@ -99,9 +99,9 @@ test_that("update process result is same with same data", {
                                               linFeat = linFeatDras))
   #TODO: this is different by a small amount but only along the edges. Not sure
   #why but also not very important
-  expect_equal(procedData@habitatUse, 
-               update_data@habitatUse, 
+  expect_equal(procedData@habitatUse,
+               update_data@habitatUse,
                label = "",
                expected.label = "different by a small amount but only along the edges. Not sure why but also not very important")
-
+  
 })

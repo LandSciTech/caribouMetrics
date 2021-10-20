@@ -1,6 +1,6 @@
 #' Functions used for data prep for disturbanceMetrics and caribouHabitat
 #' 
-
+#' @noRd
 prepProjPoly <- function(projectPoly, landCover, winArea, padProjPoly){
   if(st_crs(projectPoly) != st_crs(landCover)){
     projectPoly <- st_transform(projectPoly, crs = st_crs(landCover))

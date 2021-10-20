@@ -2,31 +2,81 @@
 % Please edit documentation in R/popGrowthJohnson.R
 \name{popGrowthJohnson}
 \alias{popGrowthJohnson}
-\title{Implementation of the Johnson 2020 population model}
+\title{Caribou demographic model}
 \usage{
 popGrowthJohnson(
   N,
   numSteps,
-  Rec_bar,
+  R_bar,
   S_bar,
   P_0 = 1,
   P_K = 0.6,
-  alpha = 1,
-  beta = 4,
-  Kmultiplier = 100,
+  a = 1,
+  b = 4,
+  K = 100,
   r_max = 1.3,
-  sexRatio = 0.5,
-  minRec = 0,
-  maxRec = 0.41,
-  minSadF = 0.61,
-  maxSadF = 1,
-  interannualVar = list(Rec_CV = 0.46, S_CV = 0.08696),
+  s = 0.5,
+  l_R = 0,
+  h_R = 0.82,
+  l_S = 0.61,
+  h_S = 1,
+  interannualVar = list(R_CV = 0.46, S_CV = 0.08696),
   probOption = "binomial"
 )
 }
 \arguments{
-\item{probOption}{Choices are "binomial","continuous" or "matchJohnson2020".}
+\item{N}{Number or vector of numbers. Initial population size for one or more
+sample populations.}
+
+\item{numSteps}{Number. Number of years to project.}
+
+\item{R_bar}{Number or vector of numbers. Expected recruitment rate (calf:cow
+ratio) for one or more sample populations.}
+
+\item{S_bar}{Number or vector of numbers. Expected adult female survival for
+one or more sample populations.}
+
+\item{P_0}{Number. Maximum recruitment multiplier.}
+
+\item{P_K}{Number. Recruitment multiplier at carrying capacity.}
+
+\item{a}{Number. Density dependence shape parameter.}
+
+\item{b}{Number. Allee effect parameter.}
+
+\item{K}{Number. Carrying capacity multiplier.}
+
+\item{r_max}{Number. Maximum population growth rate.}
+
+\item{s}{Number. Sex ratio.}
+
+\item{l_R}{Number. Minimum recruitment.}
+
+\item{h_R}{Number. Maximum recruitment.}
+
+\item{l_S}{Number. Minimum survival.}
+
+\item{h_S}{Number. Maximum survival.}
+
+\item{interannualVar}{list or logical. List containing interannual
+variability parameters. These can be either coefficients of variation
+(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to
+\code{FALSE} ignore interannual variability.}
+
+\item{probOption}{Character. Choices are "binomial","continuous" or
+"matchJohnson2020". See description for details.}
+}
+\value{
+A data.frame of population size (N) and average growth rate (lambda)
+  projections for each sample population.
 }
 \description{
-Implementation of the Johnson 2020 population model
+Given default parameter values, this is an implementation of the 2-stage
+population growth model described in Dyson et al. (in Prep). Set
+\code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson
+et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar =
+FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
+model without interannual variability, density dependence, or discrete
+numbers of animals used by Stewart et al. (in prep). See 
+\code{vignette("caribouDemography")} for additional details and examples.
 }

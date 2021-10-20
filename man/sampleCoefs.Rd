@@ -2,7 +2,7 @@
 % Please edit documentation in R/sampleCoefs.R
 \name{sampleCoefs}
 \alias{sampleCoefs}
-\title{Sample Coefficients}
+\title{Sample coefficients}
 \usage{
 sampleCoefs(coefTable, replicates)
 }

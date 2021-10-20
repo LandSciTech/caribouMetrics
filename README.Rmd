@@ -18,14 +18,9 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-caribouMetrics is built off of two different models, one calculates predictors
-described in Table 52 of Environment Canada (2011) Scientific Assessment to
-Inform the Identification of Critical Habitat for Woodland Caribou and the other
+caribouMetrics provides implementations of several different models. Firstly, it
 implements the caribou resource selection probability functions described in
-Rempel, R. and M. Hornseth. 2018. Range-specific seasonal resource selection
-probability functions for 13 caribou ranges in Northern Ontario. The second part
-of the package is the actively developed part and the rest of the README focuses
-on it.
+Hornseth and Rempel (2016) *Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance*. This allows for a spatial prediction of caribou habitat use across 13 caribou ranges in Ontario. The package also includes an implementation of the population and demographic models in *Science to inform policy: linking population dynamics to habitat for a threatened species in Canada* by Johnson et. al. (2020) and the "Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update" report. These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.  
 
 ## Installation
 
@@ -37,38 +32,78 @@ devtools::install_github("LandSciTech/caribouMetrics")
 ```
 ## Example
 
-This is a basic example which shows you how to use the primary function:
+This is a basic example which shows you how to use the main functions:
 
 ```{r example}
-#library(caribouMetrics)
-devtools::load_all()
-pthBase <- "tests/testthat/data/"
+library(caribouMetrics)
+
+pthBase <- system.file("extdata", package = "caribouMetrics")
 
 # load example data
-plcD = raster(paste0(pthBase, "plc", ".tif"))
-eskerDras = raster(paste0(pthBase, "eskerTif", ".tif"))
-eskerDshp = st_read(paste0(pthBase, "esker", ".shp"), quiet = TRUE)
-friD = raster(paste0(pthBase, "fri", ".tif"))
-ageD = raster(paste0(pthBase, "age", ".tif"))
-natDistD = raster(paste0(pthBase, "natDist", ".tif"))
-anthroDistD = raster(paste0(pthBase, "anthroDist", ".tif"))
-harvD = raster(paste0(pthBase, "harv", ".tif"))
-linFeatDras = raster(paste0(pthBase, "linFeatTif", ".tif"))
-projectPolyD = st_read(paste0(pthBase, "projectPoly", ".shp"), quiet = TRUE)
+landCoverD <- raster::raster(file.path(pthBase, "landCover.tif")) 
+  # convert PLC classes to resource types used in the model 
+landCoverD <- reclassPLC(landCoverD)
+eskerDras <- raster::raster(file.path(pthBase, "eskerTif.tif"))
+eskerDshp <- sf::read_sf(file.path(pthBase, "esker.shp"))
+natDistD <- raster::raster(file.path(pthBase, "natDist.tif"))
+anthroDistD <-raster::raster(file.path(pthBase, "anthroDist.tif"))
+linFeatDras <- raster::raster(file.path(pthBase, "linFeatTif.tif"))
+projectPolyD <- sf::read_sf(file.path(pthBase, "projectPoly.shp"))
 
 # Calculate habitat use
 carHab1 <- caribouHabitat(
-  plc = plcD, esker = eskerDras, fri = friD, age = ageD, natDist = natDistD, 
-  anthroDist = anthroDistD, harv = harvD,
-  linFeat = linFeatDras, projectPoly = projectPolyD,
-  friLU = read.csv(paste0(pthBase, "friLU", ".csv"), stringsAsFactors = FALSE) %>%
-    mutate(RFU = toupper(RFU) %>% stringr::str_replace("HRDMW", "HRDMX")),
-  caribouRange = "Churchill", 
-  winArea = 500
+  landCover = landCoverD,
+  esker = eskerDras, 
+  natDist = natDistD, 
+  anthroDist = anthroDistD, 
+  linFeat = linFeatDras, 
+  projectPoly = projectPolyD,
+  caribouRange = "Churchill"
 )
 
 # plot the results
 plot(carHab1)
+
+# calculate disturbance 
+disturb <- disturbanceMetrics(landCover = landCoverD,
+                              linFeat = linFeatDras,  
+                              natDist = natDistD,
+                              projectPoly = projectPolyD)
+
+results(disturb)
+
+# Calculate demographic rates
+demCoefs <- demographicCoefficients(replicates = 10)
+
+demRates <- demographicRates(covTable = results(disturb),
+                             popGrowthPars = demCoefs)
+demRates
+
+# Simulate population growth
+popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
+                            S_bar = demRates$S_bar)
+
+popGrow
+
 ```
 
-More detailed examples are provided in the vignettes/overall_vignette.Rmd and in scripts/notesOnHandRModel.Rmd
+More detailed examples are provided in the vignettes.
+
+# References
+
+ECCC. 2011. Scientific assessment to inform the identification of critical
+habitat for woodland caribou (*Rangifer tarandus caribou*), boreal population, in
+Canada. Canadian Wildlife Service, Ottawa.
+<http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf>.
+Accessed 26 Mar 2021.
+
+Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C.
+and McLoughlin, P.D., 2020. Science to inform policy: linking population
+dynamics to habitat for a threatened species in Canada. Journal of Applied
+Ecology, 57(7), pp.1314-1327.
+<https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637>
+
+Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+woodland caribou (Rangifer tarandus caribou) across a gradient of
+anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+https://doi.org/10.1139/cjz-2015-0101

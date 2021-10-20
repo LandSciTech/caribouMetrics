@@ -6,11 +6,13 @@
 #' (DTN). 
 #' 
 #' 
-#' @param landCover 
-#' @param anthroDist 
-#' @param natDist 
+#' @param landCover landCover raster
+#' @param anthroDist binary raster
+#' @param natDist binary raster
+#' @param tmplt template
 #' 
-#' @export
+#' @noRd
+
 
 applyDist <- function(landCover, natDist, anthroDist, tmplt){
   # check anthroDist and natDist are real if not make dummy

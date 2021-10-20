@@ -1,51 +1,79 @@
-#' Implementation of the Johnson 2020 population model
+#' Caribou demographic model
 #'
-#' @param N
-#' @param numSteps
-#' @param Rec_bar
-#' @param S_bar
-#' @param P_0
-#' @param P_K
-#' @param alpha
-#' @param beta
-#' @param Kmultiplier
-#' @param r_max
-#' @param sexRatio
-#' @param interannualVar
-#' @param probOption Choices are "binomial","continuous" or "matchJohnson2020".
-#' 
+#' Given default parameter values, this is an implementation of the 2-stage
+#' population growth model described in Dyson et al. (in Prep). Set
+#' \code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson
+#' et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar =
+#' FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
+#' model without interannual variability, density dependence, or discrete
+#' numbers of animals used by Stewart et al. (in prep). See 
+#' \code{vignette("caribouDemography")} for additional details and examples.
+#'
+#' @param N Number or vector of numbers. Initial population size for one or more
+#'   sample populations.
+#' @param numSteps Number. Number of years to project.
+#' @param R_bar Number or vector of numbers. Expected recruitment rate (calf:cow
+#'   ratio) for one or more sample populations.
+#' @param S_bar Number or vector of numbers. Expected adult female survival for
+#'   one or more sample populations.
+#' @param P_0 Number. Maximum recruitment multiplier.
+#' @param P_K Number. Recruitment multiplier at carrying capacity.
+#' @param a Number. Density dependence shape parameter.
+#' @param b Number. Allee effect parameter.
+#' @param K Number. Carrying capacity multiplier.
+#' @param r_max Number. Maximum population growth rate.
+#' @param s Number. Sex ratio.
+#' @param l_R Number. Minimum recruitment.
+#' @param h_R Number. Maximum recruitment.
+#' @param l_S Number. Minimum survival.
+#' @param h_S Number. Maximum survival.
+#' @param interannualVar list or logical. List containing interannual
+#'   variability parameters. These can be either coefficients of variation
+#'   (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to
+#'   \code{FALSE} ignore interannual variability.
+#' @param probOption Character. Choices are "binomial","continuous" or
+#'   "matchJohnson2020". See description for details.
+#'
+#' @return A data.frame of population size (N) and average growth rate (lambda)
+#'   projections for each sample population.
+#'
+#'
 #' @export
 popGrowthJohnson <- function(N,
                              numSteps,
-                             Rec_bar,
+                             R_bar,
                              S_bar,
                              P_0 = 1,
                              P_K = 0.6,
-                             alpha = 1,
-                             beta = 4,
-                             Kmultiplier = 100,
+                             a = 1,
+                             b = 4,
+                             K = 100,
                              r_max = 1.3,
-                             sexRatio=0.5,
-                             minRec=0,
-                             maxRec=0.41,
-                             minSadF=0.61,
-                             maxSadF=1,
-                             interannualVar = list(Rec_CV=0.46,S_CV=0.08696),
+                             s=0.5,
+                             l_R=0,
+                             h_R=0.82,
+                             l_S=0.61,
+                             h_S=1,
+                             interannualVar = list(R_CV=0.46,S_CV=0.08696),
                              probOption="binomial"){
   rr=data.frame(N=N)
-  Rec_bar[Rec_bar<0]=0
+  R_bar[R_bar<0]=0
   S_bar[S_bar<0]=0
-
-  if(!is.element("Rec_phi",names(interannualVar))){
-    Rec_bar=sexRatio*Rec_bar 
+  h_R = s*h_R
+  l_R = s*l_R
+  
+  if(!is.element("R_phi",names(interannualVar))){
+    R_bar=s*R_bar 
   }else{
     #Phi is precision of calf cow ratio, not recruitment.
-    minRec=minRec/sexRatio
-    maxRec=maxRec/sexRatio
+    l_R=l_R/s
+    h_R=h_R/s
   }
+  
   if(probOption=="matchJohnson2020"){
     roundDigits=0
     doBinomial=F
+    a = a+1e-6
   }else{
     if(probOption=="continuous"){
       roundDigits=100
@@ -54,26 +82,28 @@ popGrowthJohnson <- function(N,
       roundDigits=0
       doBinomial=T
     }
-    rK <- Kmultiplier * N 
+    rK <- K * N 
+  }
+  
+  if(a<=0){
+    stop("a should be greater than 0")
   }
   
   for(t in 1:numSteps){
     print(paste("projecting step ",t))
-    if(is.null(interannualVar)||is.na(interannualVar)||((length(interannualVar)==1)&&!interannualVar)){
-      Rec_t= Rec_bar
+    if(is.null(interannualVar)||any(is.na(interannualVar))||((length(interannualVar)==1)&&!interannualVar)){
+      R_t= R_bar
       S_t = S_bar
     }else{
-      Rec_t = addInterannualVar(Rec_bar,interannualVar,type="Rec",minV =minRec,maxV=maxRec)  
-      S_t = addInterannualVar(S_bar,interannualVar,type="S",minV =minSadF,maxV=maxSadF)      
+      R_t = addInterannualVar(R_bar,interannualVar,type="R",minV =l_R,maxV=h_R)  
+      S_t = addInterannualVar(S_bar,interannualVar,type="S",minV =l_S,maxV=h_S)      
     }
-
-    if(is.element("Rec_phi",names(interannualVar))){
-      Rec_t=sexRatio*Rec_t 
+    if(is.element("R_phi",names(interannualVar))){
+      R_t=s*R_t 
     }  
     
     Ntm1=N
     
-    #Note: following SpaDES code from ECCC_CaribouPopnProjections.Rmd
     if(doBinomial){
       n_deaths <- rbinom(length(N),N,(1 - S_t))
     }else{
@@ -83,21 +113,24 @@ popGrowthJohnson <- function(N,
     surviving_adFemales <- N - n_deaths
 
     if(probOption=="matchJohnson2020"){
-      rK <- Kmultiplier * N 
+      rK <- K * N 
     }
 
-    n_recruitsUnadjDD <- surviving_adFemales * Rec_t 
+    n_recruitsUnadjDD <- surviving_adFemales * R_t 
 
-    adjDDRtProportion <- (P_0 -
-                            ((P_0 - P_K) *
-                               (surviving_adFemales/rK)^beta)) * 
-      surviving_adFemales/(surviving_adFemales+1e-6 + alpha)
-    
-    adjDDRtProportion[adjDDRtProportion<0] <- 0
-    adjDDRtProportion[adjDDRtProportion>1] <- 1
-    
+    if(K){
+      adjDDRtProportion <- (P_0 -
+                              ((P_0 - P_K) *
+                                 (surviving_adFemales/rK)^b)) * 
+        surviving_adFemales/(surviving_adFemales + a)
+      
+      adjDDRtProportion[adjDDRtProportion<0] <- 0
+      adjDDRtProportion[adjDDRtProportion>1] <- 1
+    }else{
+      adjDDRtProportion=1
+    }
     if(doBinomial){
-      n_recruits <- rbinom(length(N),surviving_adFemales,Rec_t*adjDDRtProportion)
+      n_recruits <- rbinom(length(N),surviving_adFemales,R_t*adjDDRtProportion)
     }else{
       n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits) 
     }  

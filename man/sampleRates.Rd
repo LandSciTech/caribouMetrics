@@ -2,7 +2,7 @@
 % Please edit documentation in R/sampleRates.R
 \name{sampleRates}
 \alias{sampleRates}
-\title{Sample Demographic Rates}
+\title{Sample demographic rates}
 \usage{
 sampleRates(
   covTable,
@@ -12,8 +12,7 @@ sampleRates(
   resVar,
   ignorePrecision,
   returnSample,
-  useQuantiles,
-  interannualVar,
+  quantilesToUse = NULL,
   predInterval = c(0.025, 0.975)
 )
 }
@@ -36,7 +35,7 @@ currently, "ECCC" for the model used in the ECCC Report (2011) and
 "recruitment"}
 
 \item{ignorePrecision}{logical. Should the precision of the model be used if
-it is available? When precision is used variance among populations around the
+it is available? When precision is used variation among populations around the
 National mean responses is considered in addition to the uncertainty about 
 the coefficient estimates.}
 
@@ -45,33 +44,42 @@ scenarios rows. If FALSE the returned data.frame has one row per scenario
 and additional columns summarizing the variation among replicates. See
 Value for details.}
 
-\item{useQuantiles}{logical or numeric vector. Only relevant when
-\code{ignorePrecision = FALSE} and \code{returnSample = TRUE}. If
-\code{useQuantiles = TRUE}, each replicate population is assigned to a
-quantile of the distribution of variation around the expected values, and
-remains in that quantile as covariates change. If \code{useQuantiles} is a
-vector it is used as the quantiles. If \code{useQuantiles = FALSE},
-sampling is done independently for each combination of scenario and
-replicate, so the value for a particular replicate population in one
+\item{quantilesToUse}{numeric vector of length \code{coefSamples}. Only relevant when
+\code{ignorePrecision = FALSE}. Each replicate population is assigned to a quantile 
+of the distribution of variation around the expected values, and remains in that 
+quantile as covariates change. If NULL sampling is done independently for each combination 
+of scenario and replicate, so the value for a particular replicate population in one
 scenario is unrelated to the values for that replicate in other scenarios.
-If interested in projecting impacts of changing disturbance on the
-trajectories of replicate populations set \code{useQuantiles = TRUE}.}
+Useful for projecting impacts of changing disturbance on the
+trajectories of replicate populations.}
 
-\item{interannualVar}{numeric or FALSE. Should the interannual variation in
-population growth be considered? If numeric it is the precision of the
-sample taken from the beta distribution.  TO DO: either remove this
-option from demographicParameters function, or update to align with
-popGrowthJohnson.}
-
-\item{predInterval}{numeric vector with length 2. The prediction interval to
-use the default is 95% ie(\code{c(0.025,0.975)})}
+\item{predInterval}{numeric vector with length 2. The default 95\% interval is
+(\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and \code{quantilesToUse = NULL}.}
 }
 \value{
-
+A data.frame of predictions. The data.frame includes all columns in
+  \code{covTable} with additional columns depending on \code{returnSample}.
+  
+  If \code{returnSample = FALSE} the number of rows is the same as the 
+  number of rows in \code{covTable}, additional columns are:
+  \describe{
+    \item{"average"}{The mean estimated values of the response variable)}
+    \item{"stdErr"}{Standard error of the estimated values}
+    \item{"PIlow"/"PIhigh"}{If \code{quantilesToUse = NULL} these are the percentiles given by predInterval. 
+      If using quantiles, maximum and minimum values are returned.}
+  } 
+  If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
+   replicates} additional columns are:
+  \describe{
+    \item{"scnID"}{A unique identifier for scenarios provided in
+       \code{covTable}}
+    \item{"replicate"}{A replicate identifier, unique within each scenario}
+    \item{value}{The expected values of the response variable}
+  }
 }
 \description{
 Sample expected survival or recruitment rates based on samples of coefficient
-values and optionally the model precision and interannual variation.
+values and optionally the model precision.
 }
 \details{
 \code{coefSamples} and \code{coefValues} can be created with

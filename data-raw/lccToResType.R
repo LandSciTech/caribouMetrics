@@ -1,5 +1,5 @@
 ## code to prepare `lccToResType` dataset goes here
-
+# not currently in use but keep this in case we want to use FRI data again
 CON_ls <- expand.grid(PLCCode=c(1,6,7),ResourceType="CON")
 DEC_ls <- expand.grid(PLCCode=c(2,11,12),ResourceType="DEC")
 DTN_ls <- expand.grid(PLCCode=c(34,35),ResourceType="DTN")
