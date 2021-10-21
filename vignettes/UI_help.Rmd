@@ -15,7 +15,9 @@ knitr::opts_chunk$set(
 ```
 ## Introduction
 
-This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the [`caribouMetrics`](https://landscitech.github.io/caribouMetrics/) package. First we provide links between the options exposed in the UI and the `caribouMetrics` function documentation. 
+This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the [`caribouMetrics`](https://landscitech.github.io/caribouMetrics/) package. There are vignettes available for the [caribou habitat](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html) and [demographic](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html) models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) [Johnson et. al. (2020)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637) and [ECCC (2011)](http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf)
+
+Below we provide links between the options exposed in the UI and the `caribouMetrics` function documentation. 
 
 ## Documenting model options
 By right clicking a scenario you can access the scenario properties. The Caribou Metrics tab has options that can be set for the models. The table below shows the option from the UI, the corresponding argument name in `caribouMetrics`, and the names of the function in `caribouMetrics` that uses that argument. Clicking the function name will take you to the documentation for that function. You can read the description at the top of the page to learn what the function does and then find the argument name to read its definition. 
