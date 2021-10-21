@@ -73,18 +73,8 @@ demographicCoefficients <- function(replicates,
          "and recruitmentModelNumber must have length 1", call. = FALSE)
   }
   
-  if(length(useQuantiles) == 2){
-    if(!all(min(useQuantiles) >= 0, max(useQuantiles) <= 1)){
-      stop("useQuantiles must be between 0 and 1")
-    }
-    quantsToUse <- useQuantiles
-    useQuantiles <- TRUE
-  } else if(length(useQuantiles) == 1){
-    quantsToUse <- c(0.025, 0.975)
-  } else {
-    stop("useQuantiles must have length 1 or 2")
-  }
-  
+  quantsToUse <- prepQuantiles(useQuantiles)
+
   populationGrowthTable <- data.table::data.table(populationGrowthTable)
   
   DT_S <- getCoefs(populationGrowthTable, 
@@ -101,7 +91,7 @@ demographicCoefficients <- function(replicates,
   
   coefSamples_R <- sampleCoefs(DT_R, replicates)
   
-  if(useQuantiles){
+  if(!is.null(quantsToUse)){
   coefSamples_S$quantiles <- sample(getQuantiles(nrow(coefSamples_S$coefSamples),
                                                  low = quantsToUse[1],
                                                  high = quantsToUse[2]), 
@@ -119,4 +109,26 @@ demographicCoefficients <- function(replicates,
 
 getQuantiles<-function(x,low=0.025,high=0.975){
   return(low+(seq(0,x-1)/(x-1))*(high-low))
+}
+
+prepQuantiles <- function(useQuantiles, quantilesIn = NULL){
+  if(length(useQuantiles) == 2){
+    if(!all(min(useQuantiles) >= 0, max(useQuantiles) <= 1)){
+      stop("useQuantiles must be between 0 and 1")
+    }
+    if(!is.null(quantilesIn)){
+      warning("popGrowthPars contains quantiles so they are used and useQuantiles is ignored",
+              call. = FALSE)
+    }
+    quantsToUse <- useQuantiles
+  } else if(length(useQuantiles) == 1){
+    if(useQuantiles){
+      quantsToUse <- c(0.025, 0.975)
+    } else {
+      quantsToUse <- NULL
+    }
+  } else {
+    stop("useQuantiles must have length 1 or 2")
+  }
+  return(quantsToUse)
 }

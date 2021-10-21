@@ -121,6 +121,12 @@ setMethod(
 
     dots <- list(...)
     
+    if(!is.null(dots$saveOutput)){
+      if(!dir.exists(dirname(dots$saveOutput))){
+        stop("saveOutput directory does not exist: ", saveOutput)
+      }
+    }
+    
     # make sure caribouRange is a dataframe
     if(!inherits(caribouRange, "data.frame")){
       caribouRange <- data.frame(Range = caribouRange, 
