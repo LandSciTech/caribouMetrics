@@ -73,6 +73,10 @@ carHab1 <- caribouHabitat(
 
 # plot the results
 plot(carHab1)
+#> Registered S3 methods overwritten by 'stars':
+#>   method             from
+#>   st_bbox.SpatRaster sf  
+#>   st_crs.SpatRaster  sf
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
@@ -98,13 +102,13 @@ demCoefs <- demographicCoefficients(replicates = 10)
 
 demRates <- demographicRates(covTable = results(disturb),
                              popGrowthPars = demCoefs)
-#> Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.03 sec elapsed
-#> Elapsed time for caribou prediction for recruitment for Johnson:: 0.01 sec elapsed
+#> Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.36 sec elapsed
+#> Elapsed time for caribou prediction for recruitment for Johnson:: 0 sec elapsed
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.04680671
-#>     S_PIlow  S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7796476 0.8927702 0.1813372 0.1363773 0.09102343 0.5044036
+#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.05409265
+#>    S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
+#> 1 0.739131 0.9252582 0.1813372 0.09270282 0.04062846 0.3630453
 
 # Simulate population growth
 popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
@@ -132,7 +136,7 @@ popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar,
 
 popGrow
 #>     N    lambda
-#> 1 369 0.9191211
+#> 1 368 0.9189992
 ```
 
 More detailed examples are provided in the vignettes.
@@ -155,3 +159,15 @@ Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
 woodland caribou (Rangifer tarandus caribou) across a gradient of
 anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 <https://doi.org/10.1139/cjz-2015-0101>
+
+## License
+
+caribouMetrics - Terms and Condition of Use
+
+Unless otherwise noted, source code of the `caribouMetrics` R package is
+covered under Crown Copyright, Government of Canada, and distributed
+under the GPL3 license.
+
+Copyright (C) Her Majesty the Queen in Right of Canada as represented by
+the Minister of the Environment 2021/(C) Sa Majesté la Reine du chef du
+Canada représentée par le ministre de l’Environnement 2021.
