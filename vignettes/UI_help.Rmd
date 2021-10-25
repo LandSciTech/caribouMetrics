@@ -19,19 +19,171 @@ This vignette is directed at users of the SyncroSim user interface for integrati
 
 Below we provide links between the options exposed in the UI and the `caribouMetrics` function documentation. 
 
-## Documenting model options
-By right clicking a scenario you can access the scenario properties. The Caribou Metrics tab has options that can be set for the models. The table below shows the option from the UI, the corresponding argument name in `caribouMetrics`, and the names of the function in `caribouMetrics` that uses that argument. Clicking the function name will take you to the documentation for that function. You can read the description at the top of the page to learn what the function does and then find the argument name to read its definition. 
+## Documentation for model options
+By right clicking a scenario you can access the scenario properties. The Caribou Metrics tab has options that can be set for the models. The table below shows the option from the UI, the corresponding argument name in `caribouMetrics`, and the names of the function(s) in `caribouMetrics` that use that argument. Clicking the function name will take you to the documentation for that function. You can read the description at the top of the page to learn what the function does and then find the argument name to read its definition. 
 
-| UI option| caribouMetrics argument| Function|
-|-----------|------------------------|----------------------|
-|Caribou Range |caribouRange |`caribouHabitat()`|
+UI option|caribouMetrics argument|Function|Notes|
+|------------------------|-------------------|------------------|----------------|
+|**Tab: Caribou Range** 
+|Caribou Range Name and Coeff Range Name |caribouRange |`caribouHabitat()`|
+|Caribou Range Name|projectPoly |`caribouHabitat()` and `disturbanceMetrics()`|
+|**Tab:Caribou Model Options**
 |ECCC Buffer Width |bufferWidth |`disturbanceMetrics()`|
 |Project Polygon Padding|padProjPoly|`caribouHabitat()`|
 |Focal Padding |padFocal |`caribouHabitat()` and `disturbanceMetrics()`|
+|Number of Demographic Trajectories |replicates|`demographicCoefficients()`|
+|Demographic Model Version |modelVersion |`demographicCoefficients()` |
+|Survival Model Number|survivalModelNumber |`demographicCoefficients()` |
+|Recruitment Model Number|recruitmentModelNumber |`demographicCoefficients()` |
+|Initial Population Size |N |`popGrowthJohnson()` |
+|P_0: Maximum recruitment multiplier|P_0 |`popGrowthJohnson()` |
+|P_K: Recruitment multiplier at carrying capacity|P_K |`popGrowthJohnson()` |
+|a: Density dependence shape parameter|a |`popGrowthJohnson()` |
+|b: Allee effect parameter|b |`popGrowthJohnson()` |
+|K: Carrying capacity multiplier|K |`popGrowthJohnson()` |
+|r_max: Maximum population growth rate|r_max |`popGrowthJohnson()` |
+|s: Sex ratio|s |`popGrowthJohnson()` |
+|l_R: Minimum recruitment|l_R |`popGrowthJohnson()` |
+|h_R: Maximum recruitment|h_R |`popGrowthJohnson()` |
+|l_S: Minimum survival|l_S |`popGrowthJohnson()` |
+|h_S: Maximum survival|h_S |`popGrowthJohnson()` |
+|Interannual Variation|interannualVar |`popGrowthJohnson()` |
+|probOption|probOption |`popGrowthJohnson()` |
+|**Tab: Raster Data**
+|Harvest| anthroDist |`caribouHabitat()` |
+| Anthropogenic Disturbance| anthroDist |`caribouHabitat()` |
+| Natural Disturbances| natDist |`caribouHabitat()` |
+| Provincial Land Cover| landCover |`caribouHabitat()` |
+|**Tab: Polygon Data**
+|Ranges|projectPoly|`caribouHabitat()` and `disturbanceMetrics()`|This .shp file can include multiple range polygons and the ones to use will be selected based on the Caribou Range Name provided|
+|Eskers|esker|`cariouHabitat()`|
+|Linear Features|linFeat|`cariouHabitat()`|
 
-
-
+## Set up a new SyncroSim Library
 
 ```{r setup}
-library(caribouMetrics)
+library(rsyncrosim)
+
+rootPth <- system.file("extdata", package = "caribouMetrics")
+
+dir.create(file.path(rootPth, "demoSSimLib"))
+
+cDir <- file.path(rootPth, "demoSSimLib")
+
+libName <-  "demoSSimLib"
+
+# Make plc have expected classes ROFsim TODO is fix this 
+plcRas <- raster::raster(file.path(rootPth, "landCover.tif"))
+plcRas[1,1] <- 29
+raster::writeRaster(plcRas, file.path(rootPth, "landCover.tif"), 
+                    overwrite = TRUE)
+
+#delete(paste0(cDir,"/",libName,".ssim"),force=T)
+
+cLib <- ssimLibrary(paste0(cDir, "/", libName), package = "ROFSim")
+
+cProj <- project(cLib, "Demo")
+
+datasheet(cProj)
+
+#TO DO: extract this info from input range map
+cSheet <- "ROFSim_CaribouRange"
+cc <- data.frame(Name = c("James Bay", "Missisa", "Ozhiski", "Nipigon",
+                          "Pagwachuan"))
+saveDatasheet(cProj, cc, name = cSheet)
+datasheet(cProj, cSheet)
+
+# Try without SpaDES stuff
+# cSheet="ROFSim_SpaDESSimObject"
+# cc=data.frame(Name=c("burnMap","biomassMap","rstLCC","standAgeMap"),Description=c("cumulative burn map","total biomass (g/m^2) filtered by cohortData","Map of land cover classes","Map of time since transition"))
+# saveDatasheet(cProj,cc,name=cSheet)
+# datasheet(cProj,cSheet)
+
+cSheet <- "ROFSim_Rasters"
+cc <- data.frame(Name = c("Harvest", "Anthropogenic Disturbance",
+                          "Natural Disturbance", "Provincial Land Cover"))
+#cc$SpaDESSimObject[cc$Name == "Stand Age"] <- "standAgeMap"
+saveDatasheet(cProj, cc, name = cSheet)
+datasheet(cProj, cSheet, optional = TRUE)
+
+############
+#scenarios - run control
+rcScnS <- scenario(cProj, "Run Control 2020, 2100")
+
+cSheet <- "ROFSim_RunControl"
+cc <- data.frame(MinimumIteration = 1, MaximumIteration = 2, 
+                 MinimumTimestep = 2020, MaximumTimestep = 2100, 
+                 OutputFrequency = 10)
+saveDatasheet(rcScnS, cc, name = cSheet)
+datasheet(rcScnS, cSheet, optional = TRUE)
+
+rcScn <- scenario(cProj, "Run Control 2020")
+cSheet <- "ROFSim_RunControl"
+cc <- data.frame(MinimumIteration = 1, MaximumIteration = 1,
+                 MinimumTimestep = 2020, MaximumTimestep = 2020)
+saveDatasheet(rcScn, cc, name = cSheet)
+datasheet(rcScn, cSheet, optional = TRUE)
+
+
+############
+#scenarios - caribou - current
+
+cbScn <- scenario(cProj, "Caribou - current")
+
+cSheet <- "core_Pipeline"
+cc <- data.frame(StageNameID = "Caribou Habitat", RunOrder = 1)
+saveDatasheet(cbScn, cc, name = cSheet)
+datasheet(cbScn, cSheet)
+
+cSheet <- "ROFSim_RunCaribouRange"
+cc <- data.frame(Range = "Nipigon", CoeffRange = "Nipigon")
+saveDatasheet(cbScn, cc, name = cSheet)
+datasheet(cbScn, cSheet)
+
+cSheet <- "ROFSim_CaribouDataSource"
+cc <- data.frame(LandCoverRasterID = "Provincial Land Cover", 
+                 ProjectShapeFileID = "Ranges",
+                 EskerShapeFileID = "Eskers",
+                 LinearFeatureShapeFileID = "Linear Features",
+                 NaturalDisturbanceRasterID = "Natural Disturbance", 
+                 HarvestRasterID = "Harvest", 
+                 AnthropogenicRasterID = "Anthropogenic Disturbance")
+saveDatasheet(cbScn, cc, name = cSheet)
+datasheet(cbScn, cSheet)
+
+cSheet <- "ROFSim_CaribouModelOptions"
+cc <- data.frame(RunDistMetrics = TRUE, RunCaribouHabitat = TRUE, 
+                 RunDemographicModel = TRUE, padProjPoly = TRUE)
+saveDatasheet(cbScn, cc, name = cSheet)
+datasheet(cbScn, cSheet)
+
+cSheet <- "ROFSim_RasterFile"
+cc <- data.frame(RastersID = "Natural Disturbance", 
+                 Filename = file.path(rootPth, "natDist.tif"))
+cc <- rbind(cc, data.frame(RastersID = "Harvest", 
+                           Filename = file.path(rootPth, "anthroDist.tif")))
+cc <- rbind(cc, data.frame(RastersID = "Provincial Land Cover", 
+                           Filename = file.path(rootPth, "landCover.tif")))
+saveDatasheet(cbScn, cc, name = cSheet, append = FALSE)
+datasheet(cbScn, cSheet)
+
+cSheet <- "ROFSim_ExternalFile"
+cc <- data.frame(PolygonsID = "Eskers", File = file.path(rootPth, "esker.shp"))
+cc <- rbind(cc, data.frame(PolygonsID = "Linear Features", 
+                           File = file.path(rootPth, "rail.shp")))
+cc <- rbind(cc, data.frame(PolygonsID = "Linear Features",
+                           File = file.path(rootPth, "utilities.shp")))
+cc <- rbind(cc, data.frame(PolygonsID = "Ranges", 
+                           File = file.path(rootPth, "projectPoly.shp")))
+cc <- rbind(cc, data.frame(PolygonsID = "Linear Features", 
+                           File = file.path(rootPth, "roads.shp")))
+saveDatasheet(cbScn, cc, name = cSheet, append = FALSE)
+datasheet(cbScn, cSheet)
+
+dependency(cbScn, rcScn)
+datasheet(cbScn)
+
+cbRes <- run(cbScn)
+
 ```
+Works but the maps and charts don't show up, not sure how to make those
