@@ -97,43 +97,419 @@
 <p>This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the <a href="https://landscitech.github.io/caribouMetrics/"><code>caribouMetrics</code></a> package. There are vignettes available for the <a href="https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html">caribou habitat</a> and <a href="https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html">demographic</a> models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: <a href="https://doi.org/10.1139/cjz-2015-0101">Hornseth and Rempel (2016)</a> <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637">Johnson et. al. (2020)</a> and <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf">ECCC (2011)</a></p>
 <p>Below we provide links between the options exposed in the UI and the <code>caribouMetrics</code> function documentation.</p>
 </div>
-<div id="documenting-model-options" class="section level2">
+<div id="documentation-for-model-options" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documenting-model-options" class="anchor"></a>Documenting model options</h2>
-<p>By right clicking a scenario you can access the scenario properties. The Caribou Metrics tab has options that can be set for the models. The table below shows the option from the UI, the corresponding argument name in <code>caribouMetrics</code>, and the names of the function in <code>caribouMetrics</code> that uses that argument. Clicking the function name will take you to the documentation for that function. You can read the description at the top of the page to learn what the function does and then find the argument name to read its definition.</p>
+<a href="#documentation-for-model-options" class="anchor"></a>Documentation for model options</h2>
+<p>By right clicking a scenario you can access the scenario properties. The Caribou Metrics tab has options that can be set for the models. The table below shows the option from the UI, the corresponding argument name in <code>caribouMetrics</code>, and the names of the function(s) in <code>caribouMetrics</code> that use that argument. Clicking the function name will take you to the documentation for that function. You can read the description at the top of the page to learn what the function does and then find the argument name to read its definition.</p>
 <table class="table">
+<colgroup>
+<col width="31%">
+<col width="24%">
+<col width="23%">
+<col width="20%">
+</colgroup>
 <thead><tr class="header">
 <th>UI option</th>
 <th>caribouMetrics argument</th>
 <th>Function</th>
+<th>Notes</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>Caribou Range</td>
-<td>caribouRange</td>
-<td><code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code></td>
+<td><strong>Tab: Caribou Range</strong></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr class="even">
+<td>Caribou Range Name and Coeff Range Name</td>
+<td>caribouRange</td>
+<td><code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Caribou Range Name</td>
+<td>projectPoly</td>
+<td>
+<code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code> and <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code>
+</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Tab:Caribou Model Options</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
 <td>ECCC Buffer Width</td>
 <td>bufferWidth</td>
 <td><code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code></td>
+<td></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Project Polygon Padding</td>
 <td>padProjPoly</td>
 <td><code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code></td>
+<td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Focal Padding</td>
 <td>padFocal</td>
 <td>
 <code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code> and <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code>
 </td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Number of Demographic Trajectories</td>
+<td>replicates</td>
+<td><code><a href="../reference/demographicCoefficients.html">demographicCoefficients()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Demographic Model Version</td>
+<td>modelVersion</td>
+<td><code><a href="../reference/demographicCoefficients.html">demographicCoefficients()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Survival Model Number</td>
+<td>survivalModelNumber</td>
+<td><code><a href="../reference/demographicCoefficients.html">demographicCoefficients()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Recruitment Model Number</td>
+<td>recruitmentModelNumber</td>
+<td><code><a href="../reference/demographicCoefficients.html">demographicCoefficients()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Initial Population Size</td>
+<td>N</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>P_0: Maximum recruitment multiplier</td>
+<td>P_0</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>P_K: Recruitment multiplier at carrying capacity</td>
+<td>P_K</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>a: Density dependence shape parameter</td>
+<td>a</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>b: Allee effect parameter</td>
+<td>b</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>K: Carrying capacity multiplier</td>
+<td>K</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>r_max: Maximum population growth rate</td>
+<td>r_max</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>s: Sex ratio</td>
+<td>s</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>l_R: Minimum recruitment</td>
+<td>l_R</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>h_R: Maximum recruitment</td>
+<td>h_R</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>l_S: Minimum survival</td>
+<td>l_S</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>h_S: Maximum survival</td>
+<td>h_S</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Interannual Variation</td>
+<td>interannualVar</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>probOption</td>
+<td>probOption</td>
+<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><strong>Tab: Raster Data</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Harvest</td>
+<td>anthroDist</td>
+<td><code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Anthropogenic Disturbance</td>
+<td>anthroDist</td>
+<td><code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Natural Disturbances</td>
+<td>natDist</td>
+<td><code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Provincial Land Cover</td>
+<td>landCover</td>
+<td><code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><strong>Tab: Polygon Data</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Ranges</td>
+<td>projectPoly</td>
+<td>
+<code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code> and <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code>
+</td>
+<td>This .shp file can include multiple range polygons and the ones to use will be selected based on the Caribou Range Name provided</td>
+</tr>
+<tr class="odd">
+<td>Eskers</td>
+<td>esker</td>
+<td><code>cariouHabitat()</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Linear Features</td>
+<td>linFeat</td>
+<td><code>cariouHabitat()</code></td>
+<td></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="set-up-a-new-syncrosim-library" class="section level2">
+<h2 class="hasAnchor">
+<a href="#set-up-a-new-syncrosim-library" class="anchor"></a>Set up a new SyncroSim Library</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/syncrosim/rsyncrosim/">rsyncrosim</a></span><span class="op">)</span>
+
+<span class="va">rootPth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"demoSSimLib"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">cDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"demoSSimLib"</span><span class="op">)</span>
+
+<span class="va">libName</span> <span class="op">&lt;-</span>  <span class="st">"demoSSimLib"</span>
+
+<span class="co"># Make plc have expected classes ROFsim TODO is fix this </span>
+<span class="va">plcRas</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">plcRas</span><span class="op">[</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">29</span>
+<span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/writeRaster.html">writeRaster</a></span><span class="op">(</span><span class="va">plcRas</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"landCover.tif"</span><span class="op">)</span>, 
+                    overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="co">#delete(paste0(cDir,"/",libName,".ssim"),force=T)</span>
+
+<span class="va">cLib</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/ssimLibrary.html">ssimLibrary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">cDir</span>, <span class="st">"/"</span>, <span class="va">libName</span><span class="op">)</span>, package <span class="op">=</span> <span class="st">"ROFSim"</span><span class="op">)</span>
+<span class="co">#&gt; Warning in .session(): Default SyncroSim installation not found. Either install</span>
+<span class="co">#&gt; SyncroSim in the default location, or explicitly set the session path. See ?</span>
+<span class="co">#&gt; session for details.</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(): SyncroSim not found.</span>
+
+<span class="va">cProj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/project.html">project</a></span><span class="op">(</span><span class="va">cLib</span>, <span class="st">"Demo"</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(): SyncroSim not found.</span>
+
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cProj</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="co">#TO DO: extract this info from input range map</span>
+<span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_CaribouRange"</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"James Bay"</span>, <span class="st">"Missisa"</span>, <span class="st">"Ozhiski"</span>, <span class="st">"Nipigon"</span>,
+                          <span class="st">"Pagwachuan"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="co"># Try without SpaDES stuff</span>
+<span class="co"># cSheet="ROFSim_SpaDESSimObject"</span>
+<span class="co"># cc=data.frame(Name=c("burnMap","biomassMap","rstLCC","standAgeMap"),Description=c("cumulative burn map","total biomass (g/m^2) filtered by cohortData","Map of land cover classes","Map of time since transition"))</span>
+<span class="co"># saveDatasheet(cProj,cc,name=cSheet)</span>
+<span class="co"># datasheet(cProj,cSheet)</span>
+
+<span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_Rasters"</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Harvest"</span>, <span class="st">"Anthropogenic Disturbance"</span>,
+                          <span class="st">"Natural Disturbance"</span>, <span class="st">"Provincial Land Cover"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#cc$SpaDESSimObject[cc$Name == "Stand Age"] &lt;- "standAgeMap"</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="va">cSheet</span>, optional <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="co">############</span>
+<span class="co">#scenarios - run control</span>
+<span class="va">rcScnS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/scenario.html">scenario</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="st">"Run Control 2020, 2100"</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(): SyncroSim not found.</span>
+
+<span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_RunControl"</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>MinimumIteration <span class="op">=</span> <span class="fl">1</span>, MaximumIteration <span class="op">=</span> <span class="fl">2</span>, 
+                 MinimumTimestep <span class="op">=</span> <span class="fl">2020</span>, MaximumTimestep <span class="op">=</span> <span class="fl">2100</span>, 
+                 OutputFrequency <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">rcScnS</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">rcScnS</span>, <span class="va">cSheet</span>, optional <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="va">rcScn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/scenario.html">scenario</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="st">"Run Control 2020"</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(): SyncroSim not found.</span>
+<span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_RunControl"</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>MinimumIteration <span class="op">=</span> <span class="fl">1</span>, MaximumIteration <span class="op">=</span> <span class="fl">1</span>,
+                 MinimumTimestep <span class="op">=</span> <span class="fl">2020</span>, MaximumTimestep <span class="op">=</span> <span class="fl">2020</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">rcScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">rcScn</span>, <span class="va">cSheet</span>, optional <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+
+<span class="co">############</span>
+<span class="co">#scenarios - caribou - current</span>
+
+<span class="va">cbScn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/scenario.html">scenario</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="st">"Caribou - current"</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(): SyncroSim not found.</span>
+
+<span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"core_Pipeline"</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>StageNameID <span class="op">=</span> <span class="st">"Caribou Habitat"</span>, RunOrder <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_RunCaribouRange"</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Range <span class="op">=</span> <span class="st">"Nipigon"</span>, CoeffRange <span class="op">=</span> <span class="st">"Nipigon"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_CaribouDataSource"</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>LandCoverRasterID <span class="op">=</span> <span class="st">"Provincial Land Cover"</span>, 
+                 ProjectShapeFileID <span class="op">=</span> <span class="st">"Ranges"</span>,
+                 EskerShapeFileID <span class="op">=</span> <span class="st">"Eskers"</span>,
+                 LinearFeatureShapeFileID <span class="op">=</span> <span class="st">"Linear Features"</span>,
+                 NaturalDisturbanceRasterID <span class="op">=</span> <span class="st">"Natural Disturbance"</span>, 
+                 HarvestRasterID <span class="op">=</span> <span class="st">"Harvest"</span>, 
+                 AnthropogenicRasterID <span class="op">=</span> <span class="st">"Anthropogenic Disturbance"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_CaribouModelOptions"</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RunDistMetrics <span class="op">=</span> <span class="cn">TRUE</span>, RunCaribouHabitat <span class="op">=</span> <span class="cn">TRUE</span>, 
+                 RunDemographicModel <span class="op">=</span> <span class="cn">TRUE</span>, padProjPoly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_RasterFile"</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RastersID <span class="op">=</span> <span class="st">"Natural Disturbance"</span>, 
+                 Filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RastersID <span class="op">=</span> <span class="st">"Harvest"</span>, 
+                           Filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RastersID <span class="op">=</span> <span class="st">"Provincial Land Cover"</span>, 
+                           Filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span>, append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_ExternalFile"</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Eskers"</span>, File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"esker.shp"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Linear Features"</span>, 
+                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"rail.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Linear Features"</span>,
+                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"utilities.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Ranges"</span>, 
+                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"projectPoly.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Linear Features"</span>, 
+                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"roads.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span>, append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cSheet</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/dependency.html">dependency</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">rcScn</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(scenario): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cbScn</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(ssimObject): SyncroSim not found.</span>
+<span class="co">#&gt; [1] "SyncroSim not found."</span>
+
+<span class="va">cbRes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/run.html">run</a></span><span class="op">(</span><span class="va">cbScn</span><span class="op">)</span>
+<span class="co">#&gt; Warning in SyncroSimNotFound(): SyncroSim not found.</span></code></pre></div>
+<p>Works but the maps and charts don’t show up, not sure how to make those</p>
 </div>
   </div>
 
