@@ -107,6 +107,45 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  woodland caribou (Rangifer tarandus caribou) across a gradient of
 #'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 #'  \url{https://doi.org/10.1139/cjz-2015-0101}
+#' @examples 
+#' # create example rasters
+#' lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
+#'                      resolution = 250, crs = 5070)
+#' lc[] <- 0
+#' nd <- lc
+#' nd[1:30, 1:30] <- 1
+#' ad <- lc
+#' ad[30:50, 3:50] <- 1
+#' lc[] <- 1
+#' lc[70:100, 70:100] <- 2
+#' 
+#' # create sf objects
+#' lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10000, 10000),
+#'                                                             ncol = 2, byrow = TRUE))),
+#'                               crs = 5070))
+#' esk <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 10000, 10000, 0),
+#'                                                             ncol = 2, byrow = TRUE))),
+#'                               crs = 5070))
+#' 
+#' 
+#' projPol <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(ad)))
+#' 
+#' # calculate relative probability of use
+#' res <- caribouHabitat(landCover = lc,
+#'                linFeat = lf,
+#'                esker = esk,
+#'                natDist = nd,
+#'                anthroDist = ad,
+#'                projectPoly = projPol,
+#'                caribouRange = "Nipigon",
+#'                winArea = 1000 #leave as default NULL except for small examples
+#' )
+#' 
+#' # plot the relative probablity of use
+#' plot(res)
+#' 
+#' # plot the predictor variables
+#' plot(results(res, type ="processedData"))
 #'
 #'@export
 setGeneric("caribouHabitat", 

@@ -30,7 +30,44 @@ NULL
 #'  If \code{bySeason} is \code{TRUE} and \code{x} is a data.frame then the result is a data.frame.
 #'  If \code{bySeason} is \code{FALSE} and \code{x} is a vector then the result is a vector.
 #'  If \code{bySeason} is \code{TRUE} and \code{x} is a vector then the result is a data.frame.  
-#'
+#'  
+#' @examples 
+#' # create example rasters
+#' lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
+#'                      resolution = 250, crs = 5070)
+#' lc[] <- 0
+#' nd <- lc
+#' nd[1:30, 1:30] <- 1
+#' ad <- lc
+#' ad[30:50, 3:50] <- 1
+#' lc[] <- 1
+#' lc[70:100, 70:100] <- 2
+#' 
+#' # create sf objects
+#' lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10000, 10000),
+#'                                                             ncol = 2, byrow = TRUE))),
+#'                               crs = 5070))
+#' esk <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 10000, 10000, 0),
+#'                                                             ncol = 2, byrow = TRUE))),
+#'                               crs = 5070))
+#' 
+#' 
+#' projPol <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(ad)))
+#' 
+#' # calculate relative probability of use
+#' res <- caribouHabitat(landCover = lc,
+#'                linFeat = lf,
+#'                esker = esk,
+#'                natDist = nd,
+#'                anthroDist = ad,
+#'                projectPoly = projPol,
+#'                caribouRange = "Nipigon",
+#'                winArea = 1000 #leave as default NULL except for small examples
+#' )
+#' 
+#' plot(calcBinaryUse(res))
+#' plot(calcBinaryUse(res, bySeason = TRUE))
+#' 
 #' @export
 setGeneric("calcBinaryUse", function(x, ...) standardGeneric("calcBinaryUse"))
 

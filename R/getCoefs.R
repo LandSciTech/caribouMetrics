@@ -19,6 +19,9 @@
 #' @return a named list with one element per model version. The names are
 #'   \code{modVer_modNum_Type}. Each element contains a data.frame that
 #'   is a subset of \code{populationGrowthTable} for the selected model
+#'   
+#' @examples 
+#' getCoefs(popGrowthTableJohnsonECCC, "femaleSurvival", "ECCC", "M1")
 #'
 #' @export
 #' 
