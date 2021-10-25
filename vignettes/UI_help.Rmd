@@ -60,9 +60,12 @@ UI option|caribouMetrics argument|Function|Notes|
 |Linear Features|linFeat|`cariouHabitat()`|
 
 ## Set up a new SyncroSim Library
-
-```{r setup}
+Here we demonstrate how to set up a SyncroSim Library for the ROFSim Package using the rsyncrosim package. For more details on the rsyncrosim package and its funcitons see https://syncrosim.github.io/rsyncrosim/articles/a01_rsyncrosim_vignette_basic.html
+```{r prep_lib}
 library(rsyncrosim)
+
+# Install ROFSim package using file path to ssimpkg file
+# addPackage("path/to/ROFSim.ssimpkg")
 
 rootPth <- system.file("extdata", package = "caribouMetrics")
 
@@ -80,65 +83,50 @@ raster::writeRaster(plcRas, file.path(rootPth, "landCover.tif"),
 
 #delete(paste0(cDir,"/",libName,".ssim"),force=T)
 
-cLib <- ssimLibrary(paste0(cDir, "/", libName), package = "ROFSim")
+cLib <- ssimLibrary(paste0(cDir, "/", libName), package = "ROFSim", overwrite = TRUE)
 
 cProj <- project(cLib, "Demo")
 
 datasheet(cProj)
 
-#TO DO: extract this info from input range map
+# Make sure the library uses the correct R installation
+rConfig <- datasheet(cLib, name = "core_RConfig")
+rConfig <- addRow(rConfig, c(ExePath = list.files(R.home("bin"), "Rscript", full.names = TRUE)))
+saveDatasheet(cLib, rConfig, name = "core_RConfig")
+
+# set available options for input data
 cSheet <- "ROFSim_CaribouRange"
 cc <- data.frame(Name = c("James Bay", "Missisa", "Ozhiski", "Nipigon",
                           "Pagwachuan"))
 saveDatasheet(cProj, cc, name = cSheet)
-datasheet(cProj, cSheet)
-
-# Try without SpaDES stuff
-# cSheet="ROFSim_SpaDESSimObject"
-# cc=data.frame(Name=c("burnMap","biomassMap","rstLCC","standAgeMap"),Description=c("cumulative burn map","total biomass (g/m^2) filtered by cohortData","Map of land cover classes","Map of time since transition"))
-# saveDatasheet(cProj,cc,name=cSheet)
-# datasheet(cProj,cSheet)
 
 cSheet <- "ROFSim_Rasters"
 cc <- data.frame(Name = c("Harvest", "Anthropogenic Disturbance",
                           "Natural Disturbance", "Provincial Land Cover"))
-#cc$SpaDESSimObject[cc$Name == "Stand Age"] <- "standAgeMap"
 saveDatasheet(cProj, cc, name = cSheet)
-datasheet(cProj, cSheet, optional = TRUE)
 
-############
-#scenarios - run control
-rcScnS <- scenario(cProj, "Run Control 2020, 2100")
-
-cSheet <- "ROFSim_RunControl"
-cc <- data.frame(MinimumIteration = 1, MaximumIteration = 2, 
-                 MinimumTimestep = 2020, MaximumTimestep = 2100, 
-                 OutputFrequency = 10)
-saveDatasheet(rcScnS, cc, name = cSheet)
-datasheet(rcScnS, cSheet, optional = TRUE)
-
-rcScn <- scenario(cProj, "Run Control 2020")
+# scenarios - run control
+rcScn <- scenario(cProj, "Run Control 2020 - 2100")
 cSheet <- "ROFSim_RunControl"
 cc <- data.frame(MinimumIteration = 1, MaximumIteration = 1,
-                 MinimumTimestep = 2020, MaximumTimestep = 2020)
+                 MinimumTimestep = 2020, MaximumTimestep = 2100, OutputFrequency = 10)
 saveDatasheet(rcScn, cc, name = cSheet)
-datasheet(rcScn, cSheet, optional = TRUE)
+
+```
 
 
-############
-#scenarios - caribou - current
-
-cbScn <- scenario(cProj, "Caribou - current")
+### Prepare a scenario
+```{r prep-scenario}
+# scenario - caribou - current
+cbScn <- scenario(cProj, "Caribou - 2020-2100")
 
 cSheet <- "core_Pipeline"
 cc <- data.frame(StageNameID = "Caribou Habitat", RunOrder = 1)
 saveDatasheet(cbScn, cc, name = cSheet)
-datasheet(cbScn, cSheet)
 
 cSheet <- "ROFSim_RunCaribouRange"
 cc <- data.frame(Range = "Nipigon", CoeffRange = "Nipigon")
 saveDatasheet(cbScn, cc, name = cSheet)
-datasheet(cbScn, cSheet)
 
 cSheet <- "ROFSim_CaribouDataSource"
 cc <- data.frame(LandCoverRasterID = "Provincial Land Cover", 
@@ -149,13 +137,11 @@ cc <- data.frame(LandCoverRasterID = "Provincial Land Cover",
                  HarvestRasterID = "Harvest", 
                  AnthropogenicRasterID = "Anthropogenic Disturbance")
 saveDatasheet(cbScn, cc, name = cSheet)
-datasheet(cbScn, cSheet)
 
 cSheet <- "ROFSim_CaribouModelOptions"
 cc <- data.frame(RunDistMetrics = TRUE, RunCaribouHabitat = TRUE, 
                  RunDemographicModel = TRUE, padProjPoly = TRUE)
 saveDatasheet(cbScn, cc, name = cSheet)
-datasheet(cbScn, cSheet)
 
 cSheet <- "ROFSim_RasterFile"
 cc <- data.frame(RastersID = "Natural Disturbance", 
@@ -165,7 +151,6 @@ cc <- rbind(cc, data.frame(RastersID = "Harvest",
 cc <- rbind(cc, data.frame(RastersID = "Provincial Land Cover", 
                            Filename = file.path(rootPth, "landCover.tif")))
 saveDatasheet(cbScn, cc, name = cSheet, append = FALSE)
-datasheet(cbScn, cSheet)
 
 cSheet <- "ROFSim_ExternalFile"
 cc <- data.frame(PolygonsID = "Eskers", File = file.path(rootPth, "esker.shp"))
@@ -178,12 +163,55 @@ cc <- rbind(cc, data.frame(PolygonsID = "Ranges",
 cc <- rbind(cc, data.frame(PolygonsID = "Linear Features", 
                            File = file.path(rootPth, "roads.shp")))
 saveDatasheet(cbScn, cc, name = cSheet, append = FALSE)
-datasheet(cbScn, cSheet)
 
 dependency(cbScn, rcScn)
-datasheet(cbScn)
 
+# Open the library in the SyncroSim UI
+# shell.exec(filepath(cLib))
+
+# run the scenario
 cbRes <- run(cbScn)
 
 ```
 Works but the maps and charts don't show up, not sure how to make those
+
+
+## Explore model results in R
+```{r plt_res}
+library(ggplot2)
+theme_set(theme_bw())
+
+#Find scenario ID of results
+scenario(cLib)
+
+#Load result tables
+rScn <- scenario(cLib, 3)
+distMetrics <- datasheet(rScn, "OutputDisturbanceMetrics")
+popMetrics <- datasheet(rScn, "OutputPopulationMetrics")
+
+#See changes in disturbance metrics over time
+base1 <- ggplot(data = distMetrics, 
+                aes(x = Timestep, y = Amount))+
+  geom_line(size = 0.5)+
+  facet_wrap(~MetricTypeDistID,scales="free")+
+  xlab("Time")+
+  ylab("Response")+
+  theme(legend.position = "none")
+base1
+
+popMetrics$MetricTypeDemogID <- as.character(popMetrics$MetricTypeDemogID)
+popMetrics$Amount[popMetrics$MetricTypeDemogID == "N"] <-
+  log10(popMetrics$Amount[popMetrics$MetricTypeDemogID == "N"] + 0.001)
+popMetrics$MetricTypeDemogID[popMetrics$MetricTypeDemogID == "N"] <- "log10N"
+
+#See changes in demographic metrics over time
+base2 <- ggplot(data = popMetrics, 
+                aes(x = Timestep, y = Amount, group = Replicate, colour = Replicate))+
+  geom_line(size = 0.5)+
+  facet_wrap(~MetricTypeDemogID, scales = "free")+
+  xlab("Time")+
+  ylab("Response")+
+  theme(legend.position = "none")
+base2
+```
+
