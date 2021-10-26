@@ -9,7 +9,7 @@ demographicRates(
   popGrowthPars,
   ignorePrecision = FALSE,
   returnSample = FALSE,
-  useQuantiles = FALSE
+  useQuantiles = TRUE
 )
 }
 \arguments{

@@ -15,6 +15,12 @@
 #'       \item{"coefValues"}{Coefficient values taken from 
 #'         \code{populationGrowthTable}}
 #'     }
+#'     
+#' @examples 
+#' cfs <- getCoefs(popGrowthTableJohnsonECCC, "recruitment", "ECCC", "M3")
+#' 
+#' sampleCoefs(cfs[[1]], 10)
+#' 
 #' @export
 
 sampleCoefs <- function(coefTable, replicates){

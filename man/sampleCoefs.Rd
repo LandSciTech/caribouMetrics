@@ -26,3 +26,9 @@ A list with elements:
 Sample coefficient values from the normal distribution based on the
 coefficient and standard error
 }
+\examples{
+cfs <- getCoefs(popGrowthTableJohnsonECCC, "recruitment", "ECCC", "M3")
+
+sampleCoefs(cfs[[1]], 10)
+
+}

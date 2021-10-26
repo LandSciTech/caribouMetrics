@@ -28,3 +28,72 @@ By default a RasterStack if x is a CaribouHabitat object and a
 \description{
 Extract results from CaribouHabitat or DisturbanceMetrics object.
 }
+\examples{
+# create example rasters for habitat
+lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
+                     resolution = 250, crs = 5070)
+lc[] <- 0
+nd <- lc
+nd[1:30, 1:30] <- 1
+ad <- lc
+ad[30:50, 3:50] <- 1
+lc[] <- 1
+lc[70:100, 70:100] <- 2
+
+# create sf objects
+lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10000, 10000),
+                                                            ncol = 2, byrow = TRUE))),
+                              crs = 5070))
+esk <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 10000, 10000, 0),
+                                                            ncol = 2, byrow = TRUE))),
+                              crs = 5070))
+
+
+projPol <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(ad)))
+
+# calculate relative probability of use
+res <- caribouHabitat(landCover = lc,
+               linFeat = lf,
+               esker = esk,
+               natDist = nd,
+               anthroDist = ad,
+               projectPoly = projPol,
+               caribouRange = "Nipigon",
+               winArea = 1000 #leave as default NULL except for small examples
+)
+
+# default gets raster stack of both habitatUse and processedData slots
+resBoth <- results(res)
+
+# provide a slot name to get one of them
+resHabUse <- results(res, type = "habitatUse")
+
+# create example rasters for disturbance metrics
+lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+nd <- lc
+nd[1:3, 1:3] <- 1
+ad <- lc
+ad[3:5, 3:5] <- 1
+lc[] <- 1
+
+# create sf objects
+lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10, 10), 
+                                                            ncol = 2, byrow = TRUE))),
+                              crs = 5070))
+projPol <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(ad)))
+
+# calculate disturbance
+dm <- disturbanceMetrics(landCover = lc,
+                         linFeat = lf,
+                         natDist = nd,
+                         anthroDist = ad,
+                         projectPoly = projPol,
+                         padFocal = TRUE,
+                         bufferWidth = 1)
+
+# default is disturbance metrics table
+resDM <- results(dm)
+
+# can get other slots as well
+resDMrasters <- results(dm, type = "processedData")
+}

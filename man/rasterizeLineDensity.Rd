@@ -23,3 +23,21 @@ A RasterLayer object with values representing the density of lines in meters
 \description{
 Rasterize line density in meters per hectare.
 }
+\examples{
+# create example raster
+lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
+                     resolution = 250, crs = 5070)
+
+#' # create line
+lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10000, 10000),
+                                                            ncol = 2, byrow = TRUE)),
+                                   sf::st_linestring(matrix(c(1, 10001, 10001, 1),
+                                                            ncol = 2, byrow = TRUE)),
+                                   sf::st_linestring(matrix(c(5001, 10001, 5001, 1),
+                                                            ncol = 2, byrow = TRUE))),
+                                   crs = 5070))
+                             
+rastLines <- rasterizeLineDensity(lf, lc)
+
+plot(rastLines)
+}

@@ -19,3 +19,14 @@ Reclassify provincial land cover classes into resource types used for
 \code{caribouHabitat}. The default lookup table \code{plcToResType} is
 provided with the package and assumes Ontario 2001 land cover classes.
 }
+\examples{
+lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+lc[] <- 13 # conifer
+lc[1:3, 1:3] <- 1 # open water
+lc[3:5, 3:5] <- 11 # deciduous
+lc[8:10, 8:10] <- 19 # treed bog
+lc[6:7, 6:7] <- 21 #treed fen
+
+resTypes <- reclassPLC(lc) 
+plot(resTypes)
+}

@@ -7,14 +7,13 @@
 reclassDist(distYr, endYr = 0, numCumYrs, template, dateField)
 }
 \arguments{
-\item{distYr}{\code{sf object or rasterLayer}. A simple feature collection
-(preferred) or raster layer covering the focal area and including the year
-of disturbance (preferred method) or time since disturbance as well as
-geometry (multipolygon) of the disturbance.}
+\item{distYr}{\code{sf object or rasterLayer}. A simple feature collection or
+raster layer covering the focal area and including the year of disturbance
+or time since disturbance as well as geometry (multipolygon) of the
+disturbance.}
 
 \item{endYr}{\code{numeric} default 0. Four digit year indicating the latest
-year to include from \code{distYr}. If no value is included function
-assumes \code{dateField} values indicate time since disturbance.}
+year to include from \code{distYr}. If 0 assume \code{dateField} values indicate time since disturbance.}
 
 \item{numCumYrs}{\code{numeric}. Number of years before \code{endYr} to
 include.}
@@ -22,11 +21,11 @@ include.}
 \item{template}{\code{rasterLayer}. A raster of the focal region, used as a
 template to which disturbance information is projected. This layers
 dimensions determine the dimensions of the output. It is recommended to use
-the \code{landcover} raster layer used in \code{caribouMetrics()} or
+the \code{landCover} raster layer used in \code{caribouMetrics()} or
 \code{disturbanceMetrics()} to ensure equal dimensions}
 
 \item{dateField}{\code{character}. Name of the column in which disturbance
-dates/time since disturbance are recorded.}
+year/time since disturbance is recorded.}
 }
 \value{
 Returns a binary \code{RasterLayer} with the same dimensions as the
@@ -39,17 +38,38 @@ period. The output from this function can be used as either the
 \code{disturbanceMetrics()}.
 }
 \examples{
-\dontrun{
-plcD <- raster::raster("/your_data_directory/plc50.tif") \%>\%
-                       reclassPLC()
-fireYr <- sf::st_read("/your_data_directory/fireAFFES.shp") \%>\%
-                      st_transform(crs = st_crs(plcD))
+# create template raster
+lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0,
+                     ymx = 10, crs = 5070)
 
-reclassDist(fireYr,
-            endYr = 2010,
-            numCumYrs = 30,
-            template = plcD,
-            dateField = "FIRE_YEAR")
-}
+# create fire polygons 
+corners <- matrix(c(0,0,10,10,5, 0,10,10,0,5), ncol = 2)
+
+fireYr <- st_sf(FIRE_YEAR = c(1990, 2000, 2009, 2015),
+                     geometry = st_sfc(st_polygon(list(corners[c(1,2,5, 1),])),
+                                       st_polygon(list(corners[c(2,3,5, 2),])),
+                                       st_polygon(list(corners[c(3,4,5, 3),])),
+                                       st_polygon(list(corners[c(4,1,5, 4),])))) 
+fireYr <- st_set_crs(fireYr, 5070)
+
+# three polygons should be considered disturbed (1) but the 2015 polygon should
+# not (0)
+cumFirePresence <- reclassDist(fireYr,
+                               endYr = 2010,
+                               numCumYrs = 30,
+                               template = lc,
+                               dateField = "FIRE_YEAR")
+
+plot(cumFirePresence)
+
+# with time since disturbance
+fireYr$FIRE_YEAR <- c(40, 15, 10, 20)
+cumFirePresence2 <- reclassDist(fireYr,
+                               endYr = 0,
+                               numCumYrs = 30,
+                               template = lc,
+                               dateField = "FIRE_YEAR")
+                               
+plot(cumFirePresence2)
 
 }

@@ -32,3 +32,7 @@ Get the coefficients for the chosen model version(s), number(s) and response
 variable from a table of coefficients for many models. If the table does not
 contain the standard error it is calculated from the confidence interval.
 }
+\examples{
+getCoefs(popGrowthTableJohnsonECCC, "femaleSurvival", "ECCC", "M1")
+
+}

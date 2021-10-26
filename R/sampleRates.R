@@ -56,6 +56,31 @@
 #'     \item{value}{The expected values of the response variable}
 #'   } 
 #'
+#' @examples 
+#' cfs <- getCoefs(popGrowthTableJohnsonECCC, "recruitment", "ECCC", "M3")
+#' 
+#' cfSamps <- sampleCoefs(cfs[[1]], 10)
+#' 
+#' # disturbance scenarios
+#' distScen <- data.frame(Total_dist = 1:10/10)
+#' 
+#' # return summary across replicates
+#' sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
+#'             "ECCC", "recruitment", ignorePrecision = FALSE, 
+#'             returnSample = FALSE)
+#' 
+#' # return one row per replicate * scenario
+#' sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
+#'             "ECCC", "recruitment", ignorePrecision = FALSE, 
+#'             returnSample = TRUE)
+#' 
+#' # return one row per replicate * scenario with replicates assigned to a quantile
+#' sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
+#'             "ECCC", "recruitment", ignorePrecision = FALSE, 
+#'             returnSample = TRUE, 
+#'             quantilesToUse = quantile(x = c(0, 1), 
+#'                                       probs = seq(0.025, 0.975, length.out = 10)))
+#' 
 #' @export
 
 sampleRates <- function(covTable,

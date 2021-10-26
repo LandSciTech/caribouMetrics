@@ -107,6 +107,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  woodland caribou (Rangifer tarandus caribou) across a gradient of
 #'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 #'  \url{https://doi.org/10.1139/cjz-2015-0101}
+#'  
 #' @examples 
 #' # create example rasters
 #' lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
@@ -141,7 +142,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'                winArea = 1000 #leave as default NULL except for small examples
 #' )
 #' 
-#' # plot the relative probablity of use
+#' # plot the relative probability of use
 #' plot(res)
 #' 
 #' # plot the predictor variables
