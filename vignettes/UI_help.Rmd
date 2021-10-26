@@ -9,12 +9,6 @@ params:
   EVAL: !r identical(Sys.getenv("NOT_CRAN"), "true")
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
 ## Introduction
 
 This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the [`caribouMetrics`](https://landscitech.github.io/caribouMetrics/) package. There are vignettes available for the [caribou habitat](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html) and [demographic](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html) models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) [Johnson et. al. (2020)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637) and [ECCC (2011)](http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf)
@@ -63,6 +57,15 @@ UI option|caribouMetrics argument|Function|Notes|
 
 ## Set up a new SyncroSim Library
 Here we demonstrate how to set up a SyncroSim Library for the ROFSim Package using the rsyncrosim package. For more details on the rsyncrosim package and its funcitons see https://syncrosim.github.io/rsyncrosim/articles/a01_rsyncrosim_vignette_basic.html
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  eval = FALSE,
+  comment = "#>"
+)
+```
+
 ```{r prep_lib}
 library(rsyncrosim)
 
@@ -71,9 +74,9 @@ library(rsyncrosim)
 
 rootPth <- system.file("extdata", package = "caribouMetrics")
 
-dir.create(file.path(rootPth, "demoSSimLib"))
-
 cDir <- file.path(rootPth, "demoSSimLib")
+
+dir.create(cDir)
 
 libName <-  "demoSSimLib"
 
@@ -82,8 +85,6 @@ plcRas <- raster::raster(file.path(rootPth, "landCover.tif"))
 plcRas[1,1] <- 29
 raster::writeRaster(plcRas, file.path(rootPth, "landCover.tif"), 
                     overwrite = TRUE)
-
-#delete(paste0(cDir,"/",libName,".ssim"),force=T)
 
 cLib <- ssimLibrary(paste0(cDir, "/", libName), package = "ROFSim", overwrite = TRUE)
 
@@ -175,7 +176,7 @@ dependency(cbScn, rcScn)
 cbRes <- run(cbScn)
 
 ```
-Works but the maps and charts don't show up, not sure how to make those
+
 
 
 ## Explore model results in R
@@ -208,12 +209,19 @@ popMetrics$MetricTypeDemogID[popMetrics$MetricTypeDemogID == "N"] <- "log10N"
 
 #See changes in demographic metrics over time
 base2 <- ggplot(data = popMetrics, 
-                aes(x = Timestep, y = Amount, group = Replicate, colour = Replicate))+
+                aes(x = Timestep, y = Amount, group = Replicate, 
+                    colour = Replicate))+
   geom_line(size = 0.5)+
   facet_wrap(~MetricTypeDemogID, scales = "free")+
   xlab("Time")+
   ylab("Response")+
   theme(legend.position = "none")
 base2
+```
+![](distMetOverTime.png){width=50%}
+![](demogOverTime.png){width=50%}
+
+```{r clean-up}
+delete(paste0(cDir,"/",libName,".ssim"), force = TRUE)
 ```
 
