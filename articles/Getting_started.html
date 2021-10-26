@@ -401,32 +401,14 @@
 <p><img src="Getting_started_files/figure-html/demographics-1.png" width="700"></p>
 <p>Finally, we can model population growth using <code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code> which is an implementation of the 2-stage population growth model used in Johnson et al. (2020) but with some differences described in Dyson et al. (in Prep).</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2000</span>, numSteps <span class="op">=</span> <span class="fl">20</span>, R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, 
+<code class="sourceCode R"><span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2000</span><span class="op">)</span>, numSteps <span class="op">=</span> <span class="fl">20</span>,
+                            R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, 
                             S_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span>
-<span class="co">#&gt; [1] "projecting step  1"</span>
-<span class="co">#&gt; [1] "projecting step  2"</span>
-<span class="co">#&gt; [1] "projecting step  3"</span>
-<span class="co">#&gt; [1] "projecting step  4"</span>
-<span class="co">#&gt; [1] "projecting step  5"</span>
-<span class="co">#&gt; [1] "projecting step  6"</span>
-<span class="co">#&gt; [1] "projecting step  7"</span>
-<span class="co">#&gt; [1] "projecting step  8"</span>
-<span class="co">#&gt; [1] "projecting step  9"</span>
-<span class="co">#&gt; [1] "projecting step  10"</span>
-<span class="co">#&gt; [1] "projecting step  11"</span>
-<span class="co">#&gt; [1] "projecting step  12"</span>
-<span class="co">#&gt; [1] "projecting step  13"</span>
-<span class="co">#&gt; [1] "projecting step  14"</span>
-<span class="co">#&gt; [1] "projecting step  15"</span>
-<span class="co">#&gt; [1] "projecting step  16"</span>
-<span class="co">#&gt; [1] "projecting step  17"</span>
-<span class="co">#&gt; [1] "projecting step  18"</span>
-<span class="co">#&gt; [1] "projecting step  19"</span>
-<span class="co">#&gt; [1] "projecting step  20"</span>
 
-<span class="va">popGrow</span>
-<span class="co">#&gt;     N    lambda</span>
-<span class="co">#&gt; 1 294 0.9086818</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">demRates</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, <span class="va">popGrow</span><span class="op">)</span>
+<span class="co">#&gt;   zone   Anthro      Fire Total_dist fire_excl_anthro   N    lambda</span>
+<span class="co">#&gt; 1    1 43.93089 0.7708216   44.28643        0.3555401 349 0.9166866</span>
+<span class="co">#&gt; 2    1 53.93089 0.7708216   54.28643        0.3555401 197 0.8908162</span></code></pre></div>
 <p><em>For additional details on functions in the package see the help documentation</em></p>
 </div>
 </div>
