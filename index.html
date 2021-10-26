@@ -147,7 +147,11 @@
 <span class="co">#&gt; Applying moving window.</span>
 
 <span class="co"># plot the results</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span>
+<span class="co">#&gt; Registered S3 methods overwritten by 'stars':</span>
+<span class="co">#&gt;   method             from</span>
+<span class="co">#&gt;   st_bbox.SpatRaster sf  </span>
+<span class="co">#&gt;   st_crs.SpatRaster  sf</span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># calculate disturbance </span>
@@ -170,13 +174,13 @@
 
 <span class="va">demRates</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>covTable <span class="op">=</span> <span class="fu"><a href="reference/results.html">results</a></span><span class="op">(</span><span class="va">disturb</span><span class="op">)</span>,
                              popGrowthPars <span class="op">=</span> <span class="va">demCoefs</span><span class="op">)</span>
-<span class="co">#&gt; Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.03 sec elapsed</span>
-<span class="co">#&gt; Elapsed time for caribou prediction for recruitment for Johnson:: 0.01 sec elapsed</span>
+<span class="co">#&gt; Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.36 sec elapsed</span>
+<span class="co">#&gt; Elapsed time for caribou prediction for recruitment for Johnson:: 0 sec elapsed</span>
 <span class="va">demRates</span>
 <span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr</span>
-<span class="co">#&gt; 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.04680671</span>
-<span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh</span>
-<span class="co">#&gt; 1 0.7796476 0.8927702 0.1813372 0.1363773 0.09102343 0.5044036</span>
+<span class="co">#&gt; 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.05409265</span>
+<span class="co">#&gt;    S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh</span>
+<span class="co">#&gt; 1 0.739131 0.9252582 0.1813372 0.09270282 0.04062846 0.3630453</span>
 
 <span class="co"># Simulate population growth</span>
 <span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2000</span>, numSteps <span class="op">=</span> <span class="fl">20</span>, R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, 
@@ -204,7 +208,7 @@
 
 <span class="va">popGrow</span>
 <span class="co">#&gt;     N    lambda</span>
-<span class="co">#&gt; 1 369 0.9191211</span></code></pre></div>
+<span class="co">#&gt; 1 368 0.9189992</span></code></pre></div>
 <p>More detailed examples are provided in the vignettes.</p>
 </div>
 </div>
@@ -214,6 +218,13 @@
 <p>ECCC. 2011. Scientific assessment to inform the identification of critical habitat for woodland caribou (<em>Rangifer tarandus caribou</em>), boreal population, in Canada. Canadian Wildlife Service, Ottawa. <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="uri">http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf</a>. Accessed 26 Mar 2021.</p>
 <p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking population dynamics to habitat for a threatened species in Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="uri">https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637</a></p>
 <p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93. <a href="https://doi.org/10.1139/cjz-2015-0101" class="uri">https://doi.org/10.1139/cjz-2015-0101</a></p>
+<div id="license" class="section level2">
+<h2 class="hasAnchor">
+<a href="#license" class="anchor"></a>License</h2>
+<p>caribouMetrics - Terms and Condition of Use</p>
+<p>Unless otherwise noted, source code of the <code>caribouMetrics</code> R package is covered under Crown Copyright, Government of Canada, and distributed under the GPL3 license.</p>
+<p>Copyright (C) Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment 2021/(C) Sa Majesté la Reine du chef du Canada représentée par le ministre de l’Environnement 2021.</p>
+</div>
 </div>
 
   </div>

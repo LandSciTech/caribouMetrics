@@ -146,16 +146,15 @@ period. The output from this function can be used as either the
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>distYr</th>
-      <td><p><code>sf object or rasterLayer</code>. A simple feature collection
-(preferred) or raster layer covering the focal area and including the year
-of disturbance (preferred method) or time since disturbance as well as
-geometry (multipolygon) of the disturbance.</p></td>
+      <td><p><code>sf object or rasterLayer</code>. A simple feature collection or
+raster layer covering the focal area and including the year of disturbance
+or time since disturbance as well as geometry (multipolygon) of the
+disturbance.</p></td>
     </tr>
     <tr>
       <th>endYr</th>
       <td><p><code>numeric</code> default 0. Four digit year indicating the latest
-year to include from <code>distYr</code>. If no value is included function
-assumes <code>dateField</code> values indicate time since disturbance.</p></td>
+year to include from <code>distYr</code>. If 0 assume <code>dateField</code> values indicate time since disturbance.</p></td>
     </tr>
     <tr>
       <th>numCumYrs</th>
@@ -167,13 +166,13 @@ include.</p></td>
       <td><p><code>rasterLayer</code>. A raster of the focal region, used as a
 template to which disturbance information is projected. This layers
 dimensions determine the dimensions of the output. It is recommended to use
-the <code>landcover</code> raster layer used in <code><a href='caribouMetrics.html'>caribouMetrics()</a></code> or
+the <code>landCover</code> raster layer used in <code><a href='caribouMetrics.html'>caribouMetrics()</a></code> or
 <code><a href='disturbanceMetrics.html'>disturbanceMetrics()</a></code> to ensure equal dimensions</p></td>
     </tr>
     <tr>
       <th>dateField</th>
       <td><p><code>character</code>. Name of the column in which disturbance
-dates/time since disturbance are recorded.</p></td>
+year/time since disturbance is recorded.</p></td>
     </tr>
     </table>
 
@@ -183,19 +182,41 @@ dates/time since disturbance are recorded.</p></td>
   <code>template</code> input. Values of 1 represent areas of disturbance</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>plcD</span> <span class='op'>&lt;-</span> <span class='fu'>raster</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/raster.html'>raster</a></span><span class='op'>(</span><span class='st'>"/your_data_directory/plc50.tif"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-                       <span class='fu'><a href='reclassPLC.html'>reclassPLC</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>fireYr</span> <span class='op'>&lt;-</span> <span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></span><span class='op'>(</span><span class='st'>"/your_data_directory/fireAFFES.shp"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-                      <span class='fu'>st_transform</span><span class='op'>(</span>crs <span class='op'>=</span> <span class='fu'>st_crs</span><span class='op'>(</span><span class='va'>plcD</span><span class='op'>)</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-spatial.github.io/sf/'>sf</a></span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span></div><div class='input'><span class='co'># create template raster</span>
+<span class='va'>lc</span> <span class='op'>&lt;-</span> <span class='fu'>raster</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/raster.html'>raster</a></span><span class='op'>(</span>nrows <span class='op'>=</span> <span class='fl'>10</span>, ncols <span class='op'>=</span> <span class='fl'>10</span>, xmn <span class='op'>=</span> <span class='fl'>0</span>, xmx <span class='op'>=</span> <span class='fl'>10</span>, ymn <span class='op'>=</span> <span class='fl'>0</span>,
+                     ymx <span class='op'>=</span> <span class='fl'>10</span>, crs <span class='op'>=</span> <span class='fl'>5070</span><span class='op'>)</span>
 
-<span class='fu'>reclassDist</span><span class='op'>(</span><span class='va'>fireYr</span>,
-            endYr <span class='op'>=</span> <span class='fl'>2010</span>,
-            numCumYrs <span class='op'>=</span> <span class='fl'>30</span>,
-            template <span class='op'>=</span> <span class='va'>plcD</span>,
-            dateField <span class='op'>=</span> <span class='st'>"FIRE_YEAR"</span><span class='op'>)</span>
-<span class='op'>}</span>
+<span class='co'># create fire polygons </span>
+<span class='va'>corners</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>10</span>,<span class='fl'>5</span>, <span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>10</span>,<span class='fl'>0</span>,<span class='fl'>5</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
+<span class='va'>fireYr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/sf.html'>st_sf</a></span><span class='op'>(</span>FIRE_YEAR <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1990</span>, <span class='fl'>2000</span>, <span class='fl'>2009</span>, <span class='fl'>2015</span><span class='op'>)</span>,
+                     geometry <span class='op'>=</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>corners</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>)</span>,<span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>,
+                                       <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>corners</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>5</span>, <span class='fl'>2</span><span class='op'>)</span>,<span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>,
+                                       <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>corners</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>5</span>, <span class='fl'>3</span><span class='op'>)</span>,<span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>,
+                                       <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>corners</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>,<span class='fl'>1</span>,<span class='fl'>5</span>, <span class='fl'>4</span><span class='op'>)</span>,<span class='op'>]</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='va'>fireYr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_crs.html'>st_set_crs</a></span><span class='op'>(</span><span class='va'>fireYr</span>, <span class='fl'>5070</span><span class='op'>)</span>
+
+<span class='co'># three polygons should be considered disturbed (1) but the 2015 polygon should</span>
+<span class='co'># not (0)</span>
+<span class='va'>cumFirePresence</span> <span class='op'>&lt;-</span> <span class='fu'>reclassDist</span><span class='op'>(</span><span class='va'>fireYr</span>,
+                               endYr <span class='op'>=</span> <span class='fl'>2010</span>,
+                               numCumYrs <span class='op'>=</span> <span class='fl'>30</span>,
+                               template <span class='op'>=</span> <span class='va'>lc</span>,
+                               dateField <span class='op'>=</span> <span class='st'>"FIRE_YEAR"</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>cumFirePresence</span><span class='op'>)</span>
+</div><div class='img'><img src='reclassDist-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># with time since disturbance</span>
+<span class='va'>fireYr</span><span class='op'>$</span><span class='va'>FIRE_YEAR</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>15</span>, <span class='fl'>10</span>, <span class='fl'>20</span><span class='op'>)</span>
+<span class='va'>cumFirePresence2</span> <span class='op'>&lt;-</span> <span class='fu'>reclassDist</span><span class='op'>(</span><span class='va'>fireYr</span>,
+                               endYr <span class='op'>=</span> <span class='fl'>0</span>,
+                               numCumYrs <span class='op'>=</span> <span class='fl'>30</span>,
+                               template <span class='op'>=</span> <span class='va'>lc</span>,
+                               dateField <span class='op'>=</span> <span class='st'>"FIRE_YEAR"</span><span class='op'>)</span>
+                               
+<span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>cumFirePresence2</span><span class='op'>)</span>
+</div><div class='img'><img src='reclassDist-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

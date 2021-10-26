@@ -156,6 +156,17 @@ provided with the package and assumes Ontario 2001 land cover classes.</p>
 
     <p>a RasterLayer with classes matching <code>resTypeCode</code></p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>lc</span> <span class='op'>&lt;-</span> <span class='fu'>raster</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/raster.html'>raster</a></span><span class='op'>(</span>nrows <span class='op'>=</span> <span class='fl'>10</span>, ncols <span class='op'>=</span> <span class='fl'>10</span>, xmn <span class='op'>=</span> <span class='fl'>0</span>, xmx <span class='op'>=</span> <span class='fl'>10</span>, ymn <span class='op'>=</span> <span class='fl'>0</span>, ymx <span class='op'>=</span> <span class='fl'>10</span>, crs <span class='op'>=</span> <span class='fl'>5070</span><span class='op'>)</span>
+<span class='va'>lc</span><span class='op'>[</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>13</span> <span class='co'># conifer</span>
+<span class='va'>lc</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>1</span> <span class='co'># open water</span>
+<span class='va'>lc</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>3</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>11</span> <span class='co'># deciduous</span>
+<span class='va'>lc</span><span class='op'>[</span><span class='fl'>8</span><span class='op'>:</span><span class='fl'>10</span>, <span class='fl'>8</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>19</span> <span class='co'># treed bog</span>
+<span class='va'>lc</span><span class='op'>[</span><span class='fl'>6</span><span class='op'>:</span><span class='fl'>7</span>, <span class='fl'>6</span><span class='op'>:</span><span class='fl'>7</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fl'>21</span> <span class='co'>#treed fen</span>
+
+<span class='va'>resTypes</span> <span class='op'>&lt;-</span> <span class='fu'>reclassPLC</span><span class='op'>(</span><span class='va'>lc</span><span class='op'>)</span> 
+<span class='fu'><a href='https://r-spatial.github.io/sf/reference/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>resTypes</span><span class='op'>)</span>
+</div><div class='img'><img src='reclassPLC-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

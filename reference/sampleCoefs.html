@@ -163,6 +163,28 @@ name of the coefficient, "Value" for the value of the coefficient and
 </dl>
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>cfs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getCoefs.html'>getCoefs</a></span><span class='op'>(</span><span class='va'>popGrowthTableJohnsonECCC</span>, <span class='st'>"recruitment"</span>, <span class='st'>"ECCC"</span>, <span class='st'>"M3"</span><span class='op'>)</span>
+
+<span class='fu'>sampleCoefs</span><span class='op'>(</span><span class='va'>cfs</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>, <span class='fl'>10</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $coefSamples
+#&gt;       Intercept Total_dist Precision
+#&gt;  [1,]  44.48596 -0.3537632      0.06
+#&gt;  [2,]  45.90815 -0.4082341      0.06
+#&gt;  [3,]  45.48713 -0.4578349      0.06
+#&gt;  [4,]  39.99233 -0.3857661      0.06
+#&gt;  [5,]  47.03403 -0.5222665      0.06
+#&gt;  [6,]  43.26785 -0.4145171      0.06
+#&gt;  [7,]  44.04266 -0.5090817      0.06
+#&gt;  [8,]  44.38328 -0.3834313      0.06
+#&gt;  [9,]  44.63069 -0.5243136      0.06
+#&gt; [10,]  41.32761 -0.4246657      0.06
+#&gt; 
+#&gt; $coefValues
+#&gt;    Intercept Total_dist Precision
+#&gt; 1:    44.265     -0.429      0.06
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

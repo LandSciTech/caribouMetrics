@@ -234,6 +234,242 @@ trajectories of replicate populations.</p></td>
     <p><code>coefSamples</code> and <code>coefValues</code> can be created with
 <code><a href='sampleCoefs.html'>sampleCoefs</a></code></p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>cfs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getCoefs.html'>getCoefs</a></span><span class='op'>(</span><span class='va'>popGrowthTableJohnsonECCC</span>, <span class='st'>"recruitment"</span>, <span class='st'>"ECCC"</span>, <span class='st'>"M3"</span><span class='op'>)</span>
+
+<span class='va'>cfSamps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='sampleCoefs.html'>sampleCoefs</a></span><span class='op'>(</span><span class='va'>cfs</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>, <span class='fl'>10</span><span class='op'>)</span>
+
+<span class='co'># disturbance scenarios</span>
+<span class='va'>distScen</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>Total_dist <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>/</span><span class='fl'>10</span><span class='op'>)</span>
+
+<span class='co'># return summary across replicates</span>
+<span class='fu'>sampleRates</span><span class='op'>(</span><span class='va'>distScen</span>, <span class='va'>cfSamps</span><span class='op'>$</span><span class='va'>coefSamples</span>, <span class='va'>cfSamps</span><span class='op'>$</span><span class='va'>coefValues</span>,
+            <span class='st'>"ECCC"</span>, <span class='st'>"recruitment"</span>, ignorePrecision <span class='op'>=</span> <span class='cn'>FALSE</span>, 
+            returnSample <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Elapsed time for caribou prediction for recruitment for ECCC:: 0.001 sec elapsed</div><div class='output co'>#&gt;    Total_dist  average     stdErr     PIlow    PIhigh
+#&gt; 1         0.1 0.442221 0.04369618 0.3521107 0.4787963
+#&gt; 2         0.2 0.441792 0.06812728 0.3089019 0.5200264
+#&gt; 3         0.3 0.441363 0.05635439 0.3841321 0.5436478
+#&gt; 4         0.4 0.440934 0.06489341 0.3615469 0.5475486
+#&gt; 5         0.5 0.440505 0.08414855 0.3307984 0.5444589
+#&gt; 6         0.6 0.440076 0.09327866 0.3111338 0.5852500
+#&gt; 7         0.7 0.439647 0.05127198 0.4038963 0.5524147
+#&gt; 8         0.8 0.439218 0.06995877 0.3384589 0.5433213
+#&gt; 9         0.9 0.438789 0.08113388 0.3327367 0.5786815
+#&gt; 10        1.0 0.438360 0.05824418 0.3837866 0.5650311</div><div class='input'>
+<span class='co'># return one row per replicate * scenario</span>
+<span class='fu'>sampleRates</span><span class='op'>(</span><span class='va'>distScen</span>, <span class='va'>cfSamps</span><span class='op'>$</span><span class='va'>coefSamples</span>, <span class='va'>cfSamps</span><span class='op'>$</span><span class='va'>coefValues</span>,
+            <span class='st'>"ECCC"</span>, <span class='st'>"recruitment"</span>, ignorePrecision <span class='op'>=</span> <span class='cn'>FALSE</span>, 
+            returnSample <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Elapsed time for caribou prediction for recruitment for ECCC:: 0.002 sec elapsed</div><div class='output co'>#&gt;     scnID Total_dist replicate     value
+#&gt; 1       1        0.1        V1 0.5145818
+#&gt; 2       1        0.1        V5 0.3406667
+#&gt; 3       1        0.1        V9 0.5857990
+#&gt; 4       1        0.1        V3 0.5717095
+#&gt; 5       1        0.1        V4 0.4430907
+#&gt; 6       1        0.1        V8 0.5232993
+#&gt; 7       1        0.1        V2 0.3943151
+#&gt; 8       1        0.1        V6 0.3949797
+#&gt; 9       1        0.1        V7 0.5447277
+#&gt; 10      1        0.1       V10 0.3938977
+#&gt; 11      2        0.2        V7 0.4385896
+#&gt; 12      2        0.2        V8 0.4163870
+#&gt; 13      2        0.2        V9 0.4185898
+#&gt; 14      2        0.2       V10 0.3795470
+#&gt; 15      2        0.2        V1 0.4820928
+#&gt; 16      2        0.2        V5 0.3817616
+#&gt; 17      2        0.2        V2 0.3141286
+#&gt; 18      2        0.2        V3 0.4117270
+#&gt; 19      2        0.2        V4 0.5418077
+#&gt; 20      2        0.2        V6 0.4258586
+#&gt; 21      3        0.3        V4 0.4673810
+#&gt; 22      3        0.3        V5 0.4653706
+#&gt; 23      3        0.3        V3 0.4329591
+#&gt; 24      3        0.3        V7 0.4592103
+#&gt; 25      3        0.3        V8 0.4675991
+#&gt; 26      3        0.3        V9 0.4787262
+#&gt; 27      3        0.3        V6 0.4346269
+#&gt; 28      3        0.3       V10 0.4226891
+#&gt; 29      3        0.3        V1 0.4919418
+#&gt; 30      3        0.3        V2 0.4408040
+#&gt; 31      4        0.4        V1 0.4237062
+#&gt; 32      4        0.4        V9 0.4338762
+#&gt; 33      4        0.4        V3 0.5166313
+#&gt; 34      4        0.4        V4 0.4338890
+#&gt; 35      4        0.4        V5 0.4115926
+#&gt; 36      4        0.4        V2 0.4165243
+#&gt; 37      4        0.4        V6 0.3894423
+#&gt; 38      4        0.4        V7 0.5356316
+#&gt; 39      4        0.4        V8 0.5834293
+#&gt; 40      4        0.4       V10 0.3996919
+#&gt; 41      5        0.5        V8 0.4148142
+#&gt; 42      5        0.5        V9 0.5367400
+#&gt; 43      5        0.5       V10 0.3090778
+#&gt; 44      5        0.5        V1 0.5441631
+#&gt; 45      5        0.5        V5 0.3682456
+#&gt; 46      5        0.5        V2 0.3351391
+#&gt; 47      5        0.5        V3 0.5298857
+#&gt; 48      5        0.5        V4 0.4623794
+#&gt; 49      5        0.5        V6 0.5178576
+#&gt; 50      5        0.5        V7 0.4284013
+#&gt; 51      6        0.6        V4 0.4373457
+#&gt; 52      6        0.6        V5 0.2924279
+#&gt; 53      6        0.6        V7 0.4392661
+#&gt; 54      6        0.6        V8 0.4318347
+#&gt; 55      6        0.6        V9 0.4465004
+#&gt; 56      6        0.6        V6 0.4125849
+#&gt; 57      6        0.6       V10 0.4776682
+#&gt; 58      6        0.6        V1 0.3506779
+#&gt; 59      6        0.6        V2 0.4530255
+#&gt; 60      6        0.6        V3 0.5859883
+#&gt; 61      7        0.7        V1 0.4596162
+#&gt; 62      7        0.7        V3 0.3543969
+#&gt; 63      7        0.7        V4 0.5273837
+#&gt; 64      7        0.7        V5 0.4034674
+#&gt; 65      7        0.7        V9 0.4148943
+#&gt; 66      7        0.7        V6 0.4475807
+#&gt; 67      7        0.7        V7 0.4675275
+#&gt; 68      7        0.7        V8 0.5159629
+#&gt; 69      7        0.7        V2 0.4456423
+#&gt; 70      7        0.7       V10 0.2218220
+#&gt; 71      8        0.8        V9 0.5433987
+#&gt; 72      8        0.8       V10 0.3524486
+#&gt; 73      8        0.8        V1 0.4642187
+#&gt; 74      8        0.8        V5 0.4421825
+#&gt; 75      8        0.8        V2 0.3724736
+#&gt; 76      8        0.8        V3 0.3453981
+#&gt; 77      8        0.8        V4 0.4779437
+#&gt; 78      8        0.8        V8 0.5049752
+#&gt; 79      8        0.8        V6 0.4394817
+#&gt; 80      8        0.8        V7 0.4266940
+#&gt; 81      9        0.9        V5 0.2831599
+#&gt; 82      9        0.9        V7 0.5198280
+#&gt; 83      9        0.9        V8 0.3960507
+#&gt; 84      9        0.9        V9 0.4516915
+#&gt; 85      9        0.9        V6 0.3273141
+#&gt; 86      9        0.9       V10 0.4252051
+#&gt; 87      9        0.9        V1 0.3913776
+#&gt; 88      9        0.9        V2 0.3439619
+#&gt; 89      9        0.9        V3 0.4298318
+#&gt; 90      9        0.9        V4 0.4798846
+#&gt; 91     10        1.0        V1 0.4010185
+#&gt; 92     10        1.0        V4 0.5634069
+#&gt; 93     10        1.0        V5 0.4096359
+#&gt; 94     10        1.0        V9 0.3782561
+#&gt; 95     10        1.0        V3 0.3963758
+#&gt; 96     10        1.0        V7 0.5000154
+#&gt; 97     10        1.0        V8 0.4148777
+#&gt; 98     10        1.0        V2 0.3362634
+#&gt; 99     10        1.0        V6 0.5180592
+#&gt; 100    10        1.0       V10 0.3920965</div><div class='input'>
+<span class='co'># return one row per replicate * scenario with replicates assigned to a quantile</span>
+<span class='fu'>sampleRates</span><span class='op'>(</span><span class='va'>distScen</span>, <span class='va'>cfSamps</span><span class='op'>$</span><span class='va'>coefSamples</span>, <span class='va'>cfSamps</span><span class='op'>$</span><span class='va'>coefValues</span>,
+            <span class='st'>"ECCC"</span>, <span class='st'>"recruitment"</span>, ignorePrecision <span class='op'>=</span> <span class='cn'>FALSE</span>, 
+            returnSample <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+            quantilesToUse <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, 
+                                      probs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.975</span>, length.out <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Elapsed time for caribou prediction for recruitment for ECCC:: 0.003 sec elapsed</div><div class='output co'>#&gt;     scnID Total_dist replicate     value
+#&gt; 1       1        0.1      2.5% 0.3058924
+#&gt; 2       1        0.1 44.72222% 0.3846509
+#&gt; 3       1        0.1 86.94444% 0.5450161
+#&gt; 4       1        0.1 23.61111% 0.4189499
+#&gt; 5       1        0.1 34.16667% 0.4517051
+#&gt; 6       1        0.1 76.38889% 0.5176479
+#&gt; 7       1        0.1 13.05556% 0.3499294
+#&gt; 8       1        0.1 55.27778% 0.4235705
+#&gt; 9       1        0.1 65.83333% 0.5054302
+#&gt; 10      1        0.1     97.5% 0.5177997
+#&gt; 11      2        0.2 65.83333% 0.5049705
+#&gt; 12      2        0.2 76.38889% 0.5171460
+#&gt; 13      2        0.2 86.94444% 0.5445413
+#&gt; 14      2        0.2     97.5% 0.5174595
+#&gt; 15      2        0.2      2.5% 0.3055478
+#&gt; 16      2        0.2 44.72222% 0.3842298
+#&gt; 17      2        0.2 13.05556% 0.3495006
+#&gt; 18      2        0.2 23.61111% 0.4185161
+#&gt; 19      2        0.2 34.16667% 0.4513030
+#&gt; 20      2        0.2 55.27778% 0.4230909
+#&gt; 21      3        0.3 34.16667% 0.4509010
+#&gt; 22      3        0.3 44.72222% 0.3838087
+#&gt; 23      3        0.3 23.61111% 0.4180824
+#&gt; 24      3        0.3 65.83333% 0.5045108
+#&gt; 25      3        0.3 76.38889% 0.5166442
+#&gt; 26      3        0.3 86.94444% 0.5440664
+#&gt; 27      3        0.3 55.27778% 0.4226112
+#&gt; 28      3        0.3     97.5% 0.5171193
+#&gt; 29      3        0.3      2.5% 0.3052031
+#&gt; 30      3        0.3 13.05556% 0.3490718
+#&gt; 31      4        0.4      2.5% 0.3048585
+#&gt; 32      4        0.4 86.94444% 0.5435916
+#&gt; 33      4        0.4 23.61111% 0.4176486
+#&gt; 34      4        0.4 34.16667% 0.4504989
+#&gt; 35      4        0.4 44.72222% 0.3833875
+#&gt; 36      4        0.4 13.05556% 0.3486430
+#&gt; 37      4        0.4 55.27778% 0.4221316
+#&gt; 38      4        0.4 65.83333% 0.5040510
+#&gt; 39      4        0.4 76.38889% 0.5161424
+#&gt; 40      4        0.4     97.5% 0.5167791
+#&gt; 41      5        0.5 76.38889% 0.5156406
+#&gt; 42      5        0.5 86.94444% 0.5431167
+#&gt; 43      5        0.5     97.5% 0.5164389
+#&gt; 44      5        0.5      2.5% 0.3045138
+#&gt; 45      5        0.5 44.72222% 0.3829664
+#&gt; 46      5        0.5 13.05556% 0.3482142
+#&gt; 47      5        0.5 23.61111% 0.4172149
+#&gt; 48      5        0.5 34.16667% 0.4500968
+#&gt; 49      5        0.5 55.27778% 0.4216519
+#&gt; 50      5        0.5 65.83333% 0.5035913
+#&gt; 51      6        0.6 34.16667% 0.4496948
+#&gt; 52      6        0.6 44.72222% 0.3825453
+#&gt; 53      6        0.6 65.83333% 0.5031316
+#&gt; 54      6        0.6 76.38889% 0.5151388
+#&gt; 55      6        0.6 86.94444% 0.5426418
+#&gt; 56      6        0.6 55.27778% 0.4211723
+#&gt; 57      6        0.6     97.5% 0.5160987
+#&gt; 58      6        0.6      2.5% 0.3041692
+#&gt; 59      6        0.6 13.05556% 0.3477854
+#&gt; 60      6        0.6 23.61111% 0.4167811
+#&gt; 61      7        0.7      2.5% 0.3038246
+#&gt; 62      7        0.7 23.61111% 0.4163474
+#&gt; 63      7        0.7 34.16667% 0.4492927
+#&gt; 64      7        0.7 44.72222% 0.3821241
+#&gt; 65      7        0.7 86.94444% 0.5421670
+#&gt; 66      7        0.7 55.27778% 0.4206926
+#&gt; 67      7        0.7 65.83333% 0.5026719
+#&gt; 68      7        0.7 76.38889% 0.5146370
+#&gt; 69      7        0.7 13.05556% 0.3473565
+#&gt; 70      7        0.7     97.5% 0.5157585
+#&gt; 71      8        0.8 86.94444% 0.5416921
+#&gt; 72      8        0.8     97.5% 0.5154183
+#&gt; 73      8        0.8      2.5% 0.3034799
+#&gt; 74      8        0.8 44.72222% 0.3817030
+#&gt; 75      8        0.8 13.05556% 0.3469277
+#&gt; 76      8        0.8 23.61111% 0.4159136
+#&gt; 77      8        0.8 34.16667% 0.4488906
+#&gt; 78      8        0.8 76.38889% 0.5141352
+#&gt; 79      8        0.8 55.27778% 0.4202130
+#&gt; 80      8        0.8 65.83333% 0.5022122
+#&gt; 81      9        0.9 44.72222% 0.3812819
+#&gt; 82      9        0.9 65.83333% 0.5017524
+#&gt; 83      9        0.9 76.38889% 0.5136334
+#&gt; 84      9        0.9 86.94444% 0.5412173
+#&gt; 85      9        0.9 55.27778% 0.4197333
+#&gt; 86      9        0.9     97.5% 0.5150781
+#&gt; 87      9        0.9      2.5% 0.3031353
+#&gt; 88      9        0.9 13.05556% 0.3464989
+#&gt; 89      9        0.9 23.61111% 0.4154799
+#&gt; 90      9        0.9 34.16667% 0.4484885
+#&gt; 91     10        1.0      2.5% 0.3027906
+#&gt; 92     10        1.0 34.16667% 0.4480865
+#&gt; 93     10        1.0 44.72222% 0.3808607
+#&gt; 94     10        1.0 86.94444% 0.5407424
+#&gt; 95     10        1.0 23.61111% 0.4150461
+#&gt; 96     10        1.0 65.83333% 0.5012927
+#&gt; 97     10        1.0 76.38889% 0.5131315
+#&gt; 98     10        1.0 13.05556% 0.3460701
+#&gt; 99     10        1.0 55.27778% 0.4192537
+#&gt; 100    10        1.0     97.5% 0.5147379</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
