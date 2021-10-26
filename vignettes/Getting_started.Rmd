@@ -48,7 +48,7 @@ library(ggplot2)
 ```
 
 ## Example Data
-An example dataset taken from part of the Nipigon caribou range in Ontario is provided with the package. It uses the provincial land cover classes to determine the `landCover`. As the RSPF is generated using a set of specific resource classes which may not match those of standard land-cover classes there is a re-classing function (`reclassPLC`) which uses a look-up table to convert Ontario provincial land cover classes into the correct resource classes to use in the RSPF model.
+An example data set taken from part of the Nipigon caribou range in Ontario is provided with the package. It uses the provincial land cover classes to determine the `landCover`. As the RSPF is generated using a set of specific resource classes which may not match those of standard land-cover classes there is a re-classing function (`reclassPLC`) which uses a look-up table to convert Ontario provincial land cover classes into the correct resource classes to use in the RSPF model. Disturbance data sets can be converted from polygons of year of disturbance or time since disturbance using (`reclassDist`). In the example fire data with polygons containing year of disturbance are converted to a presence absence raster of cumulative disturbance over the past 30 years.
 
 
 ```{r data in}
@@ -67,7 +67,9 @@ linFeat <- list(roads = read_sf(file.path(pth_base,
                 rail = read_sf(file.path(pth_base, "rail.shp")),
                 utilities = read_sf(file.path(pth_base, "utilities.shp")))
 
-natDist <- raster(file.path(pth_base, "natDist.tif"))
+natDist <- sf::st_read(file.path(pth_base, "fireAFFES2020.shp")) %>% 
+  reclassDist(endYr = 2020, numCumYrs = 30, template = landCover, 
+              dateField = "FIRE_YEAR")
 
 anthroDist <- raster(file.path(pth_base, "anthroDist.tif"))
 

@@ -65,38 +65,39 @@
 #' 
 
 reclassDist <- function(distYr, endYr = 0, numCumYrs, template, dateField){
-  # TODO find quicker more efficient version
-  # If distYr is supplied as a raster convert it to an sf object
   if(inherits(distYr, "RasterLayer")){
-    tmp <- stars::st_as_stars(distYr %>% raster::as.factor())
-    distYr <- sf::st_as_sf(tmp,
-                           as_points = FALSE, merge = TRUE)
-  }
-  
-  # If no endYr is defined assume years relate to time since disturbance, and 
-  # thus any value smaller than numCumYrs should be recorded as a disturbance
-  if(endYr == 0){
-    out <- dplyr::filter(distYr,
-                         dplyr::between(distYr[[dateField]], 
-                                        endYr, 
-                                        numCumYrs))
-    
-  }else{ # If an endYr is included assume years represent dates of disturbance
-    startYr <- endYr - numCumYrs
-    
-    out <- dplyr::filter(distYr,
-                         dplyr::between(distYr[[dateField]], 
-                                        startYr, 
-                                        endYr))
-  }
-  
-  if(requireNamespace("fasterize", quietly = TRUE)){
-    out <- fasterize::fasterize(out, template, background = 0)
+    if(endYr == 0){
+      out <-  distYr < numCumYrs
+    } else {
+      startYr <- endYr - numCumYrs
+      
+      out <- (distYr - startYr) >= 0
+    }
   } else {
-    message("To speed up install fasterize package")
-    out <- raster::rasterize(out, template)
+    # If no endYr is defined assume years relate to time since disturbance, and 
+    # thus any value smaller than numCumYrs should be recorded as a disturbance
+    if(endYr == 0){
+      out <- dplyr::filter(distYr,
+                           dplyr::between(distYr[[dateField]], 
+                                          endYr, 
+                                          numCumYrs))
+      
+    }else{ # If an endYr is included assume years represent dates of disturbance
+      startYr <- endYr - numCumYrs
+      
+      out <- dplyr::filter(distYr,
+                           dplyr::between(distYr[[dateField]], 
+                                          startYr, 
+                                          endYr))
+    }
+    
+    if(requireNamespace("fasterize", quietly = TRUE)){
+      out <- fasterize::fasterize(out, template, background = 0)
+    } else {
+      message("To speed up install fasterize package")
+      out <- raster::rasterize(out, template)
+    }
   }
-  
-  
+  out <- raster::calc(out, fun = function(x){ifelse(is.na(x), 0, x)})
   return(out)
 }
