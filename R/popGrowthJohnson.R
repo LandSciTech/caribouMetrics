@@ -33,6 +33,7 @@
 #'   \code{FALSE} ignore interannual variability.
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
+#' @param progress Logical. Should progress updates be shown? 
 #'
 #' @return A data.frame of population size (N) and average growth rate (lambda)
 #'   projections for each sample population.
@@ -55,12 +56,21 @@ popGrowthJohnson <- function(N,
                              l_S=0.61,
                              h_S=1,
                              interannualVar = list(R_CV=0.46,S_CV=0.08696),
-                             probOption="binomial"){
+                             probOption="binomial",
+                             progress = interactive()){
   rr=data.frame(N=N)
   R_bar[R_bar<0]=0
   S_bar[S_bar<0]=0
   h_R = s*h_R
   l_R = s*l_R
+  
+  if(length(N) != length(R_bar) && length(R_bar) > 1){
+    stop("R_bar must have length = 1 or the same length as N", call. = FALSE)
+  }
+  
+  if(length(N) != length(S_bar) && length(S_bar) > 1){
+    stop("S_bar  must have length = 1 or the same length as N", call. = FALSE)
+  }
   
   if(!is.element("R_phi",names(interannualVar))){
     R_bar=s*R_bar 
@@ -90,7 +100,9 @@ popGrowthJohnson <- function(N,
   }
   
   for(t in 1:numSteps){
-    print(paste("projecting step ",t))
+    if(progress){
+      print(paste("projecting step ",t))
+    }
     if(is.null(interannualVar)||any(is.na(interannualVar))||((length(interannualVar)==1)&&!interannualVar)){
       R_t= R_bar
       S_t = S_bar
