@@ -177,7 +177,7 @@
 <div id="example-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-data" class="anchor"></a>Example Data</h2>
-<p>An example dataset taken from part of the Nipigon caribou range in Ontario is provided with the package. It uses the provincial land cover classes to determine the <code>landCover</code>. As the RSPF is generated using a set of specific resource classes which may not match those of standard land-cover classes there is a re-classing function (<code>reclassPLC</code>) which uses a look-up table to convert Ontario provincial land cover classes into the correct resource classes to use in the RSPF model.</p>
+<p>An example data set taken from part of the Nipigon caribou range in Ontario is provided with the package. It uses the provincial land cover classes to determine the <code>landCover</code>. As the RSPF is generated using a set of specific resource classes which may not match those of standard land-cover classes there is a re-classing function (<code>reclassPLC</code>) which uses a look-up table to convert Ontario provincial land cover classes into the correct resource classes to use in the RSPF model. Disturbance data sets can be converted from polygons of year of disturbance or time since disturbance using (<code>reclassDist</code>). In the example fire data with polygons containing year of disturbance are converted to a presence absence raster of cumulative disturbance over the past 30 years.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># load data sets </span>
 <span class="va">pth_base</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span>
@@ -194,7 +194,17 @@
                 rail <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pth_base</span>, <span class="st">"rail.shp"</span><span class="op">)</span><span class="op">)</span>,
                 utilities <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pth_base</span>, <span class="st">"utilities.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">natDist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pth_base</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">natDist</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pth_base</span>, <span class="st">"fireAFFES2020.shp"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/reclassDist.html">reclassDist</a></span><span class="op">(</span>endYr <span class="op">=</span> <span class="fl">2020</span>, numCumYrs <span class="op">=</span> <span class="fl">30</span>, template <span class="op">=</span> <span class="va">landCover</span>, 
+              dateField <span class="op">=</span> <span class="st">"FIRE_YEAR"</span><span class="op">)</span>
+<span class="co">#&gt; Reading layer `fireAFFES2020' from data source </span>
+<span class="co">#&gt;   `/home/runner/work/_temp/Library/caribouMetrics/extdata/fireAFFES2020.shp' </span>
+<span class="co">#&gt;   using driver `ESRI Shapefile'</span>
+<span class="co">#&gt; Simple feature collection with 9 features and 15 fields</span>
+<span class="co">#&gt; Geometry type: MULTIPOLYGON</span>
+<span class="co">#&gt; Dimension:     XY</span>
+<span class="co">#&gt; Bounding box:  xmin: 686844.2 ymin: 12562360 xmax: 768557.3 ymax: 12629940</span>
+<span class="co">#&gt; Projected CRS: MNR_Lambert_Conformal_Conic</span>
 
 <span class="va">anthroDist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pth_base</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span>
 
@@ -245,7 +255,7 @@
 <span class="co">#&gt; crs        : +proj=lcc +lat_0=0 +lon_0=-85 +lat_1=44.5 +lat_2=53.5 +x_0=930000 +y_0=6430000 +datum=NAD83 +units=m +no_defs </span>
 <span class="co">#&gt; names      :         Fall,       Spring,       Summer,       Winter,          CON,          DEC,          DTN,         LGOP,         LGTP,          LGW,          MIX,           ST,        other,       TDENLF,          ESK, ... </span>
 <span class="co">#&gt; min values : 1.016601e-04, 8.982073e-05, 9.830580e-04, 2.397027e-02, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 9.737119e-03, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, ... </span>
-<span class="co">#&gt; max values :   0.75371971,   0.66838190,   0.49350898,   0.36179434,   0.66632667,   0.22591658,   0.34058535,   0.05509639,   0.22309148,   1.00000000,   0.68773221,   0.15617596,   0.20638626,  20.00729057,   1.71055030, ...</span></code></pre></div>
+<span class="co">#&gt; max values :   0.75371971,   0.66838190,   0.49350898,   0.36179434,   0.66632667,   0.22591658,   0.33947774,   0.05509639,   0.22309148,   1.00000000,   0.68773221,   0.15617596,   0.20638626,  20.00729057,   1.71055030, ...</span></code></pre></div>
 <p>You can create a plot of the results directly from the <code>CaribouHabitat</code> object. If <code>tmap</code> is installed it will be used to make a plot, if not <code>plot.raster</code> will be used. You can provide the season(s) you wish to display and additional arguments that will be passed on to either <code>qtm</code> or <code>plot.raster</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="va">carHab1</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Fall"</span>, <span class="st">"Summer"</span><span class="op">)</span><span class="op">)</span>
@@ -324,7 +334,7 @@
 <span class="co">#&gt; crs        : +proj=lcc +lat_0=0 +lon_0=-85 +lat_1=44.5 +lat_2=53.5 +x_0=930000 +y_0=6430000 +datum=NAD83 +units=m +no_defs </span>
 <span class="co">#&gt; names      :          Fall,        Spring,        Summer,        Winter,           CON,           DEC,           DTN,          LGOP,          LGTP,           LGW,           MIX,            ST,         other,        TDENLF,           ESK, ... </span>
 <span class="co">#&gt; min values :  7.935259e-50,  0.000000e+00,  0.000000e+00, 2.105618e-245,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00,  1.337890e-02,  9.552293e-04,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00, ... </span>
-<span class="co">#&gt; max values :    0.46909939,    0.67091042,    0.94115417,    0.99405120,    0.66955135,    0.17173101,    0.23433206,    0.03633134,    0.17216422,    0.99712162,    0.70017525,    0.15172801,    0.20388714,   18.22733964,    1.70658955, ...</span>
+<span class="co">#&gt; max values :    0.47129329,    0.67091042,    0.94184896,    0.99397098,    0.66955135,    0.17173101,    0.23284212,    0.03633134,    0.17216422,    0.99712162,    0.70017525,    0.15172801,    0.20388714,   18.22733964,    1.70658955, ...</span>
 
 <span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="va">MultRange</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Winter"</span>, <span class="st">"Spring"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="Getting_started_files/figure-html/results2-1.png" width="768"></p>
@@ -360,7 +370,7 @@
 <span class="co">#&gt;   ..@ attributes        :List of 3</span>
 <span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">disturb</span><span class="op">)</span>
 <span class="co">#&gt;   zone   Anthro      Fire Total_dist fire_excl_anthro</span>
-<span class="co">#&gt; 1    1 43.93089 0.7708216   44.30811        0.3772194</span></code></pre></div>
+<span class="co">#&gt; 1    1 43.93089 0.7708216   44.28643        0.3555401</span></code></pre></div>
 </div>
 <div id="demographic-models" class="section level2">
 <h2 class="hasAnchor">
@@ -416,7 +426,7 @@
 
 <span class="va">popGrow</span>
 <span class="co">#&gt;     N    lambda</span>
-<span class="co">#&gt; 1 323 0.9129874</span></code></pre></div>
+<span class="co">#&gt; 1 294 0.9086818</span></code></pre></div>
 <p><em>For additional details on functions in the package see the help documentation</em></p>
 </div>
 </div>
