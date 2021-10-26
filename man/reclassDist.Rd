@@ -38,6 +38,7 @@ period. The output from this function can be used as either the
 \code{disturbanceMetrics()}.
 }
 \examples{
+library(sf)
 # create template raster
 lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0,
                      ymx = 10, crs = 5070)
