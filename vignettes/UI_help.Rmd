@@ -218,8 +218,8 @@ base2 <- ggplot(data = popMetrics,
   theme(legend.position = "none")
 base2
 ```
-![](distMetOverTime.png){width=50%}
-![](demogOverTime.png){width=50%}
+![](./distMetOverTime.png){width=50%}
+![](./demogOverTime.png){width=50%}
 
 ```{r clean-up}
 delete(paste0(cDir,"/",libName,".ssim"), force = TRUE)
