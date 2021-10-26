@@ -204,10 +204,11 @@ ggplot(demRates, aes(Anthro, S_bar))+
 Finally, we can model population growth using `popGrowthJohnson()` which is an implementation of the 2-stage population growth model used in Johnson et al. (2020) but with some differences described in Dyson et al. (in Prep). 
 
 ```{r}
-popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
+popGrow <- popGrowthJohnson(N = c(2000, 2000), numSteps = 20,
+                            R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
-popGrow
+cbind(demRates[,1:5], popGrow)
 ```
 
 
