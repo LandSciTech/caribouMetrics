@@ -228,163 +228,188 @@ setMethod(
 #' @noRd
 setMethod(
   "processData", signature(inData = "DisturbanceMetrics", newData = "missing"), 
-  function(inData, linBuffMethod = "raster") {
+  function(inData, linBuffMethod = "raster", isPercent) {
     #inData=dm
     
     anthroDist <- inData@anthroDist
     natDist <- inData@natDist
     landCover <- inData@landCover
     
-    # check anthroDist and natDist are real if not make dummy
-    if(length(raster::unique(anthroDist)) == 0){
-      anthroDist <- raster::init(landCover, 
-                                 fun = function(x){rep(0, x)}, 
-                                 filename = raster::rasterTmpFile())
-    }
-    if(length(raster::unique(natDist)) == 0){
+    # check natDist is real if not make dummy
+    if(raster::ncell(natDist) == 1){
       natDist <- raster::init(landCover, 
                               fun = function(x){rep(0, x)}, 
                               filename = raster::rasterTmpFile())
     }
-    anthroDist <- reclassify(anthroDist, cbind(NA, 0))
     natDist <- reclassify(natDist, cbind(NA, 0))
     
-    ############ Buffer anthropogenic disturbance
-    #To speed calculations, include points from linFeat in raster.
-    message("buffering anthropogenic disturbance")
-    
-    anthroDist <- anthroDist > 0
+    anthroDist <- processAnthroDM(anthroDist, inData@linFeat[[1]], landCover, 
+                                  linBuffMethod = linBuffMethod,
+                                  inData = inData)
     
     
-    if(!is(inData@linFeat[[1]], "RasterLayer")){
-      if(linBuffMethod == "raster"){
-        # rasterize roads to template
-        tmplt <- stars::st_as_stars(sf::st_bbox(anthroDist), nx = raster::ncol(anthroDist),
-                                    ny = raster::nrow(anthroDist), values = 0)
-        
-        lfRas <- stars::st_rasterize(inData@linFeat[[1]][attr(inData@linFeat[[1]], "sf_geometry")],
-                                     template = tmplt,
-                                     options = "ALL_TOUCHED=TRUE") %>%
-          as("Raster")
-        
-        anthroDist <- raster::mask(anthroDist, lfRas, inverse = TRUE,
-                                   maskvalue = 0, updatevalue = 1)
-      } else {
-        lfPt <- inData@linFeat[[1]] %>% dplyr::filter(st_is(. , "POINT"))
-        
-        if(nrow(lfPt) > 0){
-          lfPt <- as(lfPt, "Spatial")
-          
-          lfRas <- raster::rasterize(lfPt, expVars, field = 1, background = 0) 
-          
-          anthroDist <- raster::mask(anthroDist, lfRas, inverse = TRUE,
-                                     maskvalue = 0, updatevalue = 1)
-        } 
-      }
-    }else{
-      lfRas <- inData@linFeat[[1]]
-      
-      anthroDist <- raster::mask(anthroDist, lfRas, inverse = TRUE,
-                                 maskvalue = 0, updatevalue = 1)
-    }
-    
-    # window radius 
-    winRad <- (inData@attributes$bufferWidth/res(anthroDist[[1]])[1]) %>% 
-      round(digits = 0)*res(anthroDist[[1]])[1] %>% 
-      round()
-
-    if(!inData@attributes$padProjPoly){
-      anthroDist <- raster::mask(anthroDist, inData@projectPoly)
-    }
-    
-    anthroDist <- movingWindowAvg(rast = anthroDist, radius = winRad,
-                               nms = "ANTHRO", 
-                               pad = inData@attributes$padFocal, 
-                               offset = FALSE)
-    
-    anthroDist <- anthroDist > 0 
-    
-     if(!is(inData@linFeat[[1]], "RasterLayer") && linBuffMethod != "raster"){
-      ############## Buffer linear features
-      message("buffering linear features")
-
-      #Note points were included with polygons above.
-      lf <- inData@linFeat[[1]] %>% dplyr::filter(!st_is(. , "POINT"))
-      
-      # simplify could speed this up but using raster method instead
-      #lf <- st_simplify(lf, dTolerance = res(anthroDist)[1])
-      
-      linBuff <- st_buffer(lf, inData@attributes$bufferWidth)
-
-      if(st_geometry_type(linBuff, by_geometry = FALSE) == "GEOMETRY"){
-        linBuff <- st_collection_extract(linBuff, "POLYGON")
-      }
-
-      # faster rasterization
-      if(requireNamespace("fasterize", quietly = TRUE)){
-        linBuff <- fasterize::fasterize(linBuff, anthroDist)
-      } else {
-        message("To speed up install fasterize package")
-        linBuff <- raster::rasterize(linBuff, anthroDist)
-      }
-
-      linBuff <- linBuff > 0
-      linBuff <- reclassify(linBuff, cbind(NA, 0))
-      anthroDist <- (linBuff + anthroDist) > 0
-     }
-    
-    fire_excl_anthro <- raster::overlay(natDist, 
-                                        anthroDist,
-                                        fun = function(x, y){
-                                          x <- x - y 
-                                          x <- x > 0
-                                          return(x)
-                                        })
-    
-    all <- (anthroDist + natDist) > 0
-    
-    
-    outStack <- raster::stack(anthroDist, 
-                              natDist, 
-                              all, 
-                              fire_excl_anthro)
-    
-    rm(anthroDist, natDist, all, fire_excl_anthro)
-    
-    if(requireNamespace("fasterize", quietly = TRUE)){
-      pp = fasterize::fasterize(inData@projectPoly, outStack[[1]])
-    } else {
-      message("To speed up install fasterize package")
-      pp = raster::rasterize(inData@projectPoly, outStack[[1]])
-    }
-    
-    #set NAs from landcover
-    toNA <- raster::overlay(landCover, pp,
-                            fun = function(x, y){
-                              ifelse(is.na(x) |x == 0| is.na(y), NA, 1)
-                            })
-    
-    outStack <- raster::overlay(outStack, toNA, fun = function(x, y){x * y})
-    rm(toNA, pp)
-    
-    names(outStack) = c("Anthro", 
-                        "Fire", 
-                        "Total_dist",
-                        "fire_excl_anthro")
-    
-    inData@processedData <- outStack
+    inData@processedData <- calcDMSpatial(anthroDist, natDist, landCover, 
+                                          inData)
     
     ####### Range summaries
-    message("calculating disturbance metrics")
-    
-    # 4 times faster and 7 times less memory needed vs using raster::zonal
-    rr <- exactextractr::exact_extract(outStack, inData@projectPoly, 
-                                       fun = "mean", append_cols = TRUE) %>% 
-      select(contains("mean."), everything()) %>% 
-      rename_with(~gsub("mean\\.", "", .x)) %>% 
-      mutate(zone = 1:n(), .before = everything())
-    
-    inData@disturbanceMetrics <- rr
+    inData@disturbanceMetrics <- calcDM(inData, isPercent)
     
     return(inData)
   })
+
+processAnthroDM <- function(anthroDist, linFeat, landCover, 
+                            linBuffMethod = "raster", inData){
+  
+  # check anthroDist is real if not make dummy
+  if(raster::ncell(anthroDist) == 1){
+    anthroDist <- raster::init(landCover, 
+                               fun = function(x){rep(0, x)}, 
+                               filename = raster::rasterTmpFile())
+  }
+  anthroDist <- reclassify(anthroDist, cbind(NA, 0))
+  
+  ############ Buffer anthropogenic disturbance
+  #To speed calculations, include points from linFeat in raster.
+  message("buffering anthropogenic disturbance")
+  
+  anthroDist <- anthroDist > 0
+  
+  
+  if(!is(linFeat, "RasterLayer")){
+    if(linBuffMethod == "raster"){
+      # rasterize roads to template
+      tmplt <- stars::st_as_stars(sf::st_bbox(anthroDist), nx = raster::ncol(anthroDist),
+                                  ny = raster::nrow(anthroDist), values = 0)
+      
+      lfRas <- stars::st_rasterize(linFeat[attr(linFeat, "sf_geometry")],
+                                   template = tmplt,
+                                   options = "ALL_TOUCHED=TRUE") %>%
+        as("Raster")
+      
+      anthroDist <- raster::mask(anthroDist, lfRas, inverse = TRUE,
+                                 maskvalue = 0, updatevalue = 1)
+    } else {
+      lfPt <- linFeat %>% dplyr::filter(st_is(. , "POINT"))
+      
+      if(nrow(lfPt) > 0){
+        lfPt <- as(lfPt, "Spatial")
+        
+        lfRas <- raster::rasterize(lfPt, expVars, field = 1, background = 0) 
+        
+        anthroDist <- raster::mask(anthroDist, lfRas, inverse = TRUE,
+                                   maskvalue = 0, updatevalue = 1)
+      } 
+    }
+  }else{
+    lfRas <- linFeat
+    
+    anthroDist <- raster::mask(anthroDist, lfRas, inverse = TRUE,
+                               maskvalue = 0, updatevalue = 1)
+  }
+  
+  # window radius 
+  winRad <- (inData@attributes$bufferWidth/res(anthroDist[[1]])[1]) %>% 
+    round(digits = 0)*res(anthroDist[[1]])[1] %>% 
+    round()
+  
+  if(!inData@attributes$padProjPoly){
+    anthroDist <- raster::mask(anthroDist, inData@projectPoly)
+  }
+  
+  anthroDist <- movingWindowAvg(rast = anthroDist, radius = winRad,
+                                nms = "ANTHRO", 
+                                pad = inData@attributes$padFocal, 
+                                offset = FALSE)
+  
+  anthroDist <- anthroDist > 0 
+  
+  if(!is(linFeat, "RasterLayer") && linBuffMethod != "raster"){
+    ############## Buffer linear features
+    message("buffering linear features")
+    
+    #Note points were included with polygons above.
+    lf <- linFeat %>% dplyr::filter(!st_is(. , "POINT"))
+    
+    # simplify could speed this up but using raster method instead
+    #lf <- st_simplify(lf, dTolerance = res(anthroDist)[1])
+    
+    linBuff <- st_buffer(lf, inData@attributes$bufferWidth)
+    
+    if(st_geometry_type(linBuff, by_geometry = FALSE) == "GEOMETRY"){
+      linBuff <- st_collection_extract(linBuff, "POLYGON")
+    }
+    
+    # faster rasterization
+    if(requireNamespace("fasterize", quietly = TRUE)){
+      linBuff <- fasterize::fasterize(linBuff, anthroDist)
+    } else {
+      message("To speed up install fasterize package")
+      linBuff <- raster::rasterize(linBuff, anthroDist)
+    }
+    
+    linBuff <- linBuff > 0
+    linBuff <- reclassify(linBuff, cbind(NA, 0))
+    anthroDist <- (linBuff + anthroDist) > 0
+  }
+  return(anthroDist)
+}
+
+calcDMSpatial <- function(anthroDist, natDist, landCover, inData){
+  fire_excl_anthro <- raster::overlay(natDist, 
+                                      anthroDist,
+                                      fun = function(x, y){
+                                        x <- x - y 
+                                        x <- x > 0
+                                        return(x)
+                                      })
+  
+  all <- (anthroDist + natDist) > 0
+  
+  outStack <- raster::stack(anthroDist, 
+                            natDist, 
+                            all, 
+                            fire_excl_anthro)
+  
+  rm(anthroDist, natDist, all, fire_excl_anthro)
+  
+  if(requireNamespace("fasterize", quietly = TRUE)){
+    pp = fasterize::fasterize(inData@projectPoly, outStack[[1]])
+  } else {
+    message("To speed up install fasterize package")
+    pp = raster::rasterize(inData@projectPoly, outStack[[1]])
+  }
+  
+  #set NAs from landcover
+  toNA <- raster::overlay(landCover, pp,
+                          fun = function(x, y){
+                            ifelse(is.na(x) |x == 0| is.na(y), NA, 1)
+                          })
+  
+  outStack <- raster::overlay(outStack, toNA, fun = function(x, y){x * y})
+  rm(toNA, pp)
+  
+  names(outStack) = c("Anthro", 
+                      "Fire", 
+                      "Total_dist",
+                      "fire_excl_anthro")
+  return(outStack)
+}
+
+calcDM <- function(inData, isPercent){
+  message("calculating disturbance metrics")
+  
+  # 4 times faster and 7 times less memory needed vs using raster::zonal
+  rr <- exactextractr::exact_extract(inData@processedData, inData@projectPoly, 
+                                     fun = "mean", append_cols = TRUE) %>% 
+    select(contains("mean."), everything()) %>% 
+    rename_with(~gsub("mean\\.", "", .x)) %>% 
+    mutate(zone = 1:n(), .before = everything())
+  
+  if (isPercent == TRUE) {
+    rr$Anthro <- rr$Anthro * 100
+    rr$Fire <- rr$Fire * 100
+    rr$Total_dist <- rr$Total_dist * 100
+    rr$fire_excl_anthro <- rr$fire_excl_anthro * 100
+  }
+  return(rr)
+}

@@ -72,7 +72,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'@return A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
 #'
 #'@seealso \code{\link{DisturbanceMetrics-class}} for information on the object
-#'  returned and \code{\link{updateDisturbance}} for updating and existing
+#'  returned and \code{\link{updateDisturbance}} for updating an existing
 #'  DisturbanceMetrics object.
 #'
 #'@source Environment Canada. 2011. Scientific Assessment to Inform the
@@ -130,7 +130,7 @@ setMethod(
       linBuffMethod <- "raster"
     }
     
-    x <- processData(x, linBuffMethod = linBuffMethod)
+    x <- processData(x, linBuffMethod = linBuffMethod, isPercent = isPercent)
 
     if(!is.null(dots$saveOutput)){
       
@@ -144,13 +144,6 @@ setMethod(
       raster::writeRaster(x@habitatUse, filename = dots$saveOutput, 
                           overwrite = TRUE, bylayer = byLayer, 
                           suffix = "names")
-    }
-    
-    if (isPercent == TRUE) {
-      x@disturbanceMetrics$Anthro <- x@disturbanceMetrics$Anthro * 100
-      x@disturbanceMetrics$Fire <- x@disturbanceMetrics$Fire * 100
-      x@disturbanceMetrics$Total_dist <- x@disturbanceMetrics$Total_dist * 100
-      x@disturbanceMetrics$fire_excl_anthro <- x@disturbanceMetrics$fire_excl_anthro * 100
     }
     
     return(x)
