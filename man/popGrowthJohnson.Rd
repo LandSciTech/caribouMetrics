@@ -21,7 +21,8 @@ popGrowthJohnson(
   l_S = 0.61,
   h_S = 1,
   interannualVar = list(R_CV = 0.46, S_CV = 0.08696),
-  probOption = "binomial"
+  probOption = "binomial",
+  progress = interactive()
 )
 }
 \arguments{
@@ -65,6 +66,8 @@ variability parameters. These can be either coefficients of variation
 
 \item{probOption}{Character. Choices are "binomial","continuous" or
 "matchJohnson2020". See description for details.}
+
+\item{progress}{Logical. Should progress updates be shown?}
 }
 \value{
 A data.frame of population size (N) and average growth rate (lambda)
