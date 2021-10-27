@@ -164,7 +164,8 @@ numbers of animals used by Stewart et al. (in prep). See
   l_S <span class='op'>=</span> <span class='fl'>0.61</span>,
   h_S <span class='op'>=</span> <span class='fl'>1</span>,
   interannualVar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>R_CV <span class='op'>=</span> <span class='fl'>0.46</span>, S_CV <span class='op'>=</span> <span class='fl'>0.08696</span><span class='op'>)</span>,
-  probOption <span class='op'>=</span> <span class='st'>"binomial"</span>
+  probOption <span class='op'>=</span> <span class='st'>"binomial"</span>,
+  progress <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -244,6 +245,10 @@ variability parameters. These can be either coefficients of variation
       <th>probOption</th>
       <td><p>Character. Choices are "binomial","continuous" or
 "matchJohnson2020". See description for details.</p></td>
+    </tr>
+    <tr>
+      <th>progress</th>
+      <td><p>Logical. Should progress updates be shown?</p></td>
     </tr>
     </table>
 
