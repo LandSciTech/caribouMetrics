@@ -14,9 +14,9 @@ resource_files:
 
 ## Introduction
 
-This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the [`caribouMetrics`](https://landscitech.github.io/caribouMetrics/) package. There are vignettes available for the [caribou habitat](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html) and [demographic](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html) models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) [Johnson et. al. (2020)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637) and [ECCC (2011)](http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf)
+This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the [`caribouMetrics`](https://landscitech.github.io/caribouMetrics/) package. There are vignettes available for the [caribou habitat](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html) and [demographic](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html) models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) [Johnson et. al. (2020)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637) and [ECCC (2011)](http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf).
 
-Below we provide links between the options exposed in the UI and the `caribouMetrics` function documentation. 
+Below we provide links between the options exposed in the UI and the `caribouMetrics` function documentation and demonstrate how to set up a SynscroSim library and extract scenario results for plotting in R using rsyncrosim. 
 
 ## Documentation for model options
 By right clicking a scenario you can access the scenario properties. The Caribou Metrics tab has options that can be set for the models. The table below shows the option from the UI, the corresponding argument name in `caribouMetrics`, and the names of the function(s) in `caribouMetrics` that use that argument. Clicking the function name will take you to the documentation for that function. You can read the description at the top of the page to learn what the function does and then find the argument name to read its definition. 
@@ -59,7 +59,7 @@ UI option|caribouMetrics argument|Function|Notes|
 |Linear Features|linFeat|`cariouHabitat()`|
 
 ## Set up a new SyncroSim Library
-Here we demonstrate how to set up a SyncroSim Library for the ROFSim Package using the rsyncrosim package. For more details on the rsyncrosim package and its funcitons see https://syncrosim.github.io/rsyncrosim/articles/a01_rsyncrosim_vignette_basic.html
+Here we demonstrate how to set up a SyncroSim Library for the ROFSim Package using the rsyncrosim package. For more details on the rsyncrosim package and its funcitons see the Introduction to rsyncrosim [vignette](https://syncrosim.github.io/rsyncrosim/articles/a01_rsyncrosim_vignette_basic.html)
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -69,7 +69,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r prep_lib}
+In this example we will create the new library inside the `caribouMetrics` package directory in order to take advantage of the example data sets installed there. First we create a library called "demoSSimLib" and then a project called "Demo".
+
+```{r prep_lib_1}
 library(rsyncrosim)
 
 # Install ROFSim package using file path to ssimpkg file
@@ -83,22 +85,25 @@ dir.create(cDir)
 
 libName <-  "demoSSimLib"
 
-# Make plc have expected classes ROFsim TODO is fix this 
-plcRas <- raster::raster(file.path(rootPth, "landCover.tif"))
-plcRas[1,1] <- 29
-raster::writeRaster(plcRas, file.path(rootPth, "landCover.tif"), 
-                    overwrite = TRUE)
-
 cLib <- ssimLibrary(paste0(cDir, "/", libName), package = "ROFSim", overwrite = TRUE)
 
 cProj <- project(cLib, "Demo")
 
-datasheet(cProj)
+```
 
+Next, we ensure that SyncroSim uses the same R version as is used to run this vignette. This is only necessary if you have multiple R versions installed. 
+
+```{r prep_lib_2}
 # Make sure the library uses the correct R installation
 rConfig <- datasheet(cLib, name = "core_RConfig")
 rConfig <- addRow(rConfig, c(ExePath = list.files(R.home("bin"), "Rscript", full.names = TRUE)))
 saveDatasheet(cLib, rConfig, name = "core_RConfig")
+```
+
+Now we will set up the data sheets used at the project level and the run control scenario. To determine the names of the sheets in the project look at `cProjDS`. You can determine what column names and variable types are expected for a sheet with for example `str(datasheet(cProj, "ROFSim_CaribouRange"))`.
+```{r prep_proj}
+# inspect datasheets used at the project level
+cProjDS <- datasheet(cProj)
 
 # set available options for input data
 cSheet <- "ROFSim_CaribouRange"
@@ -121,7 +126,8 @@ saveDatasheet(rcScn, cc, name = cSheet)
 ```
 
 
-### Prepare a scenario
+Finally, we set up a scenario by setting options for the models and telling SyncroSim where to find the input files. This scenario inherits the options from the run control scenario created above. We can run the scenario from R or open the SyncroSim library to see the user interface and run it from there.
+
 ```{r prep-scenario}
 # scenario - caribou - current
 cbScn <- scenario(cProj, "Caribou - 2020-2100")
@@ -172,23 +178,24 @@ saveDatasheet(cbScn, cc, name = cSheet, append = FALSE)
 
 dependency(cbScn, rcScn)
 
-# Open the library in the SyncroSim UI
-# shell.exec(filepath(cLib))
-
 # run the scenario
 cbRes <- run(cbScn)
+
+# Open the library in the SyncroSim UI
+# shell.exec(filepath(cLib))
 
 ```
 
 
-
 ## Explore model results in R
+Once the scenario has run we can look at the results using the user interface or we can extract the results from the UI and create flexible custom plots in R. Here we extract the disturbance metrics to plot change over time (in our example there is no change) and extract the change in population metrics to see the variation among the 35 replicate populations. 
+
 ```{r plt_res}
 library(ggplot2)
 theme_set(theme_bw())
 
 #Find scenario ID of results
-scenario(cLib)
+scenNames <- scenario(cLib)
 
 #Load result tables
 rScn <- scenario(cLib, 3)
@@ -223,6 +230,8 @@ base2
 ```
 ![](./distMetOverTime.png){width=50%}
 ![](./demogOverTime.png){width=50%}
+
+Finally delete the library to tidy up.
 
 ```{r clean-up}
 delete(paste0(cDir,"/",libName,".ssim"), force = TRUE)
