@@ -123,13 +123,15 @@ setMethod(
       }
       
       if(inherits(newData$linFeat, "sf")){
-        #tmplt <- raster(inData@landCover) %>% raster::`res<-`(c(400, 400))
+        newData$linFeat <- checkAlign(newData$linFeat, inData@projectPoly,
+                                      "linFeat", "projectPoly")
+        
         inData@linFeat <- rasterizeLineDensity(newData$linFeat, tmplt)
       }
       
     }
     
-    if(!all(sapply(newData, is, "RasterLayer"))){
+    if(!all(sapply(newData[setdiff(names(newData), "linFeat")], is, "RasterLayer"))){
       stop("All data supplied in the newData list must be RasterLayer objects", 
            call. = FALSE)
     }
@@ -213,8 +215,11 @@ setMethod(
     
     notUpdated <- which(!names(inData@processedData) %in% names(expVars)) 
     
-    inData@processedData <- raster::stack(expVars, 
-                                          inData@processedData[[notUpdated]])
+    expVars <- raster::stack(expVars, 
+                             inData@processedData[[notUpdated]])
+    # order output stack to match 
+    inData@processedData <- expVars[[names(inData@processedData)]]
+    
     
     return(inData)
   })
