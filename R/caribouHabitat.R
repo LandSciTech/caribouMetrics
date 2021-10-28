@@ -161,6 +161,17 @@ setMethod(
 
     dots <- list(...)
     
+    # check all optional arguments are in expected names
+    expDotArgs <- c("natDist", "anthroDist", 
+                      "winArea", "eskerSave", "linFeatSave", 
+                      "padProjPoly", "padFocal", "ptDensity", 
+                      "tmplt", "doScale", "saveOutput")
+    
+    if(!all(names(dots) %in% expDotArgs)){
+      stop("Argument ", names(dots)[which(!names(dots) %in% expDotArgs)], 
+           " does not match an expected argument. See ?caribouHabitat for arguments")
+    }
+    
     if(!is.null(dots$saveOutput)){
       if(!dir.exists(dirname(dots$saveOutput))){
         stop("saveOutput directory does not exist: ", saveOutput)

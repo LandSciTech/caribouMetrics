@@ -67,6 +67,10 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'   are rasterized using the stars package and buffered using a moving window
 #'   method. If "sf" then the lines are buffered with st_buffer and then
 #'   rasterized. Either way points are included in the raster output.}
+#'   \item{saveOutput}{character. The filename to save the RasterBrick of binary
+#'   disturbances with buffered anthropogenic disturbance. Note this will
+#'   overwrite existing files with the same name. The .grd format is recommended
+#'   because it will preserve layer names when the file is reloaded.}
 #' }
 #' 
 #'@return A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
@@ -117,6 +121,16 @@ setMethod(
 
     dots <- list(...)
     
+    # check all optional arguments are in expected names
+    expDotArgs <- c("natDist", "anthroDist",  "bufferWidth", 
+                    "padProjPoly", "padFocal", "linBuffMethod", 
+                    "saveOutput")
+    
+    if(!all(names(dots) %in% expDotArgs)){
+      stop("Argument ", names(dots)[which(!names(dots) %in% expDotArgs)], 
+           " does not match an expected argument. See ?disturbanceMetrics for arguments")
+    }
+    
     inputDataArgs <- dots[c("landCover","natDist","anthroDist","bufferWidth", "padProjPoly", "padFocal")]
     
     inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]
@@ -141,7 +155,7 @@ setMethod(
                 " Use .grd format to preserve names")
       }
  
-      raster::writeRaster(x@habitatUse, filename = dots$saveOutput, 
+      raster::writeRaster(x@processedData, filename = dots$saveOutput, 
                           overwrite = TRUE, bylayer = byLayer, 
                           suffix = "names")
     }
