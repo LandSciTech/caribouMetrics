@@ -236,16 +236,14 @@
 <div id="with-precision" class="section level3">
 <h3 class="hasAnchor">
 <a href="#with-precision" class="anchor"></a>With precision</h3>
-<p>The Johnson et al. (2020) model with parameter uncertainty and precision. Faint coloured lines show example trajectories of expected demographic rates in sample populations, assuming each sample population is randomly distributed among quantiles of the beta distribution, and each population remains in the same quantile of the beta distribution as disturbance changes. <img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"></p>
-<pre><code>#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</code></pre>
-<p><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
+<p>The Johnson et al. (2020) model with parameter uncertainty and precision. Faint coloured lines show example trajectories of expected demographic rates in sample populations, assuming each sample population is randomly distributed among quantiles of the beta distribution, and each population remains in the same quantile of the beta distribution as disturbance changes. <img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
 </div>
 </div>
 <div id="projection-of-population-growth-over-time-on-a-changing-landscape" class="section level2">
 <h2 class="hasAnchor">
 <a href="#projection-of-population-growth-over-time-on-a-changing-landscape" class="anchor"></a>Projection of population growth over time on a changing landscape</h2>
 <p>In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade. We set <code>interannualVar = FALSE</code>, <code>K = FALSE</code>, and <code>probOption = "continuous"</code> to use a simpler 2-stage demographic model without interannual variability, density dependence, or discrete numbers of animals, as in Stewart et al. in prep.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">numTimesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span>
 <span class="va">stepLength</span> <span class="op">&lt;-</span> <span class="fl">10</span>
 <span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span>
