@@ -388,7 +388,7 @@
 
 <span class="va">demRates</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>covTable <span class="op">=</span> <span class="va">exTable</span>,
                              popGrowthPars <span class="op">=</span> <span class="va">demCoefs</span><span class="op">)</span>
-<span class="co">#&gt; Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.019 sec elapsed</span>
+<span class="co">#&gt; Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.021 sec elapsed</span>
 <span class="co">#&gt; Elapsed time for caribou prediction for recruitment for Johnson:: 0.004 sec elapsed</span>
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">demRates</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">Anthro</span>, <span class="va">S_bar</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
@@ -407,8 +407,8 @@
 
 <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">demRates</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, <span class="va">popGrow</span><span class="op">)</span>
 <span class="co">#&gt;   zone   Anthro      Fire Total_dist fire_excl_anthro   N    lambda</span>
-<span class="co">#&gt; 1    1 43.93089 0.7708216   44.28643        0.3555401 311 0.9113079</span>
-<span class="co">#&gt; 2    1 53.93089 0.7708216   54.28643        0.3555401 163 0.8823616</span></code></pre></div>
+<span class="co">#&gt; 1    1 43.93089 0.7708216   44.28643        0.3555401 373 0.9197689</span>
+<span class="co">#&gt; 2    1 53.93089 0.7708216   54.28643        0.3555401 197 0.8907842</span></code></pre></div>
 <p><em>For additional details on functions in the package see the help documentation</em></p>
 </div>
 </div>
