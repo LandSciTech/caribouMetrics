@@ -26,8 +26,12 @@ test_that("popGrowthJohnson options work", {
   
   expect_true(all(which(res3$lambda < 1) == 1:5))
   
-  # there is an error for extreme values of R_bar or S_bar see issue #73
-  expect_error(popGrowthJohnson(1000, 20, R_bar = 0.6, S_bar = 0.2))
+  # there is an error for extreme values of R_bar or S_bar
+  expect_error(popGrowthJohnson(1000, 20, R_bar = 0.6, S_bar = 0.2),
+               "Expected survival S_bar should be between")
+  
+  expect_error(popGrowthJohnson(1000, 20, R_bar = 0.9, S_bar = 0.7),
+               "Expected recruitment R_bar should be between")
   
   res4 <- popGrowthJohnson(1000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE)
   # lower carrying capacity
