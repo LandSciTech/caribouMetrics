@@ -81,6 +81,7 @@ Collate:
     'sampleCoefs.R'
     'sampleRates.R'
     'updateCaribou.R'
+    'updateDisturbance.R'
 Suggests: 
     testthat (>= 2.1.0),
     knitr,

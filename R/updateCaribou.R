@@ -16,7 +16,7 @@ NULL
 #' CaribouHabitat object is reused.
 #'
 #' @param CarHab CaribouHabitat object
-#' @param newData a named list of RasterLayer objects to be used to update
+#' @param newData a named list of objects to be used to update
 #'   CarHab. Potential names are: landCover, natDist, anthroDist, and
 #'   linFeat.
 #' @param resultsOnly logical. If FALSE the whole CaribouHabitat object is
@@ -74,8 +74,6 @@ NULL
 #'                                                              ncol = 2, byrow = TRUE))),
 #'                               crs = 5070))
 #' 
-#' # updateCaribou only takes raster inputs so need to rasterize the new lines first
-#' lf2 <- rasterizeLineDensity(lf2, r = lc)
 #' 
 #' res2 <- updateCaribou(res, newData = list(linFeat = lf2))
 #' 

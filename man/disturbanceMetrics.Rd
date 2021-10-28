@@ -103,6 +103,6 @@ disturbanceMetrics(landCover = lc,
 }
 \seealso{
 \code{\link{DisturbanceMetrics-class}} for information on the object
- returned and \code{\link{updateDisturbance}} for updating and existing
+ returned and \code{\link{updateDisturbance}} for updating an existing
  DisturbanceMetrics object.
 }
