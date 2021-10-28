@@ -114,6 +114,7 @@ updateDisturbance <- function(distMet, newData, linBuffMethod = "raster",
                               fun = function(x){rep(0, x)}, 
                               filename = raster::rasterTmpFile())
     }
+    natDist <- newData2@natDist
   } else {
     natDist <- distMet@natDist
   }

@@ -7,11 +7,11 @@ test_that("popGrowthJohnson options work", {
   res1 <- popGrowthJohnson(c(200, 400, 600) , 20, 0.5, 0.8, progress = FALSE)
   
   # vector for R_bar
-  expect_error(popGrowthJohnson(1000, 20, c(rep(0.2, 5), rep(0.9, 5)),
+  expect_error(popGrowthJohnson(1000, 20, c(rep(0.2, 5), rep(0.8, 5)),
                                 0.8, progress = FALSE), 
                "must have length")
   
-  res2 <- popGrowthJohnson(1:10*100, 20, c(rep(0.2, 5), rep(0.9, 5)),
+  res2 <- popGrowthJohnson(1:10*100, 20, c(rep(0.2, 5), rep(0.8, 5)),
                            0.8, progress = FALSE) 
   
   expect_true(all(which(res2$lambda < 1) == 1:5))
