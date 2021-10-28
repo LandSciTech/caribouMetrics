@@ -65,7 +65,6 @@ Collate:
     'demographicRates.R'
     'disturbanceMetrics.R'
     'getCoefs.R'
-    'getSyncSimData.R'
     'spatialAlignFns.R'
     'inputData.R'
     'inputDataDisturbance.R'

@@ -21,7 +21,7 @@ rasterized. Either way points are included in the raster output.}
 \item{isPercent}{logical. Should the results be returned as a percentage?}
 }
 \value{
-
+A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
 }
 \description{
 Update a DisturbanceMetrics object in order to avoid reprocessing parts of
@@ -34,4 +34,43 @@ be combined with the existing data in the DisturbanceMetrics object to
 determine the buffered anthropogenic disturbance
 
 If  \code{newData} contains only natDist then only Fire is updated.
+}
+\examples{
+# create example rasters
+lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+nd <- lc
+nd[1:3, 1:3] <- 1
+ad <- lc
+ad[3:5, 3:5] <- 1
+lc[] <- 1
+
+# create sf objects
+lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10, 10), 
+                                                            ncol = 2, byrow = TRUE))),
+                              crs = 5070))
+projPol <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(ad)))
+
+# calculate disturbance 
+dm <- disturbanceMetrics(landCover = lc,
+                         linFeat = lf,
+                         natDist = nd,
+                         anthroDist = ad,
+                         projectPoly = projPol,
+                         padFocal = TRUE,
+                         bufferWidth = 1)
+                   
+# new linear features
+lf2 <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10, 10),
+                                                             ncol = 2, byrow = TRUE)),
+                                    sf::st_linestring(matrix(c(0, 9, 9, 10),
+                                                             ncol = 2, byrow = TRUE)),
+                                    sf::st_linestring(matrix(c(10, 0, 5, 5),
+                                                             ncol = 2, byrow = TRUE))),
+                              crs = 5070))
+dm2 <- updateDisturbance(dm, newData = list(linFeat = lf2))
+}
+\seealso{
+\code{\link{DisturbanceMetrics-class}} for information on the object
+ returned and \code{\link{disturbanceMetrics}} for making a new
+ DisturbanceMetrics object.
 }

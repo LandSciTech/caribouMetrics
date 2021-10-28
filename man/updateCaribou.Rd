@@ -21,7 +21,7 @@ updateCaribou(CarHab, newData, ...)
 \arguments{
 \item{CarHab}{CaribouHabitat object}
 
-\item{newData}{a named list of RasterLayer objects to be used to update
+\item{newData}{a named list of objects to be used to update
 CarHab. Potential names are: landCover, natDist, anthroDist, and
 linFeat.}
 
@@ -98,8 +98,6 @@ lf2 <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 25000, 2500
                                                              ncol = 2, byrow = TRUE))),
                               crs = 5070))
 
-# updateCaribou only takes raster inputs so need to rasterize the new lines first
-lf2 <- rasterizeLineDensity(lf2, r = lc)
 
 res2 <- updateCaribou(res, newData = list(linFeat = lf2))
 
