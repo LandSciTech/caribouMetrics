@@ -14,7 +14,7 @@ setGeneric("inputDataDisturbance", function(landCover,linFeat, projectPoly, ...)
 #' @noRd
 setMethod(
   "inputDataDisturbance", signature(landCover = "RasterLayer"), 
-  function(landCover, linFeat, projectPoly, 
+  function(landCover, linFeat = NULL, projectPoly, 
            natDist=NULL,anthroDist = NULL,
            bufferWidth = 500, padProjPoly = FALSE,
            padFocal = FALSE) {
@@ -39,23 +39,28 @@ setMethod(
     projectPoly <- projPolyOut[["projectPoly"]]
     projectPolyOrig <- projPolyOut[["projectPolyOrig"]]
     rm(projPolyOut)
-
-    # combine linFeat
-    if(inherits(linFeat, "list")){
-      linFeat <- combineLinFeat(linFeat)
-    }
-
-    if(is(linFeat, "Spatial")){
-      linFeat <- sf::st_as_sf(linFeat)
-    } 
     
-    if(is(linFeat, "Raster")){
-      rastLst <- lst(natDist, anthroDist, linFeat)
-
+    if(!is.null(linFeat)){
+      # combine linFeat
+      if(inherits(linFeat, "list")){
+        linFeat <- combineLinFeat(linFeat)
+      }
+      
+      if(is(linFeat, "Spatial")){
+        linFeat <- sf::st_as_sf(linFeat)
+      } 
+      
+      if(is(linFeat, "Raster")){
+        rastLst <- lst(natDist, anthroDist, linFeat)
+        
+      } else {
+        rastLst <- lst(natDist, anthroDist)
+        linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
+      }
     } else {
-      rastLst <- lst(natDist, anthroDist)
-      linFeat <- checkAlign(linFeat, landCover, "linFeat", "landCover")
+      rastLst <- lst(natDist, anthroDist, linFeat)
     }
+    
 
     # check alignment of all raster layers
     rastLst <- prepRasts(rastLst, landCover, projectPoly)
@@ -70,6 +75,10 @@ setMethod(
     
     if(is(linFeat, "Raster")){
       linFeat <- rastLst$linFeat
+    }
+    
+    if(is.null(linFeat)){
+      linFeat <- raster(matrix(NA))
     }
     
     return(new("DisturbanceMetrics", rastLst$landCover, rastLst$natDist, 

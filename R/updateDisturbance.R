@@ -1,5 +1,5 @@
-updateDisturbance <- function(distMet, newData, expectRestore,
-                              linBuffMethod = "raster", isPercent = TRUE){
+updateDisturbance <- function(distMet, newData, linBuffMethod = "raster",
+                              isPercent = TRUE){
   
   # check names match expected
   if(is.null(names(newData)) ||
@@ -12,15 +12,9 @@ updateDisturbance <- function(distMet, newData, expectRestore,
                                   "linFeat" ))], call. = FALSE)
   }
   
-  # natDist and anthroDist are optional will work if null but if null should use
-  # distMet for further calcs
-  if(!is.null(newData$linFeat)){
-    linFeat <- newData$linFeat
-  } else{
-    linFeat <- distMet@linFeat
-  }
+
   newData2 <- inputDataDisturbance(distMet@landCover, 
-                                   linFeat = linFeat,
+                                   linFeat = newData$linFeat,
                                    projectPoly = distMet@projectPoly, 
                                    natDist = newData$natDist, 
                                    anthroDist = newData$anthroDist,
@@ -47,7 +41,7 @@ updateDisturbance <- function(distMet, newData, expectRestore,
                                   inData = distMet)
     
   } else {
-    anthroDist <- distMet@anthroDist
+    anthroDist <- distMet@processedData$Anthro
   }
   
   if(!is.null(newData$natDist)){
