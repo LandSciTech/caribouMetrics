@@ -86,11 +86,11 @@ calcRSP <- function(resourceProp, coefs, seasons = "all", doScale = FALSE){
                                      stringsAsFactors = FALSE) %>% 
       mutate(order = 1:n()) %>% 
       full_join(coefs, by = c(resType = "Variable")) %>% 
-      spread(Season, Coefficient, fill = 0) %>% 
-      select(-`<NA>`) %>% 
-      gather(Season, Coefficient, -c(resType, WinArea, Range, order)) %>% 
-      arrange(order) %>% 
-      split(.$Season)
+      spread(.data$Season, .data$Coefficient, fill = 0) %>% 
+      select(-.data$`<NA>`) %>% 
+      gather("Season", "Coefficient", -c(.data$resType, .data$WinArea, .data$Range, .data$order)) %>% 
+      arrange(.data$order)
+    coefs2 <- split(coefs2, coefs2$Season)
     
     # calculate probability for each season
     out <-lapply(coefs2, function(y){

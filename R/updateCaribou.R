@@ -103,14 +103,13 @@ setMethod(
     
     if(length(unique(rangeCoefLst$coefRange)) > 1){
       
-      rangeCoefLst <- rangeCoefLst %>% 
-        split(.$coefRange)
+      rangeCoefLst <- split(rangeCoefLst, rangeCoefLst$coefRange)
       
       applyCalcRSP <- function(dat, rangeCoef, doScale, coefTable){
         dat <- raster::mask(dat, rangeCoef)
         
         coefT <- coefTable %>% 
-          filter(Range %in% rangeCoef$coefRange)
+          filter(.data$Range %in% rangeCoef$coefRange)
         
         habitatUse <- calcRSP(dat, coefT, doScale = doScale)
       }
@@ -133,7 +132,7 @@ setMethod(
       names(CarHab@habitatUse) <- names(habUseLst[[1]])
     } else {
       coefT <- coefTable %>% 
-        filter(Range %in% rangeCoefLst$coefRange)
+        filter(.data$Range %in% rangeCoefLst$coefRange)
       
       CarHab@habitatUse <- calcRSP(CarHab@processedData, coefT, 
                                    doScale = doScale)

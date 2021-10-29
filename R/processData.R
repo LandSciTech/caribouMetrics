@@ -51,12 +51,12 @@ setMethod(
     }
     
     # Get window area from table b/c some models used different sizes
-    if(is.null(inData@attributes$winArea)){
-      inData@attributes$winArea <- coefTable %>% 
-        filter(Range %in% inData@attributes$caribouRange$coefRange) %>% 
-        pull(WinArea) %>% 
-        unique()
-    }
+    # if(is.null(inData@attributes$winArea)){
+    #   inData@attributes$winArea <- coefTable %>% 
+    #     filter(.data$Range %in% inData@attributes$caribouRange$coefRange) %>% 
+    #     pull(.data$WinArea) %>% 
+    #     unique()
+    # }
     
     # window radius is radius of circle with winArea rounded to even number of
     # raster cells based on resolution
@@ -69,8 +69,8 @@ setMethod(
       addLayer(inData@linFeat) %>% 
       addLayer(inData@esker) 
     
-    layernames <- c(resTypeCode %>% arrange(code) %>%
-                      pull(ResourceType) %>% 
+    layernames <- c(resTypeCode %>% arrange(.data$code) %>%
+                      pull(.data$ResourceType) %>% 
                       as.character(),
                     "TDENLF", "ESK")
     
@@ -184,11 +184,11 @@ setMethod(
     if(all(c("linFeat", "landCover") %in% names(newData))){
       expVars <- expVars %>% addLayer(inData@linFeat)
       
-      layernames <- c(resTypeCode %>% arrange(code) %>%
-                        pull(ResourceType) %>% as.character(), "TDENLF")
+      layernames <- c(resTypeCode %>% arrange(.data$code) %>%
+                        pull(.data$ResourceType) %>% as.character(), "TDENLF")
     } else if ("landCover" %in% names(newData)){
-      layernames <- resTypeCode %>% arrange(code) %>%
-        pull(ResourceType) %>% as.character()
+      layernames <- resTypeCode %>% arrange(.data$code) %>%
+        pull(.data$ResourceType) %>% as.character()
     } else {
       expVars <- inData@linFeat
       
@@ -289,12 +289,12 @@ processAnthroDM <- function(anthroDist, linFeat, landCover,
       anthroDist <- raster::mask(anthroDist, lfRas, inverse = TRUE,
                                  maskvalue = 0, updatevalue = 1)
     } else {
-      lfPt <- linFeat %>% dplyr::filter(st_is(. , "POINT"))
+      lfPt <- linFeat %>% dplyr::filter(st_is(linFeat , "POINT"))
       
       if(nrow(lfPt) > 0){
         lfPt <- as(lfPt, "Spatial")
         
-        lfRas <- raster::rasterize(lfPt, expVars, field = 1, background = 0) 
+        lfRas <- raster::rasterize(lfPt, anthroDist, field = 1, background = 0) 
         
         anthroDist <- raster::mask(anthroDist, lfRas, inverse = TRUE,
                                    maskvalue = 0, updatevalue = 1)
@@ -328,7 +328,7 @@ processAnthroDM <- function(anthroDist, linFeat, landCover,
     message("buffering linear features")
     
     #Note points were included with polygons above.
-    lf <- linFeat %>% dplyr::filter(!st_is(. , "POINT"))
+    lf <- linFeat %>% dplyr::filter(!st_is(linFeat , "POINT"))
     
     # simplify could speed this up but using raster method instead
     #lf <- st_simplify(lf, dTolerance = res(anthroDist)[1])

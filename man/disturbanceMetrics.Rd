@@ -53,6 +53,10 @@ be combined. Linear features.}
   are rasterized using the stars package and buffered using a moving window
   method. If "sf" then the lines are buffered with st_buffer and then
   rasterized. Either way points are included in the raster output.}
+  \item{saveOutput}{character. The filename to save the RasterBrick of binary
+  disturbances with buffered anthropogenic disturbance. Note this will
+  overwrite existing files with the same name. The .grd format is recommended
+  because it will preserve layer names when the file is reloaded.}
 }}
 }
 \value{

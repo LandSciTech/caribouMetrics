@@ -3,26 +3,11 @@
 \name{calcBinaryUse}
 \alias{calcBinaryUse}
 \alias{calcBinaryUse,CaribouHabitat-method}
-\alias{calcBinaryUse,data.frame-method}
-\alias{calcBinaryUse,numeric-method}
 \title{Calculate binary use}
 \usage{
 calcBinaryUse(x, ...)
 
 \S4method{calcBinaryUse}{CaribouHabitat}(x, tholdTable = threshTable, bySeason = FALSE)
-
-\S4method{calcBinaryUse}{data.frame}(x, caribouRange, tholdTable = threshTable, bySeason = FALSE)
-
-\S4method{calcBinaryUse}{numeric}(
-  x,
-  spring,
-  summer,
-  fall,
-  winter,
-  caribouRange,
-  tholdTable = threshTable,
-  bySeason = FALSE
-)
 }
 \arguments{
 \item{x}{CaribouHabitat object where habitat use has been calculated, or a
@@ -40,10 +25,10 @@ negative cost of 5. Change at own risk.}
 of 1 when the habitat use was >= threshold in any season and 0 if not. If
 TRUE then the result is a 0 or 1 for each season.}
 
-\item{caribouRange}{character. The name of the caribou range}
-
 \item{spring, summer, fall, winter}{numeric vectors of habitat use probability
 in each season}
+
+\item{caribouRange}{character. The name of the caribou range}
 }
 \value{
 If \code{bySeason} is \code{FALSE} and \code{x} is a CaribouHabitat object then the result is a RasterLayer.

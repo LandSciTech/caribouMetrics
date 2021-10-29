@@ -48,7 +48,8 @@ Imports:
     tictoc,
     simstudy,
     truncdist,
-    stars
+    stars,
+    rlang
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'

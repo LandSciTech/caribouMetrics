@@ -39,4 +39,5 @@ threshTable[22, 5] <- threshTable[25, 5]
 threshTable <- threshTable %>% filter(Range != "Kinloch Summer")
 
 usethis::use_data(threshTable, overwrite = TRUE)
-usethis::use_data(threshTable, internal = TRUE, overwrite = TRUE)
+usethis::use_data(threshTable, coefTableHR, popGrowthTableJohnsonECCC,
+                  plcToResType, resTypeCode, internal = TRUE, overwrite = TRUE)
