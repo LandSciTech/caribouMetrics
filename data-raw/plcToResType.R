@@ -51,3 +51,4 @@ plcToResType <- ".OWAT_PLC(j) = g.class.1(j)
 						.CON_PLC(j) = .CON_PLC(j) / gsarea"
 
 usethis::use_data(plcToResType, overwrite = TRUE)
+usethis::use_data(plcToResType, internal = TRUE, overwrite = TRUE)

@@ -38,4 +38,5 @@ threshTable[22, 5] <- threshTable[25, 5]
 
 threshTable <- threshTable %>% filter(Range != "Kinloch Summer")
 
-usethis::use_data(threshTable)
+usethis::use_data(threshTable, overwrite = TRUE)
+usethis::use_data(threshTable, internal = TRUE, overwrite = TRUE)
