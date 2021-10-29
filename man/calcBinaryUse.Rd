@@ -24,11 +24,6 @@ negative cost of 5. Change at own risk.}
 \item{bySeason}{logical. If FALSE (the default) the result is a single value
 of 1 when the habitat use was >= threshold in any season and 0 if not. If
 TRUE then the result is a 0 or 1 for each season.}
-
-\item{spring, summer, fall, winter}{numeric vectors of habitat use probability
-in each season}
-
-\item{caribouRange}{character. The name of the caribou range}
 }
 \value{
 If \code{bySeason} is \code{FALSE} and \code{x} is a CaribouHabitat object then the result is a RasterLayer.
