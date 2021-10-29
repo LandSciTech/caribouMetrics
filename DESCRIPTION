@@ -88,7 +88,8 @@ Suggests:
     tmap,
     tmaptools,
     ggplot2,
-    fasterize
+    fasterize,
+    pfocal
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
