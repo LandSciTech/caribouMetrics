@@ -1,3 +1,7 @@
+# Copyright 2021 Tati Micheletti & Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
+# License GPL-3
+#NOTICE: This function has been modified from https://github.com/tati-micheletti/caribouPopGrowthModel/blob/master/R/generatePopGrowthPredictions.R
+
 #' Sample demographic rates
 #'
 #' Sample expected survival or recruitment rates based on samples of coefficient
