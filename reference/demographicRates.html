@@ -218,59 +218,61 @@ trajectories of replicate populations.</p></td>
     <div class='dont-index'><p><code><a href='sampleRates.html'>sampleRates</a></code> for more details</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># get coefficient samples</span>
-<span class='va'>coefs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='demographicCoefficients.html'>demographicCoefficients</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>
-
-<span class='co'># table of different scenarios to test</span>
-<span class='va'>covTableSim</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span>Anthro <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>90</span>, by <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>, 
-                           fire_excl_anthro <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>70</span>, by <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span> 
-<span class='va'>covTableSim</span><span class='op'>$</span><span class='va'>Total_dist</span> <span class='op'>=</span> <span class='va'>covTableSim</span><span class='op'>$</span><span class='va'>Anthro</span> <span class='op'>+</span> <span class='va'>covTableSim</span><span class='op'>$</span><span class='va'>fire_excl_anthro</span>
-
-<span class='fu'>demographicRates</span><span class='op'>(</span><span class='va'>covTableSim</span>, <span class='va'>coefs</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.044 sec elapsed
-#&gt; Elapsed time for caribou prediction for recruitment for Johnson:: 0.03 sec elapsed</div><div class='output co'>#&gt;    Anthro fire_excl_anthro Total_dist     S_bar   S_stdErr   S_PIlow  S_PIhigh
-#&gt; 1       0                0          0 0.8676213 0.04771948 0.7669760 0.9343648
-#&gt; 2       0               20         20 0.8676213 0.04771948 0.7669760 0.9343648
-#&gt; 3       0               40         40 0.8676213 0.04771948 0.7669760 0.9343648
-#&gt; 4       0               60         60 0.8676213 0.04771948 0.7669760 0.9343648
-#&gt; 5      20                0         20 0.8538498 0.04839444 0.7548776 0.9227078
-#&gt; 6      20               20         40 0.8538498 0.04839444 0.7548776 0.9227078
-#&gt; 7      20               40         60 0.8538498 0.04839444 0.7548776 0.9227078
-#&gt; 8      20               60         80 0.8538498 0.04839444 0.7548776 0.9227078
-#&gt; 9      40                0         40 0.8402969 0.04903879 0.7430635 0.9109380
-#&gt; 10     40               20         60 0.8402969 0.04903879 0.7430635 0.9109380
-#&gt; 11     40               40         80 0.8402969 0.04903879 0.7430635 0.9109380
-#&gt; 12     40               60        100 0.8402969 0.04903879 0.7430635 0.9109380
-#&gt; 13     60                0         60 0.8269591 0.04965677 0.7315153 0.8991056
-#&gt; 14     60               20         80 0.8269591 0.04965677 0.7315153 0.8991056
-#&gt; 15     60               40        100 0.8269591 0.04965677 0.7315153 0.8991056
-#&gt; 16     60               60        120 0.8269591 0.04965677 0.7315153 0.8991056
-#&gt; 17     80                0         80 0.8138331 0.05025152 0.7202174 0.8872490
-#&gt; 18     80               20        100 0.8138331 0.05025152 0.7202174 0.8872490
-#&gt; 19     80               40        120 0.8138331 0.05025152 0.7202174 0.8872490
-#&gt; 20     80               60        140 0.8138331 0.05025152 0.7202174 0.8872490
-#&gt;         R_bar   R_stdErr     R_PIlow  R_PIhigh
-#&gt; 1  0.35951478 0.11152537 0.193811260 0.5220499
-#&gt; 2  0.30574618 0.10177514 0.172912057 0.4564823
-#&gt; 3  0.26001915 0.09534815 0.154038851 0.3998218
-#&gt; 4  0.22113100 0.09090682 0.130910579 0.3509654
-#&gt; 5  0.25589195 0.09742578 0.114246157 0.4171699
-#&gt; 6  0.21762106 0.08830523 0.101113467 0.3659178
-#&gt; 7  0.18507391 0.08164412 0.089288039 0.3217495
-#&gt; 8  0.15739448 0.07656952 0.078651717 0.2836787
-#&gt; 9  0.18213629 0.08433770 0.064528673 0.3352669
-#&gt; 10 0.15489621 0.07630300 0.056435227 0.2953332
-#&gt; 11 0.13173012 0.07004510 0.049195233 0.2608884
-#&gt; 12 0.11202872 0.06499305 0.042731811 0.2311261
-#&gt; 13 0.12963921 0.07256990 0.034241400 0.2714367
-#&gt; 14 0.11025053 0.06566034 0.029436537 0.2402475
-#&gt; 15 0.09376159 0.06002630 0.025186445 0.2132539
-#&gt; 16 0.07973872 0.05529033 0.021439571 0.1898199
-#&gt; 17 0.09227334 0.06215945 0.016604304 0.2215323
-#&gt; 18 0.07847305 0.05626412 0.013923722 0.1970154
-#&gt; 19 0.06673672 0.05128381 0.011595731 0.1756783
-#&gt; 20 0.05675565 0.04696634 0.009584841 0.1570282</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># get coefficient samples</span></span>
+<span class='r-in'><span class='va'>coefs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='demographicCoefficients.html'>demographicCoefficients</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># table of different scenarios to test</span></span>
+<span class='r-in'><span class='va'>covTableSim</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span>Anthro <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>90</span>, by <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>, </span>
+<span class='r-in'>                           fire_excl_anthro <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>70</span>, by <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span> </span>
+<span class='r-in'><span class='va'>covTableSim</span><span class='op'>$</span><span class='va'>Total_dist</span> <span class='op'>=</span> <span class='va'>covTableSim</span><span class='op'>$</span><span class='va'>Anthro</span> <span class='op'>+</span> <span class='va'>covTableSim</span><span class='op'>$</span><span class='va'>fire_excl_anthro</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>demographicRates</span><span class='op'>(</span><span class='va'>covTableSim</span>, <span class='va'>coefs</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.054 sec elapsed</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Elapsed time for caribou prediction for recruitment for Johnson:: 0.029 sec elapsed</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Anthro fire_excl_anthro Total_dist     S_bar   S_stdErr   S_PIlow  S_PIhigh</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       0                0          0 0.8676213 0.04771948 0.7669760 0.9343648</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       0               20         20 0.8676213 0.04771948 0.7669760 0.9343648</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       0               40         40 0.8676213 0.04771948 0.7669760 0.9343648</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4       0               60         60 0.8676213 0.04771948 0.7669760 0.9343648</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      20                0         20 0.8538498 0.04839444 0.7548776 0.9227078</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      20               20         40 0.8538498 0.04839444 0.7548776 0.9227078</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7      20               40         60 0.8538498 0.04839444 0.7548776 0.9227078</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8      20               60         80 0.8538498 0.04839444 0.7548776 0.9227078</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9      40                0         40 0.8402969 0.04903879 0.7430635 0.9109380</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10     40               20         60 0.8402969 0.04903879 0.7430635 0.9109380</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11     40               40         80 0.8402969 0.04903879 0.7430635 0.9109380</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12     40               60        100 0.8402969 0.04903879 0.7430635 0.9109380</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13     60                0         60 0.8269591 0.04965677 0.7315153 0.8991056</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14     60               20         80 0.8269591 0.04965677 0.7315153 0.8991056</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15     60               40        100 0.8269591 0.04965677 0.7315153 0.8991056</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16     60               60        120 0.8269591 0.04965677 0.7315153 0.8991056</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17     80                0         80 0.8138331 0.05025152 0.7202174 0.8872490</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18     80               20        100 0.8138331 0.05025152 0.7202174 0.8872490</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19     80               40        120 0.8138331 0.05025152 0.7202174 0.8872490</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20     80               60        140 0.8138331 0.05025152 0.7202174 0.8872490</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         R_bar   R_stdErr     R_PIlow  R_PIhigh</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  0.35951478 0.11152537 0.193811260 0.5220499</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  0.30574618 0.10177514 0.172912057 0.4564823</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  0.26001915 0.09534815 0.154038851 0.3998218</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  0.22113100 0.09090682 0.130910579 0.3509654</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  0.25589195 0.09742578 0.114246157 0.4171699</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  0.21762106 0.08830523 0.101113467 0.3659178</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  0.18507391 0.08164412 0.089288039 0.3217495</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  0.15739448 0.07656952 0.078651717 0.2836787</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  0.18213629 0.08433770 0.064528673 0.3352669</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 0.15489621 0.07630300 0.056435227 0.2953332</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11 0.13173012 0.07004510 0.049195233 0.2608884</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12 0.11202872 0.06499305 0.042731811 0.2311261</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13 0.12963921 0.07256990 0.034241400 0.2714367</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14 0.11025053 0.06566034 0.029436537 0.2402475</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15 0.09376159 0.06002630 0.025186445 0.2132539</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16 0.07973872 0.05529033 0.021439571 0.1898199</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 17 0.09227334 0.06215945 0.016604304 0.2215323</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 18 0.07847305 0.05626412 0.013923722 0.1970154</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 19 0.06673672 0.05128381 0.011595731 0.1756783</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 20 0.05675565 0.04696634 0.009584841 0.1570282</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

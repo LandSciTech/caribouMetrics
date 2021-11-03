@@ -212,110 +212,112 @@ parameters can be provided but it must match the column names of
   <a href='https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637'>https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># sample coefficients for default models</span>
-<span class='fu'>demographicCoefficients</span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $modelVersion
-#&gt; [1] "Johnson"
-#&gt; 
-#&gt; $coefSamples_Survival
-#&gt; $coefSamples_Survival$coefSamples
-#&gt;        Intercept        Anthro Precision
-#&gt;  [1,] -0.1379476 -0.0005591193  64.36410
-#&gt;  [2,] -0.1567330 -0.0008124292  62.32872
-#&gt;  [3,] -0.1461282 -0.0009193683  47.63560
-#&gt;  [4,] -0.1424160 -0.0008020345  61.12718
-#&gt;  [5,] -0.1377059 -0.0009054578  60.84418
-#&gt;  [6,] -0.1492287 -0.0009929081  72.26679
-#&gt;  [7,] -0.1382978 -0.0006806935  64.01662
-#&gt;  [8,] -0.1391297 -0.0007774887  58.14994
-#&gt;  [9,] -0.1523165 -0.0007689177  63.02389
-#&gt; [10,] -0.1361655 -0.0005929147  61.35678
-#&gt; 
-#&gt; $coefSamples_Survival$coefValues
-#&gt;    Intercept Anthro Precision
-#&gt; 1:    -0.142 -8e-04  63.43724
-#&gt; 
-#&gt; $coefSamples_Survival$quantiles
-#&gt;  [1] 0.0250000 0.5527778 0.2361111 0.3416667 0.7638889 0.1305556 0.6583333
-#&gt;  [8] 0.4472222 0.9750000 0.8694444
-#&gt; 
-#&gt; 
-#&gt; $coefSamples_Recruitment
-#&gt; $coefSamples_Recruitment$coefSamples
-#&gt;        Intercept      Anthro fire_excl_anthro Precision
-#&gt;  [1,] -0.9957675 -0.01695475     -0.010503190  22.79991
-#&gt;  [2,] -0.8543010 -0.01615843     -0.010091532  21.02950
-#&gt;  [3,] -1.0201511 -0.02048079     -0.005926414  21.21412
-#&gt;  [4,] -0.9876301 -0.01289405     -0.007831284  19.61688
-#&gt;  [5,] -1.0157636 -0.01755289     -0.007102798  20.24562
-#&gt;  [6,] -1.1400441 -0.01667344     -0.011568266  19.66058
-#&gt;  [7,] -0.9702192 -0.01535559     -0.011101503  24.15058
-#&gt;  [8,] -1.0378920 -0.01801799     -0.007520101  22.75556
-#&gt;  [9,] -1.0356176 -0.01529497     -0.005370775  21.53068
-#&gt; [10,] -1.0218259 -0.01737637     -0.007616946  21.10152
-#&gt; 
-#&gt; $coefSamples_Recruitment$coefValues
-#&gt;    Intercept Anthro fire_excl_anthro Precision
-#&gt; 1:    -1.023 -0.017          -0.0081  19.86189
-#&gt; 
-#&gt; $coefSamples_Recruitment$quantiles
-#&gt;  [1] 0.3416667 0.1305556 0.9750000 0.5527778 0.4472222 0.8694444 0.0250000
-#&gt;  [8] 0.6583333 0.7638889 0.2361111
-#&gt; 
-#&gt; </div><div class='input'> 
-<span class='co'># try a different model</span>
-<span class='fu'>demographicCoefficients</span><span class='op'>(</span><span class='fl'>10</span>, modelVersion <span class='op'>=</span> <span class='st'>"ECCC"</span>, survivalModelNumber <span class='op'>=</span> <span class='st'>"M1"</span>, 
-                        recruitmentModelNumber <span class='op'>=</span> <span class='st'>"M3"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $modelVersion
-#&gt; [1] "ECCC"
-#&gt; 
-#&gt; $coefSamples_Survival
-#&gt; $coefSamples_Survival$coefSamples
-#&gt;       Intercept Precision
-#&gt;  [1,]      0.85         0
-#&gt;  [2,]      0.85         0
-#&gt;  [3,]      0.85         0
-#&gt;  [4,]      0.85         0
-#&gt;  [5,]      0.85         0
-#&gt;  [6,]      0.85         0
-#&gt;  [7,]      0.85         0
-#&gt;  [8,]      0.85         0
-#&gt;  [9,]      0.85         0
-#&gt; [10,]      0.85         0
-#&gt; 
-#&gt; $coefSamples_Survival$coefValues
-#&gt;    Intercept Precision
-#&gt; 1:      0.85         0
-#&gt; 
-#&gt; $coefSamples_Survival$quantiles
-#&gt;  [1] 0.8694444 0.3416667 0.6583333 0.2361111 0.7638889 0.9750000 0.5527778
-#&gt;  [8] 0.4472222 0.1305556 0.0250000
-#&gt; 
-#&gt; 
-#&gt; $coefSamples_Recruitment
-#&gt; $coefSamples_Recruitment$coefSamples
-#&gt;       Intercept Total_dist Precision
-#&gt;  [1,]  49.18662 -0.4711228      0.06
-#&gt;  [2,]  43.22247 -0.4630711      0.06
-#&gt;  [3,]  47.04916 -0.4617365      0.06
-#&gt;  [4,]  48.13910 -0.4151452      0.06
-#&gt;  [5,]  43.39229 -0.3693142      0.06
-#&gt;  [6,]  43.12582 -0.4417418      0.06
-#&gt;  [7,]  41.95426 -0.5143640      0.06
-#&gt;  [8,]  41.15608 -0.4132292      0.06
-#&gt;  [9,]  41.92452 -0.4559498      0.06
-#&gt; [10,]  39.09804 -0.3943154      0.06
-#&gt; 
-#&gt; $coefSamples_Recruitment$coefValues
-#&gt;    Intercept Total_dist Precision
-#&gt; 1:    44.265     -0.429      0.06
-#&gt; 
-#&gt; $coefSamples_Recruitment$quantiles
-#&gt;  [1] 0.2361111 0.7638889 0.3416667 0.1305556 0.6583333 0.5527778 0.8694444
-#&gt;  [8] 0.0250000 0.9750000 0.4472222
-#&gt; 
-#&gt; </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># sample coefficients for default models</span></span>
+<span class='r-in'><span class='fu'>demographicCoefficients</span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $modelVersion</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Johnson"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Survival</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Survival$coefSamples</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Intercept        Anthro Precision</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1,] -0.1379476 -0.0005591193  64.36410</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [2,] -0.1567330 -0.0008124292  62.32872</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [3,] -0.1461282 -0.0009193683  47.63560</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [4,] -0.1424160 -0.0008020345  61.12718</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [5,] -0.1377059 -0.0009054578  60.84418</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [6,] -0.1492287 -0.0009929081  72.26679</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7,] -0.1382978 -0.0006806935  64.01662</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8,] -0.1391297 -0.0007774887  58.14994</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9,] -0.1523165 -0.0007689177  63.02389</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [10,] -0.1361655 -0.0005929147  61.35678</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Survival$coefValues</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Intercept Anthro Precision</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    -0.142 -8e-04  63.43724</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Survival$quantiles</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0.0250000 0.5527778 0.2361111 0.3416667 0.7638889 0.1305556 0.6583333</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] 0.4472222 0.9750000 0.8694444</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Recruitment</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Recruitment$coefSamples</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Intercept      Anthro fire_excl_anthro Precision</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1,] -0.9957675 -0.01695475     -0.010503190  22.79991</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [2,] -0.8543010 -0.01615843     -0.010091532  21.02950</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [3,] -1.0201511 -0.02048079     -0.005926414  21.21412</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [4,] -0.9876301 -0.01289405     -0.007831284  19.61688</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [5,] -1.0157636 -0.01755289     -0.007102798  20.24562</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [6,] -1.1400441 -0.01667344     -0.011568266  19.66058</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7,] -0.9702192 -0.01535559     -0.011101503  24.15058</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8,] -1.0378920 -0.01801799     -0.007520101  22.75556</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9,] -1.0356176 -0.01529497     -0.005370775  21.53068</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [10,] -1.0218259 -0.01737637     -0.007616946  21.10152</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Recruitment$coefValues</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Intercept Anthro fire_excl_anthro Precision</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    -1.023 -0.017          -0.0081  19.86189</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Recruitment$quantiles</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0.3416667 0.1305556 0.9750000 0.5527778 0.4472222 0.8694444 0.0250000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] 0.6583333 0.7638889 0.2361111</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'> </span>
+<span class='r-in'><span class='co'># try a different model</span></span>
+<span class='r-in'><span class='fu'>demographicCoefficients</span><span class='op'>(</span><span class='fl'>10</span>, modelVersion <span class='op'>=</span> <span class='st'>"ECCC"</span>, survivalModelNumber <span class='op'>=</span> <span class='st'>"M1"</span>, </span>
+<span class='r-in'>                        recruitmentModelNumber <span class='op'>=</span> <span class='st'>"M3"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $modelVersion</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "ECCC"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Survival</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Survival$coefSamples</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Intercept</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1,]      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [2,]      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [3,]      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [4,]      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [5,]      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [6,]      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7,]      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8,]      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9,]      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [10,]      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Survival$coefValues</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Intercept</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:      0.85</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Survival$quantiles</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0.8694444 0.3416667 0.6583333 0.2361111 0.7638889 0.9750000 0.5527778</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] 0.4472222 0.1305556 0.0250000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Recruitment</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Recruitment$coefSamples</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Intercept Total_dist</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1,]  49.18662 -0.4711228</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [2,]  43.22247 -0.4630711</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [3,]  47.04916 -0.4617365</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [4,]  48.13910 -0.4151452</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [5,]  43.39229 -0.3693142</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [6,]  43.12582 -0.4417418</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7,]  41.95426 -0.5143640</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8,]  41.15608 -0.4132292</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [9,]  41.92452 -0.4559498</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [10,]  39.09804 -0.3943154</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Recruitment$coefValues</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Intercept Total_dist</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    44.265     -0.429</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $coefSamples_Recruitment$quantiles</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0.2361111 0.7638889 0.3416667 0.1305556 0.6583333 0.5527778 0.8694444</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [8] 0.0250000 0.9750000 0.4472222</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
