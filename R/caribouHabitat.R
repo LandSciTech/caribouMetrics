@@ -148,6 +148,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #' # plot the predictor variables
 #' plot(results(res, type ="processedData"))
 #'
+#' @importFrom rlang .data
 #'@export
 setGeneric("caribouHabitat", 
            function(landCover, esker, linFeat, projectPoly, caribouRange, ...) 
@@ -161,9 +162,20 @@ setMethod(
 
     dots <- list(...)
     
+    # check all optional arguments are in expected names
+    expDotArgs <- c("natDist", "anthroDist", 
+                      "winArea", "eskerSave", "linFeatSave", 
+                      "padProjPoly", "padFocal", "ptDensity", 
+                      "tmplt", "doScale", "saveOutput")
+    
+    if(!all(names(dots) %in% expDotArgs)){
+      stop("Argument ", names(dots)[which(!names(dots) %in% expDotArgs)], 
+           " does not match an expected argument. See ?caribouHabitat for arguments")
+    }
+    
     if(!is.null(dots$saveOutput)){
       if(!dir.exists(dirname(dots$saveOutput))){
-        stop("saveOutput directory does not exist: ", saveOutput)
+        stop("saveOutput directory does not exist: ", dots$saveOutput)
       }
     }
     
@@ -181,8 +193,8 @@ setMethod(
     
     # Get window area from table b/c some models used different sizes
     if(is.null(dots$winArea)){
-      dots$winArea <- coefTable %>% filter(Range %in% caribouRange$coefRange) %>% 
-        pull(WinArea) %>% 
+      dots$winArea <- coefTable %>% filter(.data$Range %in% caribouRange$coefRange) %>% 
+        pull(.data$WinArea) %>% 
         unique()
     }
     
@@ -201,20 +213,20 @@ setMethod(
       # polygons of ranges split into list with different winAreas
       projPolyLst <- projectPoly %>% 
         left_join(caribouRange, by = "Range") %>% 
-        left_join(coefTable %>% group_by(Range) %>%
-                    summarize(WinArea = first(WinArea)),
+        left_join(coefTable %>% group_by(.data$Range) %>%
+                    summarize(WinArea = first(.data$WinArea)),
                   by = c(coefRange = "Range")) %>% 
-        select(-coefRange) %>% 
-        split(.$WinArea) %>% 
-        purrr::map(~select(.x, -WinArea))
+        select(-.data$coefRange) 
+      projPolyLst <- split(projPolyLst, projPolyLst$WinArea) %>% 
+        purrr::map(~select(.x, -.data$WinArea))
       
       # caribouRange values for each winArea
       carRangeLst <- caribouRange %>%
-        left_join(coefTable %>% group_by(Range) %>%
-                    summarize(WinArea = first(WinArea)),
-                  by = c(coefRange = "Range")) %>% 
-        split(.$WinArea) %>% 
-        purrr::map(~select(.x, -WinArea))
+        left_join(coefTable %>% group_by(.data$Range) %>%
+                    summarize(WinArea = first(.data$WinArea)),
+                  by = c(coefRange = "Range")) 
+      carRangeLst <- split(carRangeLst, carRangeLst$WinArea) %>% 
+        purrr::map(~select(.x, -.data$WinArea))
    
       resultLst <- purrr::map2(projPolyLst, carRangeLst,
                         ~do.call(caribouHabitat, 

@@ -13,7 +13,8 @@
 #' @noRd
 
 movingWindowAvg <- function(rast, radius, nms, offset = TRUE, 
-                            na.rm = TRUE, pad = FALSE, padValue = NA){
+                            na.rm = TRUE, pad = FALSE, padValue = NA, 
+                            usePfocal = requireNamespace("pfocal", quietly = TRUE)){
   
   nl <- nlayers(rast)
   # if(raster::res(rast)[1] != raster::res(rast)[2]){
@@ -121,15 +122,42 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
     stop("The project area is smaller than the window area", call. = FALSE)
   }
   
-  if(nl == 1){
-    rast <- raster::focal(rast, w = cf2, na.rm = na.rm, pad = pad,
-                          padValue = padValue)
+  
+  
+  if(usePfocal){
+    if(!pad){
+      if(na.rm){
+        # ignore NAs inside the raster but still remove them on the edges
+        rast <- raster::subs(rast, data.frame(NA,0), subsWithNA = FALSE)
+        # pfocal does not have a pad argument but the equivalent is:
+        padValue <- NA
+        na.rm <- FALSE
+      } else {
+        padValue <- NA
+      }
+
+    }
+    if(nl == 1){
+      rast <- pfocal::pfocal(rast, kernel = cf2, na.rm = na.rm, 
+                             edge_value = padValue)
+    } else {
+      for(i in 1:nl){
+        rast[[i]] <- pfocal::pfocal(rast[[i]], kernel = cf2, na.rm = na.rm, 
+                                    edge_value = padValue)
+      }
+    }
   } else {
-    for(i in 1:nl){
-      rast[[i]] <- raster::focal(rast[[i]], w = cf2, na.rm = na.rm, pad = pad,
-                                 padValue = padValue)
+    if(nl == 1){
+      rast <- raster::focal(rast, w = cf2, na.rm = na.rm, pad = pad,
+                            padValue = padValue)
+    } else {
+      for(i in 1:nl){
+        rast[[i]] <- raster::focal(rast[[i]], w = cf2, na.rm = na.rm, pad = pad,
+                                   padValue = padValue)
+      }
     }
   }
+  
   
   rast <- rast %>% `names<-`(nms)
   

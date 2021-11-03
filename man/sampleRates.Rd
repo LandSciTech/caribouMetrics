@@ -95,17 +95,17 @@ distScen <- data.frame(Total_dist = 1:10/10)
 
 # return summary across replicates
 sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
-            "ECCC", "recruitment", ignorePrecision = FALSE, 
+            "ECCC", "recruitment", ignorePrecision = TRUE, 
             returnSample = FALSE)
 
 # return one row per replicate * scenario
 sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
-            "ECCC", "recruitment", ignorePrecision = FALSE, 
+            "ECCC", "recruitment", ignorePrecision = TRUE, 
             returnSample = TRUE)
 
 # return one row per replicate * scenario with replicates assigned to a quantile
 sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
-            "ECCC", "recruitment", ignorePrecision = FALSE, 
+            "ECCC", "recruitment", ignorePrecision = TRUE, 
             returnSample = TRUE, 
             quantilesToUse = quantile(x = c(0, 1), 
                                       probs = seq(0.025, 0.975, length.out = 10)))

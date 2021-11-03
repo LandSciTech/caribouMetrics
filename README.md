@@ -4,6 +4,8 @@
 # caribouMetrics
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/workflows/R-CMD-check/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions)
 <!-- badges: end -->
 
 caribouMetrics provides implementations of several different models.
@@ -102,41 +104,21 @@ demCoefs <- demographicCoefficients(replicates = 10)
 
 demRates <- demographicRates(covTable = results(disturb),
                              popGrowthPars = demCoefs)
-#> Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.36 sec elapsed
+#> Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.08 sec elapsed
 #> Elapsed time for caribou prediction for recruitment for Johnson:: 0 sec elapsed
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.05409265
-#>    S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.739131 0.9252582 0.1813372 0.09270282 0.04062846 0.3630453
+#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.05108689
+#>     S_PIlow  S_PIhigh     R_bar   R_stdErr   R_PIlow  R_PIhigh
+#> 1 0.7557385 0.9261629 0.1813372 0.09349016 0.0621527 0.3789768
 
 # Simulate population growth
 popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
-#> [1] "projecting step  1"
-#> [1] "projecting step  2"
-#> [1] "projecting step  3"
-#> [1] "projecting step  4"
-#> [1] "projecting step  5"
-#> [1] "projecting step  6"
-#> [1] "projecting step  7"
-#> [1] "projecting step  8"
-#> [1] "projecting step  9"
-#> [1] "projecting step  10"
-#> [1] "projecting step  11"
-#> [1] "projecting step  12"
-#> [1] "projecting step  13"
-#> [1] "projecting step  14"
-#> [1] "projecting step  15"
-#> [1] "projecting step  16"
-#> [1] "projecting step  17"
-#> [1] "projecting step  18"
-#> [1] "projecting step  19"
-#> [1] "projecting step  20"
 
 popGrow
 #>     N    lambda
-#> 1 368 0.9189992
+#> 1 357 0.9175976
 ```
 
 More detailed examples are provided in the vignettes.

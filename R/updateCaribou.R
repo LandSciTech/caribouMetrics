@@ -16,7 +16,7 @@ NULL
 #' CaribouHabitat object is reused.
 #'
 #' @param CarHab CaribouHabitat object
-#' @param newData a named list of RasterLayer objects to be used to update
+#' @param newData a named list of objects to be used to update
 #'   CarHab. Potential names are: landCover, natDist, anthroDist, and
 #'   linFeat.
 #' @param resultsOnly logical. If FALSE the whole CaribouHabitat object is
@@ -74,8 +74,6 @@ NULL
 #'                                                              ncol = 2, byrow = TRUE))),
 #'                               crs = 5070))
 #' 
-#' # updateCaribou only takes raster inputs so need to rasterize the new lines first
-#' lf2 <- rasterizeLineDensity(lf2, r = lc)
 #' 
 #' res2 <- updateCaribou(res, newData = list(linFeat = lf2))
 #' 
@@ -105,14 +103,13 @@ setMethod(
     
     if(length(unique(rangeCoefLst$coefRange)) > 1){
       
-      rangeCoefLst <- rangeCoefLst %>% 
-        split(.$coefRange)
+      rangeCoefLst <- split(rangeCoefLst, rangeCoefLst$coefRange)
       
       applyCalcRSP <- function(dat, rangeCoef, doScale, coefTable){
         dat <- raster::mask(dat, rangeCoef)
         
         coefT <- coefTable %>% 
-          filter(Range %in% rangeCoef$coefRange)
+          filter(.data$Range %in% rangeCoef$coefRange)
         
         habitatUse <- calcRSP(dat, coefT, doScale = doScale)
       }
@@ -135,7 +132,7 @@ setMethod(
       names(CarHab@habitatUse) <- names(habUseLst[[1]])
     } else {
       coefT <- coefTable %>% 
-        filter(Range %in% rangeCoefLst$coefRange)
+        filter(.data$Range %in% rangeCoefLst$coefRange)
       
       CarHab@habitatUse <- calcRSP(CarHab@processedData, coefT, 
                                    doScale = doScale)

@@ -1345,3 +1345,4 @@ coefTableHR <- inText %>% str_squish() %>%  str_split("#region Model") %>%
 
 
 usethis::use_data(coefTableHR, overwrite = TRUE)
+usethis::use_data(coefTableHR, internal = TRUE, overwrite = TRUE)

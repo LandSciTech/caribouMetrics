@@ -3,9 +3,7 @@ pth_base <- system.file("extdata", package = "caribouMetrics")
 
 plcD <- raster::raster(file.path(pth_base, "landCover.tif")) 
 
-fireYr <- sf::st_read(file.path(pth_base, "fireAFFES2020.shp")) 
-
-
+fireYr <- sf::read_sf(file.path(pth_base, "fireAFFES2020.shp")) 
 
 test_that("all options work", {
   natDist <- reclassDist(fireYr,

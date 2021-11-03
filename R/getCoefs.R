@@ -35,7 +35,8 @@ getCoefs <- function(populationGrowthTable,
                      modVer,
                      modNum){
   
-  populationGrowthTable <- filter(populationGrowthTable, responseVariable == resVar)
+  populationGrowthTable <- filter(populationGrowthTable, 
+                                  .data$responseVariable == resVar)
   populationGrowthTable <- data.table::as.data.table(populationGrowthTable)
   
   ## Check that both a modVer and modNum parameter have been supplied.

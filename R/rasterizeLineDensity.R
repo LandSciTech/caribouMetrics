@@ -37,17 +37,17 @@ rasterizeLineDensity <- function(x, r, ptDensity = 1) {
     st_set_agr("constant") %>% st_set_crs(st_crs(r))
   
   rp2 <- st_intersection(rPoly, st_set_agr(x, "constant")) %>% 
-    mutate(length = st_length(geometry) %>% units::set_units(NULL)) %>% 
-    select(ID, length, geometry) %>% st_drop_geometry() %>% 
-    group_by(ID) %>% 
-    summarise(length = round(sum(length, na.rm = TRUE)/(res(r)[1]*res(r)[2]/10000), digits = 1))
+    mutate(length = st_length(.data$geometry) %>% units::set_units(NULL)) %>% 
+    select(.data$ID, .data$length, .data$geometry) %>% st_drop_geometry() %>% 
+    group_by(.data$ID) %>% 
+    summarise(length = round(sum(.data$length, na.rm = TRUE)/(res(r)[1]*res(r)[2]/10000), digits = 1))
   
   rp2 <- left_join(rPoly %>% st_drop_geometry(), rp2, by = "ID") %>% 
-    mutate(length = replace_na(length, 0))
+    mutate(length = replace_na(.data$length, 0))
   
   r <- raster::init(r, fun = function(x){rp2$length})
 
-  lfPt <- x %>% dplyr::filter(st_is(. , "POINT"))
+  lfPt <- x %>% dplyr::filter(st_is(x , "POINT"))
   
   if(!is.null(ptDensity)){
     if(ptDensity > 2+2*2^0.5){

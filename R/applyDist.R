@@ -32,8 +32,8 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
   
   # Transfer DTN from natDist to landCover
   DTNcode <- resTypeCode %>%
-    filter(ResourceType == "DTN") %>%
-    pull(code)
+    filter(.data$ResourceType == "DTN") %>%
+    pull(.data$code)
   
   landCover <- mask(landCover, natDist, maskvalue = 1, 
                     updatevalue = DTNcode)
@@ -56,8 +56,8 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
   
   # Get proportion of land in 16 ha area that has each type of disturbance
   watCode <- resTypeCode %>% 
-    filter(ResourceType == "LGW") %>% 
-    pull(code)
+    filter(.data$ResourceType == "LGW") %>% 
+    pull(.data$code)
   
   # get proportion land
   land <- 1 - landCover[[watCode]]
@@ -77,8 +77,8 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
   # disturbance or anthropogenic disturbance  
   anyDist35 <- max(allDist16ha > 0.35)
   rm(allDist16ha)
-  toChange <- resTypeCode %>% filter(!ResourceType %in% c("DTN", "LGW")) %>% 
-    pull(code)
+  toChange <- resTypeCode %>% filter(!.data$ResourceType %in% c("DTN", "LGW")) %>% 
+    pull(.data$code)
   
   for (i in toChange) {
     landCover[[i]] <- raster::mask(landCover[[i]], anyDist35,

@@ -62,8 +62,17 @@ popGrowthJohnson <- function(N,
   R_bar[R_bar<0]=0
   S_bar[S_bar<0]=0
   
-  #TO DO:
-  #Return error if S_bar outside of range l_S,h_S, or R_bar outside of range l_R,h_R.
+  #Return error if S_bar outside of range l_S,h_S, or R_bar outside of range
+  #l_R,h_R.
+  if(any(S_bar < l_S) || any(S_bar > h_S)){
+    stop("Expected survival S_bar should be between l_R and h_R.",
+         call. = FALSE)
+  }
+  
+  if(any(R_bar < l_R) || any(R_bar > h_R)){
+    stop("Expected recruitment R_bar should be between l_R and h_R.", 
+         call. = FALSE)
+  }
   
   h_R = s*h_R
   l_R = s*l_R

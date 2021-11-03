@@ -48,7 +48,8 @@ Imports:
     tictoc,
     simstudy,
     truncdist,
-    stars
+    stars,
+    rlang
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
@@ -65,7 +66,6 @@ Collate:
     'demographicRates.R'
     'disturbanceMetrics.R'
     'getCoefs.R'
-    'getSyncSimData.R'
     'spatialAlignFns.R'
     'inputData.R'
     'inputDataDisturbance.R'
@@ -81,6 +81,7 @@ Collate:
     'sampleCoefs.R'
     'sampleRates.R'
     'updateCaribou.R'
+    'updateDisturbance.R'
 Suggests: 
     testthat (>= 2.1.0),
     knitr,

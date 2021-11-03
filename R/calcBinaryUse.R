@@ -17,9 +17,6 @@ NULL
 #' @param bySeason logical. If FALSE (the default) the result is a single value
 #'   of 1 when the habitat use was >= threshold in any season and 0 if not. If
 #'   TRUE then the result is a 0 or 1 for each season.
-#' @param spring,summer,fall,winter numeric vectors of habitat use probability
-#'   in each season
-#' @param caribouRange character. The name of the caribou range
 #' @param ... passed to methods
 #'
 #'
@@ -77,8 +74,8 @@ setMethod(
   function(x, tholdTable = threshTable, bySeason = FALSE){
     caribouRange <- x@attributes$caribouRange$coefRange
     
-    tTable <- threshTable %>% filter(Range == caribouRange) %>% 
-      arrange(Season) %>% select(Season, Threshold)
+    tTable <- threshTable %>% filter(.data$Range == caribouRange) %>% 
+      arrange(.data$Season) %>% select(.data$Season, .data$Threshold)
     
     if(bySeason){
       binUse <- x@habitatUse >= tTable$Threshold
@@ -88,56 +85,4 @@ setMethod(
     }
     
     return(binUse)
-  })
-
-#' @rdname calcBinaryUse
-setMethod(
-  "calcBinaryUse", signature(x = "data.frame"), 
-  function(x, caribouRange, tholdTable = threshTable, bySeason = FALSE){
-    tTable <- threshTable %>% filter(Range == caribouRange) %>% 
-      arrange(Season) %>% select(Season, Threshold)
-    
-    if(!all(c("PID", "Spring", "Summer", "Fall", "Winter") %in% names(x))){
-      stop("names(x) must be PID, Spring, Summer, Fall, Winter")
-    }
-    
-    out <- x %>% gather(Season, ProbUse, -PID) %>%
-      left_join(tTable, by = "Season") %>% 
-      mutate(binUse = ifelse(ProbUse >= Threshold, 1, 0))
-    
-    if(bySeason){
-      out <- out %>% select(PID, Season, binUse) %>%
-        pivot_wider(names_from = Season, values_from = binUse) %>% 
-        rename_at(vars(-PID), ~paste0(.x, "_Cat2"))
-      
-      return(out)
-      
-    } else {
-      out <- out %>% group_by(PID) %>% 
-        summarise(binUse = ifelse(any(binUse == 1), 1, 0)) %>% 
-        arrange(match(PID, x$PID))
-    }
-    
-    return(out)
-  })
-
-#' @rdname calcBinaryUse
-setMethod(
-  "calcBinaryUse", signature(x = "numeric"), 
-  function(x, spring, summer, fall, winter, caribouRange, 
-           tholdTable = threshTable, bySeason = FALSE){
-    
-    tTable <- threshTable %>% filter(Range == caribouRange) %>% 
-      arrange(Season) %>% select(Season, Threshold)
-    
-    x <- data.frame(PID = x, Spring = spring, Summer = summer, Fall = fall, 
-                    Winter = winter)
-    x <- calcBinaryUse(x, caribouRange, tholdTable, bySeason)
-    
-    if(bySeason){
-      return(select(x, -PID))
-    } else {
-      
-      return(x$binUse)
-    }
   })
