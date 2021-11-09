@@ -254,8 +254,8 @@
 <span class="co">#&gt; extent     : 684188, 768988, 12565405, 12638605  (xmin, xmax, ymin, ymax)</span>
 <span class="co">#&gt; crs        : +proj=lcc +lat_0=0 +lon_0=-85 +lat_1=44.5 +lat_2=53.5 +x_0=930000 +y_0=6430000 +datum=NAD83 +units=m +no_defs </span>
 <span class="co">#&gt; names      :         Fall,       Spring,       Summer,       Winter,          CON,          DEC,          DTN,         LGOP,         LGTP,          LGW,          MIX,           ST,        other,       TDENLF,          ESK, ... </span>
-<span class="co">#&gt; min values : 1.016601e-04, 8.982073e-05, 9.830580e-04, 2.397027e-02, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 9.737119e-03, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, ... </span>
-<span class="co">#&gt; max values :   0.75371971,   0.66838190,   0.49350898,   0.36179434,   0.66632667,   0.22591658,   0.33947774,   0.05509639,   0.22309148,   1.00000000,   0.68773221,   0.15617596,   0.20638626,  20.00729057,   1.71055030, ...</span></code></pre></div>
+<span class="co">#&gt; min values : 1.052126e-04, 9.264238e-05, 1.039800e-03, 2.580689e-02, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 9.737119e-03, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, ... </span>
+<span class="co">#&gt; max values :   0.75371671,   0.66837868,   0.49350993,   0.36197777,   0.66632667,   0.22591658,   0.33947774,   0.05509639,   0.22309148,   1.00000000,   0.68773221,   0.15617596,   0.20638626,  19.07311602,   1.71055030, ...</span></code></pre></div>
 <p>You can create a plot of the results directly from the <code>CaribouHabitat</code> object. If <code>tmap</code> is installed it will be used to make a plot, if not <code>plot.raster</code> will be used. You can provide the season(s) you wish to display and additional arguments that will be passed on to either <code>qtm</code> or <code>plot.raster</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="va">carHab1</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Fall"</span>, <span class="st">"Summer"</span><span class="op">)</span><span class="op">)</span>
@@ -333,8 +333,8 @@
 <span class="co">#&gt; extent     : 681188, 771988, 12562405, 12641605  (xmin, xmax, ymin, ymax)</span>
 <span class="co">#&gt; crs        : +proj=lcc +lat_0=0 +lon_0=-85 +lat_1=44.5 +lat_2=53.5 +x_0=930000 +y_0=6430000 +datum=NAD83 +units=m +no_defs </span>
 <span class="co">#&gt; names      :          Fall,        Spring,        Summer,        Winter,           CON,           DEC,           DTN,          LGOP,          LGTP,           LGW,           MIX,            ST,         other,        TDENLF,           ESK, ... </span>
-<span class="co">#&gt; min values :  7.935259e-50,  0.000000e+00,  0.000000e+00, 2.105618e-245,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00,  1.337890e-02,  9.552293e-04,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00, ... </span>
-<span class="co">#&gt; max values :    0.47129329,    0.67091042,    0.94184896,    0.99397098,    0.66955135,    0.17173101,    0.23284212,    0.03633134,    0.17216422,    0.99712162,    0.70017525,    0.15172801,    0.20388714,   18.22733964,    1.70658955, ...</span>
+<span class="co">#&gt; min values :  5.400223e-48,  0.000000e+00,  0.000000e+00, 2.065566e-234,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00,  1.337890e-02,  9.552293e-04,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00, ... </span>
+<span class="co">#&gt; max values :    0.47129329,    0.67201564,    0.94184896,    0.99397842,    0.66955135,    0.17173101,    0.23284212,    0.03633134,    0.17216422,    0.99712162,    0.70017525,    0.15172801,    0.20388714,   17.46810375,    1.70658955, ...</span>
 
 <span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html">plot</a></span><span class="op">(</span><span class="va">MultRange</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Winter"</span>, <span class="st">"Spring"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="Getting_started_files/figure-html/results2-1.png" width="768"></p>
@@ -370,7 +370,7 @@
 <span class="co">#&gt;   ..@ attributes        :List of 3</span>
 <span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">disturb</span><span class="op">)</span>
 <span class="co">#&gt;   zone   Anthro      Fire Total_dist fire_excl_anthro</span>
-<span class="co">#&gt; 1    1 43.93089 0.7708216   44.28643        0.3555401</span></code></pre></div>
+<span class="co">#&gt; 1    1 43.60786 0.7708216   43.96341        0.3555401</span></code></pre></div>
 </div>
 <div id="demographic-models" class="section level2">
 <h2 class="hasAnchor">
@@ -388,8 +388,6 @@
 
 <span class="va">demRates</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>covTable <span class="op">=</span> <span class="va">exTable</span>,
                              popGrowthPars <span class="op">=</span> <span class="va">demCoefs</span><span class="op">)</span>
-<span class="co">#&gt; Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.019 sec elapsed</span>
-<span class="co">#&gt; Elapsed time for caribou prediction for recruitment for Johnson:: 0.004 sec elapsed</span>
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">demRates</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">Anthro</span>, <span class="va">S_bar</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
@@ -407,8 +405,8 @@
 
 <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">demRates</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, <span class="va">popGrow</span><span class="op">)</span>
 <span class="co">#&gt;   zone   Anthro      Fire Total_dist fire_excl_anthro   N    lambda</span>
-<span class="co">#&gt; 1    1 43.93089 0.7708216   44.28643        0.3555401 283 0.9070183</span>
-<span class="co">#&gt; 2    1 53.93089 0.7708216   54.28643        0.3555401 230 0.8976092</span></code></pre></div>
+<span class="co">#&gt; 1    1 43.60786 0.7708216   43.96341        0.3555401 300 0.9097596</span>
+<span class="co">#&gt; 2    1 53.60786 0.7708216   53.96341        0.3555401 212 0.8939657</span></code></pre></div>
 <p><em>For additional details on functions in the package see the help documentation</em></p>
 </div>
 </div>
