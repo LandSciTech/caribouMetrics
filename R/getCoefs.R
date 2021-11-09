@@ -1,3 +1,7 @@
+# Copyright 2021 Tati Micheletti & Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
+# License GPL-3
+#NOTICE: This function has been modified from https://github.com/tati-micheletti/caribouPopGrowthModel/blob/master/R/makeDTforPopGrowth.R
+
 #' Get coefficients for model version
 #'
 #' Get the coefficients for the chosen model version(s), number(s) and response
