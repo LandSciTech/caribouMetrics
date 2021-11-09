@@ -16,7 +16,7 @@ anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
 linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
-linFeatDshp = st_read(file.path(pthBase, "linFeat.shp"), quiet = TRUE) %>% 
+linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 
 data_esktif_linFtif <- caribouHabitat(

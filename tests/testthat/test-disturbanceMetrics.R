@@ -1,4 +1,3 @@
-context("test disturbanceMetrics")
 
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
@@ -8,7 +7,7 @@ natDistD = raster(file.path(pthBase, "natDist.tif"))
 anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
-linFeatDshp = st_read(file.path(pthBase, "linFeat.shp"), quiet = TRUE) %>% 
+linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 roadsD = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
@@ -35,7 +34,7 @@ dm_path <- disturbanceMetrics(
   landCover = file.path(pthBase, "landCover.tif"),
   natDist = file.path(pthBase, "natDist.tif"), 
   anthroDist = file.path(pthBase, "anthroDist.tif"), 
-  linFeat = file.path(pthBase, "linFeat.shp"), 
+  linFeat = file.path(pthBase, "roads.shp"), 
   projectPoly = file.path(pthBase, "projectPoly.shp"),
   padFocal = FALSE, # assume data outside area is 0 for all variables
   bufferWidth = 500
@@ -67,7 +66,7 @@ test_that("error if rasters don't align",{
     landCover = plcD,
     natDist = natDistD, 
     anthroDist = anthroDistD, 
-    linFeat = raster(file.path(pthBase, "linFeatTif400.tif")), 
+    linFeat = raster::`res<-`(linFeatDras, 400), 
     projectPoly = projectPolyD
   ), "rasters do not have the same")
 })

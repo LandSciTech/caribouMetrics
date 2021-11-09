@@ -57,8 +57,13 @@ context("Overall process to run caribouHabitat")
 # linFeatD <- combineLinFeat(list(roads = "tests/testthat/data/roads.shp",
 #                                 rail = "tests/testthat/data/rail.shp",
 #                                 utilities = "tests/testthat/data/utilities.shp"))
-# st_write(linFeatD, "tests/testthat/data/linFeat.shp", append = FALSE)
-# 
+# #st_write(linFeatD, "tests/testthat/data/linFeat.shp", append = FALSE)
+#
+# make roads smaller file size by simplifying
+# linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE) %>% 
+#   st_set_agr("constant")
+# st_write(linFeatDshp %>% st_simplify(dTolerance = 100), 
+# file.path(pthBase, "roads.shp"))
 # linFeatDras <- rasterizeLineDensity(linFeatD, anthroDistD)
 # writeRaster(linFeatDras, "tests/testthat/data/linFeatTif.tif", overwrite = TRUE)
 # 
@@ -75,7 +80,7 @@ paths_eskshp_linFshp <- caribouHabitat(
   esker = file.path(pthBase, "esker.shp"),
   natDist = file.path(pthBase, "natDist.tif"),
   anthroDist = file.path(pthBase, "anthroDist.tif"),
-  linFeat = file.path(pthBase, "linFeat.shp"),
+  linFeat = file.path(pthBase, "roads.shp"),
   projectPoly = file.path(pthBase, "projectPoly.shp"),
   linFeatSave = file.path(pthBase, "linFeatTif400.tif"),
   eskerSave = file.path(pthBase, "eskerTif400.tif"), 
@@ -113,7 +118,7 @@ anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
 linFeatDras = raster(file.path(pthBase, "linFeatTif400.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
-linFeatDshp = st_read(file.path(pthBase, "linFeat.shp"), quiet = TRUE) %>% 
+linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 
 data_esktif_linFtif <- caribouHabitat(
@@ -246,3 +251,6 @@ testthat::test_that("results match previous results",{
   )
 })
 
+#tidy created files
+file.remove(file.path(pthBase, "linFeatTif400.tif"))
+file.remove(file.path(pthBase, "eskerTif400.tif"))

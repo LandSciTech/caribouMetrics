@@ -12,7 +12,7 @@ natDistD = raster(file.path(pthBase, "natDist.tif"))
 anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
 linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE)
-linFeatDshp = st_read(file.path(pthBase, "linFeat.shp"), quiet = TRUE)
+linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE)
 
 
 # newData versions to check updating. 

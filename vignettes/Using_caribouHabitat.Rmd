@@ -40,8 +40,7 @@ anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
 linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE, 
                        agr = "constant")
-linFeatDshp = st_read(file.path(pthBase, "linFeat.shp"), quiet = TRUE, agr = "constant")
-roadsD = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE, agr = "constant")
+linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE, agr = "constant")
 railD = st_read(file.path(pthBase, "rail.shp"), quiet = TRUE, agr = "constant")
 utilitiesD = st_read(file.path(pthBase, "utilities.shp"), quiet = TRUE, agr = "constant")
 ```
@@ -152,7 +151,7 @@ carHab4 <- caribouHabitat(
   esker = eskerDshp, 
   natDist = natDistD,
   anthroDist = anthroDistD,
-  linFeat = list(roads = roadsD, rail = railD, utilities = utilitiesD),
+  linFeat = list(roads = linFeatDshp, rail = railD, utilities = utilitiesD),
   projectPoly = projectPolyD,
   caribouRange = "Nipigon"
 )

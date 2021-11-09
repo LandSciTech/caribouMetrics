@@ -16,7 +16,7 @@ natDistD = raster(file.path(pthBase, "natDist.tif"))
 anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
 linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE)
-linFeatDshp = st_read(file.path(pthBase, "linFeat.shp"), quiet = TRUE)
+linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE)
 
 test_that("error if a required arg is missing", {
   expect_error(caribouHabitat(
@@ -24,7 +24,7 @@ test_that("error if a required arg is missing", {
     esker = file.path(pthBase, "esker.shp"),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "linFeat.shp"),
+    linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
   ), "is missing, with no default")
@@ -33,7 +33,7 @@ test_that("error if a required arg is missing", {
     #esker = file.path(pthBase, "esker.shp"),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "linFeat.shp"),
+    linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
   ), "is missing, with no default")
@@ -43,7 +43,7 @@ test_that("error if a required arg is missing", {
     esker = file.path(pthBase, "esker.shp"),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    #linFeat = file.path(pthBase, "linFeat.shp"),
+    #linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
   ), "is missing, with no default")
@@ -52,7 +52,7 @@ test_that("error if a required arg is missing", {
     esker = file.path(pthBase, "esker.shp"),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "linFeat.shp"),
+    linFeat = file.path(pthBase, "roads.shp"),
     #projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
   ), "is missing, with no default")
@@ -62,7 +62,7 @@ test_that("error if a required arg is missing", {
     esker = file.path(pthBase, "esker.shp"),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "linFeat.shp"),
+    linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),  
     #caribouRange = "Churchill"
   ), "is missing, with no default")
@@ -74,7 +74,7 @@ test_that("error if a path file is not found", {
     esker = file.path(pthBase, "esker.shp"),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "linFeat.shp"),
+    linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"), 
     caribouRange = "Churchill"
   ), "do.es. not exist")
@@ -83,7 +83,7 @@ test_that("error if a path file is not found", {
     esker = file.path(pthBase, "eskertest.shp"),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "linFeat.shp"),
+    linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
   ), "do.es. not exist")
@@ -95,7 +95,7 @@ test_that("error if some args are paths and others spatial", {
     esker = st_read(file.path(pthBase, "esker.shp"), quiet = TRUE),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "linFeat.shp"),
+    linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"), 
     caribouRange = "Churchill"
   ), ".*supplied as sf or raster objects or character.*")
@@ -104,7 +104,7 @@ test_that("error if some args are paths and others spatial", {
     esker = file.path(pthBase, "eskertest.shp"),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "linFeat.shp"),
+    linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
   ), ".*supplied as sf or raster objects or character.*")
@@ -112,11 +112,11 @@ test_that("error if some args are paths and others spatial", {
 
 test_that("error if file is in wrong format",{
   expect_error(caribouHabitat(
-    landCover = file.path(pthBase, "linFeat.shp"),
+    landCover = file.path(pthBase, "roads.shp"),
     esker = file.path(pthBase, "esker.shp"),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "linFeat.shp"),
+    linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
   ), "raster file must be provided for")
@@ -125,7 +125,7 @@ test_that("error if file is in wrong format",{
     esker = file.path(pthBase, "esker.shp"),
     natDist = file.path(pthBase, "natDist.tif"),
     anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "linFeat.shp"),
+    linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "landCover.tif"),
     caribouRange = "Churchill"
   ), "shapefile must be provided for")
