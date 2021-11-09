@@ -6,7 +6,8 @@ Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ca
     person("Sarah", "Endicott", email = "sarah.endicott@canada.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
     person("Craig", "Simpkins", email = "simpkinscraig063@gmail.com", role = "aut"),
-    person("Tati", "Michelleti", email = "tati.micheletti@gmail.com", role = "aut"),
+    person("Tati", "Michelleti", email = "tati.micheletti@gmail.com", 
+           role = c("aut", "cph"), comment = c("Functions getCoefs and sampleRates are derived from code written by Tati Micheletti")),
     person("Eliot", "McIntire", email = "eliot.mcintire@canada.ca", role = "aut"),
     person(given="Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change",
            role = "cph"))
