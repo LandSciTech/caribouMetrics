@@ -96,10 +96,7 @@ sampleRates <- function(covTable,
                         returnSample,
                         quantilesToUse=NULL,
                         predInterval = c(0.025,0.975)){
-  
-  tictoc::tic(paste0("Elapsed time for caribou prediction for ",
-             resVar, " for ", modVer,":"))
-  
+
   whichCovariates <- names(coefValues)[!names(coefValues) %in% c("Intercept", 
                                                                    "intercept",
                                                                    "precision",
@@ -247,7 +244,6 @@ sampleRates <- function(covTable,
       resultDT$PIhigh = qqs[[2]]
     }  
   }  
-  tictoc::toc()
   
   return(resultDT)
 }
