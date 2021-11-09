@@ -1,4 +1,3 @@
-context("Overall process to run caribouHabitat")
 
 # create a small dataset for testing #==========================================
 # Only needs to happen once
@@ -102,10 +101,6 @@ paths_list_linF <- caribouHabitat(
 )
 
 
-test_that("results match when input is paths",{
-  expect_equal(paths_eskshp_linFshp@habitatUse, paths_list_linF@habitatUse)
-})
-
 
 # Test all different ways to run with data #====================================
 landCoverD = raster(file.path(pthBase, "landCover.tif")) %>% 
@@ -181,10 +176,9 @@ test_that("raster road input works as expected", {
             data_list_linFrdRast1@linFeat %>% raster::cellStats(max))
 })
 
-test_that("results match when input is paths or data, or list of either for linFeat",{
+test_that("results match when input is paths or data",{
   expect_equal(data_esktif_linFtif@habitatUse, paths_eskshp_linFshp@habitatUse)
   expect_equal(data_eskshp_linFshp@habitatUse, data_esktif_linFtif@habitatUse)
-  expect_equal(data_list_linF@habitatUse, data_esktif_linFtif@habitatUse)
 })
 
 test_that("results are different when disturbance is missing", {

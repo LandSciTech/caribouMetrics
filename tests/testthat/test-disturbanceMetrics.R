@@ -56,9 +56,8 @@ dm_lflist <- disturbanceMetrics(
 )
 
 
-test_that("results match when input is paths or data or list for linFeat",{
+test_that("results match when input is paths or data",{
   expect_equal(dm@disturbanceMetrics, dm_path@disturbanceMetrics)
-  expect_equal(dm@disturbanceMetrics, dm_lflist@disturbanceMetrics)
 })
 
 test_that("error if rasters don't align",{
