@@ -2,7 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-.Rbuildignore
 installcaribouMetrics.R
 caribouMetrics.Rproj
 inst/doc
