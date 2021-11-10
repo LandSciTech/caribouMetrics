@@ -111,112 +111,89 @@ sampleRates <- function(covTable,
   
   covTableRed <- covTable[, whichCovariates]
   
+  # set up components that are different for different model versions
   if (grepl(x = modVer, pattern = "Johnson")) {
-    intt <- coefSamples[, which(colnames(coefSamples) %in% c("Intercept", 
+    predictSDFun <- function(x, intt){exp(intt + x)}
+    phiSampleFun <- betaSample
+    predictFun <- function(coefValues, covTableRed){
+      exp(as.numeric(as.matrix(coefValues)[
+        which(colnames(coefValues) %in% c("Intercept", "intercept"))] +
+          as.matrix(covTableRed) %*% 
+          as.matrix(coefValues)[-which(colnames(coefValues) %in% 
+                                         c("Intercept", 
+                                           "intercept",
+                                           "precision",
+                                           "Precision"))]))
+    }
+    recruitDiv <- 1
+  } else if (grepl(x = modVer, pattern = "ECCC")) {
+    predictSDFun <- function(x, intt){intt + x}
+    phiSampleFun <- normalSample
+    predictFun <- function(coefValues, covTableRed){
+      as.numeric(as.matrix(coefValues)[
+        which(colnames(coefValues) %in% c("Intercept", "intercept"))] +
+          as.matrix(covTableRed) %*% 
+          as.matrix(coefValues)[-which(colnames(coefValues) %in% 
+                                         c("Intercept", 
+                                           "intercept",
+                                           "precision",
+                                           "Precision"))])
+    }
+    recruitDiv <- 100
+  }else {
+    stop("Currently only ECCC 2011 and Johnson et al., 2020 models implemented")
+  }
+  
+  intt <- coefSamples[, which(colnames(coefSamples) %in% c("Intercept", 
                                                            "intercept"))]
-    phi <- coefSamples[, which(colnames(coefSamples) %in% c("Precision", 
+  phi <- coefSamples[, which(colnames(coefSamples) %in% c("Precision", 
                                                           "precision"))]
-    
-    predictedTableSD <- as.matrix(covTableRed) %*%
-      t(coefSamples[,-which(colnames(coefSamples) %in% c("Intercept",
+  
+  predictedTableSD <- as.matrix(covTableRed) %*%
+    t(coefSamples[,-which(colnames(coefSamples) %in% c("Intercept",
                                                        "intercept",
                                                        "precision",
                                                        "Precision"))])
-    
-    predictedTableSD <- t(apply(predictedTableSD, 1, function(x,intt){
-      exp(intt + x)}, intt = intt))
-
-    #predictedTableSD is bootstrap sample of mean. 
-    #Precision parameter gives info about the amount of scatter around the mean. 
-    #Easier to understand the principles by thinking about a simpler linear regression example. 
-    #Using the notation in the regression analysis section of this wikipedia article, predictedTableSD is sample from distribution of yhat_d, rather than y_d: https://en.wikipedia.org/wiki/Prediction_interval 
-    if(!ignorePrecision){
-      if(length(phi)==0){
-        stop("Missing precision parameter. Set ignorePrecision = TRUE or",
-             " add a precision column to coefSamples", call. = FALSE)
-      }
-      if(nrow(predictedTableSD)<1){
-        stop("This code assumes at least one row.")
-      }
-      
-      predictedTableSD = t(apply(predictedTableSD,1,betaSample,phi=phi,quantilesToUse=quantilesToUse))
+  
+  predictedTableSD <- t(apply(predictedTableSD, 1, predictSDFun, intt = intt))
+  
+  if (resVar == "recruitment") {
+    predictedTableSD <- predictedTableSD/recruitDiv
+  }
+  #predictedTableSD is bootstrap sample of mean. 
+  #Precision parameter gives info about the amount of scatter around the mean. 
+  #Easier to understand the principles by thinking about a simpler linear regression example. 
+  #Using the notation in the regression analysis section of this wikipedia article, predictedTableSD is sample from distribution of yhat_d, rather than y_d: https://en.wikipedia.org/wiki/Prediction_interval 
+  if(!ignorePrecision){
+    if(length(phi) == 0){
+      stop("Missing precision parameter. Set ignorePrecision = TRUE or",
+           " add a precision column to coefSamples", call. = FALSE)
+    }
+    if(nrow(predictedTableSD)<1){
+      stop("This code assumes at least one row.")
     }
     
-    #Note: more relevant measure of uncertainty is perhaps bootstrap prediction interval
-    #https://stats.stackexchange.com/questions/226565/bootstrap-prediction-interval
-    #When precision is included points are not Gaussian distributed, and SD isn't an overly useful summary metric. 
-    
-    # Uncertainty across replicates
-    predictedSD <- matrixStats::rowSds(predictedTableSD)
-    
-    if(is.null(quantilesToUse)){
-      qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = predInterval)
-    }else{
-      qqs <- matrixStats::rowQuantiles(predictedTableSD,probs = c(0,1))
-    }  
-    # Now the model calculations
-    predicted <- as.numeric(exp(as.matrix(coefValues)[
-      which(colnames(coefValues) %in% c("Intercept", "intercept"))] +
-        as.matrix(covTableRed) %*% 
-        as.matrix(coefValues)[-which(colnames(coefValues) %in% 
-                                        c("Intercept", 
-                                          "intercept",
-                                          "precision",
-                                          "Precision"))]))
-  } 
-  else {
-    if (grepl(x = modVer, pattern = "ECCC")) {
-      
-      intt <- coefSamples[, which(colnames(coefSamples) %in% c("Intercept", "intercept"))]
-      phi <- coefSamples[, which(colnames(coefSamples) %in% c("Precision", 
-                                                            "precision"))]
-      
-      predictedTableSD <- as.matrix(covTableRed) %*%
-        t(coefSamples[,-which(colnames(coefSamples) %in% c("Intercept","intercept","precision","Precision"))])
-      
-      predictedTableSD<-t(apply(predictedTableSD,1,function(x,intt){(intt+x)},intt=intt))
-      
-      if(resVar == "recruitment"){
-        predictedTableSD=predictedTableSD/100
-      }
-      
-      if(!ignorePrecision){
-        if(length(phi)==0){
-          stop("Missing precision parameter. Set ignorePrecision = TRUE or",
-               " add a precision column to coefSamples", call. = FALSE)
-        }
-        if(nrow(predictedTableSD)<1){
-          stop("This code assumes at least one row.")
-        }
-        
-        pp = apply(predictedTableSD,1,normalSample,sd=phi,quantilesToUse=quantilesToUse)
-        
-        predictedTableSD=t(pp)
-        
-      }
-      
-      # Uncertainty across replicates
-      predictedSD <- matrixStats::rowSds(predictedTableSD)
-      
-      if(is.null(quantilesToUse)){
-        qqs <- matrixStats::rowQuantiles(predictedTableSD, probs = predInterval)
-      }else{
-        qqs <- matrixStats::rowQuantiles(predictedTableSD, probs = c(0,1))
-      }  
-      
-      # Now the model calculations
-      predicted <- as.numeric((as.matrix(coefValues)[which(colnames(coefValues) %in% c("Intercept",
-                                                                                         "intercept"))] +
-                                 as.matrix(covTableRed) %*%
-                                 as.matrix(coefValues)[-which(colnames(coefValues) %in% c("Intercept",
-                                                                                            "intercept","precision","Precision"))]))
-      if(resVar == "recruitment"){
-        predicted=predicted/100
-      }
-    } 
-    else {
-      stop("Currently only ECCC 2011 and Johnson et al., 2020 models implemented")
-    }
+    predictedTableSD <- t(apply(predictedTableSD, 1, phiSampleFun, phi = phi,
+                                quantilesToUse = quantilesToUse))
+  }
+  
+  #Note: more relevant measure of uncertainty is perhaps bootstrap prediction interval
+  #https://stats.stackexchange.com/questions/226565/bootstrap-prediction-interval
+  #When precision is included points are not Gaussian distributed, and SD isn't an overly useful summary metric. 
+  
+  # Uncertainty across replicates
+  predictedSD <- matrixStats::rowSds(predictedTableSD)
+  
+  if(is.null(quantilesToUse)){
+    qqs <- matrixStats::rowQuantiles(predictedTableSD, probs = predInterval)
+  }else{
+    qqs <- matrixStats::rowQuantiles(predictedTableSD, probs = c(0,1))
+  }  
+  # Now the model calculations
+  predicted <- predictFun(coefValues, covTableRed)
+  
+  if(resVar == "recruitment"){
+    predicted = predicted/recruitDiv
   }
   
   if (returnSample) {
