@@ -44,7 +44,8 @@ Imports:
     simstudy,
     truncdist,
     stars,
-    rlang
+    rlang,
+    rgdal
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
