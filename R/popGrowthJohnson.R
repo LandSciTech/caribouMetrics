@@ -59,8 +59,8 @@ popGrowthJohnson <- function(N,
                              probOption="binomial",
                              progress = interactive()){
   rr=data.frame(N=N)
-  R_bar[R_bar<0]=0
-  S_bar[S_bar<0]=0
+  R_bar[R_bar<0]=0.000001
+  S_bar[S_bar<0]=0.000001
   
   #Return error if S_bar outside of range l_S,h_S, or R_bar outside of range
   #l_R,h_R.
