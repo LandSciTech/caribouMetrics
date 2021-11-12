@@ -6,7 +6,7 @@
 #' et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar =
 #' FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
 #' model without interannual variability, density dependence, or discrete
-#' numbers of animals used by Stewart et al. (in prep). See 
+#' numbers of animals used by Stewart et al. (in prep). See
 #' \code{vignette("caribouDemography")} for additional details and examples.
 #'
 #' @param N Number or vector of numbers. Initial population size for one or more
@@ -33,7 +33,7 @@
 #'   \code{FALSE} ignore interannual variability.
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
-#' @param progress Logical. Should progress updates be shown? 
+#' @param progress Logical. Should progress updates be shown?
 #'
 #' @return A data.frame of population size (N) and average growth rate (lambda)
 #'   projections for each sample population.
@@ -59,40 +59,43 @@ popGrowthJohnson <- function(N,
                              probOption="binomial",
                              progress = interactive()){
   rr=data.frame(N=N)
+  
   R_bar[R_bar<0]=0.000001
   S_bar[S_bar<0]=0.000001
   
-  #Return error if S_bar outside of range l_S,h_S, or R_bar outside of range
+  #Warn if S_bar outside of range l_S,h_S, or R_bar outside of range
   #l_R,h_R.
   if(any(S_bar < l_S) || any(S_bar > h_S)){
-    stop("Expected survival S_bar should be between l_R and h_R.",
-         call. = FALSE)
+    warning("Setting expected survival S_bar to be between l_S and h_S.",
+            call. = FALSE)
+    S_bar = pmax(S_bar,l_S);S_bar=pmin(S_bar,h_S)
   }
-  
+
   if(any(R_bar < l_R) || any(R_bar > h_R)){
-    stop("Expected recruitment R_bar should be between l_R and h_R.", 
-         call. = FALSE)
+    warning("Setting expected recruitment R_bar to be between l_R and h_R.",
+            call. = FALSE)
+    R_bar = pmax(R_bar,l_R);R_bar=pmin(R_bar,h_R)
   }
-  
+
   h_R = s*h_R
   l_R = s*l_R
-  
+
   if(length(N) != length(R_bar) && length(R_bar) > 1){
     stop("R_bar must have length = 1 or the same length as N", call. = FALSE)
   }
-  
+
   if(length(N) != length(S_bar) && length(S_bar) > 1){
     stop("S_bar  must have length = 1 or the same length as N", call. = FALSE)
   }
-  
+
   if(!is.element("R_phi",names(interannualVar))){
-    R_bar=s*R_bar 
+    R_bar=s*R_bar
   }else{
     #Phi is precision of calf cow ratio, not recruitment.
     l_R=l_R/s
     h_R=h_R/s
   }
-  
+
   if(probOption=="matchJohnson2020"){
     roundDigits=0
     doBinomial=F
@@ -105,13 +108,13 @@ popGrowthJohnson <- function(N,
       roundDigits=0
       doBinomial=T
     }
-    rK <- K * N 
+    rK <- K * N
   }
-  
+
   if(a<=0){
     stop("a should be greater than 0")
   }
-  
+
   for(t in 1:numSteps){
     if(progress){
       print(paste("projecting step ",t))
@@ -120,15 +123,15 @@ popGrowthJohnson <- function(N,
       R_t= R_bar
       S_t = S_bar
     }else{
-      R_t = addInterannualVar(R_bar,interannualVar,type="R",minV =l_R,maxV=h_R)  
-      S_t = addInterannualVar(S_bar,interannualVar,type="S",minV =l_S,maxV=h_S)      
+      R_t = addInterannualVar(R_bar,interannualVar,type="R",minV =l_R,maxV=h_R)
+      S_t = addInterannualVar(S_bar,interannualVar,type="S",minV =l_S,maxV=h_S)
     }
     if(is.element("R_phi",names(interannualVar))){
-      R_t=s*R_t 
-    }  
-    
+      R_t=s*R_t
+    }
+
     Ntm1=N
-    
+
     if(doBinomial){
       n_deaths <- rbinom(length(N),N,(1 - S_t))
     }else{
@@ -138,17 +141,17 @@ popGrowthJohnson <- function(N,
     surviving_adFemales <- N - n_deaths
 
     if(probOption=="matchJohnson2020"){
-      rK <- K * N 
+      rK <- K * N
     }
 
-    n_recruitsUnadjDD <- surviving_adFemales * R_t 
+    n_recruitsUnadjDD <- surviving_adFemales * R_t
 
     if(K){
       adjDDRtProportion <- (P_0 -
                               ((P_0 - P_K) *
-                                 (surviving_adFemales/rK)^b)) * 
+                                 (surviving_adFemales/rK)^b)) *
         surviving_adFemales/(surviving_adFemales + a)
-      
+
       adjDDRtProportion[adjDDRtProportion<0] <- 0
       adjDDRtProportion[adjDDRtProportion>1] <- 1
     }else{
@@ -157,25 +160,25 @@ popGrowthJohnson <- function(N,
     if(doBinomial){
       n_recruits <- rbinom(length(N),surviving_adFemales,R_t*adjDDRtProportion)
     }else{
-      n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits) 
-    }  
+      n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits)
+    }
     N <- surviving_adFemales + n_recruits
-    
+
     if(probOption=="matchJohnson2020"){
       ad = adjustN(N,Ntm1,r_max,denominatorAdjust=1e-06,roundDigits=roundDigits)
     }else{
       ad = adjustN(N,Ntm1,r_max,roundDigits=roundDigits)
     }
     if(sum(is.na(ad$N))>0){stop()}
-    
+
     N=ad$N
-    rr[paste0("lam",t)]=ad$Lambda    
+    rr[paste0("lam",t)]=ad$Lambda
   }
-  
+
   lamBits = names(rr)[grepl("lam",names(rr))]
   rr$lambda=matrixStats::rowMeans2(as.matrix(subset(rr,select=lamBits)),na.rm=T)
   rr=subset(rr,select=setdiff(names(rr),lamBits))
-  rr$N=N 
+  rr$N=N
   return(rr)
 }
 
@@ -183,13 +186,13 @@ adjustN<-function(N,Ntm1,r_max=NA,denominatorAdjust=0,roundDigits=50){
   N[N<0]=0
   N[Ntm1==0]=0
   Lambda = N/(Ntm1+ denominatorAdjust)
-  
+
   if(!is.na(r_max)){
     Lambda[Ntm1==0]=0
     N[Lambda>r_max]=round(Ntm1[Lambda>r_max] * r_max,roundDigits)
     Lambda = N/(Ntm1+ denominatorAdjust)
   }
-  
+
   if(denominatorAdjust==0){
     Lambda[Ntm1==0]=0
   }
