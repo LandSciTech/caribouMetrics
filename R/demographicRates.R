@@ -30,6 +30,10 @@
 #'   in one scenario is unrelated to the values for that replicate in other
 #'   scenarios. Useful for projecting impacts of changing disturbance on the
 #'   trajectories of replicate populations.
+#' @param predInterval numeric vector with length 2. The default 95\% interval is
+#'   (\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and 
+#'   \code{quantilesToUse = NULL}. 
+#'
 #' @return A data.frame of predictions. The data.frame includes all columns in
 #'   \code{covTable} with additional columns depending on \code{returnSample}.
 #'   
@@ -68,10 +72,12 @@
 #'
 #' @export
 demographicRates <- function(covTable,
-                                popGrowthPars,
-                                ignorePrecision = FALSE,
-                                returnSample = FALSE,
-                                useQuantiles = TRUE){
+                             popGrowthPars,
+                             ignorePrecision = FALSE,
+                             returnSample = FALSE,
+                             useQuantiles = TRUE, 
+                             predInterval = list(PI_R = c(0.025,0.975), 
+                                                 PI_S = c(0.025,0.975))){
   
   quantsToUse <- prepQuantiles(useQuantiles, popGrowthPars$coefSamples_S$quantiles)
 
@@ -100,7 +106,8 @@ demographicRates <- function(covTable,
                         quantilesToUse = popGrowthPars$coefSamples_S[["quantiles"]],
                         resVar = "femaleSurvival",
                         ignorePrecision = ignorePrecision,
-                        returnSample = returnSample)
+                        returnSample = returnSample,
+                        predInterval = predInterval[["PI_S"]])
   
   pred_R <- sampleRates(covTable = covTable,
                         coefSamples = popGrowthPars$coefSamples_Recruitment[["coefSamples"]],
@@ -109,7 +116,8 @@ demographicRates <- function(covTable,
                         modVer =  popGrowthPars$modelVersion,
                         resVar = "recruitment",
                         ignorePrecision = ignorePrecision,
-                        returnSample = returnSample)
+                        returnSample = returnSample,
+                        predInterval = predInterval[["PI_R"]])
   rateSamples = pred_S
   names(rateSamples)[names(rateSamples) == "value"] = "S_bar"
   names(rateSamples)[names(rateSamples) == "average"] = "S_bar"

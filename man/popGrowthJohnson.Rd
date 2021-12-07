@@ -80,6 +80,6 @@ population growth model described in Dyson et al. (in Prep). Set
 et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar =
 FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
 model without interannual variability, density dependence, or discrete
-numbers of animals used by Stewart et al. (in prep). See 
+numbers of animals used by Stewart et al. (in prep). See
 \code{vignette("caribouDemography")} for additional details and examples.
 }

@@ -9,7 +9,8 @@ demographicRates(
   popGrowthPars,
   ignorePrecision = FALSE,
   returnSample = FALSE,
-  useQuantiles = TRUE
+  useQuantiles = TRUE,
+  predInterval = list(PI_R = c(0.025, 0.975), PI_S = c(0.025, 0.975))
 )
 }
 \arguments{
@@ -44,6 +45,10 @@ scenario and replicate, so the value for a particular replicate population
 in one scenario is unrelated to the values for that replicate in other
 scenarios. Useful for projecting impacts of changing disturbance on the
 trajectories of replicate populations.}
+
+\item{predInterval}{numeric vector with length 2. The default 95\% interval is
+(\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and 
+\code{quantilesToUse = NULL}.}
 }
 \value{
 A data.frame of predictions. The data.frame includes all columns in
