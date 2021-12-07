@@ -72,7 +72,7 @@ checkCompRast <- function(x, y, nmx, nmy, y2 = NULL){
     stop(nmx, " and ",  nmy,
          " rasters do not have the same extent,",
          " number of rows and columns, projection, resolution, or origin. ",
-         "Use raster::compareRaster() to identify the problem.")
+         "Use raster::compareRaster() to identify the problem.", call. = FALSE)
   }
 
   invisible(TRUE)
