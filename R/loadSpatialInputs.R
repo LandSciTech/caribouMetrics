@@ -23,8 +23,9 @@
 #'   \code{inputsList} element as its first argument and the subsequent elements
 #'   are named arguments for that function, or a matrix that will be passed to
 #'   \code{\link[raster]{reclassify}}.
-#' @param bufferWidth numeric. The width of a buffer around the
-#'   \code{projectPoly} to use so that rasters will be cropped to a larger area.
+#' @param bufferWidth numeric. The width of a moving window that will be applied
+#'   to the data. If it is supplied a buffer of 3*\code{bufferWidth} around the
+#'   \code{projectPoly} is used so that rasters will be cropped to a larger area.
 #'   This can be used to avoid edge effects in moving window calculations
 #' @param ptDensity number. Only used if an element of \code{inputsList} is a
 #'   list that contains a mixture of rasters and lines and is included in
