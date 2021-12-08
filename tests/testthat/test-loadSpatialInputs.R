@@ -38,38 +38,62 @@ tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
 linFeat400 <- raster(file.path(pth_base, "linFeatTif.tif")) %>% 
   raster::resample(y = tmplt, method = "bilinear")
 
+out <- loadSpatialInputs(projectPoly = singlePolyP, refRast = landCoverP, 
+                         inputsList = list(esker = eskerP, 
+                                           linFeat = linFeatP, 
+                                           natDist = natDistP, 
+                                           anthroDist = anthroDistP), 
+                         reclassOptions = list(refRast = reclassPLC, 
+                                               natDist = cbind(NA, 0)))
+
 test_that("with paths", {
-  out <- loadSpatialInputs(projectPoly = singlePolyP, refRast = landCoverP, 
-                           inputsList = list(esker = eskerP, 
-                                             linFeat = linFeatP, 
-                                             natDist = natDistP, 
-                                             anthroDist = anthroDistP), 
-                           convertToRast = c("esker", "linFeat"),
-                           reclassOptions = list(refRast = reclassPLC, 
-                                                 natDist = cbind(NA, 0)))
   expect_type(out, "list")
 })
 
+out2 <- loadSpatialInputs(
+  projectPoly = singlePoly, refRast = landCover, 
+  inputsList = list(esker = esker, 
+                    linFeat = linFeat, 
+                    natDist = natDist, 
+                    anthroDist = anthroDist), 
+  convertToRast = c("esker", "linFeat"),
+  useTemplate = c("esker", "linFeat"),
+  reclassOptions = list(refRast = reclassPLC, 
+                        natDist = list(fn = reclassDist,
+                                       endYr = 2020, 
+                                       numCumYrs = 30,
+                                       dateField = "FIRE_YEAR"))
+)
 
 test_that("with spatial objects", {
-  out2 <- loadSpatialInputs(
-    projectPoly = singlePoly, refRast = landCover, 
-    inputsList = list(esker = esker, 
-                      linFeat = linFeat, 
-                      natDist = natDist, 
-                      anthroDist = anthroDist), 
-    convertToRast = c("esker", "linFeat"),
-    reclassOptions = list(refRast = reclassPLC, 
-                          natDist = list(fn = reclassDist,
-                                         endYr = 2020, 
-                                         numCumYrs = 30,
-                                         dateField = "FIRE_YEAR")),
-    bufferWidth = 500
-  )
-  
   expect_type(out2, "list")
 })
 
-
+test_that("use pre-loaded spatial inputs in caribouHabitat or disturbanceMetrics", {
+  res1 <- caribouHabitat(preppedData = out2, caribouRange = "Churchill")
+  
+  # should be the same as if they were used directly
+  res2 <- caribouHabitat(landCover = reclassPLC(landCover),
+                         projectPoly = singlePoly,
+                         esker = esker, 
+                         linFeat = linFeat, 
+                         natDist = reclassDist(natDist, endYr = 2020, 
+                                               numCumYrs = 30,
+                                               dateField = "FIRE_YEAR", 
+                                               template = landCover), 
+                         anthroDist = anthroDist,
+                         caribouRange = "Churchill")
+  
+  expect_true(all.equal(res1@habitatUse, res2@habitatUse))
+  
+  dm1 <- disturbanceMetrics(preppedData = out)
+  
+  dm2 <- disturbanceMetrics(projectPoly = singlePolyP, landCover = landCoverP, 
+                            linFeat = linFeatP, 
+                            natDist = natDistP, anthroDist = anthroDistP)
+  
+  expect_true(all.equal(dm1@processedData, dm2@processedData))
+  
+})
 
 

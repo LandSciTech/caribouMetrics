@@ -27,7 +27,7 @@ test_that("error if a required arg is missing", {
     linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
-  ), "is missing, with no default")
+  ), "missing with no default")
   expect_error(caribouHabitat(
     landCover = file.path(pthBase, "landCover.tif"),
     #esker = file.path(pthBase, "esker.shp"),
@@ -36,7 +36,7 @@ test_that("error if a required arg is missing", {
     linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
-  ), "is missing, with no default")
+  ), "missing with no default")
 
   expect_error(caribouHabitat(
     landCover = file.path(pthBase, "landCover.tif"),
@@ -46,7 +46,7 @@ test_that("error if a required arg is missing", {
     #linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
-  ), "is missing, with no default")
+  ), "missing with no default")
   expect_error(caribouHabitat(
     landCover = file.path(pthBase, "landCover.tif"),
     esker = file.path(pthBase, "esker.shp"),
@@ -55,7 +55,7 @@ test_that("error if a required arg is missing", {
     linFeat = file.path(pthBase, "roads.shp"),
     #projectPoly = file.path(pthBase, "projectPoly.shp"),
     caribouRange = "Churchill"
-  ), "is missing, with no default")
+  ), "missing with no default")
  
   expect_error(caribouHabitat(
     landCover = file.path(pthBase, "landCover.tif"),
@@ -65,7 +65,7 @@ test_that("error if a required arg is missing", {
     linFeat = file.path(pthBase, "roads.shp"),
     projectPoly = file.path(pthBase, "projectPoly.shp"),  
     #caribouRange = "Churchill"
-  ), "is missing, with no default")
+  ), "missing, with no default")
 })
 
 test_that("error if a path file is not found", {
@@ -116,7 +116,7 @@ test_that("error if caribouRange missing or doesn't match", {
     anthroDist = anthroDistD,
     linFeat = linFeatDras, projectPoly = projectPolyD,
     winArea = 500),
-    "is missing, with no default")
+    "missing, with no default")
   expect_error(caribouHabitat(
     landCover = landCoverD, 
     esker = eskerDras, 

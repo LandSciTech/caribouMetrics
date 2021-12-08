@@ -2,7 +2,6 @@
 % Please edit documentation in R/disturbanceMetrics.R
 \name{disturbanceMetrics}
 \alias{disturbanceMetrics}
-\alias{disturbanceMetrics,ANY-method}
 \title{Calculate metrics of natural and anthropogenic disturbance}
 \source{
 Environment Canada. 2011. Scientific Assessment to Inform the
@@ -10,9 +9,13 @@ Environment Canada. 2011. Scientific Assessment to Inform the
  caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.
 }
 \usage{
-disturbanceMetrics(landCover, linFeat, projectPoly, isPercent = TRUE, ...)
-
-\S4method{disturbanceMetrics}{ANY}(landCover, linFeat, projectPoly, isPercent = TRUE, ...)
+disturbanceMetrics(
+  landCover = NULL,
+  linFeat = NULL,
+  projectPoly = NULL,
+  isPercent = TRUE,
+  ...
+)
 }
 \arguments{
 \item{landCover}{filename or RasterLayer. 0 and NA values are assumed to be
@@ -57,6 +60,9 @@ be combined. Linear features.}
   disturbances with buffered anthropogenic disturbance. Note this will
   overwrite existing files with the same name. The .grd format is recommended
   because it will preserve layer names when the file is reloaded.}
+  \item{preppedData}{list. A list containing pre-prepared input data sets. If
+  not NULL then data checks will be skipped. Names must match argument names.
+  See \code{\link{loadSpatialInputs}}.}
 }}
 }
 \value{

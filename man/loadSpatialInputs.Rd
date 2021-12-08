@@ -28,6 +28,9 @@ accepted for vector data and all other extensions will be passed to
 \code{raster}. If an element is a list these are assumed to be linear
 features and they are combined.}
 
+\item{convertToRast}{character. Optional. Names of elements of
+\code{inputsList} that should be converted to raster after loading.}
+
 \item{altTemplate}{raster. Optional template raster for raster inputs that
 can have a different resolution from the \code{refRast}.}
 
@@ -48,9 +51,6 @@ This can be used to avoid edge effects in moving window calculations}
 \item{ptDensity}{number. Only used if an element of \code{inputsList} is a
 list that contains a mixture of rasters and lines and is included in
 convertToRast. See \code{\link{rasterizeLineDensity}}.}
-
-\item{covertToRast}{character. Optional. Names of elements of
-\code{inputsList} that should be converted to raster after loading.}
 }
 \value{
 A named list with aligned spatial data components

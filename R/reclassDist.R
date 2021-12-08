@@ -98,6 +98,6 @@ reclassDist <- function(distYr, endYr = 0, numCumYrs, template, dateField){
       out <- raster::rasterize(out, template)
     }
   }
-  out <- raster::calc(out, fun = function(x){ifelse(is.na(x), 0, x)})
+  out <- raster::reclassify(out, cbind(NA, 0))
   return(out)
 }

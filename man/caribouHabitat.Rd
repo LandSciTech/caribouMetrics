@@ -2,7 +2,6 @@
 % Please edit documentation in R/caribouHabitat.R
 \name{caribouHabitat}
 \alias{caribouHabitat}
-\alias{caribouHabitat,ANY-method}
 \title{Calculate relative probability of caribou habitat use}
 \source{
 Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
@@ -16,13 +15,11 @@ Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
  \url{https://doi.org/10.1139/cjz-2015-0101}
 }
 \usage{
-caribouHabitat(landCover, esker, linFeat, projectPoly, caribouRange, ...)
-
-\S4method{caribouHabitat}{ANY}(
-  landCover,
-  esker,
-  linFeat,
-  projectPoly,
+caribouHabitat(
+  landCover = NULL,
+  esker = NULL,
+  linFeat = NULL,
+  projectPoly = NULL,
   caribouRange,
   coefTable = coefTableHR,
   ...
@@ -51,6 +48,9 @@ data.frame it must have two columns Range and coefRange. Range is the name
 of the geographical area and is used to link the table to the provided
 \code{projectPoly} polygons. coefRange is the name of the caribou range that
 the coefficients should be used from.}
+
+\item{coefTable}{data.frame. table of coefficients to be used in the
+model. Must match the format and naming of the default \code{coefTableHR}}
 
 \item{...}{optional arguments:
 \describe{
@@ -87,10 +87,10 @@ the coefficients should be used from.}
   cause the input data to be scaled.}
   \item{ptDensity}{number. Only used if a list element in linFeat is a raster.
   See \code{\link{rasterizeLineDensity}}.}
+  \item{preppedData}{list. A list containing pre-prepared input data sets. If
+  not NULL then data checks will be skipped. Names must match argument names.
+  See \code{\link{loadSpatialInputs}}.}
 }}
-
-\item{coefTable}{data.frame. table of coefficients to be used in the
-model. Must match the format and naming of the default \code{coefTableHR}}
 }
 \value{
 A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}

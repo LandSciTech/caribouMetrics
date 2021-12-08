@@ -12,7 +12,7 @@
 #'   accepted for vector data and all other extensions will be passed to
 #'   \code{raster}. If an element is a list these are assumed to be linear
 #'   features and they are combined.
-#' @param covertToRast character. Optional. Names of elements of
+#' @param convertToRast character. Optional. Names of elements of
 #'   \code{inputsList} that should be converted to raster after loading.
 #' @param altTemplate raster. Optional template raster for raster inputs that
 #'   can have a different resolution from the \code{refRast}.
@@ -121,7 +121,7 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   
   # Process the data
   if(length(nullNames) > 0){
-    convertToRast <- convertToRast[which(!names(convertToRast) %in% nullNames)]
+    convertToRast <- dplyr::setdiff(convertToRast, nullNames)
   }
   
   if(!is.null(convertToRast)){
