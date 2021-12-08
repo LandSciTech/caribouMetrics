@@ -9,7 +9,7 @@ linFeat <- list(roads = read_sf(file.path(pth_base,
                 rail = read_sf(file.path(pth_base, "rail.shp")),
                 utilities = read_sf(file.path(pth_base, "utilities.shp")))
 
-natDist <- sf::st_read(file.path(pth_base, "fireAFFES2020.shp")) 
+natDist <- sf::read_sf(file.path(pth_base, "fireAFFES2020.shp")) 
 
 anthroDist <- raster(file.path(pth_base, "anthroDist.tif"))
 
@@ -33,51 +33,43 @@ anthroDistP <- file.path(pth_base, "anthroDist.tif")
 
 singlePolyP <- file.path(pth_base, "projectPoly.shp")
 
-tmplt <- raster(landCover) %>% `res<-`(c(400, 400))
+tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
 
 linFeat400 <- raster(file.path(pth_base, "linFeatTif.tif")) %>% 
-  resample(y = tmplt, method = "bilinear")
+  raster::resample(y = tmplt, method = "bilinear")
 
-# with paths
-out <- loadSpatialInputs(projectPoly = singlePolyP, refRast = landCoverP, 
-                         inputsList = list(esker = eskerP, 
-                                           linFeat = linFeatP, 
-                                           natDist = natDistP, 
-                                           anthroDist = anthroDistP), 
-                         convertToRast = c("esker", "linFeat"),
-                         reclassOptions = list(refRast = reclassPLC, 
-                                               natDist = cbind(NA, 0)))
+test_that("with paths", {
+  out <- loadSpatialInputs(projectPoly = singlePolyP, refRast = landCoverP, 
+                           inputsList = list(esker = eskerP, 
+                                             linFeat = linFeatP, 
+                                             natDist = natDistP, 
+                                             anthroDist = anthroDistP), 
+                           convertToRast = c("esker", "linFeat"),
+                           reclassOptions = list(refRast = reclassPLC, 
+                                                 natDist = cbind(NA, 0)))
+  expect_type(out, "list")
+})
 
-# with spatial objects
-out2 <- loadSpatialInputs(
-  projectPoly = singlePoly, refRast = landCover, 
-  inputsList = list(esker = esker, 
-                    linFeat = linFeat, 
-                    natDist = natDist, 
-                    anthroDist = anthroDist), 
-  convertToRast = c("esker", "linFeat"),
-  reclassOptions = list(refRast = reclassPLC, 
-                        natDist = list(fn = reclassDist,
-                                       endYr = 2020, 
-                                       numCumYrs = 30,
-                                       dateField = "FIRE_YEAR")),
-  bufferWidth = 500
-)
 
-# try with linFeat as a raster that is already 400 res
-out3 <- loadSpatialInputs(
-  projectPoly = singlePoly, refRast = landCover, 
-  inputsList = list(esker = esker, 
-                    linFeat = linFeat400, 
-                    natDist = natDist, 
-                    anthroDist = anthroDist), 
-  convertToRast = c("esker"),
-  reclassOptions = list(refRast = reclassPLC, 
-                        natDist = list(fn = reclassDist,
-                                       endYr = 2020, 
-                                       numCumYrs = 30,
-                                       dateField = "FIRE_YEAR")),
-  altTemplate = tmplt,
-  useTemplate = c("linFeat"),
-  bufferWidth = 500
-)
+test_that("with spatial objects", {
+  out2 <- loadSpatialInputs(
+    projectPoly = singlePoly, refRast = landCover, 
+    inputsList = list(esker = esker, 
+                      linFeat = linFeat, 
+                      natDist = natDist, 
+                      anthroDist = anthroDist), 
+    convertToRast = c("esker", "linFeat"),
+    reclassOptions = list(refRast = reclassPLC, 
+                          natDist = list(fn = reclassDist,
+                                         endYr = 2020, 
+                                         numCumYrs = 30,
+                                         dateField = "FIRE_YEAR")),
+    bufferWidth = 500
+  )
+  
+  expect_type(out2, "list")
+})
+
+
+
+

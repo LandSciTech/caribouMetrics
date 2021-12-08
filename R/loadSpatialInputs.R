@@ -26,6 +26,9 @@
 #' @param bufferWidth numeric. The width of a buffer around the
 #'   \code{projectPoly} to use so that rasters will be cropped to a larger area.
 #'   This can be used to avoid edge effects in moving window calculations
+#' @param ptDensity number. Only used if an element of \code{inputsList} is a
+#'   list that contains a mixture of rasters and lines and is included in
+#'   convertToRast. See \code{\link{rasterizeLineDensity}}.
 #'
 #' @return A named list with aligned spatial data components
 #' @export
@@ -61,7 +64,8 @@
 #'                                            
 loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = NULL,
                               altTemplate = NULL, useTemplate = NULL,
-                              reclassOptions = NULL, bufferWidth = NULL){
+                              reclassOptions = NULL, bufferWidth = NULL,
+                              ptDensity = 1){
   
   allData <- purrr::splice(inputsList, projectPoly = projectPoly, refRast = refRast)
   
@@ -91,6 +95,10 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   
   allData <- purrr::splice(loaded, combined, spatObjs)
   
+  if(!is(allData$refRast, "Raster")){
+    stop("refRast must be a raster", call. = FALSE)
+  }
+  
   # Align and crop the data
   projPolyOut <- prepProjPoly(allData$projectPoly, allData$refRast, bufferWidth,
                               !is.null(bufferWidth))
@@ -111,16 +119,35 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   allData <- purrr::splice(rasters, purrr::discard(allData, ~is(.x, "Raster")))
   
   # Process the data
-  convertToRast <- convertToRast[which(!names(convertToRast) %in% nullNames)]
-  if(!is.null(convertToRast)){
-    if(any(purrr::map_lgl(allData[convertToRast], ~is(.x, "Raster")))){
-      stop("convertToRaster contains obejcts that are already rasters", call. = FALSE)
-    }
-    allData <- purrr::map_at(allData, convertToRast, rasterizeLineDensity, 
-                             r = allData$refRast)
+  if(length(nullNames) > 0){
+    convertToRast <- convertToRast[which(!names(convertToRast) %in% nullNames)]
   }
   
+  if(!is.null(convertToRast)){
+    # skip ones that are already rasters
+    convertToRast <- dplyr::setdiff(convertToRast,
+                                    names(purrr::keep(allData, is, "Raster")))
+    
+    if(!is.null(useTemplate)){
+      useTemplate <- dplyr::setdiff(useTemplate,
+                                    names(purrr::keep(allData, is, "Raster")))
+      if(is.null(altTemplate)){
+        altTemplate <- raster(allData$refRast) %>% raster::`res<-`(c(400, 400))
+      }
+      
+      tmplt <- altTemplate
+    } else {
+      tmplt <- allData$refRast
+    }
+    
+    allData <- purrr::map_at(allData, convertToRast, rasterizeLineDensity, 
+                             r = tmplt, ptDensity = ptDensity)
+  }
+  
+  if(length(nullNames) > 0){
   reclassOptions <- reclassOptions[which(!names(reclassOptions) %in% nullNames)]
+  }
+  
   if(!is.null(reclassOptions)){
     reclassed <- allData[names(reclassOptions)]
     

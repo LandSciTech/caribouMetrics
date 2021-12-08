@@ -221,8 +221,8 @@ test_that("results are different when disturbance is missing", {
   expect_false(identical(data_noDist,  data_esktif_linFtif))
   
   if(interactive()){
-    plot(data_esktif_linFtif, main = "Orig")
-    plot(data_noAnthro, main = "No Anthro")
+    plot(data_esktif_linFtif, raster.title = "Orig")
+    plot(data_noAnthro, raster.title = "No Anthro")
     plot(data_noNatDist, raster.title = "No NatDist")
     plot(data_noDist, raster.title = "No Dist")
   }

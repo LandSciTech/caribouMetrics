@@ -42,18 +42,20 @@ prepRasts <- function(rastLst, landCover, projectPoly, tmplt = NULL,
   rastLst <- rastLst[which(!vapply(rastLst, function(x) is.null(x), 
                                    FUN.VALUE = TRUE))]
   
-  # if(!do.call(raster::compareRaster, c(rastLst, list(landCover, res = TRUE, extent = FALSE, 
-  #                                                    rowcol = FALSE, stopiffalse = FALSE)))){
-  #   stop("all raster data sets must have matching resolution", call. = FALSE)
-  # }
+  if(!do.call(raster::compareRaster, 
+              c(rastLst, 
+                list(landCover, landCover, crs = TRUE, res = FALSE, extent = FALSE,
+                     rowcol = FALSE, stopiffalse = FALSE)))){
+    stop("all raster data sets must have matching CRS", call. = FALSE)
+  }
   
   # check alignment of each raster against projectPoly and compareRaster with
   # landCover
   rastLst <- purrr::map2(rastLst, names(rastLst),
               ~checkAlign(.x, projectPoly, .y, "projectPoly")) 
   
-  # need to crop tmplt too so that it will match extent
-  tmplt <- cropIf(tmplt, projectPoly, "tmplt", "projectPoly")
+  # # need to crop tmplt too so that it will match extent
+  # tmplt <- cropIf(tmplt, projectPoly, "tmplt", "projectPoly")
   
   # tmplt is usually res 400 400 raster that linFeat and esker are rasterized to
   tmpltUse <- rep_len(list(), length(rastLst)) %>% as.list()
@@ -100,7 +102,7 @@ loadFromFile <- function(indata){
   vect <- names(indata)[which(grepl(".shp$", indata))]
   rast <- names(indata)[which(!grepl(".shp$", indata))]
   
-  neverVect <- c("landCover", "natDist", "anthroDist")
+  neverVect <- c("refRast", "natDist", "anthroDist")
   neverRast <- c("projectPoly")
   
   if(any(vect %in% neverVect)){

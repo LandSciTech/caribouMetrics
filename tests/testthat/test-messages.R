@@ -89,27 +89,6 @@ test_that("error if a path file is not found", {
   ), "do.es. not exist")
 })
 
-test_that("error if some args are paths and others spatial", {
-  expect_error(caribouHabitat(
-    landCover = file.path(pthBase, "landCover.tif"),
-    esker = st_read(file.path(pthBase, "esker.shp"), quiet = TRUE),
-    natDist = file.path(pthBase, "natDist.tif"),
-    anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "roads.shp"),
-    projectPoly = file.path(pthBase, "projectPoly.shp"), 
-    caribouRange = "Churchill"
-  ), ".*supplied as sf or raster objects or character.*")
-  expect_error(caribouHabitat(
-    landCover = landCoverD,
-    esker = file.path(pthBase, "eskertest.shp"),
-    natDist = file.path(pthBase, "natDist.tif"),
-    anthroDist = file.path(pthBase, "anthroDist.tif"),
-    linFeat = file.path(pthBase, "roads.shp"),
-    projectPoly = file.path(pthBase, "projectPoly.shp"),
-    caribouRange = "Churchill"
-  ), ".*supplied as sf or raster objects or character.*")
-})
-
 test_that("error if file is in wrong format",{
   expect_error(caribouHabitat(
     landCover = file.path(pthBase, "roads.shp"),
@@ -189,7 +168,7 @@ test_that("error if landCover is in lonlat", {
     linFeat = linFeatDras, 
     projectPoly = projectPolyD,
     caribouRange = "Churchill"),
-    "landCover must have a projected CRS")
+    "all raster data sets must have matching CRS")
 })
 
 test_that("error if landCover is not in resource types", {
