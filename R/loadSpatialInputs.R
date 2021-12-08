@@ -12,15 +12,12 @@
 #'   accepted for vector data and all other extensions will be passed to
 #'   \code{raster}. If an element is a list these are assumed to be linear
 #'   features and they are combined.
-#' @param covertToRast logical or character. Which elements of \code{inputsList}
-#'   should be converted to raster after loading? If this is a single logical it
-#'   will apply to all vector inputs. If it is a character vector then they will
-#'   be matched with the names from \code{inputsList}.
-#' @param altTemplate raster. An optional template raster for raster inputs that
+#' @param covertToRast character. Optional. Names of elements of
+#'   \code{inputsList} that should be converted to raster after loading.
+#' @param altTemplate raster. Optional template raster for raster inputs that
 #'   can have a different resolution from the \code{refRast}.
-#' @param useTemplate character. An optional character vector that will be
-#'   matched with the names from \code{inputsList} to identifiy elements that
-#'   use \code{altTemplate}
+#' @param useTemplate character. Optional. Names of elements of
+#'   \code{inputsList} that use \code{altTemplate}.
 #' @param reclassOptions list. An optional named list containing a function, a
 #'   list where the first element is a function that takes the corresponding
 #'   \code{inputsList} element as its first argument and the subsequent elements
@@ -60,9 +57,9 @@
 #' res <- loadSpatialInputs(projectPoly = projPol, refRast = lc,
 #'                          inputsList = list(esker = esk, linFeat = lf, natDist = nd,
 #'                                            anthroDist = ad),
-#'                          convertToRast = TRUE)
+#'                          convertToRast = c("esker", "linFeat"))
 #'                                            
-loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = FALSE,
+loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = NULL,
                               altTemplate = NULL, useTemplate = NULL,
                               reclassOptions = NULL, bufferWidth = NULL){
   
@@ -80,11 +77,13 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   }
   
   # load the data
- 
+  #remove NULLs
+  nullNames <- names(purrr::keep(allData, is.null))
+  allData <- purrr::compact(allData)
   
   loaded <- loadFromFile(purrr::keep(allData, is.character))
   
-  combined <- purrr::map(purrr::keep(allData, ~is.list(.x)& !is.data.frame(.x)),
+  combined <- purrr::map(purrr::keep(allData, ~is.list(.x) & !is.data.frame(.x)),
                          combineLinFeat)
   
   spatObjs <- purrr::discard(allData, ~is.character(.x) | 
@@ -112,33 +111,41 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   allData <- purrr::splice(rasters, purrr::discard(allData, ~is(.x, "Raster")))
   
   # Process the data
-  if(any(purrr::map_lgl(allData[convertToRast], ~is(.x, "Raster")))){
-    stop("convertToRaster contains obejcts that are already rasters", call. = FALSE)
+  convertToRast <- convertToRast[which(!names(convertToRast) %in% nullNames)]
+  if(!is.null(convertToRast)){
+    if(any(purrr::map_lgl(allData[convertToRast], ~is(.x, "Raster")))){
+      stop("convertToRaster contains obejcts that are already rasters", call. = FALSE)
+    }
+    allData <- purrr::map_at(allData, convertToRast, rasterizeLineDensity, 
+                             r = allData$refRast)
   }
-  allData <- purrr::map_at(allData, convertToRast, rasterizeLineDensity, 
-                           r = allData$refRast)
   
-  reclassed <- allData[names(reclassOptions)]
-  
-  reclassed <- purrr::map2(reclassed, reclassOptions, 
-                           function(x, fn){
-                             if(is.matrix(fn)){
-                               return(raster::reclassify(x, fn))
-                             } else if(is.function(fn)){
-                               return(fn(x))
-                             } else if(is.list(fn)){
-                               args <- fn[-1]
-                               fn_args <- names(formals(fn[[1]]))
-                               args <- purrr::splice(args, x)
-                               names(args) <- c(names(fn[-1]), fn_args[1])
-                               if("template" %in% fn_args){
-                                 args <- purrr::splice(args, template = allData$refRast)
-                               }
-                               fn <- fn[[1]]
-                               return(do.call(fn, args))
-                             }
-                           })
-  
-  allData[names(reclassOptions)] <- reclassed
+  reclassOptions <- reclassOptions[which(!names(reclassOptions) %in% nullNames)]
+  if(!is.null(reclassOptions)){
+    reclassed <- allData[names(reclassOptions)]
+    
+    reclassed <- purrr::map2(
+      reclassed, reclassOptions, 
+      function(x, fn){
+        if(is.matrix(fn)){
+          return(raster::reclassify(x, fn))
+        } else if(is.function(fn)){
+          return(fn(x))
+        } else if(is.list(fn)){
+          args <- fn[-1]
+          fn_args <- names(formals(fn[[1]]))
+          args <- purrr::splice(args, x)
+          names(args) <- c(names(fn[-1]), fn_args[1])
+          if("template" %in% fn_args){
+            args <- purrr::splice(args, template = allData$refRast)
+          }
+          fn <- fn[[1]]
+          return(do.call(fn, args))
+        }
+      })
+    
+    allData[names(reclassOptions)] <- reclassed
+  }
+
   return(allData)
 }
