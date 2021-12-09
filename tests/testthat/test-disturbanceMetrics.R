@@ -159,6 +159,39 @@ test_that("linBuffMethod sf works",{
   )
 })
 
+test_that("NAs handled correctly", {
+  natDistD[natDistD == 0] <- NA
+  anthroDistD[anthroDistD == 0] <- NA
+  
+  dm_na <- disturbanceMetrics(
+    landCover = plcD,
+    natDist = natDistD, 
+    anthroDist = anthroDistD, 
+    linFeat = linFeatDshp, 
+    projectPoly = projectPolyD,
+    bufferWidth = 500
+  )
+  
+  # Nas in disturbance should have no impact
+  expect_equal(dm@disturbanceMetrics, dm_na@disturbanceMetrics)
+  
+  plcD[plcD == 3] <- NA
+  
+  dm_na_lc <- disturbanceMetrics(
+    landCover = plcD,
+    natDist = natDistD, 
+    anthroDist = anthroDistD, 
+    linFeat = linFeatDshp, 
+    projectPoly = projectPolyD,
+    bufferWidth = 500
+  )
+  ext <- raster::extent(749233.8, 757072.9, 12564948, 12572160)
+  na_out <- raster::crop(is.na(dm_na_lc@processedData[[1]]), ext)
+  na_lc <- raster::crop(is.na(dm_na_lc@landCover), ext)
+  expect_true(raster::compareRaster(na_out, na_lc, values = TRUE, 
+                                    stopiffalse = FALSE, showwarning = TRUE))
+})
+
 # Compare output to previous run. This will raise a flag if the result has
 # changed. Update the stored result if the change was expected.
 resultCompare <- readRDS(file.path("data", "dm_resultCompare.rds"))
