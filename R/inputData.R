@@ -30,8 +30,8 @@ inputData <- function(landCover, esker, linFeat, projectPoly, caribouRange,
                                      convertToRast = c("esker", "linFeat"),
                                      useTemplate = c("esker", "linFeat"),
                                      altTemplate = tmplt,
-                                     reclassOptions = list(natDist = cbind(NA, 0),
-                                                           anthroDist = cbind(NA, 0)),
+                                     # reclassOptions = list(natDist = cbind(NA, 0),
+                                     #                       anthroDist = cbind(NA, 0)),
                                      ptDensity = ptDensity)
   }
   

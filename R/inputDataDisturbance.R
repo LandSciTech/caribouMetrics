@@ -21,9 +21,7 @@ inputDataDisturbance <- function(landCover, projectPoly, linFeat = NULL,
     
     preppedData <- loadSpatialInputs(projectPoly = projectPoly, refRast = landCover, 
                                 inputsList = dplyr::lst(linFeat, natDist, anthroDist),
-                                bufferWidth = bufWidth,
-                                reclassOptions = list(natDist = cbind(NA, 0),
-                                                      anthroDist = cbind(NA, 0))) 
+                                bufferWidth = bufWidth) 
   }
   
   if(raster::isLonLat(preppedData$refRast)){

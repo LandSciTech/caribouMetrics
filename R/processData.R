@@ -242,6 +242,8 @@ setMethod(
                               filename = raster::rasterTmpFile())
     }
     
+    natDist <- reclassify(natDist, cbind(NA, 0))
+    
     anthroDist <- processAnthroDM(anthroDist, inData@linFeat[[1]], landCover, 
                                   linBuffMethod = linBuffMethod,
                                   inData = inData)
@@ -265,6 +267,7 @@ processAnthroDM <- function(anthroDist, linFeat, landCover,
                                fun = function(x){rep(0, x)}, 
                                filename = raster::rasterTmpFile())
   }
+  anthroDist <- reclassify(anthroDist, cbind(NA, 0))
   
   ############ Buffer anthropogenic disturbance
   #To speed calculations, include points from linFeat in raster.
