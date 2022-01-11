@@ -92,6 +92,9 @@ reclassDist <- function(distYr, endYr = 0, numCumYrs, template, dateField){
     }
     
     if(requireNamespace("fasterize", quietly = TRUE)){
+      if(st_geometry_type(out, by_geometry = FALSE) == "GEOMETRY"){
+        out <- st_cast(out)
+      }
       out <- fasterize::fasterize(out, template, background = 0)
     } else {
       message("To speed up install fasterize package")

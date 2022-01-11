@@ -117,7 +117,14 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
                        tmplt = altTemplate,
                        useTmplt = useTemplate)
   
-  allData <- purrr::splice(rasters, purrr::discard(allData, ~is(.x, "Raster")))
+  notRasters <- purrr::discard(allData, ~is(.x, "Raster"))
+  notRasters <- notRasters[-which(names(notRasters) %in% 
+                                    c("projectPoly", "projectPolyOrig"))] 
+  notRasters <- purrr::map2(notRasters, names(notRasters), 
+                  ~checkAlign(.x, allData$projectPoly, .y, "projectPoly"))
+  
+  allData <- purrr::splice(rasters, notRasters, 
+                           allData[which(names(allData) %in% c("projectPoly", "projectPolyOrig"))])
   
   # Process the data
   if(length(nullNames) > 0){

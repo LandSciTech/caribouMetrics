@@ -96,4 +96,23 @@ test_that("use pre-loaded spatial inputs in caribouHabitat or disturbanceMetrics
   
 })
 
-
+test_that("works when inputs have different crs", {
+  
+  esker2 <- esker %>% st_transform(crs = 5070)
+  
+  out3 <- loadSpatialInputs(
+    projectPoly = singlePoly, refRast = landCover, 
+    inputsList = list(esker = esker2, 
+                      linFeat = linFeat, 
+                      natDist = natDist, 
+                      anthroDist = anthroDist), 
+    convertToRast = c("esker", "linFeat"),
+    useTemplate = c("esker", "linFeat"),
+    reclassOptions = list(refRast = reclassPLC, 
+                          natDist = list(fn = reclassDist,
+                                         endYr = 2020, 
+                                         numCumYrs = 30,
+                                         dateField = "FIRE_YEAR"))
+  )
+  
+})
