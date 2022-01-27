@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://landscitech.github.io/caribouMetrics/404.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/articles/Getting_started.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/articles/UI_help.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/authors.html</loc>
+  </url>
+  <url>
     <loc>https://landscitech.github.io/caribouMetrics/index.html</loc>
   </url>
   <url>
@@ -35,6 +59,12 @@
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/getCoefs.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/loadSpatialInputs.html</loc>
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/plcToResType.html</loc>
@@ -80,17 +110,5 @@
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/updateDisturbance.html</loc>
-  </url>
-  <url>
-    <loc>https://landscitech.github.io/caribouMetrics/articles/Getting_started.html</loc>
-  </url>
-  <url>
-    <loc>https://landscitech.github.io/caribouMetrics/articles/UI_help.html</loc>
-  </url>
-  <url>
-    <loc>https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html</loc>
-  </url>
-  <url>
-    <loc>https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html</loc>
   </url>
 </urlset>

@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -91,15 +87,15 @@
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the <a href="https://landscitech.github.io/caribouMetrics/"><code>caribouMetrics</code></a> package. There are vignettes available for the <a href="https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html">caribou habitat</a> and <a href="https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html">demographic</a> models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: <a href="https://doi.org/10.1139/cjz-2015-0101">Hornseth and Rempel (2016)</a> <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637">Johnson et. al. (2020)</a> and <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf">ECCC (2011)</a>.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the <a href="https://landscitech.github.io/caribouMetrics/"><code>caribouMetrics</code></a> package. There are vignettes available for the <a href="https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html">caribou habitat</a> and <a href="https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html">demographic</a> models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel (2016)</a> <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link">Johnson et. al. (2020)</a> and <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="external-link">ECCC (2011)</a>.</p>
 <p>Below we provide links between the options exposed in the UI and the <code>caribouMetrics</code> function documentation and demonstrate how to set up a SynscroSim library and extract scenario results for plotting in R using rsyncrosim.</p>
 </div>
-<div id="documentation-for-model-options" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation-for-model-options" class="anchor"></a>Documentation for model options</h2>
+<div class="section level2">
+<h2 id="documentation-for-model-options">Documentation for model options<a class="anchor" aria-label="anchor" href="#documentation-for-model-options"></a>
+</h2>
 <p>By right clicking a scenario you can access the scenario properties. The Caribou Metrics tab has options that can be set for the models. The table below shows the option from the UI, the corresponding argument name in <code>caribouMetrics</code>, and the names of the function(s) in <code>caribouMetrics</code> that use that argument. Clicking the function name will take you to the documentation for that function. You can read the description at the top of the page to learn what the function does and then find the argument name to read its definition.</p>
 <table class="table">
 <colgroup>
@@ -328,158 +324,158 @@
 </tbody>
 </table>
 </div>
-<div id="set-up-a-new-syncrosim-library" class="section level2">
-<h2 class="hasAnchor">
-<a href="#set-up-a-new-syncrosim-library" class="anchor"></a>Set up a new SyncroSim Library</h2>
-<p>Here we demonstrate how to set up a SyncroSim Library for the ROFSim Package using the rsyncrosim package. For more details on the rsyncrosim package and its funcitons see the Introduction to rsyncrosim <a href="https://syncrosim.github.io/rsyncrosim/articles/a01_rsyncrosim_vignette_basic.html">vignette</a></p>
+<div class="section level2">
+<h2 id="set-up-a-new-syncrosim-library">Set up a new SyncroSim Library<a class="anchor" aria-label="anchor" href="#set-up-a-new-syncrosim-library"></a>
+</h2>
+<p>Here we demonstrate how to set up a SyncroSim Library for the ROFSim Package using the rsyncrosim package. For more details on the rsyncrosim package and its funcitons see the Introduction to rsyncrosim <a href="https://syncrosim.github.io/rsyncrosim/articles/a01_rsyncrosim_vignette_basic.html" class="external-link">vignette</a></p>
 <p>In this example we will create the new library inside the <code>caribouMetrics</code> package directory in order to take advantage of the example data sets installed there. First we create a library called “demoSSimLib” and then a project called “Demo”.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rsyncrosim</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rsyncrosim</span><span class="op">)</span>
 
 <span class="co"># Install ROFSim package using file path to ssimpkg file</span>
 <span class="co"># addPackage("path/to/ROFSim.ssimpkg")</span>
 
-<span class="va">rootPth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span>
+<span class="va">rootPth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span>
 
-<span class="va">cDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"demoSSimLib"</span><span class="op">)</span>
+<span class="va">cDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"demoSSimLib"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">cDir</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">cDir</span><span class="op">)</span>
 
 <span class="va">libName</span> <span class="op">&lt;-</span>  <span class="st">"demoSSimLib"</span>
 
-<span class="va">cLib</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/ssimLibrary.html">ssimLibrary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">cDir</span>, <span class="st">"/"</span>, <span class="va">libName</span><span class="op">)</span>, package <span class="op">=</span> <span class="st">"ROFSim"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">cLib</span> <span class="op">&lt;-</span> <span class="fu">ssimLibrary</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">cDir</span>, <span class="st">"/"</span>, <span class="va">libName</span><span class="op">)</span>, package <span class="op">=</span> <span class="st">"ROFSim"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="va">cProj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/project.html">project</a></span><span class="op">(</span><span class="va">cLib</span>, <span class="st">"Demo"</span><span class="op">)</span></code></pre></div>
+<span class="va">cProj</span> <span class="op">&lt;-</span> <span class="fu">project</span><span class="op">(</span><span class="va">cLib</span>, <span class="st">"Demo"</span><span class="op">)</span></code></pre></div>
 <p>Next, we ensure that SyncroSim uses the same R version as is used to run this vignette. This is only necessary if you have multiple R versions installed.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Make sure the library uses the correct R installation</span>
-<span class="va">rConfig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cLib</span>, name <span class="op">=</span> <span class="st">"core_RConfig"</span><span class="op">)</span>
-<span class="va">rConfig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/addRow.html">addRow</a></span><span class="op">(</span><span class="va">rConfig</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>ExePath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Rhome.html">R.home</a></span><span class="op">(</span><span class="st">"bin"</span><span class="op">)</span>, <span class="st">"Rscript"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cLib</span>, <span class="va">rConfig</span>, name <span class="op">=</span> <span class="st">"core_RConfig"</span><span class="op">)</span></code></pre></div>
+<span class="va">rConfig</span> <span class="op">&lt;-</span> <span class="fu">datasheet</span><span class="op">(</span><span class="va">cLib</span>, name <span class="op">=</span> <span class="st">"core_RConfig"</span><span class="op">)</span>
+<span class="va">rConfig</span> <span class="op">&lt;-</span> <span class="fu">addRow</span><span class="op">(</span><span class="va">rConfig</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>ExePath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Rhome.html" class="external-link">R.home</a></span><span class="op">(</span><span class="st">"bin"</span><span class="op">)</span>, <span class="st">"Rscript"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">saveDatasheet</span><span class="op">(</span><span class="va">cLib</span>, <span class="va">rConfig</span>, name <span class="op">=</span> <span class="st">"core_RConfig"</span><span class="op">)</span></code></pre></div>
 <p>Now we will set up the data sheets used at the project level and the run control scenario. To determine the names of the sheets in the project look at <code>cProjDS</code>. You can determine what column names and variable types are expected for a sheet with for example <code>str(datasheet(cProj, "ROFSim_CaribouRange"))</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># inspect datasheets used at the project level</span>
-<span class="va">cProjDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">cProj</span><span class="op">)</span>
+<span class="va">cProjDS</span> <span class="op">&lt;-</span> <span class="fu">datasheet</span><span class="op">(</span><span class="va">cProj</span><span class="op">)</span>
 
 <span class="co"># set available options for input data</span>
 <span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_CaribouRange"</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"James Bay"</span>, <span class="st">"Missisa"</span>, <span class="st">"Ozhiski"</span>, <span class="st">"Nipigon"</span>,
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"James Bay"</span>, <span class="st">"Missisa"</span>, <span class="st">"Ozhiski"</span>, <span class="st">"Nipigon"</span>,
                           <span class="st">"Pagwachuan"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="fu">saveDatasheet</span><span class="op">(</span><span class="va">cProj</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
 
 <span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_Rasters"</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Harvest"</span>, <span class="st">"Anthropogenic Disturbance"</span>,
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Harvest"</span>, <span class="st">"Anthropogenic Disturbance"</span>,
                           <span class="st">"Natural Disturbance"</span>, <span class="st">"Provincial Land Cover"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="fu">saveDatasheet</span><span class="op">(</span><span class="va">cProj</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
 
 <span class="co"># scenarios - run control</span>
-<span class="va">rcScn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/scenario.html">scenario</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="st">"Run Control 2020 - 2100"</span><span class="op">)</span>
+<span class="va">rcScn</span> <span class="op">&lt;-</span> <span class="fu">scenario</span><span class="op">(</span><span class="va">cProj</span>, <span class="st">"Run Control 2020 - 2100"</span><span class="op">)</span>
 <span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_RunControl"</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>MinimumIteration <span class="op">=</span> <span class="fl">1</span>, MaximumIteration <span class="op">=</span> <span class="fl">1</span>,
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>MinimumIteration <span class="op">=</span> <span class="fl">1</span>, MaximumIteration <span class="op">=</span> <span class="fl">1</span>,
                  MinimumTimestep <span class="op">=</span> <span class="fl">2020</span>, MaximumTimestep <span class="op">=</span> <span class="fl">2100</span>, OutputFrequency <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">rcScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span></code></pre></div>
+<span class="fu">saveDatasheet</span><span class="op">(</span><span class="va">rcScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span></code></pre></div>
 <p>Finally, we set up a scenario by setting options for the models and telling SyncroSim where to find the input files. This scenario inherits the options from the run control scenario created above. We can run the scenario from R or open the SyncroSim library to see the user interface and run it from there.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># scenario - caribou - current</span>
-<span class="va">cbScn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/scenario.html">scenario</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="st">"Caribou - 2020-2100"</span><span class="op">)</span>
+<span class="va">cbScn</span> <span class="op">&lt;-</span> <span class="fu">scenario</span><span class="op">(</span><span class="va">cProj</span>, <span class="st">"Caribou - 2020-2100"</span><span class="op">)</span>
 
 <span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"core_Pipeline"</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>StageNameID <span class="op">=</span> <span class="st">"Caribou Habitat"</span>, RunOrder <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>StageNameID <span class="op">=</span> <span class="st">"Caribou Habitat"</span>, RunOrder <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="fu">saveDatasheet</span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
 
 <span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_RunCaribouRange"</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Range <span class="op">=</span> <span class="st">"Nipigon"</span>, CoeffRange <span class="op">=</span> <span class="st">"Nipigon"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Range <span class="op">=</span> <span class="st">"Nipigon"</span>, CoeffRange <span class="op">=</span> <span class="st">"Nipigon"</span><span class="op">)</span>
+<span class="fu">saveDatasheet</span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
 
 <span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_CaribouDataSource"</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>LandCoverRasterID <span class="op">=</span> <span class="st">"Provincial Land Cover"</span>, 
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>LandCoverRasterID <span class="op">=</span> <span class="st">"Provincial Land Cover"</span>, 
                  ProjectShapeFileID <span class="op">=</span> <span class="st">"Ranges"</span>,
                  EskerShapeFileID <span class="op">=</span> <span class="st">"Eskers"</span>,
                  LinearFeatureShapeFileID <span class="op">=</span> <span class="st">"Linear Features"</span>,
                  NaturalDisturbanceRasterID <span class="op">=</span> <span class="st">"Natural Disturbance"</span>, 
                  HarvestRasterID <span class="op">=</span> <span class="st">"Harvest"</span>, 
                  AnthropogenicRasterID <span class="op">=</span> <span class="st">"Anthropogenic Disturbance"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="fu">saveDatasheet</span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
 
 <span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_CaribouModelOptions"</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RunDistMetrics <span class="op">=</span> <span class="cn">TRUE</span>, RunCaribouHabitat <span class="op">=</span> <span class="cn">TRUE</span>, 
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>RunDistMetrics <span class="op">=</span> <span class="cn">TRUE</span>, RunCaribouHabitat <span class="op">=</span> <span class="cn">TRUE</span>, 
                  RunDemographicModel <span class="op">=</span> <span class="cn">TRUE</span>, padProjPoly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
+<span class="fu">saveDatasheet</span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span>
 
 <span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_RasterFile"</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RastersID <span class="op">=</span> <span class="st">"Natural Disturbance"</span>, 
-                 Filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RastersID <span class="op">=</span> <span class="st">"Harvest"</span>, 
-                           Filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>RastersID <span class="op">=</span> <span class="st">"Provincial Land Cover"</span>, 
-                           Filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span>, append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>RastersID <span class="op">=</span> <span class="st">"Natural Disturbance"</span>, 
+                 Filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>RastersID <span class="op">=</span> <span class="st">"Harvest"</span>, 
+                           Filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>RastersID <span class="op">=</span> <span class="st">"Provincial Land Cover"</span>, 
+                           Filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">saveDatasheet</span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span>, append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="va">cSheet</span> <span class="op">&lt;-</span> <span class="st">"ROFSim_ExternalFile"</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Eskers"</span>, File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"esker.shp"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Linear Features"</span>, 
-                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"rail.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Linear Features"</span>,
-                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"utilities.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Ranges"</span>, 
-                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"projectPoly.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Linear Features"</span>, 
-                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"roads.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html">saveDatasheet</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span>, append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Eskers"</span>, File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"esker.shp"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Linear Features"</span>, 
+                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"rail.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Linear Features"</span>,
+                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"utilities.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Ranges"</span>, 
+                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"projectPoly.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>PolygonsID <span class="op">=</span> <span class="st">"Linear Features"</span>, 
+                           File <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">rootPth</span>, <span class="st">"roads.shp"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">saveDatasheet</span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span>, append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/dependency.html">dependency</a></span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">rcScn</span><span class="op">)</span>
+<span class="fu">dependency</span><span class="op">(</span><span class="va">cbScn</span>, <span class="va">rcScn</span><span class="op">)</span>
 
 <span class="co"># run the scenario</span>
-<span class="va">cbRes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/run.html">run</a></span><span class="op">(</span><span class="va">cbScn</span><span class="op">)</span>
+<span class="va">cbRes</span> <span class="op">&lt;-</span> <span class="fu">run</span><span class="op">(</span><span class="va">cbScn</span><span class="op">)</span>
 
 <span class="co"># Open the library in the SyncroSim UI</span>
 <span class="co"># shell.exec(filepath(cLib))</span></code></pre></div>
 </div>
-<div id="explore-model-results-in-r" class="section level2">
-<h2 class="hasAnchor">
-<a href="#explore-model-results-in-r" class="anchor"></a>Explore model results in R</h2>
+<div class="section level2">
+<h2 id="explore-model-results-in-r">Explore model results in R<a class="anchor" aria-label="anchor" href="#explore-model-results-in-r"></a>
+</h2>
 <p>Once the scenario has run we can look at the results using the user interface or we can extract the results from the UI and create flexible custom plots in R. Here we extract the disturbance metrics to plot change over time (in our example there is no change) and extract the change in population metrics to see the variation among the 35 replicate populations.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">#Find scenario ID of results</span>
-<span class="va">scenNames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/scenario.html">scenario</a></span><span class="op">(</span><span class="va">cLib</span><span class="op">)</span>
+<span class="va">scenNames</span> <span class="op">&lt;-</span> <span class="fu">scenario</span><span class="op">(</span><span class="va">cLib</span><span class="op">)</span>
 
 <span class="co">#Load result tables</span>
-<span class="va">rScn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/scenario.html">scenario</a></span><span class="op">(</span><span class="va">cLib</span>, <span class="fl">3</span><span class="op">)</span>
-<span class="va">distMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">rScn</span>, <span class="st">"OutputDisturbanceMetrics"</span><span class="op">)</span>
-<span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html">datasheet</a></span><span class="op">(</span><span class="va">rScn</span>, <span class="st">"OutputPopulationMetrics"</span><span class="op">)</span>
+<span class="va">rScn</span> <span class="op">&lt;-</span> <span class="fu">scenario</span><span class="op">(</span><span class="va">cLib</span>, <span class="fl">3</span><span class="op">)</span>
+<span class="va">distMetrics</span> <span class="op">&lt;-</span> <span class="fu">datasheet</span><span class="op">(</span><span class="va">rScn</span>, <span class="st">"OutputDisturbanceMetrics"</span><span class="op">)</span>
+<span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="fu">datasheet</span><span class="op">(</span><span class="va">rScn</span>, <span class="st">"OutputPopulationMetrics"</span><span class="op">)</span>
 
 <span class="co">#See changes in disturbance metrics over time</span>
-<span class="va">base1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">distMetrics</span>, 
-                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Timestep</span>, y <span class="op">=</span> <span class="va">Amount</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">MetricTypeDistID</span>,scales<span class="op">=</span><span class="st">"free"</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Time"</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Response"</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>
+<span class="va">base1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">distMetrics</span>, 
+                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Timestep</span>, y <span class="op">=</span> <span class="va">Amount</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">MetricTypeDistID</span>,scales<span class="op">=</span><span class="st">"free"</span><span class="op">)</span><span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time"</span><span class="op">)</span><span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Response"</span><span class="op">)</span><span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>
 <span class="va">base1</span>
 
-<span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeDemogID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/as.character.html">as.character</a></span><span class="op">(</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeDemogID</span><span class="op">)</span>
+<span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeDemogID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/as.character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeDemogID</span><span class="op">)</span>
 <span class="va">popMetrics</span><span class="op">$</span><span class="va">Amount</span><span class="op">[</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeDemogID</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">]</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">Amount</span><span class="op">[</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeDemogID</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">]</span> <span class="op">+</span> <span class="fl">0.001</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">Amount</span><span class="op">[</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeDemogID</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">]</span> <span class="op">+</span> <span class="fl">0.001</span><span class="op">)</span>
 <span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeDemogID</span><span class="op">[</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeDemogID</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"log10N"</span>
 
 <span class="co">#See changes in demographic metrics over time</span>
-<span class="va">base2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">popMetrics</span>, 
-                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Timestep</span>, y <span class="op">=</span> <span class="va">Amount</span>, group <span class="op">=</span> <span class="va">Replicate</span>, 
+<span class="va">base2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">popMetrics</span>, 
+                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Timestep</span>, y <span class="op">=</span> <span class="va">Amount</span>, group <span class="op">=</span> <span class="va">Replicate</span>, 
                     colour <span class="op">=</span> <span class="va">Replicate</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">MetricTypeDemogID</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Time"</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Response"</span><span class="op">)</span><span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">MetricTypeDemogID</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span><span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time"</span><span class="op">)</span><span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Response"</span><span class="op">)</span><span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span>
 <span class="va">base2</span></code></pre></div>
 <p><img src="distMetOverTime.png" style="width:50.0%"><img src="demogOverTime.png" style="width:50.0%"></p>
 <p>Finally delete the library to tidy up.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/delete.html">delete</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">cDir</span>,<span class="st">"/"</span>,<span class="va">libName</span>,<span class="st">".ssim"</span><span class="op">)</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">delete</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">cDir</span>,<span class="st">"/"</span>,<span class="va">libName</span>,<span class="st">".ssim"</span><span class="op">)</span>, force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 
@@ -494,11 +490,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Josie Hughes, Sarah Endicott, Craig Simpkins, Tati Michelleti, Eliot McIntire.</p>
+  <p></p>
+<p>Developed by Josie Hughes, Sarah Endicott, Craig Simpkins, Tati Michelleti, Eliot McIntire.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -506,6 +504,8 @@
 
   
 
+
+  
 
   </body>
 </html>

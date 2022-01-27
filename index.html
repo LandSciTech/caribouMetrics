@@ -33,6 +33,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -45,18 +47,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -95,39 +91,39 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="cariboumetrics" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#cariboumetrics" class="anchor"></a>caribouMetrics</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="cariboumetrics">caribouMetrics<a class="anchor" aria-label="anchor" href="#cariboumetrics"></a>
+</h1></div>
 <!-- badges: start -->
 
 <p>caribouMetrics provides implementations of several different models. Firstly, it implements the caribou resource selection probability functions described in Hornseth and Rempel (2016) <em>Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance</em>. This allows for a spatial prediction of caribou habitat use across 13 caribou ranges in Ontario. The package also includes an implementation of the population and demographic models in <em>Science to inform policy: linking population dynamics to habitat for a threatened species in Canada</em> by Johnson et. al. (2020) and the “Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (<em>Rangifer tarandus caribou</em>), Boreal Population, in Canada 2011 Update” report. These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"LandSciTech/caribouMetrics"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
 <p>This is a basic example which shows you how to use the main functions:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span>
 
-<span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span>
+<span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span>
 
 <span class="co"># load example data</span>
-<span class="va">landCoverD</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> 
+<span class="va">landCoverD</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> 
   <span class="co"># convert PLC classes to resource types used in the model </span>
 <span class="va">landCoverD</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/reclassPLC.html">reclassPLC</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span>
-<span class="va">eskerDras</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"eskerTif.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">eskerDshp</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"esker.shp"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">natDistD</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">anthroDistD</span> <span class="op">&lt;-</span><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">linFeatDras</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"linFeatTif.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">projectPolyD</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"projectPoly.shp"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">eskerDras</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"eskerTif.tif"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">eskerDshp</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"esker.shp"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">natDistD</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">anthroDistD</span> <span class="op">&lt;-</span><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">linFeatDras</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"linFeatTif.tif"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">projectPolyD</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"projectPoly.shp"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Calculate habitat use</span>
 <span class="va">carHab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span>
@@ -149,7 +145,7 @@
 <span class="co">#&gt; Applying moving window.</span>
 
 <span class="co"># plot the results</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span>
 <span class="co">#&gt; Registered S3 methods overwritten by 'stars':</span>
 <span class="co">#&gt;   method             from</span>
 <span class="co">#&gt;   st_bbox.SpatRaster sf  </span>
@@ -194,15 +190,15 @@
 <p>More detailed examples are provided in the vignettes.</p>
 </div>
 </div>
-<div id="references" class="section level1">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
-<p>ECCC. 2011. Scientific assessment to inform the identification of critical habitat for woodland caribou (<em>Rangifer tarandus caribou</em>), boreal population, in Canada. Canadian Wildlife Service, Ottawa. <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="uri">http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf</a>. Accessed 26 Mar 2021.</p>
-<p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking population dynamics to habitat for a threatened species in Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="uri">https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637</a></p>
-<p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93. <a href="https://doi.org/10.1139/cjz-2015-0101" class="uri">https://doi.org/10.1139/cjz-2015-0101</a></p>
-<div id="license" class="section level2">
-<h2 class="hasAnchor">
-<a href="#license" class="anchor"></a>License</h2>
+<div class="section level1">
+<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h1>
+<p>ECCC. 2011. Scientific assessment to inform the identification of critical habitat for woodland caribou (<em>Rangifer tarandus caribou</em>), boreal population, in Canada. Canadian Wildlife Service, Ottawa. <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="external-link uri">http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf</a>. Accessed 26 Mar 2021.</p>
+<p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking population dynamics to habitat for a threatened species in Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link uri">https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637</a></p>
+<p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93. <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link uri">https://doi.org/10.1139/cjz-2015-0101</a></p>
+<div class="section level2">
+<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h2>
 <p>caribouMetrics - Terms and Condition of Use</p>
 <p>Unless otherwise noted, source code of the <code>caribouMetrics</code> R package is covered under Crown Copyright, Government of Canada, and distributed under the GPL3 license.</p>
 <p>Copyright (C) Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment 2021/(C) Sa Majesté la Reine du chef du Canada représentée par le ministre de l’Environnement 2021.</p>
@@ -213,42 +209,53 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a> + file <a href="LICENSE-text.html">LICENSE</a>
+<a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a> + file <a href="LICENSE-text.html">LICENSE</a>
 </li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Josie Hughes <br><small class="roles"> Author </small>  </li>
-<li>Sarah Endicott <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9644-5343" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Craig Simpkins <br><small class="roles"> Author </small>  </li>
-<li>Tati Michelleti <br><small class="roles"> Author, copyright holder </small>  <br><small>(Functions getCoefs and sampleRates are derived from code written by Tati Micheletti)</small>
-</li>
-<li>Eliot McIntire <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/LandSciTech/caribouMetrics/actions"><img src="https://github.com/LandSciTech/caribouMetrics/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="authors.html#citation">Citing caribouMetrics</a></li>
 </ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Josie Hughes <br><small class="roles"> Author </small>  </li>
+<li>Sarah Endicott <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9644-5343" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Craig Simpkins <br><small class="roles"> Author </small>  </li>
+<li>Tati Michelleti <br><small class="roles"> Author, copyright holder </small>  </li>
+<li>Eliot McIntire <br><small class="roles"> Author </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/LandSciTech/caribouMetrics/actions" class="external-link"><img src="https://github.com/LandSciTech/caribouMetrics/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Josie Hughes, Sarah Endicott, Craig Simpkins, Tati Michelleti, Eliot McIntire.</p>
+  <p></p>
+<p>Developed by Josie Hughes, Sarah Endicott, Craig Simpkins, Tati Michelleti, Eliot McIntire.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -256,6 +263,8 @@
 
   
 
+
+  
 
   </body>
 </html>
