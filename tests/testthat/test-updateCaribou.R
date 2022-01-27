@@ -103,7 +103,7 @@ test_that("update process result is same with same data", {
   #movingWindow but different afterwards. The call is the same though. Have not
   #figured out but not serious
   expect_true(length(raster::Which((procedData@habitatUse$Spring - 
-                                      update_data@habitatUse$Spring) != 0, 
+                                      update_data@habitatUse$Spring) >= 0.0001, 
                                    cells = TRUE)) < 365)
   
 })

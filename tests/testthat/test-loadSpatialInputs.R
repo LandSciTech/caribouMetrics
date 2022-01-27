@@ -2,20 +2,22 @@ pth_base <- system.file("extdata", package = "caribouMetrics")
 
 landCover <- raster(file.path(pth_base, "landCover.tif")) 
 
-esker <- read_sf(file.path(pth_base, "esker.shp"))
+esker <- read_sf(file.path(pth_base, "esker.shp"), agr = "constant")
 
 linFeat <- list(roads = read_sf(file.path(pth_base, 
-                                          "roads.shp")),
-                rail = read_sf(file.path(pth_base, "rail.shp")),
-                utilities = read_sf(file.path(pth_base, "utilities.shp")))
+                                          "roads.shp"), agr = "constant"),
+                rail = read_sf(file.path(pth_base, "rail.shp"), agr = "constant"),
+                utilities = read_sf(file.path(pth_base, "utilities.shp"), 
+                                    agr = "constant"))
 
-natDist <- sf::read_sf(file.path(pth_base, "fireAFFES2020.shp")) 
+natDist <- sf::read_sf(file.path(pth_base, "fireAFFES2020.shp"), agr = "constant") 
 
 anthroDist <- raster(file.path(pth_base, "anthroDist.tif"))
 
 # make a polygon inside the bounding box of the rasters
 singlePoly <- (raster::extent(landCover) - 30000) %>% st_bbox() %>%
-  st_as_sfc() %>% st_as_sf() %>% st_set_crs(st_crs(landCover))
+  st_as_sfc() %>% st_as_sf() %>% st_set_crs(st_crs(landCover)) %>% 
+  st_set_agr("constant")
 
 # paths
 landCoverP <- file.path(pth_base, "landCover.tif")
@@ -114,5 +116,5 @@ test_that("works when inputs have different crs", {
                                          numCumYrs = 30,
                                          dateField = "FIRE_YEAR"))
   )
-  
+  expect_type(out3, "list")
 })

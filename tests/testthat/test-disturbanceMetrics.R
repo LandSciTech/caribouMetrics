@@ -157,6 +157,8 @@ test_that("linBuffMethod sf works",{
     bufferWidth = 500,
     linBuffMethod = "sf"
   )
+  
+  expect_s4_class(dm_sf, "DisturbanceMetrics")
 })
 
 test_that("NAs handled correctly", {
