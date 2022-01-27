@@ -71,6 +71,9 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'   disturbances with buffered anthropogenic disturbance. Note this will
 #'   overwrite existing files with the same name. The .grd format is recommended
 #'   because it will preserve layer names when the file is reloaded.}
+#'   \item{preppedData}{list. A list containing pre-prepared input data sets. If
+#'   not NULL then data checks will be skipped. Names must match argument names.
+#'   See \code{\link{loadSpatialInputs}}.}
 #' }
 #' 
 #'@return A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
@@ -109,29 +112,33 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'
 #'
 #'@export
-setGeneric("disturbanceMetrics", 
-           function(landCover, linFeat, projectPoly, isPercent = TRUE, ...) 
-             standardGeneric("disturbanceMetrics"))
-
-#' @rdname disturbanceMetrics
-setMethod(
-  "disturbanceMetrics", 
-  signature(landCover = "ANY"), 
-  function(landCover, linFeat, projectPoly, isPercent = TRUE, ...) {
+disturbanceMetrics <- function(landCover = NULL, linFeat = NULL, 
+                               projectPoly = NULL, isPercent = TRUE, ...) {
 
     dots <- list(...)
+    
+    # check required args
+    if(is.null(dots$preppedData)){
+      missReqArgs <- purrr::map_lgl(lst(landCover, linFeat, projectPoly),
+                                    is.null)
+      if(any(missReqArgs)){
+        stop("The required arguments ", paste0(names(missReqArgs)[which(missReqArgs)], collapse = ", "),
+             " are missing with no default")
+      }
+    }
     
     # check all optional arguments are in expected names
     expDotArgs <- c("natDist", "anthroDist",  "bufferWidth", 
                     "padProjPoly", "padFocal", "linBuffMethod", 
-                    "saveOutput")
+                    "saveOutput", "preppedData")
     
     if(!all(names(dots) %in% expDotArgs)){
       stop("Argument ", names(dots)[which(!names(dots) %in% expDotArgs)], 
            " does not match an expected argument. See ?disturbanceMetrics for arguments")
     }
     
-    inputDataArgs <- dots[c("landCover","natDist","anthroDist","bufferWidth", "padProjPoly", "padFocal")]
+    inputDataArgs <- dots[c("landCover","natDist","anthroDist","bufferWidth", 
+                            "padProjPoly", "padFocal", "preppedData")]
     
     inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]
     
@@ -161,4 +168,4 @@ setMethod(
     }
     
     return(x)
-  })
+  }

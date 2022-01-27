@@ -1,7 +1,7 @@
 #' Functions used for data prep for disturbanceMetrics and caribouHabitat
 #' 
 #' @noRd
-prepProjPoly <- function(projectPoly, landCover, winArea, padProjPoly){
+prepProjPoly <- function(projectPoly, landCover, bufferWidth, padProjPoly){
   if(st_crs(projectPoly) != st_crs(landCover)){
     projectPoly <- st_transform(projectPoly, crs = st_crs(landCover))
     message("projectPoly being transformed to have crs matching landCover")
@@ -17,8 +17,12 @@ prepProjPoly <- function(projectPoly, landCover, winArea, padProjPoly){
     
     # window radius is radius of circle with winArea rounded to even number of
     # raster cells based on resolution
-    winRad <- (sqrt(max(winArea)*10000/pi)/res(landCover)[1]) %>% 
-      round(digits = 0)*res(landCover)[1]
+    # winRad <- (sqrt(max(winArea)*10000/pi)/res(landCover)[1]) %>% 
+    #   round(digits = 0)*res(landCover)[1]
+    
+    winRad <- (bufferWidth/res(landCover)[1]) %>% 
+      round(digits = 0)*res(landCover)[1] %>% 
+      round()
     
     projectPoly <- projectPoly %>% st_buffer(winRad*3)
   }
@@ -38,18 +42,20 @@ prepRasts <- function(rastLst, landCover, projectPoly, tmplt = NULL,
   rastLst <- rastLst[which(!vapply(rastLst, function(x) is.null(x), 
                                    FUN.VALUE = TRUE))]
   
-  # if(!do.call(raster::compareRaster, c(rastLst, list(landCover, res = TRUE, extent = FALSE, 
-  #                                                    rowcol = FALSE, stopiffalse = FALSE)))){
-  #   stop("all raster data sets must have matching resolution", call. = FALSE)
-  # }
+  if(!do.call(raster::compareRaster, 
+              c(rastLst, 
+                list(landCover, landCover, crs = TRUE, res = FALSE, extent = FALSE,
+                     rowcol = FALSE, stopiffalse = FALSE)))){
+    stop("all raster data sets must have matching CRS", call. = FALSE)
+  }
   
   # check alignment of each raster against projectPoly and compareRaster with
   # landCover
   rastLst <- purrr::map2(rastLst, names(rastLst),
               ~checkAlign(.x, projectPoly, .y, "projectPoly")) 
   
-  # need to crop tmplt too so that it will match extent
-  #tmplt <- cropIf(tmplt, projectPoly, "tmplt", "projectPoly")
+  # # need to crop tmplt too so that it will match extent
+  # tmplt <- cropIf(tmplt, projectPoly, "tmplt", "projectPoly")
   
   # tmplt is usually res 400 400 raster that linFeat and esker are rasterized to
   tmpltUse <- rep_len(list(), length(rastLst)) %>% as.list()
@@ -65,7 +71,7 @@ prepRasts <- function(rastLst, landCover, projectPoly, tmplt = NULL,
                ~checkCompRast(x = ..1, y = landCover, nmx = ..3,
                               nmy = "landCover", y2 = ..2))
   
-  rastLst$landCover <- landCover
+  rastLst$refRast <- landCover
   
   return(rastLst)
 }
@@ -75,6 +81,9 @@ loadFromFile <- function(indata){
   indata <- indata[which(!vapply(indata, function(x) is.null(x), 
                                  FUN.VALUE = TRUE))]
   
+  if(length(indata) == 0){
+    return(list())
+  }
   
   charIn <-  indata %>% unlist(recursive = FALSE) %>% is.character()
   
@@ -93,7 +102,7 @@ loadFromFile <- function(indata){
   vect <- names(indata)[which(grepl(".shp$", indata))]
   rast <- names(indata)[which(!grepl(".shp$", indata))]
   
-  neverVect <- c("landCover", "natDist", "anthroDist")
+  neverVect <- c("refRast", "natDist", "anthroDist")
   neverRast <- c("projectPoly")
   
   if(any(vect %in% neverVect)){

@@ -88,8 +88,13 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'   \item{doScale}{logical. FALSE by default. Set to TRUE only if you have
 #'   supplied coefficients that were trained on standardized data which will
 #'   cause the input data to be scaled.}
-#'   \item{ptDensity}{number. Only used if a list element in linFeat is a raster.
+#'   \item{ptDensity}{number. Only used if a list element in \code{linFeat} is a raster.
 #'   See \code{\link{rasterizeLineDensity}}.}
+#'   \item{preppedData}{list. A list containing pre-prepared input data sets. If
+#'   not NULL then data checks will be skipped. Names must match argument names
+#'   except that \code{landCover} should be called \code{refRast} and
+#'   \code{projectPoly} should be called \code{projectPolyOrig}. See
+#'   \code{\link{loadSpatialInputs}}.}
 #' }
 #' 
 #'@return A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
@@ -150,148 +155,154 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'
 #' @importFrom rlang .data
 #'@export
-setGeneric("caribouHabitat", 
-           function(landCover, esker, linFeat, projectPoly, caribouRange, ...) 
-             standardGeneric("caribouHabitat"))
+
 #' @rdname caribouHabitat
-setMethod(
-  "caribouHabitat", 
-  signature(landCover = "ANY"), 
-  function(landCover, esker, linFeat, projectPoly, caribouRange, 
-           coefTable = coefTableHR, ...) {
-
-    dots <- list(...)
+caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL, 
+                           projectPoly = NULL,
+                           caribouRange, 
+                           coefTable = coefTableHR, ...) {
+  
+  dots <- list(...)
+  
+  if(is.null(dots$preppedData)){
+    missReqArgs <- purrr::map_lgl(lst(landCover, esker, linFeat, projectPoly),
+                                  is.null)
+    if(any(missReqArgs)){
+      stop("The required arguments ", paste0(names(missReqArgs)[which(missReqArgs)], collapse = ", "),
+           " are missing with no default")
+    }
+  }
     
-    # check all optional arguments are in expected names
-    expDotArgs <- c("natDist", "anthroDist", 
-                      "winArea", "eskerSave", "linFeatSave", 
-                      "padProjPoly", "padFocal", "ptDensity", 
-                      "tmplt", "doScale", "saveOutput")
+  # check all optional arguments are in expected names
+  expDotArgs <- c("natDist", "anthroDist", 
+                  "winArea", "eskerSave", "linFeatSave", 
+                  "padProjPoly", "padFocal", "ptDensity", 
+                  "tmplt", "doScale", "saveOutput", "preppedData")
+  
+  if(!all(names(dots) %in% expDotArgs)){
+    stop("Argument ", names(dots)[which(!names(dots) %in% expDotArgs)], 
+         " does not match an expected argument. See ?caribouHabitat for arguments")
+  }
+  
+  if(!is.null(dots$saveOutput)){
+    if(!dir.exists(dirname(dots$saveOutput))){
+      stop("saveOutput directory does not exist: ", dots$saveOutput)
+    }
+  }
+  
+  # make sure caribouRange is a dataframe
+  if(!inherits(caribouRange, "data.frame")){
+    caribouRange <- data.frame(Range = caribouRange, 
+                               coefRange = caribouRange, 
+                               stringsAsFactors = FALSE)
+  } else {
+    if(any(names(caribouRange) != c("Range", "coefRange"))){
+      stop("If caribouRange is a data.frame the column names",
+           " must be Range and coefRange", call. = FALSE)
+    }
+  }
+  
+  # Get window area from table b/c some models used different sizes
+  if(is.null(dots$winArea)){
+    dots$winArea <- coefTable %>% filter(.data$Range %in% caribouRange$coefRange) %>% 
+      pull(.data$WinArea) %>% 
+      unique()
+  }
+  
+  # If multiple winAreas need to apply processData separately
+  if(length(dots$winArea) > 1){
     
-    if(!all(names(dots) %in% expDotArgs)){
-      stop("Argument ", names(dots)[which(!names(dots) %in% expDotArgs)], 
-           " does not match an expected argument. See ?caribouHabitat for arguments")
+    # reassign to NULL so it will be redetermined from each call
+    dots$winArea <- NULL
+    
+    # provide template so resampled rasters will match 
+    
+    # NOTE: to adjust res of final model change this res and the res in
+    # default argument in inputData
+    dots$tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
+    
+    # polygons of ranges split into list with different winAreas
+    projPolyLst <- projectPoly %>% 
+      left_join(caribouRange, by = "Range") %>% 
+      left_join(coefTable %>% group_by(.data$Range) %>%
+                  summarize(WinArea = first(.data$WinArea)),
+                by = c(coefRange = "Range")) %>% 
+      select(-.data$coefRange) 
+    projPolyLst <- split(projPolyLst, projPolyLst$WinArea) %>% 
+      purrr::map(~select(.x, -.data$WinArea))
+    
+    # caribouRange values for each winArea
+    carRangeLst <- caribouRange %>%
+      left_join(coefTable %>% group_by(.data$Range) %>%
+                  summarize(WinArea = first(.data$WinArea)),
+                by = c(coefRange = "Range")) 
+    carRangeLst <- split(carRangeLst, carRangeLst$WinArea) %>% 
+      purrr::map(~select(.x, -.data$WinArea))
+    
+    resultLst <- purrr::map2(projPolyLst, carRangeLst,
+                             ~do.call(caribouHabitat, 
+                                      c(list(landCover = landCover, 
+                                             esker = esker, 
+                                             linFeat = linFeat, 
+                                             projectPoly = .x, 
+                                             caribouRange = .y, 
+                                             coefTable = coefTable),
+                                        dots)))
+    
+    # Re-combine CarHab objects into one
+    x <- resultLst[[1]]
+    
+    # names of slots to iterate over
+    slotLst <- slotNames(resultLst[[1]])
+    slotLst <- slotLst[!slotLst %in% c("attributes", "projectPoly")]
+    
+    for(i in 1:length(slotLst)){
+      slotNm <- slotLst[i]
+      rastLst <- lapply(resultLst, slot, name = slotNm)
+      slot(x, slotNm) <- doMosaic(rastLst)
     }
     
-    if(!is.null(dots$saveOutput)){
-      if(!dir.exists(dirname(dots$saveOutput))){
-        stop("saveOutput directory does not exist: ", dots$saveOutput)
-      }
+    # Only thing that will change about projectPoly is crs 
+    x@projectPoly <- projectPoly %>% st_transform(st_crs(landCover))
+    
+  } else {
+    
+    inputDataArgs <- dots[c("natDist", "anthroDist", 
+                            "winArea", "eskerSave", "linFeatSave", 
+                            "padProjPoly", "padFocal", "ptDensity", 
+                            "tmplt", "preppedData")]
+    
+    inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]
+    
+    x <- do.call(inputData, c(lst(landCover, esker, linFeat, projectPoly,
+                                  caribouRange, coefTable), 
+                              inputDataArgs))
+    
+    x <- processData(x)
+    
+    updateArgs <- dots[c("coefTable", "doScale")]
+    
+    updateArgs <- updateArgs[which(lapply(updateArgs, length) > 0)]
+    
+    x <- do.call(updateCaribou, c(list(CarHab = x), updateArgs))
+  }
+  
+  if(!is.null(dots$saveOutput)){
+    
+    byLayer <- grepl("\\.asc$|\\.sdat$|\\.rst$", dots$saveOutput)
+    if(!byLayer && !grepl("\\.grd", dots$saveOutput)){
+      warning("Saving output to ", dots$saveOutput, 
+              ". Layernames will not be preserved.",
+              " Use .grd format to preserve names")
     }
     
-    # make sure caribouRange is a dataframe
-    if(!inherits(caribouRange, "data.frame")){
-      caribouRange <- data.frame(Range = caribouRange, 
-                                 coefRange = caribouRange, 
-                                 stringsAsFactors = FALSE)
-    } else {
-      if(any(names(caribouRange) != c("Range", "coefRange"))){
-        stop("If caribouRange is a data.frame the column names",
-             " must be Range and coefRange", call. = FALSE)
-      }
-    }
-    
-    # Get window area from table b/c some models used different sizes
-    if(is.null(dots$winArea)){
-      dots$winArea <- coefTable %>% filter(.data$Range %in% caribouRange$coefRange) %>% 
-        pull(.data$WinArea) %>% 
-        unique()
-    }
-    
-    # If multiple winAreas need to apply processData separately
-    if(length(dots$winArea) > 1){
-
-      # reassign to NULL so it will be redetermined from each call
-      dots$winArea <- NULL
-      
-      # provide template so resampled rasters will match 
-      
-      # NOTE: to adjust res of final model change this res and the res in
-      # default argument in inputData
-      dots$tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
-      
-      # polygons of ranges split into list with different winAreas
-      projPolyLst <- projectPoly %>% 
-        left_join(caribouRange, by = "Range") %>% 
-        left_join(coefTable %>% group_by(.data$Range) %>%
-                    summarize(WinArea = first(.data$WinArea)),
-                  by = c(coefRange = "Range")) %>% 
-        select(-.data$coefRange) 
-      projPolyLst <- split(projPolyLst, projPolyLst$WinArea) %>% 
-        purrr::map(~select(.x, -.data$WinArea))
-      
-      # caribouRange values for each winArea
-      carRangeLst <- caribouRange %>%
-        left_join(coefTable %>% group_by(.data$Range) %>%
-                    summarize(WinArea = first(.data$WinArea)),
-                  by = c(coefRange = "Range")) 
-      carRangeLst <- split(carRangeLst, carRangeLst$WinArea) %>% 
-        purrr::map(~select(.x, -.data$WinArea))
-   
-      resultLst <- purrr::map2(projPolyLst, carRangeLst,
-                        ~do.call(caribouHabitat, 
-                                c(list(landCover = landCover, 
-                                  esker = esker, 
-                                  linFeat = linFeat, 
-                                  projectPoly = .x, 
-                                  caribouRange = .y, 
-                                  coefTable = coefTable),
-                                  dots)))
-      
-      # Re-combine CarHab objects into one
-      x <- resultLst[[1]]
-    
-      # names of slots to iterate over
-      slotLst <- slotNames(resultLst[[1]])
-      slotLst <- slotLst[!slotLst %in% c("attributes", "projectPoly")]
-      
-      for(i in 1:length(slotLst)){
-        slotNm <- slotLst[i]
-        rastLst <- lapply(resultLst, slot, name = slotNm)
-        slot(x, slotNm) <- doMosaic(rastLst)
-      }
-      
-      # Only thing that will change about projectPoly is crs 
-      x@projectPoly <- projectPoly %>% st_transform(st_crs(landCover))
-      
-    } else {
-      
-      inputDataArgs <- dots[c("natDist", "anthroDist", 
-                              "winArea", "eskerSave", "linFeatSave", 
-                              "padProjPoly", "padFocal", "ptDensity", 
-                              "tmplt")]
-      
-      inputDataArgs <- inputDataArgs[which(lapply(inputDataArgs, length) > 0)]
-      
-      x <- do.call(inputData, c(lst(landCover, esker, linFeat, projectPoly,
-                                    caribouRange, coefTable), 
-                                inputDataArgs))
-      
-      x <- processData(x)
-      
-      updateArgs <- dots[c("coefTable", "doScale")]
-      
-      updateArgs <- updateArgs[which(lapply(updateArgs, length) > 0)]
-      
-      x <- do.call(updateCaribou, c(list(CarHab = x), updateArgs))
-    }
-    
-    if(!is.null(dots$saveOutput)){
-      
-      byLayer <- grepl("\\.asc$|\\.sdat$|\\.rst$", dots$saveOutput)
-      if(!byLayer && !grepl("\\.grd", dots$saveOutput)){
-        warning("Saving output to ", dots$saveOutput, 
-                ". Layernames will not be preserved.",
-                " Use .grd format to preserve names")
-      }
- 
-      raster::writeRaster(x@habitatUse, filename = dots$saveOutput, 
-                          overwrite = TRUE, bylayer = byLayer, 
-                          suffix = "names")
-    }
-    
-    return(x)
-  })
+    raster::writeRaster(x@habitatUse, filename = dots$saveOutput, 
+                        overwrite = TRUE, bylayer = byLayer, 
+                        suffix = "names")
+  }
+  
+  return(x)
+}
 
 doMosaic <- function(rastLst){
   # do.call doesn't work with names

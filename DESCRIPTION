@@ -67,6 +67,7 @@ Collate:
     'spatialAlignFns.R'
     'inputData.R'
     'inputDataDisturbance.R'
+    'loadSpatialInputs.R'
     'movingWindowAvg.R'
     'plot.R'
     'popGrowthJohnson.R'

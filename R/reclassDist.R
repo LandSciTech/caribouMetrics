@@ -92,12 +92,15 @@ reclassDist <- function(distYr, endYr = 0, numCumYrs, template, dateField){
     }
     
     if(requireNamespace("fasterize", quietly = TRUE)){
+      if(st_geometry_type(out, by_geometry = FALSE) == "GEOMETRY"){
+        out <- st_cast(out)
+      }
       out <- fasterize::fasterize(out, template, background = 0)
     } else {
       message("To speed up install fasterize package")
       out <- raster::rasterize(out, template)
     }
   }
-  out <- raster::calc(out, fun = function(x){ifelse(is.na(x), 0, x)})
+  out <- raster::reclassify(out, cbind(NA, 0))
   return(out)
 }

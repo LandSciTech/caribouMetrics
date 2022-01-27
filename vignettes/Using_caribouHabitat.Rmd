@@ -242,7 +242,7 @@ plot(misCoef)
 ```
 
 ## Example with different coefficients
-Different coefficients can be supplied using the `coefTable` argument and if those coefficients are standardized the data can be standarized by supplying the argument `doScale = TRUE`.
+Different coefficients can be supplied using the `coefTable` argument and if those coefficients are standardized the data can be standardized by supplying the argument `doScale = TRUE`.
 ```{r}
 carHabStd <- caribouHabitat(
   landCover = landCoverD,
@@ -266,6 +266,42 @@ binCarHab1 <- calcBinaryUse(carHab1)
 binCarHab1Seasons <- calcBinaryUse(carHab1, bySeason = TRUE)
 tmap::qtm(binCarHab1)
 tmap::qtm(binCarHab1Seasons)
+```
+
+## Pre-prepare data 
+
+To save time re-processing the same inputs you can use `loadSpatialInputs` to process a list of raster and vector spatial objects to match a reference raster and be cropped to a project polygon. The resulting list can then be used as input for both `caribouHabitat` and `disturbanceMetrics`. We include the linear features twice so that they can be converted to raster line density for `caribouHabitat` but kept as lines for `disturbanceMetrics`.
+
+```{r}
+
+res <- loadSpatialInputs(projectPoly = projectPolyD2, refRast = landCoverD,
+                        inputsList = list(esker = eskerDshp, 
+                                          linFeatRas = list(linFeatDshp, railD, 
+                                                            utilitiesD),
+                                          linFeatLine = list(linFeatDshp, railD, 
+                                                             utilitiesD),
+                                          natDist = natDistD,
+                                          anthroDist = anthroDistD),
+                        convertToRast = c("esker", "linFeatRas"),
+                        useTemplate = c("esker", "linFeatRas"),
+                        altTemplate = raster(landCoverD) %>% 
+                          raster::`res<-`(c(400, 400)),
+                        bufferWidth = 10000)
+
+str(res, max.level = 1)
+
+resCH <- res
+resCH$linFeatLine <- NULL
+names(resCH) <- gsub("linFeatRas", "linFeat", names(resCH))
+
+carHab5 <- caribouHabitat(preppedData = resCH, caribouRange = "Nipigon")
+
+resDM <- res
+resDM$linFeatRas <- NULL
+names(resDM) <- gsub("linFeatLine", "linFeat", names(resDM))
+
+distMets <- disturbanceMetrics(preppedData = resDM)
+
 ```
 
 

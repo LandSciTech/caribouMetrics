@@ -82,7 +82,7 @@ setMethod(
     
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,
                                nms = layernames, 
-                               pad = inData@attributes$padFocal)
+                               pad = inData@attributes$padFocal, usePfocal = FALSE)
     
     inData@processedData <- expVars %>% 
       raster::addLayer(expVars[["MIX"]] + expVars[["DEC"]]) %>% 
@@ -241,6 +241,7 @@ setMethod(
                               fun = function(x){rep(0, x)}, 
                               filename = raster::rasterTmpFile())
     }
+    
     natDist <- reclassify(natDist, cbind(NA, 0))
     
     anthroDist <- processAnthroDM(anthroDist, inData@linFeat[[1]], landCover, 
