@@ -61,7 +61,9 @@ be combined. Linear features.}
   overwrite existing files with the same name. The .grd format is recommended
   because it will preserve layer names when the file is reloaded.}
   \item{preppedData}{list. A list containing pre-prepared input data sets. If
-  not NULL then data checks will be skipped. Names must match argument names.
+  not NULL then data checks will be skipped. Names must match argument names
+  except that \code{landCover} should be called \code{refRast} and
+  \code{projectPoly} should be called \code{projectPolyOrig}
   See \code{\link{loadSpatialInputs}}.}
 }}
 }
