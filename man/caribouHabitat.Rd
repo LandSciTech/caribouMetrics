@@ -85,11 +85,13 @@ model. Must match the format and naming of the default \code{coefTableHR}}
   \item{doScale}{logical. FALSE by default. Set to TRUE only if you have
   supplied coefficients that were trained on standardized data which will
   cause the input data to be scaled.}
-  \item{ptDensity}{number. Only used if a list element in linFeat is a raster.
+  \item{ptDensity}{number. Only used if a list element in \code{linFeat} is a raster.
   See \code{\link{rasterizeLineDensity}}.}
   \item{preppedData}{list. A list containing pre-prepared input data sets. If
-  not NULL then data checks will be skipped. Names must match argument names.
-  See \code{\link{loadSpatialInputs}}.}
+  not NULL then data checks will be skipped. Names must match argument names
+  except that \code{landCover} should be called \code{refRast} and
+  \code{projectPoly} should be called \code{projectPolyOrig}. See
+  \code{\link{loadSpatialInputs}}.}
 }}
 }
 \value{
