@@ -142,14 +142,13 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
       if(is.null(altTemplate)){
         altTemplate <- raster(allData$refRast) %>% raster::`res<-`(c(400, 400))
       }
-      
-      tmplt <- altTemplate
-    } else {
-      tmplt <- allData$refRast
-    }
+    } 
     
-    allData <- purrr::map_at(allData, convertToRast, rasterizeLineDensity, 
-                             r = tmplt, ptDensity = ptDensity)
+    tmplts <- purrr::map(convertToRast,
+                         ~if(.x %in% useTemplate){altTemplate}else{allData$refRast})
+    
+    allData <- purrr::map2(allData[convertToRast], tmplts, rasterizeLineDensity, 
+                             ptDensity = ptDensity)
   }
   
   if(length(nullNames) > 0){
