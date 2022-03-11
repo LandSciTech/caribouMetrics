@@ -45,7 +45,7 @@ inputData <- function(landCover, esker, linFeat, projectPoly, caribouRange,
   }
   
   # require column called Range
-  if(nrow(preppedData$projectPolyOrig) == 1 & !"Range" %in% names(preppedData$projectPolyOrig)){
+  if(nrow(preppedData$projectPolyOrig) == 1 && !"Range" %in% names(preppedData$projectPolyOrig)){
     preppedData$projectPolyOrig <- preppedData$projectPolyOrig %>% mutate(Range = caribouRange$Range)
   } else {
     if(!"Range" %in% names(preppedData$projectPolyOrig)){

@@ -147,8 +147,9 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
     tmplts <- purrr::map(convertToRast,
                          ~if(.x %in% useTemplate){altTemplate}else{allData$refRast})
     
-    allData <- purrr::map2(allData[convertToRast], tmplts, rasterizeLineDensity, 
-                             ptDensity = ptDensity)
+    allData[convertToRast] <- purrr::map2(allData[convertToRast], tmplts, 
+                                          rasterizeLineDensity, 
+                                          ptDensity = ptDensity)
   }
   
   if(length(nullNames) > 0){
