@@ -26,6 +26,6 @@ ECCC. 2011. Scientific assessment to inform the identification of
   Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking
   population dynamics to habitat for a threatened species in Canada. Journal
   of Applied Ecology, 57(7), pp.1314-1327.
-  \url{https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637}
+  \url{https://doi.org/10.1111/1365-2664.13637}
 }
 \keyword{datasets}

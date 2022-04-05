@@ -102,7 +102,7 @@ Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C.
 and McLoughlin, P.D., 2020. Science to inform policy: linking population
 dynamics to habitat for a threatened species in Canada. Journal of Applied
 Ecology, 57(7), pp.1314-1327.
-<https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637>
+<https://doi.org/10.1111/1365-2664.13637>
 
 Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
 woodland caribou (Rangifer tarandus caribou) across a gradient of

@@ -65,20 +65,16 @@ carHab1 <- caribouHabitat(
   caribouRange = "Churchill"
 )
 #> cropping landCover to extent of projectPoly
+#> cropping linFeat to extent of projectPoly
 #> cropping natDist to extent of projectPoly
 #> cropping anthroDist to extent of projectPoly
 #> cropping esker to extent of projectPoly
-#> cropping linFeat to extent of projectPoly
 #> resampling linFeat to match landCover resolution
 #> resampling esker to match landCover resolution
 #> Applying moving window.
 
 # plot the results
 plot(carHab1)
-#> Registered S3 methods overwritten by 'stars':
-#>   method             from
-#>   st_bbox.SpatRaster sf  
-#>   st_crs.SpatRaster  sf
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
@@ -90,8 +86,8 @@ disturb <- disturbanceMetrics(landCover = landCoverD,
                               natDist = natDistD,
                               projectPoly = projectPolyD)
 #> cropping landCover to extent of projectPoly
-#> cropping natDist to extent of projectPoly
 #> cropping linFeat to extent of projectPoly
+#> cropping natDist to extent of projectPoly
 #> buffering anthropogenic disturbance
 #> calculating disturbance metrics
 
@@ -104,13 +100,11 @@ demCoefs <- demographicCoefficients(replicates = 10)
 
 demRates <- demographicRates(covTable = results(disturb),
                              popGrowthPars = demCoefs)
-#> Elapsed time for caribou prediction for femaleSurvival for Johnson:: 0.08 sec elapsed
-#> Elapsed time for caribou prediction for recruitment for Johnson:: 0 sec elapsed
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.05108689
-#>     S_PIlow  S_PIhigh     R_bar   R_stdErr   R_PIlow  R_PIhigh
-#> 1 0.7557385 0.9261629 0.1813372 0.09349016 0.0621527 0.3789768
+#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.05383665
+#>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
+#> 1 0.7392366 0.9254506 0.1813372 0.09906526 0.05714391 0.3850676
 
 # Simulate population growth
 popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
@@ -118,7 +112,7 @@ popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar,
 
 popGrow
 #>     N    lambda
-#> 1 357 0.9175976
+#> 1 336 0.9148536
 ```
 
 More detailed examples are provided in the vignettes.
@@ -135,7 +129,7 @@ Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
 Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
 linking population dynamics to habitat for a threatened species in
 Canada. Journal of Applied Ecology, 57(7), pp.1314-1327.
-<https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637>
+<https://doi.org/10.1111/1365-2664.13637>
 
 Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
 woodland caribou (Rangifer tarandus caribou) across a gradient of
