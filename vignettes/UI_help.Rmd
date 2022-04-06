@@ -12,11 +12,69 @@ resource_files:
   - distMetOverTime.png
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  eval = FALSE,
+  comment = "#>"
+)
+```
+
 ## Introduction
 
 This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the [`caribouMetrics`](https://landscitech.github.io/caribouMetrics/) package. There are vignettes available for the [caribou habitat](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html) and [demographic](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html) models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) [Johnson et. al. (2020)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637) and [ECCC (2011)](http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf).
 
 Below we provide links between the options exposed in the UI and the `caribouMetrics` function documentation and demonstrate how to set up a SynscroSim library and extract scenario results for plotting in R using rsyncrosim. 
+
+## Installation
+To run the UI, installation of several software programs and packages is required. You will need to install [R, RStudio (recommended)](https://www.rstudio.com/products/rstudio/download/#download), [SyncroSim](https://syncrosim.com/download/), [ROFSim SyncroSim Package](https://github.com/ApexRMS/ROFSim/releases) ([instructions](http://docs.syncrosim.com/how_to_guides/package_manager.html#2-installing-from-a-package-file)), caribouMetrics R package and rsyncrosim R package. The script below can be copied into the R console to install the caribouMetics and rsyncrosim packages and to check that the other required software is available. Use the links above to install the other software dependencies before running this script. 
+
+```{r, eval=FALSE}
+if(!requireNamespace("drat", quietly = TRUE)){
+  install.packages("drat")
+}
+
+drat::addRepo("LandSciTech")
+
+install.packages("pfocal", type = "binary")
+
+if(!requireNamespace("pfocal", quietly = TRUE)){
+  stop("The pfocal package has not been successfully installed.\n",
+       "Re-run the code above and carefully read any error messages.")
+}
+
+install.packages("caribouMetrics", type = "binary")
+
+if(!requireNamespace("caribouMetrics", quietly = TRUE)){
+  stop("The caribouMetrics package has not been successfully installed.\n",
+       "Re-run the code above and carefully read any error messages.")
+}
+
+# install rsyncrosim dependencies
+install.packages(c("DBI", "RSQLite", "gtools", "lifecycle"))
+
+# install version 1.3.1 of rsyncrosim
+install.packages("https://github.com/syncrosim/rsyncrosim/releases/download/1.3.1/rsyncrosim_1.3.1.tar.gz", repo=NULL)
+
+if(!requireNamespace("rsyncrosim", quietly = TRUE)){
+    stop("The rsyncrosim package has not been successfully installed.\n",
+       "Re-run the code above and carefully read any error messages.")
+}
+
+# Check for Syncrosim and ROFSim package
+if(!"ROFSim" %in% rsyncrosim::package()$name){
+  stop("The ROFSim SyncroSim package must be installed.\n",
+       "Follow instructions at:\n http://docs.syncrosim.com/how_to_guides/package_manager.html#2-installing-from-a-package-file\n", 
+       "to install the package from a file. \nThe file can be downloaded from:\n",
+       "https://github.com/ApexRMS/ROFSim/releases")
+}
+
+# Install ROFSim package dependencies
+install.packages(c("RColorBrewer", "readr", "qs", "magrittr", "SpaDES.core", 
+                   "SpaDES.tools", "gbm", "ggplot2"))
+
+```
+
 
 ## Documentation for model options
 By right clicking a scenario you can access the scenario properties. The Caribou Metrics tab has options that can be set for the models. The table below shows the option from the UI, the corresponding argument name in `caribouMetrics`, and the names of the function(s) in `caribouMetrics` that use that argument. Clicking the function name will take you to the documentation for that function. You can read the description at the top of the page to learn what the function does and then find the argument name to read its definition. 
@@ -60,14 +118,6 @@ UI option|caribouMetrics argument|Function|Notes|
 
 ## Set up a new SyncroSim Library
 Here we demonstrate how to set up a SyncroSim Library for the ROFSim Package using the rsyncrosim package. For more details on the rsyncrosim package and its funcitons see the Introduction to rsyncrosim [vignette](https://syncrosim.github.io/rsyncrosim/articles/a01_rsyncrosim_vignette_basic.html)
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  eval = FALSE,
-  comment = "#>"
-)
-```
 
 In this example we will create the new library inside the `caribouMetrics` package directory in order to take advantage of the example data sets installed there. First we create a library called "demoSSimLib" and then a project called "Demo".
 
