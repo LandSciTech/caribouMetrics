@@ -47,7 +47,8 @@ Imports:
     truncdist,
     stars,
     rlang,
-    rgdal
+    rgdal,
+    terra
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'

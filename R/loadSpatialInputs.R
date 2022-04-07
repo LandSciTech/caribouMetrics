@@ -14,6 +14,8 @@
 #'   features and they are combined.
 #' @param convertToRast character. Optional. Names of elements of
 #'   \code{inputsList} that should be converted to raster after loading.
+#' @param convertToRastDens character. Optional. Names of elements of
+#'   \code{inputsList} that should be converted to raster line density after loading.
 #' @param altTemplate raster. Optional template raster for raster inputs that
 #'   can have a different resolution from the \code{refRast}.
 #' @param useTemplate character. Optional. Names of elements of
@@ -64,6 +66,7 @@
 #'                          convertToRast = c("esker", "linFeat"))
 #'                                            
 loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = NULL,
+                              convertToRastDens = NULL,
                               altTemplate = NULL, useTemplate = NULL,
                               reclassOptions = NULL, bufferWidth = NULL,
                               ptDensity = 1){
@@ -73,7 +76,7 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   # check that names match across lists and arguments
   inNames <- names(allData)
   
-  refNames <- c(useTemplate, convertToRast, names(reclassOptions))
+  refNames <- c(useTemplate, convertToRast, convertToRastDens, names(reclassOptions))
   
   if(any(!refNames %in% inNames)){
     stop(paste0(refNames[which(!refNames %in% inNames)], collapse = ", "), 
@@ -128,12 +131,24 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   
   # Process the data
   if(length(nullNames) > 0){
+    convertToRastDens <- dplyr::setdiff(convertToRastDens, nullNames)
     convertToRast <- dplyr::setdiff(convertToRast, nullNames)
   }
   
   if(!is.null(convertToRast)){
     # skip ones that are already rasters
     convertToRast <- dplyr::setdiff(convertToRast,
+                                        names(purrr::keep(allData, is, "Raster")))
+    
+    tmplts <- allData$refRast
+    
+    allData[convertToRast] <- purrr::map(allData[convertToRast],  
+                                              terra::rasterize, allData$refRast)
+  }
+  
+  if(!is.null(convertToRastDens)){
+    # skip ones that are already rasters
+    convertToRastDens <- dplyr::setdiff(convertToRastDens,
                                     names(purrr::keep(allData, is, "Raster")))
     
     if(!is.null(useTemplate)){
@@ -144,10 +159,10 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
       }
     } 
     
-    tmplts <- purrr::map(convertToRast,
+    tmplts <- purrr::map(convertToRastDens,
                          ~if(.x %in% useTemplate){altTemplate}else{allData$refRast})
     
-    allData[convertToRast] <- purrr::map2(allData[convertToRast], tmplts, 
+    allData[convertToRastDens] <- purrr::map2(allData[convertToRastDens], tmplts, 
                                           rasterizeLineDensity, 
                                           ptDensity = ptDensity)
   }

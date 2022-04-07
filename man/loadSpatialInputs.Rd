@@ -9,6 +9,7 @@ loadSpatialInputs(
   refRast,
   inputsList,
   convertToRast = NULL,
+  convertToRastDens = NULL,
   altTemplate = NULL,
   useTemplate = NULL,
   reclassOptions = NULL,
@@ -30,6 +31,9 @@ features and they are combined.}
 
 \item{convertToRast}{character. Optional. Names of elements of
 \code{inputsList} that should be converted to raster after loading.}
+
+\item{convertToRastDens}{character. Optional. Names of elements of
+\code{inputsList} that should be converted to raster line density after loading.}
 
 \item{altTemplate}{raster. Optional template raster for raster inputs that
 can have a different resolution from the \code{refRast}.}
