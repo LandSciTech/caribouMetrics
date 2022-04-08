@@ -19,7 +19,7 @@ objects."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9000</span>
       </span>
     </div>
 
@@ -72,6 +72,7 @@ objects.</p>
   <span class="va">refRast</span>,
   <span class="va">inputsList</span>,
   convertToRast <span class="op">=</span> <span class="cn">NULL</span>,
+  convertToRastDens <span class="op">=</span> <span class="cn">NULL</span>,
   altTemplate <span class="op">=</span> <span class="cn">NULL</span>,
   useTemplate <span class="op">=</span> <span class="cn">NULL</span>,
   reclassOptions <span class="op">=</span> <span class="cn">NULL</span>,
@@ -96,6 +97,9 @@ features and they are combined.</p></dd>
 <dt>convertToRast</dt>
 <dd><p>character. Optional. Names of elements of
 <code>inputsList</code> that should be converted to raster after loading.</p></dd>
+<dt>convertToRastDens</dt>
+<dd><p>character. Optional. Names of elements of
+<code>inputsList</code> that should be converted to raster line density after loading.</p></dd>
 <dt>altTemplate</dt>
 <dd><p>raster. Optional template raster for raster inputs that
 can have a different resolution from the <code>refRast</code>.</p></dd>
@@ -152,8 +156,6 @@ convertToRast. See <code><a href="rasterizeLineDensity.html">rasterizeLineDensit
 <span class="r-in">                         inputsList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>esker <span class="op">=</span> <span class="va">esk</span>, linFeat <span class="op">=</span> <span class="va">lf</span>, natDist <span class="op">=</span> <span class="va">nd</span>,</span>
 <span class="r-in">                                           anthroDist <span class="op">=</span> <span class="va">ad</span><span class="op">)</span>,</span>
 <span class="r-in">                         convertToRast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"esker"</span>, <span class="st">"linFeat"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
 <span class="r-in">                                           </span>
 </code></pre></div>
     </div>
