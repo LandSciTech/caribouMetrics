@@ -22,10 +22,8 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v1
-        env:
-          _R_CHECK_FORCE_SUGGESTS_: false
         with:
-          extra-packages: pkgdown, package=pfocal?ignore
+          extra-packages: pkgdown
           needs: website
 
       - name: Deploy package
