@@ -89,8 +89,7 @@ Suggests:
     tmap,
     tmaptools,
     ggplot2,
-    fasterize,
-    pfocal
+    fasterize
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
