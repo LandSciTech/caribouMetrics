@@ -143,7 +143,8 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
     tmplts <- allData$refRast
     
     allData[convertToRast] <- purrr::map(allData[convertToRast],  
-                                              terra::rasterize, allData$refRast)
+                                              terra::rasterize, allData$refRast,
+                                         background = 0)
   }
   
   if(!is.null(convertToRastDens)){
