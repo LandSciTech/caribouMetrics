@@ -50,11 +50,9 @@ if(!requireNamespace("caribouMetrics", quietly = TRUE)){
        "Re-run the code above and carefully read any error messages.")
 }
 
-# install rsyncrosim dependencies
-install.packages(c("DBI", "RSQLite", "gtools", "lifecycle"))
 
-# install version 1.3.1 of rsyncrosim
-install.packages("https://github.com/syncrosim/rsyncrosim/releases/download/1.3.1/rsyncrosim_1.3.1.tar.gz", repo=NULL)
+# install rsyncrosim
+install.packages("rsyncrosim")
 
 if(!requireNamespace("rsyncrosim", quietly = TRUE)){
     stop("The rsyncrosim package has not been successfully installed.\n",
