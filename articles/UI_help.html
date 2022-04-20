@@ -118,11 +118,9 @@
        <span class="st">"Re-run the code above and carefully read any error messages."</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="co"># install rsyncrosim dependencies</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DBI"</span>, <span class="st">"RSQLite"</span>, <span class="st">"gtools"</span>, <span class="st">"lifecycle"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="co"># install version 1.3.1 of rsyncrosim</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"https://github.com/syncrosim/rsyncrosim/releases/download/1.3.1/rsyncrosim_1.3.1.tar.gz"</span>, repo<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span>
+<span class="co"># install rsyncrosim</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rsyncrosim"</span><span class="op">)</span>
 
 <span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"rsyncrosim"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
     <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"The rsyncrosim package has not been successfully installed.\n"</span>,
