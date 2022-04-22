@@ -90,7 +90,7 @@ addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
   
   bar_t = withCallingHandlers(
     # using calling handler because of problem in truncdist package. Have flagged to developer
-    truncdist::rtrunc(length(bar), 
+    rtrunc(length(bar), 
                  spec="beta", 
                  shape1=interannualVar[[paste0(type,"_alpha")]], 
                  shape2= interannualVar[[paste0(type,"_beta")]],
@@ -105,3 +105,29 @@ addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
   return(bar_t)
 }
 
+
+# Copied from truncdist package because causing breaking issues and maintainer
+# did not reply. Issue is if statements with length > 1 in R 4.2
+qtrunc <- function (p, spec, a = -Inf, b = Inf, ...) {
+  if (a >= b) 
+    stop("argument a is greater than or equal to b")
+  tt <- p
+  G <- get(paste("p", spec, sep = ""), mode = "function")
+  Gin <- get(paste("q", spec, sep = ""), mode = "function")
+  G.a <- G(a, ...)
+  G.b <- G(b, ...)
+  if (any(G.a == G.b)) {
+    stop("Trunction interval is not inside the domain of the quantile function")
+  }
+  result <- pmin(pmax(a, Gin(G(a, ...) + p * (G(b, ...) - G(a, 
+                                                            ...)), ...)), b)
+  return(result)
+}
+
+rtrunc <- function (n, spec, a = -Inf, b = Inf, ...){
+  if (any(a >= b)) 
+    stop("argument a is greater than or equal to b")
+  u <- runif(n, min = 0, max = 1)
+  x <- qtrunc(u, spec, a = a, b = b, ...)
+  return(x)
+}
