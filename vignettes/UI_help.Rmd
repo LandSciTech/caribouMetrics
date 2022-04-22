@@ -22,9 +22,9 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the [`caribouMetrics`](https://landscitech.github.io/caribouMetrics/) package. There are vignettes available for the [caribou habitat](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html) and [demographic](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html) models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) [Johnson et. al. (2020)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637) and [ECCC (2011)](http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf).
+This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the [`caribouMetrics`](https://landscitech.github.io/caribouMetrics/) package. For new users we recommend starting with our video tutorial [presentation.](https://docs.google.com/presentation/d/1CwnPpIjPI0P6wG2t2LW_f3NEBOhqSWT7/edit?usp=sharing&ouid=113424671555606837963&rtpof=true&sd=true)  There are vignettes available for the [caribou habitat](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html) and [demographic](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html) models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) [Johnson et. al. (2020)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637) and [ECCC (2011)](http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf).
 
-Below we provide links between the options exposed in the UI and the `caribouMetrics` function documentation and demonstrate how to set up a SynscroSim library and extract scenario results for plotting in R using rsyncrosim. 
+Below we explain how to install and setup the user interface, provide links between the options exposed in the UI and the `caribouMetrics` function documentation and demonstrate how to set up a SynscroSim library and extract scenario results for plotting in R using rsyncrosim. 
 
 ## Installation
 To run the UI, installation of several software programs and packages is required. You will need to install [R, RStudio (recommended)](https://www.rstudio.com/products/rstudio/download/#download), [SyncroSim](https://syncrosim.com/download/), [ROFSim SyncroSim Package](https://github.com/ApexRMS/ROFSim/releases) ([instructions](http://docs.syncrosim.com/how_to_guides/package_manager.html#2-installing-from-a-package-file)), caribouMetrics R package and rsyncrosim R package. The script below can be copied into the R console to install the caribouMetics and rsyncrosim packages and to check that the other required software is available. Use the links above to install the other software dependencies before running this script. 
@@ -160,8 +160,12 @@ cc <- data.frame(Name = c("James Bay", "Missisa", "Ozhiski", "Nipigon",
 saveDatasheet(cProj, cc, name = cSheet)
 
 cSheet <- "ROFSim_Rasters"
-cc <- data.frame(Name = c("Harvest", "Anthropogenic Disturbance",
-                          "Natural Disturbance", "Provincial Land Cover"))
+  cc <- data.frame(
+    Name = c("Caribou Ranges", "Harvest", "Anthropogenic Disturbance",
+             "Natural Disturbances", "Provincial Land Cover", 
+             "Linear Features", "Eskers", 
+             "Eskers400", "Roads")
+  )
 saveDatasheet(cProj, cc, name = cSheet)
 
 # scenarios - run control
@@ -172,6 +176,40 @@ cc <- data.frame(MinimumIteration = 1, MaximumIteration = 1,
 saveDatasheet(rcScn, cc, name = cSheet)
 
 ```
+Next we set up a scenario to process the data making sure that it is all aligned and ready for modelling. 
+```{r data-scenario}
+datScn <- scenario(cProj, "data prep")
+
+cSheet <- "core_Pipeline"
+cc <- data.frame(StageNameID = "Prepare Spatial Data", RunOrder = 1)
+saveDatasheet(datScn, cc, name = cSheet)
+
+cSheet <- "ROFSim_RasterFile"
+cc <- data.frame(RastersID = "Natural Disturbance", 
+                 Filename = file.path(rootPth, "natDist.tif"))
+cc <- rbind(cc, data.frame(RastersID = "Harvest", 
+                           Filename = file.path(rootPth, "anthroDist.tif")))
+cc <- rbind(cc, data.frame(RastersID = "Provincial Land Cover", 
+                           Filename = file.path(rootPth, "landCover.tif")))
+saveDatasheet(datScn, cc, name = cSheet, append = FALSE)
+
+cSheet <- "ROFSim_ExternalFile"
+cc <- data.frame(PolygonsID = "Eskers", File = file.path(rootPth, "esker.shp"))
+cc <- rbind(cc, data.frame(PolygonsID = "Linear Features", 
+                           File = file.path(rootPth, "rail.shp")))
+cc <- rbind(cc, data.frame(PolygonsID = "Linear Features",
+                           File = file.path(rootPth, "utilities.shp")))
+cc <- rbind(cc, data.frame(PolygonsID = "Ranges", 
+                           File = file.path(rootPth, "projectPoly.shp")))
+cc <- rbind(cc, data.frame(PolygonsID = "Study Area", 
+                           File = file.path(rootPth, "projectPoly.shp")))
+cc <- rbind(cc, data.frame(PolygonsID = "Linear Features", 
+                           File = file.path(rootPth, "roads.shp")))
+saveDatasheet(datScn, cc, name = cSheet, append = FALSE)
+
+datRes <- run(datScn)
+```
+
 
 
 Finally, we set up a scenario by setting options for the models and telling SyncroSim where to find the input files. This scenario inherits the options from the run control scenario created above. We can run the scenario from R or open the SyncroSim library to see the user interface and run it from there.
@@ -191,7 +229,8 @@ saveDatasheet(cbScn, cc, name = cSheet)
 cSheet <- "ROFSim_CaribouDataSource"
 cc <- data.frame(LandCoverRasterID = "Provincial Land Cover", 
                  ProjectShapeFileID = "Ranges",
-                 EskerShapeFileID = "Eskers",
+                 EskerRasterID = "Eskers400",
+                 LinearFeatureRasterID = "Linear Features",
                  LinearFeatureShapeFileID = "Linear Features",
                  NaturalDisturbanceRasterID = "Natural Disturbance", 
                  HarvestRasterID = "Harvest", 
@@ -203,28 +242,10 @@ cc <- data.frame(RunDistMetrics = TRUE, RunCaribouHabitat = TRUE,
                  RunDemographicModel = TRUE, padProjPoly = TRUE)
 saveDatasheet(cbScn, cc, name = cSheet)
 
-cSheet <- "ROFSim_RasterFile"
-cc <- data.frame(RastersID = "Natural Disturbance", 
-                 Filename = file.path(rootPth, "natDist.tif"))
-cc <- rbind(cc, data.frame(RastersID = "Harvest", 
-                           Filename = file.path(rootPth, "anthroDist.tif")))
-cc <- rbind(cc, data.frame(RastersID = "Provincial Land Cover", 
-                           Filename = file.path(rootPth, "landCover.tif")))
-saveDatasheet(cbScn, cc, name = cSheet, append = FALSE)
 
-cSheet <- "ROFSim_ExternalFile"
-cc <- data.frame(PolygonsID = "Eskers", File = file.path(rootPth, "esker.shp"))
-cc <- rbind(cc, data.frame(PolygonsID = "Linear Features", 
-                           File = file.path(rootPth, "rail.shp")))
-cc <- rbind(cc, data.frame(PolygonsID = "Linear Features",
-                           File = file.path(rootPth, "utilities.shp")))
-cc <- rbind(cc, data.frame(PolygonsID = "Ranges", 
-                           File = file.path(rootPth, "projectPoly.shp")))
-cc <- rbind(cc, data.frame(PolygonsID = "Linear Features", 
-                           File = file.path(rootPth, "roads.shp")))
-saveDatasheet(cbScn, cc, name = cSheet, append = FALSE)
 
 dependency(cbScn, rcScn)
+dependency(cbScn, datRes)
 
 # run the scenario
 cbRes <- run(cbScn)
@@ -242,11 +263,17 @@ Once the scenario has run we can look at the results using the user interface or
 library(ggplot2)
 theme_set(theme_bw())
 
-#Find scenario ID of results
-scenNames <- scenario(cLib)
+# Get list of all results scenarios
+allRes <- scenario(cLib, results = TRUE)
+
+# get results scnID for the most recent result
+exampleScn <- max(subset(allRes, grepl(paste0( "Caribou - 2020-2100 \\("),
+                                       allRes$name))$scenarioId)
+
+# Load result tables
+rScn <- scenario(cLib, exampleScn)
 
 #Load result tables
-rScn <- scenario(cLib, 3)
 distMetrics <- datasheet(rScn, "OutputDisturbanceMetrics")
 popMetrics <- datasheet(rScn, "OutputPopulationMetrics")
 
