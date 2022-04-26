@@ -27,7 +27,7 @@ This vignette is directed at users of the SyncroSim user interface for integrati
 Below we explain how to install and setup the user interface, provide links between the options exposed in the UI and the `caribouMetrics` function documentation and demonstrate how to set up a SynscroSim library and extract scenario results for plotting in R using rsyncrosim. 
 
 ## Installation
-To run the UI, installation of several software programs and packages is required. You will need to install [R, RStudio (recommended)](https://www.rstudio.com/products/rstudio/download/#download), [SyncroSim](https://syncrosim.com/download/), [ROFSim SyncroSim Package](https://github.com/ApexRMS/ROFSim/releases) ([instructions](http://docs.syncrosim.com/how_to_guides/package_manager.html#2-installing-from-a-package-file)), caribouMetrics R package and rsyncrosim R package. The script below can be copied into the R console to install the caribouMetics and rsyncrosim packages and to check that the other required software is available. Use the links above to install the other software dependencies before running this script. 
+To run the UI, installation of several software programs and packages is required. You will need to install [R, RStudio (recommended)](https://www.rstudio.com/products/rstudio/download/#download), [SyncroSim](https://syncrosim.com/download/), [ROFSim SyncroSim Package](https://github.com/LandSciTech/ROFSim/releases) ([instructions](http://docs.syncrosim.com/how_to_guides/package_manager.html#2-installing-from-a-package-file)), caribouMetrics R package and rsyncrosim R package. The script below can be copied into the R console to install the caribouMetics and rsyncrosim packages and to check that the other required software is available. Use the links above to install the other software dependencies before running this script. 
 
 ```{r, eval=FALSE}
 if(!requireNamespace("drat", quietly = TRUE)){
@@ -64,7 +64,7 @@ if(!"ROFSim" %in% rsyncrosim::package()$name){
   stop("The ROFSim SyncroSim package must be installed.\n",
        "Follow instructions at:\n http://docs.syncrosim.com/how_to_guides/package_manager.html#2-installing-from-a-package-file\n", 
        "to install the package from a file. \nThe file can be downloaded from:\n",
-       "https://github.com/ApexRMS/ROFSim/releases")
+       "https://github.com/LandSciTech/ROFSim/releases")
 }
 
 # Install ROFSim package dependencies
@@ -312,13 +312,13 @@ Finally delete the library to tidy up.
 delete(paste0(cDir,"/",libName,".ssim"), force = TRUE)
 ```
 ## Overview of ROFSim package structure and components
-The ROFSim SyncroSim package that enables this workflow consists of an [xml file](https://github.com/ApexRMS/ROFSim/blob/main/package.xml) that defines model inputs, outputs, and the UI design, and four transformers (pipeline stages) written in R:
+The ROFSim SyncroSim package that enables this workflow consists of an [xml file](https://github.com/LandSciTech/ROFSim/blob/main/package.xml) that defines model inputs, outputs, and the UI design, and four transformers (pipeline stages) written in R:
 
-1.	[Spades Import](https://github.com/ApexRMS/ROFSim/blob/main/load_spades_outputs.R) Given SpaDES outputs ([example here](https://drive.google.com/drive/folders/1kjjQRyvTHUTfPBsTgzmfk3oV8uBu8Asy?usp=sharing)), this transformer can extract any component of the outputs table. Our example library is currently configured to extract standAgeMap.
+1.	[Spades Import](https://github.com/LandSciTech/ROFSim/blob/main/load_spades_outputs.R) Given SpaDES outputs ([example here](https://drive.google.com/drive/folders/1kjjQRyvTHUTfPBsTgzmfk3oV8uBu8Asy?usp=sharing)), this transformer can extract any component of the outputs table. Our example library is currently configured to extract standAgeMap.
 
-2.	[Generate LCC from Cohort Data](https://github.com/ApexRMS/ROFSim/blob/main/makeLccFromCohortData.R) Given SpaDES outputs, this transformer returns projected Ontario Far North Landcover maps, and maps of forest type (conifer, deciduous or mixed). 
+2.	[Generate LCC from Cohort Data](https://github.com/LandSciTech/ROFSim/blob/main/makeLccFromCohortData.R) Given SpaDES outputs, this transformer returns projected Ontario Far North Landcover maps, and maps of forest type (conifer, deciduous or mixed). 
 
-3.	[Prepare Spatial Data](https://github.com/ApexRMS/ROFSim/blob/main/prepare_spatial_data.R) Given a Land Cover raster, a Study Area polygon, and other spatial inputs, this transformer aligns all the spatial inputs. This is a wrapper around the `loadSpatialInputs()` function from the `caribouMetrics` package.  
+3.	[Prepare Spatial Data](https://github.com/LandSciTech/LandSciTech/blob/main/prepare_spatial_data.R) Given a Land Cover raster, a Study Area polygon, and other spatial inputs, this transformer aligns all the spatial inputs. This is a wrapper around the `loadSpatialInputs()` function from the `caribouMetrics` package.  
 
-4.	[Caribou Habitat](https://github.com/ApexRMS/ROFSim/blob/main/run_caribou_model.R) Given maps of Ranges, Study Area, Linear Features, Land Cover, Natural Disturbances, Harvest and Eskers that have been processed by the Prepare Spatial Data transformer, this transformer calculates results from the available caribou resource selection and demographic models. Functions from the `caribouMetrics` package are used to calculate habitat selection and project demography as described above.
+4.	[Caribou Habitat](https://github.com/LandSciTech/LandSciTech/blob/main/run_caribou_model.R) Given maps of Ranges, Study Area, Linear Features, Land Cover, Natural Disturbances, Harvest and Eskers that have been processed by the Prepare Spatial Data transformer, this transformer calculates results from the available caribou resource selection and demographic models. Functions from the `caribouMetrics` package are used to calculate habitat selection and project demography as described above.
 
