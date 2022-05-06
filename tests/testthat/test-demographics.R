@@ -98,6 +98,13 @@ test_that("useQuantiles works as expected", {
   
   expect_gt(max(demRates4$S_bar), max(demRates6$S_bar))
   
+  expect_warning(demRates6_2 <- demographicRates(covTable = covTableSim,
+                                               popGrowthPars = demCoefsCustomQ,
+                                               returnSample = TRUE,
+                                               useQuantiles = TRUE))
+  
+  expect_gt(max(demRates4$S_bar), max(demRates6_2$S_bar))
+  
   demRates7 <- demographicRates(covTable = covTableSim,
                                 popGrowthPars = demCoefsCustomQ,
                                 returnSample = TRUE)
