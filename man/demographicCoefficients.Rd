@@ -27,8 +27,8 @@ number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.}
 vector it must be length 2 and give the low and high limits of the
 quantiles to use. If \code{useQuantiles != FALSE}, each replicate population is
 assigned to a quantile of the distribution of variation around the expected
-values, and remains in that quantile as covariates change. 
-If \code{useQuantiles = TRUE}, replicate populations 
+values, and remains in that quantile as covariates change.
+If \code{useQuantiles = TRUE}, replicate populations
 will be assigned to quantiles in the default range of 0.025 and 0.975.}
 
 \item{populationGrowthTable}{data.frame. By default
@@ -55,9 +55,9 @@ recruitment models. Also optionally, generates quantiles.
 \examples{
 # sample coefficients for default models
 demographicCoefficients(10)
- 
+
 # try a different model
-demographicCoefficients(10, modelVersion = "ECCC", survivalModelNumber = "M1", 
+demographicCoefficients(10, modelVersion = "ECCC", survivalModelNumber = "M1",
                         recruitmentModelNumber = "M3")
 
 }
