@@ -1,7 +1,7 @@
 Package: caribouMetrics
 Type: Package
 Title: Models and Metrics of Boreal Caribou Responses to Forest Landscapes
-Version: 0.1.1.9000
+Version: 0.1.1.9001
 Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@canada.ca"),
     person("Sarah", "Endicott", email = "sarah.endicott@canada.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),

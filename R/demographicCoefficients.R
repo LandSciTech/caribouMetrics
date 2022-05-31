@@ -7,9 +7,9 @@
 #'
 #'
 #' @param replicates integer. Number of replicate populations.
-#' @param modelVersion character. Which model version to use. Options are "ECCC"
-#'   for the model used in the ECCC Report (2011) and "Johnson" for the model
-#'   used in Johnson et. al. (2020)
+#' @param modelVersion character. Which model version to use. Currently the
+#'   only option is "Johnson" for the model used in Johnson et. al. (2020), but
+#'   additional options may be added in the future.
 #' @param survivalModelNumber,recruitmentModelNumber character. Which model
 #'   number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.
 #' @param useQuantiles logical or numeric. If it is a numeric
@@ -33,13 +33,7 @@
 #'   selected quantiles between 0.025 and 0.975 with length \code{replicates}} }
 #'   } }
 #'
-#' @references ECCC. 2011. Scientific assessment to inform the identification of
-#'   critical habitat for woodland caribou (Rangifer tarandus caribou), boreal
-#'   population, in Canada. Canadian Wildlife Service, Ottawa.
-#'   \url{http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf}.
-#'    Accessed 26 Mar 2021.
-#'
-#'   Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
+#' @references Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
 #'   Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking
 #'   population dynamics to habitat for a threatened species in Canada. Journal
 #'   of Applied Ecology, 57(7), pp.1314-1327.
@@ -50,7 +44,7 @@
 #' demographicCoefficients(10)
 #'
 #' # try a different model
-#' demographicCoefficients(10, modelVersion = "ECCC", survivalModelNumber = "M1",
+#' demographicCoefficients(10, modelVersion = "Johnson", survivalModelNumber = "M1",
 #'                         recruitmentModelNumber = "M3")
 #'
 #' @export
@@ -127,8 +121,7 @@ prepQuantiles <- function(useQuantiles, quantilesIn = NULL){
   } else if(length(useQuantiles) == 1){
     if(useQuantiles){
       if(!is.null(quantilesIn)){
-        message("popGrowthPars contains quantiles so they are used instead of the defaults",
-                call. = FALSE)
+        message("popGrowthPars contains quantiles so they are used instead of the defaults")
         
         quantsToUse <- quantilesIn
       }else{

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-The `caribouMetrics` R package contains a set of functions which implement the caribou resource selection probability functions (RSPF)  described in [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) and an implementation of the population and demographic models described in [Johnson et. al. (2020)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637) and [ECCC (2011)](http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf). These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.
+The `caribouMetrics` R package contains a set of functions which implement the caribou resource selection probability functions (RSPF)  described in [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101) and an implementation of the population and demographic models described in [Johnson et. al. (2020)](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637). These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.
 
 This vignette provides an overview of how to use the `caribouMetrics` package. There are more detailed vignettes available for the `caribouHabitat` function (`vignette("caribouHabitat", package = "caribouMetrics")`) and for the demographic models (`vignette("caribouDemography", package = "caribouMetrics")`).
 
