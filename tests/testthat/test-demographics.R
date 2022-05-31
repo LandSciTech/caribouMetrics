@@ -140,23 +140,24 @@ test_that("all model versions in table work", {
                                             ignorePrecision = TRUE))
   expect_equal(nrow(versJ), length(allJmods))
   
-  # only 1 femaleSurvival model
-  versEC <- popGrowthTableJohnsonECCC %>% 
-    filter(modelVersion == "ECCC", responseVariable == "recruitment") %>% 
-    distinct(ModelNumber)
-  
-  allECmods <- purrr::map(versEC$ModelNumber,
-                          ~demographicRates(covTableSim, 
-                                            demographicCoefficients(10, modelVersion = "ECCC", 
-                                                                    survivalModelNumber = "M1", 
-                                                                    recruitmentModelNumber = .x),
-                                            ignorePrecision = TRUE))
+  # ECCC models not used for now
+  # # only 1 femaleSurvival model
+  # versEC <- popGrowthTableJohnsonECCC %>% 
+  #   filter(modelVersion == "ECCC", responseVariable == "recruitment") %>% 
+  #   distinct(ModelNumber)
+  # 
+  # allECmods <- purrr::map(versEC$ModelNumber,
+  #                         ~demographicRates(covTableSim, 
+  #                                           demographicCoefficients(10, modelVersion = "ECCC", 
+  #                                                                   survivalModelNumber = "M1", 
+  #                                                                   recruitmentModelNumber = .x),
+  #                                           ignorePrecision = TRUE))
 })
 
 test_that("demoCoefs has reasonable errors", {
   # wrong model #
-  expect_error(demographicCoefficients(10, modelVersion = "ECCC", 
-                                         survivalModelNumber = "M2"), 
+  expect_error(demographicCoefficients(10, modelVersion = "Johnson", 
+                                         survivalModelNumber = "M7"), 
                 "Model not available")
 
   
@@ -173,8 +174,8 @@ test_that("demoRates has reasonable errors",{
                "Covariates missing")
   
   expect_error(demographicRates(covTableSim,
-                                demographicCoefficients(10, modelVersion = "ECCC", 
-                                                        recruitmentModelNumber = "M7")),
+                                demographicCoefficients(10, modelVersion = "Johnson", 
+                                                        recruitmentModelNumber = "M5")),
                "Missing precision")
 })
 

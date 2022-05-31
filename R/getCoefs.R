@@ -13,10 +13,10 @@
 #'   model parameters can be provided but it must match the column names of
 #'   \code{\link{popGrowthTableJohnsonECCC}}.
 #' @param resVar character. Response variable, typically "femaleSurvival" or
-#'   "recruitment"
-#' @param modVer character vector. Which model version(s) to use. Options are
-#'   typically "ECCC" for the model used in the ECCC Report (2011) and "Johnson"
-#'   for the model used in Johnson et. al. (2020)
+#' "recruitment"
+#' @param modVer character vector. Which model version(s) to use. Currently the
+#'   only option is "Johnson" for the model used in Johnson et. al. (2020), but
+#'   additional options may be added in the future.
 #' @param modNum character vector. Which model number(s) to use see
 #'   \code{popGrowthTableJohnsonECCC$ModelNumber} for typical options.
 #'
@@ -25,7 +25,7 @@
 #'   is a subset of \code{populationGrowthTable} for the selected model
 #'   
 #' @examples 
-#' getCoefs(popGrowthTableJohnsonECCC, "femaleSurvival", "ECCC", "M1")
+#' getCoefs(popGrowthTableJohnsonECCC, "femaleSurvival", "Johnson", "M1")
 #'
 #' @export
 #' 

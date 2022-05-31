@@ -17,12 +17,9 @@ prediction of caribou habitat use across 13 caribou ranges in Ontario.
 The package also includes an implementation of the population and
 demographic models in *Science to inform policy: linking population
 dynamics to habitat for a threatened species in Canada* by Johnson et.
-al. (2020) and the “Environment Canada Scientific Assessment to Inform
-the Identification of Critical Habitat for Woodland Caribou (*Rangifer
-tarandus caribou*), Boreal Population, in Canada 2011 Update” report.
-These functions allow users to calculate metrics of disturbance, predict
-demographic rates for a given level of disturbance and simulate
-population growth over time.
+al. (2020). These functions allow users to calculate metrics of
+disturbance, predict demographic rates for a given level of disturbance
+and simulate population growth over time.
 
 ## Installation
 
@@ -100,11 +97,13 @@ demCoefs <- demographicCoefficients(replicates = 10)
 
 demRates <- demographicRates(covTable = results(disturb),
                              popGrowthPars = demCoefs)
+#> popGrowthPars contains quantiles so they are used instead of the defaultsFALSE
+#> popGrowthPars contains quantiles so they are used instead of the defaultsFALSE
 demRates
-#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.05383665
-#>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7392366 0.9254506 0.1813372 0.09906526 0.05714391 0.3850676
+#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar  S_stdErr
+#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.0452728
+#>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow R_PIhigh
+#> 1 0.7561665 0.9187631 0.1813372 0.09530066 0.05820063 0.367604
 
 # Simulate population growth
 popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
@@ -112,18 +111,12 @@ popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar,
 
 popGrow
 #>     N    lambda
-#> 1 336 0.9148536
+#> 1 361 0.9180804
 ```
 
 More detailed examples are provided in the vignettes.
 
 # References
-
-ECCC. 2011. Scientific assessment to inform the identification of
-critical habitat for woodland caribou (*Rangifer tarandus caribou*),
-boreal population, in Canada. Canadian Wildlife Service, Ottawa.
-<http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf>.
-Accessed 26 Mar 2021.
 
 Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
 Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
