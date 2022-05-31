@@ -28,9 +28,9 @@ replicate and one column per coefficient}
 \item{coefValues}{data.table. One row table with expected values for each
 coefficient}
 
-\item{modVer}{character. Which model version is being used. Options are
-currently, "ECCC" for the model used in the ECCC Report (2011) and
-"Johnson" for the model used in Johnson et. al. (2020)}
+\item{modVer}{character. Which model version to use. Currently the
+only option is "Johnson" for the model used in Johnson et. al. (2020), but
+additional options may be added in the future.}
 
 \item{resVar}{character. Response variable, typically "femaleSurvival" or
 "recruitment"}
@@ -89,7 +89,7 @@ values and optionally the model precision.
 \code{\link{sampleCoefs}}
 }
 \examples{
-cfs <- getCoefs(popGrowthTableJohnsonECCC, "recruitment", "ECCC", "M3")
+cfs <- getCoefs(popGrowthTableJohnsonECCC, "recruitment", "Johnson", "M3")
 
 cfSamps <- sampleCoefs(cfs[[1]], 10)
 
@@ -98,18 +98,18 @@ distScen <- data.frame(Total_dist = 1:10/10)
 
 # return summary across replicates
 sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
-            "ECCC", "recruitment", ignorePrecision = TRUE,
+            "Johnson", "recruitment", ignorePrecision = TRUE, 
             returnSample = FALSE)
 
 # return one row per replicate * scenario
 sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
-            "ECCC", "recruitment", ignorePrecision = TRUE,
+            "Johnson", "recruitment", ignorePrecision = TRUE, 
             returnSample = TRUE)
 
 # return one row per replicate * scenario with replicates assigned to a quantile
 sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
-            "ECCC", "recruitment", ignorePrecision = TRUE,
-            returnSample = TRUE,
+            "Johnson", "recruitment", ignorePrecision = TRUE, 
+            returnSample = TRUE, 
             quantilesToUse = quantile(x = c(0, 1),
                                       probs = seq(0.025, 0.975, length.out = 10)))
 

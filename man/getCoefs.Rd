@@ -15,9 +15,9 @@ model parameters can be provided but it must match the column names of
 \item{resVar}{character. Response variable, typically "femaleSurvival" or
 "recruitment"}
 
-\item{modVer}{character vector. Which model version(s) to use. Options are
-typically "ECCC" for the model used in the ECCC Report (2011) and "Johnson"
-for the model used in Johnson et. al. (2020)}
+\item{modVer}{character vector. Which model version(s) to use. Currently the
+only option is "Johnson" for the model used in Johnson et. al. (2020), but
+additional options may be added in the future.}
 
 \item{modNum}{character vector. Which model number(s) to use see
 \code{popGrowthTableJohnsonECCC$ModelNumber} for typical options.}
@@ -33,6 +33,6 @@ variable from a table of coefficients for many models. If the table does not
 contain the standard error it is calculated from the confidence interval.
 }
 \examples{
-getCoefs(popGrowthTableJohnsonECCC, "femaleSurvival", "ECCC", "M1")
+getCoefs(popGrowthTableJohnsonECCC, "femaleSurvival", "Johnson", "M1")
 
 }
