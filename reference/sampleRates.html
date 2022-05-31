@@ -74,7 +74,8 @@ values and optionally the model precision.</p>
   <span class="va">ignorePrecision</span>,
   <span class="va">returnSample</span>,
   quantilesToUse <span class="op">=</span> <span class="cn">NULL</span>,
-  predInterval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>
+  predInterval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>,
+  transformFn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">{</span>     <span class="va">y</span> <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -100,7 +101,7 @@ currently, "ECCC" for the model used in the ECCC Report (2011) and
 <dt>ignorePrecision</dt>
 <dd><p>logical. Should the precision of the model be used if
 it is available? When precision is used variation among populations around the
-National mean responses is considered in addition to the uncertainty about 
+National mean responses is considered in addition to the uncertainty about
 the coefficient estimates.</p></dd>
 <dt>returnSample</dt>
 <dd><p>logical. If TRUE the returned data.frame has replicates *
@@ -109,9 +110,9 @@ and additional columns summarizing the variation among replicates. See
 Value for details.</p></dd>
 <dt>quantilesToUse</dt>
 <dd><p>numeric vector of length <code>coefSamples</code>. Only relevant when
-<code>ignorePrecision = FALSE</code>. Each replicate population is assigned to a quantile 
-of the distribution of variation around the expected values, and remains in that 
-quantile as covariates change. If NULL sampling is done independently for each combination 
+<code>ignorePrecision = FALSE</code>. Each replicate population is assigned to a quantile
+of the distribution of variation around the expected values, and remains in that
+quantile as covariates change. If NULL sampling is done independently for each combination
 of scenario and replicate, so the value for a particular replicate population in one
 scenario is unrelated to the values for that replicate in other scenarios.
 Useful for projecting impacts of changing disturbance on the
@@ -119,12 +120,14 @@ trajectories of replicate populations.</p></dd>
 <dt>predInterval</dt>
 <dd><p>numeric vector with length 2. The default 95% interval is
 (<code>c(0.025,0.975)</code>). Only relevant when <code>returnSample = TRUE</code> and <code>quantilesToUse = NULL</code>.</p></dd>
+<dt>transformFn</dt>
+<dd><p>functions used to transform demographic rates.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data.frame of predictions. The data.frame includes all columns in
 <code>covTable</code> with additional columns depending on <code>returnSample</code>.
-  If <code>returnSample = FALSE</code> the number of rows is the same as the 
+  If <code>returnSample = FALSE</code> the number of rows is the same as the
   number of rows in <code>covTable</code>, additional columns are:</p><dl><dt>"average"</dt>
 <dd><p>The mean estimated values of the response variable)</p></dd>
 
@@ -132,7 +135,7 @@ trajectories of replicate populations.</p></dd>
 <dd><p>Standard error of the estimated values</p></dd>
 
     <dt>"PIlow"/"PIhigh"</dt>
-<dd><p>If <code>quantilesToUse = NULL</code> these are the percentiles given by predInterval. 
+<dd><p>If <code>quantilesToUse = NULL</code> these are the percentiles given by predInterval.
       If using quantiles, maximum and minimum values are returned.</p></dd>
 
   
@@ -168,21 +171,21 @@ trajectories of replicate populations.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># return summary across replicates</span></span>
 <span class="r-in"><span class="fu">sampleRates</span><span class="op">(</span><span class="va">distScen</span>, <span class="va">cfSamps</span><span class="op">$</span><span class="va">coefSamples</span>, <span class="va">cfSamps</span><span class="op">$</span><span class="va">coefValues</span>,</span>
-<span class="r-in">            <span class="st">"ECCC"</span>, <span class="st">"recruitment"</span>, ignorePrecision <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span class="r-in">            <span class="st">"ECCC"</span>, <span class="st">"recruitment"</span>, ignorePrecision <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span class="r-in">            returnSample <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,     "ECCC", "recruitment", ignorePrecision = TRUE, returnSample = FALSE):</span> object 'cfSamps' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># return one row per replicate * scenario</span></span>
 <span class="r-in"><span class="fu">sampleRates</span><span class="op">(</span><span class="va">distScen</span>, <span class="va">cfSamps</span><span class="op">$</span><span class="va">coefSamples</span>, <span class="va">cfSamps</span><span class="op">$</span><span class="va">coefValues</span>,</span>
-<span class="r-in">            <span class="st">"ECCC"</span>, <span class="st">"recruitment"</span>, ignorePrecision <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span class="r-in">            <span class="st">"ECCC"</span>, <span class="st">"recruitment"</span>, ignorePrecision <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span class="r-in">            returnSample <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,     "ECCC", "recruitment", ignorePrecision = TRUE, returnSample = TRUE):</span> object 'cfSamps' not found</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># return one row per replicate * scenario with replicates assigned to a quantile</span></span>
 <span class="r-in"><span class="fu">sampleRates</span><span class="op">(</span><span class="va">distScen</span>, <span class="va">cfSamps</span><span class="op">$</span><span class="va">coefSamples</span>, <span class="va">cfSamps</span><span class="op">$</span><span class="va">coefValues</span>,</span>
-<span class="r-in">            <span class="st">"ECCC"</span>, <span class="st">"recruitment"</span>, ignorePrecision <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span class="r-in">            returnSample <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span class="r-in">            quantilesToUse <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, </span>
+<span class="r-in">            <span class="st">"ECCC"</span>, <span class="st">"recruitment"</span>, ignorePrecision <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span class="r-in">            returnSample <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span class="r-in">            quantilesToUse <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span class="r-in">                                      probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,     "ECCC", "recruitment", ignorePrecision = TRUE, returnSample = TRUE,     quantilesToUse = quantile(x = c(0, 1), probs = seq(0.025,         0.975, length.out = 10))):</span> object 'cfSamps' not found</span>
 <span class="r-in"></span>

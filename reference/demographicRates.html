@@ -71,7 +71,9 @@ survival and recruitment rates.</p>
   ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,
   returnSample <span class="op">=</span> <span class="cn">FALSE</span>,
   useQuantiles <span class="op">=</span> <span class="cn">TRUE</span>,
-  predInterval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PI_R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>, PI_S <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span>
+  predInterval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PI_R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>, PI_S <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span>,
+  transformFns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>S_transform <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">{</span>     <span class="op">(</span><span class="va">y</span> <span class="op">*</span> <span class="fl">46</span> <span class="op">-</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">/</span><span class="fl">45</span> <span class="op">}</span>, R_transform
+    <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">{</span>     <span class="va">y</span> <span class="op">}</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -113,6 +115,10 @@ trajectories of replicate populations.</p></dd>
 <dd><p>numeric vector with length 2. The default 95% interval is
 (<code>c(0.025,0.975)</code>). Only relevant when <code>returnSample = TRUE</code> and
 <code>quantilesToUse = NULL</code>.</p></dd>
+<dt>transformFns</dt>
+<dd><p>list of functions used to transform demographic rates.
+The default is <code>list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})</code>.
+The back transformation is applied to survival rates as in Johnson et al. 2020.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -165,47 +171,47 @@ trajectories of replicate populations.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> popGrowthPars contains quantiles so they are used instead of the defaults</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> popGrowthPars contains quantiles so they are used instead of the defaults</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Anthro fire_excl_anthro Total_dist     S_bar   S_stdErr   S_PIlow  S_PIhigh</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       0                0          0 0.8676213 0.04776037 0.7762062 0.9416974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       0               20         20 0.8676213 0.04776037 0.7762062 0.9416974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       0               40         40 0.8676213 0.04776037 0.7762062 0.9416974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       0               60         60 0.8676213 0.04776037 0.7762062 0.9416974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      20                0         20 0.8538498 0.04956453 0.7635709 0.9323426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      20               20         40 0.8538498 0.04956453 0.7635709 0.9323426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      20               40         60 0.8538498 0.04956453 0.7635709 0.9323426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      20               60         80 0.8538498 0.04956453 0.7635709 0.9323426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      40                0         40 0.8402969 0.05128639 0.7512375 0.9228666</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     40               20         60 0.8402969 0.05128639 0.7512375 0.9228666</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11     40               40         80 0.8402969 0.05128639 0.7512375 0.9228666</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12     40               60        100 0.8402969 0.05128639 0.7512375 0.9228666</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13     60                0         60 0.8269591 0.05292693 0.7391862 0.9133058</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14     60               20         80 0.8269591 0.05292693 0.7391862 0.9133058</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15     60               40        100 0.8269591 0.05292693 0.7391862 0.9133058</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16     60               60        120 0.8269591 0.05292693 0.7391862 0.9133058</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17     80                0         80 0.8138331 0.05448810 0.7274002 0.9036890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18     80               20        100 0.8138331 0.05448810 0.7274002 0.9036890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19     80               40        120 0.8138331 0.05448810 0.7274002 0.9036890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20     80               60        140 0.8138331 0.05448810 0.7274002 0.9036890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         R_bar   R_stdErr      R_PIlow  R_PIhigh</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.35951478 0.11433396 0.2020887163 0.5780179</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.30574618 0.11392714 0.1301891315 0.5202408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.26001915 0.11139382 0.0816184945 0.4685150</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.22113100 0.10720013 0.0492694846 0.4223412</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.25589195 0.10930116 0.1100885598 0.4771678</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.21762106 0.10535671 0.0681582502 0.4300586</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.18507391 0.10044808 0.0404464856 0.3880665</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.15739448 0.09490195 0.0226560101 0.3506704</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.18213629 0.10000276 0.0565956921 0.3950821</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.15489621 0.09457485 0.0329482197 0.3569169</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 0.13173012 0.08884784 0.0179805544 0.3229370</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 0.11202872 0.08303045 0.0089807919 0.2926768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 0.12963921 0.08919341 0.0266090159 0.3286131</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 0.11025053 0.08338739 0.0141020603 0.2977326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0.09376159 0.07765489 0.0067652456 0.2702176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 0.07973872 0.07211963 0.0028279176 0.2456757</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0.09227334 0.07831677 0.0109139441 0.2748162</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 0.07847305 0.07271731 0.0050033110 0.2497797</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 0.06673672 0.06738877 0.0019638112 0.2274226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 0.05675565 0.06239285 0.0006217323 0.2074232</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       0                0          0 0.8757906 0.04681597 0.7855839 0.9485086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       0               20         20 0.8757906 0.04681597 0.7855839 0.9485086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       0               40         40 0.8757906 0.04681597 0.7855839 0.9485086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       0               60         60 0.8757906 0.04681597 0.7855839 0.9485086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      20                0         20 0.8617131 0.04874055 0.7682396 0.9385990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      20               20         40 0.8617131 0.04874055 0.7682396 0.9385990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      20               40         60 0.8617131 0.04874055 0.7682396 0.9385990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      20               60         80 0.8617131 0.04874055 0.7682396 0.9385990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      40                0         40 0.8478591 0.05057336 0.7514641 0.9285206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     40               20         60 0.8478591 0.05057336 0.7514641 0.9285206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     40               40         80 0.8478591 0.05057336 0.7514641 0.9285206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     40               60        100 0.8478591 0.05057336 0.7514641 0.9285206</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     60                0         60 0.8342249 0.05232020 0.7352057 0.9183248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14     60               20         80 0.8342249 0.05232020 0.7352057 0.9183248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15     60               40        100 0.8342249 0.05232020 0.7352057 0.9183248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16     60               60        120 0.8342249 0.05232020 0.7352057 0.9183248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17     80                0         80 0.8208071 0.05398626 0.7194234 0.9080509</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18     80               20        100 0.8208071 0.05398626 0.7194234 0.9080509</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19     80               40        120 0.8208071 0.05398626 0.7194234 0.9080509</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20     80               60        140 0.8208071 0.05398626 0.7194234 0.9080509</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         R_bar   R_stdErr     R_PIlow  R_PIhigh</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.35951478 0.11691883 0.156837702 0.5612880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.30574618 0.11362011 0.112433730 0.5165085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.26001915 0.11000826 0.079293848 0.4755179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.22113100 0.10600497 0.054774863 0.4380654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.25589195 0.10598636 0.086541061 0.4532457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.21762106 0.10111730 0.060113082 0.4177359</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.18507391 0.09642836 0.040739696 0.3853426</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.15739448 0.09180519 0.026768914 0.3558032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.18213629 0.09365976 0.044938548 0.3677716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.15489621 0.08844056 0.029772840 0.3397808</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 0.13173012 0.08359004 0.019012466 0.3142519</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 0.11202872 0.07900100 0.011589359 0.2909567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 0.12963921 0.08148065 0.021307986 0.3003982</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 0.11025053 0.07649037 0.013151423 0.2783078</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0.09376159 0.07192104 0.007677630 0.2581232</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 0.07973872 0.06768172 0.004175304 0.2396586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0.09227334 0.07018131 0.008814020 0.2471486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 0.07847305 0.06567275 0.004885429 0.2296082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 0.06673672 0.06157508 0.002486620 0.2135252</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 0.05675565 0.05781215 0.001135172 0.1987524</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
