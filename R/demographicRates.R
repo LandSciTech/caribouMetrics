@@ -140,7 +140,10 @@ demographicRates <- function(covTable,
   names(rateSamples)[names(rateSamples) == "stdErr"] = "R_stdErr"
   names(rateSamples)[names(rateSamples) == "PIlow"] = "R_PIlow"
   names(rateSamples)[names(rateSamples) == "PIhigh"] = "R_PIhigh"
-
-  rateSamples<-rateSamples[order(rateSamples$replicate),]
+  
+  if(returnSample){
+    rateSamples<-rateSamples[order(rateSamples$replicate, rateSamples$scnID),]
+  }
+  
   return(rateSamples)
 }
