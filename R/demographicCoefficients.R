@@ -121,8 +121,7 @@ prepQuantiles <- function(useQuantiles, quantilesIn = NULL){
   } else if(length(useQuantiles) == 1){
     if(useQuantiles){
       if(!is.null(quantilesIn)){
-        message("popGrowthPars contains quantiles so they are used instead of the defaults",
-                call. = FALSE)
+        message("popGrowthPars contains quantiles so they are used instead of the defaults")
         
         quantsToUse <- quantilesIn
       }else{
