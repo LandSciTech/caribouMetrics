@@ -33,6 +33,8 @@
 #' @param predInterval numeric vector with length 2. The default 95\% interval is
 #'   (\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and
 #'   \code{quantilesToUse = NULL}.
+#' @param transformFns list of functions used to transform demographic rates.
+#'        The default is list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})
 #'
 #' @return A data.frame of predictions. The data.frame includes all columns in
 #'   \code{covTable} with additional columns depending on \code{returnSample}.
@@ -77,7 +79,8 @@ demographicRates <- function(covTable,
                              returnSample = FALSE,
                              useQuantiles = TRUE,
                              predInterval = list(PI_R = c(0.025,0.975),
-                                                 PI_S = c(0.025,0.975))){
+                                                 PI_S = c(0.025,0.975)),
+                             transformFns = list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})){
 
   quantsToUse <- prepQuantiles(useQuantiles, popGrowthPars$coefSamples_Survival$quantiles)
   if(is.null(quantsToUse)){
@@ -112,7 +115,8 @@ demographicRates <- function(covTable,
                         resVar = "femaleSurvival",
                         ignorePrecision = ignorePrecision,
                         returnSample = returnSample,
-                        predInterval = predInterval[["PI_S"]])
+                        predInterval = predInterval[["PI_S"]],
+                        transformFn = transformFns$S_transform)
   pred_R <- sampleRates(covTable = covTable,
                         coefSamples = popGrowthPars$coefSamples_Recruitment[["coefSamples"]],
                         coefValues = popGrowthPars$coefSamples_Recruitment[["coefValues"]],
@@ -121,7 +125,8 @@ demographicRates <- function(covTable,
                         resVar = "recruitment",
                         ignorePrecision = ignorePrecision,
                         returnSample = returnSample,
-                        predInterval = predInterval[["PI_R"]])
+                        predInterval = predInterval[["PI_R"]],
+                        transformFn = transformFns$R_transform)
   rateSamples = pred_S
   names(rateSamples)[names(rateSamples) == "value"] = "S_bar"
   names(rateSamples)[names(rateSamples) == "average"] = "S_bar"

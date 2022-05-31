@@ -13,7 +13,8 @@ sampleRates(
   ignorePrecision,
   returnSample,
   quantilesToUse = NULL,
-  predInterval = c(0.025, 0.975)
+  predInterval = c(0.025, 0.975),
+  transformFn = function(y) {     y }
 )
 }
 \arguments{
@@ -36,7 +37,7 @@ currently, "ECCC" for the model used in the ECCC Report (2011) and
 
 \item{ignorePrecision}{logical. Should the precision of the model be used if
 it is available? When precision is used variation among populations around the
-National mean responses is considered in addition to the uncertainty about 
+National mean responses is considered in addition to the uncertainty about
 the coefficient estimates.}
 
 \item{returnSample}{logical. If TRUE the returned data.frame has replicates *
@@ -45,9 +46,9 @@ and additional columns summarizing the variation among replicates. See
 Value for details.}
 
 \item{quantilesToUse}{numeric vector of length \code{coefSamples}. Only relevant when
-\code{ignorePrecision = FALSE}. Each replicate population is assigned to a quantile 
-of the distribution of variation around the expected values, and remains in that 
-quantile as covariates change. If NULL sampling is done independently for each combination 
+\code{ignorePrecision = FALSE}. Each replicate population is assigned to a quantile
+of the distribution of variation around the expected values, and remains in that
+quantile as covariates change. If NULL sampling is done independently for each combination
 of scenario and replicate, so the value for a particular replicate population in one
 scenario is unrelated to the values for that replicate in other scenarios.
 Useful for projecting impacts of changing disturbance on the
@@ -55,19 +56,21 @@ trajectories of replicate populations.}
 
 \item{predInterval}{numeric vector with length 2. The default 95\% interval is
 (\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and \code{quantilesToUse = NULL}.}
+
+\item{transformFn}{functions used to transform demographic rates.}
 }
 \value{
 A data.frame of predictions. The data.frame includes all columns in
   \code{covTable} with additional columns depending on \code{returnSample}.
-  
-  If \code{returnSample = FALSE} the number of rows is the same as the 
+
+  If \code{returnSample = FALSE} the number of rows is the same as the
   number of rows in \code{covTable}, additional columns are:
   \describe{
     \item{"average"}{The mean estimated values of the response variable)}
     \item{"stdErr"}{Standard error of the estimated values}
-    \item{"PIlow"/"PIhigh"}{If \code{quantilesToUse = NULL} these are the percentiles given by predInterval. 
+    \item{"PIlow"/"PIhigh"}{If \code{quantilesToUse = NULL} these are the percentiles given by predInterval.
       If using quantiles, maximum and minimum values are returned.}
-  } 
+  }
   If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
    replicates} additional columns are:
   \describe{
@@ -95,19 +98,19 @@ distScen <- data.frame(Total_dist = 1:10/10)
 
 # return summary across replicates
 sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
-            "ECCC", "recruitment", ignorePrecision = TRUE, 
+            "ECCC", "recruitment", ignorePrecision = TRUE,
             returnSample = FALSE)
 
 # return one row per replicate * scenario
 sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
-            "ECCC", "recruitment", ignorePrecision = TRUE, 
+            "ECCC", "recruitment", ignorePrecision = TRUE,
             returnSample = TRUE)
 
 # return one row per replicate * scenario with replicates assigned to a quantile
 sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
-            "ECCC", "recruitment", ignorePrecision = TRUE, 
-            returnSample = TRUE, 
-            quantilesToUse = quantile(x = c(0, 1), 
+            "ECCC", "recruitment", ignorePrecision = TRUE,
+            returnSample = TRUE,
+            quantilesToUse = quantile(x = c(0, 1),
                                       probs = seq(0.025, 0.975, length.out = 10)))
 
 }
