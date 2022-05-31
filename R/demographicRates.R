@@ -34,7 +34,8 @@
 #'   (\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and
 #'   \code{quantilesToUse = NULL}.
 #' @param transformFns list of functions used to transform demographic rates.
-#'        The default is list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})
+#'        The default is \code{list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})}.
+#'        The back transformation is applied to survival rates as in Johnson et al. 2020.
 #'
 #' @return A data.frame of predictions. The data.frame includes all columns in
 #'   \code{covTable} with additional columns depending on \code{returnSample}.
@@ -140,10 +141,10 @@ demographicRates <- function(covTable,
   names(rateSamples)[names(rateSamples) == "stdErr"] = "R_stdErr"
   names(rateSamples)[names(rateSamples) == "PIlow"] = "R_PIlow"
   names(rateSamples)[names(rateSamples) == "PIhigh"] = "R_PIhigh"
-  
+
   if(returnSample){
     rateSamples<-rateSamples[order(rateSamples$replicate, rateSamples$scnID),]
   }
-  
+
   return(rateSamples)
 }

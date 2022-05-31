@@ -53,7 +53,8 @@ trajectories of replicate populations.}
 \code{quantilesToUse = NULL}.}
 
 \item{transformFns}{list of functions used to transform demographic rates.
-The default is list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})}
+The default is \code{list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})}.
+The back transformation is applied to survival rates as in Johnson et al. 2020.}
 }
 \value{
 A data.frame of predictions. The data.frame includes all columns in
