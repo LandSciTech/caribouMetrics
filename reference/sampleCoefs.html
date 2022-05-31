@@ -92,11 +92,26 @@ name of the coefficient, "Value" for the value of the coefficient and
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">cfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="getCoefs.html">getCoefs</a></span><span class="op">(</span><span class="va">popGrowthTableJohnsonECCC</span>, <span class="st">"recruitment"</span>, <span class="st">"ECCC"</span>, <span class="st">"M3"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Model not available. There is no model: ECCC, recruitment, M3</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">cfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="getCoefs.html">getCoefs</a></span><span class="op">(</span><span class="va">popGrowthTableJohnsonECCC</span>, <span class="st">"recruitment"</span>, <span class="st">"Johnson"</span>, <span class="st">"M3"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">sampleCoefs</span><span class="op">(</span><span class="va">cfs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in sampleCoefs(cfs[[1]], 10):</span> object 'cfs' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Intercept  Total_dist</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -1.0124316 -0.01509926</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -0.9046792 -0.01269664</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.9300907 -0.01670261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.9624216 -0.01476818</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.8837001 -0.01348683</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -1.0356777 -0.01537626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.9472154 -0.01408545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -1.0203093 -0.01350672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.9302296 -0.01705564</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.9054440 -0.01487991</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $coefValues</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Intercept Total_dist</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    -0.956     -0.015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

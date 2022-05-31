@@ -81,9 +81,9 @@ model parameters can be provided but it must match the column names of
 <dd><p>character. Response variable, typically "femaleSurvival" or
 "recruitment"</p></dd>
 <dt>modVer</dt>
-<dd><p>character vector. Which model version(s) to use. Options are
-typically "ECCC" for the model used in the ECCC Report (2011) and "Johnson"
-for the model used in Johnson et. al. (2020)</p></dd>
+<dd><p>character vector. Which model version(s) to use. Currently the
+only option is "Johnson" for the model used in Johnson et. al. (2020), but
+additional options may be added in the future.</p></dd>
 <dt>modNum</dt>
 <dd><p>character vector. Which model number(s) to use see
 <code>popGrowthTableJohnsonECCC$ModelNumber</code> for typical options.</p></dd>
@@ -97,8 +97,17 @@ for the model used in Johnson et. al. (2020)</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">getCoefs</span><span class="op">(</span><span class="va">popGrowthTableJohnsonECCC</span>, <span class="st">"femaleSurvival"</span>, <span class="st">"ECCC"</span>, <span class="st">"M1"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Model not available. There is no model: ECCC, femaleSurvival, M1</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">getCoefs</span><span class="op">(</span><span class="va">popGrowthTableJohnsonECCC</span>, <span class="st">"femaleSurvival"</span>, <span class="st">"Johnson"</span>, <span class="st">"M1"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Johnson_M1_National</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    modelVersion responseVariable ModelNumber     Type Coefficient    Value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      Johnson   femaleSurvival          M1 National   Intercept -0.14200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      Johnson   femaleSurvival          M1 National      Anthro -0.00080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      Johnson   femaleSurvival          M1 National   Precision 63.43724</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         StdErr lowerCI upperCI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.007908163  -0.158 -0.1270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.000127551  -0.001 -0.0005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 8.272730950      NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
