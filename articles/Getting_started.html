@@ -90,7 +90,7 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The <code>caribouMetrics</code> R package contains a set of functions which implement the caribou resource selection probability functions (RSPF) described in <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel (2016)</a> and an implementation of the population and demographic models described in <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link">Johnson et. al. (2020)</a> and <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="external-link">ECCC (2011)</a>. These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.</p>
+<p>The <code>caribouMetrics</code> R package contains a set of functions which implement the caribou resource selection probability functions (RSPF) described in <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel (2016)</a> and an implementation of the population and demographic models described in <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link">Johnson et. al. (2020)</a>. These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.</p>
 <p>This vignette provides an overview of how to use the <code>caribouMetrics</code> package. There are more detailed vignettes available for the <code>caribouHabitat</code> function (<code>vignette("caribouHabitat", package = "caribouMetrics")</code>) and for the demographic models (<code><a href="../articles/caribouDemography.html">vignette("caribouDemography", package = "caribouMetrics")</a></code>).</p>
 <div class="section level3">
 <h3 id="data-needed">Data Needed<a class="anchor" aria-label="anchor" href="#data-needed"></a>
@@ -380,8 +380,8 @@
 
 <span class="va">demRates</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>covTable <span class="op">=</span> <span class="va">exTable</span>,
                              popGrowthPars <span class="op">=</span> <span class="va">demCoefs</span><span class="op">)</span>
-<span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaultsFALSE</span>
-<span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaultsFALSE</span>
+<span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaults</span>
+<span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaults</span>
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">demRates</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Anthro</span>, <span class="va">S_bar</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span>
@@ -398,9 +398,9 @@
                             S_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">demRates</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, <span class="va">popGrow</span><span class="op">)</span>
-<span class="co">#&gt;   zone   Anthro      Fire Total_dist fire_excl_anthro   N   lambda</span>
-<span class="co">#&gt; 1    1 43.60786 0.7708216   43.96341        0.3555401 324 0.913200</span>
-<span class="co">#&gt; 2    1 53.60786 0.7708216   53.96341        0.3555401 183 0.887498</span></code></pre></div>
+<span class="co">#&gt;   zone   Anthro      Fire Total_dist fire_excl_anthro   N    lambda</span>
+<span class="co">#&gt; 1    1 43.60786 0.7708216   43.96341        0.3555401 339 0.9151824</span>
+<span class="co">#&gt; 2    1 53.60786 0.7708216   53.96341        0.3555401 232 0.8979984</span></code></pre></div>
 <p><em>For additional details on functions in the package see the help documentation</em></p>
 </div>
 </div>

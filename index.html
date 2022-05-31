@@ -95,7 +95,7 @@
 <div class="page-header"><h1 id="cariboumetrics">caribouMetrics<a class="anchor" aria-label="anchor" href="#cariboumetrics"></a>
 </h1></div>
 <!-- badges: start -->
-<p>caribouMetrics provides implementations of several different models. Firstly, it implements the caribou resource selection probability functions described in Hornseth and Rempel (2016) <em>Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance</em>. This allows for a spatial prediction of caribou habitat use across 13 caribou ranges in Ontario. The package also includes an implementation of the population and demographic models in <em>Science to inform policy: linking population dynamics to habitat for a threatened species in Canada</em> by Johnson et. al. (2020) and the “Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (<em>Rangifer tarandus caribou</em>), Boreal Population, in Canada 2011 Update” report. These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.</p>
+<p>caribouMetrics provides implementations of several different models. Firstly, it implements the caribou resource selection probability functions described in Hornseth and Rempel (2016) <em>Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance</em>. This allows for a spatial prediction of caribou habitat use across 13 caribou ranges in Ontario. The package also includes an implementation of the population and demographic models in <em>Science to inform policy: linking population dynamics to habitat for a threatened species in Canada</em> by Johnson et. al. (2020). These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -167,11 +167,13 @@
 
 <span class="va">demRates</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>covTable <span class="op">=</span> <span class="fu"><a href="reference/results.html">results</a></span><span class="op">(</span><span class="va">disturb</span><span class="op">)</span>,
                              popGrowthPars <span class="op">=</span> <span class="va">demCoefs</span><span class="op">)</span>
+<span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaultsFALSE</span>
+<span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaultsFALSE</span>
 <span class="va">demRates</span>
-<span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr</span>
-<span class="co">#&gt; 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.05383665</span>
-<span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh</span>
-<span class="co">#&gt; 1 0.7392366 0.9254506 0.1813372 0.09906526 0.05714391 0.3850676</span>
+<span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar  S_stdErr</span>
+<span class="co">#&gt; 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.0452728</span>
+<span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow R_PIhigh</span>
+<span class="co">#&gt; 1 0.7561665 0.9187631 0.1813372 0.09530066 0.05820063 0.367604</span>
 
 <span class="co"># Simulate population growth</span>
 <span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2000</span>, numSteps <span class="op">=</span> <span class="fl">20</span>, R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, 
@@ -179,14 +181,13 @@
 
 <span class="va">popGrow</span>
 <span class="co">#&gt;     N    lambda</span>
-<span class="co">#&gt; 1 336 0.9148536</span></code></pre></div>
+<span class="co">#&gt; 1 361 0.9180804</span></code></pre></div>
 <p>More detailed examples are provided in the vignettes.</p>
 </div>
 </div>
 <div class="section level1">
 <h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h1>
-<p>ECCC. 2011. Scientific assessment to inform the identification of critical habitat for woodland caribou (<em>Rangifer tarandus caribou</em>), boreal population, in Canada. Canadian Wildlife Service, Ottawa. <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="external-link uri">http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf</a>. Accessed 26 Mar 2021.</p>
 <p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking population dynamics to habitat for a threatened species in Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link uri">https://doi.org/10.1111/1365-2664.13637</a></p>
 <p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93. <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link uri">https://doi.org/10.1139/cjz-2015-0101</a></p>
 <div class="section level2">
