@@ -7,7 +7,7 @@
 \format{
 A data frame with 30 rows and 2 variables: \describe{
   \item{PLCCode}{Provincial landcover number code}
-  \item{ResourceType}{Resource type code} 
+  \item{ResourceType}{Letter code indicating the resource type} 
 }
 }
 \source{
@@ -21,7 +21,7 @@ LSL script for work published in:
 plcToResType
 }
 \description{
-A table to convert Provincial Landcover Classes to resource types used in
+A table to convert Provincial Land Cover classes to resource types used in
 caribou resource selection model.
 }
 \keyword{datasets}

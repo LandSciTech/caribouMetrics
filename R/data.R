@@ -59,12 +59,12 @@
 
 #' Lookup table for PLC to resource type
 #'
-#' A table to convert Provincial Landcover Classes to resource types used in
+#' A table to convert Provincial Land Cover classes to resource types used in
 #' caribou resource selection model.
 #' 
 #' @format A data frame with 30 rows and 2 variables: \describe{
 #'   \item{PLCCode}{Provincial landcover number code}
-#'   \item{ResourceType}{Resource type code} 
+#'   \item{ResourceType}{Letter code indicating the resource type} 
 #' } 
 #' @source LSL script for work published in:
 #'  Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
@@ -73,13 +73,27 @@
 #'  \url{https://doi.org/10.1139/cjz-2015-0101}
 "plcToResType"
 
+#' Lookup table for FNLC to resource type
+#'
+#' A table to convert Far North Land Cover classes to resource types used in
+#' caribou resource selection model.
+#'
+#' The FNLC classes were linked to resource types by comparing the descriptions
+#' of FNLC classes to the PLC classes and then linking them to the corresponding
+#' resource types
+#'
+#' @format A data frame with 26 rows and 2 variables: \describe{
+#'   \item{PLCCode}{FNLC number code}
+#'   \item{ResourceType}{Letter code indicating the resource type} }
+"fnlcToResType"
+
 #' Lookup table for RFU to resource type
 #'
 #' A table to convert Regional Forest Units to resource types used in
 #' caribou resource selection model
 #' @format A data frame with 17 rows and 2 variables: \describe{
 #'   \item{RegionalForestUnit}{Regional forest unit 5 letter or number code}
-#'   \item{ResourceType}{Resource type code} 
+#'   \item{ResourceType}{Letter code indicating the resource type} 
 #' } 
 #' @source LSL script for work published in:
 #'  Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of

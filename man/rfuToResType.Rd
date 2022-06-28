@@ -7,7 +7,7 @@
 \format{
 A data frame with 17 rows and 2 variables: \describe{
   \item{RegionalForestUnit}{Regional forest unit 5 letter or number code}
-  \item{ResourceType}{Resource type code} 
+  \item{ResourceType}{Letter code indicating the resource type} 
 }
 }
 \source{

@@ -1,26 +1,54 @@
-#' Reclassify provincial land cover
+#'Reclassify provincial land cover
 #'
-#' Reclassify provincial land cover classes into resource types used for
-#' \code{caribouHabitat}. The default lookup table \code{plcToResType} is
-#' provided with the package and assumes Ontario 2001 land cover classes.
+#'Reclassify provincial land cover classes into resource types used for
+#'\code{caribouHabitat}. Resource types are groups of land cover classes
+#'expected to be relevant to boreal caribou (Hornseth and Rempel, 2016).
 #'
-#' @param plc raster. Provincial land cover
-#' @param plcLU Lookup table to convert plc classes to resource types
+#'The default lookup table \code{plcToResType} is provided with the package and
+#'assumes Ontario 2001 Provincial Land Cover (PLC) classes. The
+#'\code{fnlcToResType} table for the Ontario Far North Land Cover (FNLC) is
+#'included with the package or you can supply a custom lookup table. The custom
+#'lookup table must have two columns with names "PLCCode" and "ResourceType"
+#'where "PLCCode" is the value in the land cover raster and "ResourceType" is
+#'the corresponding letter code for the resource type. The possible resource
+#'types are included in \code{resTypeCode} and descriptions of these codes can
+#'be found in table S1.3 of [supplementary material](https://osf.io/x6e2q) for
+#'Dyson et. al (2022).
 #'
-#' @return a RasterLayer with classes matching \code{resTypeCode}
+#'@param plc raster. Provincial land cover
+#'@param plcLU Lookup table to convert land cover classes to resource types.
+#'  Options are: \code{plcToResType} for Provincial Land Cover,
+#'  \code{fnlcToResType} for the Ontario Far North Land Cover, or a custom
+#'  lookup table. See Details.
 #'
-#' @examples 
+#'@return a RasterLayer with classes matching \code{resTypeCode}
+#'
+#' @examples
 #' lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
 #' lc[] <- 13 # conifer
 #' lc[1:3, 1:3] <- 1 # open water
 #' lc[3:5, 3:5] <- 11 # deciduous
 #' lc[8:10, 8:10] <- 19 # treed bog
 #' lc[6:7, 6:7] <- 21 #treed fen
-#' 
-#' resTypes <- reclassPLC(lc) 
+#'
+#' resTypes <- reclassPLC(lc)
 #'plot(resTypes)
-#' @rdname reclassPLC
-#' @export
+#'@rdname reclassPLC
+#'
+#'@source Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+#'  woodland caribou (Rangifer tarandus caribou) across a gradient of
+#'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+#'  \url{https://doi.org/10.1139/cjz-2015-0101}
+#'
+#'  Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
+#'  Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
+#'  Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Existing caribou
+#'  habitat and demographic models need improvement for Ring of Fire impact
+#'  assessment: A roadmap for improving the usefulness, transparency, and
+#'  availability of models for conservation.
+#'  \url{https://doi.org/10.1101/2022.06.01.494350}
+#'
+#'@export
 reclassPLC <- function(plc, plcLU = plcToResType){
   if(!is.null(plcLU)){
     # checks types and match names
