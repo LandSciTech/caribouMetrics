@@ -65,16 +65,16 @@ survival and recruitment rates.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">demographicRates</span><span class="op">(</span>
-  <span class="va">covTable</span>,
-  <span class="va">popGrowthPars</span>,
-  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,
-  returnSample <span class="op">=</span> <span class="cn">FALSE</span>,
-  useQuantiles <span class="op">=</span> <span class="cn">TRUE</span>,
-  predInterval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PI_R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>, PI_S <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span>,
-  transformFns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>S_transform <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">{</span>     <span class="op">(</span><span class="va">y</span> <span class="op">*</span> <span class="fl">46</span> <span class="op">-</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">/</span><span class="fl">45</span> <span class="op">}</span>, R_transform
-    <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">{</span>     <span class="va">y</span> <span class="op">}</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">demographicRates</span><span class="op">(</span></span>
+<span>  <span class="va">covTable</span>,</span>
+<span>  <span class="va">popGrowthPars</span>,</span>
+<span>  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  returnSample <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  useQuantiles <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  predInterval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>PI_R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>, PI_S <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  transformFns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>S_transform <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">{</span>     <span class="op">(</span><span class="va">y</span> <span class="op">*</span> <span class="fl">46</span> <span class="op">-</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">/</span><span class="fl">45</span> <span class="op">}</span>, R_transform</span>
+<span>    <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">{</span>     <span class="va">y</span> <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -83,19 +83,27 @@ survival and recruitment rates.</p>
 <dd><p>data.frame. A table of covariate values to be used. Column
 names must match the coefficient names in <code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code>.
 Each row is a different scenario.</p></dd>
+
+
 <dt>popGrowthPars</dt>
 <dd><p>list. Coefficient values and (optionally) quantiles returned by
 <code>demographicCoefficients</code>.</p></dd>
+
+
 <dt>ignorePrecision</dt>
 <dd><p>logical. Should the precision of the model be used if
 it is available? When precision is used variation among populations around the
 National mean responses is considered in addition to the uncertainty about
 the coefficient estimates.</p></dd>
+
+
 <dt>returnSample</dt>
 <dd><p>logical. If TRUE the returned data.frame has replicates *
 scenarios rows. If FALSE the returned data.frame has one row per scenario
 and additional columns summarizing the variation among replicates. See
 Value for details.</p></dd>
+
+
 <dt>useQuantiles</dt>
 <dd><p>logical or numeric. If it is a numeric
 vector it must be length 2 and give the low and high limits of the
@@ -111,21 +119,33 @@ scenario and replicate, so the value for a particular replicate population
 in one scenario is unrelated to the values for that replicate in other
 scenarios. Useful for projecting impacts of changing disturbance on the
 trajectories of replicate populations.</p></dd>
+
+
 <dt>predInterval</dt>
 <dd><p>numeric vector with length 2. The default 95% interval is
 (<code>c(0.025,0.975)</code>). Only relevant when <code>returnSample = TRUE</code> and
 <code>quantilesToUse = NULL</code>.</p></dd>
+
+
 <dt>transformFns</dt>
 <dd><p>list of functions used to transform demographic rates.
 The default is <code>list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})</code>.
 The back transformation is applied to survival rates as in Johnson et al. 2020.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.frame of predictions. The data.frame includes all columns in
-<code>covTable</code> with additional columns depending on <code>returnSample</code>.
-  If <code>returnSample = FALSE</code> the number of rows is the same as the
-  number of rows in <code>covTable</code>, additional columns are:</p><dl><dt>"S_bar" and "R_bar"</dt>
+    
+
+<p>A data.frame of predictions. The data.frame includes all columns in</p>
+<p></p>
+<p><code>covTable</code> with additional columns depending on <code>returnSample</code>.</p>
+
+
+<p>If <code>returnSample = FALSE</code> the number of rows is the same as the
+  number of rows in <code>covTable</code>, additional columns are:</p>
+<p></p>
+<dl><dt>"S_bar" and "R_bar"</dt>
 <dd><p>The mean estimated values of survival and
       recruitment (calves per cow)</p></dd>
 
@@ -139,7 +159,9 @@ The back transformation is applied to survival rates as in Johnson et al. 2020.<
 
   
 </dl><p>If <code>returnSample = TRUE</code> the number of rows is <code>nrow(covTable) *
-   replicates</code> additional columns are:</p><dl><dt>"scnID"</dt>
+   replicates</code> additional columns are:</p>
+<p></p>
+<dl><dt>"scnID"</dt>
 <dd><p>A unique identifier for scenarios provided in
        <code>covTable</code></p></dd>
 
@@ -159,60 +181,60 @@ The back transformation is applied to survival rates as in Johnson et al. 2020.<
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># get coefficient samples</span></span>
-<span class="r-in"><span class="va">coefs</span> <span class="op">&lt;-</span> <span class="fu"><a href="demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># table of different scenarios to test</span></span>
-<span class="r-in"><span class="va">covTableSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, by <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
-<span class="r-in">                           fire_excl_anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span>, by <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">covTableSim</span><span class="op">$</span><span class="va">Total_dist</span> <span class="op">=</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">fire_excl_anthro</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">demographicRates</span><span class="op">(</span><span class="va">covTableSim</span>, <span class="va">coefs</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># get coefficient samples</span></span></span>
+<span class="r-in"><span><span class="va">coefs</span> <span class="op">&lt;-</span> <span class="fu"><a href="demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># table of different scenarios to test</span></span></span>
+<span class="r-in"><span><span class="va">covTableSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, by <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                           fire_excl_anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span>, by <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">covTableSim</span><span class="op">$</span><span class="va">Total_dist</span> <span class="op">=</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">fire_excl_anthro</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">demographicRates</span><span class="op">(</span><span class="va">covTableSim</span>, <span class="va">coefs</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> popGrowthPars contains quantiles so they are used instead of the defaults</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> popGrowthPars contains quantiles so they are used instead of the defaults</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Anthro fire_excl_anthro Total_dist     S_bar   S_stdErr   S_PIlow  S_PIhigh</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       0                0          0 0.8757906 0.04913573 0.7878938 0.9501218</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       0               20         20 0.8757906 0.04913573 0.7878938 0.9501218</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       0               40         40 0.8757906 0.04913573 0.7878938 0.9501218</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       0               60         60 0.8757906 0.04913573 0.7878938 0.9501218</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      20                0         20 0.8617131 0.05187088 0.7675453 0.9426161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      20               20         40 0.8617131 0.05187088 0.7675453 0.9426161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7      20               40         60 0.8617131 0.05187088 0.7675453 0.9426161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      20               60         80 0.8617131 0.05187088 0.7675453 0.9426161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      40                0         40 0.8478591 0.05447815 0.7479864 0.9349983</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     40               20         60 0.8478591 0.05447815 0.7479864 0.9349983</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11     40               40         80 0.8478591 0.05447815 0.7479864 0.9349983</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12     40               60        100 0.8478591 0.05447815 0.7479864 0.9349983</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13     60                0         60 0.8342249 0.05696610 0.7291330 0.9272944</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14     60               20         80 0.8342249 0.05696610 0.7291330 0.9272944</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15     60               40        100 0.8342249 0.05696610 0.7291330 0.9272944</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16     60               60        120 0.8342249 0.05696610 0.7291330 0.9272944</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17     80                0         80 0.8208071 0.05934186 0.7109204 0.9195255</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18     80               20        100 0.8208071 0.05934186 0.7109204 0.9195255</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19     80               40        120 0.8208071 0.05934186 0.7109204 0.9195255</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20     80               60        140 0.8208071 0.05934186 0.7109204 0.9195255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       0                0          0 0.8757906 0.04422913 0.7918240 0.9410258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       0               20         20 0.8757906 0.04422913 0.7918240 0.9410258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       0               40         40 0.8757906 0.04422913 0.7918240 0.9410258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       0               60         60 0.8757906 0.04422913 0.7918240 0.9410258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      20                0         20 0.8617131 0.04635710 0.7738013 0.9314396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      20               20         40 0.8617131 0.04635710 0.7738013 0.9314396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      20               40         60 0.8617131 0.04635710 0.7738013 0.9314396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      20               60         80 0.8617131 0.04635710 0.7738013 0.9314396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      40                0         40 0.8478591 0.04842528 0.7563872 0.9217527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     40               20         60 0.8478591 0.04842528 0.7563872 0.9217527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     40               40         80 0.8478591 0.04842528 0.7563872 0.9217527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     40               60        100 0.8478591 0.04842528 0.7563872 0.9217527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13     60                0         60 0.8342249 0.05043160 0.7395245 0.9119995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14     60               20         80 0.8342249 0.05043160 0.7395245 0.9119995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15     60               40        100 0.8342249 0.05043160 0.7395245 0.9119995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16     60               60        120 0.8342249 0.05043160 0.7395245 0.9119995</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17     80                0         80 0.8208071 0.05237486 0.7231682 0.9022071</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18     80               20        100 0.8208071 0.05237486 0.7231682 0.9022071</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19     80               40        120 0.8208071 0.05237486 0.7231682 0.9022071</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20     80               60        140 0.8208071 0.05237486 0.7231682 0.9022071</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         R_bar   R_stdErr     R_PIlow  R_PIhigh</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.35951478 0.11275372 0.196410771 0.5729094</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.30574618 0.11131971 0.147693510 0.5248182</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.26001915 0.11059463 0.109911096 0.4809559</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.22113100 0.10947526 0.080733055 0.4410383</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.25589195 0.10251235 0.112610462 0.4642001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.21762106 0.09936074 0.082811708 0.4258058</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.18507391 0.09669396 0.059942083 0.3909267</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.15739448 0.09393292 0.042555896 0.3592601</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.18213629 0.09092106 0.061565153 0.3776275</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.15489621 0.08710966 0.043782963 0.3471882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 0.13173012 0.08365741 0.030420063 0.3195574</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 0.11202872 0.08025341 0.020541655 0.2944694</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 0.12963921 0.07944884 0.031356879 0.3090225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 0.11025053 0.07553305 0.021227661 0.2849006</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0.09376159 0.07190452 0.013884319 0.2629802</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 0.07973872 0.06839356 0.008704364 0.2430423</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0.09227334 0.06877135 0.014388561 0.2546128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 0.07847305 0.06504106 0.009054439 0.2354258</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 0.06673672 0.06155429 0.005411845 0.2179454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 0.05675565 0.05821692 0.003034939 0.2019965</span>
-<span class="r-in"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.35951478 0.12831531 0.169767828 0.6234365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.30574618 0.12858830 0.128580135 0.5572356</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.26001915 0.12788578 0.096313110 0.4982535</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.22113100 0.12597052 0.071164550 0.4459502</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.25589195 0.11789577 0.095400348 0.5178451</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.21762106 0.11468007 0.070455800 0.4633037</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.18507391 0.11132873 0.051170469 0.4150298</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  0.15739448 0.10759945 0.036419584 0.3723735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.18213629 0.10642451 0.050629889 0.4310396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.15489621 0.10157580 0.036008986 0.3865156</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 0.13173012 0.09696651 0.024988175 0.3471907</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 0.11202872 0.09240015 0.016832335 0.3124555</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 0.12963921 0.09477791 0.024684283 0.3602279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 0.11025053 0.08936509 0.016610085 0.3239731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0.09376159 0.08434081 0.010779150 0.2919352</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 0.07973872 0.07955580 0.006694248 0.2635885</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0.09227334 0.08361104 0.010622737 0.3025609</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 0.07847305 0.07822053 0.006586804 0.2729950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 0.06673672 0.07325829 0.003870598 0.2468054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 0.05675565 0.06861222 0.002130852 0.2235545</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -227,7 +249,7 @@ The back transformation is applied to survival rates as in Johnson et al. 2020.<
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

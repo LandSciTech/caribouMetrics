@@ -67,15 +67,15 @@ winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">caribouHabitat</span><span class="op">(</span>
-  landCover <span class="op">=</span> <span class="cn">NULL</span>,
-  esker <span class="op">=</span> <span class="cn">NULL</span>,
-  linFeat <span class="op">=</span> <span class="cn">NULL</span>,
-  projectPoly <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">caribouRange</span>,
-  coefTable <span class="op">=</span> <span class="va">coefTableHR</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">caribouHabitat</span><span class="op">(</span></span>
+<span>  landCover <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  esker <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  linFeat <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  projectPoly <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">caribouRange</span>,</span>
+<span>  coefTable <span class="op">=</span> <span class="va">coefTableHR</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="source">
@@ -93,20 +93,28 @@ winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
     <h2>Arguments</h2>
     <dl><dt>landCover</dt>
 <dd><p>filename or RasterLayer. Provincial landcover class</p></dd>
+
+
 <dt>esker</dt>
 <dd><p>filename, RasterLayer or sf object. Eskers. If it is a
 RasterLayer then it should be esker density in m^2/ha.</p></dd>
+
+
 <dt>linFeat</dt>
 <dd><p>filename, RasterLayer, sf object or a list of these that will
 be combined. Linear features. If it is a RasterLayer then it should be
 linear feature density in m^2/ha. If a RasterLayer is provided as a list
 element then ptDensity will be used to assign a density of linear features
 in the pixel (default is 1).</p></dd>
+
+
 <dt>projectPoly</dt>
 <dd><p>filename or sf object. Polygon defining the project area.
 If caribouRange is a data.frame this must have a column called Range with
 the name of the caribou range represented by the polygon which corresponds
 to the Range column in the caribouRange data.frame</p></dd>
+
+
 <dt>caribouRange</dt>
 <dd><p>character or data.frame. If character the range where
 caribou were located. See <code>unique(coefTableHR$Range)</code> for options. If
@@ -114,9 +122,13 @@ data.frame it must have two columns Range and coefRange. Range is the name
 of the geographical area and is used to link the table to the provided
 <code>projectPoly</code> polygons. coefRange is the name of the caribou range that
 the coefficients should be used from.</p></dd>
+
+
 <dt>coefTable</dt>
 <dd><p>data.frame. table of coefficients to be used in the
 model. Must match the format and naming of the default <code>coefTableHR</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>optional arguments:</p><dl><dt>natDist:</dt>
 <dd><p>filename or RasterLayer. Presence or absence of natural 
@@ -144,7 +156,7 @@ model. Must match the format and naming of the default <code>coefTableHR</code><
 
   <dt>padFocal</dt>
 <dd><p>logical. This value is passed to the pad argument in
-  <code><a href="https://rdrr.io/pkg/raster/man/focal.html" class="external-link">raster::focal</a></code>, if it is FALSE then cells near the edge will return
+  <code><a href="https://rdrr.io/pkg/terra/man/focal.html" class="external-link">raster::focal</a></code>, if it is FALSE then cells near the edge will return
   NA, if it is TRUE a value will be returned for each cell that assumes cells
   outside the input data are 0 for all resource types. This is not a good
   assumption and should be used with caution.</p></dd>
@@ -180,10 +192,15 @@ model. Must match the format and naming of the default <code>coefTableHR</code><
 
 
 </dl></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A CaribouHabitat Object see <code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code></p>
+    
+
+<p>A CaribouHabitat Object see <code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code></p>
+
+
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -206,50 +223,50 @@ CaribouHabitat object with new data see <a href="updateCaribou.html">updateCarib
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># create example rasters</span></span>
-<span class="r-in"><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span>xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">25000</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">25000</span>, </span>
-<span class="r-in">                     resolution <span class="op">=</span> <span class="fl">250</span>, crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span class="r-in"><span class="va">nd</span> <span class="op">&lt;-</span> <span class="va">lc</span></span>
-<span class="r-in"><span class="va">nd</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span class="r-in"><span class="va">ad</span> <span class="op">&lt;-</span> <span class="va">lc</span></span>
-<span class="r-in"><span class="va">ad</span><span class="op">[</span><span class="fl">30</span><span class="op">:</span><span class="fl">50</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span class="r-in"><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span class="r-in"><span class="va">lc</span><span class="op">[</span><span class="fl">70</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">70</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># create sf objects</span></span>
-<span class="r-in"><span class="va">lf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">10000</span>, <span class="fl">10000</span><span class="op">)</span>,</span>
-<span class="r-in">                                                            ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                              crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">esk</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span>, <span class="fl">10000</span>, <span class="fl">0</span><span class="op">)</span>,</span>
-<span class="r-in">                                                            ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                              crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">projPol</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">ad</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># calculate relative probability of use</span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">caribouHabitat</span><span class="op">(</span>landCover <span class="op">=</span> <span class="va">lc</span>,</span>
-<span class="r-in">               linFeat <span class="op">=</span> <span class="va">lf</span>,</span>
-<span class="r-in">               esker <span class="op">=</span> <span class="va">esk</span>,</span>
-<span class="r-in">               natDist <span class="op">=</span> <span class="va">nd</span>,</span>
-<span class="r-in">               anthroDist <span class="op">=</span> <span class="va">ad</span>,</span>
-<span class="r-in">               projectPoly <span class="op">=</span> <span class="va">projPol</span>,</span>
-<span class="r-in">               caribouRange <span class="op">=</span> <span class="st">"Nipigon"</span>,</span>
-<span class="r-in">               winArea <span class="op">=</span> <span class="fl">1000</span> <span class="co">#leave as default NULL except for small examples</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># create example rasters</span></span></span>
+<span class="r-in"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span>xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">25000</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">25000</span>, </span></span>
+<span class="r-in"><span>                     resolution <span class="op">=</span> <span class="fl">250</span>, crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="va">nd</span> <span class="op">&lt;-</span> <span class="va">lc</span></span></span>
+<span class="r-in"><span><span class="va">nd</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">ad</span> <span class="op">&lt;-</span> <span class="va">lc</span></span></span>
+<span class="r-in"><span><span class="va">ad</span><span class="op">[</span><span class="fl">30</span><span class="op">:</span><span class="fl">50</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">lc</span><span class="op">[</span><span class="fl">70</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">70</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create sf objects</span></span></span>
+<span class="r-in"><span><span class="va">lf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">10000</span>, <span class="fl">10000</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                                            ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                              crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">esk</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span>, <span class="fl">10000</span>, <span class="fl">0</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                                            ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                              crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">projPol</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">ad</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># calculate relative probability of use</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">caribouHabitat</span><span class="op">(</span>landCover <span class="op">=</span> <span class="va">lc</span>,</span></span>
+<span class="r-in"><span>               linFeat <span class="op">=</span> <span class="va">lf</span>,</span></span>
+<span class="r-in"><span>               esker <span class="op">=</span> <span class="va">esk</span>,</span></span>
+<span class="r-in"><span>               natDist <span class="op">=</span> <span class="va">nd</span>,</span></span>
+<span class="r-in"><span>               anthroDist <span class="op">=</span> <span class="va">ad</span>,</span></span>
+<span class="r-in"><span>               projectPoly <span class="op">=</span> <span class="va">projPol</span>,</span></span>
+<span class="r-in"><span>               caribouRange <span class="op">=</span> <span class="st">"Nipigon"</span>,</span></span>
+<span class="r-in"><span>               winArea <span class="op">=</span> <span class="fl">1000</span> <span class="co">#leave as default NULL except for small examples</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Applying moving window.</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot the relative probability of use</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot the relative probability of use</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="caribouHabitat-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot the predictor variables</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="results.html">results</a></span><span class="op">(</span><span class="va">res</span>, type <span class="op">=</span><span class="st">"processedData"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot the predictor variables</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="results.html">results</a></span><span class="op">(</span><span class="va">res</span>, type <span class="op">=</span><span class="st">"processedData"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="caribouHabitat-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -264,7 +281,7 @@ CaribouHabitat object with new data see <a href="updateCaribou.html">updateCarib
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

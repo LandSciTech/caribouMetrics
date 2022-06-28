@@ -86,13 +86,13 @@ overlapping with anthropogenic disturbance.</p></li>
 </ul></div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">disturbanceMetrics</span><span class="op">(</span>
-  landCover <span class="op">=</span> <span class="cn">NULL</span>,
-  linFeat <span class="op">=</span> <span class="cn">NULL</span>,
-  projectPoly <span class="op">=</span> <span class="cn">NULL</span>,
-  isPercent <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">disturbanceMetrics</span><span class="op">(</span></span>
+<span>  landCover <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  linFeat <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  projectPoly <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  isPercent <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="source">
@@ -107,13 +107,21 @@ overlapping with anthropogenic disturbance.</p></li>
 <dd><p>filename or RasterLayer. 0 and NA values are assumed to be
 water and omitted from the tabulated area. Note landCover is also used to
 define the input grid, so must be provided even if all values are 1.</p></dd>
+
+
 <dt>linFeat</dt>
 <dd><p>filename, RasterLayer, sf object or a list of these that will
 be combined. Linear features.</p></dd>
+
+
 <dt>projectPoly</dt>
 <dd><p>filename or sf object. Polygons defining range boundaries.</p></dd>
+
+
 <dt>isPercent</dt>
 <dd><p>logical. Should the results be returned as a percentage?</p></dd>
+
+
 <dt>...</dt>
 <dd><p>optional arguments:</p><dl><dt>natDist</dt>
 <dd><p>filename or RasterLayer. Presence or absence of natural
@@ -136,7 +144,7 @@ be combined. Linear features.</p></dd>
 
   <dt>padFocal</dt>
 <dd><p>logical. This value is passed to the pad argument in
-  <code><a href="https://rdrr.io/pkg/raster/man/focal.html" class="external-link">raster::focal</a></code>, if it is FALSE then cells near the edge will return
+  <code><a href="https://rdrr.io/pkg/terra/man/focal.html" class="external-link">raster::focal</a></code>, if it is FALSE then cells near the edge will return
   NA, if it is TRUE a value will be returned for each cell that assumes cells
   outside the input data are 0 for all resource types. This is not a good
   assumption and should be used with caution.</p></dd>
@@ -167,10 +175,15 @@ be combined. Linear features.</p></dd>
 
 
 </dl></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A DisturbanceMetrics Object see <code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class</a></code></p>
+    
+
+<p>A DisturbanceMetrics Object see <code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class</a></code></p>
+
+
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -189,28 +202,28 @@ disturbance. To update an existing DisturbanceMetrics object with new data see
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># create example rasters</span></span>
-<span class="r-in"><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span>nrows <span class="op">=</span> <span class="fl">10</span>, ncols <span class="op">=</span> <span class="fl">10</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">10</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">10</span>, crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">nd</span> <span class="op">&lt;-</span> <span class="va">lc</span></span>
-<span class="r-in"><span class="va">nd</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span class="r-in"><span class="va">ad</span> <span class="op">&lt;-</span> <span class="va">lc</span></span>
-<span class="r-in"><span class="va">ad</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span class="r-in"><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># create sf objects</span></span>
-<span class="r-in"><span class="va">lf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>, </span>
-<span class="r-in">                                                            ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                              crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">projPol</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">ad</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># calculate disturbance</span></span>
-<span class="r-in"><span class="fu">disturbanceMetrics</span><span class="op">(</span>landCover <span class="op">=</span> <span class="va">lc</span>,</span>
-<span class="r-in">                   linFeat <span class="op">=</span> <span class="va">lf</span>,</span>
-<span class="r-in">                   natDist <span class="op">=</span> <span class="va">nd</span>,</span>
-<span class="r-in">                   anthroDist <span class="op">=</span> <span class="va">ad</span>,</span>
-<span class="r-in">                   projectPoly <span class="op">=</span> <span class="va">projPol</span>,</span>
-<span class="r-in">                   padFocal <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">                   bufferWidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># create example rasters</span></span></span>
+<span class="r-in"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span>nrows <span class="op">=</span> <span class="fl">10</span>, ncols <span class="op">=</span> <span class="fl">10</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">10</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">10</span>, crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">nd</span> <span class="op">&lt;-</span> <span class="va">lc</span></span></span>
+<span class="r-in"><span><span class="va">nd</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">ad</span> <span class="op">&lt;-</span> <span class="va">lc</span></span></span>
+<span class="r-in"><span><span class="va">ad</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create sf objects</span></span></span>
+<span class="r-in"><span><span class="va">lf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>                                                            ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                              crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">projPol</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">ad</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># calculate disturbance</span></span></span>
+<span class="r-in"><span><span class="fu">disturbanceMetrics</span><span class="op">(</span>landCover <span class="op">=</span> <span class="va">lc</span>,</span></span>
+<span class="r-in"><span>                   linFeat <span class="op">=</span> <span class="va">lf</span>,</span></span>
+<span class="r-in"><span>                   natDist <span class="op">=</span> <span class="va">nd</span>,</span></span>
+<span class="r-in"><span>                   anthroDist <span class="op">=</span> <span class="va">ad</span>,</span></span>
+<span class="r-in"><span>                   projectPoly <span class="op">=</span> <span class="va">projPol</span>,</span></span>
+<span class="r-in"><span>                   padFocal <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>                   bufferWidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> buffering anthropogenic disturbance</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> calculating disturbance metrics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class "DisturbanceMetrics"</span>
@@ -294,8 +307,8 @@ disturbance. To update an existing DisturbanceMetrics object with new data see
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -310,7 +323,7 @@ disturbance. To update an existing DisturbanceMetrics object with new data see
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

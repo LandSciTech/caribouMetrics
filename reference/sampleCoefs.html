@@ -65,7 +65,7 @@ coefficient and standard error</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">sampleCoefs</span><span class="op">(</span><span class="va">coefTable</span>, <span class="va">replicates</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sampleCoefs</span><span class="op">(</span><span class="va">coefTable</span>, <span class="va">replicates</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -74,12 +74,19 @@ coefficient and standard error</p>
 <dd><p>data.table. Table of must have columns "Coefficient" for the
 name of the coefficient, "Value" for the value of the coefficient and
 "StdErr" for the standard error of coefficients</p></dd>
+
+
 <dt>replicates</dt>
 <dd><p>number of samples to take.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list with elements:</p><dl><dt>"coefSamples"</dt>
+    
+
+<p>A list with elements:</p>
+<p></p>
+<dl><dt>"coefSamples"</dt>
 <dd><p>Bootstrapped coefficients with <code>replicates</code> 
         rows</p></dd>
 
@@ -92,27 +99,27 @@ name of the coefficient, "Value" for the value of the coefficient and
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">cfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="getCoefs.html">getCoefs</a></span><span class="op">(</span><span class="va">popGrowthTableJohnsonECCC</span>, <span class="st">"recruitment"</span>, <span class="st">"Johnson"</span>, <span class="st">"M3"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">sampleCoefs</span><span class="op">(</span><span class="va">cfs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">cfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="getCoefs.html">getCoefs</a></span><span class="op">(</span><span class="va">popGrowthTableJohnsonECCC</span>, <span class="st">"recruitment"</span>, <span class="st">"Johnson"</span>, <span class="st">"M3"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">sampleCoefs</span><span class="op">(</span><span class="va">cfs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Intercept  Total_dist</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.9929294 -0.01489848</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -0.9320556 -0.01543903</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.9754252 -0.01654130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.9529751 -0.01614390</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.9813520 -0.01541747</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.8571727 -0.01216496</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -1.0442787 -0.01309771</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.9411271 -0.01445513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.9488438 -0.01621184</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.9786663 -0.01734361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.9235809 -0.01696414</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -1.0202605 -0.01756805</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.9739460 -0.01381314</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.9663985 -0.01692130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.9145620 -0.01287475</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.9514614 -0.01245722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.9225664 -0.01414370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.9758614 -0.01474436</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.9250085 -0.01445740</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.9504038 -0.01624331</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefValues</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Intercept Total_dist</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    -0.956     -0.015</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -127,7 +134,7 @@ name of the coefficient, "Value" for the value of the coefficient and
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

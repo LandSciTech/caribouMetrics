@@ -92,53 +92,53 @@
 </h2>
 <p>This vignette gives details on the use of the <code>disturbanceMetrics</code>, <code>demographicCoefficients</code>, <code>demographicRates</code>, and <code>popGrowthJohnson</code> functions. Together, these functions represent an implementation of the aspatial caribou demographic model developed by Johnson et al. (<a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link">2020</a>), and modified by Dyson et al. (in prep) and Stewart et al. (in prep).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="disturbance-metrics">Disturbance metrics<a class="anchor" aria-label="anchor" href="#disturbance-metrics"></a>
 </h2>
 <p>The example data set loaded below includes a small area in the Nipigon caribou range that we will use as an example.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># load example data and classify plc into Resource Types</span>
-<span class="va">landCoverD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/reclassPLC.html">reclassPLC</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">natDistD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">anthroDistD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">linFeatDras</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"linFeatTif.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">projectPolyD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"projectPoly.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">linFeatDshp</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"roads.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">roadsD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"roads.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">railD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"rail.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">utilitiesD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"utilities.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># load example data and classify plc into Resource Types</span></span>
+<span><span class="va">landCoverD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/reclassPLC.html">reclassPLC</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">natDistD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">anthroDistD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">linFeatDras</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"linFeatTif.tif"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">projectPolyD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"projectPoly.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">linFeatDshp</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"roads.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">roadsD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"roads.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">railD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"rail.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">utilitiesD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"utilities.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><code>disturbanceMetrics</code> will prepare the data and then calculate disturbance metrics used as predictor variables by Johnson et al. (2020). The function can be run in several different ways, and the simplest is to provide spatial objects for each input.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">disturbance</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span>
-  landCover<span class="op">=</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span>,
-  natDist <span class="op">=</span> <span class="va">natDistD</span>,
-  anthroDist <span class="op">=</span> <span class="va">anthroDistD</span>,
-  linFeat <span class="op">=</span> <span class="va">linFeatDras</span>,
-  projectPoly <span class="op">=</span> <span class="va">projectPolyD</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">disturbance</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span></span>
+<span>  landCover<span class="op">=</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span>,</span>
+<span>  natDist <span class="op">=</span> <span class="va">natDistD</span>,</span>
+<span>  anthroDist <span class="op">=</span> <span class="va">anthroDistD</span>,</span>
+<span>  linFeat <span class="op">=</span> <span class="va">linFeatDras</span>,</span>
+<span>  projectPoly <span class="op">=</span> <span class="va">projectPolyD</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></span></code></pre></div>
 <p><img src="caribouDemography_files/figure-html/plotDisturbance-1.png" width="768"> Multiple linear feature inputs can also be provided in vector form. See <code>vignette("caribouHabitat", package = "caribouMetrics")</code> for other data processing and input options.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">disturbanceV</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span>
-  landCover<span class="op">=</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span>,
-  natDist <span class="op">=</span> <span class="va">natDistD</span>,
-  anthroDist <span class="op">=</span> <span class="va">anthroDistD</span>,
-  linFeat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>roads <span class="op">=</span> <span class="va">roadsD</span>, rail <span class="op">=</span> <span class="va">railD</span>, utilities <span class="op">=</span> <span class="va">utilitiesD</span><span class="op">)</span>,
-  projectPoly <span class="op">=</span> <span class="va">projectPolyD</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">disturbanceV</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span></span>
+<span>  landCover<span class="op">=</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span>,</span>
+<span>  natDist <span class="op">=</span> <span class="va">natDistD</span>,</span>
+<span>  anthroDist <span class="op">=</span> <span class="va">anthroDistD</span>,</span>
+<span>  linFeat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>roads <span class="op">=</span> <span class="va">roadsD</span>, rail <span class="op">=</span> <span class="va">railD</span>, utilities <span class="op">=</span> <span class="va">utilitiesD</span><span class="op">)</span>,</span>
+<span>  projectPoly <span class="op">=</span> <span class="va">projectPolyD</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbanceV</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbanceV</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></span></code></pre></div>
 <p><img src="caribouDemography_files/figure-html/plotDisturbanceVector-1.png" width="768"></p>
 </div>
 <div class="section level2">
@@ -146,32 +146,32 @@
 </h2>
 <p>A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. We begin by sampling coefficients for 500 replicate populations using default models M1 and M4. Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting <code>returnSample = TRUE</code> so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the <code>popGrowthJohnson</code> function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but uncertainty in the model means that a few sample populations persist.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R">   <span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span>
-   <span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>
-          covTable <span class="op">=</span> <span class="va">disturbanceV</span><span class="op">@</span><span class="va">disturbanceMetrics</span>,
-          popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,
-          ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,
-          returnSample <span class="op">=</span> <span class="cn">TRUE</span>,
-          useQuantiles <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>     
-   <span class="va">rateSamples</span><span class="op">$</span><span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span>
-   <span class="va">demography</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">rateSamples</span>,
-                       <span class="fu"><a href="../reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span>N <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">N0</span>,
-                                        numSteps <span class="op">=</span> <span class="fl">20</span>,
-                                        R_bar <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">R_bar</span>,
-                                        S_bar <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span>   <span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></span>
+<span>   <span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span>          covTable <span class="op">=</span> <span class="va">disturbanceV</span><span class="op">@</span><span class="va">disturbanceMetrics</span>,</span>
+<span>          popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,</span>
+<span>          ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>          returnSample <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>          useQuantiles <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>     </span>
+<span>   <span class="va">rateSamples</span><span class="op">$</span><span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span>   <span class="va">demography</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">rateSamples</span>,</span>
+<span>                       <span class="fu"><a href="../reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span>N <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">N0</span>,</span>
+<span>                                        numSteps <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>                                        R_bar <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">R_bar</span>,</span>
+<span>                                        S_bar <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">demography</span>, <span class="op">!</span><span class="op">(</span><span class="va">scnID</span><span class="op">:</span><span class="va">replicate</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="va">N0</span>, names_to <span class="op">=</span> <span class="st">"Metric"</span>,
-                    values_to <span class="op">=</span> <span class="st">"Amount"</span><span class="op">)</span>
-<span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">fds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Anthro</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">Amount</span>, 
-                      colour <span class="op">=</span> <span class="va">fire_excl_anthro</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">2</span>, position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_jitterdodge.html" class="external-link">position_jitterdodge</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Metric</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Anthro"</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/raster/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span></span>
+<span><span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">demography</span>, <span class="op">!</span><span class="op">(</span><span class="va">scnID</span><span class="op">:</span><span class="va">replicate</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="va">N0</span>, names_to <span class="op">=</span> <span class="st">"Metric"</span>,</span>
+<span>                    values_to <span class="op">=</span> <span class="st">"Amount"</span><span class="op">)</span></span>
+<span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">fds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Anthro</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">Amount</span>, </span>
+<span>                      colour <span class="op">=</span> <span class="va">fire_excl_anthro</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">2</span>, position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_jitterdodge.html" class="external-link">position_jitterdodge</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Metric</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Anthro"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="caribouDemography_files/figure-html/plotSimpleDemography-1.png" width="768"></p>
 </div>
 <div class="section level2">
@@ -179,51 +179,51 @@
 </h2>
 <p>We can project demographic rates over a range of landscape conditions to recreate figures 3 and 5 from Johnson et al. (2020) and see the effects of changing disturbance on model behaviour. First we create a table of disturbance scenarios across a range of different levels of fire and anthropogenic disturbance.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">covTableSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, 
-                           fire_excl_anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span>, by <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span> 
-<span class="va">covTableSim</span><span class="op">$</span><span class="va">Total_dist</span> <span class="op">=</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">fire_excl_anthro</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">covTableSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, </span>
+<span>                           fire_excl_anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span>, by <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="va">covTableSim</span><span class="op">$</span><span class="va">Total_dist</span> <span class="op">=</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">fire_excl_anthro</span></span></code></pre></div>
 <p>We again sample coefficients from default models M1 and M4. The sample of 500 is used to calculate averages, while the sample of 35 is used to show variability among populations.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span>
-  <span class="fl">500</span>,
-  modelVersion <span class="op">=</span> <span class="st">"Johnson"</span>,
-  survivalModelNumber <span class="op">=</span> <span class="st">"M1"</span>,
-  recruitmentModelNumber <span class="op">=</span> <span class="st">"M4"</span>,
-  populationGrowthTable <span class="op">=</span> <span class="va">popGrowthTableJohnsonECCC</span>
-<span class="op">)</span>
-
-<span class="va">popGrowthParsSmall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span>
-  <span class="fl">35</span>,
-  modelVersion <span class="op">=</span> <span class="st">"Johnson"</span>,
-  survivalModelNumber <span class="op">=</span> <span class="st">"M1"</span>,
-  recruitmentModelNumber <span class="op">=</span> <span class="st">"M4"</span>,
-  populationGrowthTable <span class="op">=</span> <span class="va">popGrowthTableJohnsonECCC</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span></span>
+<span>  <span class="fl">500</span>,</span>
+<span>  modelVersion <span class="op">=</span> <span class="st">"Johnson"</span>,</span>
+<span>  survivalModelNumber <span class="op">=</span> <span class="st">"M1"</span>,</span>
+<span>  recruitmentModelNumber <span class="op">=</span> <span class="st">"M4"</span>,</span>
+<span>  populationGrowthTable <span class="op">=</span> <span class="va">popGrowthTableJohnsonECCC</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">popGrowthParsSmall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span></span>
+<span>  <span class="fl">35</span>,</span>
+<span>  modelVersion <span class="op">=</span> <span class="st">"Johnson"</span>,</span>
+<span>  survivalModelNumber <span class="op">=</span> <span class="st">"M1"</span>,</span>
+<span>  recruitmentModelNumber <span class="op">=</span> <span class="st">"M4"</span>,</span>
+<span>  populationGrowthTable <span class="op">=</span> <span class="va">popGrowthTableJohnsonECCC</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Next we calculate demographic rates given sampled model coefficients. For the smaller sample we set <code>returnSample = TRUE</code> so that the results returned contain a row for each sample in each scenario. Setting <code>useQuantiles = TRUE</code> assigns each sample population to a quantile of the regression model error distributions for survival and recruitment, which allows us to see how demographic rates change. For the larger sample we set <code>returnSample = FALSE</code> and the result has one row for each scenario and includes summary statistics of the uncertainty across the samples. We do this twice, once with <code>ignorePrecision = TRUE</code> and once with <code>ignorePrecision = FALSE</code> to demonstrate the effect of considering the variance among populations around the National mean in addition to the uncertainty about the coefficient estimates.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>
-  covTable <span class="op">=</span> <span class="va">covTableSim</span>,
-  popGrowthPars <span class="op">=</span> <span class="va">popGrowthParsSmall</span>,
-  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,
-  returnSample <span class="op">=</span> <span class="cn">TRUE</span>,
-  useQuantiles <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="va">rateSummaries</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>
-  covTable <span class="op">=</span> <span class="va">covTableSim</span>,
-  popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,
-  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,
-  returnSample <span class="op">=</span> <span class="cn">FALSE</span>,
-  useQuantiles <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="va">rateSummariesIgnorePrecision</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>
-  covTable <span class="op">=</span> <span class="va">covTableSim</span>,
-  popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,
-  ignorePrecision <span class="op">=</span> <span class="cn">TRUE</span>,
-  returnSample <span class="op">=</span> <span class="cn">FALSE</span>,
-  useQuantiles <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
+<span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthParsSmall</span>,</span>
+<span>  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  returnSample <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  useQuantiles <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rateSummaries</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
+<span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,</span>
+<span>  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  returnSample <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  useQuantiles <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rateSummariesIgnorePrecision</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
+<span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,</span>
+<span>  ignorePrecision <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  returnSample <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  useQuantiles <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="no-precision">No precision<a class="anchor" aria-label="anchor" href="#no-precision"></a>
 </h3>
@@ -240,51 +240,51 @@
 </h2>
 <p>In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade. We set <code>interannualVar = FALSE</code>, <code>K = FALSE</code>, and <code>probOption = "continuous"</code> to use a simpler 2-stage demographic model without interannual variability, density dependence, or discrete numbers of animals, as in Stewart et al. in prep.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">numTimesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span>
-<span class="va">stepLength</span> <span class="op">&lt;-</span> <span class="fl">10</span>
-<span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span>
-<span class="va">AnthroChange</span> <span class="op">&lt;-</span> <span class="fl">5</span> <span class="co">#For illustration assume 5% increase in anthropogenic disturbance footprint each decade</span>
-
-<span class="co"># at each time,  sample demographic rates and project, save results</span>
-<span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>N0 <span class="op">=</span> <span class="va">N0</span><span class="op">)</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">t</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">numTimesteps</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">covariates</span> <span class="op">&lt;-</span> <span class="va">disturbanceV</span><span class="op">@</span><span class="va">disturbanceMetrics</span>
-  <span class="va">covariates</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">&lt;-</span> <span class="va">covariates</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">AnthroChange</span> <span class="op">*</span> <span class="op">(</span><span class="va">t</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>
-
-  <span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>
-    covTable <span class="op">=</span> <span class="va">covariates</span>,
-    popGrowthPars <span class="op">=</span> <span class="va">popGrowthParsSmall</span>,
-    ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,
-    returnSample <span class="op">=</span> <span class="cn">TRUE</span>,
-    useQuantiles <span class="op">=</span> <span class="cn">TRUE</span>
-  <span class="op">)</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">is.element</a></span><span class="op">(</span><span class="st">"N"</span>, <span class="fu"><a href="https://rdrr.io/pkg/raster/man/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pars</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">replicate</span>, <span class="va">N</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/raster/man/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"N0"</span>
-  <span class="op">}</span>
-  <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">pars</span>, <span class="va">rateSamples</span><span class="op">)</span>
-  <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">pars</span>, 
-                <span class="fu"><a href="../reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">N0</span>,
-                                 R_bar <span class="op">=</span> <span class="va">pars</span><span class="op">$</span><span class="va">R_bar</span>, S_bar <span class="op">=</span> <span class="va">pars</span><span class="op">$</span><span class="va">S_bar</span>,
-                                 numSteps <span class="op">=</span> <span class="va">stepLength</span>, interannualVar <span class="op">=</span> <span class="cn">FALSE</span>, 
-                                 K <span class="op">=</span> <span class="cn">FALSE</span>, probOption <span class="op">=</span> <span class="st">"continuous"</span><span class="op">)</span><span class="op">)</span>
-
-  <span class="co"># add results to output set</span>
-  <span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pars</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">replicate</span>, <span class="va">Anthro</span>, <span class="va">S_bar</span>, <span class="va">R_bar</span>, <span class="va">N</span>, <span class="va">lambda</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">fds</span><span class="op">$</span><span class="va">replicate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="st">""</span>, <span class="va">fds</span><span class="op">$</span><span class="va">replicate</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/raster/man/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">fds</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Replicate"</span>, <span class="st">"anthro"</span>, <span class="st">"survival"</span>, <span class="st">"recruitment"</span>, <span class="st">"N"</span>, <span class="st">"lambda"</span><span class="op">)</span>
-  <span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">fds</span>, <span class="op">!</span><span class="va">Replicate</span>, names_to <span class="op">=</span> <span class="st">"MetricTypeID"</span>, values_to <span class="op">=</span> <span class="st">"Amount"</span><span class="op">)</span>
-  <span class="va">fds</span><span class="op">$</span><span class="va">Timestep</span> <span class="op">&lt;-</span> <span class="va">t</span> <span class="op">*</span> <span class="va">stepLength</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="va">t</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="va">fds</span>
-  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-    <span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">popMetrics</span>, <span class="va">fds</span><span class="op">)</span>
-  <span class="op">}</span>
-<span class="op">}</span>
-
-<span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/as.character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeID</span><span class="op">)</span>
-<span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span><span class="op">)</span>
-<span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">popMetrics</span>, <span class="op">!</span><span class="va">MetricTypeID</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">numTimesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
+<span><span class="va">stepLength</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">AnthroChange</span> <span class="op">&lt;-</span> <span class="fl">5</span> <span class="co">#For illustration assume 5% increase in anthropogenic disturbance footprint each decade</span></span>
+<span></span>
+<span><span class="co"># at each time,  sample demographic rates and project, save results</span></span>
+<span><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>N0 <span class="op">=</span> <span class="va">N0</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">t</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">numTimesteps</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">covariates</span> <span class="op">&lt;-</span> <span class="va">disturbanceV</span><span class="op">@</span><span class="va">disturbanceMetrics</span></span>
+<span>  <span class="va">covariates</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">&lt;-</span> <span class="va">covariates</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">AnthroChange</span> <span class="op">*</span> <span class="op">(</span><span class="va">t</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span>    covTable <span class="op">=</span> <span class="va">covariates</span>,</span>
+<span>    popGrowthPars <span class="op">=</span> <span class="va">popGrowthParsSmall</span>,</span>
+<span>    ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    returnSample <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    useQuantiles <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">is.element</a></span><span class="op">(</span><span class="st">"N"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pars</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">replicate</span>, <span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"N0"</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">pars</span>, <span class="va">rateSamples</span><span class="op">)</span></span>
+<span>  <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">pars</span>, </span>
+<span>                <span class="fu"><a href="../reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">N0</span>,</span>
+<span>                                 R_bar <span class="op">=</span> <span class="va">pars</span><span class="op">$</span><span class="va">R_bar</span>, S_bar <span class="op">=</span> <span class="va">pars</span><span class="op">$</span><span class="va">S_bar</span>,</span>
+<span>                                 numSteps <span class="op">=</span> <span class="va">stepLength</span>, interannualVar <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>                                 K <span class="op">=</span> <span class="cn">FALSE</span>, probOption <span class="op">=</span> <span class="st">"continuous"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># add results to output set</span></span>
+<span>  <span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pars</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">replicate</span>, <span class="va">Anthro</span>, <span class="va">S_bar</span>, <span class="va">R_bar</span>, <span class="va">N</span>, <span class="va">lambda</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">fds</span><span class="op">$</span><span class="va">replicate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="st">""</span>, <span class="va">fds</span><span class="op">$</span><span class="va">replicate</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">fds</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Replicate"</span>, <span class="st">"anthro"</span>, <span class="st">"survival"</span>, <span class="st">"recruitment"</span>, <span class="st">"N"</span>, <span class="st">"lambda"</span><span class="op">)</span></span>
+<span>  <span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">fds</span>, <span class="op">!</span><span class="va">Replicate</span>, names_to <span class="op">=</span> <span class="st">"MetricTypeID"</span>, values_to <span class="op">=</span> <span class="st">"Amount"</span><span class="op">)</span></span>
+<span>  <span class="va">fds</span><span class="op">$</span><span class="va">Timestep</span> <span class="op">&lt;-</span> <span class="va">t</span> <span class="op">*</span> <span class="va">stepLength</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">t</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="va">fds</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">popMetrics</span>, <span class="va">fds</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeID</span><span class="op">)</span></span>
+<span><span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span><span class="op">)</span></span>
+<span><span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">popMetrics</span>, <span class="op">!</span><span class="va">MetricTypeID</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="caribouDemography_files/figure-html/changeOverTime-1.png" width="768"></p>
 </div>
   </div>
@@ -306,7 +306,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>

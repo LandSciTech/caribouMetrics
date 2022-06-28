@@ -67,96 +67,117 @@ objects.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">loadSpatialInputs</span><span class="op">(</span>
-  <span class="va">projectPoly</span>,
-  <span class="va">refRast</span>,
-  <span class="va">inputsList</span>,
-  convertToRast <span class="op">=</span> <span class="cn">NULL</span>,
-  convertToRastDens <span class="op">=</span> <span class="cn">NULL</span>,
-  altTemplate <span class="op">=</span> <span class="cn">NULL</span>,
-  useTemplate <span class="op">=</span> <span class="cn">NULL</span>,
-  reclassOptions <span class="op">=</span> <span class="cn">NULL</span>,
-  bufferWidth <span class="op">=</span> <span class="cn">NULL</span>,
-  ptDensity <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">loadSpatialInputs</span><span class="op">(</span></span>
+<span>  <span class="va">projectPoly</span>,</span>
+<span>  <span class="va">refRast</span>,</span>
+<span>  <span class="va">inputsList</span>,</span>
+<span>  convertToRast <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  convertToRastDens <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  altTemplate <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  useTemplate <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reclassOptions <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bufferWidth <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ptDensity <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>projectPoly</dt>
 <dd><p>character or sf. A polygon delineating the study area.</p></dd>
+
+
 <dt>refRast</dt>
 <dd><p>character or raster. A raster which will be used as the
 template that all other rasters must align to (but see <code>alttemplate</code>).</p></dd>
+
+
 <dt>inputsList</dt>
 <dd><p>list. A named list of inputs that are either spatial
 objects or file names of spatial objects. ".shp" is the only extension
 accepted for vector data and all other extensions will be passed to
 <code>raster</code>. If an element is a list these are assumed to be linear
 features and they are combined.</p></dd>
+
+
 <dt>convertToRast</dt>
 <dd><p>character. Optional. Names of elements of
 <code>inputsList</code> that should be converted to raster after loading.</p></dd>
+
+
 <dt>convertToRastDens</dt>
 <dd><p>character. Optional. Names of elements of
 <code>inputsList</code> that should be converted to raster line density after loading.</p></dd>
+
+
 <dt>altTemplate</dt>
 <dd><p>raster. Optional template raster for raster inputs that
 can have a different resolution from the <code>refRast</code>.</p></dd>
+
+
 <dt>useTemplate</dt>
 <dd><p>character. Optional. Names of elements of
 <code>inputsList</code> that use <code>altTemplate</code>.</p></dd>
+
+
 <dt>reclassOptions</dt>
 <dd><p>list. An optional named list containing a function, a
 list where the first element is a function that takes the corresponding
 <code>inputsList</code> element as its first argument and the subsequent elements
 are named arguments for that function, or a matrix that will be passed to
 <code><a href="https://rdrr.io/pkg/raster/man/reclassify.html" class="external-link">reclassify</a></code>.</p></dd>
+
+
 <dt>bufferWidth</dt>
 <dd><p>numeric. The width of a moving window that will be applied
 to the data. If it is supplied a buffer of 3*<code>bufferWidth</code> around the
 <code>projectPoly</code> is used so that rasters will be cropped to a larger area.
 This can be used to avoid edge effects in moving window calculations</p></dd>
+
+
 <dt>ptDensity</dt>
 <dd><p>number. Only used if an element of <code>inputsList</code> is a
 list that contains a mixture of rasters and lines and is included in
 convertToRast. See <code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A named list with aligned spatial data components</p>
+    
+
+<p>A named list with aligned spatial data components</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># create example rasters</span></span>
-<span class="r-in"><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span>xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">25000</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">25000</span>,</span>
-<span class="r-in">                     resolution <span class="op">=</span> <span class="fl">250</span>, crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span class="r-in"><span class="va">nd</span> <span class="op">&lt;-</span> <span class="va">lc</span></span>
-<span class="r-in"><span class="va">nd</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span class="r-in"><span class="va">ad</span> <span class="op">&lt;-</span> <span class="va">lc</span></span>
-<span class="r-in"><span class="va">ad</span><span class="op">[</span><span class="fl">30</span><span class="op">:</span><span class="fl">50</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span class="r-in"><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span class="r-in"><span class="va">lc</span><span class="op">[</span><span class="fl">70</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">70</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># create sf objects</span></span>
-<span class="r-in"><span class="va">lf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">10000</span>, <span class="fl">10000</span><span class="op">)</span>,</span>
-<span class="r-in">                                                            ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                              crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">esk</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span>, <span class="fl">10000</span>, <span class="fl">0</span><span class="op">)</span>,</span>
-<span class="r-in">                                                            ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">                              crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">projPol</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">ad</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># prepare data</span></span>
-<span class="r-in"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">loadSpatialInputs</span><span class="op">(</span>projectPoly <span class="op">=</span> <span class="va">projPol</span>, refRast <span class="op">=</span> <span class="va">lc</span>,</span>
-<span class="r-in">                         inputsList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>esker <span class="op">=</span> <span class="va">esk</span>, linFeat <span class="op">=</span> <span class="va">lf</span>, natDist <span class="op">=</span> <span class="va">nd</span>,</span>
-<span class="r-in">                                           anthroDist <span class="op">=</span> <span class="va">ad</span><span class="op">)</span>,</span>
-<span class="r-in">                         convertToRast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"esker"</span>, <span class="st">"linFeat"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">                                           </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># create example rasters</span></span></span>
+<span class="r-in"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span>xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">25000</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">25000</span>,</span></span>
+<span class="r-in"><span>                     resolution <span class="op">=</span> <span class="fl">250</span>, crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="va">nd</span> <span class="op">&lt;-</span> <span class="va">lc</span></span></span>
+<span class="r-in"><span><span class="va">nd</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">ad</span> <span class="op">&lt;-</span> <span class="va">lc</span></span></span>
+<span class="r-in"><span><span class="va">ad</span><span class="op">[</span><span class="fl">30</span><span class="op">:</span><span class="fl">50</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">lc</span><span class="op">[</span><span class="fl">70</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">70</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create sf objects</span></span></span>
+<span class="r-in"><span><span class="va">lf</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">10000</span>, <span class="fl">10000</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                                            ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                              crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">esk</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10000</span>, <span class="fl">10000</span>, <span class="fl">0</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                                            ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                              crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">projPol</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">ad</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># prepare data</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">loadSpatialInputs</span><span class="op">(</span>projectPoly <span class="op">=</span> <span class="va">projPol</span>, refRast <span class="op">=</span> <span class="va">lc</span>,</span></span>
+<span class="r-in"><span>                         inputsList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>esker <span class="op">=</span> <span class="va">esk</span>, linFeat <span class="op">=</span> <span class="va">lf</span>, natDist <span class="op">=</span> <span class="va">nd</span>,</span></span>
+<span class="r-in"><span>                                           anthroDist <span class="op">=</span> <span class="va">ad</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         convertToRast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"esker"</span>, <span class="st">"linFeat"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                           </span></span>
 </code></pre></div>
     </div>
   </div>
@@ -171,7 +192,7 @@ convertToRast. See <code><a href="rasterizeLineDensity.html">rasterizeLineDensit
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

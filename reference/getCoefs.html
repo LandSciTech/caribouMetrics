@@ -67,7 +67,7 @@ contain the standard error it is calculated from the confidence interval.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">getCoefs</span><span class="op">(</span><span class="va">populationGrowthTable</span>, <span class="va">resVar</span>, <span class="va">modVer</span>, <span class="va">modNum</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">getCoefs</span><span class="op">(</span><span class="va">populationGrowthTable</span>, <span class="va">resVar</span>, <span class="va">modVer</span>, <span class="va">modNum</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,27 +77,37 @@ contain the standard error it is calculated from the confidence interval.</p>
 included in the package and should be used in most cases. A custom table of
 model parameters can be provided but it must match the column names of
 <code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code>.</p></dd>
+
+
 <dt>resVar</dt>
 <dd><p>character. Response variable, typically "femaleSurvival" or
 "recruitment"</p></dd>
+
+
 <dt>modVer</dt>
 <dd><p>character vector. Which model version(s) to use. Currently the
 only option is "Johnson" for the model used in Johnson et. al. (2020), but
 additional options may be added in the future.</p></dd>
+
+
 <dt>modNum</dt>
 <dd><p>character vector. Which model number(s) to use see
 <code>popGrowthTableJohnsonECCC$ModelNumber</code> for typical options.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a named list with one element per model version. The names are
-<code>modVer_modNum_Type</code>. Each element contains a data.frame that
+    
+
+<p>a named list with one element per model version. The names are</p>
+<p></p>
+<p><code>modVer_modNum_Type</code>. Each element contains a data.frame that
   is a subset of <code>populationGrowthTable</code> for the selected model</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">getCoefs</span><span class="op">(</span><span class="va">popGrowthTableJohnsonECCC</span>, <span class="st">"femaleSurvival"</span>, <span class="st">"Johnson"</span>, <span class="st">"M1"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">getCoefs</span><span class="op">(</span><span class="va">popGrowthTableJohnsonECCC</span>, <span class="st">"femaleSurvival"</span>, <span class="st">"Johnson"</span>, <span class="st">"M1"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Johnson_M1_National</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    modelVersion responseVariable ModelNumber     Type Coefficient    Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:      Johnson   femaleSurvival          M1 National   Intercept -0.14200</span>
@@ -108,7 +118,7 @@ additional options may be added in the future.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2: 0.000127551  -0.001 -0.0005</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3: 8.272730950      NA      NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -123,7 +133,7 @@ additional options may be added in the future.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

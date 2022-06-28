@@ -1,12 +1,12 @@
 pandoc: 2.7.3
-pkgdown: 2.0.3
+pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   Getting_started: Getting_started.html
   UI_help: UI_help.html
   Using_caribouHabitat: Using_caribouHabitat.html
   caribouDemography: caribouDemography.html
-last_built: 2022-05-31T19:08Z
+last_built: 2022-06-28T19:45Z
 urls:
   reference: https://landscitech.github.io/caribouMetrics/reference
   article: https://landscitech.github.io/caribouMetrics/articles

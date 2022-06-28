@@ -101,87 +101,87 @@
 </h2>
 <p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"LandSciTech/caribouMetrics"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"LandSciTech/caribouMetrics"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>This is a basic example which shows you how to use the main functions:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span>
-
-<span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span>
-
-<span class="co"># load example data</span>
-<span class="va">landCoverD</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> 
-  <span class="co"># convert PLC classes to resource types used in the model </span>
-<span class="va">landCoverD</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/reclassPLC.html">reclassPLC</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span>
-<span class="va">eskerDras</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"eskerTif.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">eskerDshp</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"esker.shp"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">natDistD</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">anthroDistD</span> <span class="op">&lt;-</span><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">linFeatDras</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"linFeatTif.tif"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">projectPolyD</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"projectPoly.shp"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Calculate habitat use</span>
-<span class="va">carHab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span>
-  landCover <span class="op">=</span> <span class="va">landCoverD</span>,
-  esker <span class="op">=</span> <span class="va">eskerDras</span>, 
-  natDist <span class="op">=</span> <span class="va">natDistD</span>, 
-  anthroDist <span class="op">=</span> <span class="va">anthroDistD</span>, 
-  linFeat <span class="op">=</span> <span class="va">linFeatDras</span>, 
-  projectPoly <span class="op">=</span> <span class="va">projectPolyD</span>,
-  caribouRange <span class="op">=</span> <span class="st">"Churchill"</span>
-<span class="op">)</span>
-<span class="co">#&gt; cropping landCover to extent of projectPoly</span>
-<span class="co">#&gt; cropping linFeat to extent of projectPoly</span>
-<span class="co">#&gt; cropping natDist to extent of projectPoly</span>
-<span class="co">#&gt; cropping anthroDist to extent of projectPoly</span>
-<span class="co">#&gt; cropping esker to extent of projectPoly</span>
-<span class="co">#&gt; resampling linFeat to match landCover resolution</span>
-<span class="co">#&gt; resampling esker to match landCover resolution</span>
-<span class="co">#&gt; Applying moving window.</span>
-
-<span class="co"># plot the results</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># load example data</span></span>
+<span><span class="va">landCoverD</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> </span>
+<span>  <span class="co"># convert PLC classes to resource types used in the model </span></span>
+<span><span class="va">landCoverD</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/reclassPLC.html">reclassPLC</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span></span>
+<span><span class="va">eskerDras</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"eskerTif.tif"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">eskerDshp</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"esker.shp"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">natDistD</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">anthroDistD</span> <span class="op">&lt;-</span><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">linFeatDras</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"linFeatTif.tif"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">projectPolyD</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"projectPoly.shp"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Calculate habitat use</span></span>
+<span><span class="va">carHab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
+<span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>,</span>
+<span>  esker <span class="op">=</span> <span class="va">eskerDras</span>, </span>
+<span>  natDist <span class="op">=</span> <span class="va">natDistD</span>, </span>
+<span>  anthroDist <span class="op">=</span> <span class="va">anthroDistD</span>, </span>
+<span>  linFeat <span class="op">=</span> <span class="va">linFeatDras</span>, </span>
+<span>  projectPoly <span class="op">=</span> <span class="va">projectPolyD</span>,</span>
+<span>  caribouRange <span class="op">=</span> <span class="st">"Churchill"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; cropping landCover to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping linFeat to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping natDist to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping anthroDist to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping esker to extent of projectPoly</span></span>
+<span><span class="co">#&gt; resampling linFeat to match landCover resolution</span></span>
+<span><span class="co">#&gt; resampling esker to match landCover resolution</span></span>
+<span><span class="co">#&gt; Applying moving window.</span></span>
+<span></span>
+<span><span class="co"># plot the results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># calculate disturbance </span>
-<span class="va">disturb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span>landCover <span class="op">=</span> <span class="va">landCoverD</span>,
-                              linFeat <span class="op">=</span> <span class="va">linFeatDras</span>,  
-                              natDist <span class="op">=</span> <span class="va">natDistD</span>,
-                              projectPoly <span class="op">=</span> <span class="va">projectPolyD</span><span class="op">)</span>
-<span class="co">#&gt; cropping landCover to extent of projectPoly</span>
-<span class="co">#&gt; cropping linFeat to extent of projectPoly</span>
-<span class="co">#&gt; cropping natDist to extent of projectPoly</span>
-<span class="co">#&gt; buffering anthropogenic disturbance</span>
-<span class="co">#&gt; calculating disturbance metrics</span>
-
-<span class="fu"><a href="reference/results.html">results</a></span><span class="op">(</span><span class="va">disturb</span><span class="op">)</span>
-<span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID</span>
-<span class="co">#&gt; 1    1 39.97933 1.734581   40.56555        0.5862182   0</span>
-
-<span class="co"># Calculate demographic rates</span>
-<span class="va">demCoefs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span>replicates <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-
-<span class="va">demRates</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>covTable <span class="op">=</span> <span class="fu"><a href="reference/results.html">results</a></span><span class="op">(</span><span class="va">disturb</span><span class="op">)</span>,
-                             popGrowthPars <span class="op">=</span> <span class="va">demCoefs</span><span class="op">)</span>
-<span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaultsFALSE</span>
-<span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaultsFALSE</span>
-<span class="va">demRates</span>
-<span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar  S_stdErr</span>
-<span class="co">#&gt; 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.0452728</span>
-<span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow R_PIhigh</span>
-<span class="co">#&gt; 1 0.7561665 0.9187631 0.1813372 0.09530066 0.05820063 0.367604</span>
-
-<span class="co"># Simulate population growth</span>
-<span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2000</span>, numSteps <span class="op">=</span> <span class="fl">20</span>, R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, 
-                            S_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span>
-
-<span class="va">popGrow</span>
-<span class="co">#&gt;     N    lambda</span>
-<span class="co">#&gt; 1 361 0.9180804</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># calculate disturbance </span></span>
+<span><span class="va">disturb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span>landCover <span class="op">=</span> <span class="va">landCoverD</span>,</span>
+<span>                              linFeat <span class="op">=</span> <span class="va">linFeatDras</span>,  </span>
+<span>                              natDist <span class="op">=</span> <span class="va">natDistD</span>,</span>
+<span>                              projectPoly <span class="op">=</span> <span class="va">projectPolyD</span><span class="op">)</span></span>
+<span><span class="co">#&gt; cropping landCover to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping linFeat to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping natDist to extent of projectPoly</span></span>
+<span><span class="co">#&gt; buffering anthropogenic disturbance</span></span>
+<span><span class="co">#&gt; calculating disturbance metrics</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/results.html">results</a></span><span class="op">(</span><span class="va">disturb</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID</span></span>
+<span><span class="co">#&gt; 1    1 39.97933 1.734581   40.56555        0.5862182   0</span></span>
+<span></span>
+<span><span class="co"># Calculate demographic rates</span></span>
+<span><span class="va">demCoefs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span>replicates <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">demRates</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>covTable <span class="op">=</span> <span class="fu"><a href="reference/results.html">results</a></span><span class="op">(</span><span class="va">disturb</span><span class="op">)</span>,</span>
+<span>                             popGrowthPars <span class="op">=</span> <span class="va">demCoefs</span><span class="op">)</span></span>
+<span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaultsFALSE</span></span>
+<span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaultsFALSE</span></span>
+<span><span class="va">demRates</span></span>
+<span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar  S_stdErr</span></span>
+<span><span class="co">#&gt; 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.0452728</span></span>
+<span><span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow R_PIhigh</span></span>
+<span><span class="co">#&gt; 1 0.7561665 0.9187631 0.1813372 0.09530066 0.05820063 0.367604</span></span>
+<span></span>
+<span><span class="co"># Simulate population growth</span></span>
+<span><span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2000</span>, numSteps <span class="op">=</span> <span class="fl">20</span>, R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, </span>
+<span>                            S_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">popGrow</span></span>
+<span><span class="co">#&gt;     N    lambda</span></span>
+<span><span class="co">#&gt; 1 361 0.9180804</span></span></code></pre></div>
 <p>More detailed examples are provided in the vignettes.</p>
 </div>
 </div>
@@ -249,7 +249,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer>

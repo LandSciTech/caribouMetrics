@@ -77,26 +77,26 @@ numbers of animals used by Stewart et al. (in prep). See
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">popGrowthJohnson</span><span class="op">(</span>
-  <span class="va">N</span>,
-  <span class="va">numSteps</span>,
-  <span class="va">R_bar</span>,
-  <span class="va">S_bar</span>,
-  P_0 <span class="op">=</span> <span class="fl">1</span>,
-  P_K <span class="op">=</span> <span class="fl">0.6</span>,
-  a <span class="op">=</span> <span class="fl">1</span>,
-  b <span class="op">=</span> <span class="fl">4</span>,
-  K <span class="op">=</span> <span class="fl">100</span>,
-  r_max <span class="op">=</span> <span class="fl">1.3</span>,
-  s <span class="op">=</span> <span class="fl">0.5</span>,
-  l_R <span class="op">=</span> <span class="fl">0</span>,
-  h_R <span class="op">=</span> <span class="fl">0.82</span>,
-  l_S <span class="op">=</span> <span class="fl">0.61</span>,
-  h_S <span class="op">=</span> <span class="fl">1</span>,
-  interannualVar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>R_CV <span class="op">=</span> <span class="fl">0.46</span>, S_CV <span class="op">=</span> <span class="fl">0.08696</span><span class="op">)</span>,
-  probOption <span class="op">=</span> <span class="st">"binomial"</span>,
-  progress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">popGrowthJohnson</span><span class="op">(</span></span>
+<span>  <span class="va">N</span>,</span>
+<span>  <span class="va">numSteps</span>,</span>
+<span>  <span class="va">R_bar</span>,</span>
+<span>  <span class="va">S_bar</span>,</span>
+<span>  P_0 <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  P_K <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  a <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  b <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  K <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  r_max <span class="op">=</span> <span class="fl">1.3</span>,</span>
+<span>  s <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  l_R <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  h_R <span class="op">=</span> <span class="fl">0.82</span>,</span>
+<span>  l_S <span class="op">=</span> <span class="fl">0.61</span>,</span>
+<span>  h_S <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  interannualVar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>R_CV <span class="op">=</span> <span class="fl">0.46</span>, S_CV <span class="op">=</span> <span class="fl">0.08696</span><span class="op">)</span>,</span>
+<span>  probOption <span class="op">=</span> <span class="st">"binomial"</span>,</span>
+<span>  progress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -104,50 +104,87 @@ numbers of animals used by Stewart et al. (in prep). See
     <dl><dt>N</dt>
 <dd><p>Number or vector of numbers. Initial population size for one or more
 sample populations.</p></dd>
+
+
 <dt>numSteps</dt>
 <dd><p>Number. Number of years to project.</p></dd>
+
+
 <dt>R_bar</dt>
 <dd><p>Number or vector of numbers. Expected recruitment rate (calf:cow
 ratio) for one or more sample populations.</p></dd>
+
+
 <dt>S_bar</dt>
 <dd><p>Number or vector of numbers. Expected adult female survival for
 one or more sample populations.</p></dd>
+
+
 <dt>P_0</dt>
 <dd><p>Number. Maximum recruitment multiplier.</p></dd>
+
+
 <dt>P_K</dt>
 <dd><p>Number. Recruitment multiplier at carrying capacity.</p></dd>
+
+
 <dt>a</dt>
 <dd><p>Number. Density dependence shape parameter.</p></dd>
+
+
 <dt>b</dt>
 <dd><p>Number. Allee effect parameter.</p></dd>
+
+
 <dt>K</dt>
 <dd><p>Number. Carrying capacity multiplier.</p></dd>
+
+
 <dt>r_max</dt>
 <dd><p>Number. Maximum population growth rate.</p></dd>
+
+
 <dt>s</dt>
 <dd><p>Number. Sex ratio.</p></dd>
+
+
 <dt>l_R</dt>
 <dd><p>Number. Minimum recruitment.</p></dd>
+
+
 <dt>h_R</dt>
 <dd><p>Number. Maximum recruitment.</p></dd>
+
+
 <dt>l_S</dt>
 <dd><p>Number. Minimum survival.</p></dd>
+
+
 <dt>h_S</dt>
 <dd><p>Number. Maximum survival.</p></dd>
+
+
 <dt>interannualVar</dt>
 <dd><p>list or logical. List containing interannual
 variability parameters. These can be either coefficients of variation
 (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to
 <code>FALSE</code> ignore interannual variability.</p></dd>
+
+
 <dt>probOption</dt>
 <dd><p>Character. Choices are "binomial","continuous" or
 "matchJohnson2020". See description for details.</p></dd>
+
+
 <dt>progress</dt>
 <dd><p>Logical. Should progress updates be shown?</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.frame of population size (N) and average growth rate (lambda)
+    
+
+<p>A data.frame of population size (N) and average growth rate (lambda)
   projections for each sample population.</p>
     </div>
 
@@ -163,7 +200,7 @@ variability parameters. These can be either coefficients of variation
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
