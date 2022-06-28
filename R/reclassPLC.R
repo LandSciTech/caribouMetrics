@@ -50,6 +50,13 @@
 #'
 #'@export
 reclassPLC <- function(plc, plcLU = plcToResType){
+  # check dataType aligns with minValue to avoid errors
+  if(raster::minValue(plc) < 0 && grepl("U", raster::dataType(plc))){
+    stop("raster::dataType(plc) is unsigned (", raster::dataType(plc),
+         ") but the minimum value is negative (", raster::minValue(plc),
+         "). Please save plc with an appropriate datatype.", call. = FALSE)
+  }
+  
   if(!is.null(plcLU)){
     # checks types and match names
     if(!inherits(plcLU, "data.frame")){
