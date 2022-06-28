@@ -89,7 +89,8 @@ Suggests:
     tmap,
     tmaptools,
     ggplot2,
-    fasterize
+    fasterize,
+    rsyncrosim
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
