@@ -1,0 +1,27 @@
+PLCCode ,ResourceType
+1,LGW
+2,LGW
+3,other
+4,other
+5,other
+6,other
+7,other
+8,other
+9,LGTP
+10,other
+11,LGOP
+12,LGTP
+13,LGOP
+14,LGTP
+15,ST
+16,DEC
+17,MIX
+18,CON
+19,other
+20,other
+21,other
+22,other
+23,other
+24,other
+-9,other
+-99,other
