@@ -90,11 +90,12 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The <code>caribouMetrics</code> R package contains a set of functions which implement the caribou resource selection probability functions (RSPF) described in <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel (2016)</a> and an implementation of the population and demographic models described in <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link">Johnson et. al. (2020)</a>. These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.</p>
+<p>The <code>caribouMetrics</code> R package contains a set of functions which implement the caribou resource selection probability functions (RSPF) described in <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel (2016)</a> and an implementation of the population and demographic models described in <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link">Johnson et. al. (2020)</a>. These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time, as described in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (2022)</a>.</p>
 <p>This vignette provides an overview of how to use the <code>caribouMetrics</code> package. There are more detailed vignettes available for the <code>caribouHabitat</code> function (<code>vignette("caribouHabitat", package = "caribouMetrics")</code>) and for the demographic models (<code><a href="../articles/caribouDemography.html">vignette("caribouDemography", package = "caribouMetrics")</a></code>).</p>
-<div class="section level3">
-<h3 id="data-needed">Data Needed<a class="anchor" aria-label="anchor" href="#data-needed"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="data-needed">Data Needed<a class="anchor" aria-label="anchor" href="#data-needed"></a>
+</h2>
 <p>Several different data sets are used in the RSPF model to describe conditions that affect caribou habitat selection. The data includes types of forest, wetlands, eskers, linear features and disturbance histories. The table below describes each data set, and what it is used for.</p>
 <table class="table">
 <colgroup>
@@ -141,10 +142,10 @@
 </tbody>
 </table>
 </div>
-<div class="section level3">
-<h3 id="caribouhabitat">
+<div class="section level2">
+<h2 id="caribouhabitat">
 <code>caribouHabitat()</code><a class="anchor" aria-label="anchor" href="#caribouhabitat"></a>
-</h3>
+</h2>
 <p><code>caribouHabitat</code> is the function used to run the RSPF model. It takes the input data and uses the coefficients described by <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel (2016)</a> to calculate the probability of habitat use by caribou in each season at each location. The function can be run for a single range or a list of ranges simultaneously. In addition to the arguments listed in the table above the <code>caribouRange</code> is also needed. <code>caribouRange</code> is a character or data frame identifying the caribou range and corresponding coefficients to use when generating the RSPF. It must contain a <code>Range</code> column with the name of the geographical area and is used to link the table to the <code>projectPoly</code> polygons and a <code>coefRange</code> column with the name of the caribou range that the coefficients should be used from. Generally <code>Range</code> and <code>coefRange</code> will be the same.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>warning <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -170,9 +171,9 @@
 <span><span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="example-data">Example Data<a class="anchor" aria-label="anchor" href="#example-data"></a>
-</h3>
+<div class="section level2">
+<h2 id="example-data">Example Data<a class="anchor" aria-label="anchor" href="#example-data"></a>
+</h2>
 <p>An example data set taken from part of the Nipigon caribou range in Ontario is provided with the package. It uses the provincial land cover classes to determine the <code>landCover</code>. As the RSPF is generated using a set of specific resource classes which may not match those of standard land-cover classes there is a re-classing function (<code>reclassPLC</code>) which uses a look-up table to convert Ontario provincial land cover classes into the correct resource classes to use in the RSPF model. Disturbance data sets can be converted from polygons of year of disturbance or time since disturbance using (<code>reclassDist</code>). In the example fire data with polygons containing year of disturbance are converted to a presence absence raster of cumulative disturbance over the past 30 years.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load data sets </span></span>
@@ -207,9 +208,9 @@
 <span><span class="co"># make a polygon inside the bounding box of the rasters</span></span>
 <span><span class="va">singlePoly</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">landCover</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_set_crs</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">landCover</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="single-range">Single Range<a class="anchor" aria-label="anchor" href="#single-range"></a>
-</h4>
+<div class="section level3">
+<h3 id="single-range">Single Range<a class="anchor" aria-label="anchor" href="#single-range"></a>
+</h3>
 <p>The most basic method is to supply a single character vector for <code>caribouRange</code> and one polygon for the project area.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
@@ -257,9 +258,9 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fall"</span>, <span class="st">"Summer"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Getting_started_files/figure-html/plot1-1.png" width="768"></p>
 </div>
-<div class="section level4">
-<h4 id="multi-range">Multi-Range<a class="anchor" aria-label="anchor" href="#multi-range"></a>
-</h4>
+<div class="section level3">
+<h3 id="multi-range">Multi-Range<a class="anchor" aria-label="anchor" href="#multi-range"></a>
+</h3>
 <p><code>caribouHabitat</code> can also be run over multiple ranges simultaneously. For multiple ranges to be run the <code>caribouRanges</code> argument must be a data frame with two columns, <code>Range</code> indicating the name of the caribou range (must match <code>projectPoly</code>) and <code>coefRange</code> indicating the matching range coefficients as derived by <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel (2016)</a>. It is possible to run the function with range coefficients swapped between ranges but this is not recommended as the models were trained separately on each range. For our example we have split the area of our data set into four polygons and arbitrarily assigned them caribou range names to demonstrate the difference in predictions depending on the coefficients associated with that range.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># split the area into 4 polygons</span></span>
@@ -332,10 +333,10 @@
 <p><img src="Getting_started_files/figure-html/results2-1.png" width="768"></p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="disturbancemetrics">
+<div class="section level2">
+<h2 id="disturbancemetrics">
 <code>disturbanceMetrics()</code><a class="anchor" aria-label="anchor" href="#disturbancemetrics"></a>
-</h3>
+</h2>
 <p>The <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> function is used to calculate the metrics described in Table 52 of Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (<em>Rangifer tarandus caribou</em>), Boreal Population, in Canada 2011 Update. The metrics included are: * Fire: % non-overlapping fire * Anthro: % non-overlapping anthropogenic disturbance * Total_dist: % total non-overlapping fire and anthropogenic disturbance * fire_excl_anthro: % fire not overlapping with anthropogenic disturbance</p>
 <p><code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> is run in a similar manner to <code>caribouHabitat</code> and uses a subset of the same inputs, these are <code>landCover</code>, <code>linFeat</code>, <code>natDist</code>, and <code>projectPoly</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -364,9 +365,9 @@
 <span><span class="co">#&gt;   zone   Anthro      Fire Total_dist fire_excl_anthro</span></span>
 <span><span class="co">#&gt; 1    1 43.60786 0.7708216   43.96341        0.3555401</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="demographic-models">Demographic Models<a class="anchor" aria-label="anchor" href="#demographic-models"></a>
-</h3>
+<div class="section level2">
+<h2 id="demographic-models">Demographic Models<a class="anchor" aria-label="anchor" href="#demographic-models"></a>
+</h2>
 <p>Another feature of <code>caribouMetrics</code> is an implementation of the population dynamics models in <em>Science to inform policy: linking population dynamics to habitat for a threatened species in Canada</em> by Johnson et. al. (2020) and the “Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (<em>Rangifer tarandus caribou</em>), Boreal Population, in Canada 2011 Update” report. <code><a href="../reference/demographicCoefficients.html">demographicCoefficients()</a></code> selects coefficients for the chosen model and then samples them for each replicate. <code><a href="../reference/demographicRates.html">demographicRates()</a></code> samples expected survival or recruitment rates based on samples of coefficient values and optionally the model precision. These are wrapper functions what use sensible defaults but lower level functions are also available.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">demCoefs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span>replicates <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
@@ -399,17 +400,17 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">demRates</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, <span class="va">popGrow</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   zone   Anthro      Fire Total_dist fire_excl_anthro   N    lambda</span></span>
-<span><span class="co">#&gt; 1    1 43.60786 0.7708216   43.96341        0.3555401 350 0.9167737</span></span>
-<span><span class="co">#&gt; 2    1 53.60786 0.7708216   53.96341        0.3555401 217 0.8951122</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    1 43.60786 0.7708216   43.96341        0.3555401 387 0.9213178</span></span>
+<span><span class="co">#&gt; 2    1 53.60786 0.7708216   53.96341        0.3555401 253 0.9019513</span></span></code></pre></div>
 <p><em>For additional details on functions in the package see the help documentation</em></p>
-</div>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
+<p>Dyson, M., Endicott, S., Simpkins C., Turner, J.W., Avery-Gomm S., Johnson, C.A., Leblond, M., Neilson, E.W., Rempel, R., Wiebe, P.A., Baltzer, J.L., Stewart, F.E.C., Hughes, J. 2022. Existing caribou habitat and demographic models are poorly suited for Ring of Fire impact assessment: A roadmap for improving the usefulness, transparency, and availability of models for conservation. bioRxiv 2022.06.01.494350; <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link uri">https://doi.org/10.1101/2022.06.01.494350</a></p>
 <p>ECCC. 2011. Scientific assessment to inform the identification of critical habitat for woodland caribou (<em>Rangifer tarandus caribou</em>), boreal population, in Canada. Canadian Wildlife Service, Ottawa. <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="external-link uri">http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf</a>. Accessed 26 Mar 2021.</p>
-<p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking population dynamics to habitat for a threatened species in Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link uri">https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637</a></p>
 <p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93. <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link uri">https://doi.org/10.1139/cjz-2015-0101</a></p>
+<p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking population dynamics to habitat for a threatened species in Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link uri">https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637</a></p>
 </div>
   </div>
 
@@ -430,7 +431,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
