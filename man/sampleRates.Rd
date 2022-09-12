@@ -14,7 +14,9 @@ sampleRates(
   returnSample,
   quantilesToUse = NULL,
   predInterval = c(0.025, 0.975),
-  transformFn = function(y) {     y }
+  transformFn = function(y) {
+     y
+ }
 )
 }
 \arguments{

@@ -10,17 +10,17 @@
 #'
 #' @return A list with elements:
 #'    \describe{
-#'       \item{"coefSamples"}{Bootstrapped coefficients with \code{replicates} 
+#'       \item{"coefSamples"}{Bootstrapped coefficients with \code{replicates}
 #'         rows}
-#'       \item{"coefValues"}{Coefficient values taken from 
+#'       \item{"coefValues"}{Coefficient values taken from
 #'         \code{populationGrowthTable}}
 #'     }
-#'     
-#' @examples 
+#'
+#' @examples
 #' cfs <- getCoefs(popGrowthTableJohnsonECCC, "recruitment", "Johnson", "M3")
-#' 
+#'
 #' sampleCoefs(cfs[[1]], 10)
-#' 
+#'
 #' @export
 
 sampleCoefs <- function(coefTable, replicates){
@@ -28,23 +28,27 @@ sampleCoefs <- function(coefTable, replicates){
   allCoefs <- coefTable[["Coefficient"]]
   coefSamples <- lapply(X = allCoefs, function(coef){
     if (0) {
-      return(rep(as.numeric(coefTable[coefTable$Coefficient == coef, "Value"]), 
+      return(rep(as.numeric(coefTable[coefTable$Coefficient == coef, "Value"]),
                  times = replicates))
     } else {
-      vec <- rnorm(n = replicates, 
+      vec <- rnorm(n = replicates,
                    mean = as.numeric(coefTable[coefTable$Coefficient == coef, "Value"]),
                    sd = as.numeric(coefTable[coefTable$Coefficient == coef, "StdErr"]))
       return(vec)
     }
   })
   names(coefSamples) <- allCoefs
-  
+
   coefMatrix <- do.call(cbind, coefSamples)
-  
+
   coefValues <- data.table::data.table(t(coefTable[, "Value"]))
   names(coefValues) <- coefTable[["Coefficient"]]
-  
+
+  coefStdErrs <- data.table::data.table(t(coefTable[, "StdErr"]))
+  names(coefStdErrs) <- coefTable[["Coefficient"]]
+
   modList <- list(coefSamples = coefMatrix,
-                  coefValues = coefValues)
+                  coefValues = coefValues,
+                  coefStdErrs=coefStdErrs)
   return(modList)
 }
