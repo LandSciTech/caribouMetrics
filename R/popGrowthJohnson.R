@@ -181,8 +181,8 @@ popGrowthJohnson <- function(N,
   rr$N=N
   rr$R_t=R_t/s
   rr$S_t=S_t
-  rr$n_recruits
-  rr$surviving_adFemales
+  rr$n_recruits = n_recruits
+  rr$surviving_adFemales = surviving_adFemales
   return(rr)
 }
 
