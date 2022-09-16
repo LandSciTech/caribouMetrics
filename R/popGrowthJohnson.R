@@ -59,10 +59,10 @@ popGrowthJohnson <- function(N,
                              probOption="binomial",
                              progress = interactive()){
   rr=data.frame(N=N)
-  
+
   R_bar[R_bar<0]=0.000001
   S_bar[S_bar<0]=0.000001
-  
+
   #Warn if S_bar outside of range l_S,h_S, or R_bar outside of range
   #l_R,h_R.
   if(any(S_bar < l_S) || any(S_bar > h_S)){
@@ -179,6 +179,8 @@ popGrowthJohnson <- function(N,
   rr$lambda=matrixStats::rowMeans2(as.matrix(subset(rr,select=lamBits)),na.rm=T)
   rr=subset(rr,select=setdiff(names(rr),lamBits))
   rr$N=N
+  rr$R_t=R_t/s
+  rr$S_t=S_t
   return(rr)
 }
 
