@@ -1,0 +1,1013 @@
+runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
+                     disturbance="simDisturbance.csv",betaPriors="default",
+                     startYear = 1998, endYear = 2018, Nchains = 2,Niter = 20000,Nburn = 10000,Nthin = 1,N0=1000,
+                     inpFixed=list()){
+  #survData="simSurvData.csv";ageRatio.herd="simAgeRatio.csv";disturbance="simDisturbance.csv"
+  #startYear = 2018-5; endYear = 2024; betaPriors="default"
+  #Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;inp=list()
+
+  # combine defaults in function with inputs from input list
+  inputArgs = c("survData","ageRatio.herd","disturbance","startYear", "endYear",
+                   "Nchains","Niter","Nburn","Nthin","N0")
+  addArgs<-inputArgs#setdiff(inputArgs,names(inp))
+  inp=list()
+  for (a in addArgs){
+    if(is.element(a,names(inpFixed))){
+      inp[[a]]=inpFixed[[a]]
+    }else{
+      inp[[a]]=eval(parse(text=a))
+    }
+  }
+
+  if(betaPriors[[1]]=="default"){
+    betaPriors=getPriors()
+  }
+
+  #Run model
+  if(is.character(inp$ageRatio.herd)){
+    ageRatio.herd2 <- read.csv(paste0("tabs/",inp$ageRatio.herd),header=T)
+    ageRatio.herd2$X=NULL
+  }else{
+    ageRatio.herd2 <- ageRatio.herd
+  }
+  if(is.character(inp$disturbance)){
+    disturbance=read.csv(paste0("tabs/",inp$disturbance))
+    disturbance$X = NULL
+  }else{
+    disturbance=inp$disturbance
+  }
+  disturbance=merge(data.frame(Year=seq(inp$startYear,inp$endYear)),disturbance,all.x=T)
+
+  if(is.character(inp$survData)){
+    survData <- read.csv(paste0("tabs/",inp$survData), header=T)
+    survData$X=NULL
+  }else{
+    survData=inp$survData
+  }
+  compData <- ageRatio.herd2
+
+  data=survData
+
+  # I think we are getting rid of HerdCode?
+  # data$HerdCode<-as.factor(data$HerdCode)
+  # data$HerdCode<-factor(data$HerdCode)
+
+  #check that year range is within data - model will run either way
+  data$Year<-as.numeric(data$Year)
+
+  #check that year range is within data - model will run either way
+  if(inp$endYear > max(data$Year) | inp$startYear < min(data$Year))
+  { warning(c("requested year range does not match survival data",c(" year range:","  ",min(data$Year)," - ",max(data$Year))))}
+
+  data<-subset(data, data$Year <= inp$endYear & data$Year >= inp$startYear)
+  data$id<-factor(data$id)
+
+  test1 <- length(c(inp$startYear:inp$endYear))
+  test2 <- length(unique(data$Year))
+
+  #check that year range is within data - model will run either way
+  if(test1 > test2)
+  { warning(c("missing years of survival data.","Start model at beginning of consecutive years."," ",c("Years of survival data:","  ",list(sort(unique(data$Year))))))}
+
+  data<-data[order(data$exit),]
+  list_data1 <- split(data, data$Year)
+  nYears<-length(levels(as.factor(data$Year)))
+  n.ind<-numeric(nYears)
+
+  #list_data1
+
+  for(i in 1:nYears){
+    n.ind[i]<-length(list_data1[[i]]$exit)
+
+  }
+
+  #check that year range is within data - model will run either way
+  if(any(n.ind < 20))
+  { warning(c("warning, low sample size of adult females in at least one year"))}
+
+  #get KM estimates to use for adult female survival
+  reg.out<-summary(survfit(Surv(enter, exit, event)~as.factor(Year), conf.type = "log-log",data=data))
+  data5<-data.frame(reg.out$strata, reg.out$surv)
+  data.se<-data.frame(reg.out$strata, reg.out$std.err)
+  data.l<-data.frame(reg.out$strata, reg.out$lower)
+  data.u<-data.frame(reg.out$strata, reg.out$upper)
+  data6<-data.frame(table(data5$reg.out.strata))
+  num<-data6$Freq
+  levs<-data.frame(levels(data5$reg.out.strata))
+  names(levs)<-c("reg.out.strata")
+  data7<-subset(data6, Freq>0)
+  survs<-numeric(length(data7$Freq))
+  se<-numeric(length(data7$Freq))
+  lower<-numeric(length(data7$Freq))
+  upper<-numeric(length(data7$Freq))
+  index<-cumsum(data7$Freq)
+
+  for(i in 1:length(survs)){
+    survs[i]<-data5$reg.out.surv[index[i]]
+    se[i] <- data.se$reg.out.std.err[index[i]]
+    lower[i]<-data.l$reg.out.lower[index[i]]
+    upper[i]<-data.u$reg.out.upper[index[i]]
+  }
+
+  indexS<-which(data6$Freq!=0)
+  data6$surv<-numeric(length(data6$Freq))
+  data6$se<-numeric(length(data6$Freq))
+  data6$lower<-numeric(length(data6$Freq))
+  data6$upper<-numeric(length(data6$Freq))
+  data6$surv<-ifelse(data6$Freq<1, 1, NA )
+  data6$lower<-ifelse(data6$Freq<1, NA, 0)
+  data6$upper<-ifelse(data6$Freq<1, NA, 0)
+
+  for(i in 1:length(data6$Freq)){
+    data6$surv[indexS[i]]<-survs[i]
+    data6$se[indexS[i]]<-se[i]
+    data6$lower[indexS[i]]<-lower[i]
+    data6$upper[indexS[i]]<-upper[i]
+  }
+
+  survData <- data6
+  if(any(survData$surv==1)){
+    # which years does survival equal 1
+    survOne=which(unlist(lapply(split(data, data$Year), function(x) sum(x$event)))==0)
+    yearsOne=as.numeric(names(survOne))
+    data.sub=data[data$Year %in% yearsOne,]
+    nriskYears=data.frame(with(data.sub, table(Year)))
+
+    #Specify model
+    sink("binLik.txt")
+    cat("
+	   model{
+	     for(i in 1:N){
+	      lived[i] ~ dbin(s[i], atrisk[i])
+	      s[i] ~ dbeta(1,1) # vague prior
+	      }
+	     }
+	      ",fill = TRUE)
+    sink()
+
+    data1=list(N=nrow(nriskYears), lived=nriskYears$Freq, atrisk=nriskYears$Freq)
+    params=c("s")
+    inits=function(){
+      list(s=runif(nrow(nriskYears), 0.80, 0.99))
+    }
+
+    # run model in JAGS
+    out1=jags(data=data1, inits=inits, parameters.to.save=params,
+              model.file="binLik.txt",n.chains=2, n.iter=5000,
+              n.burnin=1000, n.thin=1)
+    # create standard deviation variable from survData$tau above
+    survData$tau <- 1/(survData$se^2)
+    survData$tau[survOne]=1/(out1$BUGSoutput$sd$s^2)
+  }else
+
+    survData$tau <- 1/(survData$se^2)
+
+  surv_id = which(survData$surv!=1)
+  nSurv = length(surv_id)
+
+  #### Format recruitment ratio data
+  # Remove HerdCode options
+  # compData$HerdCode<-as.factor(compData$HerdCode)
+  # compData$HerdCode<-factor(compData$HerdCode)
+  # compData$Name <- rep("WCTR",length(compData$HerdCode))
+  #
+  # compData<-subset(compData, compData$Year <= inp$endYear & compData$Year >= inp$startYear)
+  #
+  # if(length(levels(compData$HerdCode)) > 1){
+  #
+  #   compData <- data.frame(aggregate(compData$Count, list(compData$Year, compData$Class), sum))
+  #   names(compData) <- c("Year", "Class", "Count")
+  #
+  # }
+
+  #split data into calf and cow recruitment data
+  calf.cnt<-subset(compData, compData$Class=="calf")
+  calf.cnt$Class<-factor(calf.cnt$Class)
+  cow.cnt<-subset(compData, compData$Class=="cow")
+  cow.cnt$Class<-factor(cow.cnt$Class)
+
+  #deal with missing years of data between year ranges
+  Years2<-data.frame(sort(unique(data$Year)))
+  names(Years2) <- "Year"
+  y1<-merge(Years2, calf.cnt, by="Year", all=TRUE)
+  data3<-y1[,1:3]
+
+  y2<-merge(Years2, cow.cnt, by="Year", all=TRUE)
+  data4<-y2[,1:3]
+  data3$Name <- rep(unique(compData$Name), length(data3$Count))
+  data4$Name  <- rep(unique(compData$Name), length(data4$Count))
+
+  data3$Count <- ifelse(data3$Count>data4$Count,NA,data3$Count)
+  data4$Count <- ifelse(data3$Count>data4$Count,NA,data4$Count)
+
+  xCalf <- which(is.na(data3$Count)==T)
+  xCow <- which(is.na(data4$Count)==T)
+  Years4 <- levels(as.factor(data$Year))[xCalf]
+
+  if(any(is.na(data3$Count)==T))
+  {
+    warning("missing composition data; missing years:"," ",list(Years4))}
+
+  t.pred = max(inp$endYear-max(data3$Year),0)
+
+  if(t.pred>0){
+    survData$Var1=as.character(survData$Var1)
+    survAddBit = survData[1,]
+    survAddBit[1,]=NA;survAddBit$Var1=NULL;survAddBit=merge(survAddBit,data.frame(Var1=seq(1:t.pred)))
+    survDatat=rbind(survData,survAddBit)
+
+    dat3Bit = data3[1,]
+    dat3Bit[,2:3]=NA;dat3Bit$Year=NULL;dat3Bit=merge(dat3Bit,data.frame(Year=seq(max(data3$Year)+1,max(data3$Year)+t.pred)))
+    data3t=rbind(data3,dat3Bit)
+
+    data4t=rbind(data4,dat3Bit)
+
+  }else{
+    survDatat=survData
+    data3t=data3
+    data4t=data4
+  }
+
+  #for beta model, remove tau, adjust Surv: (survDatat$surv*45+0.5)/46
+  #survDatat$surv,tau=survDatat$tau
+  #               phi.Saf.Prior1=betaPriors$phi.Saf.Prior1,phi.Saf.Prior2=betaPriors$phi.Saf.Prior2,
+  sp.data=list(Surv=survDatat$surv,tau=survDatat$tau,anthro=disturbance$Anthro,fire=disturbance$fire_excl_anthro,
+               beta.Saf.Prior1=betaPriors$beta.Saf.Prior1,beta.Saf.Prior2=betaPriors$beta.Saf.Prior2,
+               beta.Rec.anthro.Prior1=betaPriors$beta.Rec.anthro.Prior1,beta.Rec.anthro.Prior2=betaPriors$beta.Rec.anthro.Prior2,
+               beta.Rec.fire.Prior1=betaPriors$beta.Rec.fire.Prior1,beta.Rec.fire.Prior2=betaPriors$beta.Rec.fire.Prior2,
+               l.Saf.Prior1 = betaPriors$l.Saf.Prior1,l.Saf.Prior2 = betaPriors$l.Saf.Prior2,
+               l.R.Prior1 = betaPriors$l.R.Prior1,l.R.Prior2 = betaPriors$l.R.Prior2,
+               sig.Saf.Prior1=betaPriors$sig.Saf.Prior1,sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
+               sig.R.Prior1 = betaPriors$sig.R.Prior1,sig.R.Prior2=betaPriors$sig.R.Prior2,
+               Ninit=inp$N0,
+               nCounts=length(which(is.na(data3t$Count)==FALSE)),count_id=which(is.na(data3t$Count)==FALSE),
+               nSurvs=length(which(is.na(survDatat$surv)==FALSE)),surv_id=which(is.na(survDatat$surv)==FALSE),
+               nYears=nYears+t.pred,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
+
+  sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
+
+
+  rr.surv <- jags(data=sp.data, parameters.to.save=sp.params,
+                  model.file="INF_saf_INF_r_JAGS_extentTime.txt",
+                  n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin)
+  return(list(result=rr.surv,survInput=survDatat))
+}
+
+#install and load required packages
+ipak <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg))
+    install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+
+
+getPriors<-function(modifiers=NULL,
+                    expectMods = list(survivalModelNumber="M1",
+                                      recruitmentModelNumber="M4",
+                                      bre=3,
+                                      bse=3,
+                                      lse = 7,
+                                      sse = 0.08696*0.7,
+                                      ssv = 0.01,
+                                      lre=7,
+                                      sre = 0.46,
+                                      srv = 0.18),
+                    popGrowthTable = popGrowthTableJohnsonECCC,
+                    modVer = "Johnson"){
+  #modifiers=cs
+
+
+  if(is.null(modifiers)){modifiers=expectMods}
+  addMods<-setdiff(names(expectMods),names(modifiers))
+  for(i in addMods){
+    modifiers[[i]]=expectMods[[i]]
+  }
+
+  popGrowthPars <- demographicCoefficients(
+    2,
+    modelVersion = modVer,
+    survivalModelNumber = modifiers$survivalModelNumber,
+    recruitmentModelNumber = modifiers$recruitmentModelNumber,
+    populationGrowthTable = popGrowthTable
+  )
+
+  rPriorCoefs <- popGrowthPars$coefSamples_Recruitment$coefValues
+  rPriorStdErrs <- popGrowthPars$coefSamples_Recruitment$coefStdErrs
+  sPriorCoefs <- popGrowthPars$coefSamples_Survival$coefValues
+  sPriorStdErrs <- popGrowthPars$coefSamples_Survival$coefStdErrs
+
+  # check for variables not programmed in jags
+  diff_pars <- setdiff(names(rPriorCoefs),
+                       c("Intercept", "Precision", "Anthro", "fire_excl_anthro"))
+  if(length(diff_pars) > 0){
+    stop("The recruitment model contains unrecognized coefficients: ",
+         paste0(diff_pars, collapse = ", "))
+  }
+
+  diff_pars <- setdiff(names(sPriorCoefs),
+                       c("Intercept", "Precision", "Anthro", "fire_excl_anthro"))
+  if(length(diff_pars) > 0){
+    stop("The survival model contains unrecognized coefficients: ",
+         paste0(diff_pars, collapse = ", "))
+  }
+
+  betaPriors = list(beta.Saf.Prior1=sPriorCoefs$Anthro,
+                    beta.Saf.Prior2=sPriorStdErrs$Anthro*modifiers$bse,
+                    beta.Rec.anthro.Prior1= rPriorCoefs$Anthro,
+                    beta.Rec.anthro.Prior2 = rPriorStdErrs$Anthro*modifiers$bre,
+                    beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
+                    beta.Rec.fire.Prior2 = rPriorStdErrs$fire_excl_anthro,
+                    l.Saf.Prior1 = sPriorCoefs$Intercept,
+                    l.Saf.Prior2 = sPriorStdErrs$Intercept*modifiers$lse,
+                    sig.Saf.Prior1 = modifiers$sse,
+                    sig.Saf.Prior2=modifiers$ssv,
+                    l.R.Prior1 = rPriorCoefs$Intercept,
+                    l.R.Prior2 = rPriorStdErrs$Intercept*modifiers$lre,
+                    sig.R.Prior1=modifiers$sre,
+                    sig.R.Prior2 =modifiers$srv
+                    )
+
+  # replace NULL values with 0 for when anthro or fire is not included
+  betaPriors <- lapply(betaPriors, function(x){
+    if(is.null(x) || length(x) == 0){
+      1e-10
+    } else {
+      x
+    }
+  })
+  return(betaPriors)
+
+}
+
+simCovariates<-function(initAnthro,initFire,numYears,anthroSlope,anthroSlopeFuture,futureStep,fireSlope=0){
+  covInit= data.frame(Anthro=initAnthro,fire_excl_anthro=initFire)
+  for (t in 1:numYears) {
+    #t=1s
+    if(t==1){
+      cov <- covInit
+    }else{
+      cov<- covPrev
+    }
+    if(t>1){
+      if(t>=futureStep){
+        cov$Anthro <- pmin(100,covPrev$Anthro + anthroSlopeFuture)
+      }else{
+        cov$Anthro <- pmin(100,covPrev$Anthro + anthroSlope)
+      }
+    }
+    covPrev=cov
+    if(fireSlope==0){
+      cov$fire_excl_anthro<-pmax(0,rnorm(1,cov$fire_excl_anthro,0.0001))
+    }else{
+      cov$fire_excl_anthro<-pmin(100,cov$fire_excl_anthro+fireSlope*(t-1))
+    }
+    cov$Total_dist = cov$Anthro + cov$fire_excl_anthro
+    cov$time=t
+    if(t==1){
+      covariates<-cov
+    }else{
+      covariates<-rbind(covariates,cov)
+    }
+
+  }
+  return(covariates)
+
+}
+
+simTrajectory<-function(numYears,covariates,survivalModelNumber = "M1",recruitmentModelNumber = "M4",
+                        popGrowthTable = popGrowthTableJohnsonECCC,
+                        recSlopeMultiplier=1,sefSlopeMultiplier=1,recQuantile=0.5,sefQuantile=0.5,
+                        stepLength=1,N0=1000){
+  # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
+  #recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
+  #stepLength=1;N0=1000
+
+  #alter coefficients
+  growthTab<-popGrowthTable
+  growthTab$Value[(growthTab$Coefficient=="Anthro")&(growthTab$responseVariable=="recruitment")]=recSlopeMultiplier*growthTab$Value[(growthTab$Coefficient=="Anthro")&(growthTab$responseVariable=="recruitment")]
+  growthTab$Value[(growthTab$Coefficient=="Anthro")&(growthTab$responseVariable=="femaleSurvival")]=sefSlopeMultiplier*growthTab$Value[(growthTab$Coefficient=="Anthro")&(growthTab$responseVariable=="femaleSurvival")]
+
+  popGrowthParsSmall <- demographicCoefficients(
+    2,
+    modelVersion = "Johnson",
+    survivalModelNumber = survivalModelNumber,
+    recruitmentModelNumber = recruitmentModelNumber,
+    populationGrowthTable = growthTab,
+    useQuantiles = c(recQuantile,recQuantile)
+  )
+  #manually set quantiles for example population
+  popGrowthParsSmall$coefSamples_Survival$quantiles=sefQuantile
+  #TO DO: across full covariate range, note proportion of this scenario that is outside distribution of observations across the country
+
+  # Only use precision if included in the table for this model number for both rec and surv
+  usePrec <- "Precision" %in% names(popGrowthParsSmall$coefSamples_Survival$coefValues) &
+    "Precision" %in% names(popGrowthParsSmall$coefSamples_Recruitment$coefValues)
+  # at each time,  sample demographic rates and project, save results
+  pars <- data.frame(N0 = N0)
+  for (t in 1:numYears) {
+    #t=1
+    covs<-subset(covariates,time==t)
+
+    rateSamples <- demographicRates(
+      covTable = covs,
+      popGrowthPars = popGrowthParsSmall,
+      ignorePrecision = !usePrec,
+      returnSample = TRUE
+    )
+    if (is.element("N", names(pars))) {
+      pars <- subset(pars, select = c(replicate, N))
+      names(pars)[names(pars) == "N"] <- "N0"
+    }
+    pars <- merge(pars, rateSamples)
+    pars <- cbind(pars,
+                  popGrowthJohnson(pars$N0,
+                                   R_bar = pars$R_bar, S_bar = pars$S_bar,
+                                   numSteps = stepLength, K=F, l_R = 1e-06))
+
+    # add results to output set
+    fds <- subset(pars, select = c(replicate, Anthro,fire_excl_anthro, S_t, R_t, N, lambda,n_recruits,surviving_adFemales))
+    fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
+    names(fds) <- c("Replicate", "Anthro","fire_excl_anthro", "survival", "recruitment", "N", "lambda","n_recruits","n_cows")
+    fds$n_recruits=fds$n_recruits*2 #all calves, not just females
+    fds <- pivot_longer(fds, !Replicate, names_to = "MetricTypeID", values_to = "Amount")
+    fds$Timestep <- t * stepLength
+    if (t == 1) {
+      popMetrics <- fds
+    } else {
+      popMetrics <- rbind(popMetrics, fds)
+    }
+  }
+
+  popMetrics$MetricTypeID <- as.character(popMetrics$MetricTypeID)
+  popMetrics$Replicate <- paste0("x", popMetrics$Replicate)
+  return(subset(popMetrics,Replicate=="x1"))
+
+}
+
+simCalfCowRatios<-function(cowCounts,minYr,exData){
+  ageRatioOut=subset(cowCounts,(Year>=minYr),select=c(Year,Class,Count))#assume info from only one herd
+  ageRatioOut=pivot_wider(ageRatioOut,id_cols=c("Year"),names_from="Class",values_from="Count")
+  ageRatioOut=merge(ageRatioOut,subset(exData,select=c("Year","n_recruits","n_cows")))
+  # rbinom needs n_recruits to be <= n_cows and n_cows not 0
+  n_recs <- pmin(ageRatioOut$n_cows, ageRatioOut$n_recruits)
+  ageRatioOut$calf= ifelse(ageRatioOut$n_cows == 0, 0,
+                           rbinom(nrow(ageRatioOut),ageRatioOut$cow,
+                                  n_recs/ageRatioOut$n_cows))
+  ageRatioOut=subset(ageRatioOut,select=c(Year,calf,cow))
+  ageRatioOut=pivot_longer(ageRatioOut,cols=c(calf,cow),names_to="Class",values_to="Count")
+  return(ageRatioOut)
+}
+
+simSurvivalData<-function(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime){
+  #for simplicity, ignore variation in survival probability among months
+  initYear = min(freqStartsByYear$Year)
+  survivalSeries = subset(exData,select=c(survival,Year))
+  if(initYear<min(survivalSeries$Year)){
+    missingYrs = seq(initYear,min(survivalSeries$Year)-1)
+    addBit = subset(survivalSeries,Year==min(survivalSeries$Year))
+    addBit$Year=NULL;addBit = merge(addBit, data.frame(Year=missingYrs))
+    survivalSeries=rbind(survivalSeries,addBit)
+  }
+
+  animalID = 1
+  started=F
+  for(k in 1:nrow(freqStartsByYear)){
+    #k =1
+    if(is.na(freqStartsByYear$numStarts[k])|(freqStartsByYear$numStarts[k]<=0)){
+      next
+    }
+    startYear = freqStartsByYear$Year[k]
+    for(n in 1:freqStartsByYear$numStarts[k]){
+      #collarNumYears=20
+      addS <- simSurvivalObs(animalID,startYear,collarNumYears,collarOffTime,collarOnTime,survivalSeries)
+      nrow(addS)
+      animalID= animalID+1
+      if(!started){
+        simSurvObs<-addS
+        started=T
+      }else{
+        simSurvObs<-rbind(simSurvObs,addS)
+      }
+    }
+  }
+
+  simSurvObs<-subset(simSurvObs,is.element(Year,exData$Year))
+  simSurvObs<-simSurvObs[order(simSurvObs$Year),]
+
+  addBit <- unique(subset(freqStartsByYear,select=setdiff(names(freqStartsByYear),c("numStarts",names(simSurvObs)))))
+  if(nrow(addBit)>1){
+    stop()
+  } else if(nrow(addBit) > 0){
+    simSurvObs<-merge(simSurvObs,addBit)
+  }
+
+  return(simSurvObs)
+}
+
+simSurvivalObs<-function(animalID,startYear,collarNumYears,collarOffTime,collarOnTime,survivalSeries){
+  #animalID =  1; startYear = 2018
+  for(i in startYear:min((startYear+collarNumYears),max(survivalSeries$Year))){
+    #i = startYear
+    surv=survivalSeries$survival[survivalSeries$Year==i]^(1/12)#monthly survival
+
+    if(i==startYear){
+      enter=collarOnTime
+    }else{enter=0}
+
+    if(i==(startYear+collarNumYears)){
+      exit=collarOffTime
+    }else{exit=12}
+
+    event=0
+    for(j in (enter+1):exit){
+      die = if(runif(1)>=surv){1}else{0}
+      if(die){
+        event=1;exit=j
+        break
+      }
+    }
+
+    addBit = data.frame(id=animalID,Year=i,event=die,enter=enter,exit=exit)
+
+    if(i==startYear){
+      survObs = addBit
+    }else{
+      survObs = rbind(survObs,addBit)
+    }
+    if(die){break}
+  }
+
+  return(survObs)
+}
+
+
+# Tables ------------------------------------------------------------------
+
+getSumStats <- function(param, rrSurvMod, startYear, endYear){
+  #param = "S.annual.KM"
+  paramNames <- data.frame(parameter = c("S.annual.KM", "R", "Rfemale", "pop.growth","fpop.size",
+                                     "meanAFsurv", "meanR", "meanRfemale",
+                                     "medianLambda", "meanLambda"),
+                           name = c("Adult female survival", "Recruitment",
+                                    "Female-only recruitment", "Population growth rate","Female population size",
+                                    "Mean adult female survival",
+                                    "Mean recruitment", "Mean female recruitment",
+                                    "Median population growth rate",
+                                    "Mean population growth rate"))
+
+  paramNames<-subset(paramNames, is.element(parameter,rrSurvMod$parameters.to.save))
+
+  if(grepl("mean|median", param)){
+    yr <- NA_integer_
+  } else {
+    yr <- startYear:endYear
+  }
+
+  if(!param %in% paramNames$parameter){
+    stop("param ", param, "is not recognized\n",
+         "accepted params are: ", paramNames$parameter)
+  }
+
+  lower.cri <- apply(rrSurvMod$BUGSoutput$sims.list[[param]], 2,
+                     function(x){quantile(x, 0.025)})
+  upper.cri <- apply(rrSurvMod$BUGSoutput$sims.list[[param]], 2,
+                     function(x){quantile(x, 0.975)})
+
+  results <- data.frame(Year = yr,
+                        Parameter = subset(paramNames, paramNames$parameter == param,
+                                           select = name, drop = T),
+                        Mean = round(rrSurvMod$BUGSoutput$mean[[param]],digits=3),
+                        SD = round(rrSurvMod$BUGSoutput$sd[[param]],digits=3),
+                        `Lower 95% CRI` = round(lower.cri, digits=3),
+                        `Upper 95% CRI` = round(upper.cri,digits=3),
+                        check.names = FALSE)
+  return(results)
+}
+
+tabAllRes <- function(rrSurvMod, startYear, endYear){
+  #rrSurvMod=rr.surv;startYear= minYr;endYear= maxYr
+
+  allParams <- c("S.annual.KM", "R", "Rfemale", "pop.growth","fpop.size",
+                 "meanAFsurv", "meanR", "meanRfemale",
+                 "medianLambda", "meanLambda")
+  allParams<-allParams[is.element(allParams,rrSurvMod$parameters.to.save)]
+
+  allResults <- lapply(allParams, getSumStats, rrSurvMod, startYear, endYear)
+
+  allResults <- do.call(rbind, allResults)
+
+  allResults <- allResults[order(allResults$Year),]
+  allResults <- allResults[order(allResults$Parameter),]
+  row.names(allResults) <- 1:length(allResults$Year)
+  allResults
+}
+
+
+# Plots -------------------------------------------------------------------
+
+plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=NULL,facetVars=NULL){
+  #allRes=scResults$rr.summary.all; parameter="Adult female survival";obs=scResults$obsSurv.all;lowBound=0;simRange=scResults$sim.all;facetVars=c("sQ","P")
+  df <- subset(allRes, allRes$Parameter == parameter)
+
+  if(nrow(df) < 1){
+    stop()
+  }
+
+  if(!is.null(obs)){
+    pr = parameter
+    obs=subset(obs,parameter==pr)
+  }
+
+  if(!is.null(simRange)){
+    pr = parameter
+    simRange=subset(simRange,parameter==pr)
+
+    df$Type="local";simRange$Type="national"
+    nameSel<-c(c("Year","Mean","Lower 95% CRI", "Upper 95% CRI","Type"),facetVars)
+    df=rbind(subset(df,select=nameSel),subset(simRange,select=nameSel))
+    df$grp = df$Type
+    if(!is.null(facetVars)){
+      for(i in facetVars)
+      df$grp=paste0(df$grp,df[[i]])
+    }
+    x1 <- ggplot(df, aes(x = Year, y=Mean,fill=Type,col=Type))
+
+  }else{
+    x1 <- ggplot(df, aes(x = Year, y=Mean))
+
+  }
+
+  x2 <- x1 + theme_classic() + xlab("Year")+ ylab(parameter) +
+    geom_ribbon(aes(ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`),
+                show.legend = FALSE, alpha = 0.25,colour=NA)+
+    geom_line(aes(x = Year, y=Mean), size = 1.75) +
+    theme(axis.text.y = element_text(size=14),
+          axis.text.x = element_text(angle = 90, vjust = 0.5, size=14),
+          axis.title.x=element_text(size=16,face="bold"),
+          axis.title.y=element_text(size=16,face="bold")) +
+    scale_y_continuous(limits=c(ifelse(any(df$`Lower 95% CRI` < lowBound), NA, lowBound),
+                                ifelse(any(df$`Upper 95% CRI` > 1), NA, highBound))) +
+    scale_x_continuous(breaks=seq(min(df$Year, na.rm = TRUE),
+                                  max(df$Year, na.rm = TRUE),1))
+
+  if(!is.null(obs)){
+    obs$Type="obs"
+    x2<-x2+geom_point(data=obs,aes(x=Year,y=Mean),col="black",shape=17,size=2,show.legend=F)
+  }
+
+  if(!is.null(facetVars)){
+    if(length(facetVars)==2){
+      x2<-x2+facet_grid(as.formula(paste(facetVars[1],"~", facetVars[2])),labeller = "label_both")
+    }
+  }
+  x2
+}
+
+simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
+                               freqStartsByYear="freqStartsByYear.csv",
+                               collarNumYears=4,collarOffTime=5,
+                               collarOnTime=8,distScen = NULL,
+                               popGrowthTable = popGrowthTableJohnsonECCC,
+                               survivalModelNumber = "M1",
+                               recruitmentModelNumber = "M4"){
+  #printPlot=F;cowCounts="cowCounts.csv";freqStartsByYear="freqStartsByYear.csv";collarNumYears=4;collarOffTime=5;collarOnTime=8
+  if(is.character(cowCounts)){
+    cowCounts =read.csv2(paste0("tabs/",cowCounts))
+  }
+  if(is.character(freqStartsByYear)){
+    freqStartsByYear=read.csv2(paste0("tabs/",freqStartsByYear))
+  }
+
+  #Simulate covariate table
+  #TO DO: in UI, option for user to load a table rather than simulate one
+  if(is.null(distScen)){
+    covariates<-simCovariates(cs$iA,cs$iF,cs$P+cs$J,cs$aS,cs$aSf,cs$P+1)
+    simDisturbance=covariates
+    simDisturbance$Year = cs$iYr+simDisturbance$time-1
+
+    write.csv(simDisturbance,"tabs/simDisturbance.csv") #note default file for UI is always the last scenario run
+    write.csv(simDisturbance,paste0("tabs/simDisturbance",cs$label,".csv"))
+  } else {
+    simDisturbance <- distScen
+    simDisturbance$time = simDisturbance$Year - cs$iYr + 1
+    simDisturbance <- filter(simDisturbance, Year <= (cs$iYr + cs$P - 1 + cs$J) &
+                               Year >= cs$iYr)
+  }
+
+  #simulate true population trajectory
+  popMetrics<-simTrajectory(numYears=cs$P+cs$J,covariates=simDisturbance,
+                            popGrowthTable = popGrowthTable,
+                            survivalModelNumber = survivalModelNumber,
+                            recruitmentModelNumber = recruitmentModelNumber,
+                            recSlopeMultiplier=cs$rS,
+                            sefSlopeMultiplier=cs$sS,recQuantile=cs$rQ,sefQuantile=cs$sQ,N0=cs$N0)
+
+  simDisturbance$time=NULL
+  if(printPlot){
+    #TO DO: save info on true population dynamics, add to projection plots for comparison
+    base1 <- ggplot(data = popMetrics, aes(x = Timestep, y = Amount, colour = Replicate,
+                                           group = Replicate)) +
+      geom_line() +
+      facet_wrap(~MetricTypeID, scales = "free") +
+      xlab("Time") +
+      theme(legend.position = "none")
+    print(base1)
+  }
+
+  popMetricsWide<-pivot_wider(popMetrics,id_cols=c(Replicate,Timestep),names_from=MetricTypeID,values_from=Amount)
+  exData<-subset(popMetricsWide,(Timestep<=cs$P))
+  exData$Year = cs$iYr+exData$Timestep-1
+
+  #Now apply observation process model to get simulated calf:cow and survival data.
+  #Use sample sizes in example input data e.g. Eaker
+
+  #reduce sim data tables to length of observations prior to max year
+  minYr = cs$iYr
+  maxYr = cs$iYr+cs$P+cs$J-1
+
+  #given observed total animals & proportion calfs/cows from simulation - get calf/cow ratio
+  ageRatioOut<-simCalfCowRatios(cowCounts,minYr,exData)
+  ageRatioOut$HerdCode="ALAP" #TO DO: remove option for more than one herd in input files, UI, and all associated code...
+  ageRatioOut=subset(ageRatioOut,select=c(names(cowCounts)))
+  #TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
+  write.csv(ageRatioOut,"tabs/simAgeRatio.csv")
+  write.csv(ageRatioOut,paste0("tabs/simAgeRatio",cs$label,".csv"))
+
+  #simulate survival data from survival propability.
+  #TO DO: allow user to enter table of starts by year, collarOffTime, and collarNumYears
+  #for each animal, construct simulated observations
+  simSurvObs<-simSurvivalData(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime)
+
+  #TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
+  write.csv(simSurvObs,"tabs/simSurvData.csv")
+  write.csv(simSurvObs,paste0("tabs/simSurvData",cs$label,".csv"))
+  #TO DO: UI option to easily select among available scenarios.
+
+  return(list(minYr=minYr,maxYr=maxYr,simDisturbance=simDisturbance,simSurvObs=simSurvObs,ageRatioOut=ageRatioOut,exData=exData,cs=cs))
+}
+
+getParamsFromEacker<-function(){
+  ###############
+  #Use Eacker example data for sample sizes in each year.
+  survData="tte_caribouFEMALES.csv"
+  ageRatio.herd="ageRatio.herd.csv"
+  ageRatio.herd2 <- read.csv(ageRatio.herd,header=T)
+  tte_caribou2 <- read.csv(survData, header=T)
+
+  #need table of observed number of cows each year as input for simulating calf:cow ratios. Use Eaker as example.
+  cowCounts = subset(ageRatio.herd2,Class=="cow")
+  write.csv(cowCounts,"tabs/cowCounts.csv")
+  yrRange = max(tte_caribou2$Year)-min(tte_caribou2$Year)
+
+  #get survival sampling parameters from example data
+  animalStarts<-subset(tte_caribou2,select=c(id,Year))%>%group_by(id)%>%summarise(startYear=min(Year))
+  freqStartsByYear<- as.data.frame(table(animalStarts$startYear));names(freqStartsByYear)=c("Year","numStarts")
+  freqStartsByYear$Year = as.numeric(as.character(freqStartsByYear$Year))
+  sm = tte_caribou2%>%group_by(id)%>%summarize(startYear=min(Year),endYear = max(Year),numYears=max(Year)-min(Year),died=sum(event))
+  collarNumYears = median(subset(sm,!died)$numYears) #for simplicity, pick a single number of years that collars remain on
+
+  addInfo=unique(subset(tte_caribou2,select=c(HerdDescription,HerdCode,Range_ID,RangeDescription,RangeCode)))
+  #TO DO: remove requirement for additional herd ID and range ID columns in UI code
+  freqStartsByYear = merge(freqStartsByYear,addInfo)
+    write.csv(freqStartsByYear,"tabs/freqStartsByYear.csv")
+
+  offSet = subset(sm,!died,select=c(id,endYear));names(offSet)=c("id","Year")
+  offSet = merge(offSet,tte_caribou2,all.x=T)
+  collarOffTime = median(offSet$exit) # for simplicity, pick a single month that collars fall off
+
+  onSet = subset(sm,select=c(id,startYear));names(onSet)=c("id","Year")
+  onSet = merge(onSet,tte_caribou2,all.x=T)
+  collarOnTime = median(onSet$enter) # for simplicity, pick a single month that collars are put on
+  #TO DO: allow users to set freqStartsByYear, collarNumYears, collarOffTime, and collarOnTime as parameters OR
+  #provide a file formatted as in Eacker from which these parameters can be derived.
+
+  #freqStartsByYear$numStarts=30
+  return(list(cowCounts=cowCounts,freqStartsByYear=freqStartsByYear,collarOnTime=collarOnTime,collarOffTime=collarOffTime,collarNumYears=collarNumYears))
+}
+
+fillDefaults <- function(scns = NULL,
+                         defList = list(
+                           iF = 0, iA = 0, aS = 0, aSf = 0,
+                           rS = 1, sS = 1,
+                           rQ = 0.5, sQ = 0.5, J = 5, P = 20, st = 25, N0 = 1000
+                         ), curYear = 2018) {
+  if (is.null(scns)) {
+    scns <- as.data.frame(defList)
+  } else {
+    fillSet <- setdiff(names(defList), names(scns))
+
+    for (i in fillSet) {
+      scns[[i]] <- defList[[i]]
+    }
+  }
+  scns$ID <- seq(1:nrow(scns))
+  scns$label <- ""
+  for (n in names(scns)[(length(names(scns)) - 1):1]) {
+    scns$label <- paste0(scns$label, n, scns[[n]], "_")
+  }
+
+  if (!is.element("iYr", names(scns))) {
+    scns$iYr <- curYear - scns$P + 1
+  }
+  return(scns)
+}
+
+runScnSet<-function(scns,ePars,simBig){
+  #ePars=eParsIn
+  scns<-fillDefaults(scns)
+  for(p in 1:nrow(scns)){
+    #p=1
+    cs =scns[p,]
+
+    if(is.element("st",names(cs))){
+      ePars$freqStartsByYear$numStarts=cs$st
+    }
+    oo = simulateObservations(cs,cowCounts=ePars$cowCounts,freqStartsByYear=ePars$freqStartsByYear,collarNumYears=ePars$collarNumYears,collarOffTime=ePars$collarOffTime,collarOnTime=ePars$collarOnTime)
+    betaPriors<-getPriors(cs)
+    minYr=min(oo$exData$Year)
+    maxYr=max(oo$simDisturbance$Year)
+    out<-runRMModel(survData=oo$simSurvObs,ageRatio.herd=oo$ageRatioOut,disturbance=oo$simDisturbance,
+                    betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0)
+    outTabs<-getOutputTables(result=out$result,startYear=minYr,endYear=maxYr,survInput=out$survInput,oo=oo,simBig=simBig)
+
+    if(p==1){
+      rr.summary.all = outTabs$rr.summary.all
+      sim.all = outTabs$sim.all
+      obs.all=outTabs$obs.all
+    }else{
+      rr.summary.all = rbind(rr.summary.all,outTabs$rr.summary.all)
+      sim.all = rbind(sim.all,outTabs$sim.all)
+      obs.all=rbind(obs.all,outTabs$obs.all)
+    }
+  }
+  return(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all))
+}
+
+getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig){
+  rr.summary<-tabAllRes(result, startYear, endYear)
+  obsSurv<-survInput; obsSurv$Mean=obsSurv$surv
+  obsSurv$Year = as.numeric(gsub("as.factor(Year)=","",obsSurv$Var1,fixed=T))
+  obsSurv<- subset(obsSurv,Year>1000)
+  obsSurv$parameter="Adult female survival"
+
+  obsRec=subset(oo$ageRatioOut,select=c(Year,Count,Class))
+  obsRec <-pivot_wider(obsRec,id_cols=c("Year"),names_from="Class",values_from="Count")
+  obsRec$Mean=obsRec$calf/obsRec$cow
+  obsRec$parameter="Recruitment"
+
+  obsLam = subset(oo$exData,select=c(Year,lambda))
+  names(obsLam)=c("Year","Mean")
+  obsLam$parameter="Population growth rate"
+
+  obsSize = subset(oo$exData,select=c(Year,N))
+  names(obsSize)=c("Year","Mean")
+  obsSize$parameter="Female population size"
+
+  obsAll=rbind(obsLam,obsSize,subset(obsRec,select=names(obsLam)),subset(obsSurv,select=names(obsLam)))
+
+  simBigO<-subset(simBig,select=c(Anthro,Mean,lower,upper,parameter))
+  names(simBigO)<-c("Anthro","Mean","Lower 95% CRI","Upper 95% CRI","parameter")
+
+  # combine cs and simDisturbance and add to all output tables, nest params in a list
+  dist_params <- merge(oo$simDisturbance, oo$cs)
+
+  rr.summary=merge(rr.summary,dist_params)
+  simBigO=merge(simBigO,dist_params)
+  obsAll=merge(obsAll,dist_params)
+  rr.summary.all = rr.summary
+  sim.all = simBigO
+  obs.all=obsAll
+  return(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all))
+}
+
+makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ")){
+  #facetVars=c("sS","sQ");addBit=""
+  pdf(paste0("figs/Surv",addBit,".pdf"),width=10,height=7)
+  print(plotRes(scResults$rr.summary.all, "Adult female survival",obs=scResults$obs.all,
+                lowBound=0.6,simRange=scResults$sim.all,facetVars=facetVars))
+  dev.off()
+
+  pdf(paste0("figs/Lambda",addBit,".pdf"),width=10,height=7)
+  print(plotRes(scResults$rr.summary.all, "Population growth rate",obs=scResults$obs.all,
+                lowBound=0,simRange=scResults$sim.all,facetVars=facetVars))
+  dev.off()
+  pdf(paste0("figs/Rec",addBit,".pdf"),width=10,height=7)
+  print(plotRes(scResults$rr.summary.all, "Recruitment",obs=scResults$obs.all,
+                lowBound=0,simRange=scResults$sim.all,facetVars=facetVars))
+  dev.off()
+  pdf(paste0("figs/FPOP",addBit,".pdf"),width=10,height=7)
+  print(plotRes(scResults$rr.summary.all, "Female population size",obs=scResults$obs.all,
+                lowBound=0,facetVars=facetVars))
+  dev.off()
+
+}
+
+getSimsNational<-function(N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0){
+  #N0=1000;Anthro=seq(0,100,by=2);fire_excl_anthro=0
+
+  doSave <- FALSE
+
+  if(length(as.list(match.call())) == 1){
+
+    if(file.exists("simsNational.rds")){
+      message("Using saved object")
+      return(readRDS("simsNational.rds"))
+    } else {
+      message("Object will be saved for future use")
+      doSave <- TRUE
+    }
+
+  }
+  covTableObs <- expand.grid(Anthro = Anthro,
+                             fire_excl_anthro = fire_excl_anthro)
+  covTableObs$Total_dist = covTableObs$Anthro + covTableObs$fire_excl_anthro
+  popGrowthPars <- demographicCoefficients(1000)
+  rateSamplesAll <- demographicRates(covTable = covTableObs,popGrowthPars = popGrowthPars,returnSample=T,useQuantiles = F)
+  pars <- merge(data.frame(N0 = N0), rateSamplesAll)
+  pars <- cbind(pars,popGrowthJohnson(pars$N0,R_bar = pars$R_bar, S_bar = pars$S_bar,numSteps = 1,K=F))
+  simSurvBig<-pars %>% select(Anthro,S_t) %>% group_by(Anthro) %>% summarize(Mean=mean(S_t),lower=quantile(S_t, 0.025),upper=quantile(S_t,0.975))
+  simSurvBig$parameter="Adult female survival"
+  simRecBig<-pars %>% select(Anthro,R_t) %>% group_by(Anthro) %>% summarize(Mean=mean(R_t),lower=quantile(R_t, 0.025),upper=quantile(R_t,0.975))
+  simRecBig$parameter="Recruitment"
+  simLamBig<-pars %>% select(Anthro,lambda) %>% group_by(Anthro) %>% summarize(Mean=mean(lambda),lower=quantile(lambda, 0.025),upper=quantile(lambda,0.975))
+  simLamBig$parameter="Population growth rate"
+  simFpopBig<-pars %>% select(Anthro,N) %>% group_by(Anthro) %>% summarize(Mean=mean(N),lower=quantile(N, 0.025),upper=quantile(N,0.975))
+  simFpopBig$parameter="Female population size"
+  simBig =rbind(simSurvBig,simRecBig,simLamBig,simFpopBig)
+
+  if(doSave){
+    saveRDS(simBig, "simsNational.rds")
+  }
+  return(simBig)
+}
+
+# test a popGrowthTable has the right format
+testPopGrowthTable <- function(df) {
+  # required columns
+  missed_nms <- setdiff(c("responseVariable", "Coefficient", "Value"),
+                        colnames(df))
+
+  # need stdErr or CI
+  if(! "StdErr" %in% colnames(df)){
+   missed_nms <- c(missed_nms,
+                   setdiff(c("lowerCI", "upperCI"), colnames(df)))
+   df <- mutate(df, StdErr = NA_real_)
+  } else if(!all(c("lowerCI", "upperCI") %in% colnames(df))){
+    df <- mutate(df, lowerCI = NA_real_, upperCI = NA_real_)
+  }
+
+  if(length(missed_nms) > 0){
+    stop("The model coefficient file loaded is missing the columns ",
+         paste(missed_nms, collapse = ", "), call. = FALSE)
+  }
+
+  # should only give one model number in table because no method to select a mod num
+  if(!is.null(df$ModelNumber)){
+    nmod <- df %>% group_by(responseVariable) %>%
+      summarise(nmod = n_distinct(ModelNumber)) %>%
+      pull(nmod)
+
+    if(any(nmod > 1)){
+      stop("The model coefficient file loaded contains more than one model per response variable",
+           call. = FALSE)
+    }
+  }
+
+  # add expected columns that should never change
+  df <- mutate(df, modelVersion = "Johnson",
+               ModelNumber = ifelse(responseVariable == "recruitment", "M4", "M1"),
+               Type = "National")
+
+  # expected values
+  diff_res <- setdiff(unique(df$responseVariable), unique(popGrowthTableJohnsonECCC$responseVariable))
+
+  if(!setequal(unique(popGrowthTableJohnsonECCC$responseVariable), unique(df$responseVariable))){
+    stop("The model coefficient file loaded contains unrecognized responseVariable: ",
+         paste(diff_res, collapse = ", "), call. = FALSE)
+  }
+
+  diff_coef <- setdiff(unique(df$Coefficient),  c("Intercept", "Precision",
+                                                  "Anthro", "fire_excl_anthro"))
+
+  if(length(diff_coef) > 0){
+    stop("The model coefficient file loaded contains unrecognized Coefficient: ",
+         paste(diff_coef, collapse = ", "), call. = FALSE)
+  }
+
+  testStdCI <- df %>% mutate(stdOrCI = !is.na(StdErr)|(!is.na(lowerCI) & !is.na(upperCI)))
+
+  if(!all(testStdCI$stdOrCI)){
+    stop("The model coefficient file loaded is missing StdErr or lowerCI and upperCI for:\n",
+         "femaleSurvival: ",
+         testStdCI %>% filter(!stdOrCI, responseVariable == "femaleSurvival") %>%
+           pull(Coefficient) %>% paste0(collapse = ", "), "\n",
+         "recruitment: ",
+         testStdCI %>% filter(!stdOrCI, responseVariable == "recruitment") %>%
+           pull(Coefficient) %>% paste0(collapse = ", "),
+         call. = FALSE)
+  }
+
+  return(df)
+}
+
