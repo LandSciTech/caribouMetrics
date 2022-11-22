@@ -270,9 +270,9 @@ getPriors<-function(modifiers=NULL,
                                       lse = 7,
                                       sse = 0.08696*0.7,
                                       ssv = 0.01,
-                                      lre=7,
+                                      lre=9,
                                       sre = 0.46,
-                                      srv = 0.18),
+                                      srv = 0.22),
                     popGrowthTable = popGrowthTableJohnsonECCC,
                     modVer = "Johnson"){
   #modifiers=cs
@@ -788,9 +788,9 @@ getParamsFromEacker<-function(){
 
 fillDefaults <- function(scns = NULL,
                          defList = list(
-                           iF = 0, iA = 0, aS = 0, aSf = 0,
+                           iF = 0, iA = 0, aS = 0, aSf = 4,
                            rS = 1, sS = 1,
-                           rQ = 0.5, sQ = 0.5, J = 5, P = 20, st = 25, N0 = 1000
+                           rQ = 0.5, sQ = 0.5, J = 20, P = 2, st = 25, N0 = 1000
                          ), curYear = 2018) {
   if (is.null(scns)) {
     scns <- as.data.frame(defList)

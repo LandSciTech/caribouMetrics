@@ -304,13 +304,13 @@ ui <- dashboardPage(
         "Graphical summary",
         tabsetPanel(
           id = "graphPanel",
-          tabPanel("Adult female survival",  plotOutput("plot1")),
+          tabPanel("Disturbance", plotOutput("plot6")),
           tabPanel("Recruitment",  plotOutput("plot2")),
-          tabPanel("Female recruitment",  plotOutput("plot3")),
+          tabPanel("Adult female survival",  plotOutput("plot1")),
           tabPanel("Population growth rate",  plotOutput("plot4")),
           tabPanel("Female population size",  plotOutput("plot5")),
-          tabPanel("Disturbance", plotOutput("plot6"))
-
+          tabPanel("Female recruitment",  plotOutput("plot3"))
+          
         ),
       ),
       tabPanel(
