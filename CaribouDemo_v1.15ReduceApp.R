@@ -120,7 +120,7 @@ ui <- dashboardPage(
           id = "nYears",
           numericInput("nYearObs",
                        label = "Number of years of observations",
-                       value = scn_defaults$P, min = 1),
+                       value = scn_defaults$P, min = 2),
 
           numericInput("nYearProj",
                        label = "Number of years of projections",
@@ -166,7 +166,7 @@ ui <- dashboardPage(
       ),
       # Obs data ---------------------------------
       menuItem(
-        "Observation data parameters",
+        "Observation model parameters",
         numericInput("cowsPerYear",
                      label = "Number of cows in aerial surveys for calf:cow ratio each year",
                      value = obs_defaults$cowsPerYear, min = 1),
@@ -310,7 +310,7 @@ ui <- dashboardPage(
           tabPanel("Population growth rate",  plotOutput("plot4")),
           tabPanel("Female population size",  plotOutput("plot5")),
           tabPanel("Female recruitment",  plotOutput("plot3"))
-          
+
         ),
       ),
       tabPanel(
