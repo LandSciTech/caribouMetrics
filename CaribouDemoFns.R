@@ -1017,7 +1017,8 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
     obs$Type="local"
     obs$obsError=F
     obs$obsError[obs$type=="observed"]=T
-    x2<-x2+geom_point(data=obs,aes(x=Year,y=Mean, shape=obsError,size=obsError),col="black",show.legend=T)
+    x2<-x2+geom_point(data=obs,aes(x=Year,y=Mean, shape=obsError),col="black",show.legend=T)+
+      scale_shape_manual(values = c(16,2))
   }
 
   if(!is.null(facetVars)){
