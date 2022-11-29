@@ -1,16 +1,17 @@
 runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      disturbance="simDisturbance.csv",betaPriors="default",
                      startYear = 1998, endYear = 2018, Nchains = 2,Niter = 20000,Nburn = 10000,Nthin = 1,N0=1000,
+                     survAnalysisMethod = "KaplanMeier",
                      inpFixed=list()){
   #survData="simSurvData.csv";ageRatio.herd="simAgeRatio.csv";disturbance="simDisturbance.csv"
   #startYear = 2018-5; endYear = 2024; betaPriors="default"
   #survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
-  #betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0
+  #betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "Exponential"
   #Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;inpFixed=list()
 
   # combine defaults in function with inputs from input list
   inputArgs = c("survData","ageRatio.herd","disturbance","startYear", "endYear",
-                   "Nchains","Niter","Nburn","Nthin","N0")
+                   "Nchains","Niter","Nburn","Nthin","N0","survAnalysisMethod")
   addArgs<-inputArgs#setdiff(inputArgs,names(inp))
   inp=list()
   for (a in addArgs){
@@ -89,6 +90,196 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
     stop("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
   }
 
+
+  if(inp$survAnalysisMethod=="KaplanMeier"){
+    survData<-getKMSurvivalEstimates(dSubset)
+    #omitting years with less than 12 months of observations of collared animals
+    sumDat <-dSubset %>%
+      group_by(Year) %>%
+      summarise(minEnter = min(enter),maxExit=max(exit))
+    includeYrs = subset(sumDat,minEnter==0&maxExit==12)
+    survData$Year = as.numeric(gsub("as.factor(Year)=","",as.character(survData$Var1),fixed=T))
+    survData <- merge(survData,includeYrs)
+    if(nrow(survData)==0){
+       stop("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
+    }
+
+    if(any(survData$surv==1)){
+      # which years does survival equal 1
+      survOne=which(unlist(lapply(split(dSubset, dSubset$Year), function(x) sum(x$event)))==0)
+      yearsOne=as.numeric(names(survOne))
+      data.sub=data[data$Year %in% yearsOne,]
+      nriskYears=data.frame(with(data.sub, table(Year)))
+
+      #Specify model
+      sink("binLik.txt")
+      cat("
+	   model{
+	     for(i in 1:N){
+	      lived[i] ~ dbin(s[i], atrisk[i])
+	      s[i] ~ dbeta(1,1) # vague prior
+	      }
+	     }
+	      ",fill = TRUE)
+      sink()
+
+      data1=list(N=nrow(nriskYears), lived=nriskYears$Freq, atrisk=nriskYears$Freq)
+      params=c("s")
+      inits=function(){
+        list(s=runif(nrow(nriskYears), 0.80, 0.99))
+      }
+
+      # run model in JAGS
+      out1=jags(data=data1, inits=inits, parameters.to.save=params,
+                model.file="binLik.txt",n.chains=2, n.iter=5000,
+                n.burnin=1000, n.thin=1)
+      # create standard deviation variable from survData$tau above
+      survData$tau <- 1/(survData$se^2)
+      survData$tau[survOne]=1/(out1$BUGSoutput$sd$s^2)
+    }else
+
+      survData$tau <- 1/(survData$se^2)
+
+    surv_id = which(survData$surv!=1)
+    nSurv = length(surv_id)
+    survData$Var1=as.character(survData$Var1)
+  }else{
+    if(inp$survAnalysisMethod=="exp"){
+      #parametric exponential survival model
+      survData = dSubset
+      survData$t.to.death = survData$exit/12
+      survData$t.to.death[!survData$event]=NA
+      survData$t.cen=survData$exit/12
+      survData$t.cen[survData$event]=0
+    }else{
+      dExpand <- apply(subset(dSubset,select=c(id,Year,event,enter,exit)),1,expandSurvivalRecord)
+      survData <- do.call(rbind,dExpand)
+    }
+  }
+
+  #split data into calf and cow recruitment data
+  calf.cnt<-subset(compData, compData$Class=="calf")
+  calf.cnt$Class<-factor(calf.cnt$Class)
+  cow.cnt<-subset(compData, compData$Class=="cow")
+  cow.cnt$Class<-factor(cow.cnt$Class)
+
+  #deal with missing years of data between year ranges
+  Years2<-data.frame(sort(unique(data$Year)))
+  names(Years2) <- "Year"
+  y1<-merge(Years2, calf.cnt, by="Year", all=TRUE)
+  data3<-y1[,1:3]
+
+  y2<-merge(Years2, cow.cnt, by="Year", all=TRUE)
+  data4<-y2[,1:3]
+  data3$Name <- rep(unique(compData$Name), length(data3$Count))
+  data4$Name  <- rep(unique(compData$Name), length(data4$Count))
+
+  data3$Count <- ifelse(data3$Count>data4$Count,NA,data3$Count)
+  data4$Count <- ifelse(data3$Count>data4$Count,NA,data4$Count)
+
+  xCalf <- which(is.na(data3$Count)==T)
+  xCow <- which(is.na(data4$Count)==T)
+  Years4 <- levels(as.factor(data$Year))[xCalf]
+
+  if(any(is.na(data3$Count)==T))
+  {
+    warning("missing composition data; missing years:"," ",list(Years4))}
+
+  t.pred = max(inp$endYear-max(data3$Year),0)
+
+  if(t.pred>0){
+    survAddBit = survData[1,]
+    if(inp$survAnalysisMethod=="KaplanMeier"){
+      survAddBit[1,]=NA;survAddBit$Var1=NULL;survAddBit=merge(survAddBit,data.frame(Var1=seq(1:t.pred)))
+    }else{
+      survAddBit[1:ncol(survAddBit)]=NA;survAddBit$Year=NULL;survAddBit = merge(survAddBit,data.frame(Year=(max(survData$Year)+seq(1:t.pred))))
+    }
+
+    survDatat=rbind(survData,survAddBit)
+
+    dat3Bit = data3[1,]
+    dat3Bit[,2:3]=NA;dat3Bit$Year=NULL;dat3Bit=merge(dat3Bit,data.frame(Year=seq(max(data3$Year)+1,max(data3$Year)+t.pred)))
+    data3t=rbind(data3,dat3Bit)
+
+    data4t=rbind(data4,dat3Bit)
+
+  }else{
+    survDatat=survData
+    data3t=data3
+    data4t=data4
+  }
+
+  #for beta model, remove tau, adjust Surv: (survDatat$surv*45+0.5)/46
+  #survDatat$surv,tau=survDatat$tau
+  #               phi.Saf.Prior1=betaPriors$phi.Saf.Prior1,phi.Saf.Prior2=betaPriors$phi.Saf.Prior2,
+  if(inp$survAnalysisMethod=="KaplanMeier"){
+    sp.data=list(Surv=survDatat$surv,tau=survDatat$tau,anthro=disturbance$Anthro,fire=disturbance$fire_excl_anthro,
+                 beta.Saf.Prior1=betaPriors$beta.Saf.Prior1,beta.Saf.Prior2=betaPriors$beta.Saf.Prior2,
+                 beta.Rec.anthro.Prior1=betaPriors$beta.Rec.anthro.Prior1,beta.Rec.anthro.Prior2=betaPriors$beta.Rec.anthro.Prior2,
+                 beta.Rec.fire.Prior1=betaPriors$beta.Rec.fire.Prior1,beta.Rec.fire.Prior2=betaPriors$beta.Rec.fire.Prior2,
+                 l.Saf.Prior1 = betaPriors$l.Saf.Prior1,l.Saf.Prior2 = betaPriors$l.Saf.Prior2,
+                 l.R.Prior1 = betaPriors$l.R.Prior1,l.R.Prior2 = betaPriors$l.R.Prior2,
+                 sig.Saf.Prior1=betaPriors$sig.Saf.Prior1,sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
+                 sig.R.Prior1 = betaPriors$sig.R.Prior1,sig.R.Prior2=betaPriors$sig.R.Prior2,
+                 Ninit=inp$N0,
+                 nCounts=length(which(is.na(data3t$Count)==FALSE)),count_id=which(is.na(data3t$Count)==FALSE),
+                 nSurvs=length(which(is.na(survDatat$surv)==FALSE)),surv_id=which(is.na(survDatat$surv)==FALSE),
+                 nYears=nYears+t.pred,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
+
+    sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
+
+    rr.surv <- jags(data=sp.data, parameters.to.save=sp.params,
+                    model.file="INF_saf_INF_r_JAGS_extentTime.txt",
+                    n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin)
+  }else{
+    if(inp$survAnalysisMethod=="exp"){
+      sp.data=list(t.to.death=survDatat$t.to.death,t.cen=survDatat$t.cen,survYr = survDatat$Year-inp$startYear,anthro=disturbance$Anthro,fire=disturbance$fire_excl_anthro,
+                   beta.Saf.Prior1=betaPriors$beta.Saf.Prior1,beta.Saf.Prior2=betaPriors$beta.Saf.Prior2,
+                   beta.Rec.anthro.Prior1=betaPriors$beta.Rec.anthro.Prior1,beta.Rec.anthro.Prior2=betaPriors$beta.Rec.anthro.Prior2,
+                   beta.Rec.fire.Prior1=betaPriors$beta.Rec.fire.Prior1,beta.Rec.fire.Prior2=betaPriors$beta.Rec.fire.Prior2,
+                   l.Saf.Prior1 = betaPriors$l.Saf.Prior1,l.Saf.Prior2 = betaPriors$l.Saf.Prior2,
+                   l.R.Prior1 = betaPriors$l.R.Prior1,l.R.Prior2 = betaPriors$l.R.Prior2,
+                   sig.Saf.Prior1=betaPriors$sig.Saf.Prior1,sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
+                   sig.R.Prior1 = betaPriors$sig.R.Prior1,sig.R.Prior2=betaPriors$sig.R.Prior2,
+                   Ninit=inp$N0,
+                   nCounts=length(which(is.na(data3t$Count)==FALSE)),count_id=which(is.na(data3t$Count)==FALSE),
+                   nSurvs=length(which(is.na(survDatat[,1])==FALSE)),surv_id=which(is.na(survDatat$Year)==FALSE),
+                   nYears=nYears+t.pred,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
+
+      sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
+
+      rr.surv <- jags(data=sp.data, parameters.to.save=sp.params,
+                      model.file="INF_saf_INF_r_JAGS_expSurvival.txt",
+                      n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin)
+
+    }else{
+      sp.data=list(surv=survDatat[,1:13],survYr = survDatat$Year-inp$startYear+1,anthro=disturbance$Anthro,fire=disturbance$fire_excl_anthro,
+                   beta.Saf.Prior1=betaPriors$beta.Saf.Prior1,beta.Saf.Prior2=betaPriors$beta.Saf.Prior2,
+                   beta.Rec.anthro.Prior1=betaPriors$beta.Rec.anthro.Prior1,beta.Rec.anthro.Prior2=betaPriors$beta.Rec.anthro.Prior2,
+                   beta.Rec.fire.Prior1=betaPriors$beta.Rec.fire.Prior1,beta.Rec.fire.Prior2=betaPriors$beta.Rec.fire.Prior2,
+                   l.Saf.Prior1 = betaPriors$l.Saf.Prior1,l.Saf.Prior2 = betaPriors$l.Saf.Prior2,
+                   l.R.Prior1 = betaPriors$l.R.Prior1,l.R.Prior2 = betaPriors$l.R.Prior2,
+                   sig.Saf.Prior1=betaPriors$sig.Saf.Prior1,sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
+                   sig.R.Prior1 = betaPriors$sig.R.Prior1,sig.R.Prior2=betaPriors$sig.R.Prior2,
+                   Ninit=inp$N0,
+                   nCounts=length(which(is.na(data3t$Count)==FALSE)),count_id=which(is.na(data3t$Count)==FALSE),
+                   nSurvs=length(which(is.na(survDatat[,1])==FALSE)),surv_id=which(is.na(survDatat$Year)==FALSE),
+                   nYears=nYears+t.pred,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
+
+      sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
+
+      rr.surv <- jags(data=sp.data, parameters.to.save=sp.params,
+                      model.file="INF_saf_INF_r_JAGS_expSurvival2.txt",
+                      n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin)
+
+    }
+  }
+
+  return(list(result=rr.surv,survInput=survDatat))
+}
+
+getKMSurvivalEstimates<-function(dSubset){
+
   sModel = survfit(Surv(enter, exit, event)~as.factor(Year), conf.type = "log-log",data=dSubset)
   reg.out<-summary(sModel)
   if(0){
@@ -103,17 +294,14 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
     print(base)
   }
 
-  sumDat <-dSubset %>%
-    group_by(Year) %>%
-    summarise(minEnter = min(enter),maxExit=max(exit))
-  includeYrs = subset(sumDat,minEnter==0&maxExit==12)
-
+  if(is.null(reg.out$strata)){reg.out$strata=as.character(dSubset$Year[1])}
   data5<-data.frame(reg.out$strata, reg.out$surv)
   data.se<-data.frame(reg.out$strata, reg.out$std.err)
   data.l<-data.frame(reg.out$strata, reg.out$lower)
   data.u<-data.frame(reg.out$strata, reg.out$upper)
   data6<-data.frame(table(data5$reg.out.strata))
   num<-data6$Freq
+  if(class(data5$reg.out.strata)=="character"){data5$reg.out.strata=as.factor(data5$reg.out.strata)}
   levs<-data.frame(levels(data5$reg.out.strata))
   names(levs)<-c("reg.out.strata")
   data7<-subset(data6, Freq>0)
@@ -148,138 +336,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
 
   survData <- data6
 
-  #omitting years with less than 12 months of observations of collared animals
-  survData$Year = as.numeric(gsub("as.factor(Year)=","",as.character(survData$Var1),fixed=T))
-  survData <- merge(survData,includeYrs)
-  if(nrow(survData)==0){
-    stop("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
-  }
-
-  if(any(survData$surv==1)){
-    # which years does survival equal 1
-    survOne=which(unlist(lapply(split(dSubset, dSubset$Year), function(x) sum(x$event)))==0)
-    yearsOne=as.numeric(names(survOne))
-    data.sub=data[data$Year %in% yearsOne,]
-    nriskYears=data.frame(with(data.sub, table(Year)))
-
-    #Specify model
-    sink("binLik.txt")
-    cat("
-	   model{
-	     for(i in 1:N){
-	      lived[i] ~ dbin(s[i], atrisk[i])
-	      s[i] ~ dbeta(1,1) # vague prior
-	      }
-	     }
-	      ",fill = TRUE)
-    sink()
-
-    data1=list(N=nrow(nriskYears), lived=nriskYears$Freq, atrisk=nriskYears$Freq)
-    params=c("s")
-    inits=function(){
-      list(s=runif(nrow(nriskYears), 0.80, 0.99))
-    }
-
-    # run model in JAGS
-    out1=jags(data=data1, inits=inits, parameters.to.save=params,
-              model.file="binLik.txt",n.chains=2, n.iter=5000,
-              n.burnin=1000, n.thin=1)
-    # create standard deviation variable from survData$tau above
-    survData$tau <- 1/(survData$se^2)
-    survData$tau[survOne]=1/(out1$BUGSoutput$sd$s^2)
-  }else
-
-    survData$tau <- 1/(survData$se^2)
-
-  surv_id = which(survData$surv!=1)
-  nSurv = length(surv_id)
-
-  #### Format recruitment ratio data
-  # Remove HerdCode options
-  # compData$HerdCode<-as.factor(compData$HerdCode)
-  # compData$HerdCode<-factor(compData$HerdCode)
-  # compData$Name <- rep("WCTR",length(compData$HerdCode))
-  #
-  # compData<-subset(compData, compData$Year <= inp$endYear & compData$Year >= inp$startYear)
-  #
-  # if(length(levels(compData$HerdCode)) > 1){
-  #
-  #   compData <- data.frame(aggregate(compData$Count, list(compData$Year, compData$Class), sum))
-  #   names(compData) <- c("Year", "Class", "Count")
-  #
-  # }
-
-  #split data into calf and cow recruitment data
-  calf.cnt<-subset(compData, compData$Class=="calf")
-  calf.cnt$Class<-factor(calf.cnt$Class)
-  cow.cnt<-subset(compData, compData$Class=="cow")
-  cow.cnt$Class<-factor(cow.cnt$Class)
-
-  #deal with missing years of data between year ranges
-  Years2<-data.frame(sort(unique(data$Year)))
-  names(Years2) <- "Year"
-  y1<-merge(Years2, calf.cnt, by="Year", all=TRUE)
-  data3<-y1[,1:3]
-
-  y2<-merge(Years2, cow.cnt, by="Year", all=TRUE)
-  data4<-y2[,1:3]
-  data3$Name <- rep(unique(compData$Name), length(data3$Count))
-  data4$Name  <- rep(unique(compData$Name), length(data4$Count))
-
-  data3$Count <- ifelse(data3$Count>data4$Count,NA,data3$Count)
-  data4$Count <- ifelse(data3$Count>data4$Count,NA,data4$Count)
-
-  xCalf <- which(is.na(data3$Count)==T)
-  xCow <- which(is.na(data4$Count)==T)
-  Years4 <- levels(as.factor(data$Year))[xCalf]
-
-  if(any(is.na(data3$Count)==T))
-  {
-    warning("missing composition data; missing years:"," ",list(Years4))}
-
-  t.pred = max(inp$endYear-max(data3$Year),0)
-
-  if(t.pred>0){
-    survData$Var1=as.character(survData$Var1)
-    survAddBit = survData[1,]
-    survAddBit[1,]=NA;survAddBit$Var1=NULL;survAddBit=merge(survAddBit,data.frame(Var1=seq(1:t.pred)))
-    survDatat=rbind(survData,survAddBit)
-
-    dat3Bit = data3[1,]
-    dat3Bit[,2:3]=NA;dat3Bit$Year=NULL;dat3Bit=merge(dat3Bit,data.frame(Year=seq(max(data3$Year)+1,max(data3$Year)+t.pred)))
-    data3t=rbind(data3,dat3Bit)
-
-    data4t=rbind(data4,dat3Bit)
-
-  }else{
-    survDatat=survData
-    data3t=data3
-    data4t=data4
-  }
-
-  #for beta model, remove tau, adjust Surv: (survDatat$surv*45+0.5)/46
-  #survDatat$surv,tau=survDatat$tau
-  #               phi.Saf.Prior1=betaPriors$phi.Saf.Prior1,phi.Saf.Prior2=betaPriors$phi.Saf.Prior2,
-  sp.data=list(Surv=survDatat$surv,tau=survDatat$tau,anthro=disturbance$Anthro,fire=disturbance$fire_excl_anthro,
-               beta.Saf.Prior1=betaPriors$beta.Saf.Prior1,beta.Saf.Prior2=betaPriors$beta.Saf.Prior2,
-               beta.Rec.anthro.Prior1=betaPriors$beta.Rec.anthro.Prior1,beta.Rec.anthro.Prior2=betaPriors$beta.Rec.anthro.Prior2,
-               beta.Rec.fire.Prior1=betaPriors$beta.Rec.fire.Prior1,beta.Rec.fire.Prior2=betaPriors$beta.Rec.fire.Prior2,
-               l.Saf.Prior1 = betaPriors$l.Saf.Prior1,l.Saf.Prior2 = betaPriors$l.Saf.Prior2,
-               l.R.Prior1 = betaPriors$l.R.Prior1,l.R.Prior2 = betaPriors$l.R.Prior2,
-               sig.Saf.Prior1=betaPriors$sig.Saf.Prior1,sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
-               sig.R.Prior1 = betaPriors$sig.R.Prior1,sig.R.Prior2=betaPriors$sig.R.Prior2,
-               Ninit=inp$N0,
-               nCounts=length(which(is.na(data3t$Count)==FALSE)),count_id=which(is.na(data3t$Count)==FALSE),
-               nSurvs=length(which(is.na(survDatat$surv)==FALSE)),surv_id=which(is.na(survDatat$surv)==FALSE),
-               nYears=nYears+t.pred,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
-
-  sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
-
-
-  rr.surv <- jags(data=sp.data, parameters.to.save=sp.params,
-                  model.file="INF_saf_INF_r_JAGS_extentTime.txt",
-                  n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin)
-  return(list(result=rr.surv,survInput=survDatat))
+  return(survData)
 }
 
 #install and load required packages
@@ -290,6 +347,17 @@ ipak <- function(pkg){
   sapply(pkg, require, character.only = TRUE)
 }
 
+expandSurvivalRecord<-function(crow){
+  #crow=subset(dSubset,exit==12)[1,]
+  crow=as.numeric(crow)
+  mnths= c(rep(1,crow[5]-crow[4]),rep(!crow[3],12-crow[5]+1))
+  mnths = data.frame(t(mnths))
+  mnths$Year=crow[2]
+  mnths$enter=crow[4]
+  mnths$exit=crow[5]
+  mnths$event=crow[3]
+  return(mnths)
+}
 
 getPriors<-function(modifiers=NULL,
                     expectMods = list(survivalModelNumber="M1",
@@ -711,9 +779,17 @@ fillDefaults <- function(scns = NULL,
 getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig){
   #result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;oo=oo;simBig=simBig
   rr.summary<-tabAllRes(result, startYear, endYear)
-  obsSurv<-survInput; obsSurv$Mean=obsSurv$surv
+
+  if(!is.element("surv",names(survInput))){
+    obsSurv = getKMSurvivalEstimates(survInput)
+  }else{
+    obsSurv<-survInput
+  }
+
+  obsSurv$Mean=obsSurv$surv
   obsSurv$Year = as.numeric(gsub("as.factor(Year)=","",obsSurv$Var1,fixed=T))
   obsSurv<- subset(obsSurv,Year>1000)
+
   obsSurv$parameter="Adult female survival"
   obsSurv$type="observed"
 
@@ -721,7 +797,6 @@ getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig){
   names(trueSurv)=c("Year","Mean")
   trueSurv$parameter="Adult female survival"
   trueSurv$type="true"
-
 
   obsRec=subset(oo$ageRatioOut,select=c(Year,Count,Class))
   obsRec <-pivot_wider(obsRec,id_cols=c("Year"),names_from="Class",values_from="Count")
@@ -1042,8 +1117,8 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
 }
 
 
-runScnSet<-function(scns,ePars,simBig){
-  #ePars=eParsIn
+runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier"){
+  #ePars=eParsIn;survAnalysisMethod="Exponential"
   scns<-fillDefaults(scns)
   for(p in 1:nrow(scns)){
     #p=1
@@ -1057,7 +1132,7 @@ runScnSet<-function(scns,ePars,simBig){
     minYr=min(oo$exData$Year)
     maxYr=max(oo$simDisturbance$Year)
     out<-runRMModel(survData=oo$simSurvObs,ageRatio.herd=oo$ageRatioOut,disturbance=oo$simDisturbance,
-                    betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0)
+                    betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0,survAnalysisMethod = survAnalysisMethod)
     outTabs<-getOutputTables(result=out$result,startYear=minYr,endYear=maxYr,survInput=out$survInput,oo=oo,simBig=simBig)
 
     if(p==1){

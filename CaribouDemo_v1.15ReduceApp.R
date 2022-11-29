@@ -64,8 +64,8 @@ scn_defaults <- c(eval(formals(fillDefaults)$defList),
 
 # defaults set based on eParsIn. Need to build cowCounts table and
 # freqStartsByYear table from P, J and cowsPerYear, startsPerYear
-obs_defaults <- list(cowsPerYear = 100, startsPerYear = 15, collarNumYears = 4,
-                     collarOnTime = 8, collarOffTime = 5)
+obs_defaults <- list(cowsPerYear = 100, startsPerYear = 30, collarNumYears = 1,
+                     collarOnTime = 1, collarOffTime = 12)
 
 #Priors - see getPriors() for details & defaults
 #Allow possibility of a different parameter table instead of popGrowthTableJohnsonECCC. But don't allow different covariates. For now, recruitment model must have anthro and fire_excl_anthro covariates, and survival model must have anthro covariate. Intercept and slope parameters must be specified for each.
@@ -259,6 +259,11 @@ ui <- dashboardPage(
       # JAGS params ---------------------------
       menuItem(
         "Baysian model parameters",
+        selectInput("survAnalysisMethod",
+                    label = "Survival analysis method to use",
+                    choices = c("KaplanMeier", "Exponential"),
+                    selected = "KaplanMeier"),
+
         sliderInput(inputId = "Nchains", label = "Number of chains",
                     value=jags_defaults$Nchains, min=0, max=5),
 

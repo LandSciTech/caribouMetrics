@@ -29,7 +29,10 @@ eParsIn$cowCounts <- data.frame(Year = 1981:2018,
                         Count = 100,
                         Class = "cow")
 eParsIn$freqStartsByYear <- data.frame(Year = 1981:2018,
-                               numStarts = 25)
+                               numStarts = 30)
+eParsIn$collarOnTime=1
+eParsIn$collarOffTime=12
+eParsIn$collarNumYears=1
 
 
 ##########
@@ -43,18 +46,15 @@ simBig<-getSimsNational()#If called with default parameters, use saved object to
 #eParsIn$collarNumYears=1
 
 str(eParsIn)
-numObsYrs=c(10);startsByYr = 15 #25
+numObsYrs=c(2);startsByYr = 30 #25
 scns=expand.grid(P=numObsYrs,sQ=c(0.5),st=startsByYr)
 scResults = runScnSet(scns,eParsIn,simBig)
 print(plotRes(scResults$rr.summary.all, "Female population size",obs=scResults$obs.all,
               lowBound=0,highBound=2000,facetVars=c("P","sQ")))
-
 print(plotRes(scResults$rr.summary.all, "Adult female survival",obs=scResults$obs.all,
               lowBound=0.6,simRange=scResults$sim.all,facetVars=c("P","sQ")))
 print(plotRes(scResults$rr.summary.all, "Population growth rate",obs=scResults$obs.all,
               lowBound=0,simRange=scResults$sim.all,facetVars=c("P","sQ")))
-
-
 
 numObsYrs=c(2,5,20);startsByYr = 25;lse=1
 scns=expand.grid(P=numObsYrs,sQ=c(0.025,0.5,0.975),st=startsByYr,lse=lse)
