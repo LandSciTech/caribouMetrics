@@ -1,6 +1,6 @@
 runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      disturbance="simDisturbance.csv",betaPriors="default",
-                     startYear = 1998, endYear = 2018, Nchains = 3,Niter = 20000,Nburn = 10000,Nthin = 1,N0=1000,
+                     startYear = 1998, endYear = 2018, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 1,N0=1000,
                      survAnalysisMethod = "KaplanMeier",
                      inpFixed=list()){
   #survData="simSurvData.csv";ageRatio.herd="simAgeRatio.csv";disturbance="simDisturbance.csv"
