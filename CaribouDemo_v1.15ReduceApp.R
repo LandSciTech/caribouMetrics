@@ -265,16 +265,16 @@ ui <- dashboardPage(
                     selected = "KaplanMeier"),
 
         sliderInput(inputId = "Nchains", label = "Number of chains",
-                    value=jags_defaults$Nchains, min=0, max=5),
+                    value=jags_defaults$Nchains, min=1, max=5),
 
         sliderInput(inputId = "Niter", label = "Number of iterations",
-                    value=jags_defaults$Niter, min=0, max=50000, step=1000),
+                    value=jags_defaults$Niter, min=1, max=50000, step=1000),
 
         sliderInput(inputId = "Nburn", label = "Length of burn-in",
-                    value=jags_defaults$Nburn, min=0, max=20000, step=1000),
+                    value=jags_defaults$Nburn, min=1, max=20000, step=1000),
 
         sliderInput(inputId = "Nthin", label = "Thinning rate",
-                    value=jags_defaults$Nthin, min=0, max=10)
+                    value=jags_defaults$Nthin, min=1, max=10)
       )
       # ------------------------
     ),

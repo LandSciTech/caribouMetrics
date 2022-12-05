@@ -1,6 +1,6 @@
 runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      disturbance="simDisturbance.csv",betaPriors="default",
-                     startYear = 1998, endYear = 2018, Nchains = 2,Niter = 20000,Nburn = 10000,Nthin = 1,N0=1000,
+                     startYear = 1998, endYear = 2018, Nchains = 3,Niter = 20000,Nburn = 10000,Nthin = 1,N0=1000,
                      survAnalysisMethod = "KaplanMeier",
                      inpFixed=list()){
   #survData="simSurvData.csv";ageRatio.herd="simAgeRatio.csv";disturbance="simDisturbance.csv"
@@ -520,7 +520,7 @@ simTrajectory<-function(numYears,covariates,survivalModelNumber = "M1",recruitme
     pars <- cbind(pars,
                   popGrowthJohnson(pars$N0,
                                    R_bar = pars$R_bar, S_bar = pars$S_bar,
-                                   numSteps = stepLength, K=F, l_R = 1e-06))
+                                   numSteps = stepLength, K=F, l_R = 1e-06,adjustR=T))
 
     # add results to output set
     fds <- subset(pars, select = c(replicate, Anthro,fire_excl_anthro, S_t, R_t, N, lambda,n_recruits,surviving_adFemales))
@@ -858,16 +858,19 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ")){
 
 }
 
-getSimsNational<-function(N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0){
+getSimsNational<-function(N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,wdir=NULL){
   #N0=1000;Anthro=seq(0,100,by=2);fire_excl_anthro=0
 
+  if(is.null(wdir)){wdir=getwd()}
   doSave <- FALSE
 
-  if(length(as.list(match.call())) == 1){
+  check <- as.list(match.call());check$wdir=NULL
 
-    if(file.exists("simsNational.rds")){
+  if(length(check) == 1){
+
+    if(file.exists(paste0(wdir,"/simsNational.rds"))){
       message("Using saved object")
-      return(readRDS("simsNational.rds"))
+      return(readRDS(paste0(wdir,"/simsNational.rds")))
     } else {
       message("Object will be saved for future use")
       doSave <- TRUE
@@ -880,7 +883,7 @@ getSimsNational<-function(N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0){
   popGrowthPars <- demographicCoefficients(1000)
   rateSamplesAll <- demographicRates(covTable = covTableObs,popGrowthPars = popGrowthPars,returnSample=T,useQuantiles = F)
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
-  pars <- cbind(pars,popGrowthJohnson(pars$N0,R_bar = pars$R_bar, S_bar = pars$S_bar,numSteps = 1,K=F))
+  pars <- cbind(pars,popGrowthJohnson(pars$N0,R_bar = pars$R_bar, S_bar = pars$S_bar,numSteps = 1,K=F,adjustR=T))
   simSurvBig<-pars %>% select(Anthro,S_t) %>% group_by(Anthro) %>% summarize(Mean=mean(S_t),lower=quantile(S_t, 0.025),upper=quantile(S_t,0.975))
   simSurvBig$parameter="Adult female survival"
   simRecBig<-pars %>% select(Anthro,R_t) %>% group_by(Anthro) %>% summarize(Mean=mean(R_t),lower=quantile(R_t, 0.025),upper=quantile(R_t,0.975))
@@ -892,7 +895,7 @@ getSimsNational<-function(N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0){
   simBig =rbind(simSurvBig,simRecBig,simLamBig,simFpopBig)
 
   if(doSave){
-    saveRDS(simBig, "simsNational.rds")
+    saveRDS(simBig, paste0(wdir,"/simsNational.rds"))
   }
   return(simBig)
 }
