@@ -33,6 +33,7 @@
 #'   \code{FALSE} ignore interannual variability.
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
+#' @param adjustR Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).
 #' @param progress Logical. Should progress updates be shown?
 #'
 #' @return A data.frame of population size (N) and average growth rate (lambda)
@@ -57,6 +58,7 @@ popGrowthJohnson <- function(N,
                              h_S=1,
                              interannualVar = list(R_CV=0.46,S_CV=0.08696),
                              probOption="binomial",
+                             adjustR=F,
                              progress = interactive()){
   rr=data.frame(N=N)
 
@@ -128,6 +130,10 @@ popGrowthJohnson <- function(N,
     }
     if(is.element("R_phi",names(interannualVar))){
       R_t=s*R_t
+    }
+
+    if(adjustR){
+      R_t=R_t/(1+R_t)
     }
 
     Ntm1=N
