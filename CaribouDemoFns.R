@@ -371,7 +371,7 @@ getPriors<-function(modifiers=NULL,
                                       sre = 0.46,
                                       srv = 0.22),
                     popGrowthTable = popGrowthTableJohnsonECCC,
-                    modVer = "Johnson"){
+                    modVer = "Johnson",returnValues=T){
   #modifiers=cs
 
 
@@ -409,30 +409,49 @@ getPriors<-function(modifiers=NULL,
          paste0(diff_pars, collapse = ", "))
   }
 
-  betaPriors = list(beta.Saf.Prior1=sPriorCoefs$Anthro,
-                    beta.Saf.Prior2=sPriorStdErrs$Anthro*modifiers$bse,
-                    beta.Rec.anthro.Prior1= rPriorCoefs$Anthro,
-                    beta.Rec.anthro.Prior2 = rPriorStdErrs$Anthro*modifiers$bre,
-                    beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
-                    beta.Rec.fire.Prior2 = rPriorStdErrs$fire_excl_anthro,
-                    l.Saf.Prior1 = sPriorCoefs$Intercept,
-                    l.Saf.Prior2 = sPriorStdErrs$Intercept*modifiers$lse,
-                    sig.Saf.Prior1 = modifiers$sse,
-                    sig.Saf.Prior2=modifiers$ssv,
-                    l.R.Prior1 = rPriorCoefs$Intercept,
-                    l.R.Prior2 = rPriorStdErrs$Intercept*modifiers$lre,
-                    sig.R.Prior1=modifiers$sre,
-                    sig.R.Prior2 =modifiers$srv
-                    )
+  if(returnValues){
+    betaPriors = list(l.R.Prior1 = rPriorCoefs$Intercept,
+                      l.R.Prior2 = rPriorStdErrs$Intercept*modifiers$lre,
+                      beta.Rec.anthro.Prior1= rPriorCoefs$Anthro,
+                      beta.Rec.anthro.Prior2 = rPriorStdErrs$Anthro*modifiers$bre,
+                      beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
+                      beta.Rec.fire.Prior2 = rPriorStdErrs$fire_excl_anthro,
+                      sig.R.Prior1=modifiers$sre,
+                      sig.R.Prior2 =modifiers$srv,
+                      l.Saf.Prior1 = sPriorCoefs$Intercept,
+                      l.Saf.Prior2 = sPriorStdErrs$Intercept*modifiers$lse,
+                      beta.Saf.Prior1=sPriorCoefs$Anthro,
+                      beta.Saf.Prior2=sPriorStdErrs$Anthro*modifiers$bse,
+                      sig.Saf.Prior1 = modifiers$sse,
+                      sig.Saf.Prior2=modifiers$ssv
+    )
 
-  # replace NULL values with 0 for when anthro or fire is not included
-  betaPriors <- lapply(betaPriors, function(x){
-    if(is.null(x) || length(x) == 0){
-      1e-10
-    } else {
-      x
-    }
-  })
+    # replace NULL values with 0 for when anthro or fire is not included
+    betaPriors <- lapply(betaPriors, function(x){
+      if(is.null(x) || length(x) == 0){
+        1e-10
+      } else {
+        x
+      }
+    })
+  }else{
+    betaPriors = list(l.R.Prior1 = rPriorCoefs$Intercept,
+                      l.R.Prior2 = paste0(round(rPriorStdErrs$Intercept,4),"*",modifiers$lre),
+                      beta.Rec.anthro.Prior1= rPriorCoefs$Anthro,
+                      beta.Rec.anthro.Prior2 = paste0(round(rPriorStdErrs$Anthro,4),"*",modifiers$bre),
+                      beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
+                      beta.Rec.fire.Prior2 = rPriorStdErrs$fire_excl_anthro,
+                      sig.R.Prior1=modifiers$sre,
+                      sig.R.Prior2 =modifiers$srv,
+                      l.Saf.Prior1 = sPriorCoefs$Intercept,
+                      l.Saf.Prior2 = paste0(round(sPriorStdErrs$Intercept,4),"*",modifiers$lse),
+                      beta.Saf.Prior1=sPriorCoefs$Anthro,
+                      beta.Saf.Prior2=paste0(round(sPriorStdErrs$Anthro,4),"*",modifiers$bse),
+                      sig.Saf.Prior1 = modifiers$sse,
+                      sig.Saf.Prior2=modifiers$ssv
+    )
+
+  }
   return(betaPriors)
 
 }
