@@ -23,13 +23,12 @@ library(dplyr)
 
 ###############
 #Use Eacker example data for collaring parameters
-eParsIn = getParamsFromEacker(path="C:/Users/HughesJo/Documents/gitprojects/BayesianNationalBorealCaribouPVA/DemographyWBayesianUpdating/EakerModified/CaribouDemo_v1.15")
-
+eParsIn = list()
 eParsIn$cowCounts <- data.frame(Year = 1981:2018,
-                        Count = 100,
-                        Class = "cow")
+                                Count = 100,
+                                Class = "cow")
 eParsIn$freqStartsByYear <- data.frame(Year = 1981:2018,
-                               numStarts = 30)
+                                       numStarts = 30)
 eParsIn$collarOnTime=1
 eParsIn$collarOffTime=12
 eParsIn$collarNumYears=1
