@@ -47,8 +47,11 @@ simBig<-getSimsNational()#If called with default parameters, use saved object to
 str(eParsIn)
 numObsYrs=c(2);startsByYr = 30 #25
 scns=expand.grid(P=numObsYrs,sQ=c(0.5),st=startsByYr)
-scResults = runScnSet(scns,eParsIn,simBig)
+scResults = runScnSet(scns,eParsIn,simBig,getKSDists=F)
 
 str(scResults)$obs.all
+print(plotRes(scResults$ksDists, "Recruitment",obs=scResults$obs.all,
+              lowBound=0,highBound=2000,facetVars=c("P","sQ")))
+
 print(plotRes(scResults$rr.summary.all, "Female population size",obs=scResults$obs.all,
               lowBound=0,highBound=2000,facetVars=c("P","sQ")))

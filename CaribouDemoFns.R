@@ -1,6 +1,6 @@
 runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      disturbance="simDisturbance.csv",betaPriors="default",
-                     startYear = 1998, endYear = 2018, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 1,N0=1000,
+                     startYear = 1998, endYear = 2018, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 2,N0=1000,
                      survAnalysisMethod = "KaplanMeier",
                      inpFixed=list()){
   #survData="simSurvData.csv";ageRatio.herd="simAgeRatio.csv";disturbance="simDisturbance.csv"
@@ -668,7 +668,7 @@ simSurvivalObs<-function(animalID,startYear,collarNumYears,collarOffTime,collarO
 
 # Tables ------------------------------------------------------------------
 
-getSumStats <- function(param, rrSurvMod, startYear, endYear){
+getSumStats <- function(param, rrSurvMod, startYear, endYear,doSummary=T){
   #param = "S.annual.KM"
   paramNames <- data.frame(parameter = c("S.annual.KM", "R", "Rfemale", "pop.growth","fpop.size",
                                      "meanAFsurv", "meanR", "meanRfemale",
@@ -693,23 +693,34 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear){
          "accepted params are: ", paramNames$parameter)
   }
 
-  lower.cri <- apply(rrSurvMod$BUGSoutput$sims.list[[param]], 2,
-                     function(x){quantile(x, 0.025)})
-  upper.cri <- apply(rrSurvMod$BUGSoutput$sims.list[[param]], 2,
-                     function(x){quantile(x, 0.975)})
+  if(doSummary){
+    lower.cri <- apply(rrSurvMod$BUGSoutput$sims.list[[param]], 2,
+                       function(x){quantile(x, 0.025)})
+    upper.cri <- apply(rrSurvMod$BUGSoutput$sims.list[[param]], 2,
+                       function(x){quantile(x, 0.975)})
 
-  results <- data.frame(Year = yr,
-                        Parameter = subset(paramNames, paramNames$parameter == param,
-                                           select = name, drop = T),
-                        Mean = round(rrSurvMod$BUGSoutput$mean[[param]],digits=3),
-                        SD = round(rrSurvMod$BUGSoutput$sd[[param]],digits=3),
-                        `Lower 95% CRI` = round(lower.cri, digits=3),
-                        `Upper 95% CRI` = round(upper.cri,digits=3),
-                        check.names = FALSE)
+    results <- data.frame(Year = yr,
+                          Parameter = subset(paramNames, paramNames$parameter == param,
+                                             select = name, drop = T),
+                          Mean = round(rrSurvMod$BUGSoutput$mean[[param]],digits=3),
+                          SD = round(rrSurvMod$BUGSoutput$sd[[param]],digits=3),
+                          `Lower 95% CRI` = round(lower.cri, digits=3),
+                          `Upper 95% CRI` = round(upper.cri,digits=3),
+                          check.names = FALSE)
+  }else{
+    #rrSurvMod= result
+    wideRes <- data.frame(rrSurvMod$BUGSoutput$sims.list[[param]])
+    names(wideRes)<-yr
+
+    results<-wideRes %>%pivot_longer(cols=names(wideRes),names_to="Year",values_to="Value")
+    results$Year=as.numeric(results$Year)
+    results$Parameter = subset(paramNames, paramNames$parameter == param,
+                               select = name, drop = T)
+  }
   return(results)
 }
 
-tabAllRes <- function(rrSurvMod, startYear, endYear){
+tabAllRes <- function(rrSurvMod, startYear, endYear,doSummary=T){
   #rrSurvMod=rr.surv;startYear= minYr;endYear= maxYr
 
   allParams <- c("S.annual.KM", "R", "Rfemale", "pop.growth","fpop.size",
@@ -717,7 +728,7 @@ tabAllRes <- function(rrSurvMod, startYear, endYear){
                  "medianLambda", "meanLambda")
   allParams<-allParams[is.element(allParams,rrSurvMod$parameters.to.save)]
 
-  allResults <- lapply(allParams, getSumStats, rrSurvMod, startYear, endYear)
+  allResults <- lapply(allParams, getSumStats, rrSurvMod, startYear, endYear,doSummary=doSummary)
 
   allResults <- do.call(rbind, allResults)
 
@@ -726,8 +737,6 @@ tabAllRes <- function(rrSurvMod, startYear, endYear){
   row.names(allResults) <- 1:length(allResults$Year)
   allResults
 }
-
-
 
 getParamsFromEacker<-function(path){
   ###############
@@ -795,8 +804,12 @@ fillDefaults <- function(scns = NULL,
   return(scns)
 }
 
-getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig){
+getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig,getKSDists){
   #result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;oo=oo;simBig=simBig
+
+
+
+  #get summary info for plots
   rr.summary<-tabAllRes(result, startYear, endYear)
 
   if(!is.element("surv",names(survInput))){
@@ -840,7 +853,7 @@ getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig){
 
   obsAll=rbind(obsLam,obsSize,subset(obsRec,select=names(obsLam)),trueRec,subset(obsSurv,select=names(obsLam)),trueSurv)
 
-  simBigO<-subset(simBig,select=c(Anthro,Mean,lower,upper,parameter))
+  simBigO<-subset(simBig$summary,select=c(Anthro,Mean,lower,upper,parameter))
   names(simBigO)<-c("Anthro","Mean","Lower 95% CRI","Upper 95% CRI","parameter")
 
   # combine cs and simDisturbance and add to all output tables, nest params in a list
@@ -852,7 +865,42 @@ getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig){
   rr.summary.all = rr.summary
   sim.all = simBigO
   obs.all=obsAll
-  return(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all))
+
+  if(getKSDists){
+    #get Kolmogorov smirnov distance between samples at each point
+
+    variables = unique(simBig$summary$parameter)
+    anthroPts = unique(subset(rr.summary,select=c(Year,Anthro)))
+    #TO DO: make this step faster
+    bmSamples = tabAllRes(result, startYear, endYear,doSummary=F)
+    bmSamples$type="local"
+
+    simSamples=merge(anthroPts,simBig$samples);simSamples$Anthro=NULL
+    simSamples$type = "national"
+
+    allSamples=rbind(subset(bmSamples,is.element(Parameter,unique(simSamples$Parameter))),simSamples)
+
+    ksDists <- allSamples %>% group_by(Year,Parameter) %>% group_modify(~ {getKSDist(.x$Value,.x$type)})
+  }else{
+    ksDists <-unique(subset(rr.summary,select=c(Year,Parameter)))
+    ksDists$KSDistance=NA;ksDists$KSpvalue=NA
+
+  }
+  return(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all,ksDists=ksDists))
+}
+
+getKSDist<-function(Value,type){
+  #sampleBit=subset(allSamples,(Year==2017)&(Parameter==allSamples$Parameter[1]))
+  #Value=sampleBit$Value;type=sampleBit$type
+
+  if(length(Value[type=="national"])==0){
+    out=data.frame(KSDistance=NA,KSpvalue=NA)
+    return(out)
+  }
+  res = ks.test(Value[type=="local"],Value[type=="national"])
+
+  out=data.frame(KSDistance=res$statistic,KSpvalue=res$p.value)
+  return(out)
 }
 
 makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ")){
@@ -877,8 +925,8 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ")){
 
 }
 
-getSimsNational<-function(N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,wdir=NULL){
-  #N0=1000;Anthro=seq(0,100,by=2);fire_excl_anthro=0
+getSimsNational<-function(reps=500,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,wdir=NULL){
+  #reps=500;N0=500;Anthro=seq(0,100,by=2);fire_excl_anthro=0
 
   if(is.null(wdir)){wdir=getwd()}
   doSave <- FALSE
@@ -899,7 +947,7 @@ getSimsNational<-function(N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,wdir
   covTableObs <- expand.grid(Anthro = Anthro,
                              fire_excl_anthro = fire_excl_anthro)
   covTableObs$Total_dist = covTableObs$Anthro + covTableObs$fire_excl_anthro
-  popGrowthPars <- demographicCoefficients(1000)
+  popGrowthPars <- demographicCoefficients(reps)
   rateSamplesAll <- demographicRates(covTable = covTableObs,popGrowthPars = popGrowthPars,returnSample=T,useQuantiles = F)
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
   pars <- cbind(pars,popGrowthJohnson(pars$N0,R_bar = pars$R_bar, S_bar = pars$S_bar,numSteps = 1,K=F,adjustR=T))
@@ -912,6 +960,12 @@ getSimsNational<-function(N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,wdir
   simFpopBig<-pars %>% select(Anthro,N) %>% group_by(Anthro) %>% summarize(Mean=mean(N),lower=quantile(N, 0.025),upper=quantile(N,0.975))
   simFpopBig$parameter="Female population size"
   simBig =rbind(simSurvBig,simRecBig,simLamBig,simFpopBig)
+
+  parsSelect = subset(pars,select=c(Anthro,S_t,R_t,lambda,N))
+  names(parsSelect)=c("Anthro","Adult female survival","Recruitment","Population growth rate","Female population size")
+  parsSelect = parsSelect %>% pivot_longer(!Anthro,names_to="Parameter",values_to="Value")
+
+  simBig=list(summary=simBig,samples=parsSelect)
 
   if(doSave){
     saveRDS(simBig, paste0(wdir,"/simsNational.rds"))
@@ -991,7 +1045,16 @@ testPopGrowthTable <- function(df) {
 # Plots -------------------------------------------------------------------
 
 plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=NULL,facetVars=NULL){
-  #allRes=scResults$rr.summary.all; parameter="Recruitment";obs=scResults$obs.all;lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("P","sQ")
+  #allRes=scResults$ksDists; parameter="Recruitment";obs=scResults$obs.all;lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("P","sQ")
+
+  if(is.element("KSDistance",names(allRes))){
+    #plot Kolmogorov Smirnov distances
+    KS=T
+    allRes$Mean=allRes$KSDistance
+  }else{
+    KS=F
+  }
+
   df <- subset(allRes, allRes$Parameter == parameter)
 
   if(nrow(df) < 1){
@@ -1003,7 +1066,7 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
     obs=subset(obs,parameter==pr)
   }
 
-  if(!is.null(simRange)){
+  if(!KS&!is.null(simRange)){
     pr = parameter
     simRange=subset(simRange,parameter==pr)
 
@@ -1021,21 +1084,23 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
     x1 <- ggplot(df, aes(x = Year, y=Mean))
 
   }
-
   x2 <- x1 + theme_classic() + xlab("Year")+ ylab(parameter) +
-    geom_ribbon(aes(ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`),
-                show.legend = FALSE, alpha = 0.25,colour=NA)+
     geom_line(aes(x = Year, y=Mean), size = 1.75) +
     theme(axis.text.y = element_text(size=14),
           axis.text.x = element_text(angle = 90, vjust = 0.5, size=14),
           axis.title.x=element_text(size=16,face="bold"),
           axis.title.y=element_text(size=16,face="bold")) +
-    scale_y_continuous(limits=c(ifelse(any(df$`Lower 95% CRI` < lowBound), NA, lowBound),
-                                ifelse(any(df$`Upper 95% CRI` > 1), NA, highBound))) +
     scale_x_continuous(breaks=seq(min(df$Year, na.rm = TRUE),
                                   max(df$Year, na.rm = TRUE),1))
 
-  if(!is.null(obs)){
+  if(!KS){
+    x2 <- x2+    geom_ribbon(aes(ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`),
+                             show.legend = FALSE, alpha = 0.25,colour=NA)+
+      scale_y_continuous(limits=c(ifelse(any(df$`Lower 95% CRI` < lowBound), NA, lowBound),
+                                  ifelse(any(df$`Upper 95% CRI` > 1), NA, highBound)))
+  }
+
+  if(!KS&!is.null(obs)){
     obs$Type="local"
     obs$obsError=F
     obs$obsError[obs$type=="observed"]=T
@@ -1048,7 +1113,7 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
       x2<-x2+facet_grid(as.formula(paste(facetVars[1],"~", facetVars[2])),labeller = "label_both")
     }
   }
-  if(parameter=="Population growth rate"){
+  if(!KS & (parameter=="Population growth rate")){
     x2<-x2+geom_hline(yintercept=1, color = "black")
   }
 
@@ -1140,7 +1205,7 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
 }
 
 
-runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier"){
+runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDists=T){
   #ePars=eParsIn;survAnalysisMethod="Exponential"
   scns<-fillDefaults(scns)
   for(p in 1:nrow(scns)){
@@ -1156,18 +1221,22 @@ runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier"){
     maxYr=max(oo$simDisturbance$Year)
     out<-runRMModel(survData=oo$simSurvObs,ageRatio.herd=oo$ageRatioOut,disturbance=oo$simDisturbance,
                     betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0,survAnalysisMethod = survAnalysisMethod)
-    outTabs<-getOutputTables(result=out$result,startYear=minYr,endYear=maxYr,survInput=out$survInput,oo=oo,simBig=simBig)
+    outTabs<-getOutputTables(result=out$result,startYear=minYr,endYear=maxYr,survInput=out$survInput,oo=oo,simBig=simBig,getKSDists = getKSDists)
 
     if(p==1){
       rr.summary.all = outTabs$rr.summary.all
       sim.all = outTabs$sim.all
       obs.all=outTabs$obs.all
+      ksDists = merge(outTabs$ksDists,cs)
+
     }else{
       rr.summary.all = rbind(rr.summary.all,outTabs$rr.summary.all)
       sim.all = rbind(sim.all,outTabs$sim.all)
       obs.all=rbind(obs.all,outTabs$obs.all)
+      ksDists = rbind(ksDists,merge(outTabs$ksDists,cs))
     }
+
   }
-  return(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all))
+  return(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all,ksDists=ksDists))
 }
 

@@ -259,6 +259,8 @@ ui <- dashboardPage(
       # JAGS params ---------------------------
       menuItem(
         "Baysian model parameters",
+        checkboxInput("getKSDists" , "Calculate Kolmogorov-Smirnov Distances",value=0),
+
         selectInput("survAnalysisMethod",
                     label = "Survival analysis method to use",
                     choices = c("KaplanMeier", "Exponential"),
@@ -314,8 +316,10 @@ ui <- dashboardPage(
           tabPanel("Adult female survival",  plotOutput("plot1")),
           tabPanel("Population growth rate",  plotOutput("plot4")),
           tabPanel("Female population size",  plotOutput("plot5")),
-          tabPanel("Female recruitment",  plotOutput("plot3"))
-
+          tabPanel("Female recruitment",  plotOutput("plot3")),
+          tabPanel("Recruitment Kolmogorov-Smirnov Distance",  plotOutput("plot8")),
+          tabPanel("Adult female survival Kolmogorov-Smirnov Distance",  plotOutput("plot7")),
+          tabPanel("Population growth rate Kolmogorov-Smirnov Distance",  plotOutput("plot9"))
         ),
       ),
       tabPanel(
@@ -524,7 +528,7 @@ server <- function(input, output, session) {
 
     out<-dataInput()
     return(getOutputTables(result=out$result,startYear=out$startYear,endYear=out$endYear,
-                           survInput=out$survInput,oo=out$oo,simBig=simBig))
+                           survInput=out$survInput,oo=out$oo,simBig=simBig,getKSDists=input$getKSDists))
   })
 
   output$table<- renderDataTable({
@@ -667,6 +671,25 @@ server <- function(input, output, session) {
             strip.text = element_text(size=14),
             strip.background = element_blank())+
       ylim(0, 100)
+  })
+
+  output$plot7 <- renderPlot({
+
+    scResults<-dataInput1()
+    plotRes(scResults$ksDists, "Adult female survival")
+
+  })
+  output$plot8 <- renderPlot({
+
+    scResults<-dataInput1()
+    plotRes(scResults$ksDists, "Recruitment")
+
+  })
+  output$plot9 <- renderPlot({
+
+    scResults<-dataInput1()
+    plotRes(scResults$ksDists, "Population growth rate")
+
   })
 
   # Download output #######

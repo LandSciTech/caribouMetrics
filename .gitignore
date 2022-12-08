@@ -40,3 +40,5 @@ vignettes/*.pdf
 .Renviron
 
 tabs/*_.csv
+
+simsNational.Rds
