@@ -22,14 +22,12 @@ library(tidyr)
 library(dplyr)
 
 ###############
-#Use Eacker example data for collaring parameters
-eParsIn = getParamsFromEacker(path="C:/Users/HughesJo/Documents/gitprojects/BayesianNationalBorealCaribouPVA/DemographyWBayesianUpdating/EakerModified/CaribouDemo_v1.15")
-
+eParsIn = list()
 eParsIn$cowCounts <- data.frame(Year = 1981:2018,
-                        Count = 100,
-                        Class = "cow")
+                                Count = 1,
+                                Class = "cow")
 eParsIn$freqStartsByYear <- data.frame(Year = 1981:2018,
-                               numStarts = 30)
+                                       numStarts = 1)
 eParsIn$collarOnTime=1
 eParsIn$collarOffTime=12
 eParsIn$collarNumYears=1
@@ -39,18 +37,18 @@ eParsIn$collarNumYears=1
 #Get full set of sims for comparison
 simBig<-getSimsNational()#If called with default parameters, use saved object to speed things up.
 
+
 ###############
-#Step 1: confirm appropriate prior variability in survival intercept using minimal (2) observed data points & 0 fire/anthro covariates. Controlled by priors on l.Saf, phi and sig.Saf.
+#Step 1: confirm appropriate prior variability in survival intercept using minimal (1) observed data points & 0 fire/anthro covariates.
+#Controlled by priors on l.Saf, phi and sig.Saf.
 #################
 #source("CaribouDemoFns.R")
-#eParsIn$collarNumYears=1
 
 str(eParsIn)
-numObsYrs=c(2);startsByYr = 30 #25
+numObsYrs=c(1);startsByYr = 1 #25
 scns=expand.grid(P=numObsYrs,sQ=c(0.5),st=startsByYr)
-scResults = runScnSet(scns,eParsIn,simBig)
+scResults = runScnSet(scns,eParsIn,simBig,survAnalysisMethod = "Exponential")
 
-str(scResults)$obs.all
 print(plotRes(scResults$rr.summary.all, "Female population size",obs=scResults$obs.all,
               lowBound=0,highBound=2000,facetVars=c("P","sQ")))
 print(plotRes(scResults$rr.summary.all, "Adult female survival",obs=scResults$obs.all,
@@ -58,11 +56,42 @@ print(plotRes(scResults$rr.summary.all, "Adult female survival",obs=scResults$ob
 print(plotRes(scResults$rr.summary.all, "Population growth rate",obs=scResults$obs.all,
               lowBound=0,simRange=scResults$sim.all,facetVars=c("P","sQ")))
 
-numObsYrs=c(2,5,20);startsByYr = 25;lse=1
-scns=expand.grid(P=numObsYrs,sQ=c(0.025,0.5,0.975),st=startsByYr,lse=lse)
-scResults = runScnSet(scns,eParsIn,simBig)
+#vary lse, sse, and ssv in factorial array. Outcome of interest is KS distance
+lse=seq(1,10,by=5);sse=0.08696*seq(0.2,1,by=0.4);ssv=seq(0.01,0.1,by=0.03)
+
+#Looking for low KS distance from full range of input sims when given almost no info
+numObsYrs=c(1);startsByYr = 1;J=1
+scns=expand.grid(P=numObsYrs,J=J,st=startsByYr,lse=lse,sse=sse,ssv=ssv)
+scResults = runScnSet(scns,eParsIn,simBig,survAnalysisMethod = "Exponential")
+base = ggplot(subset(scResults$ksDists,(Year==2019)&(Parameter=="Adult female survival")),aes(x=lse,y=KSDistance))+
+  geom_point()+facet_grid(sse~ssv,labeller="label_both")+
+print(base)
+dev.off()
+
+#source("CaribouDemoFns.R")
+addBit = paste0("sQStarts",startsByYr)
+makeInterceptPlots(scResults,addBit=addBit,facetVars=c("lse","sse"),loopVars="ssv",whichPlots=c("Adult female survival"))
+
+#Also looking for low KS distance from range of input sims that match the observed data when given lots of observed data
+#Case 1 - low survival/recruitment quantile
+#Case 2 - high survival/recruitment quantile
+simLow <- getSimsNational(quants=c(0.025,0.025),Anthro=0)
+simHigh <- getSimsNational(quants=c(0.975,0.975),Anthro=0)
+
+numObsYrs=c(1);startsByYr = 100;J=1;cw=200;sQ=0.025;rQ=0.025
+scns=expand.grid(P=numObsYrs,J=J,sQ=sQ,rQ=rQ,st=startsByYr,cw=cw,lse=lse,sse=sse,ssv=ssv)
+scResults = runScnSet(scns,eParsIn,simLow,survAnalysisMethod = "KaplanMeier")
+base = ggplot(subset(scResults$ksDists,(Year==2019)&(Parameter=="Adult female survival")),aes(x=lse,y=KSDistance))+
+  geom_point()+facet_grid(sse~ssv,labeller="label_both")+
+  print(base)
+dev.off()
+
+addBit = paste0("sQStarts",startsByYr,"low")
+makeInterceptPlots(scResults,addBit=addBit,facetVars=c("lse","sse"),loopVars="ssv",whichPlots=c("Adult female survival"))
+
+
 addBit = paste0("sQStarts",startsByYr,"lse",lse)
-makeInterceptPlots(scResults,addBit=addBit,facetVars=c("P","sQ"))
+makeInterceptPlots(scResults,addBit=addBit,facetVars=c("lse","sQ"))
 
 numObsYrs=c(2,5,20);startsByYr = 25;sse=0.1
 scns=expand.grid(P=numObsYrs,sQ=c(0.025,0.5,0.975),st=startsByYr,sse=sse)

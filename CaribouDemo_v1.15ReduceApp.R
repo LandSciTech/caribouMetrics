@@ -120,7 +120,7 @@ ui <- dashboardPage(
           id = "nYears",
           numericInput("nYearObs",
                        label = "Number of years of observations",
-                       value = scn_defaults$P, min = 2),
+                       value = scn_defaults$P, min = 1),
 
           numericInput("nYearProj",
                        label = "Number of years of projections",

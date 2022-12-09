@@ -3,10 +3,8 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      startYear = 1998, endYear = 2018, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 2,N0=1000,
                      survAnalysisMethod = "KaplanMeier",
                      inpFixed=list()){
-  #survData="simSurvData.csv";ageRatio.herd="simAgeRatio.csv";disturbance="simDisturbance.csv"
-  #startYear = 2018-5; endYear = 2024; betaPriors="default"
   #survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
-  #betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "Exponential"
+  #betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"
   #Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;inpFixed=list()
 
   # combine defaults in function with inputs from input list
@@ -88,9 +86,8 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
   dSubset =subset(data,enter==0)#;dSubset=subset(dSubset,!((exit<12)&(event==0)))
   if(nrow(dSubset)==0){
     stop("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
+
   }
-
-
   if(inp$survAnalysisMethod=="KaplanMeier"){
     survData<-getKMSurvivalEstimates(dSubset)
     #omitting years with less than 12 months of observations of collared animals
@@ -101,7 +98,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
     survData$Year = as.numeric(gsub("as.factor(Year)=","",as.character(survData$Var1),fixed=T))
     survData <- merge(survData,includeYrs)
     if(nrow(survData)==0){
-       stop("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
+      stop("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
     }
 
     if(any(survData$surv==1)){
@@ -813,7 +810,13 @@ getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig,getKSDist
   rr.summary<-tabAllRes(result, startYear, endYear)
 
   if(!is.element("surv",names(survInput))){
-    obsSurv = getKMSurvivalEstimates(survInput)
+    if(sum(survInput$event,na.rm=T)>0){
+      obsSurv = getKMSurvivalEstimates(survInput)
+    }else{
+      obsSurv =unique(subset(survInput,!is.na(enter),select=c(Year)))
+      obsSurv$surv=NA
+      obsSurv$Var1=obsSurv$Year
+    }
   }else{
     obsSurv<-survInput
   }
@@ -903,30 +906,63 @@ getKSDist<-function(Value,type){
   return(out)
 }
 
-makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ")){
-  #facetVars=c("sS","sQ");addBit=""
-  pdf(paste0("figs/Surv",addBit,".pdf"),width=10,height=7)
-  print(plotRes(scResults$rr.summary.all, "Adult female survival",obs=scResults$obs.all,
-                lowBound=0.6,simRange=scResults$sim.all,facetVars=facetVars))
-  dev.off()
+makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars = NULL,whichPlots=c("Adult female survival","Population growth rate","Recruitment","Female population size")){
+  #facetVars=c("lse","sse");loopVars="ssv"
 
-  pdf(paste0("figs/Lambda",addBit,".pdf"),width=10,height=7)
-  print(plotRes(scResults$rr.summary.all, "Population growth rate",obs=scResults$obs.all,
-                lowBound=0,simRange=scResults$sim.all,facetVars=facetVars))
-  dev.off()
-  pdf(paste0("figs/Rec",addBit,".pdf"),width=10,height=7)
-  print(plotRes(scResults$rr.summary.all, "Recruitment",obs=scResults$obs.all,
-                lowBound=0,simRange=scResults$sim.all,facetVars=facetVars))
-  dev.off()
-  pdf(paste0("figs/FPOP",addBit,".pdf"),width=10,height=7)
-  print(plotRes(scResults$rr.summary.all, "Female population size",obs=scResults$obs.all,
-                lowBound=0,facetVars=facetVars))
-  dev.off()
+  if(!is.null(loopVars)){
 
+    loopSet = unique(subset(scResults$rr.summary.all,select=loopVars))
+    loopSet$dummy = 1
+
+  }else{
+    loopSet=data.frame(dummy=1)
+  }
+
+
+  for(l in 1:nrow(loopSet)){
+    #l = 1
+    crow=loopSet[l,]
+
+    aa = ""
+    for(n in names(crow)){
+      if(n=="dummy"){next}
+      aa=paste0(aa,n,crow[[n]])
+    }
+
+    addBitO = paste0(addBit,aa)
+
+    if(is.element("Adult female survival",whichPlots)){
+      pdf(paste0("figs/Surv",addBitO,".pdf"),width=10,height=7)
+      print(plotRes(merge(scResults$rr.summary.all,crow), "Adult female survival",obs=merge(scResults$obs.all,crow),
+                    lowBound=0.6,simRange=merge(scResults$sim.all,crow),facetVars=facetVars))
+      dev.off()
+    }
+
+    if(is.element("Population growth rate",whichPlots)){
+      pdf(paste0("figs/Lambda",addBitO,".pdf"),width=10,height=7)
+      print(plotRes(scResults$rr.summary.all, "Population growth rate",obs=scResults$obs.all,
+                    lowBound=0,simRange=scResults$sim.all,facetVars=facetVars))
+      dev.off()
+    }
+
+    if(is.element("Recruitment",whichPlots)){
+      pdf(paste0("figs/Rec",addBitO,".pdf"),width=10,height=7)
+      print(plotRes(scResults$rr.summary.all, "Recruitment",obs=scResults$obs.all,
+                    lowBound=0,simRange=scResults$sim.all,facetVars=facetVars))
+      dev.off()
+    }
+
+    if(is.element("Female population size",whichPlots)){
+      pdf(paste0("figs/FPOP",addBitO,".pdf"),width=10,height=7)
+      print(plotRes(scResults$rr.summary.all, "Female population size",obs=scResults$obs.all,
+                    lowBound=0,facetVars=facetVars))
+      dev.off()
+    }
+  }
 }
 
-getSimsNational<-function(reps=500,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,wdir=NULL){
-  #reps=500;N0=500;Anthro=seq(0,100,by=2);fire_excl_anthro=0
+getSimsNational<-function(reps=500,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,quants=NULL,wdir=NULL){
+  #reps=500;N0=500;Anthro=seq(0,100,by=2);fire_excl_anthro=0;quants=c(0.025,0.025)
 
   if(is.null(wdir)){wdir=getwd()}
   doSave <- FALSE
@@ -947,8 +983,14 @@ getSimsNational<-function(reps=500,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anth
   covTableObs <- expand.grid(Anthro = Anthro,
                              fire_excl_anthro = fire_excl_anthro)
   covTableObs$Total_dist = covTableObs$Anthro + covTableObs$fire_excl_anthro
-  popGrowthPars <- demographicCoefficients(reps)
-  rateSamplesAll <- demographicRates(covTable = covTableObs,popGrowthPars = popGrowthPars,returnSample=T,useQuantiles = F)
+  if(is.null(quants)){
+    popGrowthPars <- demographicCoefficients(reps)
+    rateSamplesAll <- demographicRates(covTable = covTableObs,popGrowthPars = popGrowthPars,returnSample=T,useQuantiles = F)
+  }else{
+    popGrowthPars <- demographicCoefficients(reps,useQuantiles = quants)
+    rateSamplesAll <- demographicRates(covTable = covTableObs,popGrowthPars = popGrowthPars,returnSample=T)
+
+  }
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
   pars <- cbind(pars,popGrowthJohnson(pars$N0,R_bar = pars$R_bar, S_bar = pars$S_bar,numSteps = 1,K=F,adjustR=T))
   simSurvBig<-pars %>% select(Anthro,S_t) %>% group_by(Anthro) %>% summarize(Mean=mean(S_t),lower=quantile(S_t, 0.025),upper=quantile(S_t,0.975))
@@ -1206,7 +1248,7 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
 
 
 runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDists=T){
-  #ePars=eParsIn;survAnalysisMethod="Exponential"
+  #ePars=eParsIn;survAnalysisMethod="KaplanMeier";getKSDists=T
   scns<-fillDefaults(scns)
   for(p in 1:nrow(scns)){
     #p=1
@@ -1214,6 +1256,9 @@ runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDi
 
     if(is.element("st",names(cs))){
       ePars$freqStartsByYear$numStarts=cs$st
+    }
+    if(is.element("cw",names(cs))){
+      ePars$cowCounts$Count=cs$cw
     }
     oo = simulateObservations(cs,cowCounts=ePars$cowCounts,freqStartsByYear=ePars$freqStartsByYear,collarNumYears=ePars$collarNumYears,collarOffTime=ePars$collarOffTime,collarOnTime=ePars$collarOnTime)
     betaPriors<-getPriors(cs)
