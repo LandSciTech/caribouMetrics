@@ -361,8 +361,8 @@ getPriors<-function(modifiers=NULL,
                                       recruitmentModelNumber="M4",
                                       bre=3,
                                       bse=3,
-                                      lse = 7,
-                                      sse = 0.08696*0.7,
+                                      lse = 5,
+                                      sse = 0.08696*0.4,
                                       ssv = 0.01,
                                       lre=9,
                                       sre = 0.46,
@@ -802,9 +802,7 @@ fillDefaults <- function(scns = NULL,
 }
 
 getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig,getKSDists){
-  #result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;oo=oo;simBig=simBig
-
-
+  #result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;oo=oo;simBig=simLow
 
   #get summary info for plots
   rr.summary<-tabAllRes(result, startYear, endYear)
@@ -906,7 +904,9 @@ getKSDist<-function(Value,type){
   return(out)
 }
 
-makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars = NULL,whichPlots=c("Adult female survival","Population growth rate","Recruitment","Female population size")){
+makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars = NULL,
+                             whichPlots=c("Adult female survival","Population growth rate","Recruitment","Female population size"),
+                             survLow=0.6,type="png"){
   #facetVars=c("lse","sse");loopVars="ssv"
 
   if(!is.null(loopVars)){
@@ -932,28 +932,40 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars 
     addBitO = paste0(addBit,aa)
 
     if(is.element("Adult female survival",whichPlots)){
-      pdf(paste0("figs/Surv",addBitO,".pdf"),width=10,height=7)
+      if(type=="png"){
+        png(here::here(paste0("figs/Surv",addBitO,".png")),
+            height = 6, width = 7.48, units = "in",res=600)
+      }else{pdf(paste0("figs/Surv",addBitO,".pdf"),width=10,height=7)}
       print(plotRes(merge(scResults$rr.summary.all,crow), "Adult female survival",obs=merge(scResults$obs.all,crow),
-                    lowBound=0.6,simRange=merge(scResults$sim.all,crow),facetVars=facetVars))
+                    lowBound=survLow,simRange=merge(scResults$sim.all,crow),facetVars=facetVars))
       dev.off()
     }
 
     if(is.element("Population growth rate",whichPlots)){
-      pdf(paste0("figs/Lambda",addBitO,".pdf"),width=10,height=7)
+      if(type=="png"){
+        png(here::here(paste0("figs/Lambda",addBitO,".png")),
+            height = 6, width = 7.48, units = "in",res=600)
+      }else{pdf(paste0("figs/Lambda",addBitO,".pdf"),width=10,height=7)}
       print(plotRes(scResults$rr.summary.all, "Population growth rate",obs=scResults$obs.all,
                     lowBound=0,simRange=scResults$sim.all,facetVars=facetVars))
       dev.off()
     }
 
     if(is.element("Recruitment",whichPlots)){
-      pdf(paste0("figs/Rec",addBitO,".pdf"),width=10,height=7)
+      if(type=="png"){
+        png(here::here(paste0("figs/Rec",addBitO,".png")),
+            height = 6, width = 7.48, units = "in",res=600)
+      }else{pdf(paste0("figs/Rec",addBitO,".pdf"),width=10,height=7)}
       print(plotRes(scResults$rr.summary.all, "Recruitment",obs=scResults$obs.all,
                     lowBound=0,simRange=scResults$sim.all,facetVars=facetVars))
       dev.off()
     }
 
     if(is.element("Female population size",whichPlots)){
-      pdf(paste0("figs/FPOP",addBitO,".pdf"),width=10,height=7)
+      if(type=="png"){
+        png(here::here(paste0("figs/FPOP",addBitO,".png")),
+            height = 6, width = 7.48, units = "in",res=600)
+      }else{pdf(paste0("figs/FPOP",addBitO,".pdf"),width=10,height=7)}
       print(plotRes(scResults$rr.summary.all, "Female population size",obs=scResults$obs.all,
                     lowBound=0,facetVars=facetVars))
       dev.off()
@@ -1089,6 +1101,15 @@ testPopGrowthTable <- function(df) {
 plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=NULL,facetVars=NULL){
   #allRes=scResults$ksDists; parameter="Recruitment";obs=scResults$obs.all;lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("P","sQ")
 
+  if(is.null(facetVars)){
+    titleFontSize = 16
+    labFontSize=14
+    breakInterval=1
+  }else{
+    titleFontSize = 11
+    labFontSize=10
+    breakInterval=2
+  }
   if(is.element("KSDistance",names(allRes))){
     #plot Kolmogorov Smirnov distances
     KS=T
@@ -1128,12 +1149,12 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
   }
   x2 <- x1 + theme_classic() + xlab("Year")+ ylab(parameter) +
     geom_line(aes(x = Year, y=Mean), size = 1.75) +
-    theme(axis.text.y = element_text(size=14),
-          axis.text.x = element_text(angle = 90, vjust = 0.5, size=14),
-          axis.title.x=element_text(size=16,face="bold"),
-          axis.title.y=element_text(size=16,face="bold")) +
+    theme(axis.text.y = element_text(size=labFontSize),
+          axis.text.x = element_text(angle = 90, vjust = 0.5, size=labFontSize),
+          axis.title.x=element_text(size=titleFontSize,face="bold"),
+          axis.title.y=element_text(size=titleFontSize,face="bold")) +
     scale_x_continuous(breaks=seq(min(df$Year, na.rm = TRUE),
-                                  max(df$Year, na.rm = TRUE),1))
+                                  max(df$Year, na.rm = TRUE),breakInterval))
 
   if(!KS){
     x2 <- x2+    geom_ribbon(aes(ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`),
