@@ -906,7 +906,7 @@ getKSDist<-function(Value,type){
 
 makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars = NULL,
                              whichPlots=c("Adult female survival","Population growth rate","Recruitment","Female population size"),
-                             survLow=0.6,type="png"){
+                             survLow=0.6,type="png",useNational=T){
   #facetVars=c("lse","sse");loopVars="ssv"
 
   if(!is.null(loopVars)){
@@ -931,13 +931,20 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars 
 
     addBitO = paste0(addBit,aa)
 
+    if(useNational){
+      simRange  = merge(scResults$sim.all,crow)
+
+    }else{
+      simRange=NULL
+    }
+
     if(is.element("Adult female survival",whichPlots)){
       if(type=="png"){
         png(here::here(paste0("figs/Surv",addBitO,".png")),
             height = 6, width = 7.48, units = "in",res=600)
       }else{pdf(paste0("figs/Surv",addBitO,".pdf"),width=10,height=7)}
       print(plotRes(merge(scResults$rr.summary.all,crow), "Adult female survival",obs=merge(scResults$obs.all,crow),
-                    lowBound=survLow,simRange=merge(scResults$sim.all,crow),facetVars=facetVars))
+                    lowBound=survLow,simRange=simRange,facetVars=facetVars))
       dev.off()
     }
 
@@ -946,8 +953,8 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars 
         png(here::here(paste0("figs/Lambda",addBitO,".png")),
             height = 6, width = 7.48, units = "in",res=600)
       }else{pdf(paste0("figs/Lambda",addBitO,".pdf"),width=10,height=7)}
-      print(plotRes(scResults$rr.summary.all, "Population growth rate",obs=scResults$obs.all,
-                    lowBound=0,simRange=scResults$sim.all,facetVars=facetVars))
+      print(plotRes(merge(scResults$rr.summary.all,crow), "Population growth rate",obs=merge(scResults$obs.all,crow),
+                    lowBound=0,simRange=simRange,facetVars=facetVars))
       dev.off()
     }
 
@@ -956,8 +963,8 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars 
         png(here::here(paste0("figs/Rec",addBitO,".png")),
             height = 6, width = 7.48, units = "in",res=600)
       }else{pdf(paste0("figs/Rec",addBitO,".pdf"),width=10,height=7)}
-      print(plotRes(scResults$rr.summary.all, "Recruitment",obs=scResults$obs.all,
-                    lowBound=0,simRange=scResults$sim.all,facetVars=facetVars))
+      print(plotRes(merge(scResults$rr.summary.all,crow), "Recruitment",obs=merge(scResults$obs.all,crow),
+                    lowBound=0,simRange=simRange,facetVars=facetVars))
       dev.off()
     }
 
@@ -966,14 +973,14 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars 
         png(here::here(paste0("figs/FPOP",addBitO,".png")),
             height = 6, width = 7.48, units = "in",res=600)
       }else{pdf(paste0("figs/FPOP",addBitO,".pdf"),width=10,height=7)}
-      print(plotRes(scResults$rr.summary.all, "Female population size",obs=scResults$obs.all,
+      print(plotRes(merge(scResults$rr.summary.all,crow), "Female population size",obs=merge(scResults$obs.all,crow),
                     lowBound=0,facetVars=facetVars))
       dev.off()
     }
   }
 }
 
-getSimsNational<-function(reps=500,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,quants=NULL,wdir=NULL){
+getSimsNational<-function(reps=500,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,quants=NULL,wdir=NULL,popGrowthTable=NULL){
   #reps=500;N0=500;Anthro=seq(0,100,by=2);fire_excl_anthro=0;quants=c(0.025,0.025)
 
   if(is.null(wdir)){wdir=getwd()}
@@ -995,13 +1002,14 @@ getSimsNational<-function(reps=500,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anth
   covTableObs <- expand.grid(Anthro = Anthro,
                              fire_excl_anthro = fire_excl_anthro)
   covTableObs$Total_dist = covTableObs$Anthro + covTableObs$fire_excl_anthro
+
+  if(is.null(popGrowthTable)){popGrowthTable=popGrowthTableJohnsonECCC}
   if(is.null(quants)){
-    popGrowthPars <- demographicCoefficients(reps)
+    popGrowthPars <- demographicCoefficients(reps,populationGrowthTable = popGrowthTable)
     rateSamplesAll <- demographicRates(covTable = covTableObs,popGrowthPars = popGrowthPars,returnSample=T,useQuantiles = F)
   }else{
-    popGrowthPars <- demographicCoefficients(reps,useQuantiles = quants)
+    popGrowthPars <- demographicCoefficients(reps,useQuantiles = quants,populationGrowthTable = popGrowthTable)
     rateSamplesAll <- demographicRates(covTable = covTableObs,popGrowthPars = popGrowthPars,returnSample=T)
-
   }
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
   pars <- cbind(pars,popGrowthJohnson(pars$N0,R_bar = pars$R_bar, S_bar = pars$S_bar,numSteps = 1,K=F,adjustR=T))
@@ -1174,6 +1182,9 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
   if(!is.null(facetVars)){
     if(length(facetVars)==2){
       x2<-x2+facet_grid(as.formula(paste(facetVars[1],"~", facetVars[2])),labeller = "label_both")
+    }else{
+      x2<-x2+facet_wrap(as.formula(paste0("~", facetVars[1])),labeller = "label_both")
+
     }
   }
   if(!KS & (parameter=="Population growth rate")){
