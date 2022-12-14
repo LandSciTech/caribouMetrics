@@ -542,7 +542,7 @@ simTrajectory<-function(numYears,covariates,survivalModelNumber = "M1",recruitme
     fds <- subset(pars, select = c(replicate, Anthro,fire_excl_anthro, S_t, R_t, N, lambda,n_recruits,surviving_adFemales))
     fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
     names(fds) <- c("Replicate", "Anthro","fire_excl_anthro", "survival", "recruitment", "N", "lambda","n_recruits","n_cows")
-    fds$n_recruits=fds$n_recruits*2 #all calves, not just females
+    fds$n_recruits=fds$recruitment*fds$n_cows #apparent number of calves per cow, not actual, from unadjusted R_t
     fds <- pivot_longer(fds, !Replicate, names_to = "MetricTypeID", values_to = "Amount")
     fds$Timestep <- t * stepLength
     if (t == 1) {
@@ -907,7 +907,7 @@ getKSDist<-function(Value,type){
 makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars = NULL,
                              whichPlots=c("Adult female survival","Population growth rate","Recruitment","Female population size"),
                              survLow=0.6,type="png",useNational=T){
-  #facetVars=c("lse","sse");loopVars="ssv"
+  #facetVars=c("lre","sre");loopVars="srv";scResults=scResultsHigh
 
   if(!is.null(loopVars)){
 
