@@ -133,8 +133,8 @@ popGrowthJohnson <- function(N,
     }
 
     if(adjustR){
-      R_t=R_t/(1+R_t)
-    }
+      R_tadj=R_t/(1+R_t)
+    }else{R_tadj=R_t}
 
     Ntm1=N
 
@@ -150,7 +150,7 @@ popGrowthJohnson <- function(N,
       rK <- K * N
     }
 
-    n_recruitsUnadjDD <- surviving_adFemales * R_t
+    n_recruitsUnadjDD <- surviving_adFemales * R_tadj
 
     if(K){
       adjDDRtProportion <- (P_0 -
@@ -164,7 +164,7 @@ popGrowthJohnson <- function(N,
       adjDDRtProportion=1
     }
     if(doBinomial){
-      n_recruits <- rbinom(length(N),surviving_adFemales,R_t*adjDDRtProportion)
+      n_recruits <- rbinom(length(N),surviving_adFemales,R_tadj*adjDDRtProportion)
     }else{
       n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits)
     }
