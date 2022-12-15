@@ -2,7 +2,7 @@ model{
 
 #Observation models
 for(k in 1:nSurvs){
-	Surv[surv_id[k]] ~ dnorm(S.annual.KM[surv_id[k]], tau[surv_id[k]])
+	_survString_
 }
 for(k in 1:nCounts){
 	calves[count_id[k]] ~ dbin( RT[count_id[k]], CountAntlerless[count_id[k]] )
@@ -27,7 +27,7 @@ for(k in 1:nYears){
 
 #Growth
 for(k in 1:nYears){
-		Rfemale[k] <- (RT[k]/2)/(1+(RT[k]/2))
+		_adjustString_
 		survivors[k] ~ dbin( S.annual.KM[k], fpop.size[k] )
     recruits[k] ~ dbin(Rfemale[k], survivors[k])
     #small minimum in demoninator to give 0 when fpop.size=0

@@ -31,7 +31,8 @@ load.module("glm")
 #Get full set of sims for comparison
 #TO DO: need an option for force update of this cache - needed when something changes in caribouMetrics, which presumably won't happen often, but may happen sometimes.
 #Include this option with a note that it is something to try if one is getting a mismatch between local and national results given minimal monitoring data.
-simBig<-getSimsNational() #If called with default parameters, use saved object to speed things up.
+simBigAdjust<-getSimsNational(adjustR=T) #If called with default parameters, use saved object to speed things up.
+simBigNoAdjust<-getSimsNational(adjustR=F) #If called with default parameters, use saved object to speed things up.
 
 # get default values to use in initializing parameters in ui
 #Disturbance scenario parameters
@@ -49,6 +50,7 @@ simBig<-getSimsNational() #If called with default parameters, use saved object t
 #sQ: survival quantile
 #rS: disturbance-recruitment slope multiplier
 #sS: disturbance-survival slope multiplier
+#adjustR: Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019) or not.
 #In theory, could expose any parameter from caribouMetrics projection tool here. Leave simple for now.
 
 scn_defaults <- c(eval(formals(fillDefaults)$defList),
@@ -146,6 +148,8 @@ ui <- dashboardPage(
       # True pop ---------------------------
       menuItem(
         "True population parameters",
+        checkboxInput("adjustR" , "Adjust R to account for delayed age at first reproduction",value=0),
+
         numericInput("N0",
                      label = "Initial population size",
                      value = scn_defaults$N0, min = 0),
@@ -470,7 +474,7 @@ server <- function(input, output, session) {
                         aS = input$aS, aSf = input$aSf, rS = input$rS,
                         sS = input$sS, iA = input$iA, iF = input$iF,
                         rQ = input$rQ, sQ = input$sQ, N0 = input$N0,
-                        iYr = startYear)
+                        iYr = startYear,adjustR=input$adjustR)
 
 
     scns <- fillDefaults(scns)
@@ -525,6 +529,7 @@ server <- function(input, output, session) {
   dataInput1 <- eventReactive(input$Run.model, {
 
     out<-dataInput()
+    if(input$adjustR){simBig=simBigAdjust}else{simBig=simBigNoAdjust}
     return(getOutputTables(result=out$result,startYear=out$startYear,endYear=out$endYear,
                            survInput=out$survInput,oo=out$oo,simBig=simBig,getKSDists=input$getKSDists))
   })

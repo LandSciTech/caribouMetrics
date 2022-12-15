@@ -41,4 +41,6 @@ vignettes/*.pdf
 
 tabs/*_.csv
 
-simsNational.Rds
+simsNationalFALSE.Rds
+simsNationalTRUE.Rds
+JAGS_run.txt

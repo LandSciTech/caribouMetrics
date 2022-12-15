@@ -33,10 +33,11 @@ eParsIn$collarOnTime=1
 eParsIn$collarOffTime=12
 eParsIn$collarNumYears=1
 
+adjustR = T #adjust recruitment for delayed age of first reproduction or no.
 
 ##########
 #Get full set of sims for comparison
-simBig<-getSimsNational()#If called with default parameters, use saved object to speed things up.
+simBig<-getSimsNational(adjustR=adjustR)#If called with default parameters, use saved object to speed things up.
 
 ###############
 #Step 1: confirm appropriate prior variability in survival intercept using minimal (2) observed data points & 0 fire/anthro covariates. Controlled by priors on l.Saf, phi and sig.Saf.
@@ -45,13 +46,19 @@ simBig<-getSimsNational()#If called with default parameters, use saved object to
 #eParsIn$collarNumYears=1
 
 str(eParsIn)
-numObsYrs=c(1);startsByYr = 1 #25
-scns=expand.grid(P=numObsYrs,sQ=c(0.5),st=startsByYr)
+numObsYrs=c(1);startsByYr = 1;cw=0 #25
+scns=expand.grid(P=numObsYrs,sQ=c(0.5),st=startsByYr,adjustR=adjustR,cw=cw)
 scResults = runScnSet(scns,eParsIn,simBig,getKSDists=F)
 
 str(scResults)$obs.all
-print(plotRes(scResults$ksDists, "Recruitment",obs=scResults$obs.all,
-              lowBound=0,highBound=2000,facetVars=c("P","sQ")))
+print(plotRes(scResults$rr.summary.all, "Population growth rate",obs=scResults$obs.all,
+              lowBound=0,simRange = scResults$sim.all,facetVars=c("P","sQ")))
+
+print(plotRes(scResults$rr.summary.all, "Recruitment",obs=scResults$obs.all,
+              lowBound=0,simRange = scResults$sim.all,facetVars=c("P","sQ")))
+
+print(plotRes(scResults$rr.summary.all, "Adult female survival",obs=scResults$obs.all,
+              lowBound=0.65,simRange = scResults$sim.all,facetVars=c("P","sQ")))
 
 print(plotRes(scResults$rr.summary.all, "Female population size",obs=scResults$obs.all,
               lowBound=0,highBound=2000,facetVars=c("P","sQ")))

@@ -1,7 +1,7 @@
 runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      disturbance="simDisturbance.csv",betaPriors="default",
                      startYear = 1998, endYear = 2018, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 2,N0=1000,
-                     survAnalysisMethod = "KaplanMeier",
+                     survAnalysisMethod = "KaplanMeier",adjustR=T,
                      inpFixed=list()){
   #survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
   #betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"
@@ -89,7 +89,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
   }
 
   if(nrow(dSubset)==1){
-    warning("Switching to exponential survival analysis method because there is only one animal.")
+    warning("Switching to exponential survival analysis method because there is only one collared animal.")
     inp$survAnalysisMethod = "Exponential"
   }
 
@@ -217,8 +217,28 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
   #for beta model, remove tau, adjust Surv: (survDatat$surv*45+0.5)/46
   #survDatat$surv,tau=survDatat$tau
   #               phi.Saf.Prior1=betaPriors$phi.Saf.Prior1,phi.Saf.Prior2=betaPriors$phi.Saf.Prior2,
+
+  if(adjustR){
+    adjustString="Rfemale[k] <- (RT[k]/2)/(1+(RT[k]/2))"
+  }else{
+    adjustString="Rfemale[k] <- RT[k]/2"
+  }
+
   if(inp$survAnalysisMethod=="KaplanMeier"){
-    sp.data=list(Surv=survDatat$surv,tau=survDatat$tau,anthro=disturbance$Anthro,fire=disturbance$fire_excl_anthro,
+    survString = "Surv[surv_id[k]] ~ dnorm(S.annual.KM[surv_id[k]], tau[surv_id[k]])"
+  }else{
+    survString = paste(c("for(t in 1:12){","surv[surv_id[k],t+1] ~ dbern(S.annual.KM[survYr[surv_id[k]]]^(1/12)*surv[surv_id[k],t])","}"),collapse="\n")
+  }
+
+  jagsTemplate<-paste(readLines("JAGS_template.txt"),collapse="\n")
+  jagsTemplate=gsub("_survString_",survString,jagsTemplate,fixed=T)
+  jagsTemplate=gsub("_adjustString_",adjustString,jagsTemplate,fixed=T)
+
+  sink("JAGS_run.txt")
+  cat(jagsTemplate,fill = TRUE)
+  sink()
+
+  sp.data = list(anthro=disturbance$Anthro,fire=disturbance$fire_excl_anthro,
                  beta.Saf.Prior1=betaPriors$beta.Saf.Prior1,beta.Saf.Prior2=betaPriors$beta.Saf.Prior2,
                  beta.Rec.anthro.Prior1=betaPriors$beta.Rec.anthro.Prior1,beta.Rec.anthro.Prior2=betaPriors$beta.Rec.anthro.Prior2,
                  beta.Rec.fire.Prior1=betaPriors$beta.Rec.fire.Prior1,beta.Rec.fire.Prior2=betaPriors$beta.Rec.fire.Prior2,
@@ -228,57 +248,25 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                  sig.R.Prior1 = betaPriors$sig.R.Prior1,sig.R.Prior2=betaPriors$sig.R.Prior2,
                  Ninit=inp$N0,
                  nCounts=length(which(is.na(data3t$Count)==FALSE)),count_id=which(is.na(data3t$Count)==FALSE),
-                 nSurvs=length(which(is.na(survDatat$surv)==FALSE)),surv_id=which(is.na(survDatat$surv)==FALSE),
                  nYears=nYears+t.pred,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
 
-    sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
-
-    rr.surv <- jags(data=sp.data, parameters.to.save=sp.params,
-                    model.file="INF_saf_INF_r_JAGS_extentTime.txt",
-                    n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin)
+  if(inp$survAnalysisMethod=="KaplanMeier"){
+    sp.data=c(sp.data,list(Surv=survDatat$surv,tau=survDatat$tau,
+                 nSurvs=length(which(is.na(survDatat$surv)==FALSE)),surv_id=which(is.na(survDatat$surv)==FALSE)))
   }else{
     if(inp$survAnalysisMethod=="exp"){
-      sp.data=list(t.to.death=survDatat$t.to.death,t.cen=survDatat$t.cen,survYr = survDatat$Year-inp$startYear,anthro=disturbance$Anthro,fire=disturbance$fire_excl_anthro,
-                   beta.Saf.Prior1=betaPriors$beta.Saf.Prior1,beta.Saf.Prior2=betaPriors$beta.Saf.Prior2,
-                   beta.Rec.anthro.Prior1=betaPriors$beta.Rec.anthro.Prior1,beta.Rec.anthro.Prior2=betaPriors$beta.Rec.anthro.Prior2,
-                   beta.Rec.fire.Prior1=betaPriors$beta.Rec.fire.Prior1,beta.Rec.fire.Prior2=betaPriors$beta.Rec.fire.Prior2,
-                   l.Saf.Prior1 = betaPriors$l.Saf.Prior1,l.Saf.Prior2 = betaPriors$l.Saf.Prior2,
-                   l.R.Prior1 = betaPriors$l.R.Prior1,l.R.Prior2 = betaPriors$l.R.Prior2,
-                   sig.Saf.Prior1=betaPriors$sig.Saf.Prior1,sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
-                   sig.R.Prior1 = betaPriors$sig.R.Prior1,sig.R.Prior2=betaPriors$sig.R.Prior2,
-                   Ninit=inp$N0,
-                   nCounts=length(which(is.na(data3t$Count)==FALSE)),count_id=which(is.na(data3t$Count)==FALSE),
-                   nSurvs=length(which(is.na(survDatat[,1])==FALSE)),surv_id=which(is.na(survDatat$Year)==FALSE),
-                   nYears=nYears+t.pred,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
-
-      sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
-
-      rr.surv <- jags(data=sp.data, parameters.to.save=sp.params,
-                      model.file="INF_saf_INF_r_JAGS_expSurvival.txt",
-                      n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin)
-
+      sp.data=c(sp.data,list(t.to.death=survDatat$t.to.death,t.cen=survDatat$t.cen,survYr = survDatat$Year-inp$startYear,
+                   nSurvs=length(which(is.na(survDatat[,1])==FALSE)),surv_id=which(is.na(survDatat$Year)==FALSE)))
     }else{
-      sp.data=list(surv=survDatat[,1:13],survYr = survDatat$Year-inp$startYear+1,anthro=disturbance$Anthro,fire=disturbance$fire_excl_anthro,
-                   beta.Saf.Prior1=betaPriors$beta.Saf.Prior1,beta.Saf.Prior2=betaPriors$beta.Saf.Prior2,
-                   beta.Rec.anthro.Prior1=betaPriors$beta.Rec.anthro.Prior1,beta.Rec.anthro.Prior2=betaPriors$beta.Rec.anthro.Prior2,
-                   beta.Rec.fire.Prior1=betaPriors$beta.Rec.fire.Prior1,beta.Rec.fire.Prior2=betaPriors$beta.Rec.fire.Prior2,
-                   l.Saf.Prior1 = betaPriors$l.Saf.Prior1,l.Saf.Prior2 = betaPriors$l.Saf.Prior2,
-                   l.R.Prior1 = betaPriors$l.R.Prior1,l.R.Prior2 = betaPriors$l.R.Prior2,
-                   sig.Saf.Prior1=betaPriors$sig.Saf.Prior1,sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
-                   sig.R.Prior1 = betaPriors$sig.R.Prior1,sig.R.Prior2=betaPriors$sig.R.Prior2,
-                   Ninit=inp$N0,
-                   nCounts=length(which(is.na(data3t$Count)==FALSE)),count_id=which(is.na(data3t$Count)==FALSE),
-                   nSurvs=length(which(is.na(survDatat[,1])==FALSE)),surv_id=which(is.na(survDatat$Year)==FALSE),
-                   nYears=nYears+t.pred,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
-
-      sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
-
-      rr.surv <- jags(data=sp.data, parameters.to.save=sp.params,
-                      model.file="INF_saf_INF_r_JAGS_expSurvival2.txt",
-                      n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin)
-
+      sp.data=c(sp.data,list(surv=survDatat[,1:13],survYr = survDatat$Year-inp$startYear+1,
+                   nSurvs=length(which(is.na(survDatat[,1])==FALSE)),surv_id=which(is.na(survDatat$Year)==FALSE)))
     }
   }
+
+  sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
+  rr.surv <- jags(data=sp.data, parameters.to.save=sp.params,
+                  model.file="JAGS_run.txt",
+                  n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin)
 
   return(list(result=rr.surv,survInput=survDatat))
 }
@@ -367,7 +355,7 @@ expandSurvivalRecord<-function(crow){
 getPriors<-function(modifiers=NULL,
                     expectMods = list(survivalModelNumber="M1",
                                       recruitmentModelNumber="M4",
-                                      bre=3,
+                                      bre=4,
                                       bse=3,
                                       lse = 5,
                                       sse = 0.08696*0.4,
@@ -499,7 +487,7 @@ simCovariates<-function(initAnthro,initFire,numYears,anthroSlope,anthroSlopeFutu
 simTrajectory<-function(numYears,covariates,survivalModelNumber = "M1",recruitmentModelNumber = "M4",
                         popGrowthTable = popGrowthTableJohnsonECCC,
                         recSlopeMultiplier=1,sefSlopeMultiplier=1,recQuantile=0.5,sefQuantile=0.5,
-                        stepLength=1,N0=1000){
+                        stepLength=1,N0=1000,adjustR=T){
   # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
   #recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
   #stepLength=1;N0=1000
@@ -544,7 +532,7 @@ simTrajectory<-function(numYears,covariates,survivalModelNumber = "M1",recruitme
     pars <- cbind(pars,
                   popGrowthJohnson(pars$N0,
                                    R_bar = pars$R_bar, S_bar = pars$S_bar,
-                                   numSteps = stepLength, K=F, l_R = 1e-06,adjustR=T))
+                                   numSteps = stepLength, K=F, l_R = 1e-06,adjustR=adjustR))
 
     # add results to output set
     fds <- subset(pars, select = c(replicate, Anthro,fire_excl_anthro, S_t, R_t, N, lambda,n_recruits,surviving_adFemales))
@@ -786,7 +774,7 @@ fillDefaults <- function(scns = NULL,
                          defList = list(
                            iF = 0, iA = 0, aS = 0, aSf = 4,
                            rS = 1, sS = 1,
-                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, st = 25, N0 = 1000
+                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, st = 25, N0 = 1000, adjustR=T
                          ), curYear = 2018) {
   if (is.null(scns)) {
     scns <- as.data.frame(defList)
@@ -988,19 +976,20 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars 
   }
 }
 
-getSimsNational<-function(reps=1000,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,quants=NULL,wdir=NULL,popGrowthTable=NULL){
-  #reps=500;N0=500;Anthro=seq(0,100,by=2);fire_excl_anthro=0;quants=c(0.025,0.025)
+getSimsNational<-function(reps=1000,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,quants=NULL,wdir=NULL,
+                          popGrowthTable=NULL,adjustR=F){
+  #reps=500;N0=500;Anthro=seq(0,100,by=2);fire_excl_anthro=0;quants=c(0.025,0.025);adjustR=T
 
   if(is.null(wdir)){wdir=getwd()}
   doSave <- FALSE
 
-  check <- as.list(match.call());check$wdir=NULL
+  check <- as.list(match.call());check$wdir=NULL;check$adjustR=NULL
 
   if(length(check) == 1){
 
-    if(file.exists(paste0(wdir,"/simsNational.rds"))){
+    if(file.exists(paste0(wdir,"/simsNational",adjustR,".rds"))){
       message("Using saved object")
-      return(readRDS(paste0(wdir,"/simsNational.rds")))
+      return(readRDS(paste0(wdir,"/simsNational",adjustR,".rds")))
     } else {
       message("Object will be saved for future use")
       doSave <- TRUE
@@ -1020,7 +1009,7 @@ getSimsNational<-function(reps=1000,N0=1000,Anthro=seq(0,100,by=1),fire_excl_ant
     rateSamplesAll <- demographicRates(covTable = covTableObs,popGrowthPars = popGrowthPars,returnSample=T)
   }
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
-  pars <- cbind(pars,popGrowthJohnson(pars$N0,R_bar = pars$R_bar, S_bar = pars$S_bar,numSteps = 1,K=F,adjustR=T))
+  pars <- cbind(pars,popGrowthJohnson(pars$N0,R_bar = pars$R_bar, S_bar = pars$S_bar,numSteps = 1,K=F,adjustR=adjustR))
   simSurvBig<-pars %>% select(Anthro,S_t) %>% group_by(Anthro) %>% summarize(Mean=mean(S_t),lower=quantile(S_t, 0.025),upper=quantile(S_t,0.975))
   simSurvBig$parameter="Adult female survival"
   simRecBig<-pars %>% select(Anthro,R_t) %>% group_by(Anthro) %>% summarize(Mean=mean(R_t),lower=quantile(R_t, 0.025),upper=quantile(R_t,0.975))
@@ -1038,7 +1027,7 @@ getSimsNational<-function(reps=1000,N0=1000,Anthro=seq(0,100,by=1),fire_excl_ant
   simBig=list(summary=simBig,samples=parsSelect)
 
   if(doSave){
-    saveRDS(simBig, paste0(wdir,"/simsNational.rds"))
+    saveRDS(simBig, paste0(wdir,"/simsNational",adjustR,".rds"))
   }
   return(simBig)
 }
@@ -1240,7 +1229,7 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
                             survivalModelNumber = survivalModelNumber,
                             recruitmentModelNumber = recruitmentModelNumber,
                             recSlopeMultiplier=cs$rS,
-                            sefSlopeMultiplier=cs$sS,recQuantile=cs$rQ,sefQuantile=cs$sQ,N0=cs$N0)
+                            sefSlopeMultiplier=cs$sS,recQuantile=cs$rQ,sefQuantile=cs$sQ,N0=cs$N0,adjustR=cs$adjustR)
 
   simDisturbance$time=NULL
   if(printPlot){
@@ -1305,7 +1294,7 @@ runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDi
     minYr=min(oo$exData$Year)
     maxYr=max(oo$simDisturbance$Year)
     out<-runRMModel(survData=oo$simSurvObs,ageRatio.herd=oo$ageRatioOut,disturbance=oo$simDisturbance,
-                    betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0,survAnalysisMethod = survAnalysisMethod)
+                    betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0,survAnalysisMethod = survAnalysisMethod,adjustR=cs$adjustR)
     outTabs<-getOutputTables(result=out$result,startYear=minYr,endYear=maxYr,survInput=out$survInput,oo=oo,simBig=simBig,getKSDists = getKSDists)
 
     if(p==1){
