@@ -25,13 +25,12 @@ source("CaribouDemoFns.R")
 
 load.module("glm")
 
-#TO DO: remove option for more than one herd in input files, and all associated code...
-
-# shouldn't need eParsIn since these params are in app now
-# eParsIn = getParamsFromEacker()
+#TO DO: make recruitment adjustment (equation 2 of Eacker et al) an option. Note this requires adjusting all calls to popGrowthJohnson, as well as jags code.
 
 ##########
 #Get full set of sims for comparison
+#TO DO: need an option for force update of this cache - needed when something changes in caribouMetrics, which presumably won't happen often, but may happen sometimes.
+#Include this option with a note that it is something to try if one is getting a mismatch between local and national results given minimal monitoring data.
 simBig<-getSimsNational() #If called with default parameters, use saved object to speed things up.
 
 # get default values to use in initializing parameters in ui
@@ -62,9 +61,8 @@ scn_defaults <- c(eval(formals(fillDefaults)$defList),
 #collarOnTime: month that collars are deployed
 #collarOffTime: month that collars fall off
 
-# defaults set based on eParsIn. Need to build cowCounts table and
-# freqStartsByYear table from P, J and cowsPerYear, startsPerYear
-obs_defaults <- list(cowsPerYear = 100, startsPerYear = 30, collarNumYears = 1,
+# defaults set to be uninformative
+obs_defaults <- list(cowsPerYear = 0, startsPerYear = 1, collarNumYears = 1,
                      collarOnTime = 1, collarOffTime = 12)
 
 #Priors - see getPriors() for details & defaults

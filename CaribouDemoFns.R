@@ -85,9 +85,14 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
   #And problems with adding animals part way through the year, so omitting those
   dSubset =subset(data,enter==0)#;dSubset=subset(dSubset,!((exit<12)&(event==0)))
   if(nrow(dSubset)==0){
-    stop("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
-
+    stop("Collars not present at the start of a year are omitted from survival analysis in that year. Please ensure there is at least one year with a collar in the first month.")
   }
+
+  if(nrow(dSubset)==1){
+    warning("Switching to exponential survival analysis method because there is only one animal.")
+    inp$survAnalysisMethod = "Exponential"
+  }
+
   if(inp$survAnalysisMethod=="KaplanMeier"){
     survData<-getKMSurvivalEstimates(dSubset)
     #omitting years with less than 12 months of observations of collared animals
@@ -98,9 +103,12 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
     survData$Year = as.numeric(gsub("as.factor(Year)=","",as.character(survData$Var1),fixed=T))
     survData <- merge(survData,includeYrs)
     if(nrow(survData)==0){
-      stop("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
+      warning("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
+      warning("Switching to exponential survival analysis method because there are no years with 12 months of collar data.")
+      inp$survAnalysisMethod = "Exponential"
     }
-
+  }
+  if(inp$survAnalysisMethod=="KaplanMeier"){
     if(any(survData$surv==1)){
       # which years does survival equal 1
       survOne=which(unlist(lapply(split(dSubset, dSubset$Year), function(x) sum(x$event)))==0)
@@ -364,8 +372,8 @@ getPriors<-function(modifiers=NULL,
                                       lse = 5,
                                       sse = 0.08696*0.4,
                                       ssv = 0.01,
-                                      lre=9,
-                                      sre = 0.46,
+                                      lre=3,
+                                      sre = 0.46*0.5,
                                       srv = 0.22),
                     popGrowthTable = popGrowthTableJohnsonECCC,
                     modVer = "Johnson",returnValues=T){
@@ -778,7 +786,7 @@ fillDefaults <- function(scns = NULL,
                          defList = list(
                            iF = 0, iA = 0, aS = 0, aSf = 4,
                            rS = 1, sS = 1,
-                           rQ = 0.5, sQ = 0.5, J = 20, P = 2, st = 25, N0 = 1000
+                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, st = 25, N0 = 1000
                          ), curYear = 2018) {
   if (is.null(scns)) {
     scns <- as.data.frame(defList)
@@ -980,7 +988,7 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars 
   }
 }
 
-getSimsNational<-function(reps=500,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,quants=NULL,wdir=NULL,popGrowthTable=NULL){
+getSimsNational<-function(reps=1000,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,quants=NULL,wdir=NULL,popGrowthTable=NULL){
   #reps=500;N0=500;Anthro=seq(0,100,by=2);fire_excl_anthro=0;quants=c(0.025,0.025)
 
   if(is.null(wdir)){wdir=getwd()}

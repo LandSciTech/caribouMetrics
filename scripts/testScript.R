@@ -25,10 +25,10 @@ library(dplyr)
 #Use Eacker example data for collaring parameters
 eParsIn = list()
 eParsIn$cowCounts <- data.frame(Year = 1981:2018,
-                                Count = 100,
+                                Count = 0,
                                 Class = "cow")
 eParsIn$freqStartsByYear <- data.frame(Year = 1981:2018,
-                                       numStarts = 30)
+                                       numStarts = 1)
 eParsIn$collarOnTime=1
 eParsIn$collarOffTime=12
 eParsIn$collarNumYears=1
@@ -45,7 +45,7 @@ simBig<-getSimsNational()#If called with default parameters, use saved object to
 #eParsIn$collarNumYears=1
 
 str(eParsIn)
-numObsYrs=c(1);startsByYr = 30 #25
+numObsYrs=c(1);startsByYr = 1 #25
 scns=expand.grid(P=numObsYrs,sQ=c(0.5),st=startsByYr)
 scResults = runScnSet(scns,eParsIn,simBig,getKSDists=F)
 
