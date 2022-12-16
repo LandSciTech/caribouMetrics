@@ -1,7 +1,7 @@
 runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      disturbance="simDisturbance.csv",betaPriors="default",
                      startYear = 1998, endYear = 2018, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 2,N0=1000,
-                     survAnalysisMethod = "KaplanMeier",adjustR=T,
+                     survAnalysisMethod = "KaplanMeier",adjustR=F,
                      inpFixed=list()){
   #survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
   #betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"
@@ -9,7 +9,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
 
   # combine defaults in function with inputs from input list
   inputArgs = c("survData","ageRatio.herd","disturbance","startYear", "endYear",
-                   "Nchains","Niter","Nburn","Nthin","N0","survAnalysisMethod")
+                   "Nchains","Niter","Nburn","Nthin","N0","survAnalysisMethod","adjustR")
   addArgs<-inputArgs#setdiff(inputArgs,names(inp))
   inp=list()
   for (a in addArgs){
@@ -218,7 +218,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
   #survDatat$surv,tau=survDatat$tau
   #               phi.Saf.Prior1=betaPriors$phi.Saf.Prior1,phi.Saf.Prior2=betaPriors$phi.Saf.Prior2,
 
-  if(adjustR){
+  if(inp$adjustR){
     adjustString="Rfemale[k] <- (RT[k]/2)/(1+(RT[k]/2))"
   }else{
     adjustString="Rfemale[k] <- RT[k]/2"
@@ -359,7 +359,7 @@ getPriors<-function(modifiers=NULL,
                                       bse=3,
                                       lse = 5,
                                       sse = 0.08696*0.4,
-                                      ssv = 0.01,
+                                      ssv = 0.03,
                                       lre=3,
                                       sre = 0.46*0.5,
                                       srv = 0.22),
@@ -774,8 +774,8 @@ fillDefaults <- function(scns = NULL,
                          defList = list(
                            iF = 0, iA = 0, aS = 0, aSf = 4,
                            rS = 1, sS = 1,
-                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, st = 25, N0 = 1000, adjustR=T
-                         ), curYear = 2018) {
+                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, st = 25, N0 = 1000, adjustR=F
+                         ), curYear = 2023) {
   if (is.null(scns)) {
     scns <- as.data.frame(defList)
   } else {
@@ -977,7 +977,7 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars 
 }
 
 getSimsNational<-function(reps=1000,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,quants=NULL,wdir=NULL,
-                          popGrowthTable=NULL,adjustR=F){
+                          popGrowthTable=NULL,adjustR=F,forceUpdate=F){
   #reps=500;N0=500;Anthro=seq(0,100,by=2);fire_excl_anthro=0;quants=c(0.025,0.025);adjustR=T
 
   if(is.null(wdir)){wdir=getwd()}
@@ -996,6 +996,9 @@ getSimsNational<-function(reps=1000,N0=1000,Anthro=seq(0,100,by=1),fire_excl_ant
     }
 
   }
+  check$forceUpdate=NULL
+
+  if(forceUpdate& (length(check) == 1)){message("Updating cached national simulations.");doSave=T}
   covTableObs <- expand.grid(Anthro = Anthro,
                              fire_excl_anthro = fire_excl_anthro)
   covTableObs$Total_dist = covTableObs$Anthro + covTableObs$fire_excl_anthro

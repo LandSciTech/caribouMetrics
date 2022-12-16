@@ -24,10 +24,10 @@ library(dplyr)
 ###############
 #Use Eacker example data for collaring parameters
 eParsIn = list()
-eParsIn$cowCounts <- data.frame(Year = 1981:2018,
+eParsIn$cowCounts <- data.frame(Year = 1981:2023,
                                 Count = 0,
                                 Class = "cow")
-eParsIn$freqStartsByYear <- data.frame(Year = 1981:2018,
+eParsIn$freqStartsByYear <- data.frame(Year = 1981:2023,
                                        numStarts = 1)
 eParsIn$collarOnTime=1
 eParsIn$collarOffTime=12

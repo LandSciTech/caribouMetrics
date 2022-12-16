@@ -148,7 +148,7 @@ ui <- dashboardPage(
       # True pop ---------------------------
       menuItem(
         "True population parameters",
-        checkboxInput("adjustR" , "Adjust R to account for delayed age at first reproduction",value=0),
+        checkboxInput("adjustR" , "Adjust R to account for delayed age at first reproduction",value=scn_defaults$adjustR),
 
         numericInput("N0",
                      label = "Initial population size",
@@ -192,6 +192,9 @@ ui <- dashboardPage(
       # Priors ------------------------------------------------
       menuItem(
         "Model priors",
+
+        checkboxInput("redoSimsNational" , "Update cached national simulations.",value=0),
+
         selectInput("nat_model",
                     label = "National version model to use",
                     choices = c("default", "custom"),
@@ -458,6 +461,11 @@ server <- function(input, output, session) {
 
   dataInput <- eventReactive(input$Run.model, {
 
+    #TO DO: consider making this happen when update box is checked?
+    if(input$redoSimsNational){
+      simBigAdjust<-getSimsNational(adjustR=T,forceUpdate=T)
+      simBigNoAdjust<-getSimsNational(adjustR=F,forceUpdate=T)
+    }
 
     waiter$show()
     waiter$update(html = tagList(
