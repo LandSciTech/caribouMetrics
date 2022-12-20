@@ -46,7 +46,7 @@ simBig<-getSimsNational(adjustR=adjustR)#If called with default parameters, use 
 #eParsIn$collarNumYears=1
 
 str(eParsIn)
-numObsYrs=c(15);startsByYr = 60;cmult=3;renewalInterval=3 #25
+numObsYrs=c(15);startsByYr = 60;cmult=3;renewalInterval=1 #25
 scns=expand.grid(P=numObsYrs,sQ=c(0.5),st=startsByYr,ri = renewalInterval,adjustR=adjustR,cmult=cmult)
 scResults = runScnSet(scns,eParsIn,simBig,getKSDists=F)
 

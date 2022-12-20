@@ -784,7 +784,7 @@ fillDefaults <- function(scns = NULL,
                          defList = list(
                            iF = 0, iA = 0, aS = 0, aSf = 4,
                            rS = 1, sS = 1,
-                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, st = 25,ri=1, N0 = 1000, adjustR=F
+                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, N0 = 1000, adjustR=F
                          ), curYear = 2023) {
   if (is.null(scns)) {
     scns <- as.data.frame(defList)
@@ -1272,13 +1272,14 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
   maxYr <- cs$iYr+cs$P+cs$J-1
 
   #simulate survival data from survival probability.
-  if(is.element("st",names(cs))){
+  if(is.element("ri",names(cs))){
 
     freqStartsByYear=subset(freqStartsByYear,is.element(Year,unique(exData$Year)))
     renewYrs = intersect(min(exData$Year)+seq(0,100)*cs$ri,unique(exData$Year))
-    freqStartsByYear$numStarts=0
-    freqStartsByYear$numStarts[is.element(freqStartsByYear$Year,renewYrs)]=cs$st
-
+    freqStartsByYear$numStarts[!is.element(freqStartsByYear$Year,renewYrs)]=0
+    if(is.element("st",names(cs))){
+      freqStartsByYear$numStarts[is.element(freqStartsByYear$Year,renewYrs)]=cs$st
+    }
     simSurvObs<-simSurvivalData(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime,topUp=T)
 
   }else{

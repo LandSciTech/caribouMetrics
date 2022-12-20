@@ -68,7 +68,7 @@ scn_defaults <- c(eval(formals(fillDefaults)$defList),
 #collarOffTime: month that collars fall off
 
 # defaults set to be uninformative
-obs_defaults <- list(cmult = 0, startsPerYear = scn_defaults$st, renewalInterval=scn_defaults$ri, collarNumYears = 3,
+obs_defaults <- list(cmult = 0, startsPerYear = 1, renewalInterval=1, collarNumYears = 3,
                      collarOnTime = 1, collarOffTime = 12)
 
 #Priors - see getPriors() for details & defaults
@@ -490,7 +490,7 @@ server <- function(input, output, session) {
                         aS = input$aS, aSf = input$aSf, rS = input$rS,
                         sS = input$sS, iA = input$iA, iF = input$iF,
                         rQ = input$rQ, sQ = input$sQ, N0 = input$N0,
-                        iYr = startYear,adjustR=input$adjustR,cmult=input$cmult)
+                        iYr = startYear,adjustR=input$adjustR,cmult=input$cmult,st=input$startsPerYear,ri=input$renewalInterval)
 
 
     scns <- fillDefaults(scns)
