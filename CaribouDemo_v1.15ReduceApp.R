@@ -53,6 +53,10 @@ simBigNoAdjust<-getSimsNational(adjustR=F) #If called with default parameters, u
 #adjustR: Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019) or not.
 #In theory, could expose any parameter from caribouMetrics projection tool here. Leave simple for now.
 
+#Obs model parameters
+#st: target number of collars per year
+#ri: renewal interval
+
 scn_defaults <- c(eval(formals(fillDefaults)$defList),
                   curYear = eval(formals(fillDefaults)$curYear))
 
@@ -64,7 +68,7 @@ scn_defaults <- c(eval(formals(fillDefaults)$defList),
 #collarOffTime: month that collars fall off
 
 # defaults set to be uninformative
-obs_defaults <- list(cowsPerYear = 0, startsPerYear = 1, collarNumYears = 1,
+obs_defaults <- list(cmult = 0, startsPerYear = scn_defaults$st, renewalInterval=scn_defaults$ri, collarNumYears = 3,
                      collarOnTime = 1, collarOffTime = 12)
 
 #Priors - see getPriors() for details & defaults
@@ -169,13 +173,17 @@ ui <- dashboardPage(
       # Obs data ---------------------------------
       menuItem(
         "Observation model parameters",
-        numericInput("cowsPerYear",
-                     label = "Number of cows in aerial surveys for calf:cow ratio each year",
-                     value = obs_defaults$cowsPerYear, min = 1),
-
         numericInput("startsPerYear",
-                     label = "Number of collars deployed each year",
+                     label = "Target number of collars",
                      value = obs_defaults$startsPerYear, min = 1),
+
+        numericInput("renewalInterval",
+                     label = "Number of years between collar deployments",
+                     value = obs_defaults$renewalInterval, min = 1),
+
+        numericInput("cmult",
+                     label = "Number of cows per collared cow in aerial surveys for calf:cow ratio each year",
+                     value = obs_defaults$cmult, min = 0),
 
         numericInput("collarNumYears",
                      label = "Number of years until collar falls off",
@@ -482,14 +490,14 @@ server <- function(input, output, session) {
                         aS = input$aS, aSf = input$aSf, rS = input$rS,
                         sS = input$sS, iA = input$iA, iF = input$iF,
                         rQ = input$rQ, sQ = input$sQ, N0 = input$N0,
-                        iYr = startYear,adjustR=input$adjustR)
+                        iYr = startYear,adjustR=input$adjustR,cmult=input$cmult)
 
 
     scns <- fillDefaults(scns)
 
     # create cowCounts and freqStartsByYear from inputs
     cowCounts <- data.frame(Year = startYear:input$curYear,
-                            Count = input$cowsPerYear,
+                            Count = input$startsPerYear*input$cmult,
                             Class = "cow")
     freqStartsByYear <- data.frame(Year = startYear:input$curYear,
                                    numStarts = input$startsPerYear)

@@ -31,7 +31,7 @@ eParsIn$freqStartsByYear <- data.frame(Year = 1981:2023,
                                        numStarts = 1)
 eParsIn$collarOnTime=1
 eParsIn$collarOffTime=12
-eParsIn$collarNumYears=1
+eParsIn$collarNumYears=3
 
 adjustR = T #adjust recruitment for delayed age of first reproduction or no.
 
@@ -46,8 +46,8 @@ simBig<-getSimsNational(adjustR=adjustR)#If called with default parameters, use 
 #eParsIn$collarNumYears=1
 
 str(eParsIn)
-numObsYrs=c(1);startsByYr = 1;cw=0 #25
-scns=expand.grid(P=numObsYrs,sQ=c(0.5),st=startsByYr,adjustR=adjustR,cw=cw)
+numObsYrs=c(15);startsByYr = 60;cmult=3;renewalInterval=3 #25
+scns=expand.grid(P=numObsYrs,sQ=c(0.5),st=startsByYr,ri = renewalInterval,adjustR=adjustR,cmult=cmult)
 scResults = runScnSet(scns,eParsIn,simBig,getKSDists=F)
 
 str(scResults)$obs.all

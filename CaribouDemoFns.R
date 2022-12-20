@@ -1,6 +1,6 @@
 runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      disturbance="simDisturbance.csv",betaPriors="default",
-                     startYear = 1998, endYear = 2018, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 2,N0=1000,
+                     startYear = 1998, endYear = 2023, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 2,N0=1000,
                      survAnalysisMethod = "KaplanMeier",adjustR=F,
                      inpFixed=list()){
   #survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
@@ -90,6 +90,10 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
 
   if(nrow(dSubset)==1){
     warning("Switching to exponential survival analysis method because there is only one collared animal.")
+    inp$survAnalysisMethod = "Exponential"
+  }
+  if(sum(dSubset$event,na.rm=T)==0){
+    warning("Switching to exponential survival analysis method because there are no recorded deaths.")
     inp$survAnalysisMethod = "Exponential"
   }
 
@@ -192,31 +196,31 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
 
   t.pred = max(inp$endYear-max(data3$Year),0)
 
-  if(t.pred>0){
+  #also add missing history
+  missingSurvYrs = setdiff(seq(inp$startYear,inp$endYear),survData$Year)
+
+  if(length(missingSurvYrs)>0){
     survAddBit = survData[1,]
     if(inp$survAnalysisMethod=="KaplanMeier"){
-      survAddBit[1,]=NA;survAddBit$Var1=NULL;survAddBit=merge(survAddBit,data.frame(Var1=seq(1:t.pred)))
+      survAddBit[1,]=NA;survAddBit$Var1=NULL;survAddBit=merge(survAddBit,data.frame(Var1=missingSurvYrs,Year=missingSurvYrs))
     }else{
-      survAddBit[1:ncol(survAddBit)]=NA;survAddBit$Year=NULL;survAddBit = merge(survAddBit,data.frame(Year=(max(survData$Year)+seq(1:t.pred))))
+      survAddBit[1:ncol(survAddBit)]=NA;survAddBit$Year=NULL;survAddBit = merge(survAddBit,data.frame(Year=missingSurvYrs))
     }
-
     survDatat=rbind(survData,survAddBit)
+    survDatat <- survDatat[order(survDatat$Year),]
+  }else{
+    survDatat=survData
+  }
 
+  if(t.pred>0){
     dat3Bit = data3[1,]
     dat3Bit[,2:3]=NA;dat3Bit$Year=NULL;dat3Bit=merge(dat3Bit,data.frame(Year=seq(max(data3$Year)+1,max(data3$Year)+t.pred)))
     data3t=rbind(data3,dat3Bit)
-
     data4t=rbind(data4,dat3Bit)
-
   }else{
-    survDatat=survData
     data3t=data3
     data4t=data4
   }
-
-  #for beta model, remove tau, adjust Surv: (survDatat$surv*45+0.5)/46
-  #survDatat$surv,tau=survDatat$tau
-  #               phi.Saf.Prior1=betaPriors$phi.Saf.Prior1,phi.Saf.Prior2=betaPriors$phi.Saf.Prior2,
 
   if(inp$adjustR){
     adjustString="Rfemale[k] <- (RT[k]/2)/(1+(RT[k]/2))"
@@ -568,11 +572,14 @@ simCalfCowRatios<-function(cowCounts,minYr,exData){
   return(ageRatioOut)
 }
 
-simSurvivalData<-function(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime){
+simSurvivalData<-function(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime,topUp=F){
+  #topUp=T
   #for simplicity, ignore variation in survival probability among months
-  initYear = min(exData$Year)
-  freqStartsByYear=subset(freqStartsByYear,Year>=initYear)
-  survivalSeries = subset(exData,select=c(survival,Year))
+  initYear <- min(exData$Year)
+  freqStartsByYear <- subset(freqStartsByYear,(Year>=initYear)&(numStarts>0))
+
+  freqStartsByYear <- freqStartsByYear[order(freqStartsByYear$Year),]
+  survivalSeries <- subset(exData,select=c(survival,Year))
 
   #freqStartsByYear$numStarts=10000;collarNumYears=2
 
@@ -584,27 +591,26 @@ simSurvivalData<-function(freqStartsByYear,exData,collarNumYears,collarOffTime,c
   #}
 
   animalID = 1
-  started=F
+  simSurvObs = data.frame(id=NA,Year=NA,event=NA,enter=NA,exit=NA);simSurvObs=subset(simSurvObs,!is.na(id))
+  #collarNumYears=4
   for(k in 1:nrow(freqStartsByYear)){
     #k =1
     if(is.na(freqStartsByYear$numStarts[k])|(freqStartsByYear$numStarts[k]<=0)){
       next
     }
     startYear = freqStartsByYear$Year[k]
-    for(n in 1:freqStartsByYear$numStarts[k]){
+    if(topUp){
+      collarsExisting <- nrow(subset(simSurvObs,(enter==0)&(Year==startYear)))
+      nstarts=max(0,freqStartsByYear$numStarts[k]-collarsExisting)
+    }else{nstarts = freqStartsByYear$numStarts[k]}
+    if(nstarts==0){next}
+    for(n in 1:nstarts){
       #n=1
-      addS <- simSurvivalObs(animalID,startYear,collarNumYears,collarOffTime,collarOnTime,survivalSeries)
+      addS <- simSurvivalObs(animalID,startYear=startYear,collarNumYears=collarNumYears,collarOffTime=collarOffTime,collarOnTime=collarOnTime,survivalSeries=survivalSeries)
       animalID= animalID+1
-      if(!started){
-        simSurvObs<-addS
-        started=T
-      }else{
-        simSurvObs<-rbind(simSurvObs,addS)
-      }
+      simSurvObs<-rbind(simSurvObs,addS)
     }
   }
-
-
 
   #1-sum(simSurvObs$event)/nrow(simSurvObs)
   #exData
@@ -662,7 +668,7 @@ simSurvivalObs<-function(animalID,startYear,collarNumYears,collarOffTime,collarO
 # Tables ------------------------------------------------------------------
 
 getSumStats <- function(param, rrSurvMod, startYear, endYear,doSummary=T){
-  #param = "S.annual.KM"
+  #param = "S.annual.KM";doSummary=T
   paramNames <- data.frame(parameter = c("S.annual.KM", "R", "Rfemale", "pop.growth","fpop.size",
                                      "meanAFsurv", "meanR", "meanRfemale",
                                      "medianLambda", "meanLambda"),
@@ -691,6 +697,8 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear,doSummary=T){
                        function(x){quantile(x, 0.025)})
     upper.cri <- apply(rrSurvMod$BUGSoutput$sims.list[[param]], 2,
                        function(x){quantile(x, 0.975)})
+    probViable <- apply(rrSurvMod$BUGSoutput$sims.list[[param]], 2,
+                       function(x){mean(x>0.99)})
 
     results <- data.frame(Year = yr,
                           Parameter = subset(paramNames, paramNames$parameter == param,
@@ -699,6 +707,7 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear,doSummary=T){
                           SD = round(rrSurvMod$BUGSoutput$sd[[param]],digits=3),
                           `Lower 95% CRI` = round(lower.cri, digits=3),
                           `Upper 95% CRI` = round(upper.cri,digits=3),
+                          probViable=round(probViable,digits=3),
                           check.names = FALSE)
   }else{
     #rrSurvMod= result
@@ -715,6 +724,7 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear,doSummary=T){
 
 tabAllRes <- function(rrSurvMod, startYear, endYear,doSummary=T){
   #rrSurvMod=rr.surv;startYear= minYr;endYear= maxYr
+  #rrSurvMod=result;doSummary=T
 
   allParams <- c("S.annual.KM", "R", "Rfemale", "pop.growth","fpop.size",
                  "meanAFsurv", "meanR", "meanRfemale",
@@ -774,7 +784,7 @@ fillDefaults <- function(scns = NULL,
                          defList = list(
                            iF = 0, iA = 0, aS = 0, aSf = 4,
                            rS = 1, sS = 1,
-                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, st = 25, N0 = 1000, adjustR=F
+                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, st = 25,ri=1, N0 = 1000, adjustR=F
                          ), curYear = 2023) {
   if (is.null(scns)) {
     scns <- as.data.frame(defList)
@@ -784,6 +794,9 @@ fillDefaults <- function(scns = NULL,
     for (i in fillSet) {
       scns[[i]] <- defList[[i]]
     }
+  }
+  if(is.element("cmult",names(scns))&is.element("cw",names(scns))){
+    stop("Specify number of cows per year in recruitment survey (cw) or multiplier of number of collared cows in recruitment survey (cmult), but not both.")
   }
   scns$ID <- seq(1:nrow(scns))
   scns$label <- ""
@@ -798,7 +811,7 @@ fillDefaults <- function(scns = NULL,
 }
 
 getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig,getKSDists){
-  #result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;oo=oo;simBig=simLow
+  #result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;oo=oo;simBig=simBig
 
   #get summary info for plots
   rr.summary<-tabAllRes(result, startYear, endYear)
@@ -978,7 +991,7 @@ makeInterceptPlots<-function(scResults,addBit="",facetVars=c("P","sQ"),loopVars 
 
 getSimsNational<-function(reps=1000,N0=1000,Anthro=seq(0,100,by=1),fire_excl_anthro=0,quants=NULL,wdir=NULL,
                           popGrowthTable=NULL,adjustR=F,forceUpdate=F){
-  #reps=500;N0=500;Anthro=seq(0,100,by=2);fire_excl_anthro=0;quants=c(0.025,0.025);adjustR=T
+  #reps=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;quants=NULL;adjustR=F;forceUpdate=F
 
   if(is.null(wdir)){wdir=getwd()}
   doSave <- FALSE
@@ -1247,15 +1260,40 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
   }
 
   popMetricsWide<-pivot_wider(popMetrics,id_cols=c(Replicate,Timestep),names_from=MetricTypeID,values_from=Amount)
+  popMetricsWide$Year = cs$iYr+popMetricsWide$Timestep-1
+
   exData<-subset(popMetricsWide,(Timestep<=cs$P))
-  exData$Year = cs$iYr+exData$Timestep-1
 
   #Now apply observation process model to get simulated calf:cow and survival data.
   #Use sample sizes in example input data e.g. Eaker
 
   #reduce sim data tables to length of observations prior to max year
-  minYr = cs$iYr
-  maxYr = cs$iYr+cs$P+cs$J-1
+  minYr <- cs$iYr
+  maxYr <- cs$iYr+cs$P+cs$J-1
+
+  #simulate survival data from survival probability.
+  if(is.element("st",names(cs))){
+
+    freqStartsByYear=subset(freqStartsByYear,is.element(Year,unique(exData$Year)))
+    renewYrs = intersect(min(exData$Year)+seq(0,100)*cs$ri,unique(exData$Year))
+    freqStartsByYear$numStarts=0
+    freqStartsByYear$numStarts[is.element(freqStartsByYear$Year,renewYrs)]=cs$st
+
+    simSurvObs<-simSurvivalData(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime,topUp=T)
+
+  }else{
+    simSurvObs<-simSurvivalData(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime)
+  }
+  #if cmult is provided, set cows as a function of number of surviving cows at month 5
+  if(is.element("cmult",names(cs))){
+    survsCalving <- subset(simSurvObs,exit>=6)
+
+    cowCounts <- as.data.frame(table(survsCalving$Year))
+    names(cowCounts)=c("Year","Count")
+    cowCounts$Year = as.numeric(as.character(cowCounts$Year))
+    cowCounts$Class="cow"
+    cowCounts$Count = cs$cmult*cowCounts$Count
+  }
 
   #given observed total animals & proportion calfs/cows from simulation - get calf/cow ratio
   ageRatioOut<-simCalfCowRatios(cowCounts,minYr,exData)
@@ -1265,30 +1303,25 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
   write.csv(ageRatioOut,"tabs/simAgeRatio.csv")
   write.csv(ageRatioOut,paste0("tabs/simAgeRatio",cs$label,".csv"))
 
-  #simulate survival data from survival propability.
-  #TO DO: allow user to enter table of starts by year, collarOffTime, and collarNumYears
-  #for each animal, construct simulated observations
-  simSurvObs<-simSurvivalData(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime)
-
   #TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
   write.csv(simSurvObs,"tabs/simSurvData.csv")
   write.csv(simSurvObs,paste0("tabs/simSurvData",cs$label,".csv"))
   #TO DO: UI option to easily select among available scenarios.
 
-  return(list(minYr=minYr,maxYr=maxYr,simDisturbance=simDisturbance,simSurvObs=simSurvObs,ageRatioOut=ageRatioOut,exData=exData,cs=cs))
+  return(list(minYr=minYr,maxYr=maxYr,simDisturbance=simDisturbance,simSurvObs=simSurvObs,ageRatioOut=ageRatioOut,exData=popMetricsWide,cs=cs))
 }
 
 
-runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDists=T){
-  #ePars=eParsIn;survAnalysisMethod="KaplanMeier";getKSDists=T
+runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDists=T,printProgress=F){
+  #ePars=eParsIn;survAnalysisMethod="KaplanMeier";getKSDists=T;printProgress=F
   scns<-fillDefaults(scns)
   for(p in 1:nrow(scns)){
     #p=1
     cs =scns[p,]
-
-    if(is.element("st",names(cs))){
-      ePars$freqStartsByYear$numStarts=cs$st
+    if(printProgress){
+      print(paste0(c(p,scns[p,]),collapse=" "))
     }
+
     if(is.element("cw",names(cs))){
       ePars$cowCounts$Count=cs$cw
     }
