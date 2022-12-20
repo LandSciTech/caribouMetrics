@@ -1277,11 +1277,13 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
     freqStartsByYear=subset(freqStartsByYear,is.element(Year,unique(exData$Year)))
     renewYrs = intersect(min(exData$Year)+seq(0,100)*cs$ri,unique(exData$Year))
     freqStartsByYear$numStarts[!is.element(freqStartsByYear$Year,renewYrs)]=0
-    if(is.element("st",names(cs))){
-      freqStartsByYear$numStarts[is.element(freqStartsByYear$Year,renewYrs)]=cs$st
-    }
-    simSurvObs<-simSurvivalData(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime,topUp=T)
+  }else{
+    renewYrs = unique(freqStartsByYear$Year)
+  }
 
+  if(is.element("st",names(cs))){
+    freqStartsByYear$numStarts[is.element(freqStartsByYear$Year,renewYrs)]=cs$st
+    simSurvObs<-simSurvivalData(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime,topUp=T)
   }else{
     simSurvObs<-simSurvivalData(freqStartsByYear,exData,collarNumYears,collarOffTime,collarOnTime)
   }
@@ -1289,13 +1291,16 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
   if(is.element("cmult",names(cs))){
     survsCalving <- subset(simSurvObs,exit>=6)
 
-    cowCounts <- as.data.frame(table(survsCalving$Year))
-    names(cowCounts)=c("Year","Count")
-    cowCounts$Year = as.numeric(as.character(cowCounts$Year))
-    cowCounts$Class="cow"
-    cowCounts$Count = cs$cmult*cowCounts$Count
+    if(nrow(survsCalving)>0){
+      cowCounts <- as.data.frame(table(survsCalving$Year))
+      names(cowCounts)=c("Year","Count")
+      cowCounts$Year = as.numeric(as.character(cowCounts$Year))
+      cowCounts$Class="cow"
+      cowCounts$Count = cs$cmult*cowCounts$Count
+    }else{
+      cowCounts$Count=NA
+    }
   }
-
   #given observed total animals & proportion calfs/cows from simulation - get calf/cow ratio
   ageRatioOut<-simCalfCowRatios(cowCounts,minYr,exData)
   ageRatioOut$HerdCode="ALAP" #TO DO: remove option for more than one herd in input files, UI, and all associated code...
