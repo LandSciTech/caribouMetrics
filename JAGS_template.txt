@@ -31,7 +31,13 @@ for(k in 1:nYears){
 		survivors[k] ~ dbin( S.annual.KM[k], fpop.size[k] )
     recruits[k] ~ dbin(Rfemale[k], survivors[k])
     #small minimum in demoninator to give 0 when fpop.size=0
-    pop.growth[k] <- (survivors[k]+recruits[k])/max(fpop.size[k]+0.0000001)
+    pop.growthr[k] <- (survivors[k]+recruits[k])/max(fpop.size[k],0.0000001)
+}
+for(k in 2:assessmentYrs){
+    pop.growth[k-1] <- pop.growthr[k-1]
+}
+for(k in assessmentYrs:nYears){
+    pop.growth[k] <- mean(pop.growthr[(k-assessmentYrs+1):k])
 }
 
 fpop.size[1] <- Ninit
@@ -62,6 +68,6 @@ for(k in 2:nYears){
 	meanAFsurv <-  exp(l.Saf)/(1+ exp(l.Saf)) #(prod(R))^(1/(nYears))
 	meanR <-  exp(l.R)/(1+ exp(l.R)) #(prod(R))^(1/(nYears))
 	meanRfemale <-  (prod(Rfemale))^(1/(nYears))
-	medianLambda <- (prod(pop.growth))^(1/(nYears))
-	meanLambda <- mean(pop.growth)
+	medianLambda <- (prod(pop.growthr))^(1/(nYears))
+	meanLambda <- mean(pop.growthr)
 }

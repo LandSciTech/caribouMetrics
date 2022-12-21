@@ -1,15 +1,15 @@
 runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      disturbance="simDisturbance.csv",betaPriors="default",
                      startYear = 1998, endYear = 2023, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 2,N0=1000,
-                     survAnalysisMethod = "KaplanMeier",adjustR=F,
+                     survAnalysisMethod = "KaplanMeier",adjustR=F,assessmentYrs=1,
                      inpFixed=list()){
   #survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
   #betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"
-  #Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;inpFixed=list()
+  #Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inpFixed=list()
 
   # combine defaults in function with inputs from input list
   inputArgs = c("survData","ageRatio.herd","disturbance","startYear", "endYear",
-                   "Nchains","Niter","Nburn","Nthin","N0","survAnalysisMethod","adjustR")
+                   "Nchains","Niter","Nburn","Nthin","N0","survAnalysisMethod","adjustR","assessmentYrs")
   addArgs<-inputArgs#setdiff(inputArgs,names(inp))
   inp=list()
   for (a in addArgs){
@@ -251,7 +251,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                  l.R.Prior1 = betaPriors$l.R.Prior1,l.R.Prior2 = betaPriors$l.R.Prior2,
                  sig.Saf.Prior1=betaPriors$sig.Saf.Prior1,sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
                  sig.R.Prior1 = betaPriors$sig.R.Prior1,sig.R.Prior2=betaPriors$sig.R.Prior2,
-                 Ninit=inp$N0,
+                 Ninit=inp$N0,assessmentYrs=inp$assessmentYrs,
                  nCounts=length(which(is.na(data3t$Count)==FALSE)),count_id=which(is.na(data3t$Count)==FALSE),
                  nYears=inp$endYear-inp$startYear+1,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
 
@@ -669,7 +669,7 @@ simSurvivalObs<-function(animalID,startYear,collarNumYears,collarOffTime,collarO
 # Tables ------------------------------------------------------------------
 
 getSumStats <- function(param, rrSurvMod, startYear, endYear,doSummary=T){
-  #param = "S.annual.KM";doSummary=T
+  #param = "pop.growth";doSummary=T
   paramNames <- data.frame(parameter = c("S.annual.KM", "R", "Rfemale", "pop.growth","fpop.size",
                                      "meanAFsurv", "meanR", "meanRfemale",
                                      "medianLambda", "meanLambda"),
@@ -785,7 +785,7 @@ fillDefaults <- function(scns = NULL,
                          defList = list(
                            iF = 0, iA = 0, aS = 0, aSf = 4,
                            rS = 1, sS = 1,
-                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, N0 = 1000, adjustR=F
+                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, N0 = 1000, adjustR=F,assessmentYrs = 1
                          ), curYear = 2023) {
   if (is.null(scns)) {
     scns <- as.data.frame(defList)
@@ -854,11 +854,13 @@ getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig,getKSDist
 
   obsLam = subset(oo$exData,select=c(Year,lambda))
   names(obsLam)=c("Year","Mean")
+  obsLam <- movingAveGrowthRate(obsLam,oo$cs$assessmentYrs)
   obsLam$parameter="Population growth rate"
   obsLam$type="true"
 
   obsSize = subset(oo$exData,select=c(Year,N))
   names(obsSize)=c("Year","Mean")
+  obsSize$Year=obsSize$Year+1 #pop size returned from Bayesian model is at the start of the year, not the end.
   obsSize$parameter="Female population size"
   obsSize$type = "true"
 
@@ -899,6 +901,18 @@ getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig,getKSDist
   }
   return(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all,ksDists=ksDists))
 }
+
+movingAveGrowthRate <- function(obs,assessmentYrs){
+  #obs=obsLam
+  if(assessmentYrs==1){return(obs)}
+  obsOut = obs
+  for(k in assessmentYrs:nrow(obsOut)){
+    #k=3
+    obsOut$Mean[k]=mean(obs$Mean[(k-assessmentYrs+1):k])
+  }
+  obsOut
+}
+
 
 getKSDist<-function(Value,type){
   #sampleBit=subset(allSamples,(Year==2017)&(Parameter==allSamples$Parameter[1]))
@@ -1337,7 +1351,7 @@ runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDi
     minYr=min(oo$exData$Year)
     maxYr=max(oo$simDisturbance$Year)
     out<-runRMModel(survData=oo$simSurvObs,ageRatio.herd=oo$ageRatioOut,disturbance=oo$simDisturbance,
-                    betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0,survAnalysisMethod = survAnalysisMethod,adjustR=cs$adjustR)
+                    betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0,survAnalysisMethod = survAnalysisMethod,adjustR=cs$adjustR,assessmentYrs=cs$assessmentYrs)
     outTabs<-getOutputTables(result=out$result,startYear=minYr,endYear=maxYr,survInput=out$survInput,oo=oo,simBig=simBig,getKSDists = getKSDists)
 
     if(p==1){
