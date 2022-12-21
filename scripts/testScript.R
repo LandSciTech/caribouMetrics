@@ -25,10 +25,10 @@ library(dplyr)
 #Use Eacker example data for collaring parameters
 eParsIn = list()
 eParsIn$cowCounts <- data.frame(Year = 1981:2023,
-                                Count = 0,
+                                Count = 100,
                                 Class = "cow")
 eParsIn$freqStartsByYear <- data.frame(Year = 1981:2023,
-                                       numStarts = 1)
+                                       numStarts = 30)
 eParsIn$collarOnTime=1
 eParsIn$collarOffTime=12
 eParsIn$collarNumYears=3
@@ -45,9 +45,9 @@ simBig<-getSimsNational(adjustR=adjustR)#If called with default parameters, use 
 #source("CaribouDemoFns.R")
 #eParsIn$collarNumYears=1
 
+
 str(eParsIn)
-numObsYrs=c(1);startsByYr = 1;cmult=0;renewalInterval=3 #25
-scns=expand.grid(P=numObsYrs,sQ=c(0.5),st=startsByYr,ri = renewalInterval,adjustR=adjustR,cmult=cmult)
+scns=expand.grid(P=4,st=30,cmult=3,ri=2,iA=0,sQ=0.24,rQ=0.3,N0=10000)
 scResults = runScnSet(scns,eParsIn,simBig,getKSDists=F)
 
 str(scResults)$obs.all

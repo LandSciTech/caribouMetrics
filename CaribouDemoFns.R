@@ -198,11 +198,10 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
 
   #also add missing history
   missingSurvYrs = setdiff(seq(inp$startYear,inp$endYear),survData$Year)
-
   if(length(missingSurvYrs)>0){
     survAddBit = survData[1,]
     if(inp$survAnalysisMethod=="KaplanMeier"){
-      survAddBit[1,]=NA;survAddBit$Var1=NULL;survAddBit=merge(survAddBit,data.frame(Var1=missingSurvYrs,Year=missingSurvYrs))
+      survAddBit[1,]=NA;survAddBit$Var1=NULL;survAddBit$Year=NULL;survAddBit=merge(survAddBit,data.frame(Var1=missingSurvYrs,Year=missingSurvYrs))
     }else{
       survAddBit[1:ncol(survAddBit)]=NA;survAddBit$Year=NULL;survAddBit = merge(survAddBit,data.frame(Year=missingSurvYrs))
     }
@@ -212,11 +211,13 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
     survDatat=survData
   }
 
-  if(t.pred>0){
+  missingRecYrs = setdiff(seq(inp$startYear,inp$endYear),data3$Year)
+
+  if(length(missingRecYrs)>0){
     dat3Bit = data3[1,]
-    dat3Bit[,2:3]=NA;dat3Bit$Year=NULL;dat3Bit=merge(dat3Bit,data.frame(Year=seq(max(data3$Year)+1,max(data3$Year)+t.pred)))
-    data3t=rbind(data3,dat3Bit)
-    data4t=rbind(data4,dat3Bit)
+    dat3Bit[,2:3]=NA;dat3Bit$Year=NULL;dat3Bit=merge(dat3Bit,data.frame(Year=missingRecYrs))
+    data3t=rbind(data3,dat3Bit);data3t=data3t[order(data3t$Year),]
+    data4t=rbind(data4,dat3Bit);data4t=data4t[order(data4t$Year),]
   }else{
     data3t=data3
     data4t=data4
@@ -252,7 +253,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                  sig.R.Prior1 = betaPriors$sig.R.Prior1,sig.R.Prior2=betaPriors$sig.R.Prior2,
                  Ninit=inp$N0,
                  nCounts=length(which(is.na(data3t$Count)==FALSE)),count_id=which(is.na(data3t$Count)==FALSE),
-                 nYears=nYears+t.pred,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
+                 nYears=inp$endYear-inp$startYear+1,calves=round(data3t$Count),CountAntlerless=round(data4t$Count))
 
   if(inp$survAnalysisMethod=="KaplanMeier"){
     sp.data=c(sp.data,list(Surv=survDatat$surv,tau=survDatat$tau,
