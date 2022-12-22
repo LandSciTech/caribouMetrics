@@ -269,9 +269,9 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
   }
 
   sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
-  rr.surv <- jags(data=sp.data, parameters.to.save=sp.params,
+  rr.surv <- try(jags(data=sp.data, parameters.to.save=sp.params,
                   model.file="JAGS_run.txt",
-                  n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin)
+                  n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin))
 
   return(list(result=rr.surv,survInput=survDatat))
 }
@@ -1228,7 +1228,7 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
                                collarOnTime=8,distScen = NULL,
                                popGrowthTable = popGrowthTableJohnsonECCC,
                                survivalModelNumber = "M1",
-                               recruitmentModelNumber = "M4"){
+                               recruitmentModelNumber = "M4",writeFiles=F){
   #printPlot=T;cowCounts=ePars$cowCounts;freqStartsByYear=ePars$freqStartsByYear;collarNumYears=ePars$collarNumYears;collarOffTime=ePars$collarOffTime;collarOnTime=ePars$collarOnTime
   #distScen = NULL;popGrowthTable = popGrowthTableJohnsonECCC;survivalModelNumber = "M1";recruitmentModelNumber = "M4"
   if(is.character(cowCounts)){
@@ -1245,8 +1245,10 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
     simDisturbance=covariates
     simDisturbance$Year = cs$iYr+simDisturbance$time-1
 
-    write.csv(simDisturbance,"tabs/simDisturbance.csv") #note default file for UI is always the last scenario run
-    write.csv(simDisturbance,paste0("tabs/simDisturbance",cs$label,".csv"))
+    if(writeFiles){
+      write.csv(simDisturbance,"tabs/simDisturbance.csv") #note default file for UI is always the last scenario run
+      write.csv(simDisturbance,paste0("tabs/simDisturbance",cs$label,".csv"))
+    }
   } else {
     simDisturbance <- distScen
     simDisturbance$time = simDisturbance$Year - cs$iYr + 1
@@ -1320,15 +1322,16 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
   ageRatioOut<-simCalfCowRatios(cowCounts,minYr,exData)
   ageRatioOut$HerdCode="ALAP" #TO DO: remove option for more than one herd in input files, UI, and all associated code...
   ageRatioOut=subset(ageRatioOut,select=c(names(cowCounts)))
-  #TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
-  write.csv(ageRatioOut,"tabs/simAgeRatio.csv")
-  write.csv(ageRatioOut,paste0("tabs/simAgeRatio",cs$label,".csv"))
+  if(writeFiles){
+    #TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
+    write.csv(ageRatioOut,"tabs/simAgeRatio.csv")
+    write.csv(ageRatioOut,paste0("tabs/simAgeRatio",cs$label,".csv"))
 
-  #TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
-  write.csv(simSurvObs,"tabs/simSurvData.csv")
-  write.csv(simSurvObs,paste0("tabs/simSurvData",cs$label,".csv"))
-  #TO DO: UI option to easily select among available scenarios.
-
+    #TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
+    write.csv(simSurvObs,"tabs/simSurvData.csv")
+    write.csv(simSurvObs,paste0("tabs/simSurvData",cs$label,".csv"))
+    #TO DO: UI option to easily select among available scenarios.
+  }
   return(list(minYr=minYr,maxYr=maxYr,simDisturbance=simDisturbance,simSurvObs=simSurvObs,ageRatioOut=ageRatioOut,exData=popMetricsWide,cs=cs))
 }
 
@@ -1336,6 +1339,7 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
 runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDists=T,printProgress=F){
   #ePars=eParsIn;survAnalysisMethod="KaplanMeier";getKSDists=T;printProgress=F
   scns<-fillDefaults(scns)
+  errorLog <-list()
   for(p in 1:nrow(scns)){
     #p=1
     cs =scns[p,]
@@ -1352,6 +1356,12 @@ runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDi
     maxYr=max(oo$simDisturbance$Year)
     out<-runRMModel(survData=oo$simSurvObs,ageRatio.herd=oo$ageRatioOut,disturbance=oo$simDisturbance,
                     betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0,survAnalysisMethod = survAnalysisMethod,adjustR=cs$adjustR,assessmentYrs=cs$assessmentYrs)
+    if(inherits(out$result, "try-error")){
+      errorLog[[p]]=list(cs=cs,error=out$result)
+      saveRDS(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all,ksDists=ksDists,errorLog=errorLog),"temp.Rds")
+      next
+    }
+
     outTabs<-getOutputTables(result=out$result,startYear=minYr,endYear=maxYr,survInput=out$survInput,oo=oo,simBig=simBig,getKSDists = getKSDists)
 
     if(p==1){
@@ -1366,8 +1376,8 @@ runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDi
       obs.all=rbind(obs.all,outTabs$obs.all)
       ksDists = rbind(ksDists,merge(outTabs$ksDists,cs))
     }
-
   }
-  return(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all,ksDists=ksDists))
+  if(length(errorLog)>0){print(errorLog)}
+  return(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all,ksDists=ksDists,errorLog=errorLog))
 }
 
