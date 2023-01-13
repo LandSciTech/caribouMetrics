@@ -1354,8 +1354,14 @@ runScnSet<-function(scns,ePars,simBig,survAnalysisMethod = "KaplanMeier",getKSDi
     betaPriors<-getPriors(cs)
     minYr=min(oo$exData$Year)
     maxYr=max(oo$simDisturbance$Year)
-    out<-runRMModel(survData=oo$simSurvObs,ageRatio.herd=oo$ageRatioOut,disturbance=oo$simDisturbance,
-                    betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0,survAnalysisMethod = survAnalysisMethod,adjustR=cs$adjustR,assessmentYrs=cs$assessmentYrs)
+    out<-try(runRMModel(survData=oo$simSurvObs,ageRatio.herd=oo$ageRatioOut,disturbance=oo$simDisturbance,
+                    betaPriors=betaPriors,startYear = minYr,endYear=maxYr,N0=cs$N0,survAnalysisMethod = survAnalysisMethod,adjustR=cs$adjustR,assessmentYrs=cs$assessmentYrs))
+    if(inherits(out, "try-error")){
+      errorLog[[p]]=list(cs=cs,error=out)
+      saveRDS(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all,ksDists=ksDists,errorLog=errorLog),"temp.Rds")
+      next
+    }
+
     if(inherits(out$result, "try-error")){
       errorLog[[p]]=list(cs=cs,error=out$result)
       saveRDS(list(rr.summary.all=rr.summary.all,sim.all=sim.all,obs.all=obs.all,ksDists=ksDists,errorLog=errorLog),"temp.Rds")
