@@ -68,7 +68,7 @@ scn_defaults <- c(eval(formals(fillDefaults)$defList),
 #collarOffTime: month that collars fall off
 
 # defaults set to be uninformative
-obs_defaults <- list(cmult = 0, startsPerYear = 1, renewalInterval=1, collarNumYears = 3,
+obs_defaults <- list(cmult = 0, startsPerYear = 1, renewalInterval=1, collarNumYears = 6,
                      collarOnTime = 1, collarOffTime = 12)
 
 #Priors - see getPriors() for details & defaults
@@ -471,8 +471,8 @@ server <- function(input, output, session) {
 
     #TO DO: consider making this happen when update box is checked?
     if(input$redoSimsNational){
-      simBigAdjust<-getSimsNational(adjustR=T,forceUpdate=T)
-      simBigNoAdjust<-getSimsNational(adjustR=F,forceUpdate=T)
+      simBigAdjust<-getSimsNational(adjustR=T,forceUpdate=T,fire_excl_anthro = input$iF)
+      simBigNoAdjust<-getSimsNational(adjustR=F,forceUpdate=T,fire_excl_anthro = input$iF)
     }
 
     waiter$show()

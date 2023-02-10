@@ -465,18 +465,18 @@ simCovariates<-function(initAnthro,initFire,numYears,anthroSlope,anthroSlopeFutu
     }
     if(t>1){
       if(t>=futureStep){
-        cov$Anthro <- pmin(100,covPrev$Anthro + anthroSlopeFuture)
+        cov$Anthro <- pmax(0,pmin(100,covPrev$Anthro + anthroSlopeFuture))
       }else{
-        cov$Anthro <- pmin(100,covPrev$Anthro + anthroSlope)
+        cov$Anthro <- pmax(pmin(100,covPrev$Anthro + anthroSlope))
       }
     }
     covPrev=cov
     if(fireSlope==0){
       cov$fire_excl_anthro<-pmax(0,rnorm(1,cov$fire_excl_anthro,0.0001))
     }else{
-      cov$fire_excl_anthro<-pmin(100,cov$fire_excl_anthro+fireSlope*(t-1))
+      cov$fire_excl_anthro<-pmax(0,pmin(100,cov$fire_excl_anthro+fireSlope*(t-1)))
     }
-    cov$Total_dist = cov$Anthro + cov$fire_excl_anthro
+    cov$Total_dist = pmax(0,pmin(100,cov$Anthro + cov$fire_excl_anthro))
     cov$time=t
     if(t==1){
       covariates<-cov
