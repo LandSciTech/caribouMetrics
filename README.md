@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/workflows/R-CMD-check/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions)
+[![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 caribouMetrics provides implementations of several different models.
@@ -77,6 +77,7 @@ plot(carHab1)
 <img src="man/figures/README-example-1.png" width="100%" />
 
 ``` r
+
 # calculate disturbance 
 disturb <- disturbanceMetrics(landCover = landCoverD,
                               linFeat = linFeatDras,  
@@ -97,21 +98,21 @@ demCoefs <- demographicCoefficients(replicates = 10)
 
 demRates <- demographicRates(covTable = results(disturb),
                              popGrowthPars = demCoefs)
-#> popGrowthPars contains quantiles so they are used instead of the defaultsFALSE
-#> popGrowthPars contains quantiles so they are used instead of the defaultsFALSE
+#> popGrowthPars contains quantiles so they are used instead of the defaults
+#> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
-#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar  S_stdErr
-#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.0452728
-#>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow R_PIhigh
-#> 1 0.7561665 0.9187631 0.1813372 0.09530066 0.05820063 0.367604
+#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
+#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8478733 0.05061715
+#>     S_PIlow  S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh
+#> 1 0.7627531 0.9217281 0.1813372 0.1009375 0.04912995 0.3915002
 
 # Simulate population growth
 popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
 popGrow
-#>     N    lambda
-#> 1 361 0.9180804
+#>     N    lambda       R_t       S_t n_recruits surviving_adFemales
+#> 1 401 0.9229188 0.1838083 0.8536244         29                 372
 ```
 
 More detailed examples are provided in the vignettes.

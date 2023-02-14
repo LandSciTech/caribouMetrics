@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # caribouMetrics
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/workflows/R-CMD-check/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions)
+[![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 caribouMetrics provides implementations of several different models. Firstly, it
