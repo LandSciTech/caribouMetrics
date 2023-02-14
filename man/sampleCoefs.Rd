@@ -16,9 +16,9 @@ name of the coefficient, "Value" for the value of the coefficient and
 \value{
 A list with elements:
    \describe{
-      \item{"coefSamples"}{Bootstrapped coefficients with \code{replicates} 
+      \item{"coefSamples"}{Bootstrapped coefficients with \code{replicates}
         rows}
-      \item{"coefValues"}{Coefficient values taken from 
+      \item{"coefValues"}{Coefficient values taken from
         \code{populationGrowthTable}}
     }
 }

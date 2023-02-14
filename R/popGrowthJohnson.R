@@ -33,6 +33,7 @@
 #'   \code{FALSE} ignore interannual variability.
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
+#' @param adjustR Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).
 #' @param progress Logical. Should progress updates be shown?
 #'
 #' @return A data.frame of population size (N) and average growth rate (lambda)
@@ -57,12 +58,13 @@ popGrowthJohnson <- function(N,
                              h_S=1,
                              interannualVar = list(R_CV=0.46,S_CV=0.08696),
                              probOption="binomial",
+                             adjustR=F,
                              progress = interactive()){
   rr=data.frame(N=N)
-  
+
   R_bar[R_bar<0]=0.000001
   S_bar[S_bar<0]=0.000001
-  
+
   #Warn if S_bar outside of range l_S,h_S, or R_bar outside of range
   #l_R,h_R.
   if(any(S_bar < l_S) || any(S_bar > h_S)){
@@ -130,6 +132,10 @@ popGrowthJohnson <- function(N,
       R_t=s*R_t
     }
 
+    if(adjustR){
+      R_tadj=R_t/(1+R_t)
+    }else{R_tadj=R_t}
+
     Ntm1=N
 
     if(doBinomial){
@@ -144,7 +150,7 @@ popGrowthJohnson <- function(N,
       rK <- K * N
     }
 
-    n_recruitsUnadjDD <- surviving_adFemales * R_t
+    n_recruitsUnadjDD <- surviving_adFemales * R_tadj
 
     if(K){
       adjDDRtProportion <- (P_0 -
@@ -158,7 +164,7 @@ popGrowthJohnson <- function(N,
       adjDDRtProportion=1
     }
     if(doBinomial){
-      n_recruits <- rbinom(length(N),surviving_adFemales,R_t*adjDDRtProportion)
+      n_recruits <- rbinom(length(N),surviving_adFemales,R_tadj*adjDDRtProportion)
     }else{
       n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits)
     }
@@ -179,6 +185,10 @@ popGrowthJohnson <- function(N,
   rr$lambda=matrixStats::rowMeans2(as.matrix(subset(rr,select=lamBits)),na.rm=T)
   rr=subset(rr,select=setdiff(names(rr),lamBits))
   rr$N=N
+  rr$R_t=R_t/s
+  rr$S_t=S_t
+  rr$n_recruits = n_recruits
+  rr$surviving_adFemales = surviving_adFemales
   return(rr)
 }
 
