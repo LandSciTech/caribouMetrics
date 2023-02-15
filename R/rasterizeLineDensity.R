@@ -34,7 +34,7 @@ rasterizeLineDensity <- function(x, r, ptDensity = 1) {
   r <- raster::init(r, fun = "cell")
   
   rPoly <- spex::polygonize(r) %>% set_names("ID", "geometry") %>% 
-    st_set_agr("constant") %>% st_set_crs(st_crs(r))
+    st_set_agr("constant") %>% st_set_crs(raster::wkt(r))
   
   rp2 <- st_intersection(rPoly, st_set_agr(x, "constant")) %>% 
     mutate(length = st_length(.data$geometry) %>% units::set_units(NULL)) %>% 
