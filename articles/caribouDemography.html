@@ -74,7 +74,7 @@
 
       
 
-      </header><script src="caribouDemography_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Disturbance Metrics and Caribou Demography</h1>
@@ -90,7 +90,12 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette gives details on the use of the <code>disturbanceMetrics</code>, <code>demographicCoefficients</code>, <code>demographicRates</code>, and <code>popGrowthJohnson</code> functions. Together, these functions represent an implementation of the aspatial caribou demographic model developed by Johnson et al. (<a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link">2020</a>), and modified by Dyson et al. (in prep) and Stewart et al. (in prep).</p>
+<p>This vignette gives details on the use of the
+<code>disturbanceMetrics</code>, <code>demographicCoefficients</code>,
+<code>demographicRates</code>, and <code>popGrowthJohnson</code>
+functions. Together, these functions represent an implementation of the
+aspatial caribou demographic model developed by Johnson et al. (<a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link">2020</a>),
+and modified by Dyson et al. (in prep) and Stewart et al. (in prep).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -104,7 +109,8 @@
 <div class="section level2">
 <h2 id="disturbance-metrics">Disturbance metrics<a class="anchor" aria-label="anchor" href="#disturbance-metrics"></a>
 </h2>
-<p>The example data set loaded below includes a small area in the Nipigon caribou range that we will use as an example.</p>
+<p>The example data set loaded below includes a small area in the
+Nipigon caribou range that we will use as an example.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load example data and classify plc into Resource Types</span></span>
 <span><span class="va">landCoverD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -117,7 +123,10 @@
 <span><span class="va">roadsD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"roads.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">railD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"rail.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">utilitiesD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"utilities.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><code>disturbanceMetrics</code> will prepare the data and then calculate disturbance metrics used as predictor variables by Johnson et al. (2020). The function can be run in several different ways, and the simplest is to provide spatial objects for each input.</p>
+<p><code>disturbanceMetrics</code> will prepare the data and then
+calculate disturbance metrics used as predictor variables by Johnson et
+al. (2020). The function can be run in several different ways, and the
+simplest is to provide spatial objects for each input.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">disturbance</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span></span>
 <span>  landCover<span class="op">=</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span>,</span>
@@ -128,7 +137,10 @@
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></span></code></pre></div>
-<p><img src="caribouDemography_files/figure-html/plotDisturbance-1.png" width="768"> Multiple linear feature inputs can also be provided in vector form. See <code>vignette("caribouHabitat", package = "caribouMetrics")</code> for other data processing and input options.</p>
+<p><img src="caribouDemography_files/figure-html/plotDisturbance-1.png" width="768">
+Multiple linear feature inputs can also be provided in vector form. See
+<code>vignette("caribouHabitat", package = "caribouMetrics")</code> for
+other data processing and input options.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">disturbanceV</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span></span>
 <span>  landCover<span class="op">=</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span>,</span>
@@ -144,7 +156,19 @@
 <div class="section level2">
 <h2 id="simple-demographic-projection-for-a-single-example-landscape">Simple demographic projection for a single example landscape<a class="anchor" aria-label="anchor" href="#simple-demographic-projection-for-a-single-example-landscape"></a>
 </h2>
-<p>A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. We begin by sampling coefficients for 500 replicate populations using default models M1 and M4. Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting <code>returnSample = TRUE</code> so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the <code>popGrowthJohnson</code> function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but uncertainty in the model means that a few sample populations persist.</p>
+<p>A simple case for demographic projection is multiple stochastic
+projections from a single landscape that does not change over time. We
+begin by sampling coefficients for 500 replicate populations using
+default models M1 and M4. Next we calculate sample demographic rates
+given sampled model coefficients and disturbance metrics for our example
+landscape, setting <code>returnSample = TRUE</code> so that the results
+returned contain a row for each sample in each scenario. We set the
+initial population size for each sample population to 100, and project
+population dynamics for 20 years using the <code>popGrowthJohnson</code>
+function with default parameter values. Anthropogenic disturbance is
+high on this example landscape, so the projected population growth rate
+for most sample populations is below 1, but uncertainty in the model
+means that a few sample populations persist.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>   <span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></span>
 <span>   <span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
@@ -177,12 +201,18 @@
 <div class="section level2">
 <h2 id="effects-of-disturbance-on-demographic-rates">Effects of disturbance on demographic rates<a class="anchor" aria-label="anchor" href="#effects-of-disturbance-on-demographic-rates"></a>
 </h2>
-<p>We can project demographic rates over a range of landscape conditions to recreate figures 3 and 5 from Johnson et al. (2020) and see the effects of changing disturbance on model behaviour. First we create a table of disturbance scenarios across a range of different levels of fire and anthropogenic disturbance.</p>
+<p>We can project demographic rates over a range of landscape conditions
+to recreate figures 3 and 5 from Johnson et al. (2020) and see the
+effects of changing disturbance on model behaviour. First we create a
+table of disturbance scenarios across a range of different levels of
+fire and anthropogenic disturbance.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">covTableSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, </span>
 <span>                           fire_excl_anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span>, by <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="va">covTableSim</span><span class="op">$</span><span class="va">Total_dist</span> <span class="op">=</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">fire_excl_anthro</span></span></code></pre></div>
-<p>We again sample coefficients from default models M1 and M4. The sample of 500 is used to calculate averages, while the sample of 35 is used to show variability among populations.</p>
+<p>We again sample coefficients from default models M1 and M4. The
+sample of 500 is used to calculate averages, while the sample of 35 is
+used to show variability among populations.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span></span>
 <span>  <span class="fl">500</span>,</span>
@@ -199,7 +229,19 @@
 <span>  recruitmentModelNumber <span class="op">=</span> <span class="st">"M4"</span>,</span>
 <span>  populationGrowthTable <span class="op">=</span> <span class="va">popGrowthTableJohnsonECCC</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Next we calculate demographic rates given sampled model coefficients. For the smaller sample we set <code>returnSample = TRUE</code> so that the results returned contain a row for each sample in each scenario. Setting <code>useQuantiles = TRUE</code> assigns each sample population to a quantile of the regression model error distributions for survival and recruitment, which allows us to see how demographic rates change. For the larger sample we set <code>returnSample = FALSE</code> and the result has one row for each scenario and includes summary statistics of the uncertainty across the samples. We do this twice, once with <code>ignorePrecision = TRUE</code> and once with <code>ignorePrecision = FALSE</code> to demonstrate the effect of considering the variance among populations around the National mean in addition to the uncertainty about the coefficient estimates.</p>
+<p>Next we calculate demographic rates given sampled model coefficients.
+For the smaller sample we set <code>returnSample = TRUE</code> so that
+the results returned contain a row for each sample in each scenario.
+Setting <code>useQuantiles = TRUE</code> assigns each sample population
+to a quantile of the regression model error distributions for survival
+and recruitment, which allows us to see how demographic rates change.
+For the larger sample we set <code>returnSample = FALSE</code> and the
+result has one row for each scenario and includes summary statistics of
+the uncertainty across the samples. We do this twice, once with
+<code>ignorePrecision = TRUE</code> and once with
+<code>ignorePrecision = FALSE</code> to demonstrate the effect of
+considering the variance among populations around the National mean in
+addition to the uncertainty about the coefficient estimates.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
@@ -227,19 +269,37 @@
 <div class="section level3">
 <h3 id="no-precision">No precision<a class="anchor" aria-label="anchor" href="#no-precision"></a>
 </h3>
-<p>The Johnson et al. (2020) model with parameter uncertainty but no precision. The bands are the 2.5% and 97.5% quantiles of 500 sample parameter values. <img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-1.png" width="768"><img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-2.png" width="768"></p>
+<p>The Johnson et al. (2020) model with parameter uncertainty but no
+precision. The bands are the 2.5% and 97.5% quantiles of 500 sample
+parameter values.</p>
+<pre><code><span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span></code></pre>
+<p><img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-1.png" width="768"><img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-2.png" width="768"></p>
 </div>
 <div class="section level3">
 <h3 id="with-precision">With precision<a class="anchor" aria-label="anchor" href="#with-precision"></a>
 </h3>
-<p>The Johnson et al. (2020) model with parameter uncertainty and precision. Faint coloured lines show example trajectories of expected demographic rates in sample populations, assuming each sample population is randomly distributed among quantiles of the beta distribution, and each population remains in the same quantile of the beta distribution as disturbance changes. <img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
+<p>The Johnson et al. (2020) model with parameter uncertainty and
+precision. Faint coloured lines show example trajectories of expected
+demographic rates in sample populations, assuming each sample population
+is randomly distributed among quantiles of the beta distribution, and
+each population remains in the same quantile of the beta distribution as
+disturbance changes.
+<img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="projection-of-population-growth-over-time-on-a-changing-landscape">Projection of population growth over time on a changing landscape<a class="anchor" aria-label="anchor" href="#projection-of-population-growth-over-time-on-a-changing-landscape"></a>
+<h2 id="projection-of-population-growth-over-time-on-a-changing-landscape">Projection of population growth over time on a changing
+landscape<a class="anchor" aria-label="anchor" href="#projection-of-population-growth-over-time-on-a-changing-landscape"></a>
 </h2>
-<p>In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade. We set <code>interannualVar = FALSE</code>, <code>K = FALSE</code>, and <code>probOption = "continuous"</code> to use a simpler 2-stage demographic model without interannual variability, density dependence, or discrete numbers of animals, as in Stewart et al. in prep.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p>In this example, we project 35 sample populations for 50 years on a
+landscape where the anthropogenic disturbance footprint is increasing by
+5% per decade. We set <code>interannualVar = FALSE</code>,
+<code>K = FALSE</code>, and <code>probOption = "continuous"</code> to
+use a simpler 2-stage demographic model without interannual variability,
+density dependence, or discrete numbers of animals, as in Stewart et
+al. in prep.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">numTimesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">stepLength</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
@@ -306,7 +366,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

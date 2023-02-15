@@ -95,6 +95,7 @@
 <div class="page-header"><h1 id="cariboumetrics">caribouMetrics<a class="anchor" aria-label="anchor" href="#cariboumetrics"></a>
 </h1></div>
 <!-- badges: start -->
+
 <p>caribouMetrics provides implementations of several different models. Firstly, it implements the caribou resource selection probability functions described in Hornseth and Rempel (2016) <em>Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance</em>. This allows for a spatial prediction of caribou habitat use across 13 caribou ranges in Ontario. The package also includes an implementation of the population and demographic models in <em>Science to inform policy: linking population dynamics to habitat for a threatened species in Canada</em> by Johnson et. al. (2020). These functions allow users to calculate metrics of disturbance, predict demographic rates for a given level of disturbance and simulate population growth over time.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -147,7 +148,8 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># calculate disturbance </span></span>
+<code class="sourceCode R"><span></span>
+<span><span class="co"># calculate disturbance </span></span>
 <span><span class="va">disturb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span>landCover <span class="op">=</span> <span class="va">landCoverD</span>,</span>
 <span>                              linFeat <span class="op">=</span> <span class="va">linFeatDras</span>,  </span>
 <span>                              natDist <span class="op">=</span> <span class="va">natDistD</span>,</span>
@@ -167,21 +169,21 @@
 <span></span>
 <span><span class="va">demRates</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/demographicRates.html">demographicRates</a></span><span class="op">(</span>covTable <span class="op">=</span> <span class="fu"><a href="reference/results.html">results</a></span><span class="op">(</span><span class="va">disturb</span><span class="op">)</span>,</span>
 <span>                             popGrowthPars <span class="op">=</span> <span class="va">demCoefs</span><span class="op">)</span></span>
-<span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaultsFALSE</span></span>
-<span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaultsFALSE</span></span>
+<span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaults</span></span>
+<span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaults</span></span>
 <span><span class="va">demRates</span></span>
-<span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar  S_stdErr</span></span>
-<span><span class="co">#&gt; 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8403108 0.0452728</span></span>
-<span><span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow R_PIhigh</span></span>
-<span><span class="co">#&gt; 1 0.7561665 0.9187631 0.1813372 0.09530066 0.05820063 0.367604</span></span>
+<span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr</span></span>
+<span><span class="co">#&gt; 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8478733 0.05061715</span></span>
+<span><span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh</span></span>
+<span><span class="co">#&gt; 1 0.7627531 0.9217281 0.1813372 0.1009375 0.04912995 0.3915002</span></span>
 <span></span>
 <span><span class="co"># Simulate population growth</span></span>
 <span><span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/popGrowthJohnson.html">popGrowthJohnson</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2000</span>, numSteps <span class="op">=</span> <span class="fl">20</span>, R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, </span>
 <span>                            S_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">popGrow</span></span>
-<span><span class="co">#&gt;     N    lambda</span></span>
-<span><span class="co">#&gt; 1 361 0.9180804</span></span></code></pre></div>
+<span><span class="co">#&gt;     N    lambda       R_t       S_t n_recruits surviving_adFemales</span></span>
+<span><span class="co">#&gt; 1 401 0.9229188 0.1838083 0.8536244         29                 372</span></span></code></pre></div>
 <p>More detailed examples are provided in the vignettes.</p>
 </div>
 </div>
@@ -234,7 +236,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/LandSciTech/caribouMetrics/actions" class="external-link"><img src="https://github.com/LandSciTech/caribouMetrics/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 
@@ -249,7 +251,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

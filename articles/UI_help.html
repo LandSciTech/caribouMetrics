@@ -74,7 +74,7 @@
 
       
 
-      </header><script src="UI_help_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>User Interface Help</h1>
@@ -90,13 +90,35 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette is directed at users of the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models in the <a href="https://landscitech.github.io/caribouMetrics/"><code>caribouMetrics</code></a> package. For new users we recommend starting with our video tutorial <a href="https://docs.google.com/presentation/d/1CwnPpIjPI0P6wG2t2LW_f3NEBOhqSWT7/edit?usp=sharing&amp;ouid=113424671555606837963&amp;rtpof=true&amp;sd=true" class="external-link">presentation.</a> There are vignettes available for the <a href="https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html">caribou habitat</a> and <a href="https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html">demographic</a> models that give details on how the models work and how to run them in R. To fully understand these models please refer to the journal articles where they were published: <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel (2016)</a> <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link">Johnson et. al. (2020)</a>].</p>
-<p>Below we explain how to install and setup the user interface, provide links between the options exposed in the UI and the <code>caribouMetrics</code> function documentation and demonstrate how to set up a SynscroSim library and extract scenario results for plotting in R using rsyncrosim.</p>
+<p>This vignette is directed at users of the SyncroSim user interface
+for integrating SpaDES, LandR and FireSense projections with caribou
+habitat and demographic models in the <a href="https://landscitech.github.io/caribouMetrics/"><code>caribouMetrics</code></a>
+package. For new users we recommend starting with our video tutorial <a href="https://docs.google.com/presentation/d/1CwnPpIjPI0P6wG2t2LW_f3NEBOhqSWT7/edit?usp=sharing&amp;ouid=113424671555606837963&amp;rtpof=true&amp;sd=true" class="external-link">presentation.</a>
+There are vignettes available for the <a href="https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html">caribou
+habitat</a> and <a href="https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html">demographic</a>
+models that give details on how the models work and how to run them in
+R. To fully understand these models please refer to the journal articles
+where they were published: <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel
+(2016)</a> <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link">Johnson
+et. al. (2020)</a>].</p>
+<p>Below we explain how to install and setup the user interface, provide
+links between the options exposed in the UI and the
+<code>caribouMetrics</code> function documentation and demonstrate how
+to set up a SynscroSim library and extract scenario results for plotting
+in R using rsyncrosim.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>To run the UI, installation of several software programs and packages is required. You will need to install <a href="https://www.rstudio.com/products/rstudio/download/#download" class="external-link">R, RStudio (recommended)</a>, <a href="https://syncrosim.com/download/" class="external-link">SyncroSim</a>, <a href="https://github.com/LandSciTech/ROFSim/releases" class="external-link">ROFSim SyncroSim Package</a> (<a href="http://docs.syncrosim.com/how_to_guides/package_manager.html#2-installing-from-a-package-file" class="external-link">instructions</a>), caribouMetrics R package and rsyncrosim R package. The script below can be copied into the R console to install the caribouMetics and rsyncrosim packages and to check that the other required software is available. Use the links above to install the other software dependencies before running this script.</p>
+<p>To run the UI, installation of several software programs and packages
+is required. You will need to install <a href="https://www.rstudio.com/products/rstudio/download/#download" class="external-link">R,
+RStudio (recommended)</a>, <a href="https://syncrosim.com/download/" class="external-link">SyncroSim</a>, <a href="https://github.com/LandSciTech/ROFSim/releases" class="external-link">ROFSim SyncroSim
+Package</a> (<a href="http://docs.syncrosim.com/how_to_guides/package_manager.html#2-installing-from-a-package-file" class="external-link">instructions</a>),
+caribouMetrics R package and rsyncrosim R package. The script below can
+be copied into the R console to install the caribouMetics and rsyncrosim
+packages and to check that the other required software is available. Use
+the links above to install the other software dependencies before
+running this script.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"drat"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"drat"</span><span class="op">)</span></span>
@@ -142,7 +164,15 @@
 <div class="section level2">
 <h2 id="documentation-for-model-options">Documentation for model options<a class="anchor" aria-label="anchor" href="#documentation-for-model-options"></a>
 </h2>
-<p>By right clicking a scenario you can access the scenario properties. The Caribou Metrics tab has options that can be set for the models. The table below shows the option from the UI, the corresponding argument name in <code>caribouMetrics</code>, and the names of the function(s) in <code>caribouMetrics</code> that use that argument. Clicking the function name will take you to the documentation for that function. You can read the description at the top of the page to learn what the function does and then find the argument name to read its definition.</p>
+<p>By right clicking a scenario you can access the scenario properties.
+The Caribou Metrics tab has options that can be set for the models. The
+table below shows the option from the UI, the corresponding argument
+name in <code>caribouMetrics</code>, and the names of the function(s) in
+<code>caribouMetrics</code> that use that argument. Clicking the
+function name will take you to the documentation for that function. You
+can read the description at the top of the page to learn what the
+function does and then find the argument name to read its
+definition.</p>
 <table class="table">
 <colgroup>
 <col width="31%">
@@ -173,7 +203,8 @@
 <td>Caribou Range Name</td>
 <td>projectPoly</td>
 <td>
-<code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code> and <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code>
+<code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code> and
+<code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code>
 </td>
 <td></td>
 </tr>
@@ -199,7 +230,8 @@
 <td>Focal Padding</td>
 <td>padFocal</td>
 <td>
-<code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code> and <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code>
+<code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code> and
+<code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code>
 </td>
 <td></td>
 </tr>
@@ -351,9 +383,11 @@
 <td>Ranges</td>
 <td>projectPoly</td>
 <td>
-<code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code> and <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code>
+<code><a href="../reference/caribouHabitat.html">caribouHabitat()</a></code> and
+<code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code>
 </td>
-<td>This .shp file can include multiple range polygons and the ones to use will be selected based on the Caribou Range Name provided</td>
+<td>This .shp file can include multiple range polygons and the ones to
+use will be selected based on the Caribou Range Name provided</td>
 </tr>
 <tr class="odd">
 <td>Eskers</td>
@@ -373,8 +407,13 @@
 <div class="section level2">
 <h2 id="set-up-a-new-syncrosim-library">Set up a new SyncroSim Library<a class="anchor" aria-label="anchor" href="#set-up-a-new-syncrosim-library"></a>
 </h2>
-<p>Here we demonstrate how to set up a SyncroSim Library for the ROFSim Package using the rsyncrosim package. For more details on the rsyncrosim package and its funcitons see the Introduction to rsyncrosim <a href="https://syncrosim.github.io/rsyncrosim/articles/a01_rsyncrosim_vignette_basic.html" class="external-link">vignette</a></p>
-<p>In this example we will create the new library inside the <code>caribouMetrics</code> package directory in order to take advantage of the example data sets installed there. First we create a library called “demoSSimLib” and then a project called “Demo”.</p>
+<p>Here we demonstrate how to set up a SyncroSim Library for the ROFSim
+Package using the rsyncrosim package. For more details on the rsyncrosim
+package and its funcitons see the Introduction to rsyncrosim <a href="https://syncrosim.github.io/rsyncrosim/articles/a01_rsyncrosim_vignette_basic.html" class="external-link">vignette</a></p>
+<p>In this example we will create the new library inside the
+<code>caribouMetrics</code> package directory in order to take advantage
+of the example data sets installed there. First we create a library
+called “demoSSimLib” and then a project called “Demo”.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rsyncrosim</span><span class="op">)</span></span>
 <span></span>
@@ -392,13 +431,19 @@
 <span><span class="va">cLib</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/ssimLibrary.html" class="external-link">ssimLibrary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">cDir</span>, <span class="st">"/"</span>, <span class="va">libName</span><span class="op">)</span>, package <span class="op">=</span> <span class="st">"ROFSim"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cProj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">cLib</span>, <span class="st">"Demo"</span><span class="op">)</span></span></code></pre></div>
-<p>Next, we ensure that SyncroSim uses the same R version as is used to run this vignette. This is only necessary if you have multiple R versions installed.</p>
+<p>Next, we ensure that SyncroSim uses the same R version as is used to
+run this vignette. This is only necessary if you have multiple R
+versions installed.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make sure the library uses the correct R installation</span></span>
 <span><span class="va">rConfig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html" class="external-link">datasheet</a></span><span class="op">(</span><span class="va">cLib</span>, name <span class="op">=</span> <span class="st">"core_RConfig"</span><span class="op">)</span></span>
 <span><span class="va">rConfig</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/addRow.html" class="external-link">addRow</a></span><span class="op">(</span><span class="va">rConfig</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>ExePath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Rhome.html" class="external-link">R.home</a></span><span class="op">(</span><span class="st">"bin"</span><span class="op">)</span>, <span class="st">"Rscript"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html" class="external-link">saveDatasheet</a></span><span class="op">(</span><span class="va">cLib</span>, <span class="va">rConfig</span>, name <span class="op">=</span> <span class="st">"core_RConfig"</span><span class="op">)</span></span></code></pre></div>
-<p>Now we will set up the data sheets used at the project level and the run control scenario. To determine the names of the sheets in the project look at <code>cProjDS</code>. You can determine what column names and variable types are expected for a sheet with for example <code>str(datasheet(cProj, "ROFSim_CaribouRange"))</code>.</p>
+<p>Now we will set up the data sheets used at the project level and the
+run control scenario. To determine the names of the sheets in the
+project look at <code>cProjDS</code>. You can determine what column
+names and variable types are expected for a sheet with for example
+<code>str(datasheet(cProj, "ROFSim_CaribouRange"))</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># inspect datasheets used at the project level</span></span>
 <span><span class="va">cProjDS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/datasheet.html" class="external-link">datasheet</a></span><span class="op">(</span><span class="va">cProj</span><span class="op">)</span></span>
@@ -424,7 +469,8 @@
 <span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>MinimumIteration <span class="op">=</span> <span class="fl">1</span>, MaximumIteration <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                 MinimumTimestep <span class="op">=</span> <span class="fl">2020</span>, MaximumTimestep <span class="op">=</span> <span class="fl">2100</span>, OutputFrequency <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html" class="external-link">saveDatasheet</a></span><span class="op">(</span><span class="va">rcScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span><span class="op">)</span></span></code></pre></div>
-<p>Next we set up a scenario to process the data making sure that it is all aligned and ready for modelling.</p>
+<p>Next we set up a scenario to process the data making sure that it is
+all aligned and ready for modelling.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">datScn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/scenario.html" class="external-link">scenario</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="st">"data prep"</span><span class="op">)</span></span>
 <span></span>
@@ -456,7 +502,11 @@
 <span><span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/saveDatasheet.html" class="external-link">saveDatasheet</a></span><span class="op">(</span><span class="va">datScn</span>, <span class="va">cc</span>, name <span class="op">=</span> <span class="va">cSheet</span>, append <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">datRes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/run.html" class="external-link">run</a></span><span class="op">(</span><span class="va">datScn</span><span class="op">)</span></span></code></pre></div>
-<p>Finally, we set up a scenario by setting options for the models and telling SyncroSim where to find the input files. This scenario inherits the options from the run control scenario created above. We can run the scenario from R or open the SyncroSim library to see the user interface and run it from there.</p>
+<p>Finally, we set up a scenario by setting options for the models and
+telling SyncroSim where to find the input files. This scenario inherits
+the options from the run control scenario created above. We can run the
+scenario from R or open the SyncroSim library to see the user interface
+and run it from there.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># scenario - caribou - current</span></span>
 <span><span class="va">cbScn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rsyncrosim/man/scenario.html" class="external-link">scenario</a></span><span class="op">(</span><span class="va">cProj</span>, <span class="st">"Caribou - 2020-2100"</span><span class="op">)</span></span>
@@ -499,7 +549,12 @@
 <div class="section level2">
 <h2 id="explore-model-results-in-r">Explore model results in R<a class="anchor" aria-label="anchor" href="#explore-model-results-in-r"></a>
 </h2>
-<p>Once the scenario has run we can look at the results using the user interface or we can extract the results from the UI and create flexible custom plots in R. Here we extract the disturbance metrics to plot change over time (in our example there is no change) and extract the change in population metrics to see the variation among the 35 replicate populations.</p>
+<p>Once the scenario has run we can look at the results using the user
+interface or we can extract the results from the UI and create flexible
+custom plots in R. Here we extract the disturbance metrics to plot
+change over time (in our example there is no change) and extract the
+change in population metrics to see the variation among the 35 replicate
+populations.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -551,12 +606,33 @@
 <div class="section level2">
 <h2 id="overview-of-rofsim-package-structure-and-components">Overview of ROFSim package structure and components<a class="anchor" aria-label="anchor" href="#overview-of-rofsim-package-structure-and-components"></a>
 </h2>
-<p>The ROFSim SyncroSim package that enables this workflow consists of an <a href="https://github.com/LandSciTech/ROFSim/blob/main/package.xml" class="external-link">xml file</a> that defines model inputs, outputs, and the UI design, and four transformers (pipeline stages) written in R:</p>
+<p>The ROFSim SyncroSim package that enables this workflow consists of
+an <a href="https://github.com/LandSciTech/ROFSim/blob/main/package.xml" class="external-link">xml
+file</a> that defines model inputs, outputs, and the UI design, and four
+transformers (pipeline stages) written in R:</p>
 <ol style="list-style-type: decimal">
-<li><p><a href="https://github.com/LandSciTech/ROFSim/blob/main/load_spades_outputs.R" class="external-link">Spades Import</a> Given SpaDES outputs (<a href="https://drive.google.com/drive/folders/1kjjQRyvTHUTfPBsTgzmfk3oV8uBu8Asy?usp=sharing" class="external-link">example here</a>), this transformer can extract any component of the outputs table. Our example library is currently configured to extract standAgeMap.</p></li>
-<li><p><a href="https://github.com/LandSciTech/ROFSim/blob/main/makeLccFromCohortData.R" class="external-link">Generate LCC from Cohort Data</a> Given SpaDES outputs, this transformer returns projected Ontario Far North Landcover maps, and maps of forest type (conifer, deciduous or mixed).</p></li>
-<li><p><a href="https://github.com/LandSciTech/LandSciTech/blob/main/prepare_spatial_data.R" class="external-link">Prepare Spatial Data</a> Given a Land Cover raster, a Study Area polygon, and other spatial inputs, this transformer aligns all the spatial inputs. This is a wrapper around the <code><a href="../reference/loadSpatialInputs.html">loadSpatialInputs()</a></code> function from the <code>caribouMetrics</code> package.</p></li>
-<li><p><a href="https://github.com/LandSciTech/LandSciTech/blob/main/run_caribou_model.R" class="external-link">Caribou Habitat</a> Given maps of Ranges, Study Area, Linear Features, Land Cover, Natural Disturbances, Harvest and Eskers that have been processed by the Prepare Spatial Data transformer, this transformer calculates results from the available caribou resource selection and demographic models. Functions from the <code>caribouMetrics</code> package are used to calculate habitat selection and project demography as described above.</p></li>
+<li><p><a href="https://github.com/LandSciTech/ROFSim/blob/main/load_spades_outputs.R" class="external-link">Spades
+Import</a> Given SpaDES outputs (<a href="https://drive.google.com/drive/folders/1kjjQRyvTHUTfPBsTgzmfk3oV8uBu8Asy?usp=sharing" class="external-link">example
+here</a>), this transformer can extract any component of the outputs
+table. Our example library is currently configured to extract
+standAgeMap.</p></li>
+<li><p><a href="https://github.com/LandSciTech/ROFSim/blob/main/makeLccFromCohortData.R" class="external-link">Generate
+LCC from Cohort Data</a> Given SpaDES outputs, this transformer returns
+projected Ontario Far North Landcover maps, and maps of forest type
+(conifer, deciduous or mixed).</p></li>
+<li><p><a href="https://github.com/LandSciTech/LandSciTech/blob/main/prepare_spatial_data.R" class="external-link">Prepare
+Spatial Data</a> Given a Land Cover raster, a Study Area polygon, and
+other spatial inputs, this transformer aligns all the spatial inputs.
+This is a wrapper around the <code><a href="../reference/loadSpatialInputs.html">loadSpatialInputs()</a></code> function
+from the <code>caribouMetrics</code> package.</p></li>
+<li><p><a href="https://github.com/LandSciTech/LandSciTech/blob/main/run_caribou_model.R" class="external-link">Caribou
+Habitat</a> Given maps of Ranges, Study Area, Linear Features, Land
+Cover, Natural Disturbances, Harvest and Eskers that have been processed
+by the Prepare Spatial Data transformer, this transformer calculates
+results from the available caribou resource selection and demographic
+models. Functions from the <code>caribouMetrics</code> package are used
+to calculate habitat selection and project demography as described
+above.</p></li>
 </ol>
 </div>
   </div>
@@ -578,7 +654,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

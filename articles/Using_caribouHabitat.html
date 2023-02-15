@@ -74,7 +74,7 @@
 
       
 
-      </header><script src="Using_caribouHabitat_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using caribouHabitat</h1>
@@ -90,7 +90,13 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette gives details on the use of the <code>caribouHabitat</code> function. See <code><a href="../articles/Getting_started.html">vignette("Getting_started", package = "caribouMetrics")</a></code> for an overview of the function. This function implements the caribou resource selection probability functions (RSPF) described in <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel, 2016</a> in R. They were previously written in LSL and a goal of this package is to make them more accessible to a wider range of users.</p>
+<p>This vignette gives details on the use of the
+<code>caribouHabitat</code> function. See
+<code><a href="../articles/Getting_started.html">vignette("Getting_started", package = "caribouMetrics")</a></code> for
+an overview of the function. This function implements the caribou
+resource selection probability functions (RSPF) described in <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel,
+2016</a> in R. They were previously written in LSL and a goal of this
+package is to make them more accessible to a wider range of users.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -110,13 +116,16 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     select</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></span>
+<span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
 <span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="simple-example">Simple Example<a class="anchor" aria-label="anchor" href="#simple-example"></a>
 </h2>
-<p>The example data set loaded below includes a small area in the Nipigon caribou range that we will use as an example. The provincial land cover (PLC) data are converted to resource types based on look up tables provided in the package.</p>
+<p>The example data set loaded below includes a small area in the
+Nipigon caribou range that we will use as an example. The provincial
+land cover (PLC) data are converted to resource types based on look up
+tables provided in the package.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load example data and classify plc into Resource Types</span></span>
 <span><span class="va">landCoverD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -131,7 +140,11 @@
 <span><span class="va">linFeatDshp</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"roads.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>, agr <span class="op">=</span> <span class="st">"constant"</span><span class="op">)</span></span>
 <span><span class="va">railD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"rail.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>, agr <span class="op">=</span> <span class="st">"constant"</span><span class="op">)</span></span>
 <span><span class="va">utilitiesD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"utilities.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>, agr <span class="op">=</span> <span class="st">"constant"</span><span class="op">)</span></span></code></pre></div>
-<p><code>caribouHabitat</code> will prepare the data, process it into the explanatory variables in the Hornseth and Rempel RSPF models and then calculate the probability of habitat use in each season at each location. The function can be run in several different ways, but the simplest is to provide spatial objects for each data set.</p>
+<p><code>caribouHabitat</code> will prepare the data, process it into
+the explanatory variables in the Hornseth and Rempel RSPF models and
+then calculate the probability of habitat use in each season at each
+location. The function can be run in several different ways, but the
+simplest is to provide spatial objects for each data set.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span> , </span>
@@ -157,11 +170,17 @@
 <div class="section level2">
 <h2 id="example-with-padding">Example with padding<a class="anchor" aria-label="anchor" href="#example-with-padding"></a>
 </h2>
-<p>In most cases you will have a project area that is smaller than the environmental data sets available. For our example we will create this project area by selecting a rectangle inside our example data set.</p>
+<p>In most cases you will have a project area that is smaller than the
+environmental data sets available. For our example we will create this
+project area by selecting a rectangle inside our example data set.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ext</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30000</span></span>
 <span><span class="va">projectPolyD2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">ext</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_set_crs</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>The information that is outside our project area is still useful for preventing edge effects in our results. To use this data you can set <code>padProjPoly = TRUE</code> in the <code>caribouHabitat</code> call which will set a buffer around the project area based on the size of the moving window used to scale variables for that range.</p>
+<p>The information that is outside our project area is still useful for
+preventing edge effects in our results. To use this data you can set
+<code>padProjPoly = TRUE</code> in the <code>caribouHabitat</code> call
+which will set a buffer around the project area based on the size of the
+moving window used to scale variables for that range.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>, </span>
@@ -187,8 +206,15 @@
 <span>    <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_layout.html" class="external-link">tm_legend</a></span><span class="op">(</span>bg.color <span class="op">=</span> <span class="st">"white"</span>, legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab2</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, borders <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/inspect%20padded-1.png" width="768"></p>
-<p>The black area on the map above shows the extent of the original <code>landCover</code> data, the raster shows the <code>landCover</code> data that has been cropped to a buffer around <code>projectPoly</code> which is the black rectangle.<br>
-Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</code>, if the data is available, by showing the difference in the results for padding using the data outside the project area, no padding, and using 0s to pad the area outside the project using <code>padFocal = TRUE</code></p>
+<p>The black area on the map above shows the extent of the original
+<code>landCover</code> data, the raster shows the <code>landCover</code>
+data that has been cropped to a buffer around <code>projectPoly</code>
+which is the black rectangle.<br>
+Next we will demonstrate the importance of setting
+<code>padProjPoly = TRUE</code>, if the data is available, by showing
+the difference in the results for padding using the data outside the
+project area, no padding, and using 0s to pad the area outside the
+project using <code>padFocal = TRUE</code></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>, </span>
@@ -245,12 +271,33 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 <span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab3</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, borders <span class="op">=</span> <span class="st">"red"</span>, </span>
 <span>            shape.is.master <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/compare%20pad-3.png" width="768"></p>
-<p>The difference is large in this example because the project area is very small compared to the window size. The example with no padding is the default because it prevents users from relying on questionable results. The example padded with data outside the project polygon is the preferred option since it makes use of all available information but it is not the default because it should only be used when the data provided is larger than the project area. The version where cells are padded with 0s gives results but they can be misleading. Based on the land cover data in the previous map you can see that there is an area with resource type LGOP near the border of <code>projectPoly</code> on the top right. LGOP has a strong positive effect on caribou habitat use so in the version padded with data cells on the top right edge have higher probability of use than in the version with 0s as padding. In general the predictions are lower around the edges in the version with 0s as padding because the cells outside the <code>projectPoly</code> are 0 when taking the weighted sum of values in the window. Therefore it is highly recommended to provide data for the area around the project and to use <code>padProjPoly = TRUE</code>.</p>
+<p>The difference is large in this example because the project area is
+very small compared to the window size. The example with no padding is
+the default because it prevents users from relying on questionable
+results. The example padded with data outside the project polygon is the
+preferred option since it makes use of all available information but it
+is not the default because it should only be used when the data provided
+is larger than the project area. The version where cells are padded with
+0s gives results but they can be misleading. Based on the land cover
+data in the previous map you can see that there is an area with resource
+type LGOP near the border of <code>projectPoly</code> on the top right.
+LGOP has a strong positive effect on caribou habitat use so in the
+version padded with data cells on the top right edge have higher
+probability of use than in the version with 0s as padding. In general
+the predictions are lower around the edges in the version with 0s as
+padding because the cells outside the <code>projectPoly</code> are 0
+when taking the weighted sum of values in the window. Therefore it is
+highly recommended to provide data for the area around the project and
+to use <code>padProjPoly = TRUE</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="example-with-other-inputs">Example with other inputs<a class="anchor" aria-label="anchor" href="#example-with-other-inputs"></a>
 </h2>
-<p>As mentioned above <code>caribouHabitat</code> can be called in several different ways. You can provide the data as filepaths instead of spatial objects, you can provide the eskers and linear features as vector files which will be converted to rasters, and you can provide a list of sf objects to be combined into the linear features raster.</p>
+<p>As mentioned above <code>caribouHabitat</code> can be called in
+several different ways. You can provide the data as filepaths instead of
+spatial objects, you can provide the eskers and linear features as
+vector files which will be converted to rasters, and you can provide a
+list of sf objects to be combined into the linear features raster.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>, </span>
@@ -271,8 +318,14 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 <div class="section level2">
 <h2 id="example-of-updating-an-existing-object">Example of updating an existing object<a class="anchor" aria-label="anchor" href="#example-of-updating-an-existing-object"></a>
 </h2>
-<p>In some cases you may want to update an existing object with new data for one or more of the input data sets. This can be done using <code>updateCaribou</code>.</p>
-<p>For example we can create several data sets that show roads expanding across our study area and what effect this will have on caribou habitat. Since the only data set that is changing is the linear features it will be faster to use <code>updateCaribou</code> rather than <code>caribouHabitat</code>.</p>
+<p>In some cases you may want to update an existing object with new data
+for one or more of the input data sets. This can be done using
+<code>updateCaribou</code>.</p>
+<p>For example we can create several data sets that show roads expanding
+across our study area and what effect this will have on caribou habitat.
+Since the only data set that is changing is the linear features it will
+be faster to use <code>updateCaribou</code> rather than
+<code>caribouHabitat</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create series of data sets</span></span>
 <span><span class="va">ext</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">linFeatDras</span><span class="op">)</span></span>
@@ -329,12 +382,14 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHabLF2</span>, season <span class="op">=</span> <span class="st">"Spring"</span>, title <span class="op">=</span> <span class="st">"linFeat 2"</span>, raster.breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">/</span><span class="fl">10</span>, </span>
 <span>     legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/updateCaribou-3.png" width="576"></p>
-<p>You can see that there is a lower probability of caribou habitat use when there are more roads (linFeat 2).</p>
+<p>You can see that there is a lower probability of caribou habitat use
+when there are more roads (linFeat 2).</p>
 </div>
 <div class="section level2">
 <h2 id="example-using-iteration">Example using Iteration<a class="anchor" aria-label="anchor" href="#example-using-iteration"></a>
 </h2>
-<p>To go through a large number of updated data sets we can use the <code>purrr</code> package to iterate over different sets of data</p>
+<p>To go through a large number of updated data sets we can use the
+<code>purrr</code> package to iterate over different sets of data</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">linFeatScns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/lst.html" class="external-link">lst</a></span><span class="op">(</span><span class="va">linFeatDras2</span>, <span class="va">linFeatDras3</span>, <span class="va">linFeatDras</span><span class="op">)</span></span>
@@ -360,7 +415,11 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 <span>             <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">.x</span>, season <span class="op">=</span> <span class="st">"Spring"</span>, title <span class="op">=</span> <span class="va">.y</span>, raster.breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">/</span><span class="fl">10</span>,</span>
 <span>                   legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/unnamed-chunk-2-1.png" width="768"><img src="Using_caribouHabitat_files/figure-html/unnamed-chunk-2-2.png" width="768"><img src="Using_caribouHabitat_files/figure-html/unnamed-chunk-2-3.png" width="768"><img src="Using_caribouHabitat_files/figure-html/unnamed-chunk-2-4.png" width="768"></p>
-<p>It is also possible to change just the <code>caribouRange</code> attribute without recomputing the entire function using the <code>updateCaribou</code> function. In the example below the coefRange is changed from Nipigon to Missisa and the predictions are re-calculated using the coefficients from the Missisa model</p>
+<p>It is also possible to change just the <code>caribouRange</code>
+attribute without recomputing the entire function using the
+<code>updateCaribou</code> function. In the example below the coefRange
+is changed from Nipigon to Missisa and the predictions are re-calculated
+using the coefficients from the Missisa model</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab1</span><span class="op">@</span><span class="va">attributes</span><span class="op">$</span><span class="va">caribouRange</span><span class="op">$</span><span class="va">coefRange</span> <span class="op">&lt;-</span> <span class="st">"Missisa"</span></span>
 <span></span>
@@ -372,7 +431,10 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 <div class="section level2">
 <h2 id="example-with-different-coefficients">Example with different coefficients<a class="anchor" aria-label="anchor" href="#example-with-different-coefficients"></a>
 </h2>
-<p>Different coefficients can be supplied using the <code>coefTable</code> argument and if those coefficients are standardized the data can be standardized by supplying the argument <code>doScale = TRUE</code>.</p>
+<p>Different coefficients can be supplied using the
+<code>coefTable</code> argument and if those coefficients are
+standardized the data can be standardized by supplying the argument
+<code>doScale = TRUE</code>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHabStd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>,</span>
@@ -397,7 +459,24 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 <div class="section level2">
 <h2 id="example-with-different-land-cover-data">Example with different land cover data<a class="anchor" aria-label="anchor" href="#example-with-different-land-cover-data"></a>
 </h2>
-<p><code>reclassPLC</code> assumes that the land cover data come from the Provincial Land Cover (PLC) data for Ontario and uses the included table <code>plcToResType</code> to reclassify the raster values from the PLC codes to “resource types” which are groups of land cover classes used in the models. You can also supply land cover data from different sources, for example, the Ontario Far North Land Cover (FNLC) data, in which case you must supply the appropriate lookup table to convert the land cover classes to resource types. The <code>fnlcToResType</code> table is also included with the package but if a different data set was used you could also supply a custom lookup table. The custom lookup table must have two columns with names “PLCCode” and “ResourceType” where “PLCCode” is the value in the land cover raster and “ResourceType” is the corresponding letter code for the resource type. The possible resource types are included in <code>resTypeCode</code> and descriptions of these codes can be found in table S1.3 of <a href="https://osf.io/x6e2q/?view_only=fb71321265d14dbeb3d932e4de66be0c" class="external-link">supplementary material</a> for Dyson et. al (in press). The resulting map below is quite different from the map above for the PLC because I used the same raw data for both but interpreted the codes differently.</p>
+<p><code>reclassPLC</code> assumes that the land cover data come from
+the Provincial Land Cover (PLC) data for Ontario and uses the included
+table <code>plcToResType</code> to reclassify the raster values from the
+PLC codes to “resource types” which are groups of land cover classes
+used in the models. You can also supply land cover data from different
+sources, for example, the Ontario Far North Land Cover (FNLC) data, in
+which case you must supply the appropriate lookup table to convert the
+land cover classes to resource types. The <code>fnlcToResType</code>
+table is also included with the package but if a different data set was
+used you could also supply a custom lookup table. The custom lookup
+table must have two columns with names “PLCCode” and “ResourceType”
+where “PLCCode” is the value in the land cover raster and “ResourceType”
+is the corresponding letter code for the resource type. The possible
+resource types are included in <code>resTypeCode</code> and descriptions
+of these codes can be found in table S1.3 of <a href="https://osf.io/x6e2q/?view_only=fb71321265d14dbeb3d932e4de66be0c" class="external-link">supplementary
+material</a> for Dyson et. al (in press). The resulting map below is
+quite different from the map above for the PLC because I used the same
+raw data for both but interpreted the codes differently.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">landCoverRaw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> </span>
 <span></span>
@@ -422,7 +501,9 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 <div class="section level2">
 <h2 id="binary-usage">Binary usage<a class="anchor" aria-label="anchor" href="#binary-usage"></a>
 </h2>
-<p>You can also determine a binary high or low caribou use result either by season or for the range as a whole using <code>calcBinaryUse</code>. The high/low use thresholds were provided by Rempel et al (2021).</p>
+<p>You can also determine a binary high or low caribou use result either
+by season or for the range as a whole using <code>calcBinaryUse</code>.
+The high/low use thresholds were provided by Rempel et al (2021).</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binCarHab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calcBinaryUse.html">calcBinaryUse</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span>
 <span><span class="va">binCarHab1Seasons</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calcBinaryUse.html">calcBinaryUse</a></span><span class="op">(</span><span class="va">carHab1</span>, bySeason <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -434,7 +515,14 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 <div class="section level2">
 <h2 id="pre-prepare-data">Pre-prepare data<a class="anchor" aria-label="anchor" href="#pre-prepare-data"></a>
 </h2>
-<p>To save time re-processing the same inputs you can use <code>loadSpatialInputs</code> to process a list of raster and vector spatial objects to match a reference raster and be cropped to a project polygon. The resulting list can then be used as input for both <code>caribouHabitat</code> and <code>disturbanceMetrics</code>. We include the linear features twice so that they can be converted to raster line density for <code>caribouHabitat</code> but kept as lines for <code>disturbanceMetrics</code>.</p>
+<p>To save time re-processing the same inputs you can use
+<code>loadSpatialInputs</code> to process a list of raster and vector
+spatial objects to match a reference raster and be cropped to a project
+polygon. The resulting list can then be used as input for both
+<code>caribouHabitat</code> and <code>disturbanceMetrics</code>. We
+include the linear features twice so that they can be converted to
+raster line density for <code>caribouHabitat</code> but kept as lines
+for <code>disturbanceMetrics</code>.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadSpatialInputs.html">loadSpatialInputs</a></span><span class="op">(</span>projectPoly <span class="op">=</span> <span class="va">projectPolyD2</span>, refRast <span class="op">=</span> <span class="va">landCoverD</span>,</span>
@@ -461,15 +549,15 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 8</span></span>
-<span><span class="co">#&gt;  $ natDist        :Formal class 'RasterLayer' [package "raster"] with 12 slots</span></span>
-<span><span class="co">#&gt;  $ anthroDist     :Formal class 'RasterLayer' [package "raster"] with 12 slots</span></span>
-<span><span class="co">#&gt;  $ refRast        :Formal class 'RasterLayer' [package "raster"] with 12 slots</span></span>
-<span><span class="co">#&gt;  $ linFeatRas     :Formal class 'RasterLayer' [package "raster"] with 12 slots</span></span>
+<span><span class="co">#&gt;  $ natDist        :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;  $ anthroDist     :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;  $ refRast        :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;  $ linFeatRas     :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
 <span><span class="co">#&gt;  $ linFeatLine    :Classes 'sf' and 'data.frame':    5871 obs. of  2 variables:</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "sf_column")= chr "geometry"</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "names")= chr "linFID"</span></span>
-<span><span class="co">#&gt;  $ esker          :Formal class 'RasterLayer' [package "raster"] with 12 slots</span></span>
+<span><span class="co">#&gt;  $ esker          :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
 <span><span class="co">#&gt;  $ projectPoly    :Classes 'sf' and 'data.frame':    1 obs. of  1 variable:</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "sf_column")= chr "x"</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: </span></span>
@@ -497,9 +585,21 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell, C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson, J.M., 2021. Modeling Cumulative Effects of Climate and Development on Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.</p>
-<p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93. <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link uri">https://doi.org/10.1139/cjz-2015-0101</a></p>
-<p>Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S., Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A., Baltzer, J. L., Stewart, F. E. C., &amp; Hughes, J. (in press). Existing caribou habitat and demographic models need improvement for Ring of Fire impact assessment: A roadmap for improving the usefulness, transparency, and availability of models for conservation. <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link uri">https://doi.org/10.1101/2022.06.01.494350</a></p>
+<p>Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
+C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+Moose, Wolf, and Caribou Populations. The Journal of Wildlife
+Management.</p>
+<p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+woodland caribou (Rangifer tarandus caribou) across a gradient of
+anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+<a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link uri">https://doi.org/10.1139/cjz-2015-0101</a></p>
+<p>Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
+Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
+Baltzer, J. L., Stewart, F. E. C., &amp; Hughes, J. (in press). Existing
+caribou habitat and demographic models need improvement for Ring of Fire
+impact assessment: A roadmap for improving the usefulness, transparency,
+and availability of models for conservation. <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link uri">https://doi.org/10.1101/2022.06.01.494350</a></p>
 </div>
   </div>
 
@@ -520,7 +620,7 @@ Next we will demonstrate the importance of setting <code>padProjPoly = TRUE</cod
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
