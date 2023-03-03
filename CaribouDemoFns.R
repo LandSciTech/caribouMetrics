@@ -465,18 +465,17 @@ simCovariates<-function(initAnthro,initFire,numYears,anthroSlope,anthroSlopeFutu
     }
     if(t>1){
       if(t>=futureStep){
-        cov$Anthro <- pmax(0,pmin(100,covPrev$Anthro + anthroSlopeFuture))
+        cov$Anthro <- covPrev$Anthro + anthroSlopeFuture
       }else{
-        cov$Anthro <- pmax(pmin(100,covPrev$Anthro + anthroSlope))
+        cov$Anthro <- covPrev$Anthro + anthroSlope
       }
     }
     covPrev=cov
     if(fireSlope==0){
       cov$fire_excl_anthro<-pmax(0,rnorm(1,cov$fire_excl_anthro,0.0001))
     }else{
-      cov$fire_excl_anthro<-pmax(0,pmin(100,cov$fire_excl_anthro+fireSlope*(t-1)))
+      cov$fire_excl_anthro<-cov$fire_excl_anthro+fireSlope*(t-1)
     }
-    cov$Total_dist = pmax(0,pmin(100,cov$Anthro + cov$fire_excl_anthro))
     cov$time=t
     if(t==1){
       covariates<-cov
@@ -485,6 +484,10 @@ simCovariates<-function(initAnthro,initFire,numYears,anthroSlope,anthroSlopeFutu
     }
 
   }
+  covariates$Anthro = pmin(100,pmax(0,covariates$Anthro))
+  covariates$fire_excl_anthro = pmin(100,pmax(0,covariates$fire_excl_anthro))
+  covariates$Total_dist = pmin(100,covariates$Anthro + covariates$fire_excl_anthro)
+
   return(covariates)
 
 }
