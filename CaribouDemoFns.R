@@ -1,3 +1,40 @@
+#' Run recruitment and mortality model
+#'
+#'
+#'
+#' @param survData either a path to a csv file or a dataframe containing the
+#'   columns "id", "Year", "event", "enter" and "exit"
+#'   TODO: what is the coding for event enter and exit?
+#' @param ageRatio.herd either a path to a csv file or a dataframe containing
+#'   the columns "Year","Count", and "Class". Where class can be either calf or
+#'   cow
+#' @param disturbance either a path to a csv file or a dataframe containing the
+#'   columns "Anthro","fire_excl_anthro","Total_dist","time", and "Year"
+#' @param betaPriors a list of model priors see [getPriors()]
+#' @param startYear,endYear year defining the beginning and end of the survivalt
+#'   data to use.
+#' @param Nchains Number of chains for the Bayesian model
+#' @param Niter Number of iterations for the Bayesian model
+#' @param Nburn Length of burn-in for the Bayesian model
+#' @param Nthin Thinning rate for the Bayesian model
+#' @param N0 Initial population size
+#' @param survAnalysisMethod Survival analysis method either "KaplanMeier" or
+#'   "exp"
+#' TODO: check the above, exp used on line 185 but Exponential on earlier lines
+#' also need to explain what these mean and what the else option is?
+#' @inheritParams popGrowthJohnson
+#' @param assessmentYrs
+#' TODO: what is assessmentYrs? defaults to 1 but not sure what it is.
+#' @param inpFixed an optional list of inputs with names matching the above, if
+#'   an argument is included in this list it will override the named argument
+#'
+#' @return a list with elements:
+#'   * result: an `rjags` model object see [R2jags::jags()].
+#'   * survInput: a data.frame with the input data used in the model.
+#'
+#' @export
+#'
+#' @examples
 runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      disturbance="simDisturbance.csv",betaPriors="default",
                      startYear = 1998, endYear = 2023, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 2,N0=1000,
@@ -357,6 +394,33 @@ expandSurvivalRecord<-function(crow){
   return(mnths)
 }
 
+#' Get model priors from national models
+#'
+#' @param modifiers a list of modifiers to use to change the priors. See
+#'   Details.
+#' @param expectMods the default modifiers. If one of the modifiers is not
+#'   supplied then this value is used
+#' @inheritParams caribouMetrics::getCoefs
+#' @param returnValues logical. Default is TRUE. If FALSE returns strings for
+#'   some values showing the initial values and the modifier ie "0.9 * 1.05"
+#'
+#' @return a list with values:
+#' * l.R.Prior1: Recruitment intercept,
+#' * l.R.Prior2: Recruitment intercept standard error times modifier,
+#' * beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,
+#' * beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard error times modifier,
+#' * beta.Rec.fire.Prior1: Recruitment fire excluding anthropogenic disturbance slope,
+#' * beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance standard error,
+#' * sig.R.Prior1: Interannual coefficient of variation for recruitment,
+#' * sig.R.Prior2: uncertainty about interannual variation in recruitment,
+#' * l.Saf.Prior1: Adult female survival intercept,
+#' * l.Saf.Prior2: Adult female survival intercept standard error times modifier,
+#' * beta.Saf.Prior1: Adult female survival anthropogenic disturbance slope,
+#' * beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard error times modifier,
+#' * sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,
+#' * sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival
+#'
+#'
 getPriors<-function(modifiers=NULL,
                     expectMods = list(survivalModelNumber="M1",
                                       recruitmentModelNumber="M4",
@@ -1225,6 +1289,38 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
   x2
 }
 
+#' Simulate survival data
+#'
+#' Simulate caribou survival data using a simulated true population trajectory
+#' following the national model and a disturbance scenario, which is used to
+#' simulate realistic observations from that population based on a collaring
+#' program with the given parameters.
+#'
+#' @param cs a list of parameters used to simulate anthropogenic disturbance
+#'   overtime:
+#'   * iA: Initial anthropogenic disturbance percentage,
+#'   * iF: Initial fire disturbance percentage,
+#'   * P: Number of years of observations
+#'   * J: Number of years of projections,
+#'   * aS: Change in anthropogenic disturbance per year in the observation period,
+#'   * aSf: Change in anthropogenic disturbance per year in the projection period,
+#'   * iYr: Start year
+#' @param printPlot
+#' @param cowCounts
+#' @param freqStartsByYear
+#' @param collarNumYears
+#' @param collarOffTime
+#' @param collarOnTime
+#' @param distScen
+#' @param popGrowthTable
+#' @param survivalModelNumber
+#' @param recruitmentModelNumber
+#' @param writeFiles
+#'
+#' @return
+#' @export
+#'
+#' @examples
 simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
                                freqStartsByYear="freqStartsByYear.csv",
                                collarNumYears=4,collarOffTime=5,
@@ -1242,7 +1338,6 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
   }
 
   #Simulate covariate table
-  #TO DO: in UI, option for user to load a table rather than simulate one
   if(is.null(distScen)){
     covariates<-simCovariates(cs$iA,cs$iF,cs$P+cs$J,cs$aS,cs$aSf,cs$P+1)
     simDisturbance=covariates
