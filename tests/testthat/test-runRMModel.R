@@ -3,4 +3,10 @@ library(dplyr)
 library(R2jags)
 rjags::load.module("glm")
 
-mod <- runRMModel()
+test_that("Runs with defaults",{
+  # reduce some defaults to make fast
+  # note that the default csv does not match the default startYear
+  expect_warning(runRMModel(Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2))
+  runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
+})
+
