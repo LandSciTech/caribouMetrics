@@ -1,0 +1,35 @@
+Package: BayesianCaribouDemographicProjection
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person("Sarah", "Endicott", , "sarah.endicott@canada.ca", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9644-5343"))
+Description: What the package does (one paragraph).
+License: TBD
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports: 
+    caribouMetrics,
+    coda,
+    data.table,
+    dplyr,
+    gdata,
+    ggplot2,
+    here,
+    knitr,
+    R2jags,
+    mcmcplots,
+    plyr,
+    R.utils,
+    rmarkdown,
+    RODBC,
+    shiny,
+    shinydashboard,
+    shinyFiles,
+    shinyjs,
+    survival,
+    tidyr,
+    waiter
+Suggests: 
+    testthat

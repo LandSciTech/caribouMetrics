@@ -20,13 +20,15 @@
 #' @param N0 Initial population size
 #' @param survAnalysisMethod Survival analysis method either "KaplanMeier" or
 #'   "exp"
-#' TODO: check the above, exp used on line 185 but Exponential on earlier lines
+#' TODO: check the above, exp used on line 185 but "Exponential" on earlier lines
 #' also need to explain what these mean and what the else option is?
 #' @inheritParams popGrowthJohnson
 #' @param assessmentYrs
 #' TODO: what is assessmentYrs? defaults to 1 but not sure what it is.
 #' @param inpFixed an optional list of inputs with names matching the above, if
 #'   an argument is included in this list it will override the named argument
+#' @param saveJAGStxt file path. Directory where the JAGS model txt files will
+#'   be saved. Default is `tempdir()`
 #'
 #' @return a list with elements:
 #'   * result: an `rjags` model object see [R2jags::jags()].
@@ -39,7 +41,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
                      disturbance="simDisturbance.csv",betaPriors="default",
                      startYear = 1998, endYear = 2023, Nchains = 4,Niter = 15000,Nburn = 10000,Nthin = 2,N0=1000,
                      survAnalysisMethod = "KaplanMeier",adjustR=F,assessmentYrs=1,
-                     inpFixed=list()){
+                     inpFixed=list(), saveJAGStxt = tempdir()){
   #survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
   #betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"
   #Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inpFixed=list()
@@ -169,8 +171,10 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
       data.sub=data[data$Year %in% yearsOne,]
       nriskYears=data.frame(with(data.sub, table(Year)))
 
+      binLikFile <- file.path(saveJAGStxt, "binLik.txt")
+
       #Specify model
-      sink("binLik.txt")
+      sink(binLikFile)
       cat("
 	   model{
 	     for(i in 1:N){
@@ -189,7 +193,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
 
       # run model in JAGS
       out1=R2jags::jags(data=data1, inits=inits, parameters.to.save=params,
-                model.file="binLik.txt",n.chains=2, n.iter=5000,
+                model.file=binLikFile,n.chains=2, n.iter=5000,
                 n.burnin=1000, n.thin=1)
       # create standard deviation variable from survData$tau above
       survData$tau <- 1/(survData$se^2)
@@ -284,11 +288,14 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
     survString = paste(c("for(t in 1:12){","surv[surv_id[k],t+1] ~ dbern(S.annual.KM[survYr[surv_id[k]]]^(1/12)*surv[surv_id[k],t])","}"),collapse="\n")
   }
 
-  jagsTemplate<-paste(readLines("JAGS_template.txt"),collapse="\n")
+  jagsTemplate<-paste(readLines(system.file("templates/JAGS_template.txt",
+                                            package = "BayesianCaribouDemographicProjection")),collapse="\n")
   jagsTemplate=gsub("_survString_",survString,jagsTemplate,fixed=T)
   jagsTemplate=gsub("_adjustString_",adjustString,jagsTemplate,fixed=T)
 
-  sink("JAGS_run.txt")
+  jagsFile <- file.path(saveJAGStxt, "JAGS_run.txt")
+
+  sink(jagsFile)
   cat(jagsTemplate,fill = TRUE)
   sink()
 
@@ -319,7 +326,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
 
   sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
   rr.surv <- try(R2jags::jags(data=sp.data, parameters.to.save=sp.params,
-                  model.file="JAGS_run.txt",
+                  model.file=jagsFile,
                   n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin))
 
   return(list(result=rr.surv,survInput=survDatat))
@@ -337,7 +344,8 @@ getKMSurvivalEstimates<-function(dSubset){
     tt = subset(oo$exData,select=c(Year,survival))
     tt$time=12;tt$type="truth"
     check=rbind(check,tt)
-    base=ggplot(check,aes(x=time,y=survival,colour=type,shape=type))+geom_point()+facet_wrap(~Year)
+    base <- ggplot2::ggplot(check,ggplot2::aes(x=time,y=survival,colour=type,shape=type))+
+      ggplot2::geom_point()+ggplot2::facet_wrap(~Year)
     print(base)
   }
 
@@ -444,7 +452,7 @@ getPriors<-function(modifiers=NULL,
                                       lre=3,
                                       sre = 0.46*0.5,
                                       srv = 0.22),
-                    popGrowthTable = popGrowthTableJohnsonECCC,
+                    popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                     modVer = "Johnson",returnValues=T){
   #modifiers=cs
 
@@ -569,7 +577,7 @@ simCovariates<-function(initAnthro,initFire,numYears,anthroSlope,anthroSlopeFutu
 }
 
 simTrajectory<-function(numYears,covariates,survivalModelNumber = "M1",recruitmentModelNumber = "M4",
-                        popGrowthTable = popGrowthTableJohnsonECCC,
+                        popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                         recSlopeMultiplier=1,sefSlopeMultiplier=1,recQuantile=0.5,sefQuantile=0.5,
                         stepLength=1,N0=1000,adjustR=T){
   # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
@@ -623,7 +631,7 @@ simTrajectory<-function(numYears,covariates,survivalModelNumber = "M1",recruitme
     fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
     names(fds) <- c("Replicate", "Anthro","fire_excl_anthro", "survival", "recruitment", "N", "lambda","n_recruits","n_cows")
     fds$n_recruits=fds$recruitment*fds$n_cows #apparent number of calves per cow, not actual, from unadjusted R_t
-    fds <- pivot_longer(fds, !Replicate, names_to = "MetricTypeID", values_to = "Amount")
+    fds <- tidyr::pivot_longer(fds, !Replicate, names_to = "MetricTypeID", values_to = "Amount")
     fds$Timestep <- t * stepLength
     if (t == 1) {
       popMetrics <- fds
@@ -640,7 +648,7 @@ simTrajectory<-function(numYears,covariates,survivalModelNumber = "M1",recruitme
 
 simCalfCowRatios<-function(cowCounts,minYr,exData){
   ageRatioOut=subset(cowCounts,(Year>=minYr),select=c(Year,Class,Count))#assume info from only one herd
-  ageRatioOut=pivot_wider(ageRatioOut,id_cols=c("Year"),names_from="Class",values_from="Count")
+  ageRatioOut=tidyr::pivot_wider(ageRatioOut,id_cols=c("Year"),names_from="Class",values_from="Count")
   ageRatioOut=merge(ageRatioOut,subset(exData,select=c("Year","n_recruits","n_cows")))
   # rbinom needs n_recruits to be <= n_cows and n_cows not 0
   n_recs <- pmin(ageRatioOut$n_cows, ageRatioOut$n_recruits)
@@ -648,7 +656,7 @@ simCalfCowRatios<-function(cowCounts,minYr,exData){
                            rbinom(n=nrow(ageRatioOut),size=ageRatioOut$cow,
                                   prob=n_recs/ageRatioOut$n_cows))
   ageRatioOut=subset(ageRatioOut,select=c(Year,calf,cow))
-  ageRatioOut=pivot_longer(ageRatioOut,cols=c(calf,cow),names_to="Class",values_to="Count")
+  ageRatioOut=tidyr::pivot_longer(ageRatioOut,cols=c(calf,cow),names_to="Class",values_to="Count")
   return(ageRatioOut)
 }
 
@@ -794,7 +802,7 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear,doSummary=T){
     wideRes <- data.frame(rrSurvMod$BUGSoutput$sims.list[[param]])
     names(wideRes)<-yr
 
-    results<-wideRes %>%pivot_longer(cols=names(wideRes),names_to="Year",values_to="Value")
+    results<-wideRes %>%tidyr::pivot_longer(cols=names(wideRes),names_to="Year",values_to="Value")
     results$Year=as.numeric(results$Year)
     results$Parameter = subset(paramNames, paramNames$parameter == param,
                                select = name, drop = T)
@@ -921,7 +929,7 @@ getOutputTables<-function(result,startYear,endYear,survInput,oo,simBig,getKSDist
   trueSurv$type="true"
 
   obsRec=subset(oo$ageRatioOut,select=c(Year,Count,Class))
-  obsRec <-pivot_wider(obsRec,id_cols=c("Year"),names_from="Class",values_from="Count")
+  obsRec <-tidyr::pivot_wider(obsRec,id_cols=c("Year"),names_from="Class",values_from="Count")
   obsRec$Mean=obsRec$calf/obsRec$cow
   obsRec$parameter="Recruitment"
   obsRec$type="observed"
@@ -1110,7 +1118,7 @@ getSimsNational<-function(reps=1000,N0=1000,Anthro=seq(0,100,by=1),fire_excl_ant
                              fire_excl_anthro = fire_excl_anthro)
   covTableObs$Total_dist = covTableObs$Anthro + covTableObs$fire_excl_anthro
 
-  if(is.null(popGrowthTable)){popGrowthTable=popGrowthTableJohnsonECCC}
+  if(is.null(popGrowthTable)){popGrowthTable=caribouMetrics::popGrowthTableJohnsonECCC}
   if(is.null(quants)){
     popGrowthPars <- demographicCoefficients(reps,populationGrowthTable = popGrowthTable)
     rateSamplesAll <- demographicRates(covTable = covTableObs,popGrowthPars = popGrowthPars,returnSample=T,useQuantiles = F)
@@ -1132,7 +1140,7 @@ getSimsNational<-function(reps=1000,N0=1000,Anthro=seq(0,100,by=1),fire_excl_ant
 
   parsSelect = subset(pars,select=c(Anthro,S_t,R_t,lambda,N))
   names(parsSelect)=c("Anthro","Adult female survival","Recruitment","Population growth rate","Female population size")
-  parsSelect = parsSelect %>% pivot_longer(!Anthro,names_to="Parameter",values_to="Value")
+  parsSelect = parsSelect %>% tidyr::pivot_longer(!Anthro,names_to="Parameter",values_to="Value")
 
   simBig=list(summary=simBig,samples=parsSelect)
 
@@ -1180,9 +1188,9 @@ testPopGrowthTable <- function(df) {
                Type = "National")
 
   # expected values
-  diff_res <- setdiff(unique(df$responseVariable), unique(popGrowthTableJohnsonECCC$responseVariable))
+  diff_res <- setdiff(unique(df$responseVariable), unique(caribouMetrics::popGrowthTableJohnsonECCC$responseVariable))
 
-  if(!setequal(unique(popGrowthTableJohnsonECCC$responseVariable), unique(df$responseVariable))){
+  if(!setequal(unique(caribouMetrics::popGrowthTableJohnsonECCC$responseVariable), unique(df$responseVariable))){
     stop("The model coefficient file loaded contains unrecognized responseVariable: ",
          paste(diff_res, collapse = ", "), call. = FALSE)
   }
@@ -1256,25 +1264,25 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
       for(i in facetVars)
         df$grp=paste0(df$grp,df[[i]])
     }
-    x1 <- ggplot(df, aes(x = Year, y=Mean,fill=Type,col=Type))
+    x1 <- ggplot2::ggplot(df, ggplot2::aes(x = Year, y=Mean, fill=Type, col=Type))
 
   }else{
-    x1 <- ggplot(df, aes(x = Year, y=Mean))
+    x1 <- ggplot2::ggplot(df, ggplot2::aes(x = Year, y=Mean))
 
   }
-  x2 <- x1 + theme_classic() + xlab("Year")+ ylab(parameter) +
-    geom_line(aes(x = Year, y=Mean), size = 1.75) +
-    theme(axis.text.y = element_text(size=labFontSize),
-          axis.text.x = element_text(angle = 90, vjust = 0.5, size=labFontSize),
-          axis.title.x=element_text(size=titleFontSize,face="bold"),
-          axis.title.y=element_text(size=titleFontSize,face="bold")) +
-    scale_x_continuous(breaks=seq(min(df$Year, na.rm = TRUE),
+  x2 <- x1 + ggplot2::theme_classic() + ggplot2::xlab("Year")+ ggplot2::ylab(parameter) +
+    ggplot2::geom_line(ggplot2::aes(x = Year, y=Mean), size = 1.75) +
+    ggplot2::theme(axis.text.y = ggplot2::element_text(size=labFontSize),
+          axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, size=labFontSize),
+          axis.title.x=ggplot2::element_text(size=titleFontSize,face="bold"),
+          axis.title.y=ggplot2::element_text(size=titleFontSize,face="bold")) +
+    ggplot2::scale_x_continuous(breaks=seq(min(df$Year, na.rm = TRUE),
                                   max(df$Year, na.rm = TRUE),breakInterval))
 
   if(!KS){
-    x2 <- x2+    geom_ribbon(aes(ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`),
+    x2 <- x2+    ggplot2::geom_ribbon(ggplot2::aes(ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`),
                              show.legend = FALSE, alpha = 0.25,colour=NA)+
-      scale_y_continuous(limits=c(ifelse(any(df$`Lower 95% CRI` < lowBound), NA, lowBound),
+      ggplot2::scale_y_continuous(limits=c(ifelse(any(df$`Lower 95% CRI` < lowBound), NA, lowBound),
                                   ifelse(any(df$`Upper 95% CRI` > 1), NA, highBound)))
   }
 
@@ -1282,20 +1290,20 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
     obs$Type="local"
     obs$obsError=F
     obs$obsError[obs$type=="observed"]=T
-    x2<-x2+geom_point(data=obs,aes(x=Year,y=Mean, shape=obsError),col="black",show.legend=T)+
-      scale_shape_manual(values = c(16,2))
+    x2<-x2+ggplot2::geom_point(data=obs,ggplot2::aes(x=Year,y=Mean, shape=obsError),col="black",show.legend=T)+
+      ggplot2::scale_shape_manual(values = c(16,2))
   }
 
   if(!is.null(facetVars)){
     if(length(facetVars)==2){
-      x2<-x2+facet_grid(as.formula(paste(facetVars[1],"~", facetVars[2])),labeller = "label_both")
+      x2<-x2+ggplot2::facet_grid(as.formula(paste(facetVars[1],"~", facetVars[2])),labeller = "label_both")
     }else{
-      x2<-x2+facet_wrap(as.formula(paste0("~", facetVars[1])),labeller = "label_both")
+      x2<-x2+ggplot2::facet_wrap(as.formula(paste0("~", facetVars[1])),labeller = "label_both")
 
     }
   }
   if(!KS & (parameter=="Population growth rate")){
-    x2<-x2+geom_hline(yintercept=1, color = "black")
+    x2<-x2+ggplot2::geom_hline(yintercept=1, color = "black")
   }
 
   x2
@@ -1349,11 +1357,11 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
                                freqStartsByYear="freqStartsByYear.csv",
                                collarNumYears=4,collarOffTime=5,
                                collarOnTime=8,distScen = NULL,
-                               populationGrowthTable = popGrowthTableJohnsonECCC,
+                               populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                                survivalModelNumber = "M1",
                                recruitmentModelNumber = "M4",writeFiles=F){
   #printPlot=T;cowCounts=ePars$cowCounts;freqStartsByYear=ePars$freqStartsByYear;collarNumYears=ePars$collarNumYears;collarOffTime=ePars$collarOffTime;collarOnTime=ePars$collarOnTime
-  #distScen = NULL;popGrowthTable = popGrowthTableJohnsonECCC;survivalModelNumber = "M1";recruitmentModelNumber = "M4"
+  #distScen = NULL;popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC;survivalModelNumber = "M1";recruitmentModelNumber = "M4"
   if(is.character(cowCounts)){
     cowCounts =read.csv2(paste0("tabs/",cowCounts))
   }
@@ -1389,16 +1397,16 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
   simDisturbance$time=NULL
   if(printPlot){
     #TO DO: save info on true population dynamics, add to projection plots for comparison
-    base1 <- ggplot(data = popMetrics, aes(x = Timestep, y = Amount, colour = Replicate,
+    base1 <- ggplot2::ggplot(data = popMetrics, ggplot2::aes(x = Timestep, y = Amount, colour = Replicate,
                                            group = Replicate)) +
-      geom_line() +
-      facet_wrap(~MetricTypeID, scales = "free") +
-      xlab("Time") +
-      theme(legend.position = "none")
+      ggplot2::geom_line() +
+      ggplot2::facet_wrap(~MetricTypeID, scales = "free") +
+      ggplot2::xlab("Time") +
+      ggplot2::theme(legend.position = "none")
     print(base1)
   }
 
-  popMetricsWide<-pivot_wider(popMetrics,id_cols=c(Replicate,Timestep),names_from=MetricTypeID,values_from=Amount)
+  popMetricsWide<-tidyr::pivot_wider(popMetrics,id_cols=c(Replicate,Timestep),names_from=MetricTypeID,values_from=Amount)
   popMetricsWide$Year = cs$iYr+popMetricsWide$Timestep-1
 
   exData<-subset(popMetricsWide,(Timestep<=cs$P))

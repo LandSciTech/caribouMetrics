@@ -1,8 +1,0 @@
-
-	   model{
-	     for(i in 1:N){
-	      lived[i] ~ dbin(s[i], atrisk[i])
-	      s[i] ~ dbeta(1,1) # vague prior
-	      }
-	     }
-	      
