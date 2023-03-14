@@ -176,7 +176,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
       }
 
       # run model in JAGS
-      out1=jags(data=data1, inits=inits, parameters.to.save=params,
+      out1=R2jags::jags(data=data1, inits=inits, parameters.to.save=params,
                 model.file="binLik.txt",n.chains=2, n.iter=5000,
                 n.burnin=1000, n.thin=1)
       # create standard deviation variable from survData$tau above
@@ -306,7 +306,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
   }
 
   sp.params <- c("S.annual.KM" ,"R", "Rfemale", "pop.growth","fpop.size","var.R.real","l.R","l.Saf","beta.Rec.anthro","beta.Rec.fire","beta.Saf")
-  rr.surv <- try(jags(data=sp.data, parameters.to.save=sp.params,
+  rr.surv <- try(R2jags::jags(data=sp.data, parameters.to.save=sp.params,
                   model.file="JAGS_run.txt",
                   n.chains=inp$Nchains, n.iter=inp$Niter, n.burnin=inp$Nburn, n.thin=inp$Nthin))
 
@@ -315,7 +315,7 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
 
 getKMSurvivalEstimates<-function(dSubset){
 
-  sModel = survfit(Surv(enter, exit, event)~as.factor(Year), conf.type = "log-log",data=dSubset)
+  sModel = survival::survfit(survival::Surv(enter, exit, event)~as.factor(Year), conf.type = "log-log",data=dSubset)
   reg.out<-summary(sModel)
   if(0){
     check= data.frame(strata=reg.out$strata,survival= reg.out$surv,time=reg.out$time)
