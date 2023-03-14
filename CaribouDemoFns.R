@@ -1303,10 +1303,10 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
 
 #' Simulate survival data
 #'
-#' Simulate caribou survival data using a simulated true population trajectory
-#' following the national model and a disturbance scenario, which is used to
-#' simulate realistic observations from that population based on a collaring
-#' program with the given parameters.
+#' Simulate caribou survival data. First a true population trajectory is
+#' simulated following the national model and a disturbance scenario. Then
+#' realistic observations are simulated from this true population based on a
+#' collaring program with the given parameters.
 #'
 #' @param cs a list of parameters used to simulate anthropogenic disturbance
 #'   overtime:
@@ -1317,19 +1317,31 @@ plotRes <- function(allRes, parameter,obs=NULL,lowBound=0,highBound=1,simRange=N
 #'   * aS: Change in anthropogenic disturbance per year in the observation period,
 #'   * aSf: Change in anthropogenic disturbance per year in the projection period,
 #'   * iYr: Start year
-#' @param printPlot
-#' @param cowCounts
-#' @param freqStartsByYear
-#' @param collarNumYears
-#' @param collarOffTime
-#' @param collarOnTime
-#' @param distScen
-#' @param popGrowthTable
-#' @param survivalModelNumber
-#' @param recruitmentModelNumber
-#' @param writeFiles
+#'   If `distScen` is provided this is ignored.
+#' @param printPlot logical. print a plot of the true population trajectory?
+#' @param cowCounts data.frame. Number of cows counted in aerial surveys each
+#'   year. Must have 3 columns "Year", "Count", and "Class" where class is "cow"
+#'   in all rows
+#' @param freqStartsByYear data.frame. Number of collars deployed in each year.
+#'   Must have 2 columns "Year" and "numStarts"
+#' @param collarNumYears integer. Number of years until collar falls off
+#' @param collarOffTime integer. Month that collars fall off. A number from 1
+#'   (January) to 12 (December)
+#' @param collarOnTime integer. Month that collars are deployed. A number from 1
+#'   (January) to 12 (December)
+#' @param distScen data.frame. Disturbance scenario. Must have columns "Year",
+#'   "Anthro", and "fire_excl_anthro" containing the year, % of the landscape
+#'   covered by anthropogenic disturbance buffered by 500 m, and the % covered
+#'   by fire that does not overlap anthropogenic disturbance. See
+#'   [disturbanceMetrics()]. If NULL the disturbance scenario is simulated based
+#'   on `cs`
+#' @inheritParams demographicCoefficients TODO: remove writeFiles option? I
+#'   think yes. If not need to ask for location
+#' @param writeFiles should simSurvObs and ageRatioOut results be saved to csv
+#'   files in the tabs folder
 #'
-#' @return
+#' @return a list with elements:
+#'   list(minYr=minYr,maxYr=maxYr,simDisturbance=simDisturbance,simSurvObs=simSurvObs,ageRatioOut=ageRatioOut,exData=popMetricsWide,cs=cs)
 #' @export
 #'
 #' @examples
@@ -1337,7 +1349,7 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
                                freqStartsByYear="freqStartsByYear.csv",
                                collarNumYears=4,collarOffTime=5,
                                collarOnTime=8,distScen = NULL,
-                               popGrowthTable = popGrowthTableJohnsonECCC,
+                               populationGrowthTable = popGrowthTableJohnsonECCC,
                                survivalModelNumber = "M1",
                                recruitmentModelNumber = "M4",writeFiles=F){
   #printPlot=T;cowCounts=ePars$cowCounts;freqStartsByYear=ePars$freqStartsByYear;collarNumYears=ePars$collarNumYears;collarOffTime=ePars$collarOffTime;collarOnTime=ePars$collarOnTime
@@ -1368,7 +1380,7 @@ simulateObservations<-function(cs,printPlot=F,cowCounts="cowCounts.csv",
 
   #simulate true population trajectory
   popMetrics<-simTrajectory(numYears=cs$P+cs$J,covariates=simDisturbance,
-                            popGrowthTable = popGrowthTable,
+                            popGrowthTable = populationGrowthTable,
                             survivalModelNumber = survivalModelNumber,
                             recruitmentModelNumber = recruitmentModelNumber,
                             recSlopeMultiplier=cs$rS,
