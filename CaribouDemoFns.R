@@ -75,6 +75,18 @@ runRMModel<-function(survData="simSurvData.csv",ageRatio.herd="simAgeRatio.csv",
     disturbance=inp$disturbance
   }
   disturbance=merge(data.frame(Year=seq(inp$startYear,inp$endYear)),disturbance,all.x=T)
+  if(anyNA(disturbance)){
+    warning("Years ",
+            filter(disturbance,
+                   if_any(c(Anthro, fire_excl_anthro, Total_dist), is.na)) %>%
+              pull(Year) %>% paste0(collapse = ", "),
+            " have missing disturbance data. ",
+            "Anthro will be filled from the next year with data and fire will be fill with 0s")
+
+    disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup") %>%
+      mutate(fire_excl_anthro = tidyr::replace_na(fire_excl_anthro, 0),
+             Total_dist = fire_excl_anthro + Anthro)
+  }
 
   if(is.character(inp$survData)){
     survData <- read.csv(paste0("tabs/",inp$survData), header=T)
