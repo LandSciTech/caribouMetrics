@@ -3,16 +3,18 @@
 #'
 #'
 #' @param survData either a path to a csv file or a dataframe containing the
-#'   columns "id", "Year", "event", "enter" and "exit"
-#'   TODO: what is the coding for event enter and exit?
+#'   columns "Year", "event", "enter" and "exit". Enter and exit are the
+#'   beginning and end of the time interval and should be a number from 1 to 12
+#'   (December) or 0. Event is 0 or 1 where 0 means the animal lived and 1 died.
+#'   See [survival::Surv()] for more details.
 #' @param ageRatio.herd either a path to a csv file or a dataframe containing
 #'   the columns "Year","Count", and "Class". Where class can be either calf or
 #'   cow
 #' @param disturbance either a path to a csv file or a dataframe containing the
-#'   columns "Anthro","fire_excl_anthro","Total_dist","time", and "Year"
+#'   columns "Anthro","fire_excl_anthro", and "Year"
 #' @param betaPriors a list of model priors see [getPriors()]
-#' @param startYear,endYear year defining the beginning and end of the survivalt
-#'   data to use.
+#' @param startYear,endYear year defining the beginning of the observation
+#'   period and the end of the projection period.
 #' @param Nchains Number of chains for the Bayesian model
 #' @param Niter Number of iterations for the Bayesian model
 #' @param Nburn Length of burn-in for the Bayesian model
@@ -69,25 +71,35 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
 
   # Run model
   if (is.character(inp$ageRatio.herd)) {
-    ageRatio.herd2 <- read.csv(paste0("tabs/", inp$ageRatio.herd), header = T)
-    ageRatio.herd2$X <- NULL
+    ageRatio.herd <- read.csv(inp$ageRatio.herd, header = T)
+    ageRatio.herd$X <- NULL
   } else {
-    ageRatio.herd2 <- ageRatio.herd
+    ageRatio.herd <- inp$ageRatio.herd
   }
   if (is.character(inp$disturbance)) {
-    disturbance <- read.csv(paste0("tabs/", inp$disturbance))
+    disturbance <- read.csv(inp$disturbance)
     disturbance$X <- NULL
   } else {
     disturbance <- inp$disturbance
   }
-  disturbance <- merge(data.frame(Year = seq(inp$startYear, inp$endYear)), disturbance, all.x = T)
+  if (is.character(inp$survData)) {
+    survData <- read.csv(inp$survData, header = T)
+    survData$X <- NULL
+  } else {
+    survData <- inp$survData
+  }
+
+  # if decide to error when Year ranges don't match could use testTable
+  testTable(disturbance, c("Year", "Anthro", "fire_excl_anthro"))
+  testTable(ageRatio.herd, c("Year", "Count", "Class"))
+  testTable(survData, c("Year", "event", "enter", "exit"))
+
+  disturbance <- merge(data.frame(Year = seq(inp$startYear, inp$endYear)),
+                       disturbance, by = "Year", all.x = T)
   if (anyNA(disturbance)) {
     warning(
       "Years ",
-      filter(
-        disturbance,
-        if_any(c(Anthro, fire_excl_anthro, Total_dist), is.na)
-      ) %>%
+      filter(disturbance, if_any(c(Anthro, fire_excl_anthro), is.na)) %>%
         pull(Year) %>% paste0(collapse = ", "),
       " have missing disturbance data. ",
       "Anthro will be filled from the next year with data and fire will be fill with 0s"
@@ -98,16 +110,13 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
         fire_excl_anthro = tidyr::replace_na(fire_excl_anthro, 0),
         Total_dist = fire_excl_anthro + Anthro
       )
+    if(anyNA(disturbance)){
+      stop("None of the disturbance data is within the requested year range",
+           call. = FALSE)
+    }
   }
 
-  if (is.character(inp$survData)) {
-    survData <- read.csv(paste0("tabs/", inp$survData), header = T)
-    survData$X <- NULL
-  } else {
-    survData <- inp$survData
-  }
-  compData <- ageRatio.herd2
-
+  # TODO: Give a better name. survData is overwritten later so it is confusing
   data <- survData
 
   # check that year range is within data - model will run either way
@@ -119,6 +128,12 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
   }
 
   data <- subset(data, data$Year <= inp$endYear & data$Year >= inp$startYear)
+
+  if(nrow(data) == 0){
+    stop("None of the survival data is within the requested year range",
+         call. = FALSE)
+  }
+
   data$id <- factor(data$id)
 
   test1 <- length(c(inp$startYear:inp$endYear))
@@ -223,21 +238,23 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
   } else {
     if (inp$survAnalysisMethod == "exp") {
       # parametric exponential survival model
+      message("using parametric exponential survival model")
       survData <- dSubset
       survData$t.to.death <- survData$exit / 12
       survData$t.to.death[!survData$event] <- NA
       survData$t.cen <- survData$exit / 12
       survData$t.cen[survData$event] <- 0
     } else {
+      message("expanding survival record")
       dExpand <- apply(subset(dSubset, select = c(id, Year, event, enter, exit)), 1, expandSurvivalRecord)
       survData <- do.call(rbind, dExpand)
     }
   }
 
   # split data into calf and cow recruitment data
-  calf.cnt <- subset(compData, compData$Class == "calf")
+  calf.cnt <- subset(ageRatio.herd, ageRatio.herd$Class == "calf")
   calf.cnt$Class <- factor(calf.cnt$Class)
-  cow.cnt <- subset(compData, compData$Class == "cow")
+  cow.cnt <- subset(ageRatio.herd, ageRatio.herd$Class == "cow")
   cow.cnt$Class <- factor(cow.cnt$Class)
 
   # deal with missing years of data between year ranges
@@ -248,15 +265,15 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
 
   y2 <- merge(Years2, cow.cnt, by = "Year", all = TRUE)
   data4 <- y2[, 1:3]
-  data3$Name <- rep(unique(compData$Name), length(data3$Count))
-  data4$Name <- rep(unique(compData$Name), length(data4$Count))
+  data3$Name <- rep(unique(ageRatio.herd$Name), length(data3$Count))
+  data4$Name <- rep(unique(ageRatio.herd$Name), length(data4$Count))
 
   data3$Count <- ifelse(data3$Count > data4$Count, NA, data3$Count)
   data4$Count <- ifelse(data3$Count > data4$Count, NA, data4$Count)
 
   xCalf <- which(is.na(data3$Count) == T)
   xCow <- which(is.na(data4$Count) == T)
-  Years4 <- levels(as.factor(data$Year))[xCalf]
+  Years4 <- levels(as.factor(data4$Year))[xCalf]
 
   if (any(is.na(data3$Count) == T)) {
     warning("missing composition data; missing years:", " ", list(Years4))
