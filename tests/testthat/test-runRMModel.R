@@ -80,4 +80,14 @@ test_that("input tables are as expected",{
     "list")
 })
 
-test_that("survAnalysisMethod works")
+test_that("survAnalysisMethod works", {
+  expect_message(runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+                            Nthin = 2),
+                 "using Kaplan-Meier survival model")
+  expect_message(runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+                            Nthin = 2, survAnalysisMethod = "Exponential"),
+                 "using parametric exponential survival model")
+  expect_message(runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+                            Nthin = 2, survAnalysisMethod = "other"),
+                 "expanding survival record")
+})

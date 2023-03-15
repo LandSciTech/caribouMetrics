@@ -21,9 +21,8 @@
 #' @param Nthin Thinning rate for the Bayesian model
 #' @param N0 Initial population size
 #' @param survAnalysisMethod Survival analysis method either "KaplanMeier" or
-#'   "exp"
-#' TODO: check the above, exp used on line 185 but "Exponential" on earlier lines
-#' also need to explain what these mean and what the else option is?
+#'   "Exponential".
+#'   TODO: What do these mean and what is the else option
 #' @inheritParams popGrowthJohnson
 #' @param assessmentYrs
 #' TODO: what is assessmentYrs? defaults to 1 but not sure what it is.
@@ -192,6 +191,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
     }
   }
   if (inp$survAnalysisMethod == "KaplanMeier") {
+    message("using Kaplan-Meier survival model")
     if (any(survData$surv == 1)) {
       # which years does survival equal 1
       survOne <- which(unlist(lapply(split(dSubset, dSubset$Year), function(x) sum(x$event))) == 0)
@@ -236,7 +236,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
     nSurv <- length(surv_id)
     survData$Var1 <- as.character(survData$Var1)
   } else {
-    if (inp$survAnalysisMethod == "exp") {
+    if (inp$survAnalysisMethod == "Exponential") {
       # parametric exponential survival model
       message("using parametric exponential survival model")
       survData <- dSubset
@@ -361,7 +361,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
       nSurvs = length(which(is.na(survDatat$surv) == FALSE)), surv_id = which(is.na(survDatat$surv) == FALSE)
     ))
   } else {
-    if (inp$survAnalysisMethod == "exp") {
+    if (inp$survAnalysisMethod == "Exponential") {
       sp.data <- c(sp.data, list(
         t.to.death = survDatat$t.to.death, t.cen = survDatat$t.cen, survYr = survDatat$Year - inp$startYear,
         nSurvs = length(which(is.na(survDatat[, 1]) == FALSE)), surv_id = which(is.na(survDatat$Year) == FALSE)
