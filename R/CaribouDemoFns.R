@@ -1,370 +1,3 @@
-#' Run recruitment and mortality model
-#'
-#'
-#'
-#' @param survData either a path to a csv file or a dataframe containing the
-#'   columns "id", "Year", "event", "enter" and "exit"
-#'   TODO: what is the coding for event enter and exit?
-#' @param ageRatio.herd either a path to a csv file or a dataframe containing
-#'   the columns "Year","Count", and "Class". Where class can be either calf or
-#'   cow
-#' @param disturbance either a path to a csv file or a dataframe containing the
-#'   columns "Anthro","fire_excl_anthro","Total_dist","time", and "Year"
-#' @param betaPriors a list of model priors see [getPriors()]
-#' @param startYear,endYear year defining the beginning and end of the survivalt
-#'   data to use.
-#' @param Nchains Number of chains for the Bayesian model
-#' @param Niter Number of iterations for the Bayesian model
-#' @param Nburn Length of burn-in for the Bayesian model
-#' @param Nthin Thinning rate for the Bayesian model
-#' @param N0 Initial population size
-#' @param survAnalysisMethod Survival analysis method either "KaplanMeier" or
-#'   "exp"
-#' TODO: check the above, exp used on line 185 but "Exponential" on earlier lines
-#' also need to explain what these mean and what the else option is?
-#' @inheritParams popGrowthJohnson
-#' @param assessmentYrs
-#' TODO: what is assessmentYrs? defaults to 1 but not sure what it is.
-#' @param inpFixed an optional list of inputs with names matching the above, if
-#'   an argument is included in this list it will override the named argument
-#' @param saveJAGStxt file path. Directory where the JAGS model txt files will
-#'   be saved. Default is `tempdir()`
-#'
-#' @return a list with elements:
-#'   * result: an `rjags` model object see [R2jags::jags()].
-#'   * survInput: a data.frame with the input data used in the model.
-#'
-#' @export
-#'
-#' @examples
-runRMModel <- function(survData = "simSurvData.csv", ageRatio.herd = "simAgeRatio.csv",
-                       disturbance = "simDisturbance.csv", betaPriors = "default",
-                       startYear = 1998, endYear = 2023, Nchains = 4, Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
-                       survAnalysisMethod = "KaplanMeier", adjustR = F, assessmentYrs = 1,
-                       inpFixed = list(), saveJAGStxt = tempdir()) {
-  # survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
-  # betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"
-  # Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inpFixed=list()
-
-  # combine defaults in function with inputs from input list
-  inputArgs <- c(
-    "survData", "ageRatio.herd", "disturbance", "startYear", "endYear",
-    "Nchains", "Niter", "Nburn", "Nthin", "N0", "survAnalysisMethod", "adjustR", "assessmentYrs"
-  )
-  addArgs <- inputArgs # setdiff(inputArgs,names(inp))
-  inp <- list()
-  for (a in addArgs) {
-    if (is.element(a, names(inpFixed))) {
-      inp[[a]] <- inpFixed[[a]]
-    } else {
-      inp[[a]] <- eval(parse(text = a))
-    }
-  }
-
-  if (betaPriors[[1]] == "default") {
-    betaPriors <- getPriors()
-  }
-
-  # Run model
-  if (is.character(inp$ageRatio.herd)) {
-    ageRatio.herd2 <- read.csv(paste0("tabs/", inp$ageRatio.herd), header = T)
-    ageRatio.herd2$X <- NULL
-  } else {
-    ageRatio.herd2 <- ageRatio.herd
-  }
-  if (is.character(inp$disturbance)) {
-    disturbance <- read.csv(paste0("tabs/", inp$disturbance))
-    disturbance$X <- NULL
-  } else {
-    disturbance <- inp$disturbance
-  }
-  disturbance <- merge(data.frame(Year = seq(inp$startYear, inp$endYear)), disturbance, all.x = T)
-  if (anyNA(disturbance)) {
-    warning(
-      "Years ",
-      filter(
-        disturbance,
-        if_any(c(Anthro, fire_excl_anthro, Total_dist), is.na)
-      ) %>%
-        pull(Year) %>% paste0(collapse = ", "),
-      " have missing disturbance data. ",
-      "Anthro will be filled from the next year with data and fire will be fill with 0s"
-    )
-
-    disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup") %>%
-      mutate(
-        fire_excl_anthro = tidyr::replace_na(fire_excl_anthro, 0),
-        Total_dist = fire_excl_anthro + Anthro
-      )
-  }
-
-  if (is.character(inp$survData)) {
-    survData <- read.csv(paste0("tabs/", inp$survData), header = T)
-    survData$X <- NULL
-  } else {
-    survData <- inp$survData
-  }
-  compData <- ageRatio.herd2
-
-  data <- survData
-
-  # check that year range is within data - model will run either way
-  data$Year <- as.numeric(data$Year)
-
-  # check that year range is within data - model will run either way
-  if (inp$endYear > max(data$Year) | inp$startYear < min(data$Year)) {
-    warning(c("requested year range does not match survival data", c(" year range:", "  ", min(data$Year), " - ", max(data$Year))))
-  }
-
-  data <- subset(data, data$Year <= inp$endYear & data$Year >= inp$startYear)
-  data$id <- factor(data$id)
-
-  test1 <- length(c(inp$startYear:inp$endYear))
-  test2 <- length(unique(data$Year))
-
-  # check that year range is within data - model will run either way
-  if (test1 > test2) {
-    warning(c("missing years of survival data.", "Start model at beginning of consecutive years.", " ", c("Years of survival data:", "  ", list(sort(unique(data$Year))))))
-  }
-
-  data <- data[order(data$exit), ]
-  list_data1 <- split(data, data$Year)
-  nYears <- length(levels(as.factor(data$Year)))
-  n.ind <- numeric(nYears)
-
-  for (i in 1:nYears) {
-    n.ind[i] <- length(list_data1[[i]]$exit)
-  }
-
-  # check that year range is within data - model will run either way
-  if (any(n.ind < 20)) {
-    warning(c("warning, low sample size of adult females in at least one year"))
-  }
-
-  # get KM estimates to use for adult female survival
-
-  # Note: biased results from years with <12 months of observations.
-  # And problems with adding animals part way through the year, so omitting those
-  dSubset <- subset(data, enter == 0) # ;dSubset=subset(dSubset,!((exit<12)&(event==0)))
-  if (nrow(dSubset) == 0) {
-    stop("Collars not present at the start of a year are omitted from survival analysis in that year. Please ensure there is at least one year with a collar in the first month.")
-  }
-
-  if (nrow(dSubset) == 1) {
-    warning("Switching to exponential survival analysis method because there is only one collared animal.")
-    inp$survAnalysisMethod <- "Exponential"
-  }
-  if (sum(dSubset$event, na.rm = T) == 0) {
-    warning("Switching to exponential survival analysis method because there are no recorded deaths.")
-    inp$survAnalysisMethod <- "Exponential"
-  }
-
-  if (inp$survAnalysisMethod == "KaplanMeier") {
-    survData <- getKMSurvivalEstimates(dSubset)
-    # omitting years with less than 12 months of observations of collared animals
-    sumDat <- dSubset %>%
-      group_by(Year) %>%
-      summarise(minEnter = min(enter), maxExit = max(exit))
-    includeYrs <- subset(sumDat, minEnter == 0 & maxExit == 12)
-    survData$Year <- as.numeric(gsub("as.factor(Year)=", "", as.character(survData$Var1), fixed = T))
-    survData <- merge(survData, includeYrs)
-    if (nrow(survData) == 0) {
-      warning("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
-      warning("Switching to exponential survival analysis method because there are no years with 12 months of collar data.")
-      inp$survAnalysisMethod <- "Exponential"
-    }
-  }
-  if (inp$survAnalysisMethod == "KaplanMeier") {
-    if (any(survData$surv == 1)) {
-      # which years does survival equal 1
-      survOne <- which(unlist(lapply(split(dSubset, dSubset$Year), function(x) sum(x$event))) == 0)
-      yearsOne <- as.numeric(names(survOne))
-      data.sub <- data[data$Year %in% yearsOne, ]
-      nriskYears <- data.frame(with(data.sub, table(Year)))
-
-      binLikFile <- file.path(saveJAGStxt, "binLik.txt")
-
-      # Specify model
-      sink(binLikFile)
-      cat("
-	   model{
-	     for(i in 1:N){
-	      lived[i] ~ dbin(s[i], atrisk[i])
-	      s[i] ~ dbeta(1,1) # vague prior
-	      }
-	     }
-	      ", fill = TRUE)
-      sink()
-
-      data1 <- list(N = nrow(nriskYears), lived = nriskYears$Freq, atrisk = nriskYears$Freq)
-      params <- c("s")
-      inits <- function() {
-        list(s = runif(nrow(nriskYears), 0.80, 0.99))
-      }
-
-      # run model in JAGS
-      out1 <- R2jags::jags(
-        data = data1, inits = inits, parameters.to.save = params,
-        model.file = binLikFile, n.chains = 2, n.iter = 5000,
-        n.burnin = 1000, n.thin = 1
-      )
-      # create standard deviation variable from survData$tau above
-      survData$tau <- 1 / (survData$se^2)
-      survData$tau[survOne] <- 1 / (out1$BUGSoutput$sd$s^2)
-    } else {
-      survData$tau <- 1 / (survData$se^2)
-    }
-
-    surv_id <- which(survData$surv != 1)
-    nSurv <- length(surv_id)
-    survData$Var1 <- as.character(survData$Var1)
-  } else {
-    if (inp$survAnalysisMethod == "exp") {
-      # parametric exponential survival model
-      survData <- dSubset
-      survData$t.to.death <- survData$exit / 12
-      survData$t.to.death[!survData$event] <- NA
-      survData$t.cen <- survData$exit / 12
-      survData$t.cen[survData$event] <- 0
-    } else {
-      dExpand <- apply(subset(dSubset, select = c(id, Year, event, enter, exit)), 1, expandSurvivalRecord)
-      survData <- do.call(rbind, dExpand)
-    }
-  }
-
-  # split data into calf and cow recruitment data
-  calf.cnt <- subset(compData, compData$Class == "calf")
-  calf.cnt$Class <- factor(calf.cnt$Class)
-  cow.cnt <- subset(compData, compData$Class == "cow")
-  cow.cnt$Class <- factor(cow.cnt$Class)
-
-  # deal with missing years of data between year ranges
-  Years2 <- data.frame(sort(unique(data$Year)))
-  names(Years2) <- "Year"
-  y1 <- merge(Years2, calf.cnt, by = "Year", all = TRUE)
-  data3 <- y1[, 1:3]
-
-  y2 <- merge(Years2, cow.cnt, by = "Year", all = TRUE)
-  data4 <- y2[, 1:3]
-  data3$Name <- rep(unique(compData$Name), length(data3$Count))
-  data4$Name <- rep(unique(compData$Name), length(data4$Count))
-
-  data3$Count <- ifelse(data3$Count > data4$Count, NA, data3$Count)
-  data4$Count <- ifelse(data3$Count > data4$Count, NA, data4$Count)
-
-  xCalf <- which(is.na(data3$Count) == T)
-  xCow <- which(is.na(data4$Count) == T)
-  Years4 <- levels(as.factor(data$Year))[xCalf]
-
-  if (any(is.na(data3$Count) == T)) {
-    warning("missing composition data; missing years:", " ", list(Years4))
-  }
-
-  t.pred <- max(inp$endYear - max(data3$Year), 0)
-
-  # also add missing history
-  missingSurvYrs <- setdiff(seq(inp$startYear, inp$endYear), survData$Year)
-  if (length(missingSurvYrs) > 0) {
-    survAddBit <- survData[1, ]
-    if (inp$survAnalysisMethod == "KaplanMeier") {
-      survAddBit[1, ] <- NA
-      survAddBit$Var1 <- NULL
-      survAddBit$Year <- NULL
-      survAddBit <- merge(survAddBit, data.frame(Var1 = missingSurvYrs, Year = missingSurvYrs))
-    } else {
-      survAddBit[1:ncol(survAddBit)] <- NA
-      survAddBit$Year <- NULL
-      survAddBit <- merge(survAddBit, data.frame(Year = missingSurvYrs))
-    }
-    survDatat <- rbind(survData, survAddBit)
-    survDatat <- survDatat[order(survDatat$Year), ]
-  } else {
-    survDatat <- survData
-  }
-
-  missingRecYrs <- setdiff(seq(inp$startYear, inp$endYear), data3$Year)
-
-  if (length(missingRecYrs) > 0) {
-    dat3Bit <- data3[1, ]
-    dat3Bit[, 2:3] <- NA
-    dat3Bit$Year <- NULL
-    dat3Bit <- merge(dat3Bit, data.frame(Year = missingRecYrs))
-    data3t <- rbind(data3, dat3Bit)
-    data3t <- data3t[order(data3t$Year), ]
-    data4t <- rbind(data4, dat3Bit)
-    data4t <- data4t[order(data4t$Year), ]
-  } else {
-    data3t <- data3
-    data4t <- data4
-  }
-
-  if (inp$adjustR) {
-    adjustString <- "Rfemale[k] <- (RT[k]/2)/(1+(RT[k]/2))"
-  } else {
-    adjustString <- "Rfemale[k] <- RT[k]/2"
-  }
-
-  if (inp$survAnalysisMethod == "KaplanMeier") {
-    survString <- "Surv[surv_id[k]] ~ dnorm(S.annual.KM[surv_id[k]], tau[surv_id[k]])"
-  } else {
-    survString <- paste(c("for(t in 1:12){", "surv[surv_id[k],t+1] ~ dbern(S.annual.KM[survYr[surv_id[k]]]^(1/12)*surv[surv_id[k],t])", "}"), collapse = "\n")
-  }
-
-  jagsTemplate <- paste(readLines(system.file("templates/JAGS_template.txt",
-    package = "BayesianCaribouDemographicProjection"
-  )), collapse = "\n")
-  jagsTemplate <- gsub("_survString_", survString, jagsTemplate, fixed = T)
-  jagsTemplate <- gsub("_adjustString_", adjustString, jagsTemplate, fixed = T)
-
-  jagsFile <- file.path(saveJAGStxt, "JAGS_run.txt")
-
-  sink(jagsFile)
-  cat(jagsTemplate, fill = TRUE)
-  sink()
-
-  sp.data <- list(
-    anthro = disturbance$Anthro, fire = disturbance$fire_excl_anthro,
-    beta.Saf.Prior1 = betaPriors$beta.Saf.Prior1, beta.Saf.Prior2 = betaPriors$beta.Saf.Prior2,
-    beta.Rec.anthro.Prior1 = betaPriors$beta.Rec.anthro.Prior1, beta.Rec.anthro.Prior2 = betaPriors$beta.Rec.anthro.Prior2,
-    beta.Rec.fire.Prior1 = betaPriors$beta.Rec.fire.Prior1, beta.Rec.fire.Prior2 = betaPriors$beta.Rec.fire.Prior2,
-    l.Saf.Prior1 = betaPriors$l.Saf.Prior1, l.Saf.Prior2 = betaPriors$l.Saf.Prior2,
-    l.R.Prior1 = betaPriors$l.R.Prior1, l.R.Prior2 = betaPriors$l.R.Prior2,
-    sig.Saf.Prior1 = betaPriors$sig.Saf.Prior1, sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
-    sig.R.Prior1 = betaPriors$sig.R.Prior1, sig.R.Prior2 = betaPriors$sig.R.Prior2,
-    Ninit = inp$N0, assessmentYrs = inp$assessmentYrs,
-    nCounts = length(which(is.na(data3t$Count) == FALSE)), count_id = which(is.na(data3t$Count) == FALSE),
-    nYears = inp$endYear - inp$startYear + 1, calves = round(data3t$Count), CountAntlerless = round(data4t$Count)
-  )
-
-  if (inp$survAnalysisMethod == "KaplanMeier") {
-    sp.data <- c(sp.data, list(
-      Surv = survDatat$surv, tau = survDatat$tau,
-      nSurvs = length(which(is.na(survDatat$surv) == FALSE)), surv_id = which(is.na(survDatat$surv) == FALSE)
-    ))
-  } else {
-    if (inp$survAnalysisMethod == "exp") {
-      sp.data <- c(sp.data, list(
-        t.to.death = survDatat$t.to.death, t.cen = survDatat$t.cen, survYr = survDatat$Year - inp$startYear,
-        nSurvs = length(which(is.na(survDatat[, 1]) == FALSE)), surv_id = which(is.na(survDatat$Year) == FALSE)
-      ))
-    } else {
-      sp.data <- c(sp.data, list(
-        surv = survDatat[, 1:13], survYr = survDatat$Year - inp$startYear + 1,
-        nSurvs = length(which(is.na(survDatat[, 1]) == FALSE)), surv_id = which(is.na(survDatat$Year) == FALSE)
-      ))
-    }
-  }
-
-  sp.params <- c("S.annual.KM", "R", "Rfemale", "pop.growth", "fpop.size", "var.R.real", "l.R", "l.Saf", "beta.Rec.anthro", "beta.Rec.fire", "beta.Saf")
-  rr.surv <- try(R2jags::jags(
-    data = sp.data, parameters.to.save = sp.params,
-    model.file = jagsFile,
-    n.chains = inp$Nchains, n.iter = inp$Niter, n.burnin = inp$Nburn, n.thin = inp$Nthin
-  ))
-
-  return(list(result = rr.surv, survInput = survDatat))
-}
-
 getKMSurvivalEstimates <- function(dSubset) {
   sModel <- survival::survfit(survival::Surv(enter, exit, event) ~ as.factor(Year), conf.type = "log-log", data = dSubset)
   reg.out <- summary(sModel)
@@ -1304,6 +937,56 @@ testPopGrowthTable <- function(df) {
   return(df)
 }
 
+
+#' Test table
+#'
+#' Test has expected column names and optionally that certain columns have
+#' expected values
+#'
+#' @param df data.frame. The table to test
+#' @param req_col_names character. Required column names. A vector of column
+#'   names that must be present in `df`. Other columns are allowed
+#' @param req_vals list.  A named list where the name is a column name and the
+#'   value is a vector of required values. Values in the list and not in the
+#'   column will throw an error
+#' @param acc_vals list. A named list where the name is a column name and the
+#'   value is vector of accepted values. Any values not in the list will throw
+#'   an error.
+#'
+#' @return throws an error if failed otherwise invisible NULL
+#'
+#' @noRd
+testTable <- function(df, req_col_names, req_vals = NULL, acc_vals = NULL){
+  df_name <- deparse(substitute(df))
+  missing_cols <- setdiff(req_col_names, colnames(df))
+  if(length(missing_cols) > 0){
+    stop(df_name, " is missing expected columns: ",
+         paste0(missing_cols, collapse = ", "))
+  }
+
+  if(!is.null(req_vals)){
+    Map(function(x, nm){
+      missing_vals <- setdiff(x, df[[nm]])
+      if(length(missing_vals) > 0){
+        stop(df_name, "$", nm, " is missing expected values: ",
+             paste0(missing_vals, collapse = ", "), call. = FALSE)
+      }
+    }, req_vals, names(req_vals))
+  }
+
+  if(!is.null(acc_vals)){
+    Map(function(x, nm){
+      wrong_vals <- setdiff(df[[nm]], x)
+      if(length(wrong_vals) > 0){
+        stop(df_name, "$", nm, " contains unexpected values: ",
+             paste0(wrong_vals, collapse = ", "), ".\n Expected values: ",
+             paste0(x, collapse = ", "), call. = FALSE)
+      }
+    }, acc_vals, names(acc_vals))
+  }
+  return(invisible(NULL))
+}
+
 # Plots -------------------------------------------------------------------
 
 plotRes <- function(allRes, parameter, obs = NULL, lowBound = 0, highBound = 1, simRange = NULL, facetVars = NULL) {
@@ -1400,164 +1083,6 @@ plotRes <- function(allRes, parameter, obs = NULL, lowBound = 0, highBound = 1, 
   x2
 }
 
-#' Simulate survival data
-#'
-#' Simulate caribou survival data. First a true population trajectory is
-#' simulated following the national model and a disturbance scenario. Then
-#' realistic observations are simulated from this true population based on a
-#' collaring program with the given parameters.
-#'
-#' @param cs a list of parameters used to simulate anthropogenic disturbance
-#'   overtime:
-#'   * iA: Initial anthropogenic disturbance percentage,
-#'   * iF: Initial fire disturbance percentage,
-#'   * P: Number of years of observations
-#'   * J: Number of years of projections,
-#'   * aS: Change in anthropogenic disturbance per year in the observation period,
-#'   * aSf: Change in anthropogenic disturbance per year in the projection period,
-#'   * iYr: Start year
-#'   If `distScen` is provided this is ignored.
-#' @param printPlot logical. print a plot of the true population trajectory?
-#' @param cowCounts data.frame. Number of cows counted in aerial surveys each
-#'   year. Must have 3 columns "Year", "Count", and "Class" where class is "cow"
-#'   in all rows
-#' @param freqStartsByYear data.frame. Number of collars deployed in each year.
-#'   Must have 2 columns "Year" and "numStarts"
-#' @param collarNumYears integer. Number of years until collar falls off
-#' @param collarOffTime integer. Month that collars fall off. A number from 1
-#'   (January) to 12 (December)
-#' @param collarOnTime integer. Month that collars are deployed. A number from 1
-#'   (January) to 12 (December)
-#' @param distScen data.frame. Disturbance scenario. Must have columns "Year",
-#'   "Anthro", and "fire_excl_anthro" containing the year, % of the landscape
-#'   covered by anthropogenic disturbance buffered by 500 m, and the % covered
-#'   by fire that does not overlap anthropogenic disturbance. See
-#'   [disturbanceMetrics()]. If NULL the disturbance scenario is simulated based
-#'   on `cs`
-#' @inheritParams demographicCoefficients TODO: remove writeFiles option? I
-#'   think yes. If not need to ask for location
-#' @param writeFiles should simSurvObs and ageRatioOut results be saved to csv
-#'   files in the tabs folder
-#'
-#' @return a list with elements:
-#'   list(minYr=minYr,maxYr=maxYr,simDisturbance=simDisturbance,simSurvObs=simSurvObs,ageRatioOut=ageRatioOut,exData=popMetricsWide,cs=cs)
-#' @export
-#'
-#' @examples
-simulateObservations <- function(cs, printPlot = F, cowCounts = "cowCounts.csv",
-                                 freqStartsByYear = "freqStartsByYear.csv",
-                                 collarNumYears = 4, collarOffTime = 5,
-                                 collarOnTime = 8, distScen = NULL,
-                                 populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
-                                 survivalModelNumber = "M1",
-                                 recruitmentModelNumber = "M4", writeFiles = F) {
-  # printPlot=T;cowCounts=ePars$cowCounts;freqStartsByYear=ePars$freqStartsByYear;collarNumYears=ePars$collarNumYears;collarOffTime=ePars$collarOffTime;collarOnTime=ePars$collarOnTime
-  # distScen = NULL;popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC;survivalModelNumber = "M1";recruitmentModelNumber = "M4"
-  if (is.character(cowCounts)) {
-    cowCounts <- read.csv2(paste0("tabs/", cowCounts))
-  }
-  if (is.character(freqStartsByYear)) {
-    freqStartsByYear <- read.csv2(paste0("tabs/", freqStartsByYear))
-  }
-
-  # Simulate covariate table
-  if (is.null(distScen)) {
-    covariates <- simCovariates(cs$iA, cs$iF, cs$P + cs$J, cs$aS, cs$aSf, cs$P + 1)
-    simDisturbance <- covariates
-    simDisturbance$Year <- cs$iYr + simDisturbance$time - 1
-
-    if (writeFiles) {
-      write.csv(simDisturbance, "tabs/simDisturbance.csv") # note default file for UI is always the last scenario run
-      write.csv(simDisturbance, paste0("tabs/simDisturbance", cs$label, ".csv"))
-    }
-  } else {
-    simDisturbance <- distScen
-    simDisturbance$time <- simDisturbance$Year - cs$iYr + 1
-    simDisturbance <- filter(simDisturbance, Year <= (cs$iYr + cs$P - 1 + cs$J) &
-      Year >= cs$iYr)
-  }
-
-  # simulate true population trajectory
-  popMetrics <- simTrajectory(
-    numYears = cs$P + cs$J, covariates = simDisturbance,
-    popGrowthTable = populationGrowthTable,
-    survivalModelNumber = survivalModelNumber,
-    recruitmentModelNumber = recruitmentModelNumber,
-    recSlopeMultiplier = cs$rS,
-    sefSlopeMultiplier = cs$sS, recQuantile = cs$rQ, sefQuantile = cs$sQ, N0 = cs$N0, adjustR = cs$adjustR
-  )
-
-  simDisturbance$time <- NULL
-  if (printPlot) {
-    # TO DO: save info on true population dynamics, add to projection plots for comparison
-    base1 <- ggplot2::ggplot(data = popMetrics, ggplot2::aes(
-      x = Timestep, y = Amount, colour = Replicate,
-      group = Replicate
-    )) +
-      ggplot2::geom_line() +
-      ggplot2::facet_wrap(~MetricTypeID, scales = "free") +
-      ggplot2::xlab("Time") +
-      ggplot2::theme(legend.position = "none")
-    print(base1)
-  }
-
-  popMetricsWide <- tidyr::pivot_wider(popMetrics, id_cols = c(Replicate, Timestep), names_from = MetricTypeID, values_from = Amount)
-  popMetricsWide$Year <- cs$iYr + popMetricsWide$Timestep - 1
-
-  exData <- subset(popMetricsWide, (Timestep <= cs$P))
-
-  # Now apply observation process model to get simulated calf:cow and survival data.
-  # Use sample sizes in example input data e.g. Eaker
-
-  # reduce sim data tables to length of observations prior to max year
-  minYr <- cs$iYr
-  maxYr <- cs$iYr + cs$P + cs$J - 1
-
-  # simulate survival data from survival probability.
-  if (is.element("ri", names(cs))) {
-    freqStartsByYear <- subset(freqStartsByYear, is.element(Year, unique(exData$Year)))
-    renewYrs <- intersect(min(exData$Year) + seq(0, 100) * cs$ri, unique(exData$Year))
-    freqStartsByYear$numStarts[!is.element(freqStartsByYear$Year, renewYrs)] <- 0
-  } else {
-    renewYrs <- unique(freqStartsByYear$Year)
-  }
-
-  if (is.element("st", names(cs))) {
-    freqStartsByYear$numStarts[is.element(freqStartsByYear$Year, renewYrs)] <- cs$st
-    simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime, collarOnTime, topUp = T)
-  } else {
-    simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime, collarOnTime)
-  }
-  # if cmult is provided, set cows as a function of number of surviving cows at month 5
-  if (is.element("cmult", names(cs))) {
-    survsCalving <- subset(simSurvObs, exit >= 6)
-
-    if (nrow(survsCalving) > 0) {
-      cowCounts <- as.data.frame(table(survsCalving$Year))
-      names(cowCounts) <- c("Year", "Count")
-      cowCounts$Year <- as.numeric(as.character(cowCounts$Year))
-      cowCounts$Class <- "cow"
-      cowCounts$Count <- cs$cmult * cowCounts$Count
-    } else {
-      cowCounts$Count <- NA
-    }
-  }
-  # given observed total animals & proportion calfs/cows from simulation - get calf/cow ratio
-  ageRatioOut <- simCalfCowRatios(cowCounts, minYr, exData)
-  ageRatioOut$HerdCode <- "ALAP" # TO DO: remove option for more than one herd in input files, UI, and all associated code...
-  ageRatioOut <- subset(ageRatioOut, select = c(names(cowCounts)))
-  if (writeFiles) {
-    # TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
-    write.csv(ageRatioOut, "tabs/simAgeRatio.csv")
-    write.csv(ageRatioOut, paste0("tabs/simAgeRatio", cs$label, ".csv"))
-
-    # TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
-    write.csv(simSurvObs, "tabs/simSurvData.csv")
-    write.csv(simSurvObs, paste0("tabs/simSurvData", cs$label, ".csv"))
-    # TO DO: UI option to easily select among available scenarios.
-  }
-  return(list(minYr = minYr, maxYr = maxYr, simDisturbance = simDisturbance, simSurvObs = simSurvObs, ageRatioOut = ageRatioOut, exData = popMetricsWide, cs = cs))
-}
 
 
 runScnSet <- function(scns, ePars, simBig, survAnalysisMethod = "KaplanMeier", getKSDists = T, printProgress = F) {
