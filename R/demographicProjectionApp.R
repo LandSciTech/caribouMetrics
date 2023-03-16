@@ -532,7 +532,9 @@ $( document ).ready(function() {
         aS = input$aS, aSf = input$aSf, rS = input$rS,
         sS = input$sS, iA = input$iA, iF = input$iF,
         rQ = input$rQ, sQ = input$sQ, N0 = input$N0,
-        iYr = startYear, adjustR = input$adjustR, cmult = input$cmult, st = input$startsPerYear, ri = input$renewalInterval
+        iYr = startYear, adjustR = input$adjustR,
+        cmult = input$cmult, st = input$startsPerYear,
+        ri = input$renewalInterval
       )
 
 

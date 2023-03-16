@@ -13,6 +13,8 @@
 #'   * aS: Change in anthropogenic disturbance per year in the observation period,
 #'   * aSf: Change in anthropogenic disturbance per year in the projection period,
 #'   * iYr: First year in observation period
+#'   * label: optional. A label for files written out
+#'   * ri: optional. Number of years between collar deployments
 #' @param printPlot logical. print a plot of the true population trajectory?
 #' @param cowCounts data.frame. Number of cows counted in aerial surveys each
 #'   year. Must have 3 columns "Year", "Count", and "Class" where class is "cow"

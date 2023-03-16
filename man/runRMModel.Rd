@@ -56,9 +56,8 @@ period and the end of the projection period.}
 \item{N0}{Initial population size}
 
 \item{survAnalysisMethod}{Survival analysis method either "KaplanMeier" or
-"exp"
-TODO: check the above, exp used on line 185 but "Exponential" on earlier lines
-also need to explain what these mean and what the else option is?}
+"Exponential".
+TODO: What do these mean and what is the else option}
 
 \item{assessmentYrs}{TODO: what is assessmentYrs? defaults to 1 but not sure what it is.}
 
