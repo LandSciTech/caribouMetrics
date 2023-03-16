@@ -32,4 +32,5 @@ Imports:
     tidyr,
     waiter
 Suggests: 
+    shinytest2,
     testthat

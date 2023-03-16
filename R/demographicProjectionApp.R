@@ -7,7 +7,7 @@
 #' @examples
 #' @import caribouMetrics shiny dplyr shinydashboard
 #'
-demographicProjectionApp <- function() {
+demographicProjectionApp <- function(n = 1000) {
   rjags::load.module("glm")
 
   # TO DO: make recruitment adjustment (equation 2 of Eacker et al) an option. Note this requires adjusting all calls to popGrowthJohnson, as well as jags code.
@@ -16,8 +16,8 @@ demographicProjectionApp <- function() {
   # Get full set of sims for comparison
   # TO DO: need an option for force update of this cache - needed when something changes in caribouMetrics, which presumably won't happen often, but may happen sometimes.
   # Include this option with a note that it is something to try if one is getting a mismatch between local and national results given minimal monitoring data.
-  simBigAdjust <- getSimsNational(adjustR = T) # If called with default parameters, use saved object to speed things up.
-  simBigNoAdjust <- getSimsNational(adjustR = F) # If called with default parameters, use saved object to speed things up.
+  simBigAdjust <- getSimsNational(reps = n, adjustR = T) # If called with default parameters, use saved object to speed things up.
+  simBigNoAdjust <- getSimsNational(reps = n, adjustR = F) # If called with default parameters, use saved object to speed things up.
 
   # get default values to use in initializing parameters in ui
   # Disturbance scenario parameters
@@ -42,9 +42,7 @@ demographicProjectionApp <- function() {
   # st: target number of collars per year
   # ri: renewal interval
 
-  scn_defaults <- c(eval(formals(fillDefaults)$defList),
-    curYear = eval(formals(fillDefaults)$curYear)
-  )
+  scn_defaults <- eval(formals(fillDefaults))
 
   # Observation model parameters
   # cowsPerYear: number of cows in aerial surval for calf:cow ratio each year.
@@ -415,7 +413,7 @@ $( document ).ready(function() {
           {
             volumes <- c(
               wd = getwd(),
-              getVolumes()()
+              shinyFiles::getVolumes()()
             )
           },
           timeout = 200,
@@ -455,7 +453,7 @@ $( document ).ready(function() {
 
     scn_df <- eventReactive(input$scn_file, {
       # if(!is.integer(input$scn_file)){
-      df <- read.csv(parseFilePaths(volumes, input$scn_file)$datapath)
+      df <- read.csv(shinyFiles::parseFilePaths(volumes, input$scn_file)$datapath)
       # check colnames match expected for caribouMetrics
       missed_nms <- setdiff(c("Anthro", "fire_excl_anthro", "Year"), colnames(df))
       if (length(missed_nms) > 0) {
@@ -470,7 +468,7 @@ $( document ).ready(function() {
 
     popGrow_df <- eventReactive(input$popGrowth_file, {
       if (!is.integer(input$popGrowth_file)) {
-        df <- read.csv(parseFilePaths(volumes, input$popGrowth_file)$datapath,
+        df <- read.csv(shinyFiles::parseFilePaths(volumes, input$popGrowth_file)$datapath,
           blank.lines.skip = TRUE
         )
         # check table matches expected for caribouMetrics
@@ -613,7 +611,9 @@ $( document ).ready(function() {
     output$table <- renderDataTable({
       dataInput1()$rr.summary.all %>%
         # remove params as they are included in label
-        select(-c(P, J, aS, aSf, rS, sS, iA, iF, rQ, sQ, N0, iYr, st, ID)) %>%
+        select(-c(.data$P, .data$J, .data$aS, .data$aSf, .data$rS, .data$sS,
+                  .data$iA, .data$iF, .data$rQ, .data$sQ, .data$N0, .data$iYr,
+                  .data$st, .data$ID)) %>%
         mutate(across(where(is.numeric), ~ round(.x, 2)))
     })
 
@@ -727,16 +727,16 @@ $( document ).ready(function() {
       out <- dataInput()
       dist <- out$oo$simDisturbance
       dist %>%
-        tidyr::pivot_longer(c(Anthro, fire_excl_anthro),
+        tidyr::pivot_longer(c(.data$Anthro, .data$fire_excl_anthro),
           names_to = "dist_type",
           values_to = "dist"
         ) %>%
-        mutate(dist_type = ifelse(dist_type == "Anthro", "Anthropogenic",
+        mutate(dist_type = ifelse(.data$dist_type == "Anthro", "Anthropogenic",
           "Fire excluding anthropogenic"
         )) %>%
-        ggplot2::ggplot(ggplot2::aes(Year, dist)) +
+        ggplot2::ggplot(ggplot2::aes(.data$Year, .data$dist)) +
         ggplot2::geom_point() +
-        ggplot2::facet_wrap(~dist_type, nrow = 1) +
+        ggplot2::facet_wrap(~.data$dist_type, nrow = 1) +
         ggplot2::theme_classic() +
         ggplot2::xlab("Year") +
         ggplot2::ylab("% disturbance") +
@@ -767,7 +767,7 @@ $( document ).ready(function() {
     # Download output #######
     observeEvent(input$saveOutput, {
       if (!is.integer(input$saveOutput)) {
-        path <- parseSavePath(volumes(), input$saveOutput)$datapath
+        path <- shinyFiles::parseSavePath(volumes(), input$saveOutput)$datapath
         if (grepl("\\.csv$", path)) {
           write.csv(dataInput1()$rr.summary.all, path, row.names = FALSE)
         } else if (grepl("\\.rds$", path)) {

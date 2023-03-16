@@ -44,3 +44,5 @@ tabs/*_.csv
 simsNationalFALSE.Rds
 simsNationalTRUE.Rds
 JAGS_run.txt
+# {shinytest2}: Ignore new debug snapshots for `$expect_values()`
+*_.new.png
