@@ -29,3 +29,14 @@ test_that("error messages are as expected", {
                                                 Class = "cat")),
     "Class contains unexpected values")
 })
+
+test_that("multiple scenarios not allowed",{
+  scns <- fillDefaults(data.frame(iF = 1:2))
+  expect_error(simulateObservations(scns,
+                                 freqStartsByYear = data.frame(Year = 2015:2023,
+                                                               numStarts = 10),
+                                 cowCounts = data.frame(Year = 2015:2023,
+                                                        Count = 10,
+                                                        Class = "cow")),
+            "must have length 1")
+})

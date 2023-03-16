@@ -58,6 +58,10 @@ simulateObservations <- function(cs, printPlot = F, cowCounts,
     freqStartsByYear <- read.csv(freqStartsByYear)
   }
 
+  if(!all(vapply(cs, function(x){length(x)==1}, FUN.VALUE = logical(1)))){
+    stop("Each element of cs must have length 1", call. = FALSE)
+  }
+
   testTable(cowCounts, c("Year", "Count", "Class"),
             req_vals = list(Year = cs$iYr:(cs$iYr+cs$P-1)),
             acc_vals = list(Class = "cow"))

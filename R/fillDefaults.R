@@ -1,19 +1,24 @@
 fillDefaults <- function(scns = NULL,
-                         defList = list(
-                           iF = 0, iA = 0, aS = 0, aSf = 4,
-                           rS = 1, sS = 1,
-                           rQ = 0.5, sQ = 0.5, J = 20, P = 1, N0 = 1000,
-                           adjustR = F, ri = NULL, assessmentYrs = 1
-                         ), curYear = 2023) {
+                         iF = 0, iA = 0, aS = 0, aSf = 4,
+                         rS = 1, sS = 1,
+                         rQ = 0.5, sQ = 0.5, J = 20, P = 1, N0 = 1000,
+                         adjustR = F, assessmentYrs = 1,
+                         ri = NA, cmult = NA, cw = NA,
+                         curYear = 2023) {
+  defList <- c(as.list(environment()))
+  defList$scns <- NULL
   if (is.null(scns)) {
     scns <- as.data.frame(defList)
   } else {
-    fillSet <- setdiff(names(defList), names(scns))
-
-    for (i in fillSet) {
-      scns[[i]] <- defList[[i]]
-    }
+    # keep all values in scns and add any that are missing using values in
+    # defList
+    scns <- cbind(scns, defList[which(!names(defList) %in% names(scns))])
   }
+
+  # remove columns that are all NA because they should be missing and order like
+  # defList
+  scns <- select(scns, all_of(names(defList)), -where(~all(is.na(.x))))
+
   if (is.element("cmult", names(scns)) & is.element("cw", names(scns))) {
     stop("Specify number of cows per year in recruitment survey (cw) or multiplier of number of collared cows in recruitment survey (cmult), but not both.")
   }
@@ -24,7 +29,7 @@ fillDefaults <- function(scns = NULL,
   }
 
   if (!is.element("iYr", names(scns))) {
-    scns$iYr <- curYear - scns$P + 1
+    scns$iYr <- scns$curYear - scns$P + 1
   }
   return(scns)
 }
