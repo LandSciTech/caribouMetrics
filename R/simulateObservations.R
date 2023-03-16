@@ -5,16 +5,8 @@
 #' realistic observations are simulated from this true population based on a
 #' collaring program with the given parameters.
 #'
-#' @param cs a list of parameters:
-#'   * iA: Initial anthropogenic disturbance percentage,
-#'   * iF: Initial fire disturbance percentage,
-#'   * P: Number of years of observations
-#'   * J: Number of years of projections,
-#'   * aS: Change in anthropogenic disturbance per year in the observation period,
-#'   * aSf: Change in anthropogenic disturbance per year in the projection period,
-#'   * iYr: First year in observation period
-#'   * label: optional. A label for files written out
-#'   * ri: optional. Number of years between collar deployments
+#' @param cs list. Parameters for the simulations. See [fillDefaults()] for
+#'   details.
 #' @param printPlot logical. print a plot of the true population trajectory?
 #' @param cowCounts data.frame. Number of cows counted in aerial surveys each
 #'   year. Must have 3 columns "Year", "Count", and "Class" where class is "cow"
@@ -32,8 +24,8 @@
 #'   by fire that does not overlap anthropogenic disturbance. See
 #'   [disturbanceMetrics()]. If NULL the disturbance scenario is simulated based
 #'   on `cs`
-#' @inheritParams demographicCoefficients TODO: remove writeFiles option? I
-#'   think yes. If not need to ask for location
+#' @inheritParams demographicCoefficients
+#' TODO: remove writeFiles option? I think yes. If not need to ask for location
 #' @param writeFiles should simSurvObs and ageRatioOut results be saved to csv
 #'   files in the tabs folder
 #'
