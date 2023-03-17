@@ -20,16 +20,8 @@ simulateObservations(
 )
 }
 \arguments{
-\item{cs}{a list of parameters:
-\itemize{
-\item iA: Initial anthropogenic disturbance percentage,
-\item iF: Initial fire disturbance percentage,
-\item P: Number of years of observations
-\item J: Number of years of projections,
-\item aS: Change in anthropogenic disturbance per year in the observation period,
-\item aSf: Change in anthropogenic disturbance per year in the projection period,
-\item iYr: First year in observation period
-}}
+\item{cs}{list. Parameters for the simulations. See \code{\link[=fillDefaults]{fillDefaults()}} for
+details.}
 
 \item{printPlot}{logical. print a plot of the true population trajectory?}
 

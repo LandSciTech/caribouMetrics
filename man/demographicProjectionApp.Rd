@@ -4,7 +4,7 @@
 \alias{demographicProjectionApp}
 \title{Title}
 \usage{
-demographicProjectionApp()
+demographicProjectionApp(n = 1000)
 }
 \description{
 Title
