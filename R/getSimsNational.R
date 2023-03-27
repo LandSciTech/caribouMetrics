@@ -4,11 +4,11 @@
 # See explanation here: https://r-pkgs.org/data.html#sec-data-state
 cacheEnv <- new.env()
 
-getSimsNational <- function(reps = 1000, N0 = 1000, Anthro = seq(0, 100, by = 1),
+getSimsNational <- function(reps = 10, N0 = 1000, Anthro = seq(0, 100, by = 1),
                             fire_excl_anthro = 0, quants = NULL,
                             popGrowthTable = NULL, adjustR = F, forceUpdate = F) {
   # reps=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;quants=NULL;adjustR=F;forceUpdate=F
-  doSave <- FALSE
+  doSave <- TRUE
 
   # check that everything other than adjustR is default
   check <- as.list(match.call())

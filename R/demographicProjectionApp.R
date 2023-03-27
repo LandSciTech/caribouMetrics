@@ -13,11 +13,9 @@ demographicProjectionApp <- function(n = 1000) {
   # TO DO: make recruitment adjustment (equation 2 of Eacker et al) an option. Note this requires adjusting all calls to popGrowthJohnson, as well as jags code.
 
   ##########
-  # Get full set of sims for comparison
-  # TO DO: need an option for force update of this cache - needed when something changes in caribouMetrics, which presumably won't happen often, but may happen sometimes.
-  # Include this option with a note that it is something to try if one is getting a mismatch between local and national results given minimal monitoring data.
-  simBigAdjust <- getSimsNational(reps = n, adjustR = T) # If called with default parameters, use saved object to speed things up.
-  simBigNoAdjust <- getSimsNational(reps = n, adjustR = F) # If called with default parameters, use saved object to speed things up.
+  # Get full set of sims for comparison, the results are cached
+  getSimsNational(adjustR = T)
+  getSimsNational(adjustR = F)
 
   # get default values to use in initializing parameters in ui
   # Disturbance scenario parameters
@@ -53,7 +51,7 @@ demographicProjectionApp <- function(n = 1000) {
 
   # defaults set to be uninformative
   obs_defaults <- list(
-    cmult = 0, startsPerYear = 1, renewalInterval = 1, collarNumYears = 6,
+    cmult = 1, startsPerYear = 10, renewalInterval = 1, collarNumYears = 6,
     collarOnTime = 1, collarOffTime = 12
   )
 
@@ -511,14 +509,25 @@ server <- function(input, output, session) {
     selected = "Graphical summary"
   ))
 
+  # Prepare national model
+  simBig <- reactive({
+    waiter$show()
+    waiter$update(html = tagList(
+      waiter::spin_1(),
+      h4("Getting national model...")
+    ))
+    on.exit(waiter$hide())
+
+    if(input$redoSimsNational){
+      getSimsNational(adjustR = input$adjustR, forceUpdate = T,
+                      fire_excl_anthro = input$iF)
+    } else {
+      getSimsNational(adjustR = input$adjustR)
+    }
+  })
+
 
   dataInput <- eventReactive(input$Run.model, {
-
-    # TO DO: consider making this happen when update box is checked?
-    if (input$redoSimsNational) {
-      simBigAdjust <- getSimsNational(adjustR = T, forceUpdate = T, fire_excl_anthro = input$iF)
-      simBigNoAdjust <- getSimsNational(adjustR = F, forceUpdate = T, fire_excl_anthro = input$iF)
-    }
 
     waiter$show()
     waiter$update(html = tagList(
@@ -583,7 +592,7 @@ server <- function(input, output, session) {
 
     betaPriors <- getPriors(
       modifiers = isolate(reactiveValuesToList(input)),
-      popGrowthTable = popGrow_df2
+      populationGrowthTable = popGrow_df2
     )
 
     out <- runRMModel(
@@ -598,19 +607,14 @@ server <- function(input, output, session) {
     out
   })
 
-
   # TABLES #######
   # TODO: there is a simpler way to do this reactivity with req()
   dataInput1 <- eventReactive(input$Run.model, {
     out <- dataInput()
-    if (input$adjustR) {
-      simBig <- simBigAdjust
-    } else {
-      simBig <- simBigNoAdjust
-    }
+
     return(getOutputTables(
       result = out$result, startYear = out$startYear, endYear = out$endYear,
-      survInput = out$survInput, oo = out$oo, simBig = simBig, getKSDists = input$getKSDists
+      survInput = out$survInput, oo = out$oo, simBig = simBig(), getKSDists = input$getKSDists
     ))
   })
 

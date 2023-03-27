@@ -47,7 +47,7 @@
 fillDefaults <- function(scns = NULL,
                          iF = 0, iA = 0, aS = 0, aSf = 4,
                          rS = 1, sS = 1,
-                         rQ = 0.5, sQ = 0.5, J = 20, P = 1, N0 = 1000,
+                         rQ = 0.5, sQ = 0.5, J = 20, P = 10, N0 = 1000,
                          adjustR = FALSE, assessmentYrs = 1,
                          ri = NA, cmult = NA, cw = NA, st = NA, iYr = NA,
                          curYear = 2023) {
