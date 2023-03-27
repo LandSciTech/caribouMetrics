@@ -1,0 +1,157 @@
+{
+  "input": {
+    "N0": 1000,
+    "Nburn": 10000,
+    "Nchains": 4,
+    "Niter": 15000,
+    "Nthin": 2,
+    "Run.model": 1,
+    "aS": 0,
+    "aSf": 4,
+    "adjustR": false,
+    "bodyTabs": "Graphical summary",
+    "bre": 4,
+    "bse": 3,
+    "cmult": 0,
+    "collarNumYears": 6,
+    "collarOffTime": 12,
+    "collarOnTime": 1,
+    "curYear": 2023,
+    "getKSDists": false,
+    "graphPanel": "Recruitment",
+    "iA": 0,
+    "iF": 0,
+    "lre": 3,
+    "lse": 5,
+    "mcmc.output": 0,
+    "nYearObs": 1,
+    "nYearProj": 20,
+    "nat_model": "default",
+    "popGrowth_file": 0,
+    "rQ": 0.5,
+    "rS": 1,
+    "recruitmentModelNumber": "M4",
+    "redoSimsNational": false,
+    "renewalInterval": 1,
+    "sQ": 0.5,
+    "sS": 1,
+    "saveOutput": 0,
+    "scn_file": 0,
+    "scn_source": "sim",
+    "sideBar": null,
+    "sidebarCollapsed": false,
+    "sidebarItemExpanded": null,
+    "sre": 0.23,
+    "srv": 0.22,
+    "sse": 0.034784,
+    "ssv": 0.03,
+    "startsPerYear": 1,
+    "survAnalysisMethod": "KaplanMeier",
+    "survivalModelNumber": "M1",
+    "tablePanel": "Summary",
+    "waiter-content_waiter_hidden": true,
+    "waiter_shown": true
+  },
+  "output": {
+    "plot1": {
+      "message": "object 'simBigNoAdjust' not found",
+      "call": "eventReactiveValueFunc(...)",
+      "type": null
+    },
+    "plot2": {
+      "message": "object 'simBigNoAdjust' not found",
+      "call": "eventReactiveValueFunc(...)",
+      "type": null
+    },
+    "plot3": {
+      "message": "object 'simBigNoAdjust' not found",
+      "call": "eventReactiveValueFunc(...)",
+      "type": null
+    },
+    "plot4": {
+      "message": "object 'simBigNoAdjust' not found",
+      "call": "eventReactiveValueFunc(...)",
+      "type": null
+    },
+    "plot5": {
+      "message": "object 'simBigNoAdjust' not found",
+      "call": "eventReactiveValueFunc(...)",
+      "type": null
+    },
+    "plot6": {
+      "src": "[image data hash: f1d3fda92429f73e5efe93979ea6aff3]",
+      "width": 532,
+      "height": 400,
+      "alt": "Plot object",
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+              "panelvar1": "Anthropogenic"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2022,
+              "right": 2044,
+              "bottom": -5,
+              "top": 105
+            },
+            "mapping": {
+              "x": ".data$Year",
+              "y": ".data$dist",
+              "panelvar1": "dist_type"
+            },
+            "range": {
+              "left": 51.4944349315069,
+              "right": 286.267765410959,
+              "bottom": 340.724315068493,
+              "top": 27.2465753424658
+            }
+          },
+          {
+            "panel": 2,
+            "row": 1,
+            "col": 2,
+            "panel_vars": {
+              "panelvar1": "Fire excluding anthropogenic"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2022,
+              "right": 2044,
+              "bottom": -5,
+              "top": 105
+            },
+            "mapping": {
+              "x": ".data$Year",
+              "y": ".data$dist",
+              "panelvar1": "dist_type"
+            },
+            "range": {
+              "left": 291.747217465753,
+              "right": 526.520547945206,
+              "bottom": 340.724315068493,
+              "top": 27.2465753424658
+            }
+          }
+        ],
+        "dims": {
+          "width": 532,
+          "height": 400
+        }
+      }
+    }
+  },
+  "export": {
+
+  }
+}
