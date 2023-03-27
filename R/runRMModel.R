@@ -194,7 +194,8 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
     message("using Kaplan-Meier survival model")
     if (any(survData$surv == 1)) {
       # which years does survival equal 1
-      survOne <- which(unlist(lapply(split(dSubset, dSubset$Year), function(x) sum(x$event))) == 0)
+      survOne <- which(unlist(lapply(split(survData, survData$Year),
+                                     function(x) sum(x$event))) == 0)
       yearsOne <- as.numeric(names(survOne))
       data.sub <- data[data$Year %in% yearsOne, ]
       nriskYears <- data.frame(with(data.sub, table(Year)))

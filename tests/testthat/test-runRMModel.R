@@ -3,8 +3,8 @@ test_that("Runs with defaults", {
   # reduce some defaults to make fast
   # note that the default csv does not match the default startYear
   expect_is(runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
-                       Nthin = 2),
-            "list")
+                       Nthin = 2)$result,
+            "rjags")
 })
 
 test_that("input tables are as expected",{
@@ -23,17 +23,21 @@ test_that("input tables are as expected",{
   res1 <- expect_warning(runRMModel(Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2))
 
   expect_true(is.na(res1$survInput$surv[1]))
+  expect_is(res1$result, "rjags")
 
   # end year is outside range of data but still runs
   res2 <- expect_warning(runRMModel(startYear = 2009, endYear = 2050, Nchains = 1, Niter = 100, Nburn = 10,
              Nthin = 2))
 
   expect_true(is.na(last(res2$survInput$surv)))
+  expect_is(res2$result, "rjags")
 
   # ageRatio.herd is outside year range warning but still runs
-  expect_warning(runRMModel(ageRatio.herd = mutate(ageRatio.herdIn, Year = Year - 30),
+  res3 <- expect_warning(runRMModel(ageRatio.herd = mutate(ageRatio.herdIn, Year = Year - 30),
              startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
              Nthin = 2), "composition")
+
+  expect_is(res3$result, "rjags")
 
   # all survival data is outside year range
   expect_warning(
@@ -76,20 +80,60 @@ test_that("input tables are as expected",{
   expect_is(
     runRMModel(disturbance = select(disturbanceIn, -Total_dist),
                startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
-               Nthin = 2),
-    "list")
+               Nthin = 2)$result,
+    "rjags")
 })
 
 test_that("survAnalysisMethod works", {
-  expect_message(runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+  expect_message(out1 <- runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2),
                  "using Kaplan-Meier survival model")
+  expect_is(out1$result, "rjags")
+
   # TODO fix this error
-  expect_message(runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+  expect_message(out2 <- runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2, survAnalysisMethod = "Exponential"),
                  "using parametric exponential survival model")
 
-  expect_message(runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+  expect_is(out2$result, "rjags")
+
+  expect_message(out3 <- runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2, survAnalysisMethod = "other"),
                  "expanding survival record")
+
+  expect_is(out3$result, "rjags")
+})
+
+test_that("works when only 1 collared animal",{
+  cowCounts <- data.frame(
+    Year = 2012:2023,
+    Count = 1,
+    Class = "cow"
+  )
+
+  freqStartsByYear <- data.frame(
+    Year = 2012:2023,
+    numStarts = 1
+  )
+
+  scns <- fillDefaults(P = 12, st = 1)
+
+  oo <- simulateObservations(scns, cowCounts = cowCounts,
+                             freqStartsByYear = freqStartsByYear)
+
+  out <- runRMModel(
+    survData = oo$simSurvObs, ageRatio.herd = oo$ageRatioOut,
+    disturbance = oo$simDisturbance,
+    startYear = 2012, endYear = 2043,
+    Nchains = 1, Niter = 100, Nburn = 10,
+    Nthin = 2
+  )
+
+  expect_is(out$result, "rjags")
+
+  # FIXED: error seems to happen when there are few collars but enough data for KM.
+  # This was happening in some of the paper simulations too.
+  # Error in `$<-.data.frame`(`*tmp*`, tau, value = c(18.0902177774918, 17.7911133740675,  :
+  #                                                     replacement has 7 rows, data has 4
+
 })
