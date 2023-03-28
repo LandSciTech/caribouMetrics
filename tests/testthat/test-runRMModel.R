@@ -48,7 +48,24 @@ test_that("input tables are as expected",{
       "None of the survival data")
   )
 
-  # survival should go tocurYear but disturbance data should go to endYear
+  # survival should go to curYear but disturbance data should go to endYear
+  # no warnings when survData is shorter
+  expect_s3_class(
+    runRMModel(survData = survDataIn,
+               startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
+               Nthin = 2)$result,
+    "rjags"
+  )
+
+  # warning when survData is missing a year in the middle
+  expect_warning(
+    expect_s3_class(
+      runRMModel(survData = filter(survDataIn, Year != 2010),
+                 startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
+                 Nthin = 2)$result,
+      "rjags"
+    ),
+    "consecutive years")
 
   # all disturbance data is outside year range
   expect_warning(

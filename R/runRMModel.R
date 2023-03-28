@@ -122,7 +122,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
   data$Year <- as.numeric(data$Year)
 
   # check that year range is within data - model will run either way
-  if (inp$endYear > max(data$Year) | inp$startYear < min(data$Year)) {
+  if (inp$endYear < max(data$Year) | inp$startYear < min(data$Year)) {
     warning(c("requested year range does not match survival data", c(" year range:", "  ", min(data$Year), " - ", max(data$Year))))
   }
 
@@ -135,7 +135,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
 
   data$id <- factor(data$id)
 
-  test1 <- length(c(inp$startYear:inp$endYear))
+  test1 <- length(c(inp$startYear:max(data$Year)))
   test2 <- length(unique(data$Year))
 
   # check that year range is within data - model will run either way
@@ -152,7 +152,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
     n.ind[i] <- length(list_data1[[i]]$exit)
   }
 
-  # check that year range is within data - model will run either way
+  # check for low sample size - model will run either way
   if (any(n.ind < 20)) {
     warning(c("warning, low sample size of adult females in at least one year"))
   }
@@ -280,7 +280,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
 
   t.pred <- max(inp$endYear - max(data3$Year), 0)
 
-  # also add missing history
+  # also add missing history and NA for projection period
   missingSurvYrs <- setdiff(seq(inp$startYear, inp$endYear), survData$Year)
   if (length(missingSurvYrs) > 0) {
     survAddBit <- survData[1, ]
