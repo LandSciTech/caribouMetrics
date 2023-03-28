@@ -44,6 +44,11 @@
 #' @export
 #'
 #' @examples
+#' fillDefaults()
+#'
+#' # scns list takes precedence over argument values
+#' fillDefaults(scns = data.frame(iF = 10, iA = 20, P = 1), P = 5)
+#'
 fillDefaults <- function(scns = NULL,
                          iF = 0, iA = 0, aS = 0, aSf = 4,
                          rS = 1, sS = 1,
