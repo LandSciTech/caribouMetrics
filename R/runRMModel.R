@@ -38,12 +38,17 @@
 #' @export
 #'
 #' @examples
-runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package = "BayesianCaribouDemographicProjection"),
-                       ageRatio.herd = system.file("extdata/simAgeRatio.csv", package = "BayesianCaribouDemographicProjection"),
-                       disturbance = system.file("extdata/simDisturbance.csv", package = "BayesianCaribouDemographicProjection"),
+runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
+                                              package = "BayesianCaribouDemographicProjection"),
+                       ageRatio.herd = system.file("extdata/simAgeRatio.csv",
+                                                   package = "BayesianCaribouDemographicProjection"),
+                       disturbance = system.file("extdata/simDisturbance.csv",
+                                                 package = "BayesianCaribouDemographicProjection"),
                        betaPriors = "default",
-                       startYear = 1998, endYear = 2023, Nchains = 4, Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
-                       survAnalysisMethod = "KaplanMeier", adjustR = F, assessmentYrs = 1,
+                       startYear = 1998, endYear = 2023, Nchains = 4,
+                       Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
+                       survAnalysisMethod = "KaplanMeier", adjustR = F,
+                       assessmentYrs = 1,
                        inpFixed = list(), saveJAGStxt = tempdir()) {
   # survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
   # betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"
@@ -52,7 +57,8 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
   # combine defaults in function with inputs from input list
   inputArgs <- c(
     "survData", "ageRatio.herd", "disturbance", "startYear", "endYear",
-    "Nchains", "Niter", "Nburn", "Nthin", "N0", "survAnalysisMethod", "adjustR", "assessmentYrs"
+    "Nchains", "Niter", "Nburn", "Nthin", "N0", "survAnalysisMethod", "adjustR",
+    "assessmentYrs"
   )
   addArgs <- inputArgs # setdiff(inputArgs,names(inp))
   inp <- list()
@@ -123,7 +129,8 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
 
   # check that year range is within data - model will run either way
   if (inp$endYear < max(data$Year) | inp$startYear < min(data$Year)) {
-    warning(c("requested year range does not match survival data", c(" year range:", "  ", min(data$Year), " - ", max(data$Year))))
+    warning(c("requested year range does not match survival data",
+              c(" year range:", "  ", min(data$Year), " - ", max(data$Year))))
   }
 
   data <- subset(data, data$Year <= inp$endYear & data$Year >= inp$startYear)
@@ -140,7 +147,10 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
 
   # check that year range is within data - model will run either way
   if (test1 > test2) {
-    warning(c("missing years of survival data.", "Start model at beginning of consecutive years.", " ", c("Years of survival data:", "  ", list(sort(unique(data$Year))))))
+    warning(c("missing years of survival data.",
+              "Start model at beginning of consecutive years.",
+              " ", c("Years of survival data:", "  ",
+                     list(sort(unique(data$Year))))))
   }
 
   data <- data[order(data$exit), ]
@@ -163,15 +173,19 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
   # And problems with adding animals part way through the year, so omitting those
   dSubset <- subset(data, enter == 0) # ;dSubset=subset(dSubset,!((exit<12)&(event==0)))
   if (nrow(dSubset) == 0) {
-    stop("Collars not present at the start of a year are omitted from survival analysis in that year. Please ensure there is at least one year with a collar in the first month.")
+    stop("Collars not present at the start of a year are omitted from survival ",
+         "analysis in that year. Please ensure there is at least one year with",
+         " a collar in the first month.")
   }
 
   if (nrow(dSubset) == 1) {
-    warning("Switching to exponential survival analysis method because there is only one collared animal.")
+    warning("Switching to exponential survival analysis method because there is",
+            " only one collared animal.")
     inp$survAnalysisMethod <- "Exponential"
   }
   if (sum(dSubset$event, na.rm = T) == 0) {
-    warning("Switching to exponential survival analysis method because there are no recorded deaths.")
+    warning("Switching to exponential survival analysis method because there ",
+            "are no recorded deaths.")
     inp$survAnalysisMethod <- "Exponential"
   }
 
@@ -182,11 +196,15 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
       group_by(Year) %>%
       summarise(minEnter = min(enter), maxExit = max(exit))
     includeYrs <- subset(sumDat, minEnter == 0 & maxExit == 12)
-    survData$Year <- as.numeric(gsub("as.factor(Year)=", "", as.character(survData$Var1), fixed = T))
+    survData$Year <- as.numeric(gsub("as.factor(Year)=", "",
+                                     as.character(survData$Var1), fixed = T))
     survData <- merge(survData, includeYrs)
     if (nrow(survData) == 0) {
-      warning("Years with less than 12 months of collar data are omitted from survival analysis. Please ensure there is 12 months of collar data in at least one year.")
-      warning("Switching to exponential survival analysis method because there are no years with 12 months of collar data.")
+      warning("Years with less than 12 months of collar data are omitted from",
+              " survival analysis. Please ensure there is 12 months of collar ",
+              "data in at least one year.")
+      warning("Switching to exponential survival analysis method because there ",
+              "are no years with 12 months of collar data.")
       inp$survAnalysisMethod <- "Exponential"
     }
   }
@@ -214,7 +232,8 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
 	      ", fill = TRUE)
       sink()
 
-      data1 <- list(N = nrow(nriskYears), lived = nriskYears$Freq, atrisk = nriskYears$Freq)
+      data1 <- list(N = nrow(nriskYears), lived = nriskYears$Freq,
+                    atrisk = nriskYears$Freq)
       params <- c("s")
       inits <- function() {
         list(s = runif(nrow(nriskYears), 0.80, 0.99))
@@ -247,7 +266,8 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
       survData$t.cen[survData$event] <- 0
     } else {
       message("expanding survival record")
-      dExpand <- apply(subset(dSubset, select = c(id, Year, event, enter, exit)), 1, expandSurvivalRecord)
+      dExpand <- apply(subset(dSubset, select = c(id, Year, event, enter, exit)),
+                       1, expandSurvivalRecord)
       survData <- do.call(rbind, dExpand)
     }
   }
@@ -288,7 +308,8 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
       survAddBit[1, ] <- NA
       survAddBit$Var1 <- NULL
       survAddBit$Year <- NULL
-      survAddBit <- merge(survAddBit, data.frame(Var1 = missingSurvYrs, Year = missingSurvYrs))
+      survAddBit <- merge(survAddBit, data.frame(Var1 = missingSurvYrs,
+                                                 Year = missingSurvYrs))
     } else {
       survAddBit[1:ncol(survAddBit)] <- NA
       survAddBit$Year <- NULL
@@ -341,43 +362,62 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
   sink()
 
   sp.data <- list(
-    anthro = disturbance$Anthro, fire = disturbance$fire_excl_anthro,
-    beta.Saf.Prior1 = betaPriors$beta.Saf.Prior1, beta.Saf.Prior2 = betaPriors$beta.Saf.Prior2,
-    beta.Rec.anthro.Prior1 = betaPriors$beta.Rec.anthro.Prior1, beta.Rec.anthro.Prior2 = betaPriors$beta.Rec.anthro.Prior2,
-    beta.Rec.fire.Prior1 = betaPriors$beta.Rec.fire.Prior1, beta.Rec.fire.Prior2 = betaPriors$beta.Rec.fire.Prior2,
-    l.Saf.Prior1 = betaPriors$l.Saf.Prior1, l.Saf.Prior2 = betaPriors$l.Saf.Prior2,
-    l.R.Prior1 = betaPriors$l.R.Prior1, l.R.Prior2 = betaPriors$l.R.Prior2,
-    sig.Saf.Prior1 = betaPriors$sig.Saf.Prior1, sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
-    sig.R.Prior1 = betaPriors$sig.R.Prior1, sig.R.Prior2 = betaPriors$sig.R.Prior2,
-    Ninit = inp$N0, assessmentYrs = inp$assessmentYrs,
-    nCounts = length(which(is.na(data3t$Count) == FALSE)), count_id = which(is.na(data3t$Count) == FALSE),
-    nYears = inp$endYear - inp$startYear + 1, calves = round(data3t$Count), CountAntlerless = round(data4t$Count)
+    anthro = disturbance$Anthro,
+    fire = disturbance$fire_excl_anthro,
+    beta.Saf.Prior1 = betaPriors$beta.Saf.Prior1,
+    beta.Saf.Prior2 = betaPriors$beta.Saf.Prior2,
+    beta.Rec.anthro.Prior1 = betaPriors$beta.Rec.anthro.Prior1,
+    beta.Rec.anthro.Prior2 = betaPriors$beta.Rec.anthro.Prior2,
+    beta.Rec.fire.Prior1 = betaPriors$beta.Rec.fire.Prior1,
+    beta.Rec.fire.Prior2 = betaPriors$beta.Rec.fire.Prior2,
+    l.Saf.Prior1 = betaPriors$l.Saf.Prior1,
+    l.Saf.Prior2 = betaPriors$l.Saf.Prior2,
+    l.R.Prior1 = betaPriors$l.R.Prior1,
+    l.R.Prior2 = betaPriors$l.R.Prior2,
+    sig.Saf.Prior1 = betaPriors$sig.Saf.Prior1,
+    sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
+    sig.R.Prior1 = betaPriors$sig.R.Prior1,
+    sig.R.Prior2 = betaPriors$sig.R.Prior2,
+    Ninit = inp$N0,
+    assessmentYrs = inp$assessmentYrs,
+    nCounts = length(which(is.na(data3t$Count) == FALSE)),
+    count_id = which(is.na(data3t$Count) == FALSE),
+    nYears = inp$endYear - inp$startYear + 1,
+    calves = round(data3t$Count),
+    CountAntlerless = round(data4t$Count)
   )
 
   if (inp$survAnalysisMethod == "KaplanMeier") {
     sp.data <- c(sp.data, list(
       Surv = survDatat$surv, tau = survDatat$tau,
-      nSurvs = length(which(is.na(survDatat$surv) == FALSE)), surv_id = which(is.na(survDatat$surv) == FALSE)
+      nSurvs = length(which(is.na(survDatat$surv) == FALSE)),
+      surv_id = which(is.na(survDatat$surv) == FALSE)
     ))
   } else {
     if (inp$survAnalysisMethod == "Exponential") {
       sp.data <- c(sp.data, list(
-        t.to.death = survDatat$t.to.death, t.cen = survDatat$t.cen, survYr = survDatat$Year - inp$startYear,
-        nSurvs = length(which(is.na(survDatat[, 1]) == FALSE)), surv_id = which(is.na(survDatat$Year) == FALSE)
+        t.to.death = survDatat$t.to.death, t.cen = survDatat$t.cen,
+        survYr = survDatat$Year - inp$startYear,
+        nSurvs = length(which(is.na(survDatat[, 1]) == FALSE)),
+        surv_id = which(is.na(survDatat$Year) == FALSE)
       ))
     } else {
       sp.data <- c(sp.data, list(
         surv = survDatat[, 1:13], survYr = survDatat$Year - inp$startYear + 1,
-        nSurvs = length(which(is.na(survDatat[, 1]) == FALSE)), surv_id = which(is.na(survDatat$Year) == FALSE)
+        nSurvs = length(which(is.na(survDatat[, 1]) == FALSE)),
+        surv_id = which(is.na(survDatat$Year) == FALSE)
       ))
     }
   }
 
-  sp.params <- c("S.annual.KM", "R", "Rfemale", "pop.growth", "fpop.size", "var.R.real", "l.R", "l.Saf", "beta.Rec.anthro", "beta.Rec.fire", "beta.Saf")
+  sp.params <- c("S.annual.KM", "R", "Rfemale", "pop.growth",
+                 "fpop.size", "var.R.real", "l.R", "l.Saf",
+                 "beta.Rec.anthro", "beta.Rec.fire", "beta.Saf")
   rr.surv <- try(R2jags::jags(
     data = sp.data, parameters.to.save = sp.params,
     model.file = jagsFile,
-    n.chains = inp$Nchains, n.iter = inp$Niter, n.burnin = inp$Nburn, n.thin = inp$Nthin
+    n.chains = inp$Nchains, n.iter = inp$Niter, n.burnin = inp$Nburn,
+    n.thin = inp$Nthin
   ))
 
   return(list(result = rr.surv, survInput = survDatat))

@@ -19,18 +19,24 @@
 #' @param collarOnTime integer. Month that collars are deployed. A number from 1
 #'   (January) to 12 (December)
 #' @param distScen data.frame. Disturbance scenario. Must have columns "Year",
-#'   "Anthro", and "fire_excl_anthro" containing the year, percentage of the landscape
-#'   covered by anthropogenic disturbance buffered by 500 m, and the percentage covered
-#'   by fire that does not overlap anthropogenic disturbance. See
-#'   [disturbanceMetrics()]. If NULL the disturbance scenario is simulated based
-#'   on `cs`
+#'   "Anthro", and "fire_excl_anthro" containing the year, percentage of the
+#'   landscape covered by anthropogenic disturbance buffered by 500 m, and the
+#'   percentage covered by fire that does not overlap anthropogenic disturbance.
+#'   See [disturbanceMetrics()]. If NULL the disturbance scenario is simulated
+#'   based on `cs`
 #' @inheritParams demographicCoefficients
 #' TODO: remove writeFiles option? I think yes. If not need to ask for location
 #' @param writeFiles should simSurvObs and ageRatioOut results be saved to csv
 #'   files in the tabs folder
 #'
 #' @return a list with elements:
-#'   list(minYr=minYr,maxYr=maxYr,simDisturbance=simDisturbance,simSurvObs=simSurvObs,ageRatioOut=ageRatioOut,exData=popMetricsWide,cs=cs)
+#'   * minYr: first year in the simulations,
+#'   * maxYr: last year in the simulations,
+#'   * simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
+#'   * simSurvObs: a data frame of survival data with columns id, Year, event, enter, and exit,
+#'   * ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
+#'   * exData: a tibble of expected population metric based on the national model,
+#'   * cs: a data frame recording the input parameters for the simulation.
 #' @export
 #'
 #' @examples
@@ -41,8 +47,11 @@ simulateObservations <- function(cs, printPlot = F, cowCounts,
                                  populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                                  survivalModelNumber = "M1",
                                  recruitmentModelNumber = "M4", writeFiles = F) {
-  # printPlot=T;cowCounts=ePars$cowCounts;freqStartsByYear=ePars$freqStartsByYear;collarNumYears=ePars$collarNumYears;collarOffTime=ePars$collarOffTime;collarOnTime=ePars$collarOnTime
-  # distScen = NULL;popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC;survivalModelNumber = "M1";recruitmentModelNumber = "M4"
+  # printPlot=T;cowCounts=ePars$cowCounts;freqStartsByYear=ePars$freqStartsByYear;
+  # collarNumYears=ePars$collarNumYears;collarOffTime=ePars$collarOffTime;
+  # collarOnTime=ePars$collarOnTime
+  # distScen = NULL;popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC;
+  # survivalModelNumber = "M1";recruitmentModelNumber = "M4"
   if (is.character(cowCounts)) {
     cowCounts <- read.csv(cowCounts)
   }
@@ -68,7 +77,8 @@ simulateObservations <- function(cs, printPlot = F, cowCounts,
     simDisturbance$Year <- cs$iYr + simDisturbance$time - 1
 
     if (writeFiles) {
-      write.csv(simDisturbance, "tabs/simDisturbance.csv") # note default file for UI is always the last scenario run
+      # note default file for UI is always the last scenario run
+      write.csv(simDisturbance, "tabs/simDisturbance.csv")
       write.csv(simDisturbance, paste0("tabs/simDisturbance", cs$label, ".csv"))
     }
   } else {
@@ -85,12 +95,14 @@ simulateObservations <- function(cs, printPlot = F, cowCounts,
     survivalModelNumber = survivalModelNumber,
     recruitmentModelNumber = recruitmentModelNumber,
     recSlopeMultiplier = cs$rS,
-    sefSlopeMultiplier = cs$sS, recQuantile = cs$rQ, sefQuantile = cs$sQ, N0 = cs$N0, adjustR = cs$adjustR
+    sefSlopeMultiplier = cs$sS, recQuantile = cs$rQ, sefQuantile = cs$sQ,
+    N0 = cs$N0, adjustR = cs$adjustR
   )
 
   simDisturbance$time <- NULL
   if (printPlot) {
-    # TO DO: save info on true population dynamics, add to projection plots for comparison
+    # TO DO: save info on true population dynamics, add to projection plots for
+    # comparison
     base1 <- ggplot2::ggplot(data = popMetrics, ggplot2::aes(
       x = Timestep, y = Amount, colour = Replicate,
       group = Replicate
@@ -102,7 +114,9 @@ simulateObservations <- function(cs, printPlot = F, cowCounts,
     print(base1)
   }
 
-  popMetricsWide <- tidyr::pivot_wider(popMetrics, id_cols = c(Replicate, Timestep), names_from = MetricTypeID, values_from = Amount)
+  popMetricsWide <- tidyr::pivot_wider(popMetrics, id_cols = c(Replicate, Timestep),
+                                       names_from = MetricTypeID,
+                                       values_from = Amount)
   popMetricsWide$Year <- cs$iYr + popMetricsWide$Timestep - 1
 
   exData <- subset(popMetricsWide, (Timestep <= cs$P))
@@ -116,8 +130,10 @@ simulateObservations <- function(cs, printPlot = F, cowCounts,
 
   # simulate survival data from survival probability.
   if (is.element("ri", names(cs))) {
-    freqStartsByYear <- subset(freqStartsByYear, is.element(Year, unique(exData$Year)))
-    renewYrs <- intersect(min(exData$Year) + seq(0, 100) * cs$ri, unique(exData$Year))
+    freqStartsByYear <- subset(freqStartsByYear,
+                               is.element(Year, unique(exData$Year)))
+    renewYrs <- intersect(min(exData$Year) + seq(0, 100) * cs$ri,
+                          unique(exData$Year))
     freqStartsByYear$numStarts[!is.element(freqStartsByYear$Year, renewYrs)] <- 0
   } else {
     renewYrs <- unique(freqStartsByYear$Year)
@@ -125,11 +141,14 @@ simulateObservations <- function(cs, printPlot = F, cowCounts,
 
   if (is.element("st", names(cs))) {
     freqStartsByYear$numStarts[is.element(freqStartsByYear$Year, renewYrs)] <- cs$st
-    simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime, collarOnTime, topUp = T)
+    simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears,
+                                  collarOffTime, collarOnTime, topUp = T)
   } else {
-    simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime, collarOnTime)
+    simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears,
+                                  collarOffTime, collarOnTime)
   }
-  # if cmult is provided, set cows as a function of number of surviving cows at month 5
+  # if cmult is provided, set cows as a function of number of surviving cows at
+  # month 5
   if (is.element("cmult", names(cs))) {
     survsCalving <- subset(simSurvObs, exit >= 6)
 
@@ -143,19 +162,26 @@ simulateObservations <- function(cs, printPlot = F, cowCounts,
       cowCounts$Count <- NA
     }
   }
-  # given observed total animals & proportion calfs/cows from simulation - get calf/cow ratio
+  # given observed total animals & proportion calfs/cows from simulation - get
+  # calf/cow ratio
   ageRatioOut <- simCalfCowRatios(cowCounts, minYr, exData)
-  ageRatioOut$HerdCode <- "ALAP" # TO DO: remove option for more than one herd in input files, UI, and all associated code...
+  # TO DO: remove option for more than one herd in input files, UI, and all
+  # associated code...
+  ageRatioOut$HerdCode <- "ALAP"
   ageRatioOut <- subset(ageRatioOut, select = c(names(cowCounts)))
   if (writeFiles) {
-    # TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
+    # TO DO: ensure UI code uses column names rather than column positions, and
+    # is not sensitive to rearrangement of columns
     write.csv(ageRatioOut, "tabs/simAgeRatio.csv")
     write.csv(ageRatioOut, paste0("tabs/simAgeRatio", cs$label, ".csv"))
 
-    # TO DO: ensure UI code uses column names rather than column positions, and is not sensitive to rearrangement of columns
+    # TO DO: ensure UI code uses column names rather than column positions, and
+    # is not sensitive to rearrangement of columns
     write.csv(simSurvObs, "tabs/simSurvData.csv")
     write.csv(simSurvObs, paste0("tabs/simSurvData", cs$label, ".csv"))
     # TO DO: UI option to easily select among available scenarios.
   }
-  return(list(minYr = minYr, maxYr = maxYr, simDisturbance = simDisturbance, simSurvObs = simSurvObs, ageRatioOut = ageRatioOut, exData = popMetricsWide, cs = cs))
+  return(list(minYr = minYr, maxYr = maxYr, simDisturbance = simDisturbance,
+              simSurvObs = simSurvObs, ageRatioOut = ageRatioOut,
+              exData = popMetricsWide, cs = cs))
 }

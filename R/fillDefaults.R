@@ -66,7 +66,9 @@ fillDefaults <- function(scns = NULL,
   scns <- select(scns, all_of(names(defList)), -where(~all(is.na(.x))))
 
   if (is.element("cmult", names(scns)) & is.element("cw", names(scns))) {
-    stop("Specify number of cows per year in recruitment survey (cw) or multiplier of number of collared cows in recruitment survey (cmult), but not both.")
+    stop("Specify number of cows per year in recruitment survey (cw) or",
+         " multiplier of number of collared cows in recruitment survey (cmult),",
+         " but not both.")
   }
   scns$ID <- seq(1:nrow(scns))
   scns$label <- ""

@@ -14,15 +14,19 @@
 #' * l.R.Prior1: Recruitment intercept,
 #' * l.R.Prior2: Recruitment intercept standard error times modifier,
 #' * beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,
-#' * beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard error times modifier,
-#' * beta.Rec.fire.Prior1: Recruitment fire excluding anthropogenic disturbance slope,
-#' * beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance standard error,
+#' * beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard
+#'   error times modifier,
+#' * beta.Rec.fire.Prior1: Recruitment fire excluding anthropogenic disturbance
+#'   slope,
+#' * beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance
+#'   standard error,
 #' * sig.R.Prior1: Interannual coefficient of variation for recruitment,
 #' * sig.R.Prior2: uncertainty about interannual variation in recruitment,
 #' * l.Saf.Prior1: Adult female survival intercept,
 #' * l.Saf.Prior2: Adult female survival intercept standard error times modifier,
 #' * beta.Saf.Prior1: Adult female survival anthropogenic disturbance slope,
-#' * beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard error times modifier,
+#' * beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
+#'   error times modifier,
 #' * sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,
 #' * sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival
 #'
@@ -120,7 +124,8 @@ getPriors <- function(modifiers = NULL,
       l.R.Prior1 = rPriorCoefs$Intercept,
       l.R.Prior2 = paste0(round(rPriorStdErrs$Intercept, 4), "*", modifiers$lre),
       beta.Rec.anthro.Prior1 = rPriorCoefs$Anthro,
-      beta.Rec.anthro.Prior2 = paste0(round(rPriorStdErrs$Anthro, 4), "*", modifiers$bre),
+      beta.Rec.anthro.Prior2 = paste0(round(rPriorStdErrs$Anthro, 4), "*",
+                                      modifiers$bre),
       beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
       beta.Rec.fire.Prior2 = rPriorStdErrs$fire_excl_anthro,
       sig.R.Prior1 = modifiers$sre,
@@ -136,7 +141,8 @@ getPriors <- function(modifiers = NULL,
   return(betaPriors)
 }
 
-simCovariates <- function(initAnthro, initFire, numYears, anthroSlope, anthroSlopeFuture, futureStep, fireSlope = 0) {
+simCovariates <- function(initAnthro, initFire, numYears, anthroSlope,
+                          anthroSlopeFuture, futureStep, fireSlope = 0) {
   covInit <- data.frame(Anthro = initAnthro, fire_excl_anthro = initFire)
   for (t in 1:numYears) {
     # t=1s

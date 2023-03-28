@@ -37,7 +37,8 @@ if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
 getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, by = 1),
                             fire_excl_anthro = 0, useQuantiles  = NULL,
                             populationGrowthTable  = NULL, adjustR = F, forceUpdate = F) {
-  # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;useQuantiles =NULL;adjustR=F;forceUpdate=F
+  # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;
+  # useQuantiles =NULL;adjustR=F;forceUpdate=F
   doSave <- FALSE
 
   # check that everything other than adjustR is default
@@ -72,39 +73,58 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
     populationGrowthTable  <- caribouMetrics::popGrowthTableJohnsonECCC
   }
   if (is.null(useQuantiles )) {
-    popGrowthPars <- demographicCoefficients(replicates, populationGrowthTable = populationGrowthTable )
-    rateSamplesAll <- demographicRates(covTable = covTableObs, popGrowthPars = popGrowthPars, returnSample = T, useQuantiles = F)
+    popGrowthPars <- demographicCoefficients(
+      replicates,
+      populationGrowthTable = populationGrowthTable
+    )
+    rateSamplesAll <- demographicRates(covTable = covTableObs,
+                                       popGrowthPars = popGrowthPars,
+                                       returnSample = T, useQuantiles = F)
   } else {
-    popGrowthPars <- demographicCoefficients(replicates, useQuantiles = useQuantiles , populationGrowthTable = populationGrowthTable )
-    rateSamplesAll <- demographicRates(covTable = covTableObs, popGrowthPars = popGrowthPars, returnSample = T)
+    popGrowthPars <- demographicCoefficients(
+      replicates, useQuantiles = useQuantiles,
+      populationGrowthTable = populationGrowthTable
+    )
+    rateSamplesAll <- demographicRates(covTable = covTableObs,
+                                       popGrowthPars = popGrowthPars,
+                                       returnSample = T)
   }
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
-  pars <- cbind(pars, popGrowthJohnson(pars$N0, R_bar = pars$R_bar, S_bar = pars$S_bar, numSteps = 1, K = F, adjustR = adjustR))
+  pars <- cbind(pars, popGrowthJohnson(pars$N0, R_bar = pars$R_bar,
+                                       S_bar = pars$S_bar, numSteps = 1,
+                                       K = F, adjustR = adjustR))
   simSurvBig <- pars %>%
     select(Anthro, S_t) %>%
     group_by(Anthro) %>%
-    summarize(Mean = mean(S_t), lower = quantile(S_t, 0.025), upper = quantile(S_t, 0.975))
+    summarize(Mean = mean(S_t), lower = quantile(S_t, 0.025),
+              upper = quantile(S_t, 0.975))
   simSurvBig$Parameter <- "Adult female survival"
   simRecBig <- pars %>%
     select(Anthro, R_t) %>%
     group_by(Anthro) %>%
-    summarize(Mean = mean(R_t), lower = quantile(R_t, 0.025), upper = quantile(R_t, 0.975))
+    summarize(Mean = mean(R_t), lower = quantile(R_t, 0.025),
+              upper = quantile(R_t, 0.975))
   simRecBig$Parameter <- "Recruitment"
   simLamBig <- pars %>%
     select(Anthro, lambda) %>%
     group_by(Anthro) %>%
-    summarize(Mean = mean(lambda), lower = quantile(lambda, 0.025), upper = quantile(lambda, 0.975))
+    summarize(Mean = mean(lambda), lower = quantile(lambda, 0.025),
+              upper = quantile(lambda, 0.975))
   simLamBig$Parameter <- "Population growth rate"
   simFpopBig <- pars %>%
     select(Anthro, N) %>%
     group_by(Anthro) %>%
-    summarize(Mean = mean(N), lower = quantile(N, 0.025), upper = quantile(N, 0.975))
+    summarize(Mean = mean(N), lower = quantile(N, 0.025),
+              upper = quantile(N, 0.975))
   simFpopBig$Parameter <- "Female population size"
   simBig <- rbind(simSurvBig, simRecBig, simLamBig, simFpopBig)
 
   parsSelect <- subset(pars, select = c(Anthro, S_t, R_t, lambda, N))
-  names(parsSelect) <- c("Anthro", "Adult female survival", "Recruitment", "Population growth rate", "Female population size")
-  parsSelect <- parsSelect %>% tidyr::pivot_longer(!Anthro, names_to = "Parameter", values_to = "Value")
+  names(parsSelect) <- c("Anthro", "Adult female survival",
+                         "Recruitment", "Population growth rate",
+                         "Female population size")
+  parsSelect <- parsSelect %>%
+    tidyr::pivot_longer(!Anthro, names_to = "Parameter", values_to = "Value")
 
   simBig <- list(summary = simBig, samples = parsSelect)
 
