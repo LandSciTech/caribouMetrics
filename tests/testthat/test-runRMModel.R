@@ -2,7 +2,7 @@
 test_that("Runs with defaults", {
   # reduce some defaults to make fast
   # note that the default csv does not match the default startYear
-  expect_is(runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+  expect_s3_class(runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                        Nthin = 2)$result,
             "rjags")
 })
@@ -23,21 +23,21 @@ test_that("input tables are as expected",{
   res1 <- expect_warning(runRMModel(Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2))
 
   expect_true(is.na(res1$survInput$surv[1]))
-  expect_is(res1$result, "rjags")
+  expect_s3_class(res1$result, "rjags")
 
   # end year is outside range of data but still runs
   res2 <- expect_warning(runRMModel(startYear = 2009, endYear = 2050, Nchains = 1, Niter = 100, Nburn = 10,
              Nthin = 2))
 
   expect_true(is.na(last(res2$survInput$surv)))
-  expect_is(res2$result, "rjags")
+  expect_s3_class(res2$result, "rjags")
 
   # ageRatio.herd is outside year range warning but still runs
   res3 <- expect_warning(runRMModel(ageRatio.herd = mutate(ageRatio.herdIn, Year = Year - 30),
              startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
              Nthin = 2), "composition")
 
-  expect_is(res3$result, "rjags")
+  expect_s3_class(res3$result, "rjags")
 
   # all survival data is outside year range
   expect_warning(
@@ -47,6 +47,8 @@ test_that("input tables are as expected",{
                  Nthin = 2),
       "None of the survival data")
   )
+
+  # survival should go tocurYear but disturbance data should go to endYear
 
   # all disturbance data is outside year range
   expect_warning(
@@ -77,7 +79,7 @@ test_that("input tables are as expected",{
     "missing expected columns")
 
   # check haven't added need for Total_dist
-  expect_is(
+  expect_s3_class(
     runRMModel(disturbance = select(disturbanceIn, -Total_dist),
                startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                Nthin = 2)$result,
@@ -88,20 +90,20 @@ test_that("survAnalysisMethod works", {
   expect_message(out1 <- runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2),
                  "using Kaplan-Meier survival model")
-  expect_is(out1$result, "rjags")
+  expect_s3_class(out1$result, "rjags")
 
   # TODO fix this error
   expect_message(out2 <- runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2, survAnalysisMethod = "Exponential"),
                  "using parametric exponential survival model")
 
-  expect_is(out2$result, "rjags")
+  expect_s3_class(out2$result, "rjags")
 
   expect_message(out3 <- runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2, survAnalysisMethod = "other"),
                  "expanding survival record")
 
-  expect_is(out3$result, "rjags")
+  expect_s3_class(out3$result, "rjags")
 })
 
 test_that("works when only 1 collared animal",{
@@ -121,15 +123,16 @@ test_that("works when only 1 collared animal",{
   oo <- simulateObservations(scns, cowCounts = cowCounts,
                              freqStartsByYear = freqStartsByYear)
 
-  out <- runRMModel(
-    survData = oo$simSurvObs, ageRatio.herd = oo$ageRatioOut,
-    disturbance = oo$simDisturbance,
-    startYear = 2012, endYear = 2043,
-    Nchains = 1, Niter = 100, Nburn = 10,
-    Nthin = 2
-  )
+  expect_warning(
+    out <- runRMModel(
+      survData = oo$simSurvObs, ageRatio.herd = oo$ageRatioOut,
+      disturbance = oo$simDisturbance,
+      startYear = 2012, endYear = 2043,
+      Nchains = 1, Niter = 100, Nburn = 10,
+      Nthin = 2),
+    "low sample size")
 
-  expect_is(out$result, "rjags")
+  expect_s3_class(out$result, "rjags")
 
   # FIXED: error seems to happen when there are few collars but enough data for KM.
   # This was happening in some of the paper simulations too.

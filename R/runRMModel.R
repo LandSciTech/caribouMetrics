@@ -266,8 +266,6 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv", package
 
   y2 <- merge(Years2, cow.cnt, by = "Year", all = TRUE)
   data4 <- y2[, 1:3]
-  data3$Name <- rep(unique(ageRatio.herd$Name), length(data3$Count))
-  data4$Name <- rep(unique(ageRatio.herd$Name), length(data4$Count))
 
   data3$Count <- ifelse(data3$Count > data4$Count, NA, data3$Count)
   data4$Count <- ifelse(data3$Count > data4$Count, NA, data4$Count)
