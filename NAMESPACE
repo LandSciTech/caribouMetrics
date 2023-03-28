@@ -2,6 +2,7 @@
 
 export(demographicProjectionApp)
 export(fillDefaults)
+export(getSimsNational)
 export(runRMModel)
 export(simulateObservations)
 import(caribouMetrics)

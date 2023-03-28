@@ -19,8 +19,8 @@
 #' @param collarOnTime integer. Month that collars are deployed. A number from 1
 #'   (January) to 12 (December)
 #' @param distScen data.frame. Disturbance scenario. Must have columns "Year",
-#'   "Anthro", and "fire_excl_anthro" containing the year, % of the landscape
-#'   covered by anthropogenic disturbance buffered by 500 m, and the % covered
+#'   "Anthro", and "fire_excl_anthro" containing the year, percentage of the landscape
+#'   covered by anthropogenic disturbance buffered by 500 m, and the percentage covered
 #'   by fire that does not overlap anthropogenic disturbance. See
 #'   [disturbanceMetrics()]. If NULL the disturbance scenario is simulated based
 #'   on `cs`

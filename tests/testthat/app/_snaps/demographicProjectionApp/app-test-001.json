@@ -1,0 +1,348 @@
+{
+  "input": {
+    "N0": 1000,
+    "Nburn": 10,
+    "Nchains": 1,
+    "Niter": 100,
+    "Nthin": 2,
+    "Run.model": 1,
+    "aS": 0,
+    "aSf": 4,
+    "adjustR": false,
+    "bodyTabs": "Graphical summary",
+    "bre": 4,
+    "bse": 3,
+    "cmult": 1,
+    "collarNumYears": 6,
+    "collarOffTime": 12,
+    "collarOnTime": 1,
+    "curYear": 2023,
+    "getKSDists": false,
+    "graphPanel": "Recruitment",
+    "iA": 0,
+    "iF": 0,
+    "lre": 3,
+    "lse": 5,
+    "mcmc.output": 0,
+    "nYearObs": 10,
+    "nYearProj": 20,
+    "nat_model": "default",
+    "popGrowth_file": 0,
+    "rQ": 0.5,
+    "rS": 1,
+    "recruitmentModelNumber": "M4",
+    "redoSimsNational": false,
+    "renewalInterval": 1,
+    "sQ": 0.5,
+    "sS": 1,
+    "saveOutput": 0,
+    "scn_file": 0,
+    "scn_source": "sim",
+    "sideBar": null,
+    "sidebarCollapsed": false,
+    "sidebarItemExpanded": null,
+    "sre": 0.23,
+    "srv": 0.22,
+    "sse": 0.034784,
+    "ssv": 0.03,
+    "startsPerYear": 10,
+    "survAnalysisMethod": "KaplanMeier",
+    "survivalModelNumber": "M1",
+    "tablePanel": "Summary",
+    "waiter-content_waiter_hidden": true,
+    "waiter_shown": true
+  },
+  "output": {
+    "plot1": {
+      "src": "[image data hash: 2bb38a0da25443b165552f22d6b8bc9c]",
+      "width": 532,
+      "height": 400,
+      "alt": "Plot object",
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2012.55,
+              "right": 2044.45,
+              "bottom": 0.58,
+              "top": 1.02
+            },
+            "mapping": {
+              "x": "Year",
+              "y": "Mean",
+              "fill": "Type",
+              "colour": "Type"
+            },
+            "range": {
+              "left": 47.6038099315069,
+              "right": 451.046412671233,
+              "bottom": 340.724315068493,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 532,
+          "height": 400
+        }
+      }
+    },
+    "plot2": {
+      "src": "[image data hash: 709ac1fb1290c8ff295be069cf673844]",
+      "width": 532,
+      "height": 400,
+      "alt": "Plot object",
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2012.55,
+              "right": 2044.45,
+              "bottom": -0.05,
+              "top": 1.05
+            },
+            "mapping": {
+              "x": "Year",
+              "y": "Mean",
+              "fill": "Type",
+              "colour": "Type"
+            },
+            "range": {
+              "left": 55.3850599315069,
+              "right": 451.046412671233,
+              "bottom": 340.724315068493,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 532,
+          "height": 400
+        }
+      }
+    },
+    "plot3": {
+      "src": "[image data hash: fcc11aa111c6b0f2d0ef2cb6deb72c4f]",
+      "width": 532,
+      "height": 400,
+      "alt": "Plot object",
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2012.55,
+              "right": 2044.45,
+              "bottom": -0.05,
+              "top": 1.05
+            },
+            "mapping": {
+              "x": "Year",
+              "y": "Mean"
+            },
+            "range": {
+              "left": 55.3850599315069,
+              "right": 526.520547945205,
+              "bottom": 340.724315068493,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 532,
+          "height": 400
+        }
+      }
+    },
+    "plot4": {
+      "src": "[image data hash: 7b3d52cd0ca66841c5f50664165a8a75]",
+      "width": 532,
+      "height": 400,
+      "alt": "Plot object",
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2012.55,
+              "right": 2044.45,
+              "bottom": -0.0592,
+              "top": 1.2432
+            },
+            "mapping": {
+              "x": "Year",
+              "y": "Mean",
+              "fill": "Type",
+              "colour": "Type"
+            },
+            "range": {
+              "left": 47.6038099315069,
+              "right": 451.046412671233,
+              "bottom": 340.724315068493,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 532,
+          "height": 400
+        }
+      }
+    },
+    "plot5": {
+      "src": "[image data hash: 98a738b00310f1103b2bb63036c8956b]",
+      "width": 532,
+      "height": 400,
+      "alt": "Plot object",
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2012.55,
+              "right": 2044.45,
+              "bottom": -166.565,
+              "top": 3497.865
+            },
+            "mapping": {
+              "x": "Year",
+              "y": "Mean"
+            },
+            "range": {
+              "left": 59.2756849315069,
+              "right": 454.452662671233,
+              "bottom": 340.724315068493,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 532,
+          "height": 400
+        }
+      }
+    },
+    "plot6": {
+      "src": "[image data hash: 1db2dd2a76b4d9d2f425e103a582d611]",
+      "width": 532,
+      "height": 400,
+      "alt": "Plot object",
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+              "panelvar1": "Anthropogenic"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2012.55,
+              "right": 2044.45,
+              "bottom": -5,
+              "top": 105
+            },
+            "mapping": {
+              "x": ".data$Year",
+              "y": ".data$dist",
+              "panelvar1": "dist_type"
+            },
+            "range": {
+              "left": 51.4944349315069,
+              "right": 286.267765410959,
+              "bottom": 340.724315068493,
+              "top": 27.2465753424658
+            }
+          },
+          {
+            "panel": 2,
+            "row": 1,
+            "col": 2,
+            "panel_vars": {
+              "panelvar1": "Fire excluding anthropogenic"
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2012.55,
+              "right": 2044.45,
+              "bottom": -5,
+              "top": 105
+            },
+            "mapping": {
+              "x": ".data$Year",
+              "y": ".data$dist",
+              "panelvar1": "dist_type"
+            },
+            "range": {
+              "left": 291.747217465753,
+              "right": 526.520547945206,
+              "bottom": 340.724315068493,
+              "top": 27.2465753424658
+            }
+          }
+        ],
+        "dims": {
+          "width": 532,
+          "height": 400
+        }
+      }
+    }
+  },
+  "export": {
+
+  }
+}

@@ -40,13 +40,11 @@ test_that("input tables are as expected",{
   expect_s3_class(res3$result, "rjags")
 
   # all survival data is outside year range
-  expect_warning(
-    expect_error(
-      runRMModel(survData = mutate(survDataIn, Year = Year - 30),
-                 startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
-                 Nthin = 2),
-      "None of the survival data")
-  )
+  expect_error(
+    runRMModel(survData = mutate(survDataIn, Year = Year - 30),
+               startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
+               Nthin = 2),
+    "None of the survival data")
 
   # survival should go to curYear but disturbance data should go to endYear
   # no warnings when survData is shorter
@@ -126,7 +124,7 @@ test_that("survAnalysisMethod works", {
 test_that("works when only 1 collared animal",{
   cowCounts <- data.frame(
     Year = 2012:2023,
-    Count = 1,
+    Count = 10,
     Class = "cow"
   )
 
@@ -139,6 +137,9 @@ test_that("works when only 1 collared animal",{
 
   oo <- simulateObservations(scns, cowCounts = cowCounts,
                              freqStartsByYear = freqStartsByYear)
+
+  # ensure some deaths so it uses KM still
+  oo$simSurvObs$event[3] <- 1
 
   expect_warning(
     out <- runRMModel(

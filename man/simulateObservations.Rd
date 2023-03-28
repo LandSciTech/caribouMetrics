@@ -41,8 +41,8 @@ Must have 2 columns "Year" and "numStarts"}
 (January) to 12 (December)}
 
 \item{distScen}{data.frame. Disturbance scenario. Must have columns "Year",
-"Anthro", and "fire_excl_anthro" containing the year, \% of the landscape
-covered by anthropogenic disturbance buffered by 500 m, and the \% covered
+"Anthro", and "fire_excl_anthro" containing the year, percentage of the landscape
+covered by anthropogenic disturbance buffered by 500 m, and the percentage covered
 by fire that does not overlap anthropogenic disturbance. See
 \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturbance scenario is simulated based
 on \code{cs}}
