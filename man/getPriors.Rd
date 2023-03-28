@@ -6,20 +6,48 @@
 \usage{
 getPriors(
   modifiers = NULL,
-  expectMods = list(survivalModelNumber = "M1", recruitmentModelNumber = "M4", bre = 4,
-    bse = 3, lse = 5, sse = 0.08696 * 0.4, ssv = 0.03, lre = 3, sre = 0.46 * 0.5, srv =
-    0.22),
+  survivalModelNumber = "M1",
+  recruitmentModelNumber = "M4",
+  bre = 4,
+  bse = 3,
+  lse = 5,
+  sse = 0.08696 * 0.4,
+  ssv = 0.03,
+  lre = 3,
+  sre = 0.46 * 0.5,
+  srv = 0.22,
   populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
   modVer = "Johnson",
-  returnValues = T
+  returnValues = TRUE
 )
 }
 \arguments{
-\item{modifiers}{a list of modifiers to use to change the priors. See
-Details.}
+\item{modifiers}{a named list of modifiers to use to change the priors. If a
+modifier is supplied here the corresponding argument below is ignored.}
 
-\item{expectMods}{the default modifiers. If one of the modifiers is not
-supplied then this value is used}
+\item{survivalModelNumber, recruitmentModelNumber}{character. Which model
+number to use see \code{\link[caribouMetrics]{popGrowthTableJohnsonECCC}} for options.}
+
+\item{bre}{anthropogenic disturbance slope recruitment uncertainty
+multiplier. 1 - 10}
+
+\item{bse}{anthropogenic disturbance slope survival uncertainty multiplier. 1
+\itemize{
+\item 10
+}}
+
+\item{lse}{survival intercept uncertainty multiplier. 1 - 10}
+
+\item{sse}{interannual coefficient of variation for survival. 0-1. See
+\code{\link[=popGrowthJohnson]{popGrowthJohnson()}} and functions therein for details}
+
+\item{ssv}{uncertainty about interannual variation in survival. 0-1}
+
+\item{lre}{recruitment intercept uncertainty multiplier. 1 - 10}
+
+\item{sre}{interannual coefficient of variation for recruitment. 0-1}
+
+\item{srv}{uncertainty about interannual variation in recruitment. 0-1.}
 
 \item{populationGrowthTable}{data.frame. \code{\link[caribouMetrics]{popGrowthTableJohnsonECCC}} is
 included in the package and should be used in most cases. A custom table of
@@ -39,19 +67,26 @@ a list with values:
 \item l.R.Prior1: Recruitment intercept,
 \item l.R.Prior2: Recruitment intercept standard error times modifier,
 \item beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,
-\item beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard error times modifier,
-\item beta.Rec.fire.Prior1: Recruitment fire excluding anthropogenic disturbance slope,
-\item beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance standard error,
+\item beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard
+error times modifier,
+\item beta.Rec.fire.Prior1: Recruitment fire excluding anthropogenic disturbance
+slope,
+\item beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance
+standard error,
 \item sig.R.Prior1: Interannual coefficient of variation for recruitment,
 \item sig.R.Prior2: uncertainty about interannual variation in recruitment,
 \item l.Saf.Prior1: Adult female survival intercept,
 \item l.Saf.Prior2: Adult female survival intercept standard error times modifier,
 \item beta.Saf.Prior1: Adult female survival anthropogenic disturbance slope,
-\item beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard error times modifier,
+\item beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
+error times modifier,
 \item sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,
 \item sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival
 }
 }
 \description{
 Get model priors from national models
+}
+\examples{
+getPriors()
 }

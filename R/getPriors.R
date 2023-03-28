@@ -2,13 +2,23 @@
 #'
 #'
 #'
-#' @param modifiers a list of modifiers to use to change the priors. See
-#'   Details.
-#' @param expectMods the default modifiers. If one of the modifiers is not
-#'   supplied then this value is used
-#' @inheritParams caribouMetrics::getCoefs
+#' @param modifiers a named list of modifiers to use to change the priors. If a
+#'   modifier is supplied here the corresponding argument below is ignored.
 #' @param returnValues logical. Default is TRUE. If FALSE returns strings for
 #'   some values showing the initial values and the modifier ie "0.9 * 1.05"
+#' @param bse anthropogenic disturbance slope survival uncertainty multiplier. 1
+#'   - 10
+#' @param bre anthropogenic disturbance slope recruitment uncertainty
+#'   multiplier. 1 - 10
+#' @param lse survival intercept uncertainty multiplier. 1 - 10
+#' @param lre recruitment intercept uncertainty multiplier. 1 - 10
+#' @param sse interannual coefficient of variation for survival. 0-1. See
+#'   [popGrowthJohnson()] and functions therein for details
+#' @param ssv uncertainty about interannual variation in survival. 0-1
+#' @param sre interannual coefficient of variation for recruitment. 0-1
+#' @param srv uncertainty about interannual variation in recruitment. 0-1.
+#' @inheritParams caribouMetrics::getCoefs
+#' @inheritParams caribouMetrics::demographicCoefficients
 #'
 #' @return a list with values:
 #' * l.R.Prior1: Recruitment intercept,
@@ -30,31 +40,32 @@
 #' * sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,
 #' * sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival
 #'
-#'
+#' @examples
+#' getPriors()
 getPriors <- function(modifiers = NULL,
-                      expectMods = list(
-                        survivalModelNumber = "M1",
-                        recruitmentModelNumber = "M4",
-                        bre = 4,
-                        bse = 3,
-                        lse = 5,
-                        sse = 0.08696 * 0.4,
-                        ssv = 0.03,
-                        lre = 3,
-                        sre = 0.46 * 0.5,
-                        srv = 0.22
-                      ),
+                      survivalModelNumber = "M1",
+                      recruitmentModelNumber = "M4",
+                      bre = 4,
+                      bse = 3,
+                      lse = 5,
+                      sse = 0.08696 * 0.4,
+                      ssv = 0.03,
+                      lre = 3,
+                      sre = 0.46 * 0.5,
+                      srv = 0.22,
                       populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
-                      modVer = "Johnson", returnValues = T) {
+                      modVer = "Johnson",
+                      returnValues = TRUE) {
   # modifiers=cs
 
-
+  expectMods <- c(as.list(environment()))
+  expectMods$modifiers <- NULL
   if (is.null(modifiers)) {
     modifiers <- expectMods
-  }
-  addMods <- setdiff(names(expectMods), names(modifiers))
-  for (i in addMods) {
-    modifiers[[i]] <- expectMods[[i]]
+  } else {
+    # keep all values in modifiers and add any that are missing using values in
+    # expectMods
+    modifiers <- c(modifiers, expectMods[which(!names(expectMods) %in% names(modifiers))])
   }
 
   popGrowthPars <- demographicCoefficients(

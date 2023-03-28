@@ -41,18 +41,26 @@ Must have 2 columns "Year" and "numStarts"}
 (January) to 12 (December)}
 
 \item{distScen}{data.frame. Disturbance scenario. Must have columns "Year",
-"Anthro", and "fire_excl_anthro" containing the year, percentage of the landscape
-covered by anthropogenic disturbance buffered by 500 m, and the percentage covered
-by fire that does not overlap anthropogenic disturbance. See
-\code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturbance scenario is simulated based
-on \code{cs}}
+"Anthro", and "fire_excl_anthro" containing the year, percentage of the
+landscape covered by anthropogenic disturbance buffered by 500 m, and the
+percentage covered by fire that does not overlap anthropogenic disturbance.
+See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturbance scenario is simulated
+based on \code{cs}}
 
 \item{writeFiles}{should simSurvObs and ageRatioOut results be saved to csv
 files in the tabs folder}
 }
 \value{
 a list with elements:
-list(minYr=minYr,maxYr=maxYr,simDisturbance=simDisturbance,simSurvObs=simSurvObs,ageRatioOut=ageRatioOut,exData=popMetricsWide,cs=cs)
+\itemize{
+\item minYr: first year in the simulations,
+\item maxYr: last year in the simulations,
+\item simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
+\item simSurvObs: a data frame of survival data with columns id, Year, event, enter, and exit,
+\item ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
+\item exData: a tibble of expected population metric based on the national model,
+\item cs: a data frame recording the input parameters for the simulation.
+}
 }
 \description{
 Simulate caribou survival data. First a true population trajectory is

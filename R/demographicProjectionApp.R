@@ -65,7 +65,7 @@ demographicProjectionApp <- function(n = 1000) {
   # ssv: uncertainty about interannual variation in survival. 0-1
   # sre: interannual coefficient of variation for recruitment. 0-1
   # srv: uncertainty about interannual variation in recruitment. 0-1.
-  prior_defaults <- eval(formals(getPriors)$expectMods)
+  prior_defaults <- lapply(formals(getPriors), eval)
 
   # JAGS params
   jags_defaults <- eval(formals(runRMModel)[c("Niter", "Nchains", "Nthin", "Nburn")])
