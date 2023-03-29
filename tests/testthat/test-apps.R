@@ -1,2 +1,1 @@
-
-  testthat::test_dir("app")
+testthat::test_dir("app")

@@ -30,6 +30,7 @@
 #'   an argument is included in this list it will override the named argument
 #' @param saveJAGStxt file path. Directory where the JAGS model txt files will
 #'   be saved. Default is `tempdir()`
+#' @param quiet logical. Should jags be run quietly?
 #'
 #' @return a list with elements:
 #'   * result: an `rjags` model object see [R2jags::jags()].
@@ -49,7 +50,8 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
                        Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
                        survAnalysisMethod = "KaplanMeier", adjustR = F,
                        assessmentYrs = 1,
-                       inpFixed = list(), saveJAGStxt = tempdir()) {
+                       inpFixed = list(), saveJAGStxt = tempdir(),
+                       quiet = TRUE) {
   # survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
   # betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"
   # Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inpFixed=list()
@@ -243,7 +245,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
       out1 <- R2jags::jags(
         data = data1, inits = inits, parameters.to.save = params,
         model.file = binLikFile, n.chains = 2, n.iter = 5000,
-        n.burnin = 1000, n.thin = 1
+        n.burnin = 1000, n.thin = 1, quiet = quiet
       )
       # create standard deviation variable from survData$tau above
       survData$tau <- 1 / (survData$se^2)
@@ -417,7 +419,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
     data = sp.data, parameters.to.save = sp.params,
     model.file = jagsFile,
     n.chains = inp$Nchains, n.iter = inp$Niter, n.burnin = inp$Nburn,
-    n.thin = inp$Nthin
+    n.thin = inp$Nthin, quiet = quiet
   ))
 
   return(list(result = rr.surv, survInput = survDatat))
