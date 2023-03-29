@@ -6,9 +6,9 @@
 \usage{
 simulateObservations(
   cs,
-  printPlot = F,
   cowCounts,
   freqStartsByYear,
+  printPlot = FALSE,
   collarNumYears = 4,
   collarOffTime = 5,
   collarOnTime = 8,
@@ -16,14 +16,12 @@ simulateObservations(
   populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
   survivalModelNumber = "M1",
   recruitmentModelNumber = "M4",
-  writeFiles = F
+  writeFilesDir = NULL
 )
 }
 \arguments{
-\item{cs}{list. Parameters for the simulations. See \code{\link[=fillDefaults]{fillDefaults()}} for
+\item{cs}{list. Parameters for the simulations. See [fillDefaults()] for
 details.}
-
-\item{printPlot}{logical. print a plot of the true population trajectory?}
 
 \item{cowCounts}{data.frame. Number of cows counted in aerial surveys each
 year. Must have 3 columns "Year", "Count", and "Class" where class is "cow"
@@ -31,6 +29,8 @@ in all rows}
 
 \item{freqStartsByYear}{data.frame. Number of collars deployed in each year.
 Must have 2 columns "Year" and "numStarts"}
+
+\item{printPlot}{logical. print a plot of the true population trajectory?}
 
 \item{collarNumYears}{integer. Number of years until collar falls off}
 
@@ -44,23 +44,29 @@ Must have 2 columns "Year" and "numStarts"}
 "Anthro", and "fire_excl_anthro" containing the year, percentage of the
 landscape covered by anthropogenic disturbance buffered by 500 m, and the
 percentage covered by fire that does not overlap anthropogenic disturbance.
-See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturbance scenario is simulated
-based on \code{cs}}
+See [disturbanceMetrics()]. If NULL the disturbance scenario is simulated
+based on `cs`}
 
-\item{writeFiles}{should simSurvObs and ageRatioOut results be saved to csv
-files in the tabs folder}
+\item{populationGrowthTable}{data.frame. By default
+\code{\link{popGrowthTableJohnsonECCC}} is used. A custom table of model
+parameters can be provided but it must match the column names of
+\code{\link{popGrowthTableJohnsonECCC}}.}
+
+\item{survivalModelNumber, recruitmentModelNumber}{character. Which model
+number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.}
+
+\item{writeFilesDir}{characater. If not NULL `simSurvObs` and `ageRatioOut`
+results will be saved to csv files in the directory provided}
 }
 \value{
 a list with elements:
-\itemize{
-\item minYr: first year in the simulations,
-\item maxYr: last year in the simulations,
-\item simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
-\item simSurvObs: a data frame of survival data with columns id, Year, event, enter, and exit,
-\item ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
-\item exData: a tibble of expected population metric based on the national model,
-\item cs: a data frame recording the input parameters for the simulation.
-}
+  * minYr: first year in the simulations,
+  * maxYr: last year in the simulations,
+  * simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
+  * simSurvObs: a data frame of survival data with columns id, Year, event, enter, and exit,
+  * ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
+  * exData: a tibble of expected population metric based on the national model,
+  * cs: a data frame recording the input parameters for the simulation.
 }
 \description{
 Simulate caribou survival data. First a true population trajectory is

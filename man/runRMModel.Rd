@@ -23,7 +23,8 @@ runRMModel(
   adjustR = F,
   assessmentYrs = 1,
   inpFixed = list(),
-  saveJAGStxt = tempdir()
+  saveJAGStxt = tempdir(),
+  quiet = TRUE
 )
 }
 \arguments{
@@ -31,7 +32,7 @@ runRMModel(
 columns "Year", "event", "enter" and "exit". Enter and exit are the
 beginning and end of the time interval and should be a number from 1 to 12
 (December) or 0. Event is 0 or 1 where 0 means the animal lived and 1 died.
-See \code{\link[survival:Surv]{survival::Surv()}} for more details.}
+See [survival::Surv()] for more details.}
 
 \item{ageRatio.herd}{either a path to a csv file or a dataframe containing
 the columns "Year","Count", and "Class". Where class can be either calf or
@@ -40,7 +41,7 @@ cow}
 \item{disturbance}{either a path to a csv file or a dataframe containing the
 columns "Anthro","fire_excl_anthro", and "Year"}
 
-\item{betaPriors}{a list of model priors see \code{\link[=getPriors]{getPriors()}}}
+\item{betaPriors}{a list of model priors see [getPriors()]}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
@@ -59,20 +60,22 @@ period and the end of the projection period.}
 "Exponential".
 TODO: What do these mean and what is the else option}
 
+\item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
+
 \item{assessmentYrs}{TODO: what is assessmentYrs? defaults to 1 but not sure what it is.}
 
 \item{inpFixed}{an optional list of inputs with names matching the above, if
 an argument is included in this list it will override the named argument}
 
 \item{saveJAGStxt}{file path. Directory where the JAGS model txt files will
-be saved. Default is \code{tempdir()}}
+be saved. Default is `tempdir()`}
+
+\item{quiet}{logical. Should jags be run quietly?}
 }
 \value{
 a list with elements:
-\itemize{
-\item result: an \code{rjags} model object see \code{\link[R2jags:jags]{R2jags::jags()}}.
-\item survInput: a data.frame with the input data used in the model.
-}
+  * result: an `rjags` model object see [R2jags::jags()].
+  * survInput: a data.frame with the input data used in the model.
 }
 \description{
 Run recruitment and mortality model

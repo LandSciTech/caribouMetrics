@@ -16,25 +16,40 @@ getSimsNational(
 )
 }
 \arguments{
+\item{replicates}{integer. Number of replicate populations.}
+
 \item{N0}{initial population size}
 
 \item{Anthro, fire_excl_anthro}{numeric. A vector of numbers between 0 and 100
 representing the percentage of the landscape covered by anthropogenic
 disturbance buffered by 500 m, and the percentage covered by fire that does
 not overlap anthropogenic disturbance. The two vectors will be combined
-with \code{expand.grid()} to give the set of scenarios simulated.}
+with `expand.grid()` to give the set of scenarios simulated.}
+
+\item{useQuantiles}{logical or numeric. If it is a numeric
+vector it must be length 2 and give the low and high limits of the
+quantiles to use. If \code{useQuantiles != FALSE}, each replicate population is
+assigned to a quantile of the distribution of variation around the expected
+values, and remains in that quantile as covariates change.
+If \code{useQuantiles = TRUE}, replicate populations
+will be assigned to quantiles in the default range of 0.025 and 0.975.}
+
+\item{populationGrowthTable}{data.frame. By default
+\code{\link{popGrowthTableJohnsonECCC}} is used. A custom table of model
+parameters can be provided but it must match the column names of
+\code{\link{popGrowthTableJohnsonECCC}}.}
+
+\item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{forceUpdate}{logical. If the default inputs are used the result is
-cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
+cached. Set `forceUpdate` to TRUE to ensure the simulations are re-run.}
 }
 \value{
 a list with two elements:
-\itemize{
-\item summary: a tibble with a summary of parameter values for each scenario.
-Column names are Anthro, Mean, lower, upper, Parameter.
-\item samples: a tibble with parameter values for each scenario and replicate
-4 rows per replicate \* scenario. Column names are Anthro, Parameter and Value
-}
+ * summary: a tibble with a summary of parameter values for each scenario.
+   Column names are Anthro, Mean, lower, upper, Parameter.
+ * samples: a tibble with parameter values for each scenario and replicate
+   4 rows per replicate \* scenario. Column names are Anthro, Parameter and Value
 }
 \description{
 Get a set of simulation results from the national model
