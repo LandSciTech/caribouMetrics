@@ -40,7 +40,7 @@ any season or each season using thresholds given in a table.
 \examples{
 # create example rasters
 lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
-                     resolution = 250, crs = 5070)
+                     resolution = 250, crs = sf::st_crs(5070)$wkt)
 lc[] <- 0
 nd <- lc
 nd[1:30, 1:30] <- 1
@@ -49,16 +49,19 @@ ad[30:50, 3:50] <- 1
 lc[] <- 1
 lc[70:100, 70:100] <- 2
 
+
+
 # create sf objects
 lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10000, 10000),
                                                             ncol = 2, byrow = TRUE))),
-                              crs = 5070))
+                              crs = sf::st_crs(5070)))
 esk <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 10000, 10000, 0),
                                                             ncol = 2, byrow = TRUE))),
-                              crs = 5070))
+                              crs = sf::st_crs(5070)))
 
 
 projPol <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(ad)))
+projPol <- sf::st_set_crs(projPol, sf::st_crs(5070))
 
 # calculate relative probability of use
 res <- caribouHabitat(landCover = lc,
