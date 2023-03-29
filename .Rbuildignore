@@ -9,3 +9,6 @@
 ^\.github$
 ^doc$
 ^Meta$
+
+_\.new\.png$
+

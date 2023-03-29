@@ -45,7 +45,10 @@ Imports:
     simstudy,
     stars,
     rlang,
-    terra
+    terra,
+    R2jags,
+    mcmcplots,
+    survival
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
@@ -88,7 +91,8 @@ Suggests:
     ggplot2,
     fasterize,
     rsyncrosim,
-    pfocal
+    pfocal,
+    BayesianCaribouDemographicProjection
 Remotes: LandSciTech/pfocal
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
