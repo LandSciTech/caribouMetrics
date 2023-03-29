@@ -87,7 +87,9 @@ Suggests:
     tmaptools,
     ggplot2,
     fasterize,
-    rsyncrosim
+    rsyncrosim,
+    pfocal
+Remotes: LandSciTech/pfocal
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
