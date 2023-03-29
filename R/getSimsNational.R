@@ -34,6 +34,7 @@ if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
 #' @export
 #'
 #' @examples
+#' getSimsNational()
 getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, by = 1),
                             fire_excl_anthro = 0, useQuantiles  = NULL,
                             populationGrowthTable  = NULL, adjustR = F, forceUpdate = F) {

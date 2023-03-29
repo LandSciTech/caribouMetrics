@@ -39,7 +39,7 @@ returned. If TRUE then only the habitatUse RasterStack is returned.}
 }
 \value{
 If \code{resultsOnly} is FALSE an updated CaribouHabitat object. If
-  \code{resultsOnly} is TRUE a RasterStack with a layer for each season.
+\code{resultsOnly} is TRUE a RasterStack with a layer for each season.
 }
 \description{
 Update a CaribouHabitat object in order to avoid reprocessing parts of the

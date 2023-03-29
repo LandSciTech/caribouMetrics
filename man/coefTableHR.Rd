@@ -6,17 +6,17 @@
 \title{Model coefficients for caribou ranges}
 \format{
 A data frame with 547 rows and 5 variables: \describe{
-  \item{Season}{season, one of Spring, Summer, Fall, Winter}
-  \item{Variable}{the shortform variable name for this resource type}
-  \item{Coefficient}{modelled coefficients} 
-  \item{WinArea}{window area for moving window average} 
-  \item{Range}{the caribou range name}}
+\item{Season}{season, one of Spring, Summer, Fall, Winter}
+\item{Variable}{the shortform variable name for this resource type}
+\item{Coefficient}{modelled coefficients}
+\item{WinArea}{window area for moving window average}
+\item{Range}{the caribou range name}}
 }
 \source{
 Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
-  C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
-  J.M., 2021. Modeling Cumulative Effects of Climate and Development on
-  Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
+C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
 }
 \usage{
 coefTableHR

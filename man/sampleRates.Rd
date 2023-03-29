@@ -56,31 +56,31 @@ scenario is unrelated to the values for that replicate in other scenarios.
 Useful for projecting impacts of changing disturbance on the
 trajectories of replicate populations.}
 
-\item{predInterval}{numeric vector with length 2. The default 95\% interval is
+\item{predInterval}{numeric vector with length 2. The default 95\\% interval is
 (\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and \code{quantilesToUse = NULL}.}
 
 \item{transformFn}{functions used to transform demographic rates.}
 }
 \value{
 A data.frame of predictions. The data.frame includes all columns in
-  \code{covTable} with additional columns depending on \code{returnSample}.
+\code{covTable} with additional columns depending on \code{returnSample}.
 
-  If \code{returnSample = FALSE} the number of rows is the same as the
-  number of rows in \code{covTable}, additional columns are:
-  \describe{
-    \item{"average"}{The mean estimated values of the response variable)}
-    \item{"stdErr"}{Standard error of the estimated values}
-    \item{"PIlow"/"PIhigh"}{If \code{quantilesToUse = NULL} these are the percentiles given by predInterval.
-      If using quantiles, maximum and minimum values are returned.}
-  }
-  If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
+If \code{returnSample = FALSE} the number of rows is the same as the
+number of rows in \code{covTable}, additional columns are:
+\describe{
+\item{"average"}{The mean estimated values of the response variable)}
+\item{"stdErr"}{Standard error of the estimated values}
+\item{"PIlow"/"PIhigh"}{If \code{quantilesToUse = NULL} these are the percentiles given by predInterval.
+If using quantiles, maximum and minimum values are returned.}
+}
+If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
    replicates} additional columns are:
-  \describe{
-    \item{"scnID"}{A unique identifier for scenarios provided in
-       \code{covTable}}
-    \item{"replicate"}{A replicate identifier, unique within each scenario}
-    \item{value}{The expected values of the response variable}
-  }
+\describe{
+\item{"scnID"}{A unique identifier for scenarios provided in
+\code{covTable}}
+\item{"replicate"}{A replicate identifier, unique within each scenario}
+\item{value}{The expected values of the response variable}
+}
 }
 \description{
 Sample expected survival or recruitment rates based on samples of coefficient

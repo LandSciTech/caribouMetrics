@@ -24,8 +24,8 @@ additional options may be added in the future.}
 }
 \value{
 a named list with one element per model version. The names are
-  \code{modVer_modNum_Type}. Each element contains a data.frame that
-  is a subset of \code{populationGrowthTable} for the selected model
+\code{modVer_modNum_Type}. Each element contains a data.frame that
+is a subset of \code{populationGrowthTable} for the selected model
 }
 \description{
 Get the coefficients for the chosen model version(s), number(s) and response

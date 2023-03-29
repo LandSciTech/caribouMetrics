@@ -12,10 +12,10 @@ of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal
 Population, in Canada: 2011 Update. Ottawa, Ontario. Output variables
 include:
 \itemize{
-  \item {Fire:} {\% fire}
-  \item {Anthro:} {\% non-overlapping anthropogenic disturbance.}
-  \item {Total_dist:} {Percent total non-overlapping fire and anthropogenic disturbance.}
-  \item {fire_excl_anthro:} {\% fire not overlapping with anthropogenic disturbance.}
+\item Fire: Percent fire
+\item Anthro: Percent non-overlapping buffered anthropogenic disturbance.
+\item Total_dist: Percent total non-overlapping fire and anthropogenic disturbance.
+\item fire_excl_anthro: Percent fire not overlapping with anthropogenic disturbance.
 }
 }
 \details{
@@ -43,6 +43,6 @@ Missing layers are omitted from the output, not interpreted as 0 disturbance
 }}
 
 \seealso{
-See \code{\link{disturbanceMetrics}} for options when creating a
-  DisturbanceMetrics object.
+See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}} for options when creating a
+DisturbanceMetrics object.
 }

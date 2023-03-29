@@ -35,5 +35,5 @@ used in the RSF}
 
 \seealso{
 See \code{\link{caribouHabitat}} for options when creating a
-  CaribouHabitat object.
+CaribouHabitat object.
 }

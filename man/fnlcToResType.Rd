@@ -6,8 +6,8 @@
 \title{Lookup table for FNLC to resource type}
 \format{
 A data frame with 26 rows and 2 variables: \describe{
-  \item{PLCCode}{FNLC number code}
-  \item{ResourceType}{Letter code indicating the resource type} }
+\item{PLCCode}{FNLC number code}
+\item{ResourceType}{Letter code indicating the resource type} }
 }
 \usage{
 fnlcToResType

@@ -24,7 +24,7 @@ getSimsNational(
 representing the percentage of the landscape covered by anthropogenic
 disturbance buffered by 500 m, and the percentage covered by fire that does
 not overlap anthropogenic disturbance. The two vectors will be combined
-with `expand.grid()` to give the set of scenarios simulated.}
+with \code{expand.grid()} to give the set of scenarios simulated.}
 
 \item{useQuantiles}{logical or numeric. If it is a numeric
 vector it must be length 2 and give the low and high limits of the
@@ -42,15 +42,20 @@ parameters can be provided but it must match the column names of
 \item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{forceUpdate}{logical. If the default inputs are used the result is
-cached. Set `forceUpdate` to TRUE to ensure the simulations are re-run.}
+cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
 }
 \value{
 a list with two elements:
- * summary: a tibble with a summary of parameter values for each scenario.
-   Column names are Anthro, Mean, lower, upper, Parameter.
- * samples: a tibble with parameter values for each scenario and replicate
-   4 rows per replicate \* scenario. Column names are Anthro, Parameter and Value
+\itemize{
+\item summary: a tibble with a summary of parameter values for each scenario.
+Column names are Anthro, Mean, lower, upper, Parameter.
+\item samples: a tibble with parameter values for each scenario and replicate
+4 rows per replicate \* scenario. Column names are Anthro, Parameter and Value
+}
 }
 \description{
 Get a set of simulation results from the national model
+}
+\examples{
+getSimsNational()
 }

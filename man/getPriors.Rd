@@ -25,16 +25,21 @@ getPriors(
 \item{modifiers}{a named list of modifiers to use to change the priors. If a
 modifier is supplied here the corresponding argument below is ignored.}
 
+\item{survivalModelNumber, recruitmentModelNumber}{character. Which model
+number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.}
+
 \item{bre}{anthropogenic disturbance slope recruitment uncertainty
 multiplier. 1 - 10}
 
 \item{bse}{anthropogenic disturbance slope survival uncertainty multiplier. 1
-- 10}
+\itemize{
+\item 10
+}}
 
 \item{lse}{survival intercept uncertainty multiplier. 1 - 10}
 
 \item{sse}{interannual coefficient of variation for survival. 0-1. See
-[popGrowthJohnson()] and functions therein for details}
+\code{\link[=popGrowthJohnson]{popGrowthJohnson()}} and functions therein for details}
 
 \item{ssv}{uncertainty about interannual variation in survival. 0-1}
 
@@ -44,29 +49,40 @@ multiplier. 1 - 10}
 
 \item{srv}{uncertainty about interannual variation in recruitment. 0-1.}
 
+\item{populationGrowthTable}{data.frame. \code{\link{popGrowthTableJohnsonECCC}} is
+included in the package and should be used in most cases. A custom table of
+model parameters can be provided but it must match the column names of
+\code{\link{popGrowthTableJohnsonECCC}}.}
+
+\item{modVer}{character vector. Which model version(s) to use. Currently the
+only option is "Johnson" for the model used in Johnson et. al. (2020), but
+additional options may be added in the future.}
+
 \item{returnValues}{logical. Default is TRUE. If FALSE returns strings for
 some values showing the initial values and the modifier ie "0.9 * 1.05"}
 }
 \value{
 a list with values:
-* l.R.Prior1: Recruitment intercept,
-* l.R.Prior2: Recruitment intercept standard error times modifier,
-* beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,
-* beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard
-  error times modifier,
-* beta.Rec.fire.Prior1: Recruitment fire excluding anthropogenic disturbance
-  slope,
-* beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance
-  standard error,
-* sig.R.Prior1: Interannual coefficient of variation for recruitment,
-* sig.R.Prior2: uncertainty about interannual variation in recruitment,
-* l.Saf.Prior1: Adult female survival intercept,
-* l.Saf.Prior2: Adult female survival intercept standard error times modifier,
-* beta.Saf.Prior1: Adult female survival anthropogenic disturbance slope,
-* beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
-  error times modifier,
-* sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,
-* sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival
+\itemize{
+\item l.R.Prior1: Recruitment intercept
+\item l.R.Prior2: Recruitment intercept standard error times modifier,
+\item beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,
+\item beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard
+error times modifier,
+\item beta.Rec.fire.Prior1: Recruitment fire excluding anthropogenic disturbance
+slope,
+\item beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance
+standard error,
+\item sig.R.Prior1: Interannual coefficient of variation for recruitment,
+\item sig.R.Prior2: uncertainty about interannual variation in recruitment,
+\item l.Saf.Prior1: Adult female survival intercept,
+\item l.Saf.Prior2: Adult female survival intercept standard error times modifier,
+\item beta.Saf.Prior1: Adult female survival anthropogenic disturbance slope,
+\item beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
+error times modifier,
+\item sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,
+\item sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival
+}
 }
 \description{
 Get model priors from national models

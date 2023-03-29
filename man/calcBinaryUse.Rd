@@ -27,11 +27,11 @@ TRUE then the result is a 0 or 1 for each season.}
 }
 \value{
 If \code{bySeason} is \code{FALSE} and \code{x} is a CaribouHabitat object then the result is a RasterLayer.
- If \code{bySeason} is \code{TRUE} and \code{x} is a CaribouHabitat object then the result is a RasterBrick.  
- If \code{bySeason} is \code{FALSE} and \code{x} is a data.frame then the result is a data.frame.
- If \code{bySeason} is \code{TRUE} and \code{x} is a data.frame then the result is a data.frame.
- If \code{bySeason} is \code{FALSE} and \code{x} is a vector then the result is a vector.
- If \code{bySeason} is \code{TRUE} and \code{x} is a vector then the result is a data.frame.
+If \code{bySeason} is \code{TRUE} and \code{x} is a CaribouHabitat object then the result is a RasterBrick.
+If \code{bySeason} is \code{FALSE} and \code{x} is a data.frame then the result is a data.frame.
+If \code{bySeason} is \code{TRUE} and \code{x} is a data.frame then the result is a data.frame.
+If \code{bySeason} is \code{FALSE} and \code{x} is a vector then the result is a vector.
+If \code{bySeason} is \code{TRUE} and \code{x} is a vector then the result is a data.frame.
 }
 \description{
 Convert continuous probability of use in each season to binary high use in

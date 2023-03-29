@@ -20,7 +20,7 @@ simulateObservations(
 )
 }
 \arguments{
-\item{cs}{list. Parameters for the simulations. See [fillDefaults()] for
+\item{cs}{list. Parameters for the simulations. See \code{\link[=fillDefaults]{fillDefaults()}} for
 details.}
 
 \item{cowCounts}{data.frame. Number of cows counted in aerial surveys each
@@ -44,8 +44,8 @@ Must have 2 columns "Year" and "numStarts"}
 "Anthro", and "fire_excl_anthro" containing the year, percentage of the
 landscape covered by anthropogenic disturbance buffered by 500 m, and the
 percentage covered by fire that does not overlap anthropogenic disturbance.
-See [disturbanceMetrics()]. If NULL the disturbance scenario is simulated
-based on `cs`}
+See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturbance scenario is simulated
+based on \code{cs}}
 
 \item{populationGrowthTable}{data.frame. By default
 \code{\link{popGrowthTableJohnsonECCC}} is used. A custom table of model
@@ -55,22 +55,33 @@ parameters can be provided but it must match the column names of
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
 number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.}
 
-\item{writeFilesDir}{characater. If not NULL `simSurvObs` and `ageRatioOut`
+\item{writeFilesDir}{characater. If not NULL \code{simSurvObs} and \code{ageRatioOut}
 results will be saved to csv files in the directory provided}
 }
 \value{
 a list with elements:
-  * minYr: first year in the simulations,
-  * maxYr: last year in the simulations,
-  * simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
-  * simSurvObs: a data frame of survival data with columns id, Year, event, enter, and exit,
-  * ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
-  * exData: a tibble of expected population metric based on the national model,
-  * cs: a data frame recording the input parameters for the simulation.
+\itemize{
+\item minYr: first year in the simulations,
+\item maxYr: last year in the simulations,
+\item simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
+\item simSurvObs: a data frame of survival data with columns id, Year, event, enter, and exit,
+\item ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
+\item exData: a tibble of expected population metric based on the national model,
+\item cs: a data frame recording the input parameters for the simulation.
+}
 }
 \description{
 Simulate caribou survival data. First a true population trajectory is
 simulated following the national model and a disturbance scenario. Then
 realistic observations are simulated from this true population based on a
 collaring program with the given parameters.
+}
+\examples{
+scns <- fillDefaults()
+simulateObservations(scns,
+                     freqStartsByYear = data.frame(Year = 2014:2023,
+                                                   numStarts = 10),
+                     cowCounts = data.frame(Year = 2014:2023,
+                                            Count = 10,
+                                            Class = "cow"))
 }

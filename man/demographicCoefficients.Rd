@@ -38,13 +38,13 @@ parameters can be provided but it must match the column names of
 }
 \value{
 A list with elements: \describe{ \item{"modelVersion"}{The name of
-  the model version} \item{"coefSamples_Survival" and
-  "coefSamples_Recruitment"}{ lists with elements: \describe{
-  \item{"coefSamples"}{Bootstrapped coefficients with \code{replicates} rows}
-  \item{"coefValues"}{Coefficient values taken from
-  \code{populationGrowthTable}} \item{"quantiles"}{A vector of randomly
-  selected quantiles between 0.025 and 0.975 with length \code{replicates}} }
-  } }
+the model version} \item{"coefSamples_Survival" and
+"coefSamples_Recruitment"}{ lists with elements: \describe{
+\item{"coefSamples"}{Bootstrapped coefficients with \code{replicates} rows}
+\item{"coefValues"}{Coefficient values taken from
+\code{populationGrowthTable}} \item{"quantiles"}{A vector of randomly
+selected quantiles between 0.025 and 0.975 with length \code{replicates}} }
+} }
 }
 \description{
 A wrapper around \code{\link{getCoefs}} to select coefficients for the
@@ -63,8 +63,8 @@ demographicCoefficients(10, modelVersion = "Johnson", survivalModelNumber = "M1"
 }
 \references{
 Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
-  Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking
-  population dynamics to habitat for a threatened species in Canada. Journal
-  of Applied Ecology, 57(7), pp.1314-1327.
-  \url{https://doi.org/10.1111/1365-2664.13637}
+Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking
+population dynamics to habitat for a threatened species in Canada. Journal
+of Applied Ecology, 57(7), pp.1314-1327.
+\url{https://doi.org/10.1111/1365-2664.13637}
 }

@@ -17,11 +17,12 @@
 #' @param ssv uncertainty about interannual variation in survival. 0-1
 #' @param sre interannual coefficient of variation for recruitment. 0-1
 #' @param srv uncertainty about interannual variation in recruitment. 0-1.
-#' @inheritParams caribouMetrics::getCoefs
-#' @inheritParams caribouMetrics::demographicCoefficients
+#' @inheritParams getCoefs
+#' @inheritParams demographicCoefficients
 #'
 #' @return a list with values:
-#' * l.R.Prior1: Recruitment intercept,
+#' 
+#' * l.R.Prior1: Recruitment intercept  
 #' * l.R.Prior2: Recruitment intercept standard error times modifier,
 #' * beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,
 #' * beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard

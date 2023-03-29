@@ -5,17 +5,17 @@
 \title{Reclassify provincial land cover}
 \source{
 Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
- woodland caribou (Rangifer tarandus caribou) across a gradient of
- anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
- \url{https://doi.org/10.1139/cjz-2015-0101}
+woodland caribou (Rangifer tarandus caribou) across a gradient of
+anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+\url{https://doi.org/10.1139/cjz-2015-0101}
 
- Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
- Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
- Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Existing caribou
- habitat and demographic models need improvement for Ring of Fire impact
- assessment: A roadmap for improving the usefulness, transparency, and
- availability of models for conservation.
- \url{https://doi.org/10.1101/2022.06.01.494350}
+Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
+Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
+Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Existing caribou
+habitat and demographic models need improvement for Ring of Fire impact
+assessment: A roadmap for improving the usefulness, transparency, and
+availability of models for conservation.
+\url{https://doi.org/10.1101/2022.06.01.494350}
 }
 \usage{
 reclassPLC(plc, plcLU = plcToResType)
@@ -45,7 +45,7 @@ lookup table must have two columns with names "PLCCode" and "ResourceType"
 where "PLCCode" is the value in the land cover raster and "ResourceType" is
 the corresponding letter code for the resource type. The possible resource
 types are included in \code{resTypeCode} and descriptions of these codes can
-be found in table S1.3 of [supplementary material](https://osf.io/x6e2q) for
+be found in table S1.3 of \href{https://osf.io/x6e2q}{supplementary material} for
 Dyson et. al (2022).
 }
 \examples{

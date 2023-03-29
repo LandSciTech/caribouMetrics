@@ -6,16 +6,16 @@
 \title{Lookup table for RFU to resource type}
 \format{
 A data frame with 17 rows and 2 variables: \describe{
-  \item{RegionalForestUnit}{Regional forest unit 5 letter or number code}
-  \item{ResourceType}{Letter code indicating the resource type} 
+\item{RegionalForestUnit}{Regional forest unit 5 letter or number code}
+\item{ResourceType}{Letter code indicating the resource type}
 }
 }
 \source{
 LSL script for work published in:
- Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
- woodland caribou (Rangifer tarandus caribou) across a gradient of
- anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
- \url{https://doi.org/10.1139/cjz-2015-0101}
+Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+woodland caribou (Rangifer tarandus caribou) across a gradient of
+anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+\url{https://doi.org/10.1139/cjz-2015-0101}
 }
 \usage{
 rfuToResType

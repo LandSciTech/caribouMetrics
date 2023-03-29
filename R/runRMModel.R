@@ -39,6 +39,9 @@
 #' @export
 #'
 #' @examples
+#' # this uses example data shipped with the package
+#' runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
+#' 
 runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
                                               package = "BayesianCaribouDemographicProjection"),
                        ageRatio.herd = system.file("extdata/simAgeRatio.csv",

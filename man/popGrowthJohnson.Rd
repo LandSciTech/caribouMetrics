@@ -74,7 +74,7 @@ variability parameters. These can be either coefficients of variation
 }
 \value{
 A data.frame of population size (N) and average growth rate (lambda)
-  projections for each sample population.
+projections for each sample population.
 }
 \description{
 Given default parameter values, this is an implementation of the 2-stage

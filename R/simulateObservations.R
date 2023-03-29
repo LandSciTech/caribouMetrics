@@ -39,6 +39,13 @@
 #' @export
 #'
 #' @examples
+#' scns <- fillDefaults()
+#' simulateObservations(scns,
+#'                      freqStartsByYear = data.frame(Year = 2014:2023,
+#'                                                    numStarts = 10),
+#'                      cowCounts = data.frame(Year = 2014:2023,
+#'                                             Count = 10,
+#'                                             Class = "cow"))
 simulateObservations <- function(cs, cowCounts,
                                  freqStartsByYear,
                                  printPlot = FALSE,

@@ -52,7 +52,7 @@ in one scenario is unrelated to the values for that replicate in other
 scenarios. Useful for projecting impacts of changing disturbance on the
 trajectories of replicate populations.}
 
-\item{predInterval}{numeric vector with length 2. The default 95\% interval is
+\item{predInterval}{numeric vector with length 2. The default 95\\% interval is
 (\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and
 \code{quantilesToUse = NULL}.}
 
@@ -62,27 +62,27 @@ The back transformation is applied to survival rates as in Johnson et al. 2020.}
 }
 \value{
 A data.frame of predictions. The data.frame includes all columns in
-  \code{covTable} with additional columns depending on \code{returnSample}.
+\code{covTable} with additional columns depending on \code{returnSample}.
 
-  If \code{returnSample = FALSE} the number of rows is the same as the
-  number of rows in \code{covTable}, additional columns are:
-  \describe{
-    \item{"S_bar" and "R_bar"}{The mean estimated values of survival and
-      recruitment (calves per cow)}
-    \item{"S_stdErr" and "R_stdErr"}{Standard error of the estimated values}
-    \item{"S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh"}{If not using quantiles,
-      95\% of values fall within this range.
-      If using quantiles, maximum and minimum values are returned.}
-  }
-  If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
+If \code{returnSample = FALSE} the number of rows is the same as the
+number of rows in \code{covTable}, additional columns are:
+\describe{
+\item{"S_bar" and "R_bar"}{The mean estimated values of survival and
+recruitment (calves per cow)}
+\item{"S_stdErr" and "R_stdErr"}{Standard error of the estimated values}
+\item{"S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh"}{If not using quantiles,
+95\\% of values fall within this range.
+If using quantiles, maximum and minimum values are returned.}
+}
+If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
    replicates} additional columns are:
-  \describe{
-    \item{"scnID"}{A unique identifier for scenarios provided in
-       \code{covTable}}
-    \item{"replicate"}{A replicate identifier, unique within each scenario}
-    \item{"S_bar" and "R_bar"}{The expected values of survival and
-      recruitment (calves per cow)}
-  }
+\describe{
+\item{"scnID"}{A unique identifier for scenarios provided in
+\code{covTable}}
+\item{"replicate"}{A replicate identifier, unique within each scenario}
+\item{"S_bar" and "R_bar"}{The expected values of survival and
+recruitment (calves per cow)}
+}
 }
 \description{
 A wrapper around \code{\link{sampleRates}} to sample

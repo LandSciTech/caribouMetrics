@@ -18,7 +18,7 @@ NULL, points in x will be ignored.}
 }
 \value{
 A RasterLayer object with values representing the density of lines in meters
-  per hectare.
+per hectare.
 }
 \description{
 Rasterize line density in meters per hectare.

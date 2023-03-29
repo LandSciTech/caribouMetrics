@@ -71,6 +71,6 @@ dm2 <- updateDisturbance(dm, newData = list(linFeat = lf2))
 }
 \seealso{
 \code{\link{DisturbanceMetrics-class}} for information on the object
- returned and \code{\link{disturbanceMetrics}} for making a new
- DisturbanceMetrics object.
+returned and \code{\link{disturbanceMetrics}} for making a new
+DisturbanceMetrics object.
 }

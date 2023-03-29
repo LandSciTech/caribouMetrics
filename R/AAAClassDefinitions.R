@@ -57,17 +57,15 @@ CaribouHabitat <- setClass("CaribouHabitat",
 #' of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal
 #' Population, in Canada: 2011 Update. Ottawa, Ontario. Output variables
 #' include:
-#' \itemize{
-#'   \item {Fire:} {\% fire}
-#'   \item {Anthro:} {\% non-overlapping anthropogenic disturbance.}
-#'   \item {Total_dist:} {Percent total non-overlapping fire and anthropogenic disturbance.}
-#'   \item {fire_excl_anthro:} {\% fire not overlapping with anthropogenic disturbance.}
-#' }
+#'  * Fire: Percent fire
+#'  * Anthro: Percent non-overlapping buffered anthropogenic disturbance.
+#'  * Total_dist: Percent total non-overlapping fire and anthropogenic disturbance.
+#'  * fire_excl_anthro: Percent fire not overlapping with anthropogenic disturbance.
 #'
 #' Note that NA values are omitted from tabulated area.
 #' Missing layers are omitted from the output, not interpreted as 0 disturbance
 #'
-#' @seealso See \code{\link{disturbanceMetrics}} for options when creating a
+#' @seealso See [disturbanceMetrics()] for options when creating a
 #'   DisturbanceMetrics object.
 #'   
 #' @slot landCover Raster distinguishing land from water. 0 or NA is water.

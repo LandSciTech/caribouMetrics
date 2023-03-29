@@ -2,10 +2,19 @@
 % Please edit documentation in R/demographicProjectionApp.R
 \name{demographicProjectionApp}
 \alias{demographicProjectionApp}
-\title{Title}
+\title{Run the Bayesian caribou demographic projection app}
 \usage{
 demographicProjectionApp(n = 1000)
 }
+\value{
+launches a shiny app in the browser
+}
 \description{
-Title
+This requires the "BayesianCaribouDemographicProjection" to be is installed.
+}
+\examples{
+if(interactive()){
+ demographicProjectionApp()
+}
+
 }

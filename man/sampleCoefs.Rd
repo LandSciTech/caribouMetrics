@@ -15,12 +15,12 @@ name of the coefficient, "Value" for the value of the coefficient and
 }
 \value{
 A list with elements:
-   \describe{
-      \item{"coefSamples"}{Bootstrapped coefficients with \code{replicates}
-        rows}
-      \item{"coefValues"}{Coefficient values taken from
-        \code{populationGrowthTable}}
-    }
+\describe{
+\item{"coefSamples"}{Bootstrapped coefficients with \code{replicates}
+rows}
+\item{"coefValues"}{Coefficient values taken from
+\code{populationGrowthTable}}
+}
 }
 \description{
 Sample coefficient values from the normal distribution based on the

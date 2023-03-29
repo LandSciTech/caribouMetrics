@@ -23,7 +23,7 @@ returned as a RasterStack.}
 }
 \value{
 By default a RasterStack if x is a CaribouHabitat object and a
-  data.frame if x is a DisturbanceMetrics object.
+data.frame if x is a DisturbanceMetrics object.
 }
 \description{
 Extract results from CaribouHabitat or DisturbanceMetrics object.

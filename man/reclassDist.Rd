@@ -29,7 +29,7 @@ year/time since disturbance is recorded.}
 }
 \value{
 Returns a binary \code{RasterLayer} with the same dimensions as the
-  \code{template} input. Values of 1 represent areas of disturbance
+\code{template} input. Values of 1 represent areas of disturbance
 }
 \description{
 Classify disturbances that have occurred in a user defined time

@@ -1,4 +1,7 @@
+#' Generate default scenario parameters
 #'
+#' This function can be used to generate default parameter values used in
+#' [simulateObservations()]
 #'
 #' @param scns a data.frame with column names matching the arguments below. Any
 #'   columns that are missing will be filled with the default values.
@@ -17,7 +20,7 @@
 #' @param N0 number. Initial population size
 #' @param adjustR logical. Adjust R to account for delayed age at first
 #'   reproduction (DeCesare et al. 2012; Eacker et al. 2019)?
-#' @param assessmentYrs
+#' @param assessmentYrs number. #TODO: 
 #' @param ri number. Optional. Number of years between collar deployments. If
 #'   missing assumed to be every year
 #' @param cmult number. Optional. If provided number of cows is `cmult` \*
@@ -40,7 +43,8 @@
 #'   Hervieux, D., 2019. Web‐based application for threatened woodland caribou
 #'   population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.
 #'
-#' @return
+#' @return a data.frame of parameter values including a label that combines all
+#'   the parameter names and values into a string
 #' @export
 #'
 #' @examples
@@ -48,7 +52,7 @@
 #'
 #' # scns list takes precedence over argument values
 #' fillDefaults(scns = data.frame(iF = 10, iA = 20, P = 1), P = 5)
-#'
+#' 
 fillDefaults <- function(scns = NULL,
                          iF = 0, iA = 0, aS = 0, aSf = 4,
                          rS = 1, sS = 1,
