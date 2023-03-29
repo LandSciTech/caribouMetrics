@@ -25,9 +25,8 @@
 #'   See [disturbanceMetrics()]. If NULL the disturbance scenario is simulated
 #'   based on `cs`
 #' @inheritParams demographicCoefficients
-#' TODO: remove writeFiles option? I think yes. If not need to ask for location
-#' @param writeFiles should simSurvObs and ageRatioOut results be saved to csv
-#'   files in the tabs folder
+#' @param writeFilesDir characater. If not NULL `simSurvObs` and `ageRatioOut`
+#'   results will be saved to csv files in the directory provided
 #'
 #' @return a list with elements:
 #'   * minYr: first year in the simulations,
@@ -40,13 +39,15 @@
 #' @export
 #'
 #' @examples
-simulateObservations <- function(cs, printPlot = F, cowCounts,
+simulateObservations <- function(cs, cowCounts,
                                  freqStartsByYear,
+                                 printPlot = FALSE,
                                  collarNumYears = 4, collarOffTime = 5,
                                  collarOnTime = 8, distScen = NULL,
                                  populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                                  survivalModelNumber = "M1",
-                                 recruitmentModelNumber = "M4", writeFiles = F) {
+                                 recruitmentModelNumber = "M4",
+                                 writeFilesDir = NULL) {
   # printPlot=T;cowCounts=ePars$cowCounts;freqStartsByYear=ePars$freqStartsByYear;
   # collarNumYears=ePars$collarNumYears;collarOffTime=ePars$collarOffTime;
   # collarOnTime=ePars$collarOnTime
@@ -76,10 +77,11 @@ simulateObservations <- function(cs, printPlot = F, cowCounts,
     simDisturbance <- covariates
     simDisturbance$Year <- cs$iYr + simDisturbance$time - 1
 
-    if (writeFiles) {
-      # note default file for UI is always the last scenario run
-      write.csv(simDisturbance, "tabs/simDisturbance.csv")
-      write.csv(simDisturbance, paste0("tabs/simDisturbance", cs$label, ".csv"))
+    if (!is.null(writeFilesDir)) {
+      write.csv(simDisturbance,
+                file.path(writeFilesDir,
+                          paste0("simDisturbance", cs$label, ".csv")),
+                row.names = FALSE)
     }
   } else {
     simDisturbance <- distScen
@@ -165,21 +167,15 @@ simulateObservations <- function(cs, printPlot = F, cowCounts,
   # given observed total animals & proportion calfs/cows from simulation - get
   # calf/cow ratio
   ageRatioOut <- simCalfCowRatios(cowCounts, minYr, exData)
-  # TO DO: remove option for more than one herd in input files, UI, and all
-  # associated code...
-  ageRatioOut$HerdCode <- "ALAP"
-  ageRatioOut <- subset(ageRatioOut, select = c(names(cowCounts)))
-  if (writeFiles) {
-    # TO DO: ensure UI code uses column names rather than column positions, and
-    # is not sensitive to rearrangement of columns
-    write.csv(ageRatioOut, "tabs/simAgeRatio.csv")
-    write.csv(ageRatioOut, paste0("tabs/simAgeRatio", cs$label, ".csv"))
 
-    # TO DO: ensure UI code uses column names rather than column positions, and
-    # is not sensitive to rearrangement of columns
-    write.csv(simSurvObs, "tabs/simSurvData.csv")
-    write.csv(simSurvObs, paste0("tabs/simSurvData", cs$label, ".csv"))
-    # TO DO: UI option to easily select among available scenarios.
+  ageRatioOut <- subset(ageRatioOut, select = c(names(cowCounts)))
+  if (!is.null(writeFilesDir)) {
+    write.csv(ageRatioOut,
+              file.path(writeFilesDir, paste0("simAgeRatio", cs$label, ".csv")),
+              row.names = FALSE)
+    write.csv(simSurvObs,
+              file.path(writeFilesDir, paste0("simSurvData", cs$label, ".csv")),
+              row.names = FALSE)
   }
   return(list(minYr = minYr, maxYr = maxYr, simDisturbance = simDisturbance,
               simSurvObs = simSurvObs, ageRatioOut = ageRatioOut,
