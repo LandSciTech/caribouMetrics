@@ -199,6 +199,119 @@ simCalfCowRatios <- function(cowCounts, minYr, exData) {
   return(ageRatioOut)
 }
 
+simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffTime,
+                            collarOnTime, topUp = F) {
+  # topUp=T
+  # for simplicity, ignore variation in survival probability among months
+  initYear <- min(exData$Year)
+  freqStartsByYear <- subset(freqStartsByYear, (Year >= initYear) & (numStarts > 0))
+  
+  freqStartsByYear <- freqStartsByYear[order(freqStartsByYear$Year), ]
+  survivalSeries <- subset(exData, select = c(survival, Year))
+  
+  # freqStartsByYear$numStarts=10000;collarNumYears=2
+  
+  # if(initYear<min(survivalSeries$Year)){
+  #  missingYrs = seq(initYear,min(survivalSeries$Year)-1)
+  #  addBit = subset(survivalSeries,Year==min(survivalSeries$Year))
+  #  addBit$Year=NULL;addBit = merge(addBit, data.frame(Year=missingYrs))
+  #  survivalSeries=rbind(survivalSeries,addBit)
+  # }
+  
+  animalID <- 1
+  simSurvObs <- data.frame(id = NA, Year = NA, event = NA, enter = NA, exit = NA)
+  simSurvObs <- subset(simSurvObs, !is.na(id))
+  # collarNumYears=4
+  for (k in 1:nrow(freqStartsByYear)) {
+    # k =1
+    if (is.na(freqStartsByYear$numStarts[k]) | (freqStartsByYear$numStarts[k] <= 0)) {
+      next
+    }
+    startYear <- freqStartsByYear$Year[k]
+    if (topUp) {
+      collarsExisting <- nrow(subset(simSurvObs, (enter == 0) & (Year == startYear)))
+      nstarts <- max(0, freqStartsByYear$numStarts[k] - collarsExisting)
+    } else {
+      nstarts <- freqStartsByYear$numStarts[k]
+    }
+    if (nstarts == 0) {
+      next
+    }
+    for (n in 1:nstarts) {
+      # n=1
+      addS <- simSurvivalObs(animalID, startYear = startYear,
+                             collarNumYears = collarNumYears,
+                             collarOffTime = collarOffTime,
+                             collarOnTime = collarOnTime,
+                             survivalSeries = survivalSeries)
+      animalID <- animalID + 1
+      simSurvObs <- rbind(simSurvObs, addS)
+    }
+  }
+  
+  # 1-sum(simSurvObs$event)/nrow(simSurvObs)
+  # exData
+  
+  simSurvObs <- subset(simSurvObs, is.element(Year, exData$Year))
+  simSurvObs <- simSurvObs[order(simSurvObs$Year), ]
+  
+  addBit <- unique(subset(freqStartsByYear,
+                          select = setdiff(names(freqStartsByYear),
+                                           c("numStarts", names(simSurvObs)))))
+  if (nrow(addBit) > 1) {
+    stop()
+  } else if (nrow(addBit) > 0) {
+    simSurvObs <- merge(simSurvObs, addBit)
+  }
+  
+  return(simSurvObs)
+}
+
+simSurvivalObs <- function(animalID, startYear, collarNumYears, collarOffTime,
+                           collarOnTime, survivalSeries) {
+  # animalID =  1; startYear = 2016
+  for (i in startYear:min((startYear + collarNumYears - 1), max(survivalSeries$Year))) {
+    # i = startYear
+    surv <- survivalSeries$survival[survivalSeries$Year == i]^(1 / 12) # monthly survival
+    
+    if (i == startYear) {
+      enter <- collarOnTime - 1
+    } else {
+      enter <- 0
+    }
+    
+    if (i == (startYear + collarNumYears - 1)) {
+      exit <- collarOffTime
+    } else {
+      exit <- 12
+    }
+    
+    event <- 0
+    for (j in (enter + 1):exit) {
+      die <- rbinom(1, 1, 1 - surv)
+      if (die) {
+        event <- 1
+        exit <- j
+        break
+      }
+    }
+    
+    addBit <- data.frame(id = animalID, Year = i, event = die, enter = enter,
+                         exit = exit)
+    
+    if (i == startYear) {
+      survObs <- addBit
+    } else {
+      survObs <- rbind(survObs, addBit)
+    }
+    if (die) {
+      break
+    }
+  }
+  
+  return(survObs)
+}
+
 # Helpers for runScnSet and App -------------------------------------------
 
 getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
