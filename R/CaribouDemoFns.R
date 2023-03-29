@@ -148,7 +148,7 @@ getParamsFromEacker <- function(path) {
   addInfo <- unique(subset(tte_caribou2,
                            select = c(HerdDescription, HerdCode, Range_ID,
                                       RangeDescription, RangeCode)))
-  # TO DO: remove requirement for additional herd ID and range ID columns in UI code
+
   freqStartsByYear <- merge(freqStartsByYear, addInfo)
   write.csv(freqStartsByYear, "tabs/freqStartsByYear.csv")
 
@@ -163,8 +163,7 @@ getParamsFromEacker <- function(path) {
   onSet <- merge(onSet, tte_caribou2, all.x = T)
   # for simplicity, pick a single month that collars are put on
   collarOnTime <- median(onSet$enter)
-  # TO DO: allow users to set freqStartsByYear, collarNumYears, collarOffTime,
-  # and collarOnTime as parameters OR provide a file formatted as in Eacker from
+  # TO DO: allow users to provide a file formatted as in Eacker from
   # which these parameters can be derived.
 
   # freqStartsByYear$numStarts=30

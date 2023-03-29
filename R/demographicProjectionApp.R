@@ -10,8 +10,6 @@
 demographicProjectionApp <- function(n = 1000) {
   rjags::load.module("glm")
 
-  # TO DO: make recruitment adjustment (equation 2 of Eacker et al) an option. Note this requires adjusting all calls to popGrowthJohnson, as well as jags code.
-
   ##########
   # Get full set of sims for comparison, the results are cached
   getSimsNational(adjustR = T)
@@ -469,7 +467,6 @@ $( document ).ready(function() {
                        blank.lines.skip = TRUE
         )
         # check table matches expected for caribouMetrics
-        # TODO: confirm that a table that passes this works
         df <- testPopGrowthTable(df)
 
         return(df)
@@ -601,7 +598,6 @@ $( document ).ready(function() {
     })
 
     # TABLES #######
-    # TODO: there is a simpler way to do this reactivity with req()
     dataInput1 <- eventReactive(input$Run.model, {
       out <- dataInput()
 

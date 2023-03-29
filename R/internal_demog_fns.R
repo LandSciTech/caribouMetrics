@@ -122,7 +122,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   )
   # manually set quantiles for example population
   popGrowthParsSmall$coefSamples_Survival$quantiles <- sefQuantile
-  # TO DO: across full covariate range, note proportion of this scenario that is
+  # TODO: across full covariate range, note proportion of this scenario that is
   # outside distribution of observations across the country
 
   # Only use precision if included in the table for this model number for both

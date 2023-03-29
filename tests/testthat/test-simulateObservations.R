@@ -40,3 +40,6 @@ test_that("multiple scenarios not allowed",{
                                                         Class = "cow")),
             "must have length 1")
 })
+
+# TODO: add test for non-default popGrow table should use testPopGrowTable
+# internally, do same in getPriors
