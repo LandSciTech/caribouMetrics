@@ -224,7 +224,89 @@ disturbance. To update an existing DisturbanceMetrics object with new data see
 <span class="r-in"><span>                   projectPoly <span class="op">=</span> <span class="va">projPol</span>,</span></span>
 <span class="r-in"><span>                   padFocal <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                   bufferWidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in st_transform.sfc(., st_crs(y)):</span> cannot transform sfc object with missing crs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> buffering anthropogenic disturbance</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calculating disturbance metrics</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> An object of class "DisturbanceMetrics"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "landCover":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 10, 10, 100  (nrow, ncol, ncell)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 1, 1  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : layer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values     : 1, 1  (min, max)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "natDist":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 10, 10, 100  (nrow, ncol, ncell)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 1, 1  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : layer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values     : 1, 1  (min, max)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "anthroDist":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 10, 10, 100  (nrow, ncol, ncell)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 1, 1  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : layer </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> values     : 1, 1  (min, max)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "linFeat":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 0 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 0 ymin: 0 xmax: 10 ymax: 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: NAD83 / Conus Albers</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 LINESTRING (0 0, 10 10)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "projectPoly":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 0 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 0 ymin: 0 xmax: 10 ymax: 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sf..st_as_sfc.sf..st_bbox.ad..</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 POLYGON ((0 0, 10 0, 10 10,...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "processedData":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterBrick </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 10, 10, 100, 4  (nrow, ncol, ncell, nlayers)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 1, 1  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names      : Anthro, Fire, Total_dist, fire_excl_anthro </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> min values :      0,    0,          0,                0 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> max values :      1,    1,          1,                1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "disturbanceMetrics":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   zone Anthro Fire Total_dist fire_excl_anthro</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    1     52    9         58                6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "attributes":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $bufferWidth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $padProjPoly</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $padFocal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
