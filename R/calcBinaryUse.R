@@ -78,7 +78,7 @@ setMethod(
     caribouRange <- x@attributes$caribouRange$coefRange
     
     tTable <- threshTable %>% filter(.data$Range == caribouRange) %>% 
-      arrange(.data$Season) %>% select(.data$Season, .data$Threshold)
+      arrange(.data$Season) %>% select("Season", "Threshold")
     
     if(bySeason){
       binUse <- x@habitatUse >= tTable$Threshold

@@ -103,7 +103,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
 
   disturbance <- merge(data.frame(Year = seq(inp$startYear, inp$endYear)),
                        disturbance, by = "Year", all.x = T)
-  if (anyNA(select(disturbance, Anthro, fire_excl_anthro))) {
+  if (anyNA(select(disturbance, "Anthro", "fire_excl_anthro"))) {
     warning(
       "Years ",
       filter(disturbance, if_any(c(Anthro, fire_excl_anthro), is.na)) %>%
@@ -117,7 +117,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
         fire_excl_anthro = tidyr::replace_na(fire_excl_anthro, 0),
         Total_dist = fire_excl_anthro + Anthro
       )
-    if(anyNA(select(disturbance, Anthro, fire_excl_anthro))){
+    if(anyNA(select(disturbance, "Anthro", "fire_excl_anthro"))){
       stop("None of the disturbance data is within the requested year range",
            call. = FALSE)
     }

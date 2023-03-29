@@ -85,10 +85,10 @@ calcRSP <- function(resourceProp, coefs, seasons = "all", doScale = FALSE){
     coefs2 <- data.table::data.table(resType = resourceProp %>% names(),
                                      stringsAsFactors = FALSE) %>% 
       mutate(order = 1:n()) %>% 
-      full_join(coefs, by = c(resType = "Variable")) %>% 
+      full_join(coefs, by = c(resType = "Variable"), multiple = "all") %>% 
       spread(.data$Season, .data$Coefficient, fill = 0) %>% 
-      select(-.data$`<NA>`) %>% 
-      gather("Season", "Coefficient", -c(.data$resType, .data$WinArea, .data$Range, .data$order)) %>% 
+      select(-"<NA>") %>% 
+      gather("Season", "Coefficient", -c("resType", 'WinArea', "Range", "order")) %>% 
       arrange(.data$order)
     coefs2 <- split(coefs2, coefs2$Season)
     

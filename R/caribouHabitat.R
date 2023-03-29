@@ -227,9 +227,9 @@ caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL,
       left_join(coefTable %>% group_by(.data$Range) %>%
                   summarize(WinArea = first(.data$WinArea)),
                 by = c(coefRange = "Range")) %>% 
-      select(-.data$coefRange) 
+      select(-"coefRange") 
     projPolyLst <- split(projPolyLst, projPolyLst$WinArea) %>% 
-      purrr::map(~select(.x, -.data$WinArea))
+      purrr::map(~select(.x, -"WinArea"))
     
     # caribouRange values for each winArea
     carRangeLst <- caribouRange %>%
@@ -237,7 +237,7 @@ caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL,
                   summarize(WinArea = first(.data$WinArea)),
                 by = c(coefRange = "Range")) 
     carRangeLst <- split(carRangeLst, carRangeLst$WinArea) %>% 
-      purrr::map(~select(.x, -.data$WinArea))
+      purrr::map(~select(.x, -"WinArea"))
     
     resultLst <- purrr::map2(projPolyLst, carRangeLst,
                              ~do.call(caribouHabitat, 

@@ -32,7 +32,7 @@ test_that("testScript still works", {
   )
   scResults <- suppressWarnings(runScnSet(scns, eParsIn, simBig, getKSDists = F))
 
-  expect_is(scResults, "list")
+  expect_s3_class(scResults$rr.summary.all, "data.frame")
 
   if (interactive()) {
     print(plotRes(scResults$rr.summary.all, "Population growth rate",

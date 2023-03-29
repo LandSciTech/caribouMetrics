@@ -71,7 +71,8 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
                               reclassOptions = NULL, bufferWidth = NULL,
                               ptDensity = 1){
   
-  allData <- purrr::splice(inputsList, projectPoly = projectPoly, refRast = refRast)
+  allData <- list(inputsList, projectPoly = projectPoly, refRast = refRast) %>% 
+    purrr::list_flatten()
   
   # check that names match across lists and arguments
   inNames <- names(allData)
@@ -97,7 +98,7 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   spatObjs <- purrr::discard(allData, ~is.character(.x) | 
                                (is.list(.x) & !is.data.frame(.x)))
   
-  allData <- purrr::splice(loaded, combined, spatObjs)
+  allData <- purrr::list_flatten(list(loaded, combined, spatObjs))
   
   if(!is(allData$refRast, "Raster")){
     stop("refRast must be a raster", call. = FALSE)
@@ -126,8 +127,8 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   notRasters <- purrr::map2(notRasters, names(notRasters), 
                   ~checkAlign(.x, allData$projectPoly, .y, "projectPoly"))
   
-  allData <- purrr::splice(rasters, notRasters, 
-                           allData[which(names(allData) %in% c("projectPoly", "projectPolyOrig"))])
+  allData <- purrr::list_flatten(list(rasters, notRasters, 
+                           allData[which(names(allData) %in% c("projectPoly", "projectPolyOrig"))]))
   
   # Process the data
   if(length(nullNames) > 0){
@@ -185,10 +186,10 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
         } else if(is.list(fn)){
           args <- fn[-1]
           fn_args <- names(formals(fn[[1]]))
-          args <- purrr::splice(args, x)
+          args <- purrr::list_flatten(list(args, x))
           names(args) <- c(names(fn[-1]), fn_args[1])
           if("template" %in% fn_args){
-            args <- purrr::splice(args, template = allData$refRast)
+            args <- purrr::list_flatten(list(args, template = allData$refRast))
           }
           fn <- fn[[1]]
           return(do.call(fn, args))

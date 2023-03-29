@@ -94,7 +94,7 @@ reclassPLC <- function(plc, plcLU = plcToResType){
   # reclassify plc to resource types based on look up tables
   rclPLC <- plcLU %>% 
     left_join(resTypeCode, by = "ResourceType")%>% 
-    select(-.data$ResourceType) %>% 
+    select(-"ResourceType") %>% 
     as.matrix(rclPLC, rownames.force = FALSE)
   
   plc <- reclassify(plc, rclPLC)

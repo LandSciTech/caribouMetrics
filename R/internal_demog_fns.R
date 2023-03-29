@@ -477,7 +477,7 @@ getOutputTables <- function(result, startYear, endYear, survInput, oo, simBig,
   obsAll <- rbind(obsLam, obsSize, subset(obsRec, select = names(obsLam)),
                   trueRec, subset(obsSurv, select = names(obsLam)), trueSurv)
 
-  simBigO <- subset(simBig$summary, select = c(Anthro, Mean, lower, upper, parameter))
+  simBigO <- subset(simBig$summary, select = c(Anthro, Mean, lower, upper, Parameter))
   names(simBigO) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
 
   # combine cs and simDisturbance and add to all output tables, nest params in a list

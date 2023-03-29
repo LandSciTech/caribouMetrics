@@ -38,7 +38,7 @@ rasterizeLineDensity <- function(x, r, ptDensity = 1) {
   
   rp2 <- st_intersection(rPoly, st_set_agr(x, "constant")) %>% 
     mutate(length = st_length(.data$geometry) %>% units::set_units(NULL)) %>% 
-    select(.data$ID, .data$length, .data$geometry) %>% st_drop_geometry() %>% 
+    select("ID", "length", "geometry") %>% st_drop_geometry() %>% 
     group_by(.data$ID) %>% 
     summarise(length = round(sum(.data$length, na.rm = TRUE)/(res(r)[1]*res(r)[2]/10000), digits = 1))
   

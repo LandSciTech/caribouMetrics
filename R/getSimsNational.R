@@ -94,25 +94,25 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
                                        S_bar = pars$S_bar, numSteps = 1,
                                        K = F, adjustR = adjustR))
   simSurvBig <- pars %>%
-    select(Anthro, S_t) %>%
+    select("Anthro", "S_t") %>%
     group_by(Anthro) %>%
     summarize(Mean = mean(S_t), lower = quantile(S_t, 0.025),
               upper = quantile(S_t, 0.975))
   simSurvBig$Parameter <- "Adult female survival"
   simRecBig <- pars %>%
-    select(Anthro, R_t) %>%
+    select("Anthro", "R_t") %>%
     group_by(Anthro) %>%
     summarize(Mean = mean(R_t), lower = quantile(R_t, 0.025),
               upper = quantile(R_t, 0.975))
   simRecBig$Parameter <- "Recruitment"
   simLamBig <- pars %>%
-    select(Anthro, lambda) %>%
+    select("Anthro", "lambda") %>%
     group_by(Anthro) %>%
     summarize(Mean = mean(lambda), lower = quantile(lambda, 0.025),
               upper = quantile(lambda, 0.975))
   simLamBig$Parameter <- "Population growth rate"
   simFpopBig <- pars %>%
-    select(Anthro, N) %>%
+    select("Anthro", "N") %>%
     group_by(Anthro) %>%
     summarize(Mean = mean(N), lower = quantile(N, 0.025),
               upper = quantile(N, 0.975))
