@@ -43,11 +43,11 @@
 #' runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
 #' 
 runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
-                                              package = "BayesianCaribouDemographicProjection"),
+                                              package = "caribouMetrics"),
                        ageRatio.herd = system.file("extdata/simAgeRatio.csv",
-                                                   package = "BayesianCaribouDemographicProjection"),
+                                                   package = "caribouMetrics"),
                        disturbance = system.file("extdata/simDisturbance.csv",
-                                                 package = "BayesianCaribouDemographicProjection"),
+                                                 package = "caribouMetrics"),
                        betaPriors = "default",
                        startYear = 1998, endYear = 2023, Nchains = 4,
                        Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
@@ -355,7 +355,7 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
   }
 
   jagsTemplate <- paste(readLines(system.file("templates/JAGS_template.txt",
-                                              package = "BayesianCaribouDemographicProjection"
+                                              package = "caribouMetrics"
   )), collapse = "\n")
   jagsTemplate <- gsub("_survString_", survString, jagsTemplate, fixed = T)
   jagsTemplate <- gsub("_adjustString_", adjustString, jagsTemplate, fixed = T)

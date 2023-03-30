@@ -43,6 +43,7 @@
 #'
 #' @examples
 #' getPriors()
+#' @export
 getPriors <- function(modifiers = NULL,
                       survivalModelNumber = "M1",
                       recruitmentModelNumber = "M4",

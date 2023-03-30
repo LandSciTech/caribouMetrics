@@ -10,13 +10,13 @@ test_that("Runs with defaults", {
 test_that("input tables are as expected",{
   # default input data
   survDataIn <- system.file("extdata/simSurvData.csv",
-                            package = "BayesianCaribouDemographicProjection") %>%
+                            package = "caribouMetrics") %>%
     read.csv()
   ageRatio.herdIn <- system.file("extdata/simAgeRatio.csv",
-                                 package = "BayesianCaribouDemographicProjection")%>%
+                                 package = "caribouMetrics")%>%
     read.csv()
   disturbanceIn <- system.file("extdata/simDisturbance.csv",
-                               package = "BayesianCaribouDemographicProjection")%>%
+                               package = "caribouMetrics")%>%
     read.csv()
 
   # default start year is outside range of data but still runs
