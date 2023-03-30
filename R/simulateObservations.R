@@ -110,8 +110,6 @@ simulateObservations <- function(cs, cowCounts,
 
   simDisturbance$time <- NULL
   if (printPlot) {
-    # TO DO: save info on true population dynamics, add to projection plots for
-    # comparison
     base1 <- ggplot2::ggplot(data = popMetrics, ggplot2::aes(
       x = Timestep, y = Amount, colour = Replicate,
       group = Replicate

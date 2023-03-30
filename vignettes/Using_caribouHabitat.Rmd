@@ -3,7 +3,7 @@ title: "Using caribouHabitat"
 output: 
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using_caribouHabitat}
+  %\VignetteIndexEntry{Using caribouHabitat}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

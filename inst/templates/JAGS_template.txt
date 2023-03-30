@@ -56,7 +56,6 @@ for(k in 2:nYears){
 	sig.Saf~dnorm(exp(l.Saf.Prior1)*sig.Saf.Prior1,pow(sig.Saf.Prior2,-2))
 	tau.Saf<-pow(sig.Saf, -2)
 	var.Saf<-1/tau.Saf
-	#TO DO: need to adjust this to account for change from logit to log link.
 	var.Saf.real<-(var.Saf * meanAFsurv^2 * (1-meanAFsurv)^2)
 
 	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2,-2))

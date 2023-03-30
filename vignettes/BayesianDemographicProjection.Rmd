@@ -1,0 +1,32 @@
+---
+title: "Bayesian Demographic Projection"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Bayesian Demographic Projection}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(caribouMetrics)
+```
+
+`caribouMetrics` includes several functions designed to allow users to explore the impacts of various factors that affect projections of caribou population dynamics using the Johnson et al. (2020) national models as a starting point.
+
+A Bayesian model is fit that uses the national model as the priors and is updated based on a simulated or observed data set. The priors from the national model can also be modified to allow greater uncertainty or reflect different expectations.
+
+### Simulate observed data
+First we will simulate observations from a typical boreal caribou monitoring program that includes radio collars on some cows and annual aerial surveys to count the number of calves with the tracked cows. To run the simulations we need a data frame of cow counts in each year
+
+
+
+
+
+
