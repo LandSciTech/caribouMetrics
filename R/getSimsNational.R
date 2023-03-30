@@ -4,6 +4,10 @@
 # See explanation here: https://r-pkgs.org/data.html#sec-data-state
 cacheEnv <- new.env()
 
+# Not supposed to save files to user computer on CRAN so for users the cache is
+# only preserved within a session but for dev I have added this "persistent
+# cache" use savePersistentCache function to update/create it after having run
+# getSimsNational
 if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
   simsNationalRadjusted <- readRDS( "inst/extdata/simsNationalRadjusted.rds")
   simsNationalRunadjusted <- readRDS( "inst/extdata/simsNationalRunadjusted.rds")
@@ -53,7 +57,6 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
       message("Using saved object")
       return(get(saveName, envir=cacheEnv))
     } else {
-      message("Object will be saved for future use")
       doSave <- TRUE
     }
   }
@@ -61,8 +64,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
   check$forceUpdate <- NULL
 
   if (forceUpdate & (length(check) == 1)) {
-    message("Updating cached national simulations.")
-    doSave <- T
+    doSave <- TRUE
   }
   covTableObs <- expand.grid(
     Anthro = Anthro,
@@ -130,6 +132,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
   simBig <- list(summary = simBig, samples = parsSelect)
 
   if (doSave) {
+    message("Updating cached national simulations.")
     assign(saveName, simBig, envir = cacheEnv)
   }
   return(simBig)

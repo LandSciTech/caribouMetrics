@@ -406,6 +406,13 @@ tabAllRes <- function(rrSurvMod, startYear, endYear, doSummary = T) {
   )
   allParams <- allParams[is.element(allParams, rrSurvMod$parameters.to.save)]
 
+  # check rrSurvMod has same number of years as start to end
+  if(length(rrSurvMod$BUGSoutput$mean[[rrSurvMod$parameters.to.save[1]]]) !=
+     length(startYear:endYear)){
+    stop("The model result has different length than startYear:endYear")
+  }
+
+  
   allResults <- lapply(allParams, getSumStats, rrSurvMod, startYear, endYear,
                        doSummary = doSummary)
 
@@ -790,4 +797,13 @@ testTable <- function(df, req_col_names, req_vals = NULL, acc_vals = NULL){
     }, acc_vals, names(acc_vals))
   }
   return(invisible(NULL))
+}
+
+savePersistentCache <- function(env = cacheEnv){
+  obj_nms <- ls(envir = env)
+  lapply(obj_nms, function(x){
+    obj <- get(x, envir=env)
+    saveRDS(obj, paste0("inst/extdata/", x, ".rds"))
+  })
+  return(invisible())
 }
