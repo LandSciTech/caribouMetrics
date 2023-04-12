@@ -44,8 +44,8 @@ runScnSet <- function(scns, ePars, simBig, survAnalysisMethod = "KaplanMeier",
       next
     }
 
-    outTabs <- getOutputTables(result = out$result, startYear = minYr,
-                               endYear = maxYr, survInput = out$survInput,
+    outTabs <- getOutputTables(caribouBayesDemogMod = out, startYear = minYr,
+                               endYear = maxYr, 
                                oo = oo, simBig = simBig, getKSDists = getKSDists)
 
     if (p == 1) {
