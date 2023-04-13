@@ -21,11 +21,9 @@
 #' @param Nthin Thinning rate for the Bayesian model
 #' @param N0 Initial population size
 #' @param survAnalysisMethod Survival analysis method either "KaplanMeier" or
-#'   "Exponential".
-#'   TODO: What do these mean and what is the else option
+#'   "Exponential". Exponential is only recommended for small sample sizes
 #' @inheritParams popGrowthJohnson
-#' @param assessmentYrs
-#' TODO: what is assessmentYrs? defaults to 1 but not sure what it is.
+#' @param assessmentYrs Number of years over which to assess lambda (growth rate)
 #' @param inpFixed an optional list of inputs with names matching the above, if
 #'   an argument is included in this list it will override the named argument
 #' @param saveJAGStxt file path. Directory where the JAGS model txt files will

@@ -25,7 +25,8 @@ A Bayesian model is fit that uses the national model as the priors and is update
 ### Simulate observed data
 First we will simulate observations from a typical boreal caribou monitoring program that includes radio collars on some cows and annual aerial surveys to count the number of calves with the tracked cows. To run the simulations we need a data frame of cow counts in each year
 
-
+### Troubleshooting
+The national model results are cached if the default values are used. This cache can but updated by running `getSimsNational(forceUpdate = TRUE)`
 
 
 
