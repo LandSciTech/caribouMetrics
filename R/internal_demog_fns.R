@@ -2,6 +2,9 @@
 
 
 # Helpers for runRMModel --------------------------------------------------
+# Copyright 2023 Daniel Eacker & Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
+# License GPL-3
+#NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
 getKMSurvivalEstimates <- function(dSubset) {
   sModel <- survival::survfit(survival::Surv(enter, exit, event) ~ as.factor(Year),
@@ -315,6 +318,9 @@ simSurvivalObs <- function(animalID, startYear, collarNumYears, collarOffTime,
 }
 
 # Helpers for runScnSet and App -------------------------------------------
+# Copyright 2023 Daniel Eacker & Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
+# License GPL-3
+#NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
 getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
   # param = "pop.growth";doSummary=T

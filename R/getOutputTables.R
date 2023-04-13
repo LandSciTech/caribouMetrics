@@ -1,6 +1,6 @@
 #' Summarize results of Bayesian demographic model in tables
 #'
-#'
+#' TODO: Finish documenting
 #'
 #' @param caribouBayesDemogMod caribou Bayesian demographic model results
 #'   produced by calling [runRMModel()]
