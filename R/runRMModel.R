@@ -261,20 +261,10 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
     nSurv <- length(surv_id)
     survData$Var1 <- as.character(survData$Var1)
   } else {
-    if (inp$survAnalysisMethod == "Exponential") {
-      # parametric exponential survival model
-      message("using parametric exponential survival model")
-      survData <- dSubset
-      survData$t.to.death <- survData$exit / 12
-      survData$t.to.death[!survData$event] <- NA
-      survData$t.cen <- survData$exit / 12
-      survData$t.cen[survData$event] <- 0
-    } else {
-      message("expanding survival record")
-      dExpand <- apply(subset(dSubset, select = c(id, Year, event, enter, exit)),
-                       1, expandSurvivalRecord)
-      survData <- do.call(rbind, dExpand)
-    }
+    message("expanding survival record")
+    dExpand <- apply(subset(dSubset, select = c(id, Year, event, enter, exit)),
+                     1, expandSurvivalRecord)
+    survData <- do.call(rbind, dExpand)
   }
 
   # split data into calf and cow recruitment data
@@ -399,20 +389,11 @@ runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
       surv_id = which(is.na(survDatat$surv) == FALSE)
     ))
   } else {
-    if (inp$survAnalysisMethod == "Exponential") {
-      sp.data <- c(sp.data, list(
-        t.to.death = survDatat$t.to.death, t.cen = survDatat$t.cen,
-        survYr = survDatat$Year - inp$startYear,
-        nSurvs = length(which(is.na(survDatat[, 1]) == FALSE)),
-        surv_id = which(is.na(survDatat$Year) == FALSE)
-      ))
-    } else {
-      sp.data <- c(sp.data, list(
-        surv = survDatat[, 1:13], survYr = survDatat$Year - inp$startYear + 1,
-        nSurvs = length(which(is.na(survDatat[, 1]) == FALSE)),
-        surv_id = which(is.na(survDatat$Year) == FALSE)
-      ))
-    }
+    sp.data <- c(sp.data, list(
+      surv = survDatat[, 1:13], survYr = survDatat$Year - inp$startYear + 1,
+      nSurvs = length(which(is.na(survDatat[, 1]) == FALSE)),
+      surv_id = which(is.na(survDatat$Year) == FALSE)
+    ))
   }
 
   sp.params <- c("S.annual.KM", "R", "Rfemale", "pop.growth",

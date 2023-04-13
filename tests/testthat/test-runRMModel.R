@@ -110,7 +110,7 @@ test_that("survAnalysisMethod works", {
   # TODO fix this error
   expect_message(out2 <- runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2, survAnalysisMethod = "Exponential"),
-                 "using parametric exponential survival model")
+                 "expanding survival record")
 
   expect_s3_class(out2$result, "rjags")
 
