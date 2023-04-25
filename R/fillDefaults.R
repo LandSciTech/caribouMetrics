@@ -71,8 +71,8 @@ fillDefaults <- function(scns = NULL,
   }
 
   # remove columns that are all NA because they should be missing and order like
-  # defList
-  scns <- select(scns, all_of(names(defList)), -where(~all(is.na(.x))))
+  # defList but keep any extra columns not in defList
+  scns <- select(scns, all_of(names(defList)), everything(), -where(~all(is.na(.x))))
 
   if (is.element("cmult", names(scns)) & is.element("cw", names(scns))) {
     stop("Specify number of cows per year in recruitment survey (cw) or",

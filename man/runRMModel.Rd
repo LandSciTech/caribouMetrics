@@ -5,12 +5,9 @@
 \title{Run recruitment and mortality model}
 \usage{
 runRMModel(
-  survData = system.file("extdata/simSurvData.csv", package =
-    "BayesianCaribouDemographicProjection"),
-  ageRatio.herd = system.file("extdata/simAgeRatio.csv", package =
-    "BayesianCaribouDemographicProjection"),
-  disturbance = system.file("extdata/simDisturbance.csv", package =
-    "BayesianCaribouDemographicProjection"),
+  survData = system.file("extdata/simSurvData.csv", package = "caribouMetrics"),
+  ageRatio.herd = system.file("extdata/simAgeRatio.csv", package = "caribouMetrics"),
+  disturbance = system.file("extdata/simDisturbance.csv", package = "caribouMetrics"),
   betaPriors = "default",
   startYear = 1998,
   endYear = 2023,
@@ -57,12 +54,11 @@ period and the end of the projection period.}
 \item{N0}{Initial population size}
 
 \item{survAnalysisMethod}{Survival analysis method either "KaplanMeier" or
-"Exponential".
-TODO: What do these mean and what is the else option}
+"Exponential". Exponential is only recommended for small sample sizes}
 
 \item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
-\item{assessmentYrs}{TODO: what is assessmentYrs? defaults to 1 but not sure what it is.}
+\item{assessmentYrs}{Number of years over which to assess lambda (growth rate)}
 
 \item{inpFixed}{an optional list of inputs with names matching the above, if
 an argument is included in this list it will override the named argument}
