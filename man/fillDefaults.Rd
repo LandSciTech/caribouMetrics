@@ -55,8 +55,7 @@ the projection period}
 
 \item{N0}{number. Initial population size}
 
-\item{adjustR}{logical. Adjust R to account for delayed age at first
-reproduction (DeCesare et al. 2012; Eacker et al. 2019)?}
+\item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{assessmentYrs}{number. #TODO:}
 

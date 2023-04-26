@@ -18,8 +18,7 @@
 #' @param J Number of years of projections
 #' @param P Number of years of observations
 #' @param N0 number. Initial population size
-#' @param adjustR logical. Adjust R to account for delayed age at first
-#'   reproduction (DeCesare et al. 2012; Eacker et al. 2019)?
+#' @inheritParams popGrowthJohnson
 #' @param assessmentYrs number. #TODO: 
 #' @param ri number. Optional. Number of years between collar deployments. If
 #'   missing assumed to be every year

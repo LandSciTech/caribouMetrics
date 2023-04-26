@@ -6,8 +6,8 @@
 #'   modifier is supplied here the corresponding argument below is ignored.
 #' @param returnValues logical. Default is TRUE. If FALSE returns strings for
 #'   some values showing the initial values and the modifier ie "0.9 * 1.05"
-#' @param bse anthropogenic disturbance slope survival uncertainty multiplier. 1
-#'   - 10
+#' @param bse anthropogenic disturbance slope survival uncertainty multiplier. 
+#'   1 - 10
 #' @param bre anthropogenic disturbance slope recruitment uncertainty
 #'   multiplier. 1 - 10
 #' @param lse survival intercept uncertainty multiplier. 1 - 10

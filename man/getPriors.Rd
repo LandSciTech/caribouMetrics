@@ -31,10 +31,8 @@ number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.}
 \item{bre}{anthropogenic disturbance slope recruitment uncertainty
 multiplier. 1 - 10}
 
-\item{bse}{anthropogenic disturbance slope survival uncertainty multiplier. 1
-\itemize{
-\item 10
-}}
+\item{bse}{anthropogenic disturbance slope survival uncertainty multiplier.
+1 - 10}
 
 \item{lse}{survival intercept uncertainty multiplier. 1 - 10}
 
