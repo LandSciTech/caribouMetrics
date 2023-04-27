@@ -515,7 +515,7 @@ plotRes <- function(allRes, parameter, obs = NULL, lowBound = 0, highBound = 1,
   }
   x2 <- x1 + ggplot2::theme_classic() + ggplot2::xlab("Year") +
     ggplot2::ylab(parameter) +
-    ggplot2::geom_line(ggplot2::aes(x = Year, y = Mean), size = 1.75) +gglot2::scale_color_discrete(type=pal2)+
+    ggplot2::geom_line(ggplot2::aes(x = Year, y = Mean), size = 1.75) +ggplot2::scale_color_discrete(type=pal2)+
     ggplot2::theme(
       axis.text.y = ggplot2::element_text(size = labFontSize),
       axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, size = labFontSize),
