@@ -13,7 +13,7 @@
 #' @param lse survival intercept uncertainty multiplier. 1 - 10
 #' @param lre recruitment intercept uncertainty multiplier. 1 - 10
 #' @param sse interannual coefficient of variation for survival. 0-1. See
-#'   [popGrowthJohnson()] and functions therein for details
+#'   [caribouPopGrowth()] and functions therein for details
 #' @param ssv uncertainty about interannual variation in survival. 0-1
 #' @param sre interannual coefficient of variation for recruitment. 0-1
 #' @param srv uncertainty about interannual variation in recruitment. 0-1.

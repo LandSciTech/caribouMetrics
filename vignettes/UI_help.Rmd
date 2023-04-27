@@ -90,20 +90,20 @@ UI option|caribouMetrics argument|Function|Notes|
 |Demographic Model Version |modelVersion |`demographicCoefficients()` |
 |Survival Model Number|survivalModelNumber |`demographicCoefficients()` |
 |Recruitment Model Number|recruitmentModelNumber |`demographicCoefficients()` |
-|Initial Population Size |N |`popGrowthJohnson()` |
-|P_0: Maximum recruitment multiplier|P_0 |`popGrowthJohnson()` |
-|P_K: Recruitment multiplier at carrying capacity|P_K |`popGrowthJohnson()` |
-|a: Density dependence shape parameter|a |`popGrowthJohnson()` |
-|b: Allee effect parameter|b |`popGrowthJohnson()` |
-|K: Carrying capacity multiplier|K |`popGrowthJohnson()` |
-|r_max: Maximum population growth rate|r_max |`popGrowthJohnson()` |
-|s: Sex ratio|s |`popGrowthJohnson()` |
-|l_R: Minimum recruitment|l_R |`popGrowthJohnson()` |
-|h_R: Maximum recruitment|h_R |`popGrowthJohnson()` |
-|l_S: Minimum survival|l_S |`popGrowthJohnson()` |
-|h_S: Maximum survival|h_S |`popGrowthJohnson()` |
-|Interannual Variation|interannualVar |`popGrowthJohnson()` |
-|probOption|probOption |`popGrowthJohnson()` |
+|Initial Population Size |N |`caribouPopGrowth()` |
+|P_0: Maximum recruitment multiplier|P_0 |`caribouPopGrowth()` |
+|P_K: Recruitment multiplier at carrying capacity|P_K |`caribouPopGrowth()` |
+|a: Density dependence shape parameter|a |`caribouPopGrowth()` |
+|b: Allee effect parameter|b |`caribouPopGrowth()` |
+|K: Carrying capacity multiplier|K |`caribouPopGrowth()` |
+|r_max: Maximum population growth rate|r_max |`caribouPopGrowth()` |
+|s: Sex ratio|s |`caribouPopGrowth()` |
+|l_R: Minimum recruitment|l_R |`caribouPopGrowth()` |
+|h_R: Maximum recruitment|h_R |`caribouPopGrowth()` |
+|l_S: Minimum survival|l_S |`caribouPopGrowth()` |
+|h_S: Maximum survival|h_S |`caribouPopGrowth()` |
+|Interannual Variation|interannualVar |`caribouPopGrowth()` |
+|probOption|probOption |`caribouPopGrowth()` |
 |**Tab: Raster Data**
 |Harvest| anthroDist |`caribouHabitat()` |
 | Anthropogenic Disturbance| anthroDist |`caribouHabitat()` |

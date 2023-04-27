@@ -107,7 +107,7 @@ demRates
 #> 1 0.7627531 0.9217281 0.1813372 0.1009375 0.04912995 0.3915002
 
 # Simulate population growth
-popGrow <- popGrowthJohnson(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
+popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
 popGrow

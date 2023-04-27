@@ -20,7 +20,7 @@ simulateObservations(
 )
 }
 \arguments{
-\item{cs}{list. Parameters for the simulations. See \code{\link[=fillDefaults]{fillDefaults()}} for
+\item{cs}{list. Parameters for the simulations. See \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for
 details.}
 
 \item{cowCounts}{data.frame. Number of cows counted in aerial surveys each
@@ -77,7 +77,7 @@ realistic observations are simulated from this true population based on a
 collaring program with the given parameters.
 }
 \examples{
-scns <- fillDefaults()
+scns <- getScenarioDefaults()
 simulateObservations(scns,
                      freqStartsByYear = data.frame(Year = 2014:2023,
                                                    numStarts = 10),

@@ -1,7 +1,7 @@
 runScnSet <- function(scns, ePars, simBig, survAnalysisMethod = "KaplanMeier",
                       getKSDists = T, printProgress = F) {
   # ePars=eParsIn;survAnalysisMethod="KaplanMeier";getKSDists=T;printProgress=F
-  scns <- fillDefaults(scns)
+  scns <- getScenarioDefaults(scns)
   errorLog <- list()
   for (p in 1:nrow(scns)) {
     # p=1
@@ -21,7 +21,7 @@ runScnSet <- function(scns, ePars, simBig, survAnalysisMethod = "KaplanMeier",
     betaPriors <- getPriors(cs)
     minYr <- min(oo$exData$Year)
     maxYr <- max(oo$simDisturbance$Year)
-    out <- try(runRMModel(
+    out <- try(caribouBayesianIPM(
       survData = oo$simSurvObs, ageRatio.herd = oo$ageRatioOut,
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = minYr, endYear = maxYr,

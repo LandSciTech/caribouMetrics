@@ -26,7 +26,7 @@
 #' @param N0 Initial population size
 #' @param survAnalysisMethod Survival analysis method either "KaplanMeier" or
 #'   "Exponential". Exponential is only recommended for small sample sizes
-#' @inheritParams popGrowthJohnson
+#' @inheritParams caribouPopGrowth
 #' @param assessmentYrs Number of years over which to assess lambda (growth rate)
 #' @param inpFixed an optional list of inputs with names matching the above, if
 #'   an argument is included in this list it will override the named argument
@@ -42,9 +42,9 @@
 #'
 #' @examples
 #' # this uses example data shipped with the package
-#' runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
+#' caribouBayesianIPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
 #' 
-runRMModel <- function(survData = system.file("extdata/simSurvData.csv",
+caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
                                               package = "caribouMetrics"),
                        ageRatio.herd = system.file("extdata/simAgeRatio.csv",
                                                    package = "caribouMetrics"),

@@ -41,7 +41,7 @@
 #'
 #'
 #' @export
-popGrowthJohnson <- function(N,
+caribouPopGrowth <- function(N,
                              numSteps,
                              R_bar,
                              S_bar,

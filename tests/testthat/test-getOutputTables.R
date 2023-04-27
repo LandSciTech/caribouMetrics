@@ -1,6 +1,6 @@
 test_that("works with defaults", {
   
-  scns <- fillDefaults(J = 0)
+  scns <- getScenarioDefaults(J = 0)
   simO <- simulateObservations(scns,
                                freqStartsByYear = data.frame(Year = 2014:2023,
                                                              numStarts = 20),
@@ -8,7 +8,7 @@ test_that("works with defaults", {
                                                       Count = 100,
                                                       Class = "cow"))
   
-  out <- runRMModel(survData = simO$simSurvObs, ageRatio.herd = simO$ageRatioOut,
+  out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio.herd = simO$ageRatioOut,
                     disturbance = simO$simDisturbance,
                     startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
                     Nthin = 2)

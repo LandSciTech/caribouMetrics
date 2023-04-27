@@ -37,7 +37,7 @@ multiplier. 1 - 10}
 \item{lse}{survival intercept uncertainty multiplier. 1 - 10}
 
 \item{sse}{interannual coefficient of variation for survival. 0-1. See
-\code{\link[=popGrowthJohnson]{popGrowthJohnson()}} and functions therein for details}
+\code{\link[=caribouPopGrowth]{caribouPopGrowth()}} and functions therein for details}
 
 \item{ssv}{uncertainty about interannual variation in survival. 0-1}
 

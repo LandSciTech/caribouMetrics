@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 ## Introduction
-This vignette gives details on the use of the `disturbanceMetrics`, `demographicCoefficients`, `demographicRates`, and `popGrowthJohnson` functions. Together, these functions represent an implementation of the aspatial caribou demographic model developed by Johnson et al. ([2020](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637)), and modified by Dyson et al. (in prep) and Stewart et al. (in prep). 
+This vignette gives details on the use of the `disturbanceMetrics`, `demographicCoefficients`, `demographicRates`, and `caribouPopGrowth` functions. Together, these functions represent an implementation of the aspatial caribou demographic model developed by Johnson et al. ([2020](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637)), and modified by Dyson et al. (in prep) and Stewart et al. (in prep). 
 
 ```{r setup, results='hide',message=F, warning=T}
 library(caribouMetrics)
@@ -79,7 +79,7 @@ plot(disturbanceV@processedData)
 
 ## Simple demographic projection for a single example landscape
 
-A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. We begin by sampling coefficients for 500 replicate populations using default models M1 and M4. Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the `popGrowthJohnson` function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but uncertainty in the model means that a few sample populations persist.
+A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. We begin by sampling coefficients for 500 replicate populations using default models M1 and M4. Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the `caribouPopGrowth` function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but uncertainty in the model means that a few sample populations persist.
 
 
 ```{r simpleProjection, results='hide',message=F, warning=T}
@@ -92,7 +92,7 @@ A simple case for demographic projection is multiple stochastic projections from
           useQuantiles = FALSE)     
    rateSamples$N0 <- 100
    demography <- cbind(rateSamples,
-                       popGrowthJohnson(N = rateSamples$N0,
+                       caribouPopGrowth(N = rateSamples$N0,
                                         numSteps = 20,
                                         R_bar = rateSamples$R_bar,
                                         S_bar = rateSamples$S_bar))
@@ -268,7 +268,7 @@ for (t in 1:numTimesteps) {
   }
   pars <- merge(pars, rateSamples)
   pars <- cbind(pars, 
-                popGrowthJohnson(pars$N0,
+                caribouPopGrowth(pars$N0,
                                  R_bar = pars$R_bar, S_bar = pars$S_bar,
                                  numSteps = stepLength, interannualVar = FALSE, 
                                  K = FALSE, probOption = "continuous"))

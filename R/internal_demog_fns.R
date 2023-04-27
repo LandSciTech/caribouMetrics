@@ -1,7 +1,7 @@
 # internal functions related to caribou demographics
 
 
-# Helpers for runRMModel --------------------------------------------------
+# Helpers for caribouBayesianIPM --------------------------------------------------
 # Copyright 2023 Daniel Eacker & Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
 # License GPL-3
 #NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
@@ -153,7 +153,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
     pars <- merge(pars, rateSamples)
     pars <- cbind(
       pars,
-      popGrowthJohnson(pars$N0,
+      caribouPopGrowth(pars$N0,
                        R_bar = pars$R_bar, S_bar = pars$S_bar,
                        numSteps = stepLength, K = F, l_R = 1e-06, adjustR = adjustR
       )

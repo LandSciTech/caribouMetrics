@@ -5,7 +5,7 @@
 #' realistic observations are simulated from this true population based on a
 #' collaring program with the given parameters.
 #'
-#' @param cs list. Parameters for the simulations. See [fillDefaults()] for
+#' @param cs list. Parameters for the simulations. See [getScenarioDefaults()] for
 #'   details.
 #' @param printPlot logical. print a plot of the true population trajectory?
 #' @param cowCounts data.frame. Number of cows counted in aerial surveys each
@@ -39,7 +39,7 @@
 #' @export
 #'
 #' @examples
-#' scns <- fillDefaults()
+#' scns <- getScenarioDefaults()
 #' simulateObservations(scns,
 #'                      freqStartsByYear = data.frame(Year = 2014:2023,
 #'                                                    numStarts = 10),

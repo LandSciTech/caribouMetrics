@@ -27,7 +27,7 @@ if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
 #' @param forceUpdate logical. If the default inputs are used the result is
 #'   cached. Set `forceUpdate` to TRUE to ensure the simulations are re-run.
 #' @inheritParams demographicCoefficients
-#' @inheritParams popGrowthJohnson
+#' @inheritParams caribouPopGrowth
 #' @param N0 initial population size
 #'
 #' @return a list with two elements:
@@ -93,7 +93,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
                                        returnSample = T)
   }
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
-  pars <- cbind(pars, popGrowthJohnson(pars$N0, R_bar = pars$R_bar,
+  pars <- cbind(pars, caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
                                        S_bar = pars$S_bar, numSteps = 1,
                                        K = F, adjustR = adjustR))
   simSurvBig <- pars %>%

@@ -1,5 +1,5 @@
 test_that("default works", {
-  scns <- fillDefaults()
+  scns <- getScenarioDefaults()
   expect_is(simulateObservations(scns,
                        freqStartsByYear = data.frame(Year = 2014:2023,
                                                      numStarts = 10),
@@ -10,7 +10,7 @@ test_that("default works", {
 })
 
 test_that("error messages are as expected", {
-  scns <- fillDefaults()
+  scns <- getScenarioDefaults()
   expect_error(
     simulateObservations(scns,
                          freqStartsByYear = data.frame(Year = 2014:2023,
@@ -31,7 +31,7 @@ test_that("error messages are as expected", {
 })
 
 test_that("multiple scenarios not allowed",{
-  scns <- fillDefaults(data.frame(iF = 1:2))
+  scns <- getScenarioDefaults(data.frame(iF = 1:2))
   expect_error(simulateObservations(scns,
                                  freqStartsByYear = data.frame(Year = 2014:2023,
                                                                numStarts = 10),

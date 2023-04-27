@@ -3,8 +3,8 @@
 #' TODO: Finish documenting
 #'
 #' @param caribouBayesDemogMod caribou Bayesian demographic model results
-#'   produced by calling [runRMModel()]
-#' @inheritParams runRMModel
+#'   produced by calling [caribouBayesianIPM()]
+#' @inheritParams caribouBayesianIPM
 #' @param oo observed simulation data, produced by calling
 #'   [simulateObservations()]
 #' @param simBig National simulation results, produced by calling

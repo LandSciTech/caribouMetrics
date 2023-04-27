@@ -15,7 +15,7 @@ getOutputTables(
 }
 \arguments{
 \item{caribouBayesDemogMod}{caribou Bayesian demographic model results
-produced by calling \code{\link[=runRMModel]{runRMModel()}}}
+produced by calling \code{\link[=caribouBayesianIPM]{caribouBayesianIPM()}}}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}

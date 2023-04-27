@@ -18,7 +18,7 @@
 #' @param J Number of years of projections
 #' @param P Number of years of observations
 #' @param N0 number. Initial population size
-#' @inheritParams popGrowthJohnson
+#' @inheritParams caribouPopGrowth
 #' @param assessmentYrs number. #TODO: 
 #' @param ri number. Optional. Number of years between collar deployments. If
 #'   missing assumed to be every year
@@ -47,12 +47,12 @@
 #' @export
 #'
 #' @examples
-#' fillDefaults()
+#' getScenarioDefaults()
 #'
 #' # scns list takes precedence over argument values
-#' fillDefaults(scns = data.frame(iF = 10, iA = 20, P = 1), P = 5)
+#' getScenarioDefaults(scns = data.frame(iF = 10, iA = 20, P = 1), P = 5)
 #' 
-fillDefaults <- function(scns = NULL,
+getScenarioDefaults <- function(scns = NULL,
                          iF = 0, iA = 0, aS = 0, aSf = 4,
                          rS = 1, sS = 1,
                          rQ = 0.5, sQ = 0.5, J = 20, P = 10, N0 = 1000,
