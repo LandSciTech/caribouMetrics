@@ -1,4 +1,4 @@
-runScnSet <- function(scns, ePars, simBig, survAnalysisMethod = "KaplanMeier",
+runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeier",
                       getKSDists = T, printProgress = F) {
   # ePars=eParsIn;survAnalysisMethod="KaplanMeier";getKSDists=T;printProgress=F
   scns <- getScenarioDefaults(scns)
@@ -10,8 +10,8 @@ runScnSet <- function(scns, ePars, simBig, survAnalysisMethod = "KaplanMeier",
       print(paste0(c(p, scns[p, ]), collapse = " "))
     }
 
-    if (is.element("cw", names(cs))) {
-      ePars$cowCounts$Count <- cs$cw
+    if (is.element("cowCount", names(cs))) {
+      ePars$cowCounts$Count <- cs$cowCount
     }
     oo <- simulateObservations(cs, cowCounts = ePars$cowCounts,
                                freqStartsByYear = ePars$freqStartsByYear,
@@ -22,7 +22,7 @@ runScnSet <- function(scns, ePars, simBig, survAnalysisMethod = "KaplanMeier",
     minYr <- min(oo$exData$Year)
     maxYr <- max(oo$simDisturbance$Year)
     out <- try(caribouBayesianIPM(
-      survData = oo$simSurvObs, ageRatio.herd = oo$ageRatioOut,
+      survData = oo$simSurvObs, ageRatio = oo$ageRatioOut,
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = minYr, endYear = maxYr,
       N0 = cs$N0, survAnalysisMethod = survAnalysisMethod,
@@ -46,7 +46,7 @@ runScnSet <- function(scns, ePars, simBig, survAnalysisMethod = "KaplanMeier",
 
     outTabs <- getOutputTables(caribouBayesDemogMod = out, startYear = minYr,
                                endYear = maxYr, 
-                               oo = oo, simBig = simBig, getKSDists = getKSDists)
+                               simObsList = oo, simNational = simNational, getKSDists = getKSDists)
 
     if (p == 1) {
       rr.summary.all <- outTabs$rr.summary.all

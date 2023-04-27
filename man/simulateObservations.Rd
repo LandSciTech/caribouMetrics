@@ -5,7 +5,7 @@
 \title{Simulate survival data}
 \usage{
 simulateObservations(
-  cs,
+  paramTable,
   cowCounts,
   freqStartsByYear,
   printPlot = FALSE,
@@ -20,7 +20,7 @@ simulateObservations(
 )
 }
 \arguments{
-\item{cs}{list. Parameters for the simulations. See \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for
+\item{paramTable}{list. Parameters for the simulations. See \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for
 details.}
 
 \item{cowCounts}{data.frame. Number of cows counted in aerial surveys each
@@ -45,7 +45,7 @@ Must have 2 columns "Year" and "numStarts"}
 landscape covered by anthropogenic disturbance buffered by 500 m, and the
 percentage covered by fire that does not overlap anthropogenic disturbance.
 See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturbance scenario is simulated
-based on \code{cs}}
+based on \code{paramTable}}
 
 \item{populationGrowthTable}{data.frame. By default
 \code{\link{popGrowthTableJohnsonECCC}} is used. A custom table of model
@@ -67,7 +67,7 @@ a list with elements:
 \item simSurvObs: a data frame of survival data with columns id, Year, event, enter, and exit,
 \item ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
 \item exData: a tibble of expected population metric based on the national model,
-\item cs: a data frame recording the input parameters for the simulation.
+\item paramTable: a data frame recording the input parameters for the simulation.
 }
 }
 \description{

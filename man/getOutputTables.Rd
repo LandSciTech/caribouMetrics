@@ -8,8 +8,8 @@ getOutputTables(
   caribouBayesDemogMod,
   startYear,
   endYear,
-  oo,
-  simBig,
+  simObsList,
+  simNational,
   getKSDists
 )
 }
@@ -20,10 +20,10 @@ produced by calling \code{\link[=caribouBayesianIPM]{caribouBayesianIPM()}}}
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
 
-\item{oo}{observed simulation data, produced by calling
+\item{simObsList}{observed simulation data, produced by calling
 \code{\link[=simulateObservations]{simulateObservations()}}}
 
-\item{simBig}{National simulation results, produced by calling
+\item{simNational}{National simulation results, produced by calling
 \code{\link[=getSimsNational]{getSimsNational()}}}
 
 \item{getKSDists}{logical. Should Kolmogorov–Smirnov distances be calculated?}

@@ -11,7 +11,7 @@
 #'   beginning and end of the time interval and should be a number from 1 to 12
 #'   (December) or 0. Event is 0 or 1 where 0 means the animal lived and 1 died.
 #'   See [survival::Surv()] for more details.
-#' @param ageRatio.herd either a path to a csv file or a dataframe containing
+#' @param ageRatio either a path to a csv file or a dataframe containing
 #'   the columns "Year","Count", and "Class". Where class can be either calf or
 #'   cow
 #' @param disturbance either a path to a csv file or a dataframe containing the
@@ -28,7 +28,7 @@
 #'   "Exponential". Exponential is only recommended for small sample sizes
 #' @inheritParams caribouPopGrowth
 #' @param assessmentYrs Number of years over which to assess lambda (growth rate)
-#' @param inpFixed an optional list of inputs with names matching the above, if
+#' @param inputList an optional list of inputs with names matching the above, if
 #'   an argument is included in this list it will override the named argument
 #' @param saveJAGStxt file path. Directory where the JAGS model txt files will
 #'   be saved. Default is `tempdir()`
@@ -46,7 +46,7 @@
 #' 
 caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
                                               package = "caribouMetrics"),
-                       ageRatio.herd = system.file("extdata/simAgeRatio.csv",
+                       ageRatio = system.file("extdata/simAgeRatio.csv",
                                                    package = "caribouMetrics"),
                        disturbance = system.file("extdata/simDisturbance.csv",
                                                  package = "caribouMetrics"),
@@ -55,23 +55,23 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
                        Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
                        survAnalysisMethod = "KaplanMeier", adjustR = F,
                        assessmentYrs = 1,
-                       inpFixed = list(), saveJAGStxt = tempdir(),
+                       inputList = list(), saveJAGStxt = tempdir(),
                        quiet = TRUE) {
-  # survData=oo$simSurvObs;ageRatio.herd=oo$ageRatioOut;disturbance=oo$simDisturbance;
-  # betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"
-  # Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inpFixed=list()
+  # survData=oo$simSurvObs;ageRatio=oo$ageRatioOut;disturbance=oo$simDisturbance;
+  # betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=paramTable$N0;survAnalysisMethod = "KaplanMeier"
+  # Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inputList=list()
 
   # combine defaults in function with inputs from input list
   inputArgs <- c(
-    "survData", "ageRatio.herd", "disturbance", "startYear", "endYear",
+    "survData", "ageRatio", "disturbance", "startYear", "endYear",
     "Nchains", "Niter", "Nburn", "Nthin", "N0", "survAnalysisMethod", "adjustR",
     "assessmentYrs"
   )
   addArgs <- inputArgs # setdiff(inputArgs,names(inp))
   inp <- list()
   for (a in addArgs) {
-    if (is.element(a, names(inpFixed))) {
-      inp[[a]] <- inpFixed[[a]]
+    if (is.element(a, names(inputList))) {
+      inp[[a]] <- inputList[[a]]
     } else {
       inp[[a]] <- eval(parse(text = a))
     }
@@ -82,11 +82,11 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   }
 
   # Run model
-  if (is.character(inp$ageRatio.herd)) {
-    ageRatio.herd <- read.csv(inp$ageRatio.herd, header = T)
-    ageRatio.herd$X <- NULL
+  if (is.character(inp$ageRatio)) {
+    ageRatio <- read.csv(inp$ageRatio, header = T)
+    ageRatio$X <- NULL
   } else {
-    ageRatio.herd <- inp$ageRatio.herd
+    ageRatio <- inp$ageRatio
   }
   if (is.character(inp$disturbance)) {
     disturbance <- read.csv(inp$disturbance)
@@ -103,7 +103,7 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
 
   # if decide to error when Year ranges don't match could use testTable
   testTable(disturbance, c("Year", "Anthro", "fire_excl_anthro"))
-  testTable(ageRatio.herd, c("Year", "Count", "Class"))
+  testTable(ageRatio, c("Year", "Count", "Class"))
   testTable(survData, c("Year", "event", "enter", "exit"))
 
   disturbance <- merge(data.frame(Year = seq(inp$startYear, inp$endYear)),
@@ -270,9 +270,9 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   }
 
   # split data into calf and cow recruitment data
-  calf.cnt <- subset(ageRatio.herd, ageRatio.herd$Class == "calf")
+  calf.cnt <- subset(ageRatio, ageRatio$Class == "calf")
   calf.cnt$Class <- factor(calf.cnt$Class)
-  cow.cnt <- subset(ageRatio.herd, ageRatio.herd$Class == "cow")
+  cow.cnt <- subset(ageRatio, ageRatio$Class == "cow")
   cow.cnt$Class <- factor(cow.cnt$Class)
 
   # deal with missing years of data between year ranges

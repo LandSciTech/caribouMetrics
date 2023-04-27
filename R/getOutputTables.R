@@ -5,9 +5,9 @@
 #' @param caribouBayesDemogMod caribou Bayesian demographic model results
 #'   produced by calling [caribouBayesianIPM()]
 #' @inheritParams caribouBayesianIPM
-#' @param oo observed simulation data, produced by calling
+#' @param simObsList observed simulation data, produced by calling
 #'   [simulateObservations()]
-#' @param simBig National simulation results, produced by calling
+#' @param simNational National simulation results, produced by calling
 #'   [getSimsNational()]
 #' @param getKSDists logical. Should Kolmogorov–Smirnov distances be calculated?
 #'
@@ -19,10 +19,10 @@
 #' @export
 #'
 #' @examples
-getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, oo, simBig,
+getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, simObsList, simNational,
                             getKSDists) {
   # result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;
-  # oo=oo;simBig=simBig
+  # simObsList=oo;simNational=simBig
   
   result <- caribouBayesDemogMod$result
   survInput <- caribouBayesDemogMod$survInput
@@ -49,30 +49,30 @@ getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, oo, simBig
   obsSurv$parameter <- "Adult female survival"
   obsSurv$type <- "observed"
   
-  trueSurv <- subset(oo$exData, select = c(Year, survival))
+  trueSurv <- subset(simObsList$exData, select = c(Year, survival))
   names(trueSurv) <- c("Year", "Mean")
   trueSurv$parameter <- "Adult female survival"
   trueSurv$type <- "true"
   
-  obsRec <- subset(oo$ageRatioOut, select = c(Year, Count, Class))
+  obsRec <- subset(simObsList$ageRatioOut, select = c(Year, Count, Class))
   obsRec <- tidyr::pivot_wider(obsRec, id_cols = c("Year"), names_from = "Class",
                                values_from = "Count")
   obsRec$Mean <- obsRec$calf / obsRec$cow
   obsRec$parameter <- "Recruitment"
   obsRec$type <- "observed"
   
-  trueRec <- subset(oo$exData, select = c(Year, recruitment))
+  trueRec <- subset(simObsList$exData, select = c(Year, recruitment))
   names(trueRec) <- c("Year", "Mean")
   trueRec$parameter <- "Recruitment"
   trueRec$type <- "true"
   
-  obsLam <- subset(oo$exData, select = c(Year, lambda))
+  obsLam <- subset(simObsList$exData, select = c(Year, lambda))
   names(obsLam) <- c("Year", "Mean")
-  obsLam <- movingAveGrowthRate(obsLam, oo$cs$assessmentYrs)
+  obsLam <- movingAveGrowthRate(obsLam, simObsList$paramTable$assessmentYrs)
   obsLam$parameter <- "Population growth rate"
   obsLam$type <- "true"
   
-  obsSize <- subset(oo$exData, select = c(Year, N))
+  obsSize <- subset(simObsList$exData, select = c(Year, N))
   names(obsSize) <- c("Year", "Mean")
   # pop size returned from Bayesian model is at the start of the year, not the end.
   obsSize$Year <- obsSize$Year + 1
@@ -82,11 +82,11 @@ getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, oo, simBig
   obsAll <- rbind(obsLam, obsSize, subset(obsRec, select = names(obsLam)),
                   trueRec, subset(obsSurv, select = names(obsLam)), trueSurv)
   
-  simBigO <- subset(simBig$summary, select = c(Anthro, Mean, lower, upper, Parameter))
+  simBigO <- subset(simNational$summary, select = c(Anthro, Mean, lower, upper, Parameter))
   names(simBigO) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
   
-  # combine cs and simDisturbance and add to all output tables, nest params in a list
-  dist_params <- merge(oo$simDisturbance, oo$cs)
+  # combine paramTable and simDisturbance and add to all output tables, nest params in a list
+  dist_params <- merge(simObsList$simDisturbance, simObsList$paramTable)
   
   rr.summary <- merge(rr.summary, dist_params)
   simBigO <- merge(simBigO, dist_params)
@@ -98,13 +98,13 @@ getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, oo, simBig
   if (getKSDists) {
     # get Kolmogorov smirnov distance between samples at each point
     
-    variables <- unique(simBig$summary$parameter)
+    variables <- unique(simNational$summary$parameter)
     anthroPts <- unique(subset(rr.summary, select = c(Year, Anthro)))
     # TO DO: make this step faster
     bmSamples <- tabAllRes(result, startYear, endYear, doSummary = F)
     bmSamples$type <- "local"
     
-    simSamples <- merge(anthroPts, simBig$samples)
+    simSamples <- merge(anthroPts, simNational$samples)
     simSamples$Anthro <- NULL
     simSamples$type <- "national"
     

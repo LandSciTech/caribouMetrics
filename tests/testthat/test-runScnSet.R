@@ -27,8 +27,10 @@ test_that("testScript still works", {
   # eParsIn$collarNumYears=1
 
   scns <- expand.grid(
-    P = 8, st = 30, cmult = 2, ri = 2, assessmentYrs = 1, iA = 0,
-    tA = 0, aS = 0, aSf = 0, sQ = 0.960908218594268, rQ = 0.744425233039074, N0 = 1000
+    obsYears = 8, collarCount = 30, cowMult = 2, collarInterval = 2,
+    assessmentYrs = 1, iAnthro = 0,
+    tA = 0, obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.960908218594268, 
+    rQuantile = 0.744425233039074, N0 = 1000
   )
   scResults <- suppressWarnings(runScnSet(scns, eParsIn, simBig, getKSDists = F))
 
@@ -37,22 +39,22 @@ test_that("testScript still works", {
   if (interactive()) {
     print(plotRes(scResults$rr.summary.all, "Population growth rate",
       obs = scResults$obs.all,
-      lowBound = 0, simRange = scResults$sim.all, facetVars = c("P", "sQ")
+      lowBound = 0, simRange = scResults$sim.all, facetVars = c("obsYears", "sQuantile")
     ))
 
     print(plotRes(scResults$rr.summary.all, "Recruitment",
       obs = scResults$obs.all,
-      lowBound = 0, simRange = scResults$sim.all, facetVars = c("P", "sQ")
+      lowBound = 0, simRange = scResults$sim.all, facetVars = c("obsYears", "sQuantile")
     ))
 
     print(plotRes(scResults$rr.summary.all, "Adult female survival",
       obs = scResults$obs.all,
-      lowBound = 0.65, simRange = scResults$sim.all, facetVars = c("P", "sQ")
+      lowBound = 0.65, simRange = scResults$sim.all, facetVars = c("obsYears", "sQuantile")
     ))
 
     print(plotRes(scResults$rr.summary.all, "Female population size",
       obs = scResults$obs.all,
-      lowBound = 0, highBound = 2000, facetVars = c("P", "sQ")
+      lowBound = 0, highBound = 2000, facetVars = c("obsYears", "sQuantile")
     ))
   }
 })

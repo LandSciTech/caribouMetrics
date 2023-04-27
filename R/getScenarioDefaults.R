@@ -3,35 +3,34 @@
 #' This function can be used to generate default parameter values used in
 #' [simulateObservations()]
 #'
-#' @param scns a data.frame with column names matching the arguments below. Any
+#' @param paramTable a data.frame with column names matching the arguments below. Any
 #'   columns that are missing will be filled with the default values.
-#' @param iF number. Initial fire disturbance percentage.
-#' @param iA number. Initial anthropogenic disturbance percentage
-#' @param aS number. Percent change in anthropogenic disturbance per year in the
+#' @param iFire number. Initial fire disturbance percentage.
+#' @param iAnthro number. Initial anthropogenic disturbance percentage
+#' @param obsAnthroSlope number. Percent change in anthropogenic disturbance per year in the
 #'   observation period
-#' @param aSf number. Percent change in anthropogenic disturbance per year in
+#' @param projAnthroSlope number. Percent change in anthropogenic disturbance per year in
 #'   the projection period
-#' @param rS number. Disturbance-recruitment slope multiplier
-#' @param sS number. Disturbance-survival slope multiplier
-#' @param rQ number in 0, 1. Recruitment quantile
-#' @param sQ number in 0, 1. Survival quantile
-#' @param J Number of years of projections
-#' @param P Number of years of observations
-#' @param N0 number. Initial population size
+#' @param rSlopeMod number. Disturbance-recruitment slope multiplier
+#' @param sSlopeMod number. Disturbance-survival slope multiplier
+#' @param rQuantile number in 0, 1. Recruitment quantile
+#' @param sQuantile number in 0, 1. Survival quantile
+#' @param projYears Number of years of projections
+#' @param obsYears Number of years of observations
 #' @inheritParams caribouPopGrowth
-#' @param assessmentYrs number. #TODO: 
-#' @param ri number. Optional. Number of years between collar deployments. If
+#' @inheritParams caribouBayesianIPM
+#' @param collarInterval number. Optional. Number of years between collar deployments. If
 #'   missing assumed to be every year
-#' @param cmult number. Optional. If provided number of cows is `cmult` \*
+#' @param cowMult number. Optional. If provided number of cows is `cowMult` \*
 #'   number of surviving collared cows at month 5
-#' @param cw Optional. Only used in [runScnSet()] to set the number of cows per
+#' @param cowCount Optional. Only used in [runScnSet()] to set the number of cows per
 #'   year in recruitment survey
-#' @param st Optional. If provided target number of deployed collars is overwritten with
+#' @param collarCount Optional. If provided target number of deployed collars is overwritten with
 #'   this value.
 #' @param curYear year. The current year. All years before are part of the
 #'   observation period and years after are part of the projection period.
-#' @param iYr year. First year in observation period. Optional, if not provided
-#'   it will be calculated from `curYear` and `P`
+#' @param startYear year. First year in observation period. Optional, if not provided
+#'   it will be calculated from `curYear` and `obsYears`
 #'
 #' @references DeCesare, N.J., Hebblewhite, M., Bradley, M., Smith, K.G.,
 #'   Hervieux, D. and Neufeld, L., 2012. Estimating ungulate recruitment and
@@ -49,43 +48,44 @@
 #' @examples
 #' getScenarioDefaults()
 #'
-#' # scns list takes precedence over argument values
-#' getScenarioDefaults(scns = data.frame(iF = 10, iA = 20, P = 1), P = 5)
+#' # paramTable list takes precedence over argument values
+#' getScenarioDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears = 1), obsYears = 5)
 #' 
-getScenarioDefaults <- function(scns = NULL,
-                         iF = 0, iA = 0, aS = 0, aSf = 4,
-                         rS = 1, sS = 1,
-                         rQ = 0.5, sQ = 0.5, J = 20, P = 10, N0 = 1000,
+getScenarioDefaults <- function(paramTable = NULL,
+                         iFire = 0, iAnthro = 0, obsAnthroSlope = 0, projAnthroSlope = 4,
+                         rSlopeMod = 1, sSlopeMod = 1,
+                         rQuantile = 0.5, sQuantile = 0.5, projYears = 20, obsYears = 10, N0 = 1000,
                          adjustR = FALSE, assessmentYrs = 1,
-                         ri = NA, cmult = NA, cw = NA, st = NA, iYr = NA,
+                         collarInterval = NA, cowMult = NA, cowCount = NA, 
+                         collarCount = NA, startYear = NA,
                          curYear = 2023) {
   defList <- c(as.list(environment()))
-  defList$scns <- NULL
-  if (is.null(scns)) {
-    scns <- as.data.frame(defList)
+  defList$paramTable <- NULL
+  if (is.null(paramTable)) {
+    paramTable <- as.data.frame(defList)
   } else {
-    # keep all values in scns and add any that are missing using values in
+    # keep all values in paramTable and add any that are missing using values in
     # defList
-    scns <- cbind(scns, defList[which(!names(defList) %in% names(scns))])
+    paramTable <- cbind(paramTable, defList[which(!names(defList) %in% names(paramTable))])
   }
 
   # remove columns that are all NA because they should be missing and order like
   # defList but keep any extra columns not in defList
-  scns <- select(scns, all_of(names(defList)), everything(), -where(~all(is.na(.x))))
+  paramTable <- select(paramTable, all_of(names(defList)), everything(), -where(~all(is.na(.x))))
 
-  if (is.element("cmult", names(scns)) & is.element("cw", names(scns))) {
-    stop("Specify number of cows per year in recruitment survey (cw) or",
-         " multiplier of number of collared cows in recruitment survey (cmult),",
+  if (is.element("cowMult", names(paramTable)) & is.element("cowCount", names(paramTable))) {
+    stop("Specify number of cows per year in recruitment survey (cowCount) or",
+         " multiplier of number of collared cows in recruitment survey (cowMult),",
          " but not both.")
   }
-  scns$ID <- seq(1:nrow(scns))
-  scns$label <- ""
-  for (n in names(scns)[(length(names(scns)) - 1):1]) {
-    scns$label <- paste0(scns$label, n, scns[[n]], "_")
+  paramTable$ID <- seq(1:nrow(paramTable))
+  paramTable$label <- ""
+  for (n in names(paramTable)[(length(names(paramTable)) - 1):1]) {
+    paramTable$label <- paste0(paramTable$label, n, paramTable[[n]], "_")
   }
 
-  if (!is.element("iYr", names(scns))) {
-    scns$iYr <- scns$curYear - scns$P + 1
+  if (!is.element("startYear", names(paramTable))) {
+    paramTable$startYear <- paramTable$curYear - paramTable$obsYears + 1
   }
-  return(scns)
+  return(paramTable)
 }

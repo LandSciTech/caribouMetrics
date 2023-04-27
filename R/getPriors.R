@@ -2,21 +2,21 @@
 #'
 #'
 #'
-#' @param modifiers a named list of modifiers to use to change the priors. If a
+#' @param modList a named list of modifiers to use to change the priors. If a
 #'   modifier is supplied here the corresponding argument below is ignored.
 #' @param returnValues logical. Default is TRUE. If FALSE returns strings for
 #'   some values showing the initial values and the modifier ie "0.9 * 1.05"
-#' @param bse anthropogenic disturbance slope survival uncertainty multiplier. 
+#' @param sAnthroSlopeSEMod anthropogenic disturbance slope survival uncertainty multiplier. 
 #'   1 - 10
-#' @param bre anthropogenic disturbance slope recruitment uncertainty
+#' @param rAnthroSlopeSEMod anthropogenic disturbance slope recruitment uncertainty
 #'   multiplier. 1 - 10
-#' @param lse survival intercept uncertainty multiplier. 1 - 10
-#' @param lre recruitment intercept uncertainty multiplier. 1 - 10
-#' @param sse interannual coefficient of variation for survival. 0-1. See
+#' @param sIntSEMod survival intercept uncertainty multiplier. 1 - 10
+#' @param rIntSEMod recruitment intercept uncertainty multiplier. 1 - 10
+#' @param sInterannualVar interannual coefficient of variation for survival. 0-1. See
 #'   [caribouPopGrowth()] and functions therein for details
-#' @param ssv uncertainty about interannual variation in survival. 0-1
-#' @param sre interannual coefficient of variation for recruitment. 0-1
-#' @param srv uncertainty about interannual variation in recruitment. 0-1.
+#' @param sInterannualVarSE uncertainty about interannual variation in survival. 0-1
+#' @param rInterannualVar interannual coefficient of variation for recruitment. 0-1
+#' @param rInterannualVarSE uncertainty about interannual variation in recruitment. 0-1.
 #' @inheritParams getCoefs
 #' @inheritParams demographicCoefficients
 #'
@@ -44,37 +44,37 @@
 #' @examples
 #' getPriors()
 #' @export
-getPriors <- function(modifiers = NULL,
+getPriors <- function(modList = NULL,
                       survivalModelNumber = "M1",
                       recruitmentModelNumber = "M4",
-                      bre = 4,
-                      bse = 3,
-                      lse = 5,
-                      sse = 0.08696 * 0.4,
-                      ssv = 0.03,
-                      lre = 3,
-                      sre = 0.46 * 0.5,
-                      srv = 0.22,
+                      rAnthroSlopeSEMod = 4,
+                      sAnthroSlopeSEMod = 3,
+                      sIntSEMod = 5,
+                      sInterannualVar = 0.08696 * 0.4,
+                      sInterannualVarSE = 0.03,
+                      rIntSEMod = 3,
+                      rInterannualVar = 0.46 * 0.5,
+                      rInterannualVarSE = 0.22,
                       populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                       modVer = "Johnson",
                       returnValues = TRUE) {
-  # modifiers=cs
+  # modList=paramTable
 
   expectMods <- c(as.list(environment()))
-  expectMods$modifiers <- NULL
-  if (is.null(modifiers)) {
-    modifiers <- expectMods
+  expectMods$modList <- NULL
+  if (is.null(modList)) {
+    modList <- expectMods
   } else {
     # keep all values in modifiers and add any that are missing using values in
     # expectMods
-    modifiers <- c(modifiers, expectMods[which(!names(expectMods) %in% names(modifiers))])
+    modList <- c(modList, expectMods[which(!names(expectMods) %in% names(modList))])
   }
 
   popGrowthPars <- demographicCoefficients(
     2,
     modelVersion = modVer,
-    survivalModelNumber = modifiers$survivalModelNumber,
-    recruitmentModelNumber = modifiers$recruitmentModelNumber,
+    survivalModelNumber = modList$survivalModelNumber,
+    recruitmentModelNumber = modList$recruitmentModelNumber,
     populationGrowthTable = populationGrowthTable
   )
 
@@ -109,19 +109,19 @@ getPriors <- function(modifiers = NULL,
   if (returnValues) {
     betaPriors <- list(
       l.R.Prior1 = rPriorCoefs$Intercept,
-      l.R.Prior2 = rPriorStdErrs$Intercept * modifiers$lre,
+      l.R.Prior2 = rPriorStdErrs$Intercept * modList$rIntSEMod,
       beta.Rec.anthro.Prior1 = rPriorCoefs$Anthro,
-      beta.Rec.anthro.Prior2 = rPriorStdErrs$Anthro * modifiers$bre,
+      beta.Rec.anthro.Prior2 = rPriorStdErrs$Anthro * modList$rAnthroSlopeSEMod,
       beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
       beta.Rec.fire.Prior2 = rPriorStdErrs$fire_excl_anthro,
-      sig.R.Prior1 = modifiers$sre,
-      sig.R.Prior2 = modifiers$srv,
+      sig.R.Prior1 = modList$rInterannualVar,
+      sig.R.Prior2 = modList$rInterannualVarSE,
       l.Saf.Prior1 = sPriorCoefs$Intercept,
-      l.Saf.Prior2 = sPriorStdErrs$Intercept * modifiers$lse,
+      l.Saf.Prior2 = sPriorStdErrs$Intercept * modList$sIntSEMod,
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
-      beta.Saf.Prior2 = sPriorStdErrs$Anthro * modifiers$bse,
-      sig.Saf.Prior1 = modifiers$sse,
-      sig.Saf.Prior2 = modifiers$ssv
+      beta.Saf.Prior2 = sPriorStdErrs$Anthro * modList$sAnthroSlopeSEMod,
+      sig.Saf.Prior1 = modList$sInterannualVar,
+      sig.Saf.Prior2 = modList$sInterannualVarSE
     )
 
     # replace NULL values with 0 for when anthro or fire is not included
@@ -135,20 +135,20 @@ getPriors <- function(modifiers = NULL,
   } else {
     betaPriors <- list(
       l.R.Prior1 = rPriorCoefs$Intercept,
-      l.R.Prior2 = paste0(round(rPriorStdErrs$Intercept, 4), "*", modifiers$lre),
+      l.R.Prior2 = paste0(round(rPriorStdErrs$Intercept, 4), "*", modList$rIntSEMod),
       beta.Rec.anthro.Prior1 = rPriorCoefs$Anthro,
       beta.Rec.anthro.Prior2 = paste0(round(rPriorStdErrs$Anthro, 4), "*",
-                                      modifiers$bre),
+                                      modList$rAnthroSlopeSEMod),
       beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
       beta.Rec.fire.Prior2 = rPriorStdErrs$fire_excl_anthro,
-      sig.R.Prior1 = modifiers$sre,
-      sig.R.Prior2 = modifiers$srv,
+      sig.R.Prior1 = modList$rInterannualVar,
+      sig.R.Prior2 = modList$rInterannualVarSE,
       l.Saf.Prior1 = sPriorCoefs$Intercept,
-      l.Saf.Prior2 = paste0(round(sPriorStdErrs$Intercept, 4), "*", modifiers$lse),
+      l.Saf.Prior2 = paste0(round(sPriorStdErrs$Intercept, 4), "*", modList$sIntSEMod),
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
-      beta.Saf.Prior2 = paste0(round(sPriorStdErrs$Anthro, 4), "*", modifiers$bse),
-      sig.Saf.Prior1 = modifiers$sse,
-      sig.Saf.Prior2 = modifiers$ssv
+      beta.Saf.Prior2 = paste0(round(sPriorStdErrs$Anthro, 4), "*", modList$sAnthroSlopeSEMod),
+      sig.Saf.Prior1 = modList$sInterannualVar,
+      sig.Saf.Prior2 = modList$sInterannualVarSE
     )
   }
   return(betaPriors)

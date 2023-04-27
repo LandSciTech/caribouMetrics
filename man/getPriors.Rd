@@ -5,47 +5,47 @@
 \title{Get model priors from national models}
 \usage{
 getPriors(
-  modifiers = NULL,
+  modList = NULL,
   survivalModelNumber = "M1",
   recruitmentModelNumber = "M4",
-  bre = 4,
-  bse = 3,
-  lse = 5,
-  sse = 0.08696 * 0.4,
-  ssv = 0.03,
-  lre = 3,
-  sre = 0.46 * 0.5,
-  srv = 0.22,
+  rAnthroSlopeSEMod = 4,
+  sAnthroSlopeSEMod = 3,
+  sIntSEMod = 5,
+  sInterannualVar = 0.08696 * 0.4,
+  sInterannualVarSE = 0.03,
+  rIntSEMod = 3,
+  rInterannualVar = 0.46 * 0.5,
+  rInterannualVarSE = 0.22,
   populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
   modVer = "Johnson",
   returnValues = TRUE
 )
 }
 \arguments{
-\item{modifiers}{a named list of modifiers to use to change the priors. If a
+\item{modList}{a named list of modifiers to use to change the priors. If a
 modifier is supplied here the corresponding argument below is ignored.}
 
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
 number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.}
 
-\item{bre}{anthropogenic disturbance slope recruitment uncertainty
+\item{rAnthroSlopeSEMod}{anthropogenic disturbance slope recruitment uncertainty
 multiplier. 1 - 10}
 
-\item{bse}{anthropogenic disturbance slope survival uncertainty multiplier.
+\item{sAnthroSlopeSEMod}{anthropogenic disturbance slope survival uncertainty multiplier.
 1 - 10}
 
-\item{lse}{survival intercept uncertainty multiplier. 1 - 10}
+\item{sIntSEMod}{survival intercept uncertainty multiplier. 1 - 10}
 
-\item{sse}{interannual coefficient of variation for survival. 0-1. See
+\item{sInterannualVar}{interannual coefficient of variation for survival. 0-1. See
 \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} and functions therein for details}
 
-\item{ssv}{uncertainty about interannual variation in survival. 0-1}
+\item{sInterannualVarSE}{uncertainty about interannual variation in survival. 0-1}
 
-\item{lre}{recruitment intercept uncertainty multiplier. 1 - 10}
+\item{rIntSEMod}{recruitment intercept uncertainty multiplier. 1 - 10}
 
-\item{sre}{interannual coefficient of variation for recruitment. 0-1}
+\item{rInterannualVar}{interannual coefficient of variation for recruitment. 0-1}
 
-\item{srv}{uncertainty about interannual variation in recruitment. 0-1.}
+\item{rInterannualVarSE}{uncertainty about interannual variation in recruitment. 0-1.}
 
 \item{populationGrowthTable}{data.frame. \code{\link{popGrowthTableJohnsonECCC}} is
 included in the package and should be used in most cases. A custom table of

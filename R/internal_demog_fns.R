@@ -10,6 +10,7 @@ getKMSurvivalEstimates <- function(dSubset) {
   sModel <- survival::survfit(survival::Surv(enter, exit, event) ~ as.factor(Year),
                               conf.type = "log-log", data = dSubset)
   reg.out <- summary(sModel)
+  # TODO: Josie can this be deleted?
   if (0) {
     check <- data.frame(strata = reg.out$strata, survival = reg.out$surv,
                         time = reg.out$time)
@@ -463,7 +464,7 @@ getKSDist <- function(Value, type) {
 plotRes <- function(allRes, parameter, obs = NULL, lowBound = 0, highBound = 1,
                     simRange = NULL, facetVars = NULL) {
   # allRes=scResults$ksDists; parameter="Recruitment";obs=scResults$obs.all;
-  # lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("P","sQ")
+  # lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("obsYears","sQuantile")
   
   pal2 = c("#EF8A62","#67A9CF")#brewer.pal(7,"RdBu")[c(2,6)]
 

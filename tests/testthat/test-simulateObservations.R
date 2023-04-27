@@ -31,7 +31,7 @@ test_that("error messages are as expected", {
 })
 
 test_that("multiple scenarios not allowed",{
-  scns <- getScenarioDefaults(data.frame(iF = 1:2))
+  scns <- getScenarioDefaults(data.frame(iFire = 1:2))
   expect_error(simulateObservations(scns,
                                  freqStartsByYear = data.frame(Year = 2014:2023,
                                                                numStarts = 10),

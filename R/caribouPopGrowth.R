@@ -9,7 +9,7 @@
 #' numbers of animals used by Stewart et al. (in prep). See
 #' \code{vignette("caribouDemography")} for additional details and examples.
 #'
-#' @param N Number or vector of numbers. Initial population size for one or more
+#' @param N0 Number or vector of numbers. Initial population size for one or more
 #'   sample populations.
 #' @param numSteps Number. Number of years to project.
 #' @param R_bar Number or vector of numbers. Expected recruitment rate (calf:cow
@@ -36,12 +36,12 @@
 #' @param adjustR Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).
 #' @param progress Logical. Should progress updates be shown?
 #'
-#' @return A data.frame of population size (N) and average growth rate (lambda)
+#' @return A data.frame of population size (N0) and average growth rate (lambda)
 #'   projections for each sample population.
 #'
 #'
 #' @export
-caribouPopGrowth <- function(N,
+caribouPopGrowth <- function(N0,
                              numSteps,
                              R_bar,
                              S_bar,
@@ -60,7 +60,7 @@ caribouPopGrowth <- function(N,
                              probOption="binomial",
                              adjustR=F,
                              progress = interactive()){
-  rr=data.frame(N=N)
+  rr=data.frame(N0=N0)
 
   R_bar[R_bar<0]=0.000001
   S_bar[S_bar<0]=0.000001
@@ -82,12 +82,12 @@ caribouPopGrowth <- function(N,
   h_R = s*h_R
   l_R = s*l_R
 
-  if(length(N) != length(R_bar) && length(R_bar) > 1){
-    stop("R_bar must have length = 1 or the same length as N", call. = FALSE)
+  if(length(N0) != length(R_bar) && length(R_bar) > 1){
+    stop("R_bar must have length = 1 or the same length as N0", call. = FALSE)
   }
 
-  if(length(N) != length(S_bar) && length(S_bar) > 1){
-    stop("S_bar  must have length = 1 or the same length as N", call. = FALSE)
+  if(length(N0) != length(S_bar) && length(S_bar) > 1){
+    stop("S_bar  must have length = 1 or the same length as N0", call. = FALSE)
   }
 
   if(!is.element("R_phi",names(interannualVar))){
@@ -110,7 +110,7 @@ caribouPopGrowth <- function(N,
       roundDigits=0
       doBinomial=T
     }
-    rK <- K * N
+    rK <- K * N0
   }
 
   if(a<=0){
@@ -136,18 +136,18 @@ caribouPopGrowth <- function(N,
       R_tadj=R_t/(1+R_t)
     }else{R_tadj=R_t}
 
-    Ntm1=N
+    Ntm1=N0
 
     if(doBinomial){
-      n_deaths <- rbinom(length(N),N,(1 - S_t))
+      n_deaths <- rbinom(length(N0),N0,(1 - S_t))
     }else{
-      n_deaths <- round(N * (1 - S_t),roundDigits)
+      n_deaths <- round(N0 * (1 - S_t),roundDigits)
     }
 
-    surviving_adFemales <- N - n_deaths
+    surviving_adFemales <- N0 - n_deaths
 
     if(probOption=="matchJohnson2020"){
-      rK <- K * N
+      rK <- K * N0
     }
 
     n_recruitsUnadjDD <- surviving_adFemales * R_tadj
@@ -164,7 +164,7 @@ caribouPopGrowth <- function(N,
       adjDDRtProportion=1
     }
     if(doBinomial){
-      n_recruits <- rbinom(length(N),surviving_adFemales,R_tadj*adjDDRtProportion)
+      n_recruits <- rbinom(length(N0),surviving_adFemales,R_tadj*adjDDRtProportion)
     }else{
       n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits)
     }

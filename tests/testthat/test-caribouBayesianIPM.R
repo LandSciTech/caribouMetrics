@@ -12,7 +12,7 @@ test_that("input tables are as expected",{
   survDataIn <- system.file("extdata/simSurvData.csv",
                             package = "caribouMetrics") %>%
     read.csv()
-  ageRatio.herdIn <- system.file("extdata/simAgeRatio.csv",
+  ageRatioIn <- system.file("extdata/simAgeRatio.csv",
                                  package = "caribouMetrics")%>%
     read.csv()
   disturbanceIn <- system.file("extdata/simDisturbance.csv",
@@ -32,8 +32,8 @@ test_that("input tables are as expected",{
   expect_true(is.na(last(res2$survInput$surv)))
   expect_s3_class(res2$result, "rjags")
 
-  # ageRatio.herd is outside year range warning but still runs
-  res3 <- expect_warning(caribouBayesianIPM(ageRatio.herd = mutate(ageRatio.herdIn, Year = Year - 30),
+  # ageRatio is outside year range warning but still runs
+  res3 <- expect_warning(caribouBayesianIPM(ageRatio = mutate(ageRatioIn, Year = Year - 30),
              startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
              Nthin = 2), "composition")
 
@@ -82,7 +82,7 @@ test_that("input tables are as expected",{
     "missing expected columns")
 
   expect_error(
-    caribouBayesianIPM(ageRatio.herd =  rename(ageRatio.herdIn, cls = Class),
+    caribouBayesianIPM(ageRatio =  rename(ageRatioIn, cls = Class),
                startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                Nthin = 2),
     "missing expected columns")
@@ -132,7 +132,7 @@ test_that("works when only 1 collared animal",{
     numStarts = 1
   )
 
-  scns <- getScenarioDefaults(P = 12, st = 1)
+  scns <- getScenarioDefaults(obsYears = 12, collarCount = 1)
 
   oo <- simulateObservations(scns, cowCounts = cowCounts,
                              freqStartsByYear = freqStartsByYear)
@@ -142,7 +142,7 @@ test_that("works when only 1 collared animal",{
 
   expect_warning(
     out <- caribouBayesianIPM(
-      survData = oo$simSurvObs, ageRatio.herd = oo$ageRatioOut,
+      survData = oo$simSurvObs, ageRatio = oo$ageRatioOut,
       disturbance = oo$simDisturbance,
       startYear = 2012, endYear = 2043,
       Nchains = 1, Niter = 100, Nburn = 10,
