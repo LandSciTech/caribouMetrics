@@ -64,12 +64,12 @@ reproduction (DeCesare et al. 2012; Eacker et al. 2019)?}
 missing assumed to be every year}
 
 \item{cmult}{number. Optional. If provided number of cows is \code{cmult} \*
-number of surviving cows at month 5}
+number of surviving collared cows at month 5}
 
 \item{cw}{Optional. Only used in \code{\link[=runScnSet]{runScnSet()}} to set the number of cows per
 year in recruitment survey}
 
-\item{st}{Optional. If provided number of starts per year is overwritten with
+\item{st}{Optional. If provided target number of deployed collars is overwritten with
 this value.}
 
 \item{iYr}{year. First year in observation period. Optional, if not provided
