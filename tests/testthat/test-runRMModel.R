@@ -107,7 +107,6 @@ test_that("survAnalysisMethod works", {
                  "using Kaplan-Meier survival model")
   expect_s3_class(out1$result, "rjags")
 
-  # TODO fix this error
   expect_message(out2 <- runRMModel(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2, survAnalysisMethod = "Exponential"),
                  "expanding survival record")
