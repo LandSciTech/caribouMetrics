@@ -27,7 +27,7 @@ for(k in 1:nYears){
 for(k in 1:nYears){
 		_adjustString_
 		survivors[k] ~ dbin( S.annual.KM[k], fpop.size[k] )
-    recruits[k] ~ dpois(Rfemale[k], survivors[k])
+    recruits[k] ~ dpois(Rfemale[k]*survivors[k])
     #small minimum in demoninator to give 0 when fpop.size=0
     pop.growthr[k] <- (survivors[k]+recruits[k])/max(fpop.size[k],0.0000001)
 }
