@@ -335,9 +335,9 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   }
 
   if (inp$adjustR) {
-    adjustString <- "Rfemale[k] <- (RT[k]/2)/(1+(RT[k]/2))"
+    adjustString <- "Rfemale[k] <- (R[k]/2)/(1+(R[k]/2))"
   } else {
-    adjustString <- "Rfemale[k] <- RT[k]/2"
+    adjustString <- "Rfemale[k] <- R[k]/2"
   }
 
   if (inp$survAnalysisMethod == "KaplanMeier") {
