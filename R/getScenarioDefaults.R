@@ -52,9 +52,9 @@
 #' getScenarioDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears = 1), obsYears = 5)
 #' 
 getScenarioDefaults <- function(paramTable = NULL,
-                         iFire = 0, iAnthro = 20, obsAnthroSlope = 2, projAnthroSlope = 2,
+                         iFire = 0, iAnthro = 0, obsAnthroSlope = 2, projAnthroSlope = 2,
                          rSlopeMod = 1, sSlopeMod = 1,
-                         rQuantile = 0.5, sQuantile = 0.5, projYears = 25, obsYears = 15, N0 = 1000,
+                         rQuantile = 0.5, sQuantile = 0.5, projYears = 35, obsYears = 15, N0 = 1000,
                          adjustR = FALSE, assessmentYrs = 3,
                          collarInterval = NA, cowMult = NA, cowCount = NA, 
                          collarCount = NA, startYear = NA,
