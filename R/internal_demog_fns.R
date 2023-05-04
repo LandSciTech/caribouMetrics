@@ -500,7 +500,7 @@ plotRes <- function(allRes, parameter, obs = NULL, lowBound = 0, highBound = 1,
     pr <- parameter
     simRange <- subset(simRange, parameter == pr)
 
-    df$Type <- "local"
+    df$Type <- "IPM"
     simRange$Type <- "national"
     nameSel <- c(c("Year", "Mean", "Lower 95% CRI", "Upper 95% CRI", "Type"), facetVars)
     df <- rbind(subset(df, select = nameSel), subset(simRange, select = nameSel))
@@ -540,7 +540,7 @@ plotRes <- function(allRes, parameter, obs = NULL, lowBound = 0, highBound = 1,
   }
 
   if (!KS & !is.null(obs)) {
-    obs$Type <- "local"
+    obs$Type <- "IPM"
     obs$obsError <- F
     obs$obsError[obs$type == "observed"] <- T
     x2 <- x2 + ggplot2::geom_point(data = obs,
