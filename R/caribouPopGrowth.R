@@ -61,6 +61,8 @@ caribouPopGrowth <- function(N0,
                              adjustR=F,
                              progress = interactive()){
   rr=data.frame(N0=N0)
+  
+  N <- N0
 
   R_bar[R_bar<0]=0.000001
   S_bar[S_bar<0]=0.000001
@@ -136,18 +138,18 @@ caribouPopGrowth <- function(N0,
       R_tadj=R_t/(1+R_t)
     }else{R_tadj=R_t}
 
-    Ntm1=N0
+    Ntm1=N
 
     if(doBinomial){
-      n_deaths <- rbinom(length(N0),N0,(1 - S_t))
+      n_deaths <- rbinom(length(N),N,(1 - S_t))
     }else{
-      n_deaths <- round(N0 * (1 - S_t),roundDigits)
+      n_deaths <- round(N * (1 - S_t),roundDigits)
     }
 
-    surviving_adFemales <- N0 - n_deaths
+    surviving_adFemales <- N - n_deaths
 
     if(probOption=="matchJohnson2020"){
-      rK <- K * N0
+      rK <- K * N
     }
 
     n_recruitsUnadjDD <- surviving_adFemales * R_tadj
@@ -164,7 +166,7 @@ caribouPopGrowth <- function(N0,
       adjDDRtProportion=1
     }
     if(doBinomial){
-      n_recruits <- rbinom(length(N0),surviving_adFemales,R_tadj*adjDDRtProportion)
+      n_recruits <- rbinom(length(N),surviving_adFemales,R_tadj*adjDDRtProportion)
     }else{
       n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits)
     }

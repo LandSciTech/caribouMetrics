@@ -27,10 +27,10 @@ test_that("caribouPopGrowth options work", {
   expect_true(all(which(res3$lambda < 1) == 1:5))
   
   # there is an error for extreme values of R_bar or S_bar
-  expect_warning(caribouPopGrowth(1000, 20, R_bar = 0.6, S_bar = 0.2),
+  expect_warning(caribouPopGrowth(1000, 20, R_bar = 0.6, S_bar = 0.2, progress = FALSE),
                "expected survival S_bar")
   
-  expect_warning(caribouPopGrowth(1000, 20, R_bar = 0.9, S_bar = 0.7),
+  expect_warning(caribouPopGrowth(1000, 20, R_bar = 0.9, S_bar = 0.7, progress = FALSE),
                "expected recruitment R_bar")
   
   res4 <- caribouPopGrowth(1000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE)
@@ -39,4 +39,10 @@ test_that("caribouPopGrowth options work", {
                            progress = FALSE)
   
   expect_lt(res5$N, res4$N)
+  
+  # population gets larger over longer time with high R and S
+  res6 <- caribouPopGrowth(1000, 2, R_bar = 0.7, S_bar = 0.99, progress = FALSE)
+  res7 <- caribouPopGrowth(1000, 200, R_bar = 0.8, S_bar = 0.99, progress = FALSE)
+  
+  expect_gt(res7$N - res6$N, 200)
 })
