@@ -1,5 +1,4 @@
 test_that("testScript still works", {
-  # Use Eacker example data for collaring parameters
   eParsIn <- list()
   eParsIn$cowCounts <- data.frame(
     Year = 1981:2023,

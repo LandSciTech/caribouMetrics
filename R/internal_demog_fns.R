@@ -707,6 +707,8 @@ testTable <- function(df, req_col_names, req_vals = NULL, acc_vals = NULL){
   return(invisible(NULL))
 }
 
+# saves the cached version of the national sims to a local file so it doesn't
+# need to be re-run every time you restart
 savePersistentCache <- function(env = cacheEnv){
   obj_nms <- ls(envir = env)
   lapply(obj_nms, function(x){

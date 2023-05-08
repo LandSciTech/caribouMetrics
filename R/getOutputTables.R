@@ -82,6 +82,12 @@ getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, simObsList
   obsAll <- rbind(obsLam, obsSize, subset(obsRec, select = names(obsLam)),
                   trueRec, subset(obsSurv, select = names(obsLam)), trueSurv)
   
+  if(!all(unique(simObsList$simDisturbance$Anthro) %in% simNational$summary$Anthro)){
+    message("recalculating national sims to match anthropogenic distubance scenario")
+    
+    simNational <- getSimsNational(Anthro = unique(simObsList$simDisturbance$Anthro))
+  }
+  
   simBigO <- subset(simNational$summary, select = c(Anthro, Mean, lower, upper, Parameter))
   names(simBigO) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
   
@@ -89,7 +95,9 @@ getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, simObsList
   dist_params <- merge(simObsList$simDisturbance, simObsList$paramTable)
   
   rr.summary <- merge(rr.summary, dist_params)
-  simBigO <- merge(simBigO, dist_params)
+  simBigO <- merge(simBigO, dist_params, all.y = TRUE)
+
+  
   obsAll <- merge(obsAll, dist_params)
   rr.summary.all <- rr.summary
   sim.all <- simBigO
