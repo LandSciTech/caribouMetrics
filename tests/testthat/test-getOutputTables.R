@@ -1,6 +1,6 @@
 test_that("works with defaults", {
   
-  scns <- getScenarioDefaults(projYears = 0)
+  scns <- getScenarioDefaults(projYears = 0, obsYears = 10)
   simO <- simulateObservations(scns,
                                freqStartsByYear = data.frame(Year = 2014:2023,
                                                              numStarts = 20),
