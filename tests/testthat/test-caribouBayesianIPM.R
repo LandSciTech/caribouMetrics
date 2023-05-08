@@ -157,3 +157,34 @@ test_that("works when only 1 collared animal",{
   #                                                     replacement has 7 rows, data has 4
 
 })
+
+test_that("results match expected", {
+  
+  cowCounts <- data.frame(
+    Year = 2014:2023,
+    Count = 2000,
+    Class = "cow"
+  )
+  
+  freqStartsByYear <- data.frame(
+    Year = 2014:2023,
+    numStarts = 2000
+  )
+  
+  scns <- getScenarioDefaults(obsYears = 10, collarCount = 2000)
+  
+  oo <- simulateObservations(scns, cowCounts = cowCounts,
+                             freqStartsByYear = freqStartsByYear)
+  
+  
+  
+  out <- caribouBayesianIPM(
+    survData = oo$simSurvObs, ageRatio = oo$ageRatioOut,
+    disturbance = oo$simDisturbance,
+    startYear = scns$startYear, endYear = scns$curYear+scns$projYears,
+    Nchains = 1, Niter = 100, Nburn = 10,
+    Nthin = 2)
+  
+  # TODO: add expectations that make sense based on what we know and ensure obs
+  # are similar to expected
+})
