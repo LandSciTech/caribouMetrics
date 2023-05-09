@@ -77,7 +77,7 @@ realistic observations are simulated from this true population based on a
 collaring program with the given parameters.
 }
 \examples{
-scns <- getScenarioDefaults()
+scns <- getScenarioDefaults(projYears = 10, obsYears = 10)
 simulateObservations(scns,
                      freqStartsByYear = data.frame(Year = 2014:2023,
                                                    numStarts = 10),

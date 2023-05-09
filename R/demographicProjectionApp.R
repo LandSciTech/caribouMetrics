@@ -11,7 +11,7 @@
 #'  demographicProjectionApp()
 #' }
 #'
-demographicProjectionApp <- function(n = 1000) {
+demographicProjectionApp <- function() {
   if(rlang::is_installed("BayesianCaribouDemographicProjection")){
     BayesianCaribouDemographicProjection::demographicProjectionApp()
   } else {

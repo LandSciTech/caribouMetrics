@@ -4,7 +4,7 @@
 \alias{demographicProjectionApp}
 \title{Run the Bayesian caribou demographic projection app}
 \usage{
-demographicProjectionApp(n = 1000)
+demographicProjectionApp()
 }
 \value{
 launches a shiny app in the browser
