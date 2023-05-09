@@ -13,9 +13,13 @@
 #'
 #' @return a list of tables:
 #' * rr.summary.all: Mean parameter values for each year and standard deviation,
-#'   upper and lower credible intervals, as well as disturbance and other
-#'   parameter input values
-#' * 
+#'   upper and lower credible intervals projected by the Bayesian model,
+#'   as well as scenario input parameters.
+#' * sim.all: Mean parameter values and upper and lower credible intervals from
+#'   the National model for each year, as well as scenario input parameters.
+#' * obs.all: Observed parameter values with column "type" identifying if it is 
+#'   the "true" value of the simulated population or the "observed" value 
+#'   simulated based on the collaring program parameters.  
 #' @export
 #'
 #' @examples

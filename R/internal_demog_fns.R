@@ -136,6 +136,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   usePrec <- "Precision" %in% names(popGrowthParsSmall$coefSamples_Survival$coefValues) &
     "Precision" %in% names(popGrowthParsSmall$coefSamples_Recruitment$coefValues)
   # at each time,  sample demographic rates and project, save results
+  # TODO: SE thinks this can be done all at once with a table of demographic rates 
   pars <- data.frame(N0 = N0)
   for (t in 1:numYears) {
     # t=1
