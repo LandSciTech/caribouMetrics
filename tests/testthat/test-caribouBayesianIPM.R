@@ -163,7 +163,8 @@ test_that("results match expected", {
   
   doScn <- function(nCollar = 2000, nobsYears = 10, collarOn = 1, collarOff = 12, 
                     iAnthro = 0, obsAnthroSlope = 0, projAnthroSlope = 0, 
-                    sQuantile = 0.5,  rQuantile = 0.5, rSlopeMod = 1, sSlopeMod = 1){
+                    sQuantile = 0.5,  rQuantile = 0.5, rSlopeMod = 1, sSlopeMod = 1, 
+                    KSDists = FALSE){
     eParsIn <- list()
     eParsIn$cowCounts <- data.frame(
       Year = 1981:2023,
@@ -184,7 +185,7 @@ test_that("results match expected", {
       tA = 0, obsAnthroSlope = obsAnthroSlope, projAnthroSlope = projAnthroSlope,
       sQuantile = sQuantile, rQuantile = rQuantile, N0 = 3000
     )
-    scResults <- suppressWarnings(runScnSet(scns, eParsIn, simBig, getKSDists = F))
+    scResults <- suppressWarnings(runScnSet(scns, eParsIn, simBig, getKSDists = KSDists))
   }
   
   doPlot <- function(scResults, var = "Recruitment"){
@@ -218,7 +219,9 @@ test_that("results match expected", {
               suffix = c("_true", "_proj")) %>% 
       mutate(dif = Mean_true - Mean_proj) %>% 
       group_by(parameter) %>% 
-      summarise(mean_dif = mean(abs(dif)))
+      summarise(mean_dif = mean(abs(dif))) %>% 
+      # female pop size is done differently so don't compare
+      filter(parameter != "Female population size")
   }
   
   # difference between national model and IPM
@@ -281,25 +284,55 @@ test_that("results match expected", {
   
   # TODO: what is expectation here?
   # expect survival to be the same with same parameters 
-  # might ignore first year of collar data if year 1 starts later than jan
-  
+  # will ignore first year of collar data if year 1 starts later than jan
   # K-M gets weird if there are any months in the middle without data JH avoided
   # this by dropping 1st year
-  
-  # Can look at K-M directly with use survInput from the model and then pass to
-  # getKMestimates should be insensitive to when things fall off or time between
-  # on and off
-  obs <- simulateObservations(paramTable = getScenarioDefaults(obsYears = 12),
+  set.seed(1234)
+  # Can look at K-M results directly with use survInput from the model 
+  obs12_1 <- simulateObservations(paramTable = getScenarioDefaults(obsYears = 12),
     cowCounts = data.frame(Year = 2012:2023, Count = 1000, Class = "cow"),
-    freqStartsByYear = data.frame(Year = 2012:2023, numStarts = 100)
+    freqStartsByYear = data.frame(Year = 2012:2023, numStarts = 100), 
+    collarOffTime = 12, collarOnTime = 1
   )
   
-  mod <- caribouBayesianIPM(obs$simSurvObs, obs$ageRatioOut, obs$simDisturbance,
-                            startYear = 2012, endYear = 2023)
+  mod12_1 <- caribouBayesianIPM(obs12_1$simSurvObs, obs12_1$ageRatioOut, obs12_1$simDisturbance,
+                                startYear = 2012, endYear = 2023)
+  set.seed(1234)
+  obs9_3 <- simulateObservations(paramTable = getScenarioDefaults(obsYears = 12),
+                                  cowCounts = data.frame(Year = 2012:2023, Count = 1000, Class = "cow"),
+                                  freqStartsByYear = data.frame(Year = 2012:2023, numStarts = 100), 
+                                  collarOffTime = 9, collarOnTime = 3
+  )
   
-  getKMSurvivalEstimates(mod$survInput)
+  mod9_3 <- caribouBayesianIPM(obs9_3$simSurvObs, obs9_3$ageRatioOut, obs9_3$simDisturbance,
+                                startYear = 2012, endYear = 2023)
   
-  #TODO finish this
+  dif1 <- mod9_3$survInput$surv - mod12_1$survInput$surv
+  
+  # re-run 12_1 with new seed and compare amount of difference to that
+  # obs12_1_2 <- simulateObservations(paramTable = getScenarioDefaults(obsYears = 12),
+  #                                 cowCounts = data.frame(Year = 2012:2023, Count = 1000, Class = "cow"),
+  #                                 freqStartsByYear = data.frame(Year = 2012:2023, numStarts = 100), 
+  #                                 collarOffTime = 12, collarOnTime = 1
+  # )
+  # 
+  # mod12_1_2 <- caribouBayesianIPM(obs12_1_2$simSurvObs, obs12_1_2$ageRatioOut, obs12_1_2$simDisturbance,
+  #                               startYear = 2012, endYear = 2023)
+  # 
+  # dif2 <- mod12_1_2$survInput$surv - mod12_1$survInput$surv
+  # 
+  # mean(abs(dif2))
+  # 0.03
+  # don't need to re-run above every time just use to get a reasonable number 
+  
+  # difference in survival with different collar on/off times and same seed is
+  # less than difference with same collar on/off times but different seed
+  expect_true(mean(abs(dif1), na.rm = TRUE) < 0.035)
+  
+  # standard error is always higher in collar on/off not 1/12 because there is
+  # less collar data in each year
+  dif1_se <- mod9_3$survInput$se - mod12_1$survInput$se
+  expect_true(mean(dif1_se, na.rm = TRUE) > 0)
   
   # A pop with quantile >> 0.5 will be above the national model projection
   highQ <- doScn(rQuantile = 0.95, sQuantile = 0.95)
@@ -339,5 +372,22 @@ test_that("results match expected", {
   # that when no obs the differences don't get much worse than they are now. See
   # the doc JH will send to show what we are looking for
   
-  # How to scan for problems with convergence ie the Rhats from the JAGS model
+  # scenario with no information is very similar to national model
+  noDat <- doScn(nCollar = 1, nobsYears = 1, KSDists = TRUE)
+  doPlot(noDat)
+  doPlot(noDat, "Adult female survival")
+  
+  if(interactive()){
+    noDat$ksDists %>% filter(Parameter != "Female population size") %>% 
+      ggplot2::ggplot(ggplot2::aes(Year, KSDistance))+
+      ggplot2::geom_point()+
+      ggplot2::facet_wrap(~Parameter)
+  }
+  
+  noDatKS <- noDat$ksDists %>% group_by(Parameter) %>% 
+    filter(Parameter != "Female population size") %>% 
+    summarise(meanKS = mean(KSDistance))
+  
+  expect_true(all(noDatKS$meanKS < 0.14))
+
 })
