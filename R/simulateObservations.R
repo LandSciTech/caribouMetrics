@@ -101,15 +101,17 @@ simulateObservations <- function(paramTable, cowCounts,
   }
 
   # simulate true population trajectory
-  popMetrics <- simTrajectory(
-    numYears = paramTable$obsYears + paramTable$projYears, covariates = simDisturbance,
-    popGrowthTable = populationGrowthTable,
-    survivalModelNumber = survivalModelNumber,
-    recruitmentModelNumber = recruitmentModelNumber,
-    recSlopeMultiplier = paramTable$rSlopeMod,
-    sefSlopeMultiplier = paramTable$sSlopeMod, recQuantile = paramTable$rQuantile,
-    sefQuantile = paramTable$sQuantile,
-    N0 = paramTable$N0, adjustR = paramTable$adjustR 
+  suppressMessages(
+    popMetrics <- simTrajectory(
+      numYears = paramTable$obsYears + paramTable$projYears, covariates = simDisturbance,
+      popGrowthTable = populationGrowthTable,
+      survivalModelNumber = survivalModelNumber,
+      recruitmentModelNumber = recruitmentModelNumber,
+      recSlopeMultiplier = paramTable$rSlopeMod,
+      sefSlopeMultiplier = paramTable$sSlopeMod, recQuantile = paramTable$rQuantile,
+      sefQuantile = paramTable$sQuantile,
+      N0 = paramTable$N0, adjustR = paramTable$adjustR 
+    )
   )
 
   simDisturbance$time <- NULL
