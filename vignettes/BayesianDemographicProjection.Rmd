@@ -3,8 +3,10 @@ title: "Bayesian Demographic Projection"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Bayesian Demographic Projection}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -16,11 +18,86 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(caribouMetrics)
+library(ggplot2)
+
+theme_set(theme_bw())
 ```
 
 `caribouMetrics` includes several functions designed to allow users to explore the impacts of various factors that affect projections of caribou population dynamics using the Johnson et al. (2020) national models as a starting point.
 
 A Bayesian model is fit that uses the national model as the priors and is updated based on a simulated or observed data set. The priors from the national model can also be modified to allow greater uncertainty or reflect different expectations.
+
+### Using real observed data
+
+```{r load-data}
+survObs <- read.csv(system.file("extdata/simSurvData.csv", package = "caribouMetrics"))
+ageRatioObs <- read.csv(system.file("extdata/simAgeRatio.csv", package = "caribouMetrics"))
+distObs <- read.csv(system.file("extdata/simDisturbance.csv", package = "caribouMetrics"))
+
+survObs %>% group_by(Year) %>% 
+  summarise(n_collars = n(),
+            n_die = sum(event)) %>% 
+  ggplot(aes(Year))+
+  geom_line(aes(y = n_collars))+
+  geom_col(aes(y = n_die))+
+  labs(y = "Number of Collars (line) and deaths (bars)")
+
+ageRatioObs %>% 
+  ggplot(aes(Year, Count, fill = Class))+
+  geom_col(position = "dodge")
+
+distObs %>% ggplot(aes(Year, Anthro))+
+  geom_line()
+
+```
+
+```{r}
+mod_res <- caribouBayesianIPM(survData = survObs, ageRatio = ageRatioObs, 
+                              disturbance = distObs, 
+                              startYear = min(distObs$Year), 
+                              endYear = max(distObs$Year))
+
+obsList <- list(simDisturbance = distObs, simSurvObs = survObs, 
+                ageRatioOut = ageRatioObs )
+
+# TODO: this doesn't work without the results of simObs would be good to
+# make it work with only real data and simNational or provide another summary fun
+
+# mod_tbl <- getOutputTables(mod_res, simObsList = obsList,
+#                            simNational = getSimsNational(),
+#                            startYear = min(distObs$Year), 
+#                            endYear = max(distObs$Year))
+
+# maybe the answer is just to export tabAllRes and which works with plotRes or
+# simple ggplot
+res_tbl <- tabAllRes(mod_res$result, startYear = min(distObs$Year),
+                     endYear = max(distObs$Year))
+
+ggplot(res_tbl, aes(Year, Mean, ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`))+
+  geom_ribbon(fill = "grey90")+
+  geom_line()+
+  facet_wrap(~Parameter, scales = "free")
+
+plotRes(res_tbl, "Recruitment")
+
+# but that doesn't work with plotRes if we want to compare to simNational with
+# out a bit of processing
+simNational <- getSimsNational()
+simNational <- subset(simNational$summary, select = c(Anthro, Mean, lower, upper, Parameter))
+names(simNational) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
+
+simNational2 <- left_join(distObs %>% select(Year, Anthro), simNational, 
+                          by = "Anthro", relationship = "many-to-many")
+
+plotRes(res_tbl, "Recruitment", simRange = simNational2)
+plotRes(res_tbl, "Adult female survival", simRange = simNational2)
+plotRes(res_tbl, "Population growth rate", simRange = simNational2)
+# TODO: conclusion export plotRes and change it so it can to the processing of
+# the simNational object if needed. Would want to change arg names and fun name.
+# also needs argument checking on names of parameters
+```
+
+From these graphs we can see that this local population seems to have slightly higher demographic rates than would have been predicted by the national model alone. Note that the populations response to anthropogenic disturbance in completely determined by the national model since there was 0% disturbance during the observation period.  
 
 ### Simulate observed data
 First we will simulate observations from a typical boreal caribou monitoring program that includes radio collars on some cows and annual aerial surveys to count the number of calves with the tracked cows. To run the simulations we need a data frame of cow counts in each year
