@@ -48,11 +48,13 @@ test_that("caribouPopGrowth options work", {
 })
 
 test_that("pop Growth matches Johnson figures", {
-  johnsonCompare <- read.csv(file.path("data", "Johnson et al. figures5_6.csv"))
+  
+  johnsonCompare <- read.csv(file.path("data", "Johnson_figures5_6.csv"))
+  # johnsonCompare <- read.csv(file.path("tests/testthat/data", "Johnson_figures5_6.csv"))
   
   covTableSim <- data.frame(Anthro = c(0, 10, 20, 30, 40, 50, 
                                        60, 70, 80, 90, 100), 
-                            fire_excl_anthro = 5)
+                            fire_excl_anthro = 4.27)
   covTableSim$polygon <- paste0("Missisa_", covTableSim$Anthro + 1)
   covTableSim$area <- "FarNorth"
   covTableSim$Total_dist <- covTableSim$Anthro + covTableSim$fire_excl_anthro
@@ -60,7 +62,14 @@ test_that("pop Growth matches Johnson figures", {
   popGrowthPars <- demographicCoefficients(500,
                                            modelVersion = "Johnson",
                                            survivalModelNumber = "M1",
-                                           recruitmentModelNumber = "M4")
+                                           recruitmentModelNumber = "M4"
+  )
+  
+  rateSamplesLarge <- demographicRates(
+    covTable = covTableSim,
+    popGrowthPars = popGrowthPars,
+    ignorePrecision = F, returnSample = T, useQuantiles = T
+  )
   
   rateSummaries <- demographicRates(
     covTable = covTableSim, popGrowthPars = popGrowthPars,
@@ -87,9 +96,9 @@ test_that("pop Growth matches Johnson figures", {
     pivot_wider(names_from = "method", values_from = "value") %>% 
     mutate(dif = johnson - caribouMetrics)
   
-  ggplot(comp, aes(Anthro, dif))+
-    geom_point()+
-    facet_wrap(~var)
+  comp_plot <- ggplot2::ggplot(comp, ggplot2::aes(Anthro, dif))+
+    ggplot2::geom_point()+
+    ggplot2::facet_wrap(~var, scales = "free")
   
   expected_difs <- dplyr::tribble(
     ~var, ~exp_dif,
@@ -106,81 +115,97 @@ test_that("pop Growth matches Johnson figures", {
     summarise(mean_dif = mean(abs_dif)) %>% 
     left_join(expected_difs, by = "var")
   
+  # demographic rates match Johnson
   expect_true(all(dif_comp$mean_dif < dif_comp$exp_dif))
   
-  dia_shp <- 23
+  # TODO: investigate why intercepts of R_bar and S_bar seem to be right but
+  # slopes are slightly off. JH says I suspect it has something to do with
+  # compounding slight deviations over time. I bet if we looked at 1 yr ahead
+  # projections (each year independent of the next) the errors would remain more
+  # constant as anthropogenic disturbance changes.
   
-  err_col <- "grey50"
-  
-  theme_set(theme_bw())
-  
-  # TODO: finish adapting this to work as a test
+  if(F){
+    # reproduce comparison plots used in the MS
+    library(ggplot2)
+    popGrowthParsSmall <- demographicCoefficients(35,
+                                                  modelVersion = "Johnson",
+                                                  survivalModelNumber = "M1",
+                                                  recruitmentModelNumber = "M4"
+    )
+    
+    rateSamples <- demographicRates(
+      covTable = covTableSim,
+      popGrowthPars = popGrowthParsSmall,
+      ignorePrecision = F, returnSample = T, useQuantiles = T
+    )
+    
+    rateSamples$S_PIlow <- 1
+    rateSamples$S_PIhigh <- 1
+    rateSamples$rep <- as.factor(rateSamples$replicate)
+    levels(rateSamples$rep) <- sample(unique(rateSamples$replicate), replace = F)
+    rateSamples$rep <- as.character(rateSamples$rep)
+    rateSamplesLarge$S_PIlow <- 1
+    rateSamplesLarge$S_PIhigh <- 1
+
+    rateSamples$R_PIlow <- 1
+    rateSamples$R_PIhigh <- 1
+    rateSamples$fullGrp <- paste(rateSamples$rep) # ,rateSamples$Fire)
+    rateSamplesLarge$R_PIlow <- 1
+    rateSamplesLarge$R_PIhigh <- 1
+    rateSamplesLarge$fullGrp <- paste(rateSamplesLarge$rep) # ,rateSamplesLarge$Fire)
+
+    theme_set(theme_bw())
+    base1 <- ggplot(data = rateSummaries,
+                    aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh)) +
+      geom_ribbon(fill="grey95",colour="grey95",data=johnsonCompare)+
+      geom_line(data = subset(rateSamples), size = 0.5, alpha = 0.5,
+                aes(x = Anthro, y = S_bar, group = rep, colour = rep)) +
+      geom_line(colour = "grey50", linewidth = 2, linetype = "dotted") +
+      geom_line(colour = "black", linewidth = 2, linetype = "dotted",data=johnsonCompare) +
+      xlab("Anthropogenic Disturbance (%)") +
+      ylab("Adult Female Survival") +
+      scale_x_continuous(limits = c(-1, 90), breaks = c(0, 20, 40, 60, 80)) +
+      scale_y_continuous(limits = c(0.65, 1)) +
+      theme(legend.position = "none", plot.margin = margin(l = 0.6, unit = "cm"))
+
+    plot_recruitment3 <- ggplot(data = rateSummaries,
+                                aes(x = Anthro, y = R_bar * 100,
+                                    ymin = R_PIlow * 100, ymax = R_PIhigh * 100)) +
+      geom_ribbon(fill="grey95",colour="grey95",data=johnsonCompare)+
+      geom_line(data = rateSamples, size = 0.5,
+                aes(x = Anthro, y = R_bar * 100, group = fullGrp, color = fullGrp),
+                alpha = 0.5) +
+      geom_line(colour = "grey50", linewidth = 2, linetype = "dotted") +
+      geom_line(colour = "black", linewidth = 2, linetype = "dotted",data=johnsonCompare) +
+      scale_x_continuous(limits = c(-1, 90), breaks = c(0, 20, 40, 60, 80)) +
+      scale_y_continuous(limits = c(0, 60), breaks = c(0, 10, 20, 30, 40, 50, 60)) +
+      xlab("Anthropogenic disturbance (%)") +
+      ylab("Recruitment (calves/100 cows)") +
+      theme(legend.position = "none", plot.margin = margin(l = 0.6, unit = "cm"))
+  }
   
   # demography
-  pars <- data.frame(N0 = c(round(745 / 2)))
-  # increase to get a better sample size, or set interannualVar to NA
-  pars <- merge(pars, data.frame(rrp = 1))
-  pars <- merge(pars, rateSamplesLarge)
+  rates <- data.frame(N0 = c(round(745 / 2)), rrp = 1)
   numSteps <- 20
-  pars1 <- cbind(pars, popGrowthJohnson(pars$N0,
-                                        numSteps = numSteps, R_bar = pars$R_bar,
-                                        S_bar = pars$S_bar, probOption = "binomial"
+  ratesLarge <- merge(rates, rateSamplesLarge)
+  set.seed(1234)
+  ratesLarge <- cbind(ratesLarge, caribouPopGrowth(ratesLarge$N0,
+                                        numSteps = numSteps, R_bar = ratesLarge$R_bar,
+                                        S_bar = ratesLarge$S_bar, probOption = "binomial", 
+                                        progress = FALSE
   ))
   
-  pars <- data.frame(N0 = round(745 / 2))
-  # increase to get a better sample size, or set interannualVar to NA
-  pars <- merge(pars, data.frame(rrp = 1)) 
-  pars <- merge(pars, rateSamples)
-  numSteps <- 20
-  pars2 <- cbind(pars, popGrowthJohnson(pars$N0,
-                                        numSteps = numSteps, R_bar = pars$R_bar,
-                                        S_bar = pars$S_bar, probOption = "binomial"
-  ))
-  
-  
-  check <- subset(pars1, Anthro == 5)
-  testPars <- list(R_bar = mean(check$R_bar), S_bar = mean(check$S_bar))
-  popGrowthJohnson(round(745 / 2), numSteps = 20, R_bar = testPars$R_bar, 
-                   S_bar = testPars$S_bar, probOption = "continuous", 
-                   interannualVar = F)
+  check <- subset(ratesLarge, Anthro == 10)
+  testRates <- list(R_bar = mean(check$R_bar), S_bar = mean(check$S_bar))
+  set.seed(1234)
+  testCheck <- caribouPopGrowth(round(745 / 2), numSteps = 20, R_bar = testRates$R_bar, 
+                   S_bar = testRates$S_bar, probOption = "continuous", 
+                   interannualVar = F, progress = FALSE)
   # this is theoretical lambda - to confirm
-  (testPars$S_bar) * (1 + testPars$R_bar * 0.5) 
-  mean(check$lambda)
-  testPars
-  # The math seems ok here.
+  theor_lam <- (testRates$S_bar) * (1 + testRates$R_bar * 0.5) 
   
-  oo <- pars2 %>%
-    select(Anthro, lambda, fullGrp, rrp) %>%
-    group_by(fullGrp, Anthro) %>%
-    summarise(lambda = median(lambda))
-  
-  subset(oo, Anthro == 5)
-  ooT <- pars1 %>%
-    select(Anthro, lambda, fullGrp, rrp) %>%
-    group_by(fullGrp, Anthro) %>%
-    summarise(lambda = median(lambda))
-  
-  ooS <- ooT %>%
-    select(Anthro, lambda) %>%
-    group_by(Anthro) %>%
-    summarise(lambdaH = max(lambda), lambdaL = min(lambda), lambda = median(lambda))
-  
-  oo$lambdaH <- oo$lambda
-  oo$lambdaL <- oo$lambda
-  str(ooS)
-  plot_lambda <- ggplot(oo, 
-                        aes(x = Anthro, y = lambda, ymin = lambdaH, ymax = lambdaL)) +
-    geom_line(size = 0.5,
-              aes(x = Anthro, y = lambda, group = fullGrp, color = fullGrp), 
-              alpha = 0.5) +
-    geom_errorbar(data = subset(ooS, Anthro < 10), width = 2, 
-                  size = 0.7, col = err_col) +
-    geom_point(data = data.frame(Anthro = 0.27, lambda = 0.86, fullGrp = 0,
-                                 lambdaH = 0.86, lambdaL = 0.86), 
-               size = 2, shape = dia_shp, fill = "black") +
-    scale_x_continuous(limits = c(-1, 90), breaks = c(0, 20, 40, 60, 80)) +
-    xlab("Anthropogenic disturbance (%)") +
-    ylab(expression("Average Growth Rate " * lambda)) +
-    theme(legend.position = "none", plot.margin = margin(l = 0.6, unit = "cm"))
-  
+  # these should all be similar
+  expect_equal(mean(check$lambda), theor_lam, tolerance = 0.001)
+  expect_equal(testCheck$lambda, theor_lam, tolerance = 0.001)
+  expect_equal(testCheck$lambda, mean(check$lambda), tolerance = 0.001)
 })
