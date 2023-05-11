@@ -2,18 +2,21 @@
 # License GPL-3
 #NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
-#' Run recruitment and mortality model
+#' Run Bayesian integrated population model for caribou
 #'
+#' TODO: fill in this description based on terminology in paper.
 #'
+#' Note that if `survData` contains values for enter that are > 0 these rows
+#' will be dropped to avoid errors when collars are added in the middle of the
+#' year. This will reduce the sample size in years when new collars are added.
 #'
 #' @param survData either a path to a csv file or a dataframe containing the
 #'   columns "Year", "event", "enter" and "exit". Enter and exit are the
 #'   beginning and end of the time interval and should be a number from 1 to 12
-#'   (December) or 0. Event is 0 or 1 where 0 means the animal lived and 1 died.
-#'   See [survival::Surv()] for more details.
-#' @param ageRatio either a path to a csv file or a dataframe containing
-#'   the columns "Year","Count", and "Class". Where class can be either calf or
-#'   cow
+#'   (December) or 0 (See Details). Event is 0 or 1 where 0 means the animal
+#'   lived and 1 died. See [survival::Surv()] for more details.
+#' @param ageRatio either a path to a csv file or a dataframe containing the
+#'   columns "Year","Count", and "Class". Where class can be either calf or cow
 #' @param disturbance either a path to a csv file or a dataframe containing the
 #'   columns "Anthro","fire_excl_anthro", and "Year"
 #' @param betaPriors a list of model priors see [getPriors()]
@@ -27,7 +30,8 @@
 #' @param survAnalysisMethod Survival analysis method either "KaplanMeier" or
 #'   "Exponential". Exponential is only recommended for small sample sizes
 #' @inheritParams caribouPopGrowth
-#' @param assessmentYrs Number of years over which to assess lambda (growth rate)
+#' @param assessmentYrs Number of years over which to assess lambda (growth
+#'   rate)
 #' @param inputList an optional list of inputs with names matching the above, if
 #'   an argument is included in this list it will override the named argument
 #' @param saveJAGStxt file path. Directory where the JAGS model txt files will

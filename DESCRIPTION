@@ -48,7 +48,6 @@ Imports:
     rlang,
     terra,
     R2jags,
-    mcmcplots,
     survival
 Collate: 
     'AAAClassDefinitions.R'

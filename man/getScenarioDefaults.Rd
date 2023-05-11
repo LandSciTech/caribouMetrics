@@ -58,7 +58,8 @@ sample populations.}
 
 \item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
-\item{assessmentYrs}{Number of years over which to assess lambda (growth rate)}
+\item{assessmentYrs}{Number of years over which to assess lambda (growth
+rate)}
 
 \item{collarInterval}{number. Optional. Number of years between collar deployments. If
 missing assumed to be every year}
@@ -66,7 +67,7 @@ missing assumed to be every year}
 \item{cowMult}{number. Optional. If provided number of cows is \code{cowMult} \*
 number of surviving collared cows at month 5}
 
-\item{cowCount}{Optional. Only used in \code{\link[=runScnSet]{runScnSet()}} to set the number of cows per
+\item{cowCount}{Optional. Only used in \code{runScnSet()} to set the number of cows per
 year in recruitment survey}
 
 \item{collarCount}{Optional. If provided target number of deployed collars is overwritten with

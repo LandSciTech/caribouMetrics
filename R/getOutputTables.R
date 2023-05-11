@@ -1,6 +1,8 @@
 #' Summarize results of Bayesian demographic model in tables
 #'
-#' TODO: Finish documenting
+#' Produces summary tables for Bayesian caribou integrated population model
+#' results. Optionally calculates Kolmogorov–Smirnov distances between
+#' Bayesian model results and national model results. 
 #'
 #' @param caribouBayesDemogMod caribou Bayesian demographic model results
 #'   produced by calling [caribouBayesianIPM()]
@@ -13,16 +15,32 @@
 #'
 #' @return a list of tables:
 #' * rr.summary.all: Mean parameter values for each year and standard deviation,
-#'   upper and lower credible intervals projected by the Bayesian model,
-#'   as well as scenario input parameters.
+#'   upper and lower credible intervals projected by the Bayesian model, as well
+#'   as scenario input parameters.
 #' * sim.all: Mean parameter values and upper and lower credible intervals from
 #'   the National model for each year, as well as scenario input parameters.
-#' * obs.all: Observed parameter values with column "type" identifying if it is 
-#'   the "true" value of the simulated population or the "observed" value 
-#'   simulated based on the collaring program parameters.  
+#' * obs.all: Observed parameter values with column "type" identifying if it is
+#'   the "true" value of the simulated population or the "observed" value
+#'   simulated based on the collaring program parameters.
 #' @export
 #'
 #' @examples
+#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10, obsAnthroSlope = 1, projAnthroSlope = 5)
+#' simO <- simulateObservations(scns,
+#'                              freqStartsByYear = data.frame(Year = 2014:2023,
+#'                                                            numStarts = 20),
+#'                              cowCounts = data.frame(Year = 2014:2023,
+#'                                                     Count = 100,
+#'                                                     Class = "cow"))
+#' 
+#' out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+#'                           disturbance = simO$simDisturbance,
+#'                           startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
+#'                           Nthin = 2)
+#' 
+#' getOutputTables(out, startYear = 2014, endYear = 2023, simObsList = simO, 
+#'                                simNational = getSimsNational(), getKSDists = FALSE)
+                             
 getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, simObsList, simNational,
                             getKSDists) {
   # result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;

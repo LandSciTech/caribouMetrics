@@ -2,7 +2,7 @@
 % Please edit documentation in R/caribouBayesianIPM.R
 \name{caribouBayesianIPM}
 \alias{caribouBayesianIPM}
-\title{Run recruitment and mortality model}
+\title{Run Bayesian integrated population model for caribou}
 \usage{
 caribouBayesianIPM(
   survData = system.file("extdata/simSurvData.csv", package = "caribouMetrics"),
@@ -28,12 +28,11 @@ caribouBayesianIPM(
 \item{survData}{either a path to a csv file or a dataframe containing the
 columns "Year", "event", "enter" and "exit". Enter and exit are the
 beginning and end of the time interval and should be a number from 1 to 12
-(December) or 0. Event is 0 or 1 where 0 means the animal lived and 1 died.
-See \code{\link[survival:Surv]{survival::Surv()}} for more details.}
+(December) or 0 (See Details). Event is 0 or 1 where 0 means the animal
+lived and 1 died. See \code{\link[survival:Surv]{survival::Surv()}} for more details.}
 
-\item{ageRatio}{either a path to a csv file or a dataframe containing
-the columns "Year","Count", and "Class". Where class can be either calf or
-cow}
+\item{ageRatio}{either a path to a csv file or a dataframe containing the
+columns "Year","Count", and "Class". Where class can be either calf or cow}
 
 \item{disturbance}{either a path to a csv file or a dataframe containing the
 columns "Anthro","fire_excl_anthro", and "Year"}
@@ -58,7 +57,8 @@ period and the end of the projection period.}
 
 \item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
-\item{assessmentYrs}{Number of years over which to assess lambda (growth rate)}
+\item{assessmentYrs}{Number of years over which to assess lambda (growth
+rate)}
 
 \item{inputList}{an optional list of inputs with names matching the above, if
 an argument is included in this list it will override the named argument}
@@ -76,7 +76,12 @@ a list with elements:
 }
 }
 \description{
-Run recruitment and mortality model
+TODO: fill in this description based on terminology in paper.
+}
+\details{
+Note that if \code{survData} contains values for enter that are > 0 these rows
+will be dropped to avoid errors when collars are added in the middle of the
+year. This will reduce the sample size in years when new collars are added.
 }
 \examples{
 # this uses example data shipped with the package
