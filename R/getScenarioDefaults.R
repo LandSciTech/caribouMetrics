@@ -23,7 +23,7 @@
 #'   missing assumed to be every year
 #' @param cowMult number. Optional. If provided number of cows is `cowMult` \*
 #'   number of surviving collared cows at month 5
-#' @param cowCount Optional. Only used in [runScnSet()] to set the number of cows per
+#' @param cowCount Optional. Only used in `runScnSet()` to set the number of cows per
 #'   year in recruitment survey
 #' @param collarCount Optional. If provided target number of deployed collars is overwritten with
 #'   this value.

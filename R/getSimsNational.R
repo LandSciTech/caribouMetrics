@@ -2,7 +2,7 @@
 # to multiple functions/multiple function calls. Does not persist across
 # sessions but it only take ~ 20s so once per session is probably ok.
 # See explanation here: https://r-pkgs.org/data.html#sec-data-state
-cacheEnv <- new.env()
+cacheEnv <- new.env(parent = emptyenv())
 
 # Not supposed to save files to user computer on CRAN so for users the cache is
 # only preserved within a session but for dev I have added this "persistent
