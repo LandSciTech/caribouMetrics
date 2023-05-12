@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(caribouMetrics)
 library(ggplot2)
+library(dplyr)
 
 theme_set(theme_bw())
 ```
@@ -29,7 +30,7 @@ A Bayesian model is fit that uses the national model as the priors and is update
 
 ### Using real observed data
 
-```{r load-data}
+```{r load-obs}
 survObs <- read.csv(system.file("extdata/simSurvData.csv", package = "caribouMetrics"))
 ageRatioObs <- read.csv(system.file("extdata/simAgeRatio.csv", package = "caribouMetrics"))
 distObs <- read.csv(system.file("extdata/simDisturbance.csv", package = "caribouMetrics"))
@@ -51,8 +52,8 @@ distObs %>% ggplot(aes(Year, Anthro))+
 
 ```
 
-```{r}
-mod_res <- caribouBayesianIPM(survData = survObs, ageRatio = ageRatioObs, 
+```{r mod-real}
+mod_real <- caribouBayesianIPM(survData = survObs, ageRatio = ageRatioObs, 
                               disturbance = distObs, 
                               startYear = min(distObs$Year), 
                               endYear = max(distObs$Year))
@@ -63,14 +64,14 @@ obsList <- list(simDisturbance = distObs, simSurvObs = survObs,
 # TODO: this doesn't work without the results of simObs would be good to
 # make it work with only real data and simNational or provide another summary fun
 
-# mod_tbl <- getOutputTables(mod_res, simObsList = obsList,
+# mod_tbl <- getOutputTables(mod_real, simObsList = obsList,
 #                            simNational = getSimsNational(),
 #                            startYear = min(distObs$Year), 
 #                            endYear = max(distObs$Year))
 
 # maybe the answer is just to export tabAllRes and which works with plotRes or
 # simple ggplot
-res_tbl <- tabAllRes(mod_res$result, startYear = min(distObs$Year),
+res_tbl <- caribouMetrics:::tabAllRes(mod_real$result, startYear = min(distObs$Year),
                      endYear = max(distObs$Year))
 
 ggplot(res_tbl, aes(Year, Mean, ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`))+
@@ -78,29 +79,100 @@ ggplot(res_tbl, aes(Year, Mean, ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`))
   geom_line()+
   facet_wrap(~Parameter, scales = "free")
 
-plotRes(res_tbl, "Recruitment")
+caribouMetrics:::plotRes(res_tbl, "Recruitment")
 
 # but that doesn't work with plotRes if we want to compare to simNational with
 # out a bit of processing
 simNational <- getSimsNational()
-simNational <- subset(simNational$summary, select = c(Anthro, Mean, lower, upper, Parameter))
-names(simNational) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
+simNational2 <- subset(simNational$summary, select = c(Anthro, Mean, lower, upper, Parameter))
+names(simNational2) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
 
-simNational2 <- left_join(distObs %>% select(Year, Anthro), simNational, 
+simNational2 <- left_join(distObs %>% select(Year, Anthro), simNational2, 
                           by = "Anthro", relationship = "many-to-many")
 
-plotRes(res_tbl, "Recruitment", simRange = simNational2)
-plotRes(res_tbl, "Adult female survival", simRange = simNational2)
-plotRes(res_tbl, "Population growth rate", simRange = simNational2)
-# TODO: conclusion export plotRes and change it so it can to the processing of
-# the simNational object if needed. Would want to change arg names and fun name.
-# also needs argument checking on names of parameters
+caribouMetrics:::plotRes(res_tbl, "Recruitment", simRange = simNational2)
+caribouMetrics:::plotRes(res_tbl, "Adult female survival", simRange = simNational2)
+caribouMetrics:::plotRes(res_tbl, "Population growth rate", simRange = simNational2)
+# TODO: conclusion export plotRes and tabAllRes and change plotRes so it can do the processing of
+# the simNational object if needed. Would want to change arg names and fun names.
+# also needs argument checking on names of parameter
 ```
 
-From these graphs we can see that this local population seems to have slightly higher demographic rates than would have been predicted by the national model alone. Note that the populations response to anthropogenic disturbance in completely determined by the national model since there was 0% disturbance during the observation period.  
+From these graphs we can see that this local population seems to have slightly higher demographic rates than would have been predicted by the national model alone. Note that the population's response to anthropogenic disturbance in completely determined by the national model since there was 0% disturbance during the observation period.  
 
 ### Simulate observed data
-First we will simulate observations from a typical boreal caribou monitoring program that includes radio collars on some cows and annual aerial surveys to count the number of calves with the tracked cows. To run the simulations we need a data frame of cow counts in each year
+We will simulate observations from a typical boreal caribou monitoring program that includes radio collars on some cows and annual aerial surveys to count the number of calves with the tracked cows. To run the simulations we need a data frame of the number of collars deployed in each year and a data frame of cow counts in each year. In addition we will provide parameters to create a disturbance scenario and set other parameters...
+
+```{r sim-obs}
+
+# decreasing cow counts each year as anthropogenic disturbance increases. This
+# only affects the absolute number of cows in ageRatio but not the ratio and not
+# survival estimates. These data frames only affect the amount of information
+# and so the variation between the observations and the "True" population.
+
+# TODO: I think this would be more clear if we only supplied freqStartsByYear
+# and cmult so that custom collaring programs could be accounted for but there
+# wouldn't be any expectation that demographics are reflected here.
+
+cow_tbl <- data.frame(Year = 2004:2023,
+                      Class = "cow",
+                      Count = 1000 - ceiling(seq(from = 0, to = 900, length.out = 20)))
+
+collar_dep_tbl <- data.frame(Year = 2004:2023,
+                             numStarts = 50)
+
+scn_params <- getScenarioDefaults(obsAnthroSlope = 2, projAnthroSlope = 3,
+                                  obsYears = 20, projYears = 20)
+
+# TODO: change so cowCounts and freqStartsByYear are not required and can
+# instead be set with getScenarioDefaults's cowCount and collarCount. 
+sim_obs <- simulateObservations(
+  scn_params, cowCounts = cow_tbl, freqStartsByYear = collar_dep_tbl,
+  printPlot = TRUE
+)
+
+
+sim_obs$simSurvObs %>% group_by(Year) %>% 
+  summarise(n_collars = n(),
+            n_die = sum(event)) %>% 
+  ggplot(aes(Year))+
+  geom_line(aes(y = n_collars))+
+  geom_col(aes(y = n_die))+
+  labs(y = "Number of Collars (line) and deaths (bars)")
+
+sim_obs$ageRatioOut %>% 
+  ggplot(aes(Year, Count, fill = Class))+
+  geom_col(position = "dodge")
+
+sim_obs$simDisturbance %>% ggplot(aes(Year, Anthro))+
+  geom_line()
+```
+
+```{r mod-sim-obs}
+# TODO default start and end year should be set by disturbance data for IPM,
+# output tables and tabAllRes
+mod_sim <- caribouBayesianIPM(survData = sim_obs$simSurvObs,
+                              ageRatio = sim_obs$ageRatioOut, 
+                              disturbance = sim_obs$simDisturbance, 
+                              startYear = min(sim_obs$simDisturbance$Year), 
+                              endYear = max(sim_obs$simDisturbance$Year))
+
+mod_tbl <- getOutputTables(mod_sim, simObsList = sim_obs,
+                           simNational = simNational,
+                           startYear = min(sim_obs$simDisturbance$Year),
+                           endYear = max(sim_obs$simDisturbance$Year),
+                           getKSDists = FALSE)
+
+caribouMetrics:::plotRes(mod_tbl$rr.summary.all, "Recruitment", simRange = mod_tbl$sim.all,
+                         obs = mod_tbl$obs.all)
+
+caribouMetrics:::plotRes(mod_tbl$rr.summary.all, "Adult female survival", simRange = mod_tbl$sim.all,
+                         obs = mod_tbl$obs.all)
+
+caribouMetrics:::plotRes(mod_tbl$rr.summary.all, "Population growth rate", simRange = mod_tbl$sim.all,
+                         obs = mod_tbl$obs.all)
+```
+
 
 ### Troubleshooting
 The national model results are cached if the default values are used. This cache can but updated by running `getSimsNational(forceUpdate = TRUE)`
