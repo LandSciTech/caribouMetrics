@@ -405,34 +405,6 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
   return(results)
 }
 
-tabAllRes <- function(rrSurvMod, startYear, endYear, doSummary = T) {
-  # rrSurvMod=rr.surv;startYear= minYr;endYear= maxYr
-  # rrSurvMod=result;doSummary=T
-
-  allParams <- c(
-    "S.annual.KM", "R", "Rfemale", "pop.growth", "fpop.size",
-    "meanAFsurv", "meanR", "meanRfemale",
-    "medianLambda", "meanLambda"
-  )
-  allParams <- allParams[is.element(allParams, rrSurvMod$parameters.to.save)]
-
-  # check rrSurvMod has same number of years as start to end
-  if(length(rrSurvMod$BUGSoutput$mean[[rrSurvMod$parameters.to.save[1]]]) !=
-     length(startYear:endYear)){
-    stop("The model result has different length than startYear:endYear")
-  }
-
-  
-  allResults <- lapply(allParams, getSumStats, rrSurvMod, startYear, endYear,
-                       doSummary = doSummary)
-
-  allResults <- do.call(rbind, allResults)
-
-  allResults <- allResults[order(allResults$Year), ]
-  allResults <- allResults[order(allResults$Parameter), ]
-  row.names(allResults) <- 1:length(allResults$Year)
-  allResults
-}
 
 
 movingAveGrowthRate <- function(obs, assessmentYrs) {
@@ -463,7 +435,7 @@ getKSDist <- function(Value, type) {
 }
 
 plotRes <- function(allRes, parameter, obs = NULL, lowBound = 0, highBound = 1,
-                    simRange = NULL, facetVars = NULL) {
+                    simRange = NULL, facetVars = NULL, labFontSize = 14) {
   # allRes=scResults$ksDists; parameter="Recruitment";obs=scResults$obs.all;
   # lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("obsYears","sQuantile")
   
@@ -471,7 +443,7 @@ plotRes <- function(allRes, parameter, obs = NULL, lowBound = 0, highBound = 1,
 
   if (is.null(facetVars)) {
     titleFontSize <- 16
-    labFontSize <- 14
+    # labFontSize <- 14
     breakInterval <- 1
   } else {
     titleFontSize <- 11
