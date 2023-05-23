@@ -389,6 +389,9 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
       probViable = round(probViable, digits = 3),
       check.names = FALSE
     )
+    if(!grepl("growth rate", results$Parameter[1])){
+      results$probViable <- NA
+    }
   } else {
     # rrSurvMod= result
     wideRes <- data.frame(rrSurvMod$BUGSoutput$sims.list[[param]])
