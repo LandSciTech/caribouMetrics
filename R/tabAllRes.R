@@ -1,14 +1,22 @@
 #' Tabulate results from caribou Bayesian IPM
-#' 
-#' Create a summary table for each population parameter modelled by [caribouBayesianIPM()]
+#'
+#' Create a summary table for each population parameter modelled by
+#' [caribouBayesianIPM()]
 #'
 #'
-#' @param rrSurvMod 
-#' @param startYear 
-#' @param endYear 
-#' @param doSummary 
+#' @param rrSurvMod rjags model object. Produced by
+#'   [caribouBayesianIPM()$result]
+#' @param startYear integer. Start year of the simulation
+#' @param endYear integer. Start year of the simulation
+#' @param doSummary logical. Should the results be summarized by year (TRUE) or
+#'   should results of each run be returned individually?
 #'
-#' @return
+#' @return a data.frame. If `doSummary = TRUE` this will contain the mean,
+#'   standard deviation and upper and lower credible intervals for all
+#'   parameters and years. There is also a probability that the population is
+#'   viable calculated as the proportion of runs where the population growth
+#'   rate was greater than 0.99. If `doSummary = FALSE` then the data.frame
+#'   contains a row for every simulation run and parameter. 
 #' @export
 #'
 #' @examples

@@ -89,6 +89,7 @@ Collate:
     'sampleCoefs.R'
     'sampleRates.R'
     'simulateObservations.R'
+    'tabAllRes.R'
     'updateCaribou.R'
     'updateDisturbance.R'
 Suggests: 
