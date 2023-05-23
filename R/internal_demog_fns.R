@@ -404,6 +404,7 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
     results$Parameter <- subset(paramNames, paramNames$parameter == param,
                                 select = name, drop = T
     )
+    results <- as.data.frame(results)
   }
   return(results)
 }
