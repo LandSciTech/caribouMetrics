@@ -12,7 +12,9 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 7, 
+  fig.height = 3.5
 )
 ```
 
@@ -71,7 +73,7 @@ obsList <- list(simDisturbance = distObs, simSurvObs = survObs,
 
 # maybe the answer is just to export tabAllRes and which works with plotRes or
 # simple ggplot
-res_tbl <- caribouMetrics:::tabAllRes(mod_real$result, startYear = min(distObs$Year),
+res_tbl <- tabAllRes(mod_real$result, startYear = min(distObs$Year),
                      endYear = max(distObs$Year))
 
 ggplot(res_tbl, aes(Year, Mean, ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`))+
@@ -79,7 +81,7 @@ ggplot(res_tbl, aes(Year, Mean, ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`))
   geom_line()+
   facet_wrap(~Parameter, scales = "free")
 
-caribouMetrics:::plotRes(res_tbl, "Recruitment")
+caribouMetrics:::plotRes(res_tbl, "Recruitment", labFontSize = 10)
 
 # but that doesn't work with plotRes if we want to compare to simNational with
 # out a bit of processing
@@ -90,9 +92,9 @@ names(simNational2) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "pa
 simNational2 <- left_join(distObs %>% select(Year, Anthro), simNational2, 
                           by = "Anthro", relationship = "many-to-many")
 
-caribouMetrics:::plotRes(res_tbl, "Recruitment", simRange = simNational2)
-caribouMetrics:::plotRes(res_tbl, "Adult female survival", simRange = simNational2)
-caribouMetrics:::plotRes(res_tbl, "Population growth rate", simRange = simNational2)
+caribouMetrics:::plotRes(res_tbl, "Recruitment", simRange = simNational2, labFontSize = 10)
+caribouMetrics:::plotRes(res_tbl, "Adult female survival", simRange = simNational2, labFontSize = 10)
+caribouMetrics:::plotRes(res_tbl, "Population growth rate", simRange = simNational2, labFontSize = 10)
 # TODO: conclusion export plotRes and tabAllRes and change plotRes so it can do the processing of
 # the simNational object if needed. Would want to change arg names and fun names.
 # also needs argument checking on names of parameter
@@ -164,13 +166,61 @@ mod_tbl <- getOutputTables(mod_sim, simObsList = sim_obs,
                            getKSDists = FALSE)
 
 caribouMetrics:::plotRes(mod_tbl$rr.summary.all, "Recruitment", simRange = mod_tbl$sim.all,
-                         obs = mod_tbl$obs.all)
+                         obs = mod_tbl$obs.all, labFontSize = 10)
 
 caribouMetrics:::plotRes(mod_tbl$rr.summary.all, "Adult female survival", simRange = mod_tbl$sim.all,
-                         obs = mod_tbl$obs.all)
+                         obs = mod_tbl$obs.all, labFontSize = 10)
 
 caribouMetrics:::plotRes(mod_tbl$rr.summary.all, "Population growth rate", simRange = mod_tbl$sim.all,
-                         obs = mod_tbl$obs.all)
+                         obs = mod_tbl$obs.all, labFontSize = 10)
+```
+
+
+### Comparing many scenarios
+
+```{r many-scns, fig.height=5}
+eParsIn <- list()
+eParsIn$cowCounts <- data.frame(
+  Year = 1981:2023,
+  Count = 100,
+  Class = "cow"
+)
+eParsIn$freqStartsByYear <- data.frame(
+  Year = 1981:2023,
+  numStarts = 100
+)
+eParsIn$collarOnTime <- 1
+eParsIn$collarOffTime <- 12
+eParsIn$collarNumYears <- 3
+
+# adjust recruitment for delayed age of first reproduction
+adjustR <- T 
+
+simBig <- getSimsNational(adjustR = adjustR)
+
+scns <- expand.grid(
+  obsYears = 10, projYears = 10, collarCount = 100, cowMult = 2, collarInterval = 2,
+  assessmentYrs = 1, iAnthro = 0,
+  tA = 0, obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = c(0.1, 0.5, 0.9), 
+  rQuantile = c(0.1, 0.5, 0.9), N0 = 1000
+)
+scResults <- caribouMetrics:::runScnSet(scns, eParsIn, simBig,
+                                        getKSDists = FALSE, Niter = 150, Nburn = 100)
+
+caribouMetrics:::plotRes(scResults$rr.summary.all, "Population growth rate", 
+                         obs = scResults$obs.all,
+                         lowBound = 0, simRange = scResults$sim.all,
+                         facetVars = c("rQuantile", "sQuantile"))
+
+caribouMetrics:::plotRes(scResults$rr.summary.all, "Recruitment", 
+                         obs = scResults$obs.all,
+                         lowBound = 0, simRange = scResults$sim.all,
+                         facetVars = c("rQuantile", "sQuantile"))
+
+caribouMetrics:::plotRes(scResults$rr.summary.all, "Adult female survival", 
+                         obs = scResults$obs.all,
+                         lowBound = 0, simRange = scResults$sim.all,
+                         facetVars = c("rQuantile", "sQuantile"))
 ```
 
 
