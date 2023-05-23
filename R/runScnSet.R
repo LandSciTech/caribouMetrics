@@ -1,5 +1,7 @@
 runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeier",
-                      getKSDists = T, printProgress = F) {
+                      getKSDists = T, printProgress = F, 
+                      Niter = formals(caribouBayesianIPM)$Niter,
+                      Nburn = formals(caribouBayesianIPM)$Nburn) {
   # ePars=eParsIn;survAnalysisMethod="KaplanMeier";getKSDists=T;printProgress=F
   scns <- getScenarioDefaults(scns)
   errorLog <- list()
@@ -26,7 +28,8 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = minYr, endYear = maxYr,
       N0 = cs$N0, survAnalysisMethod = survAnalysisMethod,
-      adjustR = cs$adjustR, assessmentYrs = cs$assessmentYrs
+      adjustR = cs$adjustR, assessmentYrs = cs$assessmentYrs, Niter = Niter, 
+      Nburn = Nburn
     ))
     if (inherits(out, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out)
