@@ -71,11 +71,6 @@ getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, simObsList
   obsSurv$parameter <- "Adult female survival"
   obsSurv$type <- "observed"
   
-  trueSurv <- subset(simObsList$exData, select = c(Year, survival))
-  names(trueSurv) <- c("Year", "Mean")
-  trueSurv$parameter <- "Adult female survival"
-  trueSurv$type <- "true"
-  
   obsRec <- subset(simObsList$ageRatioOut, select = c(Year, Count, Class))
   obsRec <- tidyr::pivot_wider(obsRec, id_cols = c("Year"), names_from = "Class",
                                values_from = "Count")
@@ -83,26 +78,41 @@ getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, simObsList
   obsRec$parameter <- "Recruitment"
   obsRec$type <- "observed"
   
-  trueRec <- subset(simObsList$exData, select = c(Year, recruitment))
-  names(trueRec) <- c("Year", "Mean")
-  trueRec$parameter <- "Recruitment"
-  trueRec$type <- "true"
-  
-  obsLam <- subset(simObsList$exData, select = c(Year, lambda))
-  names(obsLam) <- c("Year", "Mean")
-  obsLam <- movingAveGrowthRate(obsLam, simObsList$paramTable$assessmentYrs)
-  obsLam$parameter <- "Population growth rate"
-  obsLam$type <- "true"
-  
-  obsSize <- subset(simObsList$exData, select = c(Year, N))
-  names(obsSize) <- c("Year", "Mean")
-  # pop size returned from Bayesian model is at the start of the year, not the end.
-  obsSize$Year <- obsSize$Year + 1
-  obsSize$parameter <- "Female population size"
-  obsSize$type <- "true"
-  
-  obsAll <- rbind(obsLam, obsSize, subset(obsRec, select = names(obsLam)),
-                  trueRec, subset(obsSurv, select = names(obsLam)), trueSurv)
+  if(!is.null(simObsList$exData)){
+    trueSurv <- subset(simObsList$exData, select = c(Year, survival))
+    names(trueSurv) <- c("Year", "Mean")
+    trueSurv$parameter <- "Adult female survival"
+    trueSurv$type <- "true"
+    
+    trueRec <- subset(simObsList$exData, select = c(Year, recruitment))
+    names(trueRec) <- c("Year", "Mean")
+    trueRec$parameter <- "Recruitment"
+    trueRec$type <- "true"
+    
+    obsLam <- subset(simObsList$exData, select = c(Year, lambda))
+    names(obsLam) <- c("Year", "Mean")
+    obsLam <- movingAveGrowthRate(obsLam, simObsList$paramTable$assessmentYrs)
+    obsLam$parameter <- "Population growth rate"
+    obsLam$type <- "true"
+    
+    obsSize <- subset(simObsList$exData, select = c(Year, N))
+    names(obsSize) <- c("Year", "Mean")
+    # pop size returned from Bayesian model is at the start of the year, not the end.
+    obsSize$Year <- obsSize$Year + 1
+    obsSize$parameter <- "Female population size"
+    obsSize$type <- "true"
+  } else{
+    obsLam <- NULL
+    obsSize <- NULL
+    trueRec <- NULL
+    trueSurv <- NULL
+  }
+  obsAll <- rbind(obsLam,
+                  obsSize,
+                  subset(obsRec, select = c("Year", "Mean", "parameter", "type")),
+                  trueRec, 
+                  subset(obsSurv, select = c("Year", "Mean", "parameter", "type")), 
+                  trueSurv)
   
   if(!all(unique(simObsList$simDisturbance$Anthro) %in% simNational$summary$Anthro)){
     message("recalculating national sims to match anthropogenic distubance scenario")

@@ -41,3 +41,26 @@ test_that("decimals in observed disturbance work", {
                  "recalculating")
              
 })
+
+test_that("works with out sim obs",{
+  survObs <- read.csv(system.file("extdata/simSurvData.csv", package = "caribouMetrics"))
+  ageRatioObs <- read.csv(system.file("extdata/simAgeRatio.csv", package = "caribouMetrics"))
+  distObs <- read.csv(system.file("extdata/simDisturbance.csv", package = "caribouMetrics"))
+
+  mod_real <- caribouBayesianIPM(survData = survObs, ageRatio = ageRatioObs, 
+                                 disturbance = distObs, 
+                                 startYear = min(distObs$Year), 
+                                 endYear = max(distObs$Year))
+  
+  obsList <- list(simDisturbance = distObs, simSurvObs = survObs, 
+                  ageRatioOut = ageRatioObs, paramTable = data.frame(params = "observed"))
+  
+  mod_tbl <- getOutputTables(mod_real, simObsList = obsList,
+                             simNational = getSimsNational(),
+                             startYear = min(distObs$Year),
+                             endYear = max(distObs$Year),
+                             getKSDists = FALSE)
+  
+  expect_type(mod_tbl, "list")
+  
+})
