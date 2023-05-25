@@ -57,6 +57,7 @@ distObs %>% ggplot(aes(Year, Anthro))+
 ```{r mod-real}
 mod_real <- caribouBayesianIPM(survData = survObs, ageRatio = ageRatioObs, 
                               disturbance = distObs, 
+                              # only set to speed up vignette. Normally keep defaults.
                               Niter = 150, Nburn = 100)
 
 mod_tbl <- getOutputTables(mod_real, 
@@ -75,40 +76,35 @@ From these graphs we can see that this local population seems to have slightly h
 We will simulate observations from a typical boreal caribou monitoring program that includes radio collars on some cows and annual aerial surveys to count the number of calves with the tracked cows. To run the simulations we need a data frame of the number of collars deployed in each year and a data frame of cow counts in each year. In addition we will provide parameters to create a disturbance scenario and set other parameters...
 
 ```{r sim-obs}
+scn_params <- getScenarioDefaults(
+  # Anthropogenic disturbance increases by 2% per year in observation perios and
+  # 3% per year in projection period
+  obsAnthroSlope = 2, projAnthroSlope = 3,
+  # 20 years each of observations and projections
+  obsYears = 20, projYears = 20,
+  # Collaring program aims to keep 30 collars active
+  collarCount = 30,
+  # Collars are topped up every year
+  collarInterval = 1,
+  # Assume will see 2 cows in aerial survey for every collar deployed
+  cowMult = 2
+  )
 
-# decreasing cow counts each year as anthropogenic disturbance increases. This
-# only affects the absolute number of cows in ageRatio but not the ratio and not
-# survival estimates. These data frames only affect the amount of information
-# and so the variation between the observations and the "True" population.
-
-# TODO: I think this would be more clear if we only supplied freqStartsByYear
-# and cmult so that custom collaring programs could be accounted for but there
-# wouldn't be any expectation that demographics are reflected here.
-
-cow_tbl <- data.frame(Year = 2004:2023,
-                      Class = "cow",
-                      Count = 1000 - ceiling(seq(from = 0, to = 900, length.out = 20)))
-
-collar_dep_tbl <- data.frame(Year = 2004:2023,
-                             numStarts = 50)
-
-scn_params <- getScenarioDefaults(obsAnthroSlope = 2, projAnthroSlope = 3,
-                                  obsYears = 20, projYears = 20)
-
-# TODO: change so cowCounts and freqStartsByYear are not required and can
-# instead be set with getScenarioDefaults's cowCount and collarCount. 
 sim_obs <- simulateObservations(
-  scn_params, cowCounts = cow_tbl, freqStartsByYear = collar_dep_tbl,
-  printPlot = TRUE
-)
+  scn_params, 
+  # collars fall off after 4 years and are deployed in May and fall off in August
+  collarNumYears = 4, collarOffTime = 8, collarOnTime = 5, 
+  printPlot = TRUE)
 
 
 sim_obs$simSurvObs %>% group_by(Year) %>% 
-  summarise(n_collars = n(),
-            n_die = sum(event)) %>% 
+  summarise(ncollar = n(), ndeaths = sum(event), 
+            ndropped = sum(exit == 5 & event == 0),
+            nadded = sum(enter == 7), 
+            survsCalving = sum(exit >= 6)) %>% 
   ggplot(aes(Year))+
-  geom_line(aes(y = n_collars))+
-  geom_col(aes(y = n_die))+
+  geom_line(aes(y = ncollar))+
+  geom_col(aes(y = ndeaths))+
   labs(y = "Number of Collars (line) and deaths (bars)")
 
 sim_obs$ageRatioOut %>% 
@@ -120,20 +116,16 @@ sim_obs$simDisturbance %>% ggplot(aes(Year, Anthro))+
 ```
 
 ```{r mod-sim-obs}
-# TODO default start and end year should be set by disturbance data for IPM,
-# output tables and tabAllRes
 mod_sim <- caribouBayesianIPM(survData = sim_obs$simSurvObs,
                               ageRatio = sim_obs$ageRatioOut, 
                               disturbance = sim_obs$simDisturbance, 
-                              startYear = min(sim_obs$simDisturbance$Year), 
-                              endYear = max(sim_obs$simDisturbance$Year), 
+                              # only set to speed up vignette. Normally keep defaults.
                               Niter = 150, Nburn = 100)
 simNational <- getSimsNational()
-mod_sim_tbl <- getOutputTables(mod_sim, simObsList = sim_obs,
-                           simNational = simNational,
-                           startYear = min(sim_obs$simDisturbance$Year),
-                           endYear = max(sim_obs$simDisturbance$Year),
-                           getKSDists = FALSE)
+mod_sim_tbl <- getOutputTables(mod_sim, exData = sim_obs$exData, 
+                               paramTable = sim_obs$paramTable,
+                               simNational = simNational,
+                               getKSDists = FALSE)
 
 plotRes(mod_sim_tbl,
         c("Recruitment", "Adult female survival", "Population growth rate"),
@@ -143,17 +135,8 @@ plotRes(mod_sim_tbl,
 
 ### Comparing many scenarios
 
-```{r many-scns, fig.height=5}
+```{r many-scns, fig.height=8, fig.width=7}
 eParsIn <- list()
-eParsIn$cowCounts <- data.frame(
-  Year = 1981:2023,
-  Count = 100,
-  Class = "cow"
-)
-eParsIn$freqStartsByYear <- data.frame(
-  Year = 1981:2023,
-  numStarts = 100
-)
 eParsIn$collarOnTime <- 1
 eParsIn$collarOffTime <- 12
 eParsIn$collarNumYears <- 3
@@ -165,12 +148,13 @@ simBig <- getSimsNational(adjustR = adjustR)
 
 scns <- expand.grid(
   obsYears = 10, projYears = 10, collarCount = 100, cowMult = 2, collarInterval = 2,
-  assessmentYrs = 1, iAnthro = 0,
-  tA = 0, obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = c(0.1, 0.5, 0.9), 
-  rQuantile = c(0.1, 0.5, 0.9), N0 = 1000
+  assessmentYrs = 1, iAnthro = 0, obsAnthroSlope = 0, projAnthroSlope = 0, 
+  sQuantile = c(0.1, 0.5, 0.9), rQuantile = c(0.1, 0.5, 0.9), N0 = 1000
 )
-scResults <- caribouMetrics:::runScnSet(scns, eParsIn, simBig,
-                                        getKSDists = FALSE, Niter = 150, Nburn = 100)
+scResults <- runScnSet(
+  scns, eParsIn, simBig, getKSDists = FALSE,
+  # only set to speed up vignette. Normally keep defaults.
+  Niter = 150, Nburn = 100)
 
 plotRes(scResults,
         c("Recruitment", "Adult female survival", "Population growth rate"), 

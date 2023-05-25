@@ -12,12 +12,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
       print(paste0(c(p, scns[p, ]), collapse = " "))
     }
 
-    if (is.element("cowCount", names(cs))) {
-      ePars$cowCounts$Count <- cs$cowCount
-    }
-    oo <- simulateObservations(cs, cowCounts = ePars$cowCounts,
-                               freqStartsByYear = ePars$freqStartsByYear,
-                               collarNumYears = ePars$collarNumYears,
+    oo <- simulateObservations(cs, collarNumYears = ePars$collarNumYears,
                                collarOffTime = ePars$collarOffTime,
                                collarOnTime = ePars$collarOnTime)
     betaPriors <- getPriors(cs)

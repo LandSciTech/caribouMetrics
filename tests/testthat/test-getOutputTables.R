@@ -1,12 +1,8 @@
 test_that("works with defaults", {
   
-  scns <- getScenarioDefaults(projYears = 0, obsYears = 10)
-  simO <- simulateObservations(scns,
-                               freqStartsByYear = data.frame(Year = 2014:2023,
-                                                             numStarts = 20),
-                               cowCounts = data.frame(Year = 2014:2023,
-                                                      Count = 100,
-                                                      Class = "cow"))
+  scns <- getScenarioDefaults(projYears = 0, obsYears = 10, collarCount = 20,
+                              cowCount = 100)
+  simO <- simulateObservations(scns)
   
   out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
                     disturbance = simO$simDisturbance,
@@ -23,13 +19,10 @@ test_that("works with defaults", {
 })
 
 test_that("decimals in observed disturbance work", {
-  scns <- getScenarioDefaults(projYears = 10, obsYears = 10, obsAnthroSlope = 1.5, projAnthroSlope = 5)
-  simO <- simulateObservations(scns,
-                               freqStartsByYear = data.frame(Year = 2014:2023,
-                                                             numStarts = 20),
-                               cowCounts = data.frame(Year = 2014:2023,
-                                                      Count = 100,
-                                                      Class = "cow"))
+  scns <- getScenarioDefaults(projYears = 10, obsYears = 10, 
+                              obsAnthroSlope = 1.5, projAnthroSlope = 5,
+                              collarCount = 20, cowCount = 100)
+  simO <- simulateObservations(scns)
   
   out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
                             disturbance = simO$simDisturbance,

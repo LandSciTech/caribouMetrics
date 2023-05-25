@@ -22,13 +22,11 @@
 #' @export
 #'
 #' @examples
-#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10, obsAnthroSlope = 1, projAnthroSlope = 5)
-#' simO <- simulateObservations(scns,
-#'                              freqStartsByYear = data.frame(Year = 2014:2023,
-#'                                                            numStarts = 20),
-#'                              cowCounts = data.frame(Year = 2014:2023,
-#'                                                     Count = 100,
-#'                                                     Class = "cow"))
+#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10, 
+#'                             obsAnthroSlope = 1, projAnthroSlope = 5,
+#'                             collarCount = 20, cowCount = 100)
+#'                             
+#' simO <- simulateObservations(scns)
 #' 
 #' out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
 #'                           disturbance = simO$simDisturbance,

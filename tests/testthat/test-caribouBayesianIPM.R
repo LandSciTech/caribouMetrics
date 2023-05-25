@@ -169,15 +169,6 @@ test_that("results match expected", {
                     sQuantile = 0.5,  rQuantile = 0.5, rSlopeMod = 1, sSlopeMod = 1, 
                     KSDists = FALSE){
     eParsIn <- list()
-    eParsIn$cowCounts <- data.frame(
-      Year = 1981:2023,
-      Count = nCollar,
-      Class = "cow"
-    )
-    eParsIn$freqStartsByYear <- data.frame(
-      Year = 1981:2023,
-      numStarts = nCollar
-    )
     eParsIn$collarOnTime <- collarOn
     eParsIn$collarOffTime <- collarOff
     eParsIn$collarNumYears <- 5
@@ -290,19 +281,19 @@ test_that("results match expected", {
   # this by dropping 1st year
   set.seed(1234)
   # Can look at K-M results directly with use survInput from the model 
-  obs12_1 <- simulateObservations(paramTable = getScenarioDefaults(obsYears = 12),
-    cowCounts = data.frame(Year = 2012:2023, Count = 1000, Class = "cow"),
-    freqStartsByYear = data.frame(Year = 2012:2023, numStarts = 100), 
+  obs12_1 <- simulateObservations(
+    paramTable = getScenarioDefaults(obsYears = 12, cowCount = 1000, 
+                                     collarCount = 400),
     collarOffTime = 12, collarOnTime = 1
   )
   
   mod12_1 <- caribouBayesianIPM(obs12_1$simSurvObs, obs12_1$ageRatioOut, obs12_1$simDisturbance,
                                 startYear = 2012, endYear = 2023)
   set.seed(1234)
-  obs9_3 <- simulateObservations(paramTable = getScenarioDefaults(obsYears = 12),
-                                  cowCounts = data.frame(Year = 2012:2023, Count = 1000, Class = "cow"),
-                                  freqStartsByYear = data.frame(Year = 2012:2023, numStarts = 100), 
-                                  collarOffTime = 9, collarOnTime = 3
+  obs9_3 <- simulateObservations(
+    paramTable = getScenarioDefaults(obsYears = 12, cowCount = 1000, 
+                                     collarCount = 400),
+    collarOffTime = 9, collarOnTime = 3
   )
   
   mod9_3 <- caribouBayesianIPM(obs9_3$simSurvObs, obs9_3$ageRatioOut, obs9_3$simDisturbance,
@@ -311,24 +302,24 @@ test_that("results match expected", {
   dif1 <- mod9_3$inData$survDataIn$surv - mod12_1$inData$survDataIn$surv
   
   # re-run 12_1 with new seed and compare amount of difference to that
-  # obs12_1_2 <- simulateObservations(paramTable = getScenarioDefaults(obsYears = 12),
-  #                                 cowCounts = data.frame(Year = 2012:2023, Count = 1000, Class = "cow"),
-  #                                 freqStartsByYear = data.frame(Year = 2012:2023, numStarts = 100), 
-  #                                 collarOffTime = 12, collarOnTime = 1
+  # obs12_1_2 <- simulateObservations(
+  # paramTable = getScenarioDefaults(obsYears = 12, cowCount = 1000,
+  #                                  collarCount = 400),
+  # collarOffTime = 12, collarOnTime = 1
   # )
   # 
   # mod12_1_2 <- caribouBayesianIPM(obs12_1_2$simSurvObs, obs12_1_2$ageRatioOut, obs12_1_2$simDisturbance,
   #                               startYear = 2012, endYear = 2023)
   # 
-  # dif2 <- mod12_1_2$survInput$surv - mod12_1$survInput$surv
+  # dif2 <- mod12_1_2$inData$survDataIn$surv - mod12_1$inData$survDataIn$surv
   # 
-  # mean(abs(dif2))
+  # mean(abs(dif2), na.rm = TRUE)
   # 0.03
   # don't need to re-run above every time just use to get a reasonable number 
   
   # difference in survival with different collar on/off times and same seed is
   # less than difference with same collar on/off times but different seed
-  expect_true(mean(abs(dif1), na.rm = TRUE) < 0.035)
+  expect_true(mean(abs(dif1), na.rm = TRUE) < 0.03)
   
   # standard error is always higher in collar on/off not 1/12 because there is
   # less collar data in each year

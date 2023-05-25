@@ -1,14 +1,5 @@
 test_that("testScript still works", {
   eParsIn <- list()
-  eParsIn$cowCounts <- data.frame(
-    Year = 1981:2023,
-    Count = 100,
-    Class = "cow"
-  )
-  eParsIn$freqStartsByYear <- data.frame(
-    Year = 1981:2023,
-    numStarts = 30
-  )
   eParsIn$collarOnTime <- 1
   eParsIn$collarOffTime <- 12
   eParsIn$collarNumYears <- 3

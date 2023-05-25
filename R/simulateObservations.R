@@ -5,14 +5,20 @@
 #' realistic observations are simulated from this true population based on a
 #' collaring program with the given parameters.
 #'
-#' @param paramTable list. Parameters for the simulations. See [getScenarioDefaults()] for
-#'   details.
+#' @param paramTable list. Parameters for the simulations. See
+#'   [getScenarioDefaults()] for details.
 #' @param printPlot logical. print a plot of the true population trajectory?
-#' @param cowCounts data.frame. Number of cows counted in aerial surveys each
-#'   year. Must have 3 columns "Year", "Count", and "Class" where class is "cow"
-#'   in all rows
-#' @param freqStartsByYear data.frame. Number of collars deployed in each year.
-#'   Must have 2 columns "Year" and "numStarts"
+#' @param cowCounts data.frame. Optional. Number of cows counted in aerial
+#'   surveys each year. If NULL `paramTable$cowCount` is used and the number of
+#'   cows observed is assumed to be equal each year.  If a data.fram is provided
+#'   it must have 3 columns "Year", "Count", and "Class" where class is "cow" in
+#'   all rows
+#' @param freqStartsByYear data.frame. Optional. Number of collars deployed in
+#'   each year. If NULL `paramTable$collarCount` is used as the target number of
+#'   collars and each year that collars are deployed they will be topped up to
+#'   this number. If a data.frame is provided it must have 2 columns "Year" and
+#'   "numStarts" and the "numStarts" is the absolute number of collars deployed
+#'   in that year.
 #' @param collarNumYears integer. Number of years until collar falls off
 #' @param collarOffTime integer. Month that collars fall off. A number from 1
 #'   (January) to 12 (December)
@@ -39,15 +45,13 @@
 #' @export
 #'
 #' @examples
-#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10)
-#' simulateObservations(scns,
-#'                      freqStartsByYear = data.frame(Year = 2014:2023,
-#'                                                    numStarts = 10),
-#'                      cowCounts = data.frame(Year = 2014:2023,
-#'                                             Count = 10,
-#'                                             Class = "cow"))
-simulateObservations <- function(paramTable, cowCounts,
-                                 freqStartsByYear,
+#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10, 
+#'                             obsAnthroSlope = 1, projAnthroSlope = 5,
+#'                             collarCount = 20, cowCount = 100)
+#'                             
+#' simO <- simulateObservations(scns)
+simulateObservations <- function(paramTable, cowCounts = NULL,
+                                 freqStartsByYear = NULL,
                                  printPlot = FALSE,
                                  collarNumYears = 4, collarOffTime = 5,
                                  collarOnTime = 8, distScen = NULL,
@@ -70,13 +74,36 @@ simulateObservations <- function(paramTable, cowCounts,
   if(!all(vapply(paramTable, function(x){length(x)==1}, FUN.VALUE = logical(1)))){
     stop("Each element of paramTable must have length 1", call. = FALSE)
   }
-
-  testTable(cowCounts, c("Year", "Count", "Class"),
-            req_vals = list(Year = paramTable$startYear:(paramTable$startYear+paramTable$obsYears-1)),
-            acc_vals = list(Class = "cow"))
-
-  testTable(freqStartsByYear, c("Year", "numStarts"),
-            req_vals = list(Year = paramTable$startYear:(paramTable$startYear+paramTable$obsYears-1)))
+  
+  # if cowCounts and freqStartsByYear not provided build from cowCount and collarCount
+  cowCountsIn <- cowCounts
+  freqStartsByYearIn <- freqStartsByYear
+  
+  if(!is.null(cowCounts)){
+    testTable(cowCounts, c("Year", "Count", "Class"),
+              req_vals = list(Year = paramTable$startYear:(paramTable$startYear+paramTable$obsYears-1)),
+              acc_vals = list(Class = "cow"))
+  } else if(!is.null(paramTable$cowCount)){
+    cowCounts <- data.frame(Year = paramTable$startYear:
+                              (paramTable$startYear+paramTable$obsYears-1),
+                            Count = paramTable$cowCount,
+                            Class = "cow")
+  } else if(is.null(paramTable$cowCount) & is.null(paramTable$cowMult)){
+    stop("One of cowCounts or paramTable$cowCount must be provided", 
+         call. = FALSE)
+  }
+  
+  if(!is.null(freqStartsByYear)){
+    testTable(freqStartsByYear, c("Year", "numStarts"),
+              acc_vals = list(Year = paramTable$startYear:(paramTable$startYear+paramTable$obsYears-1)))
+  } else if(!is.null(paramTable$collarCount)){
+    freqStartsByYear <- data.frame(Year = paramTable$startYear:
+                                     (paramTable$startYear+paramTable$obsYears-1),
+                                   numStarts = paramTable$collarCount)
+  }else {
+    stop("One of freqStartsByYear or paramTable$collarCount must be provided",
+         call. = FALSE)
+  }
 
   # Simulate covariate table
   if (is.null(distScen)) {
@@ -142,18 +169,15 @@ simulateObservations <- function(paramTable, cowCounts,
   maxYr <- paramTable$startYear + paramTable$obsYears + paramTable$projYears - 1
 
   # simulate survival data from survival probability.
-  if (is.element("collarInterval", names(paramTable))) {
+  if (is.element("collarInterval", names(paramTable)) & is.null(freqStartsByYearIn)) {
     freqStartsByYear <- subset(freqStartsByYear,
                                is.element(Year, unique(exData$Year)))
     renewYrs <- intersect(min(exData$Year) + seq(0, 100) * paramTable$collarInterval,
                           unique(exData$Year))
     freqStartsByYear$numStarts[!is.element(freqStartsByYear$Year, renewYrs)] <- 0
-  } else {
-    renewYrs <- unique(freqStartsByYear$Year)
-  }
+  } 
 
-  if (is.element("collarCount", names(paramTable))) {
-    freqStartsByYear$numStarts[is.element(freqStartsByYear$Year, renewYrs)] <- paramTable$collarCount
+  if (is.null(freqStartsByYearIn)) {
     simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears,
                                   collarOffTime, collarOnTime, topUp = T)
   } else {
@@ -162,7 +186,7 @@ simulateObservations <- function(paramTable, cowCounts,
   }
   # if cowMult is provided, set cows as a function of number of surviving cows at
   # month 5
-  if (is.element("cowMult", names(paramTable))) {
+  if (is.element("cowMult", names(paramTable)) & is.null(cowCountsIn)) {
     survsCalving <- subset(simSurvObs, exit >= 6)
 
     if (nrow(survsCalving) > 0) {
