@@ -17,9 +17,7 @@
 #'   viable calculated as the proportion of runs where the population growth
 #'   rate was greater than 0.99. If `doSummary = FALSE` then the data.frame
 #'   contains a row for every simulation run and parameter. 
-#' @export
-#'
-#' @examples
+#' @noRd
 tabAllRes <- function(rrSurvMod, startYear, endYear, doSummary = T) {
   # rrSurvMod=rr.surv;startYear= minYr;endYear= maxYr
   # rrSurvMod=result;doSummary=T

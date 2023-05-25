@@ -2,7 +2,7 @@
 test_that("Runs with defaults", {
   # reduce some defaults to make fast
   # note that the default csv does not match the default startYear
-  expect_s3_class(caribouBayesianIPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+  expect_s3_class(caribouBayesianIPM(Nchains = 1, Niter = 100, Nburn = 10,
                        Nthin = 2)$result,
             "rjags")
 })
@@ -19,17 +19,20 @@ test_that("input tables are as expected",{
                                package = "caribouMetrics")%>%
     read.csv()
 
-  # default start year is outside range of data but still runs
-  res1 <- expect_warning(caribouBayesianIPM(Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2))
+  # start year is outside range of data but still runs
+  res1 <- expect_warning(
+    caribouBayesianIPM(startYear = 1998, Nchains = 1, Niter = 100, Nburn = 10, 
+                       Nthin = 2))
 
-  expect_true(is.na(res1$survInput$surv[1]))
+  expect_true(is.na(res1$inData$survDataIn$surv[1]))
   expect_s3_class(res1$result, "rjags")
 
   # end year is outside range of data but still runs
-  res2 <- expect_warning(caribouBayesianIPM(startYear = 2009, endYear = 2050, Nchains = 1, Niter = 100, Nburn = 10,
-             Nthin = 2))
+  res2 <- expect_warning(
+    caribouBayesianIPM(startYear = 2009, endYear = 2050, Nchains = 1, 
+                       Niter = 100, Nburn = 10, Nthin = 2))
 
-  expect_true(is.na(last(res2$survInput$surv)))
+  expect_true(is.na(last(res2$inData$survDataIn$surv)))
   expect_s3_class(res2$result, "rjags")
 
   # ageRatio is outside year range warning but still runs
@@ -190,9 +193,8 @@ test_that("results match expected", {
   
   doPlot <- function(scResults, var = "Recruitment"){
     if (interactive()) {
-      print(plotRes(scResults$rr.summary.all, var,
-                    obs = scResults$obs.all,
-                    lowBound = 0, simRange = scResults$sim.all, facetVars = NULL
+      print(plotRes(scResults, var,
+                    lowBound = 0,  facetVars = NULL
       ))
     }
   }
@@ -243,7 +245,7 @@ test_that("results match expected", {
   # when we have a lot of collars the distance between observations and "true"
   # pop is smaller than when we have few.
   manyObs <- doScn()
-  doPlot(manyObs)
+  doPlot(manyObs, var = c("Recruitment", "Adult female survival"))
   
   fewCollarObs <- doScn(nCollar = 30)
   doPlot(fewCollarObs)
@@ -282,7 +284,6 @@ test_that("results match expected", {
   
   modDifcollOff12On4 <- calcDifMod(collOff12On4)
   
-  # TODO: what is expectation here?
   # expect survival to be the same with same parameters 
   # will ignore first year of collar data if year 1 starts later than jan
   # K-M gets weird if there are any months in the middle without data JH avoided
@@ -307,7 +308,7 @@ test_that("results match expected", {
   mod9_3 <- caribouBayesianIPM(obs9_3$simSurvObs, obs9_3$ageRatioOut, obs9_3$simDisturbance,
                                 startYear = 2012, endYear = 2023)
   
-  dif1 <- mod9_3$survInput$surv - mod12_1$survInput$surv
+  dif1 <- mod9_3$inData$survDataIn$surv - mod12_1$inData$survDataIn$surv
   
   # re-run 12_1 with new seed and compare amount of difference to that
   # obs12_1_2 <- simulateObservations(paramTable = getScenarioDefaults(obsYears = 12),
@@ -331,7 +332,7 @@ test_that("results match expected", {
   
   # standard error is always higher in collar on/off not 1/12 because there is
   # less collar data in each year
-  dif1_se <- mod9_3$survInput$se - mod12_1$survInput$se
+  dif1_se <- mod9_3$inData$survDataIn$se - mod12_1$inData$survDataIn$se
   expect_true(mean(dif1_se, na.rm = TRUE) > 0)
   
   # A pop with quantile >> 0.5 will be above the national model projection

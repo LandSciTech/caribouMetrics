@@ -553,7 +553,7 @@ testTable <- function(df, req_col_names, req_vals = NULL, acc_vals = NULL){
   missing_cols <- setdiff(req_col_names, colnames(df))
   if(length(missing_cols) > 0){
     stop(df_name, " is missing expected columns: ",
-         paste0(missing_cols, collapse = ", "))
+         paste0(missing_cols, collapse = ", "), call. = FALSE)
   }
 
   if(!is.null(req_vals)){

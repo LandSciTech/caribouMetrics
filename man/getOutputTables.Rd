@@ -6,9 +6,10 @@
 \usage{
 getOutputTables(
   caribouBayesDemogMod,
-  startYear,
-  endYear,
-  simObsList,
+  startYear = min(caribouBayesDemogMod$inData$disturbanceIn$Year),
+  endYear = max(caribouBayesDemogMod$inData$disturbanceIn$Year),
+  paramTable = data.frame(param = "observed"),
+  exData = NULL,
   simNational,
   getKSDists
 )
@@ -20,13 +21,13 @@ produced by calling \code{\link[=caribouBayesianIPM]{caribouBayesianIPM()}}}
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
 
-\item{simObsList}{observed simulation data, produced by calling
-\code{\link[=simulateObservations]{simulateObservations()}}}
-
 \item{simNational}{National simulation results, produced by calling
 \code{\link[=getSimsNational]{getSimsNational()}}}
 
 \item{getKSDists}{logical. Should Kolmogorov–Smirnov distances be calculated?}
+
+\item{simObsList}{observed simulation data, produced by calling
+\code{\link[=simulateObservations]{simulateObservations()}}}
 }
 \value{
 a list of tables:
@@ -39,6 +40,7 @@ the National model for each year, as well as scenario input parameters.
 \item obs.all: Observed parameter values with column "type" identifying if it is
 the "true" value of the simulated population or the "observed" value
 simulated based on the collaring program parameters.
+\item kdDists: Kolmogorov–Smirnov distances and p-values, NA if getKSDists is false
 }
 }
 \description{
@@ -57,9 +59,9 @@ simO <- simulateObservations(scns,
 
 out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
                           disturbance = simO$simDisturbance,
-                          startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
+                          Nchains = 1, Niter = 100, Nburn = 10,
                           Nthin = 2)
 
-getOutputTables(out, startYear = 2014, endYear = 2023, simObsList = simO, 
-                               simNational = getSimsNational(), getKSDists = FALSE)
+getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable, 
+                simNational = getSimsNational(), getKSDists = FALSE)
 }

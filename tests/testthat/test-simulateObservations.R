@@ -43,3 +43,5 @@ test_that("multiple scenarios not allowed",{
 
 # TODO: add test for non-default popGrow table should use testPopGrowTable
 # internally, do same in getPriors
+
+# TODO: add test for behaviour with collarCount and cowCount options

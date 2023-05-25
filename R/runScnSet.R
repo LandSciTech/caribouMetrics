@@ -48,8 +48,9 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
     }
 
     outTabs <- getOutputTables(caribouBayesDemogMod = out, startYear = minYr,
-                               endYear = maxYr, 
-                               simObsList = oo, simNational = simNational, getKSDists = getKSDists)
+                               endYear = maxYr, simNational = simNational,
+                               exData = oo$exData, paramTable = oo$paramTable,
+                               getKSDists = getKSDists)
 
     if (p == 1) {
       rr.summary.all <- outTabs$rr.summary.all

@@ -9,8 +9,8 @@ caribouBayesianIPM(
   ageRatio = system.file("extdata/simAgeRatio.csv", package = "caribouMetrics"),
   disturbance = system.file("extdata/simDisturbance.csv", package = "caribouMetrics"),
   betaPriors = "default",
-  startYear = 1998,
-  endYear = 2023,
+  startYear = NULL,
+  endYear = NULL,
   Nchains = 4,
   Niter = 15000,
   Nburn = 10000,
@@ -72,7 +72,12 @@ be saved. Default is \code{tempdir()}}
 a list with elements:
 \itemize{
 \item result: an \code{rjags} model object see \code{\link[R2jags:jags]{R2jags::jags()}}.
-\item survInput: a data.frame with the input data used in the model.
+\item inData: a list of data that is used as input to the jags model:
+\itemize{
+\item survDataIn:  survival data
+\item disturbanceIn: disturbance data
+\item ageRatioIn: composition data
+}
 }
 }
 \description{
@@ -85,6 +90,6 @@ year. This will reduce the sample size in years when new collars are added.
 }
 \examples{
 # this uses example data shipped with the package
-caribouBayesianIPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
-
+mod <- caribouBayesianIPM(Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
+str(mod, max.level = 2)
 }

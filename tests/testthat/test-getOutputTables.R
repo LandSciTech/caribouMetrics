@@ -10,15 +10,15 @@ test_that("works with defaults", {
   
   out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
                     disturbance = simO$simDisturbance,
-                    startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
+                    Nchains = 1, Niter = 100, Nburn = 10,
                     Nthin = 2)
   
   # error when result has different startYear from argument
-  expect_error(getOutputTables(out, startYear = 2009, endYear = 2023, simObsList = simO), 
+  expect_error(getOutputTables(out, startYear = 2009, endYear = 2023), 
                "different length")
 
-  expect_type(getOutputTables(out, startYear = 2014, endYear = 2023, simObsList = simO,
-                              simNational = getSimsNational(), getKSDists = FALSE), 
+  expect_type(getOutputTables(out, simNational = getSimsNational(),
+                              getKSDists = FALSE), 
               "list")
 })
 
@@ -33,32 +33,23 @@ test_that("decimals in observed disturbance work", {
   
   out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
                             disturbance = simO$simDisturbance,
-                            startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
+                            Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2)
   
-  expect_message(getOutputTables(out, startYear = 2014, endYear = 2023, simObsList = simO, 
-                  simNational = getSimsNational(), getKSDists = FALSE),
-                 "recalculating")
+  expect_message(
+    getOutputTables(
+      out, exData = simO$exData, paramTable = simO$paramTable,
+      simNational = getSimsNational(), getKSDists = FALSE),
+    "recalculating")
              
 })
 
 test_that("works with out sim obs",{
-  survObs <- read.csv(system.file("extdata/simSurvData.csv", package = "caribouMetrics"))
-  ageRatioObs <- read.csv(system.file("extdata/simAgeRatio.csv", package = "caribouMetrics"))
-  distObs <- read.csv(system.file("extdata/simDisturbance.csv", package = "caribouMetrics"))
-
-  mod_real <- caribouBayesianIPM(survData = survObs, ageRatio = ageRatioObs, 
-                                 disturbance = distObs, 
-                                 startYear = min(distObs$Year), 
-                                 endYear = max(distObs$Year))
+  mod_real <- caribouBayesianIPM(Niter = 100, Nburn = 10)
   
-  obsList <- list(simDisturbance = distObs, simSurvObs = survObs, 
-                  ageRatioOut = ageRatioObs, paramTable = data.frame(params = "observed"))
   
-  mod_tbl <- getOutputTables(mod_real, simObsList = obsList,
+  mod_tbl <- getOutputTables(mod_real,
                              simNational = getSimsNational(),
-                             startYear = min(distObs$Year),
-                             endYear = max(distObs$Year),
                              getKSDists = FALSE)
   
   expect_type(mod_tbl, "list")

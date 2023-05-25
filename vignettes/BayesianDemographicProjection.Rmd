@@ -57,47 +57,16 @@ distObs %>% ggplot(aes(Year, Anthro))+
 ```{r mod-real}
 mod_real <- caribouBayesianIPM(survData = survObs, ageRatio = ageRatioObs, 
                               disturbance = distObs, 
-                              startYear = min(distObs$Year), 
-                              endYear = max(distObs$Year))
+                              Niter = 150, Nburn = 100)
 
-obsList <- list(simDisturbance = distObs, simSurvObs = survObs, 
-                ageRatioOut = ageRatioObs )
+mod_tbl <- getOutputTables(mod_real, 
+                           simNational = getSimsNational(),
+                           getKSDists = FALSE)
 
-# TODO: this doesn't work without the results of simObs would be good to
-# make it work with only real data and simNational or provide another summary fun
+plotRes(mod_tbl,
+        c("Recruitment", "Adult female survival", "Population growth rate"),
+         labFontSize = 10)
 
-# mod_tbl <- getOutputTables(mod_real, simObsList = obsList,
-#                            simNational = getSimsNational(),
-#                            startYear = min(distObs$Year), 
-#                            endYear = max(distObs$Year))
-
-# maybe the answer is just to export tabAllRes and which works with plotRes or
-# simple ggplot
-res_tbl <- tabAllRes(mod_real$result, startYear = min(distObs$Year),
-                     endYear = max(distObs$Year))
-
-ggplot(res_tbl, aes(Year, Mean, ymin = `Lower 95% CRI`, ymax = `Upper 95% CRI`))+
-  geom_ribbon(fill = "grey90")+
-  geom_line()+
-  facet_wrap(~Parameter, scales = "free")
-
-caribouMetrics:::plotRes(res_tbl, "Recruitment", labFontSize = 10)
-
-# but that doesn't work with plotRes if we want to compare to simNational with
-# out a bit of processing
-simNational <- getSimsNational()
-simNational2 <- subset(simNational$summary, select = c(Anthro, Mean, lower, upper, Parameter))
-names(simNational2) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
-
-simNational2 <- left_join(distObs %>% select(Year, Anthro), simNational2, 
-                          by = "Anthro", relationship = "many-to-many")
-
-caribouMetrics:::plotRes(res_tbl, "Recruitment", simRange = simNational2, labFontSize = 10)
-caribouMetrics:::plotRes(res_tbl, "Adult female survival", simRange = simNational2, labFontSize = 10)
-caribouMetrics:::plotRes(res_tbl, "Population growth rate", simRange = simNational2, labFontSize = 10)
-# TODO: conclusion export plotRes and tabAllRes and change plotRes so it can do the processing of
-# the simNational object if needed. Would want to change arg names and fun names.
-# also needs argument checking on names of parameter
 ```
 
 From these graphs we can see that this local population seems to have slightly higher demographic rates than would have been predicted by the national model alone. Note that the population's response to anthropogenic disturbance in completely determined by the national model since there was 0% disturbance during the observation period.  
@@ -157,22 +126,18 @@ mod_sim <- caribouBayesianIPM(survData = sim_obs$simSurvObs,
                               ageRatio = sim_obs$ageRatioOut, 
                               disturbance = sim_obs$simDisturbance, 
                               startYear = min(sim_obs$simDisturbance$Year), 
-                              endYear = max(sim_obs$simDisturbance$Year))
-
-mod_tbl <- getOutputTables(mod_sim, simObsList = sim_obs,
+                              endYear = max(sim_obs$simDisturbance$Year), 
+                              Niter = 150, Nburn = 100)
+simNational <- getSimsNational()
+mod_sim_tbl <- getOutputTables(mod_sim, simObsList = sim_obs,
                            simNational = simNational,
                            startYear = min(sim_obs$simDisturbance$Year),
                            endYear = max(sim_obs$simDisturbance$Year),
                            getKSDists = FALSE)
 
-caribouMetrics:::plotRes(mod_tbl$rr.summary.all, "Recruitment", simRange = mod_tbl$sim.all,
-                         obs = mod_tbl$obs.all, labFontSize = 10)
-
-caribouMetrics:::plotRes(mod_tbl$rr.summary.all, "Adult female survival", simRange = mod_tbl$sim.all,
-                         obs = mod_tbl$obs.all, labFontSize = 10)
-
-caribouMetrics:::plotRes(mod_tbl$rr.summary.all, "Population growth rate", simRange = mod_tbl$sim.all,
-                         obs = mod_tbl$obs.all, labFontSize = 10)
+plotRes(mod_sim_tbl,
+        c("Recruitment", "Adult female survival", "Population growth rate"),
+        labFontSize = 10)
 ```
 
 
@@ -207,20 +172,10 @@ scns <- expand.grid(
 scResults <- caribouMetrics:::runScnSet(scns, eParsIn, simBig,
                                         getKSDists = FALSE, Niter = 150, Nburn = 100)
 
-caribouMetrics:::plotRes(scResults$rr.summary.all, "Population growth rate", 
-                         obs = scResults$obs.all,
-                         lowBound = 0, simRange = scResults$sim.all,
-                         facetVars = c("rQuantile", "sQuantile"))
+plotRes(scResults,
+        c("Recruitment", "Adult female survival", "Population growth rate"), 
+        facetVars = c("rQuantile", "sQuantile"))
 
-caribouMetrics:::plotRes(scResults$rr.summary.all, "Recruitment", 
-                         obs = scResults$obs.all,
-                         lowBound = 0, simRange = scResults$sim.all,
-                         facetVars = c("rQuantile", "sQuantile"))
-
-caribouMetrics:::plotRes(scResults$rr.summary.all, "Adult female survival", 
-                         obs = scResults$obs.all,
-                         lowBound = 0, simRange = scResults$sim.all,
-                         facetVars = c("rQuantile", "sQuantile"))
 ```
 
 

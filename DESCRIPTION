@@ -79,6 +79,7 @@ Collate:
     'loadSpatialInputs.R'
     'movingWindowAvg.R'
     'plot.R'
+    'plotRes.R'
     'popGrowthTableJohnsonECCC.R'
     'processData.R'
     'rasterizeLineDensity.R'
