@@ -40,14 +40,17 @@
 #'
 #' @return a list with elements:
 #'   * result: an `rjags` model object see [R2jags::jags()].
-#'   * survInput: a data.frame with the input data used in the model.
+#'   * inData: a list of data that is used as input to the jags model:
+#'     * survDataIn:  survival data 
+#'     * disturbanceIn: disturbance data
+#'     * ageRatioIn: composition data
 #'
 #' @export
 #'
 #' @examples
 #' # this uses example data shipped with the package
-#' caribouBayesianIPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
-#' 
+#' mod <- caribouBayesianIPM(Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
+#' str(mod, max.level = 2)
 caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
                                               package = "caribouMetrics"),
                        ageRatio = system.file("extdata/simAgeRatio.csv",
@@ -55,7 +58,7 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
                        disturbance = system.file("extdata/simDisturbance.csv",
                                                  package = "caribouMetrics"),
                        betaPriors = "default",
-                       startYear = 1998, endYear = 2023, Nchains = 4,
+                       startYear = NULL, endYear = NULL, Nchains = 4,
                        Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
                        survAnalysisMethod = "KaplanMeier", adjustR = F,
                        assessmentYrs = 1,
@@ -108,7 +111,16 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   # if decide to error when Year ranges don't match could use testTable
   testTable(disturbance, c("Year", "Anthro", "fire_excl_anthro"))
   testTable(ageRatio, c("Year", "Count", "Class"))
-  testTable(survData, c("Year", "event", "enter", "exit"))
+  testTable(survData, c("id", "Year", "event", "enter", "exit"))
+  
+  # Get start and end years from data
+  if(is.null(inp$startYear)){
+    inp$startYear <- min(survData$Year)
+  }
+  
+  if(is.null(inp$endYear)){
+    inp$endYear <- max(disturbance$Year)
+  }
 
   disturbance <- merge(data.frame(Year = seq(inp$startYear, inp$endYear)),
                        disturbance, by = "Year", all.x = T)
@@ -411,6 +423,14 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
     n.chains = inp$Nchains, n.iter = inp$Niter, n.burnin = inp$Nburn,
     n.thin = inp$Nthin, quiet = quiet
   ))
+  
+  ageRatioIn <- rbind(
+    mutate(data3t, Class = "calf"), 
+    mutate(data4t, Class = "cow")
+  ) %>% arrange(Year)
 
-  return(list(result = rr.surv, survInput = survDatat))
+  return(list(result = rr.surv, 
+              inData = list(survDataIn = survDatat, 
+                            disturbanceIn = disturbance, 
+                            ageRatioIn = ageRatioIn)))
 }
