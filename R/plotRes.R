@@ -8,25 +8,78 @@
 #' Plot results of the caribou Bayesian IPM with the option to include the
 #' national model and observed data
 #'
-#' @param allRes data.frame. Summary of model results created using [getOutputTables()] 
-#' @param parameter
-#' @param obs
-#' @param lowBound
-#' @param highBound
-#' @param simRange
-#' @param facetVars
-#' @param labFontSize
+#' @param modTables list. A list of model results tables created using
+#'   `[getOutputTables()]`.
+#' @param parameter character. Which parameter to plot, if more than one, a list
+#'   of plots is returned.
+#' @param lowBound,highBound numeric. Lower and upper y axis limits
+#' @param facetVars character. Optional. Vector of column names to facet by
+#' @param labFontSize numeric. Optional. Label font size if there are not
+#'   facets. Font size is 10 pt if facets are used.
 #'
-#' @return
+#' @return a ggplot object or list of ggplot objects if a vector of parameters
+#'   was given.
 #' @export
 #'
 #' @examples
-plotRes <- function(allRes, parameter, obs = NULL, lowBound = 0, highBound = 1,
-                    simRange = NULL, facetVars = NULL, labFontSize = 14) {
+#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10, obsAnthroSlope = 1, projAnthroSlope = 5)
+#' simO <- simulateObservations(scns,
+#'                              freqStartsByYear = data.frame(Year = 2014:2023,
+#'                                                            numStarts = 20),
+#'                              cowCounts = data.frame(Year = 2014:2023,
+#'                                                     Count = 100,
+#'                                                     Class = "cow"))
+#' 
+#' out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+#'                           disturbance = simO$simDisturbance,
+#'                           startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
+#'                           Nthin = 2)
+#' 
+#' out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
+#'                            simNational = getSimsNational(), getKSDists = FALSE)
+#' 
+#' plotRes(out_tbl, parameter = "Recruitment")
+plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
+                   facetVars = NULL, labFontSize = 14) {
   # allRes=scResults$ksDists; parameter="Recruitment";obs=scResults$obs.all;
   # lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("obsYears","sQuantile")
   
+  if(length(parameter) > 1){
+    allPlots <- lapply(parameter, function(x) {
+      plotRes(modTables, x,  lowBound, highBound, facetVars, labFontSize)
+    })
+    
+    names(allPlots) <- parameter
+    return(allPlots)
+  }
+  
+  allRes <- modTables$rr.summary.all
+  obs <- modTables$obs.all
+  simRange <- modTables$sim.all
+  
   pal2 = c("#EF8A62","#67A9CF")#brewer.pal(7,"RdBu")[c(2,6)]
+  
+  if(!is.data.frame(allRes)){
+    stop("allRes must be a data.frame not a ", class(allRes), call. = FALSE)
+  }
+  
+  exp_param_nms <- c(
+    "Adult female survival", "Recruitment",
+    "Female-only recruitment", "Population growth rate", "Female population size",
+    "Mean adult female survival",
+    "Mean recruitment", "Mean female recruitment",
+    "Median population growth rate",
+    "Mean population growth rate"
+  )
+  
+  if(!parameter %in% exp_param_nms){
+    stop("parameter ", parameter, " is not one of the expected values: '",
+         paste0(exp_param_nms, collapse = "', '"), call. = FALSE)
+  }
+  
+  testTable(allRes, req_col_names = c("Year", "Parameter", "Mean", 
+                                      "Lower 95% CRI", "Upper 95% CRI"),
+            acc_vals = list(Parameter = exp_param_nms))
   
   if (is.null(facetVars)) {
     titleFontSize <- 16
@@ -100,14 +153,16 @@ plotRes <- function(allRes, parameter, obs = NULL, lowBound = 0, highBound = 1,
   }
   
   if (!KS & !is.null(obs)) {
-    obs$Type <- "IPM"
-    obs$obsError <- F
-    obs$obsError[obs$type == "observed"] <- T
-    x2 <- x2 + ggplot2::geom_point(data = obs,
-                                   ggplot2::aes(x = Year, y = Mean,
-                                                shape = obsError), col = "black",
-                                   show.legend = T) +
-      ggplot2::scale_shape_manual(values = c(16, 2))
+    if(nrow(obs) > 0){
+      obs$Type <- "IPM"
+      obs$obsError <- F
+      obs$obsError[obs$type == "observed"] <- T
+      x2 <- x2 + ggplot2::geom_point(data = obs,
+                                     ggplot2::aes(x = Year, y = Mean,
+                                                  shape = obsError), col = "black",
+                                     show.legend = T) +
+        ggplot2::scale_shape_manual(values = c(16, 2))
+    }
   }
   
   if (!is.null(facetVars)) {
