@@ -22,6 +22,7 @@
 #' * obs.all: Observed parameter values with column "type" identifying if it is
 #'   the "true" value of the simulated population or the "observed" value
 #'   simulated based on the collaring program parameters.
+#' * kdDists: Kolmogorov–Smirnov distances and p-values, NA if getKSDists is false
 #' @export
 #'
 #' @examples
@@ -35,19 +36,25 @@
 #' 
 #' out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
 #'                           disturbance = simO$simDisturbance,
-#'                           startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
+#'                           Nchains = 1, Niter = 100, Nburn = 10,
 #'                           Nthin = 2)
 #' 
-#' getOutputTables(out, startYear = 2014, endYear = 2023, simObsList = simO, 
-#'                                simNational = getSimsNational(), getKSDists = FALSE)
+#' getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable, 
+#'                 simNational = getSimsNational(), getKSDists = FALSE)
                              
-getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, simObsList, simNational,
+getOutputTables <- function(caribouBayesDemogMod, 
+                            startYear = min(caribouBayesDemogMod$inData$disturbanceIn$Year), 
+                            endYear = max(caribouBayesDemogMod$inData$disturbanceIn$Year), 
+                            paramTable = data.frame(param = "observed"),
+                            exData = NULL,
+                            simNational,
                             getKSDists) {
   # result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;
   # simObsList=oo;simNational=simBig
   
   result <- caribouBayesDemogMod$result
-  survInput <- caribouBayesDemogMod$survInput
+  survInput <- caribouBayesDemogMod$inData$survDataIn
+  simObsList <- caribouBayesDemogMod$inData
   
   # get summary info for plots
   rr.summary <- tabAllRes(result, startYear, endYear)
@@ -71,31 +78,31 @@ getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, simObsList
   obsSurv$parameter <- "Adult female survival"
   obsSurv$type <- "observed"
   
-  obsRec <- subset(simObsList$ageRatioOut, select = c(Year, Count, Class))
+  obsRec <- subset(simObsList$ageRatioIn, select = c(Year, Count, Class))
   obsRec <- tidyr::pivot_wider(obsRec, id_cols = c("Year"), names_from = "Class",
                                values_from = "Count")
   obsRec$Mean <- obsRec$calf / obsRec$cow
   obsRec$parameter <- "Recruitment"
   obsRec$type <- "observed"
   
-  if(!is.null(simObsList$exData)){
-    trueSurv <- subset(simObsList$exData, select = c(Year, survival))
+  if(!is.null(exData)){
+    trueSurv <- subset(exData, select = c(Year, survival))
     names(trueSurv) <- c("Year", "Mean")
     trueSurv$parameter <- "Adult female survival"
     trueSurv$type <- "true"
     
-    trueRec <- subset(simObsList$exData, select = c(Year, recruitment))
+    trueRec <- subset(exData, select = c(Year, recruitment))
     names(trueRec) <- c("Year", "Mean")
     trueRec$parameter <- "Recruitment"
     trueRec$type <- "true"
     
-    obsLam <- subset(simObsList$exData, select = c(Year, lambda))
+    obsLam <- subset(exData, select = c(Year, lambda))
     names(obsLam) <- c("Year", "Mean")
-    obsLam <- movingAveGrowthRate(obsLam, simObsList$paramTable$assessmentYrs)
+    obsLam <- movingAveGrowthRate(obsLam, paramTable$assessmentYrs)
     obsLam$parameter <- "Population growth rate"
     obsLam$type <- "true"
     
-    obsSize <- subset(simObsList$exData, select = c(Year, N))
+    obsSize <- subset(exData, select = c(Year, N))
     names(obsSize) <- c("Year", "Mean")
     # pop size returned from Bayesian model is at the start of the year, not the end.
     obsSize$Year <- obsSize$Year + 1
@@ -114,20 +121,20 @@ getOutputTables <- function(caribouBayesDemogMod, startYear, endYear, simObsList
                   subset(obsSurv, select = c("Year", "Mean", "parameter", "type")), 
                   trueSurv)
   
-  if(!all(unique(simObsList$simDisturbance$Anthro) %in% simNational$summary$Anthro)){
+  if(!all(unique(simObsList$disturbanceIn$Anthro) %in% simNational$summary$Anthro)){
     message("recalculating national sims to match anthropogenic distubance scenario")
     
-    simNational <- getSimsNational(Anthro = unique(simObsList$simDisturbance$Anthro))
+    simNational <- getSimsNational(Anthro = unique(simObsList$disturbanceIn$Anthro))
   }
   
   simBigO <- subset(simNational$summary, select = c(Anthro, Mean, lower, upper, Parameter))
   names(simBigO) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
   
   # combine paramTable and simDisturbance and add to all output tables, nest params in a list
-  dist_params <- merge(simObsList$simDisturbance, simObsList$paramTable)
+  dist_params <- merge(simObsList$disturbanceIn, paramTable)
   
   rr.summary <- merge(rr.summary, dist_params)
-  simBigO <- merge(simBigO, dist_params, all.y = TRUE)
+  simBigO <- merge(simBigO, dist_params)
 
   
   obsAll <- merge(obsAll, dist_params)
