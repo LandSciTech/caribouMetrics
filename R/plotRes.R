@@ -16,35 +16,37 @@
 #' @param facetVars character. Optional. Vector of column names to facet by
 #' @param labFontSize numeric. Optional. Label font size if there are not
 #'   facets. Font size is 10 pt if facets are used.
+#' @param ksDists logical. If true the `modTables$ksDists` table is used to
+#'   create plots for each parameter.
 #'
 #' @return a ggplot object or list of ggplot objects if a vector of parameters
 #'   was given.
 #' @export
 #'
 #' @examples
-#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10, 
+#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 #'                             obsAnthroSlope = 1, projAnthroSlope = 5,
 #'                             collarCount = 20, cowCount = 100)
-#'                             
+#'
 #' simO <- simulateObservations(scns)
-#' 
+#'
 #' out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
 #'                           disturbance = simO$simDisturbance,
 #'                           startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
 #'                           Nthin = 2)
-#' 
+#'
 #' out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
 #'                            simNational = getSimsNational(), getKSDists = FALSE)
-#' 
+#'
 #' plotRes(out_tbl, parameter = "Recruitment")
 plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
-                   facetVars = NULL, labFontSize = 14) {
+                   facetVars = NULL, labFontSize = 14, ksDists = FALSE) {
   # allRes=scResults$ksDists; parameter="Recruitment";obs=scResults$obs.all;
   # lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("obsYears","sQuantile")
   
   if(length(parameter) > 1){
     allPlots <- lapply(parameter, function(x) {
-      plotRes(modTables, x,  lowBound, highBound, facetVars, labFontSize)
+      plotRes(modTables, x,  lowBound, highBound, facetVars, labFontSize, ksDists)
     })
     
     names(allPlots) <- parameter
@@ -88,18 +90,16 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     labFontSize <- 10
     breakInterval <- 2
   }
-  if (is.element("KSDistance", names(allRes))) {
+  if (ksDists) {
     # plot Kolmogorov Smirnov distances
-    KS <- T
+    allRes <- modTables$ksDists
     allRes$Mean <- allRes$KSDistance
-  } else {
-    KS <- F
-  }
+  } 
   
   df <- subset(allRes, allRes$Parameter == parameter)
   
   if (nrow(df) < 1) {
-    stop()
+    stop("The parameter: ", parameter, " is not present in the data provided")
   }
   
   if (!is.null(obs)) {
@@ -107,9 +107,15 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     obs <- subset(obs, parameter == pr)
   }
   
-  if (!KS & !is.null(simRange)) {
+  if(!is.null(simRange)){
     pr <- parameter
     simRange <- subset(simRange, parameter == pr)
+    if(nrow(simRange) == 0){
+     simRange <- NULL  
+    }
+  }
+  
+  if (!ksDists & !is.null(simRange)) {
     
     df$Type <- "IPM"
     simRange$Type <- "national"
@@ -127,7 +133,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   }
   x2 <- x1 + ggplot2::theme_classic() + ggplot2::xlab("Year") +
     ggplot2::ylab(parameter) +
-    ggplot2::geom_line(ggplot2::aes(x = Year, y = Mean), size = 1.75) +ggplot2::scale_color_discrete(type=pal2)+
+    ggplot2::geom_line(ggplot2::aes(x = Year, y = Mean), linewidth = 1.75) +ggplot2::scale_color_discrete(type=pal2)+
     ggplot2::theme(
       axis.text.y = ggplot2::element_text(size = labFontSize),
       axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, size = labFontSize),
@@ -139,7 +145,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
       max(df$Year, na.rm = TRUE), breakInterval
     ))
   
-  if (!KS) {
+  if (!ksDists) {
     x2 <- x2 + ggplot2::geom_ribbon(ggplot2::aes(ymin = `Lower 95% CRI`,
                                                  ymax = `Upper 95% CRI`),
                                     show.legend = FALSE, alpha = 0.25, colour = NA
@@ -150,15 +156,15 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
       ))
   }
   
-  if (!KS & !is.null(obs)) {
+  if (!ksDists & !is.null(obs)) {
     if(nrow(obs) > 0){
       obs$Type <- "IPM"
-      obs$obsError <- F
-      obs$obsError[obs$type == "observed"] <- T
+      obs$obsError <- FALSE
+      obs$obsError[obs$type == "observed"] <- TRUE
       x2 <- x2 + ggplot2::geom_point(data = obs,
                                      ggplot2::aes(x = Year, y = Mean,
                                                   shape = obsError), col = "black",
-                                     show.legend = T) +
+                                     show.legend = TRUE) +
         ggplot2::scale_shape_manual(values = c(16, 2))
     }
   }
@@ -172,7 +178,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
                                      labeller = "label_both")
     }
   }
-  if (!KS & (parameter == "Population growth rate")) {
+  if (!ksDists & (parameter == "Population growth rate")) {
     x2 <- x2 + ggplot2::geom_hline(yintercept = 1, color = "black")
   }
   
