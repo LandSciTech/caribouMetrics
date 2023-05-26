@@ -1,3 +1,36 @@
+#' Run the caribou Bayesian IPM for multiple parameter sets
+#'
+#' Define scenarios in a table and [simulateObservations()], run the
+#' [caribouBayesianIPM()] model and [getOutputTables()] for each scenario.
+#'
+#' @param scns data.frame. Parameters for the simulations. See
+#'   [getScenarioDefaults()] for details.
+#' @param ePars list. Additional parameters passed on to
+#'   [simulateObservations()]
+#' @inheritParams caribouBayesianIPM
+#' @inheritParams getOutputTables
+#' @param printProgress logical. Should the scenario number and parameters be
+#'   printed at each step?
+#'
+#' @return A list similar to [getOutputTables()] where tables for each scenario
+#'   have been appended together. Plus an error log for any scenarios that
+#'   failed to run.
+#' @export
+#'
+#' @examples
+#' scns <- expand.grid(
+#'   obsYears =c(10, 20), collarCount = c(30, 300), cowMult = 2, collarInterval = 2,
+#'   assessmentYrs = 1, iAnthro = 0,
+#'   obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.9,
+#'   rQuantile = 0.7, N0 = 1000
+#' )
+#' 
+#' eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
+#' scResults <- runScnSet(scns, eParsIn, getSimsNational(), getKSDists = F,
+#'                        # only set to speed up vignette. Normally keep defaults.
+#'                        Niter = 150, Nburn = 100)
+
+
 runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeier",
                       getKSDists = T, printProgress = F, 
                       Niter = formals(caribouBayesianIPM)$Niter,

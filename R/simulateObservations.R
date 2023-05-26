@@ -5,7 +5,7 @@
 #' realistic observations are simulated from this true population based on a
 #' collaring program with the given parameters.
 #'
-#' @param paramTable list. Parameters for the simulations. See
+#' @param paramTable data.frame. Parameters for the simulations. See
 #'   [getScenarioDefaults()] for details.
 #' @param printPlot logical. print a plot of the true population trajectory?
 #' @param cowCounts data.frame. Optional. Number of cows counted in aerial

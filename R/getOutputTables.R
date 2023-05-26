@@ -7,8 +7,7 @@
 #' @param caribouBayesDemogMod caribou Bayesian demographic model results
 #'   produced by calling [caribouBayesianIPM()]
 #' @inheritParams caribouBayesianIPM
-#' @param simObsList observed simulation data, produced by calling
-#'   [simulateObservations()]
+#' @param paramTable 
 #' @param simNational National simulation results, produced by calling
 #'   [getSimsNational()]
 #' @param getKSDists logical. Should Kolmogorov–Smirnov distances be calculated?
