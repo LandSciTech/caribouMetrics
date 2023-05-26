@@ -21,13 +21,17 @@ produced by calling \code{\link[=caribouBayesianIPM]{caribouBayesianIPM()}}}
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
 
+\item{paramTable}{data.frame. Optional. Scenario parameters see
+\code{\link[=simulateObservations]{simulateObservations()}}}
+
+\item{exData}{data.frame. Optional. Output of \code{\link[=simulateObservations]{simulateObservations()}} that
+records the true population metrics of the population that observations
+were simulated from.}
+
 \item{simNational}{National simulation results, produced by calling
 \code{\link[=getSimsNational]{getSimsNational()}}}
 
 \item{getKSDists}{logical. Should Kolmogorov–Smirnov distances be calculated?}
-
-\item{simObsList}{observed simulation data, produced by calling
-\code{\link[=simulateObservations]{simulateObservations()}}}
 }
 \value{
 a list of tables:
@@ -45,23 +49,21 @@ simulated based on the collaring program parameters.
 }
 \description{
 Produces summary tables for Bayesian caribou integrated population model
-results. Optionally calculates Kolmogorov–Smirnov distances between
-Bayesian model results and national model results.
+results. Optionally calculates Kolmogorov–Smirnov distances between Bayesian
+model results and national model results.
 }
 \examples{
-scns <- getScenarioDefaults(projYears = 10, obsYears = 10, obsAnthroSlope = 1, projAnthroSlope = 5)
-simO <- simulateObservations(scns,
-                             freqStartsByYear = data.frame(Year = 2014:2023,
-                                                           numStarts = 20),
-                             cowCounts = data.frame(Year = 2014:2023,
-                                                    Count = 100,
-                                                    Class = "cow"))
+scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
+                            obsAnthroSlope = 1, projAnthroSlope = 5,
+                            collarCount = 20, cowCount = 100)
+
+simO <- simulateObservations(scns)
 
 out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
                           disturbance = simO$simDisturbance,
                           Nchains = 1, Niter = 100, Nburn = 10,
                           Nthin = 2)
 
-getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable, 
+getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
                 simNational = getSimsNational(), getKSDists = FALSE)
 }

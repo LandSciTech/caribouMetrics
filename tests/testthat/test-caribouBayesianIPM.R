@@ -162,8 +162,11 @@ test_that("works when only 1 collared animal",{
 })
 
 test_that("results match expected", {
-  simBig <- suppressWarnings(getSimsNational(N0 = 3000))
+  # save to speed up tests
+  # simBig <- suppressWarnings(getSimsNational(N0 = 3000))
+  # saveRDS(simBig, "tests/testthat/data/simBig3000.rds")
   
+  simBig <- readRDS("data/simBig3000.rds")
   doScn <- function(nCollar = 2000, nobsYears = 10, collarOn = 1, collarOff = 12, 
                     iAnthro = 0, obsAnthroSlope = 0, projAnthroSlope = 0, 
                     sQuantile = 0.5,  rQuantile = 0.5, rSlopeMod = 1, sSlopeMod = 1, 
@@ -179,7 +182,8 @@ test_that("results match expected", {
       tA = 0, obsAnthroSlope = obsAnthroSlope, projAnthroSlope = projAnthroSlope,
       sQuantile = sQuantile, rQuantile = rQuantile, N0 = 3000
     )
-    scResults <- suppressWarnings(runScnSet(scns, eParsIn, simBig, getKSDists = KSDists))
+    scResults <- suppressWarnings(runScnSet(scns, eParsIn, simBig, getKSDists = KSDists,
+                                            Niter = 100, Nburn = 10))
   }
   
   doPlot <- function(scResults, var = "Recruitment"){
@@ -288,7 +292,8 @@ test_that("results match expected", {
   )
   
   mod12_1 <- caribouBayesianIPM(obs12_1$simSurvObs, obs12_1$ageRatioOut, obs12_1$simDisturbance,
-                                startYear = 2012, endYear = 2023)
+                                startYear = 2012, endYear = 2023,
+                                Niter = 100, Nburn = 10)
   set.seed(1234)
   obs9_3 <- simulateObservations(
     paramTable = getScenarioDefaults(obsYears = 12, cowCount = 1000, 
@@ -297,7 +302,8 @@ test_that("results match expected", {
   )
   
   mod9_3 <- caribouBayesianIPM(obs9_3$simSurvObs, obs9_3$ageRatioOut, obs9_3$simDisturbance,
-                                startYear = 2012, endYear = 2023)
+                                startYear = 2012, endYear = 2023,
+                               Niter = 100, Nburn = 10)
   
   dif1 <- mod9_3$inData$survDataIn$surv - mod12_1$inData$survDataIn$surv
   

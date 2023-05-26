@@ -22,7 +22,7 @@ caribouPopGrowth(
   h_S = 1,
   interannualVar = list(R_CV = 0.46, S_CV = 0.08696),
   probOption = "binomial",
-  adjustR = F,
+  adjustR = FALSE,
   progress = interactive()
 )
 }

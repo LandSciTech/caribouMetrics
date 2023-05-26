@@ -60,7 +60,7 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
                        betaPriors = "default",
                        startYear = NULL, endYear = NULL, Nchains = 4,
                        Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
-                       survAnalysisMethod = "KaplanMeier", adjustR = F,
+                       survAnalysisMethod = "KaplanMeier", adjustR = FALSE,
                        assessmentYrs = 1,
                        inputList = list(), saveJAGStxt = tempdir(),
                        quiet = TRUE) {

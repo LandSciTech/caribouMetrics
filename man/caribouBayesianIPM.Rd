@@ -17,7 +17,7 @@ caribouBayesianIPM(
   Nthin = 2,
   N0 = 1000,
   survAnalysisMethod = "KaplanMeier",
-  adjustR = F,
+  adjustR = FALSE,
   assessmentYrs = 1,
   inputList = list(),
   saveJAGStxt = tempdir(),

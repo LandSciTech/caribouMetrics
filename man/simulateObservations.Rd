@@ -6,8 +6,8 @@
 \usage{
 simulateObservations(
   paramTable,
-  cowCounts,
-  freqStartsByYear,
+  cowCounts = NULL,
+  freqStartsByYear = NULL,
   printPlot = FALSE,
   collarNumYears = 4,
   collarOffTime = 5,
@@ -20,15 +20,21 @@ simulateObservations(
 )
 }
 \arguments{
-\item{paramTable}{list. Parameters for the simulations. See \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for
-details.}
+\item{paramTable}{data.frame. Parameters for the simulations. See
+\code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for details.}
 
-\item{cowCounts}{data.frame. Number of cows counted in aerial surveys each
-year. Must have 3 columns "Year", "Count", and "Class" where class is "cow"
-in all rows}
+\item{cowCounts}{data.frame. Optional. Number of cows counted in aerial
+surveys each year. If NULL \code{paramTable$cowCount} is used and the number of
+cows observed is assumed to be equal each year.  If a data.fram is provided
+it must have 3 columns "Year", "Count", and "Class" where class is "cow" in
+all rows}
 
-\item{freqStartsByYear}{data.frame. Number of collars deployed in each year.
-Must have 2 columns "Year" and "numStarts"}
+\item{freqStartsByYear}{data.frame. Optional. Number of collars deployed in
+each year. If NULL \code{paramTable$collarCount} is used as the target number of
+collars and each year that collars are deployed they will be topped up to
+this number. If a data.frame is provided it must have 2 columns "Year" and
+"numStarts" and the "numStarts" is the absolute number of collars deployed
+in that year.}
 
 \item{printPlot}{logical. print a plot of the true population trajectory?}
 
@@ -66,7 +72,7 @@ a list with elements:
 \item simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
 \item simSurvObs: a data frame of survival data with columns id, Year, event, enter, and exit,
 \item ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
-\item exData: a tibble of expected population metric based on the national model,
+\item exData: a tibble of expected population metrics based on the national model,
 \item paramTable: a data frame recording the input parameters for the simulation.
 }
 }
@@ -77,11 +83,9 @@ realistic observations are simulated from this true population based on a
 collaring program with the given parameters.
 }
 \examples{
-scns <- getScenarioDefaults(projYears = 10, obsYears = 10)
-simulateObservations(scns,
-                     freqStartsByYear = data.frame(Year = 2014:2023,
-                                                   numStarts = 10),
-                     cowCounts = data.frame(Year = 2014:2023,
-                                            Count = 10,
-                                            Class = "cow"))
+scns <- getScenarioDefaults(projYears = 10, obsYears = 10, 
+                            obsAnthroSlope = 1, projAnthroSlope = 5,
+                            collarCount = 20, cowCount = 100)
+                            
+simO <- simulateObservations(scns)
 }

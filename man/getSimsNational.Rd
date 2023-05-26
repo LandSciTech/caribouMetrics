@@ -11,7 +11,7 @@ getSimsNational(
   fire_excl_anthro = 0,
   useQuantiles = NULL,
   populationGrowthTable = NULL,
-  adjustR = F,
+  adjustR = FALSE,
   forceUpdate = F
 )
 }

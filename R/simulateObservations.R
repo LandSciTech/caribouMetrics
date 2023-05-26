@@ -40,7 +40,7 @@
 #'   * simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
 #'   * simSurvObs: a data frame of survival data with columns id, Year, event, enter, and exit,
 #'   * ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
-#'   * exData: a tibble of expected population metric based on the national model,
+#'   * exData: a tibble of expected population metrics based on the national model,
 #'   * paramTable: a data frame recording the input parameters for the simulation.
 #' @export
 #'

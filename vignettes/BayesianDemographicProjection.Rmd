@@ -162,6 +162,8 @@ plotRes(scResults,
 
 ```
 
+TO DO: Add something about getPriors and how that can be adjusted?
+
 
 ### Troubleshooting
 The national model results are cached if the default values are used. This cache can but updated by running `getSimsNational(forceUpdate = TRUE)`

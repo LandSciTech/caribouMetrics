@@ -1,13 +1,17 @@
 #' Summarize results of Bayesian demographic model in tables
 #'
 #' Produces summary tables for Bayesian caribou integrated population model
-#' results. Optionally calculates Kolmogorov–Smirnov distances between
-#' Bayesian model results and national model results. 
+#' results. Optionally calculates Kolmogorov–Smirnov distances between Bayesian
+#' model results and national model results.
 #'
 #' @param caribouBayesDemogMod caribou Bayesian demographic model results
 #'   produced by calling [caribouBayesianIPM()]
 #' @inheritParams caribouBayesianIPM
-#' @param paramTable 
+#' @param paramTable data.frame. Optional. Scenario parameters see
+#'   [simulateObservations()]
+#' @param exData data.frame. Optional. Output of [simulateObservations()] that
+#'   records the true population metrics of the population that observations
+#'   were simulated from.
 #' @param simNational National simulation results, produced by calling
 #'   [getSimsNational()]
 #' @param getKSDists logical. Should Kolmogorov–Smirnov distances be calculated?
@@ -25,17 +29,17 @@
 #' @export
 #'
 #' @examples
-#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10, 
+#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 #'                             obsAnthroSlope = 1, projAnthroSlope = 5,
 #'                             collarCount = 20, cowCount = 100)
-#' 
+#'
 #' simO <- simulateObservations(scns)
-#' 
+#'
 #' out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
 #'                           disturbance = simO$simDisturbance,
 #'                           Nchains = 1, Niter = 100, Nburn = 10,
 #'                           Nthin = 2)
-#' 
+#'
 #' getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
 #'                 simNational = getSimsNational(), getKSDists = FALSE)
                              

@@ -157,7 +157,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
       pars,
       caribouPopGrowth(pars$N0,
                        R_bar = pars$R_bar, S_bar = pars$S_bar,
-                       numSteps = stepLength, K = F, l_R = 1e-06, adjustR = adjustR
+                       numSteps = stepLength, K = FALSE, l_R = 1e-06, adjustR = adjustR
       )
     )
 
@@ -207,7 +207,7 @@ simCalfCowRatios <- function(cowCounts, minYr, exData) {
 }
 
 simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffTime,
-                            collarOnTime, topUp = F) {
+                            collarOnTime, topUp = FALSE) {
   # topUp=T
   # for simplicity, ignore variation in survival probability among months
   initYear <- min(exData$Year)

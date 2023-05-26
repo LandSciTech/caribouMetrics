@@ -10,7 +10,8 @@ plotRes(
   lowBound = 0,
   highBound = 1,
   facetVars = NULL,
-  labFontSize = 14
+  labFontSize = 14,
+  ksDists = FALSE
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ of plots is returned.}
 
 \item{labFontSize}{numeric. Optional. Label font size if there are not
 facets. Font size is 10 pt if facets are used.}
+
+\item{ksDists}{logical. If true the \code{modTables$ksDists} table is used to
+create plots for each parameter.}
 }
 \value{
 a ggplot object or list of ggplot objects if a vector of parameters
@@ -36,13 +40,11 @@ Plot results of the caribou Bayesian IPM with the option to include the
 national model and observed data
 }
 \examples{
-scns <- getScenarioDefaults(projYears = 10, obsYears = 10, obsAnthroSlope = 1, projAnthroSlope = 5)
-simO <- simulateObservations(scns,
-                             freqStartsByYear = data.frame(Year = 2014:2023,
-                                                           numStarts = 20),
-                             cowCounts = data.frame(Year = 2014:2023,
-                                                    Count = 100,
-                                                    Class = "cow"))
+scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
+                            obsAnthroSlope = 1, projAnthroSlope = 5,
+                            collarCount = 20, cowCount = 100)
+
+simO <- simulateObservations(scns)
 
 out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
                           disturbance = simO$simDisturbance,

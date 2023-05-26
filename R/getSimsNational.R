@@ -41,7 +41,7 @@ if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
 #' getSimsNational()
 getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, by = 1),
                             fire_excl_anthro = 0, useQuantiles  = NULL,
-                            populationGrowthTable  = NULL, adjustR = F, forceUpdate = F) {
+                            populationGrowthTable  = NULL, adjustR = FALSE, forceUpdate = F) {
   # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;
   # useQuantiles =NULL;adjustR=F;forceUpdate=F
   doSave <- FALSE
@@ -82,7 +82,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
     )
     rateSamplesAll <- demographicRates(covTable = covTableObs,
                                        popGrowthPars = popGrowthPars,
-                                       returnSample = T, useQuantiles = F)
+                                       returnSample = TRUE, useQuantiles = FALSE)
   } else {
     popGrowthPars <- demographicCoefficients(
       replicates, useQuantiles = useQuantiles,
@@ -95,7 +95,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
   pars <- cbind(pars, caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
                                        S_bar = pars$S_bar, numSteps = 1,
-                                       K = F, adjustR = adjustR))
+                                       K = FALSE, adjustR = adjustR))
   simSurvBig <- pars %>%
     select("Anthro", "S_t") %>%
     group_by(Anthro) %>%

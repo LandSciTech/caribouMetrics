@@ -22,7 +22,8 @@ test_that("testScript still works", {
     tA = 0, obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.960908218594268, 
     rQuantile = 0.744425233039074, N0 = 1000
   )
-  scResults <- suppressWarnings(runScnSet(scns, eParsIn, simBig, getKSDists = F))
+  scResults <- suppressWarnings(runScnSet(scns, eParsIn, simBig, getKSDists = F,
+                                          Niter = 100, Nburn = 10))
 
   expect_s3_class(scResults$rr.summary.all, "data.frame")
 
