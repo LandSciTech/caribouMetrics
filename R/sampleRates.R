@@ -48,20 +48,17 @@
 #'
 #'   If `returnSample = FALSE` the number of rows is the same as the
 #'   number of rows in `covTable`, additional columns are:
-#'   \describe{
-#'     \item{"average"}{The mean estimated values of the response variable)}
-#'     \item{"stdErr"}{Standard error of the estimated values}
-#'     \item{"PIlow"/"PIhigh"}{If `quantilesToUse = NULL` these are the percentiles given by predInterval.
-#'       If using quantiles, maximum and minimum values are returned.}
-#'   }
-#'   If `returnSample = TRUE` the number of rows is `nrow(covTable) *
-#'    replicates` additional columns are:
-#'   \describe{
-#'     \item{"scnID"}{A unique identifier for scenarios provided in
-#'        `covTable`}
-#'     \item{"replicate"}{A replicate identifier, unique within each scenario}
-#'     \item{value}{The expected values of the response variable}
-#'   }
+#'   * "average": The mean estimated values of the response variable) 
+#'   * "stdErr": Standard error of the estimated values
+#'   * "PIlow"/"PIhigh": If `quantilesToUse = NULL` these are the percentiles given by predInterval.
+#'     If using quantiles, maximum and minimum values are returned.
+#'    
+#'   If `returnSample = TRUE` the number of rows is `nrow(covTable) * replicates` 
+#'   additional columns are:
+#'   * "scnID": A unique identifier for scenarios provided in `covTable` 
+#'   * "replicate": A replicate identifier, unique within each scenario
+#'   * "value": The expected values of the response variable 
+#'    
 #'
 #' @examples 
 #' cfs <- getCoefs(popGrowthTableJohnsonECCC, "recruitment", "Johnson", "M3")

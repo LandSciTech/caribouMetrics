@@ -34,7 +34,7 @@
 #'   (`c(0.025,0.975)`). Only relevant when `returnSample = TRUE` and
 #'   `quantilesToUse = NULL`.
 #' @param transformFns list of functions used to transform demographic rates.
-#'        The default is \code{list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})}.
+#'        The default is `list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})`.
 #'        The back transformation is applied to survival rates as in Johnson et al. 2020.
 #'
 #' @return A data.frame of predictions. The data.frame includes all columns in
@@ -42,23 +42,21 @@
 #'
 #'   If `returnSample = FALSE` the number of rows is the same as the
 #'   number of rows in `covTable`, additional columns are:
-#'   \describe{
-#'     \item{"S_bar" and "R_bar"}{The mean estimated values of survival and
-#'       recruitment (calves per cow)}
-#'     \item{"S_stdErr" and "R_stdErr"}{Standard error of the estimated values}
-#'     \item{"S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh"}{If not using quantiles,
-#'       95\% of values fall within this range.
-#'       If using quantiles, maximum and minimum values are returned.}
-#'   }
-#'   If `returnSample = TRUE` the number of rows is `nrow(covTable) *
-#'    replicates` additional columns are:
-#'   \describe{
-#'     \item{"scnID"}{A unique identifier for scenarios provided in
-#'        `covTable`}
-#'     \item{"replicate"}{A replicate identifier, unique within each scenario}
-#'     \item{"S_bar" and "R_bar"}{The expected values of survival and
-#'       recruitment (calves per cow)}
-#'   }
+#'   * "S_bar" and "R_bar": The mean estimated values of survival and
+#'      recruitment (calves per cow)
+#'   * "S_stdErr" and "R_stdErr": Standard error of the estimated values
+#'   * "S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh": If not using quantiles,
+#'     95\% of values fall within this range.
+#'     If using quantiles, maximum and minimum values are returned.
+#'   
+#'   If `returnSample = TRUE` the number of rows is `nrow(covTable) * replicates` 
+#'   additional columns are:
+#'   * "scnID": A unique identifier for scenarios provided in
+#'     `covTable`
+#'   * "replicate": A replicate identifier, unique within each scenario
+#'   * "S_bar" and "R_bar": The expected values of survival and
+#'     recruitment (calves per cow)
+#'   
 #'
 #' @seealso [sampleRates()] for more details
 #'

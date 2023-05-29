@@ -67,18 +67,19 @@ A data.frame of predictions. The data.frame includes all columns in
 
 If \code{returnSample = FALSE} the number of rows is the same as the
 number of rows in \code{covTable}, additional columns are:
-\describe{
-\item{"average"}{The mean estimated values of the response variable)}
-\item{"stdErr"}{Standard error of the estimated values}
-\item{"PIlow"/"PIhigh"}{If \code{quantilesToUse = NULL} these are the percentiles given by predInterval.
-If using quantiles, maximum and minimum values are returned.}
+\itemize{
+\item "average": The mean estimated values of the response variable)
+\item "stdErr": Standard error of the estimated values
+\item "PIlow"/"PIhigh": If \code{quantilesToUse = NULL} these are the percentiles given by predInterval.
+If using quantiles, maximum and minimum values are returned.
 }
-If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) * replicates} additional columns are:
-\describe{
-\item{"scnID"}{A unique identifier for scenarios provided in
-\code{covTable}}
-\item{"replicate"}{A replicate identifier, unique within each scenario}
-\item{value}{The expected values of the response variable}
+
+If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) * replicates}
+additional columns are:
+\itemize{
+\item "scnID": A unique identifier for scenarios provided in \code{covTable}
+\item "replicate": A replicate identifier, unique within each scenario
+\item "value": The expected values of the response variable
 }
 }
 \description{

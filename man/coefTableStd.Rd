@@ -5,12 +5,14 @@
 \alias{coefTableStd}
 \title{Model coefficients from standardized data for caribou ranges}
 \format{
-A data frame with 224 rows and 5 variables: \describe{
-\item{Season}{season, one of Spring, Summer, Fall, Winter}
-\item{Variable}{the shortform variable name for this resource type}
-\item{Coefficient}{modelled coefficients}
-\item{WinArea}{window area for moving window average}
-\item{Range}{the caribou range name} }
+A data frame with 224 rows and 5 variables:
+\itemize{
+\item Season: season, one of Spring, Summer, Fall, Winter
+\item Variable: the shortform variable name for this resource type
+\item Coefficient: modelled coefficients
+\item WinArea: window area for moving window average
+\item Range: the caribou range name
+}
 }
 \source{
 Table 3 of: Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource

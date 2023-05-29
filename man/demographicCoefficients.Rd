@@ -16,41 +16,45 @@ demographicCoefficients(
 \arguments{
 \item{replicates}{integer. Number of replicate populations.}
 
-\item{modelVersion}{character. Which model version to use. Currently the
-only option is "Johnson" for the model used in Johnson et. al. (2020), but
+\item{modelVersion}{character. Which model version to use. Currently the only
+option is "Johnson" for the model used in Johnson et. al. (2020), but
 additional options may be added in the future.}
 
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
 number to use see \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} for options.}
 
-\item{useQuantiles}{logical or numeric. If it is a numeric
-vector it must be length 2 and give the low and high limits of the
-quantiles to use. If \code{useQuantiles != FALSE}, each replicate population is
-assigned to a quantile of the distribution of variation around the expected
-values, and remains in that quantile as covariates change.
-If \code{useQuantiles = TRUE}, replicate populations
-will be assigned to quantiles in the default range of 0.025 and 0.975.}
+\item{useQuantiles}{logical or numeric. If it is a numeric vector it must be
+length 2 and give the low and high limits of the quantiles to use. If
+\code{useQuantiles != FALSE}, each replicate population is assigned to a
+quantile of the distribution of variation around the expected values, and
+remains in that quantile as covariates change. If \code{useQuantiles = TRUE},
+replicate populations will be assigned to quantiles in the default range of
+0.025 and 0.975.}
 
 \item{populationGrowthTable}{data.frame. By default
-\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is used. A custom table of model
-parameters can be provided but it must match the column names of
+\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is used. A custom table of model parameters
+can be provided but it must match the column names of
 \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.}
 }
 \value{
-A list with elements: \describe{ \item{"modelVersion"}{The name of
-the model version} \item{"coefSamples_Survival" and
-"coefSamples_Recruitment"}{ lists with elements: \describe{
-\item{"coefSamples"}{Bootstrapped coefficients with \code{replicates} rows}
-\item{"coefValues"}{Coefficient values taken from
-\code{populationGrowthTable}} \item{"quantiles"}{A vector of randomly
-selected quantiles between 0.025 and 0.975 with length \code{replicates}} }
-} }
+A list with elements:
+\itemize{
+\item "modelVersion": The name of the model version
+\item "coefSamples_Survival" and"coefSamples_Recruitment":
+lists with elements:
+\itemize{
+\item "coefSamples": Bootstrapped coefficients with \code{replicates} rows
+\item "coefValues": Coefficient values taken from \code{populationGrowthTable}
+\item "quantiles": A vector of randomly selected quantiles between 0.025 and
+0.975 with length \code{replicates}
+}
+}
 }
 \description{
-A wrapper around \code{\link[=getCoefs]{getCoefs()}} to select coefficients for the
-appropriate model version and \code{\link[=sampleCoefs]{sampleCoefs()}} to sample
-coefficients for each replicate population, for both the survival and
-recruitment models. Also optionally, generates quantiles.
+A wrapper around \code{\link[=getCoefs]{getCoefs()}} to select coefficients for the appropriate
+model version and \code{\link[=sampleCoefs]{sampleCoefs()}} to sample coefficients for each replicate
+population, for both the survival and recruitment models. Also optionally,
+generates quantiles.
 }
 \examples{
 # sample coefficients for default models
@@ -62,9 +66,9 @@ demographicCoefficients(10, modelVersion = "Johnson", survivalModelNumber = "M1"
 
 }
 \references{
-Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
-Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking
-population dynamics to habitat for a threatened species in Canada. Journal
-of Applied Ecology, 57(7), pp.1314-1327.
+Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
+P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+linking population dynamics to habitat for a threatened species in Canada.
+Journal of Applied Ecology, 57(7), pp.1314-1327.
 \url{https://doi.org/10.1111/1365-2664.13637}
 }

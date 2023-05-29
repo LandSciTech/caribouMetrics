@@ -5,9 +5,10 @@
 \alias{plcToResType}
 \title{Lookup table for PLC to resource type}
 \format{
-A data frame with 30 rows and 2 variables: \describe{
-\item{PLCCode}{Provincial landcover number code}
-\item{ResourceType}{Letter code indicating the resource type}
+A data frame with 30 rows and 2 variables:
+\itemize{
+\item PLCCode: Provincial landcover number code
+\item ResourceType: Letter code indicating the resource type
 }
 }
 \source{

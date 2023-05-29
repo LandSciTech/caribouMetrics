@@ -66,21 +66,23 @@ A data.frame of predictions. The data.frame includes all columns in
 
 If \code{returnSample = FALSE} the number of rows is the same as the
 number of rows in \code{covTable}, additional columns are:
-\describe{
-\item{"S_bar" and "R_bar"}{The mean estimated values of survival and
-recruitment (calves per cow)}
-\item{"S_stdErr" and "R_stdErr"}{Standard error of the estimated values}
-\item{"S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh"}{If not using quantiles,
+\itemize{
+\item "S_bar" and "R_bar": The mean estimated values of survival and
+recruitment (calves per cow)
+\item "S_stdErr" and "R_stdErr": Standard error of the estimated values
+\item "S_PIlow"/"S_PIhigh" and "R_PIlow"/"R_PIhigh": If not using quantiles,
 95\\% of values fall within this range.
-If using quantiles, maximum and minimum values are returned.}
+If using quantiles, maximum and minimum values are returned.
 }
-If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) * replicates} additional columns are:
-\describe{
-\item{"scnID"}{A unique identifier for scenarios provided in
-\code{covTable}}
-\item{"replicate"}{A replicate identifier, unique within each scenario}
-\item{"S_bar" and "R_bar"}{The expected values of survival and
-recruitment (calves per cow)}
+
+If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) * replicates}
+additional columns are:
+\itemize{
+\item "scnID": A unique identifier for scenarios provided in
+\code{covTable}
+\item "replicate": A replicate identifier, unique within each scenario
+\item "S_bar" and "R_bar": The expected values of survival and
+recruitment (calves per cow)
 }
 }
 \description{

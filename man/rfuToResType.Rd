@@ -5,9 +5,10 @@
 \alias{rfuToResType}
 \title{Lookup table for RFU to resource type}
 \format{
-A data frame with 17 rows and 2 variables: \describe{
-\item{RegionalForestUnit}{Regional forest unit 5 letter or number code}
-\item{ResourceType}{Letter code indicating the resource type}
+A data frame with 17 rows and 2 variables:
+\itemize{
+\item RegionalForestUnit: Regional forest unit 5 letter or number code
+\item ResourceType: Letter code indicating the resource type
 }
 }
 \source{

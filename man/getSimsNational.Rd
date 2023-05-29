@@ -26,17 +26,17 @@ disturbance buffered by 500 m, and the percentage covered by fire that does
 not overlap anthropogenic disturbance. The two vectors will be combined
 with \code{expand.grid()} to give the set of scenarios simulated.}
 
-\item{useQuantiles}{logical or numeric. If it is a numeric
-vector it must be length 2 and give the low and high limits of the
-quantiles to use. If \code{useQuantiles != FALSE}, each replicate population is
-assigned to a quantile of the distribution of variation around the expected
-values, and remains in that quantile as covariates change.
-If \code{useQuantiles = TRUE}, replicate populations
-will be assigned to quantiles in the default range of 0.025 and 0.975.}
+\item{useQuantiles}{logical or numeric. If it is a numeric vector it must be
+length 2 and give the low and high limits of the quantiles to use. If
+\code{useQuantiles != FALSE}, each replicate population is assigned to a
+quantile of the distribution of variation around the expected values, and
+remains in that quantile as covariates change. If \code{useQuantiles = TRUE},
+replicate populations will be assigned to quantiles in the default range of
+0.025 and 0.975.}
 
 \item{populationGrowthTable}{data.frame. By default
-\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is used. A custom table of model
-parameters can be provided but it must match the column names of
+\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is used. A custom table of model parameters
+can be provided but it must match the column names of
 \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.}
 
 \item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}

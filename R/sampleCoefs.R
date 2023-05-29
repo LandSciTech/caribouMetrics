@@ -9,12 +9,8 @@
 #' @param replicates number of samples to take.
 #'
 #' @return A list with elements:
-#'    \describe{
-#'       \item{"coefSamples"}{Bootstrapped coefficients with `replicates`
-#'         rows}
-#'       \item{"coefValues"}{Coefficient values taken from
-#'         `populationGrowthTable`}
-#'     }
+#'   * "coefSamples": Bootstrapped coefficients with `replicates` rows
+#'   * "coefValues": Coefficient values taken from `populationGrowthTable`
 #'
 #' @examples
 #' cfs <- getCoefs(popGrowthTableJohnsonECCC, "recruitment", "Johnson", "M3")

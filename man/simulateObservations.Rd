@@ -54,8 +54,8 @@ See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturb
 based on \code{paramTable}}
 
 \item{populationGrowthTable}{data.frame. By default
-\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is used. A custom table of model
-parameters can be provided but it must match the column names of
+\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is used. A custom table of model parameters
+can be provided but it must match the column names of
 \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.}
 
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model

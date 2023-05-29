@@ -56,46 +56,44 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'@param coefTable data.frame. table of coefficients to be used in the
 #'   model. Must match the format and naming of the default `coefTableHR`
 #'@param ... optional arguments:
-#' \describe{
-#'   \item{natDist:}{filename or RasterLayer. Presence or absence of natural 
+#'   * natDist: filename or RasterLayer. Presence or absence of natural 
 #'   disturbance, primarily by fire. This should reflect cumulative natural 
-#'   disturbance over the preceding 30 years}
-#'   \item{anthroDist:}{filename or RasterLayer. Anthropogenic disturbance including 
-#'   harvest.}
-#'   \item{eskerSave}{filename to save rasterized esker data.}
-#'   \item{linFeatSave}{filename to save rasterized linear feature data.}
-#'   \item{padProjPoly}{logical. Should the area around the `projectPoly` be
+#'   disturbance over the preceding 30 years
+#'   * anthroDist: filename or RasterLayer. Anthropogenic disturbance including 
+#'   harvest.
+#'   * eskerSave: filename to save rasterized esker data.
+#'   * linFeatSave: filename to save rasterized linear feature data.
+#'   * padProjPoly: logical. Should the area around the `projectPoly` be
 #'   used to avoid edge effects? If FALSE, the default, only data from inside the
 #'   `projectPoly` is used. If TRUE then `projectPoly` is buffered and
 #'   the other variables are clipped to the extent of the buffered area. Results
 #'   are always clipped to the original `projectPoly`. It is ideal to set
 #'   this to TRUE and provide a data set that is larger than the
-#'   `projectPoly` to avoid edge effects.}
-#'   \item{padFocal}{logical. This value is passed to the pad argument in
+#'   `projectPoly` to avoid edge effects.
+#'   * padFocal: logical. This value is passed to the pad argument in
 #'   `raster::focal`, if it is FALSE then cells near the edge will return
 #'   NA, if it is TRUE a value will be returned for each cell that assumes cells
 #'   outside the input data are 0 for all resource types. This is not a good
-#'   assumption and should be used with caution.}
-#'   \item{saveOutput}{character. The filename to save the rasterBrick of habitat
+#'   assumption and should be used with caution.
+#'   * saveOutput: character. The filename to save the rasterBrick of habitat
 #'   use probabilities to. Note this will overwrite any existing files. The .grd
 #'   format is recommended because it will preserve layer names when the file is
-#'   reloaded.}
-#'   \item{winArea}{number. This is the area of the moving window that is used to
+#'   reloaded.
+#'   * winArea: number. This is the area of the moving window that is used to
 #'   average proportions of each resource type at broader spatial scales. The
 #'   Hornseth and Rempel (2016) models used specific window areas which are
 #'   defined within this package and used as the default. You should only specify
-#'   a window size if you have good reason.}
-#'   \item{doScale}{logical. FALSE by default. Set to TRUE only if you have
+#'   a window size if you have good reason.
+#'   * doScale: logical. FALSE by default. Set to TRUE only if you have
 #'   supplied coefficients that were trained on standardized data which will
-#'   cause the input data to be scaled.}
-#'   \item{ptDensity}{number. Only used if a list element in `linFeat` is a raster.
-#'   See [rasterizeLineDensity()].}
-#'   \item{preppedData}{list. A list containing pre-prepared input data sets. If
+#'   cause the input data to be scaled.
+#'   * ptDensity: number. Only used if a list element in `linFeat` is a raster.
+#'   See [rasterizeLineDensity()].
+#'   * preppedData: list. A list containing pre-prepared input data sets. If
 #'   not NULL then data checks will be skipped. Names must match argument names
 #'   except that `landCover` should be called `refRast` and
 #'   `projectPoly` should be called `projectPolyOrig`. See
-#'   [loadSpatialInputs()].}
-#' }
+#'   [loadSpatialInputs()].
 #' 
 #'@return A CaribouHabitat Object see [CaribouHabitat-class()]
 #'
