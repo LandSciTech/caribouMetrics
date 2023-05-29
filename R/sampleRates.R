@@ -5,10 +5,12 @@
 #' Sample demographic rates
 #'
 #' Sample expected survival or recruitment rates based on samples of coefficient
-#' values and optionally the model precision.
-#'
-#' \code{coefSamples} and \code{coefValues} can be created with
-#' \code{\link{sampleCoefs}}
+#' values and optionally the model precision. `coefSamples` and `coefValues` can be created with
+#' [sampleCoefs()]
+#' 
+#' @details 
+#' \deqn{\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t \sim \text{Normal}(0,\sigma^2_{R})}
+#' 
 #'
 #' @param coefSamples matrix. Bootstrapped coefficients with one row per
 #'   replicate and one column per coefficient
