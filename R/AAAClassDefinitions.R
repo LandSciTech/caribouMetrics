@@ -9,7 +9,7 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #' An object containing data and results for the caribou habitat resource
 #' selection function
 #'
-#' @seealso See \code{\link{caribouHabitat}} for options when creating a
+#' @seealso See [caribouHabitat()] for options when creating a
 #'   CaribouHabitat object.
 #' @slot landCover Raster with land cover classified into resource types. See
 #'   `resTypeCode` for a legend.

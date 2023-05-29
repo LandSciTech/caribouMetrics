@@ -26,7 +26,7 @@ getPriors(
 modifier is supplied here the corresponding argument below is ignored.}
 
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
-number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.}
+number to use see \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} for options.}
 
 \item{rAnthroSlopeSEMod}{anthropogenic disturbance slope recruitment uncertainty
 multiplier. 1 - 10}
@@ -47,10 +47,10 @@ multiplier. 1 - 10}
 
 \item{rInterannualVarSE}{uncertainty about interannual variation in recruitment. 0-1.}
 
-\item{populationGrowthTable}{data.frame. \code{\link{popGrowthTableJohnsonECCC}} is
+\item{populationGrowthTable}{data.frame. \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is
 included in the package and should be used in most cases. A custom table of
 model parameters can be provided but it must match the column names of
-\code{\link{popGrowthTableJohnsonECCC}}.}
+\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.}
 
 \item{modVer}{character vector. Which model version(s) to use. Currently the
 only option is "Johnson" for the model used in Johnson et. al. (2020), but

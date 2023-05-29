@@ -86,16 +86,16 @@ a window size if you have good reason.}
 supplied coefficients that were trained on standardized data which will
 cause the input data to be scaled.}
 \item{ptDensity}{number. Only used if a list element in \code{linFeat} is a raster.
-See \code{\link{rasterizeLineDensity}}.}
+See \code{\link[=rasterizeLineDensity]{rasterizeLineDensity()}}.}
 \item{preppedData}{list. A list containing pre-prepared input data sets. If
 not NULL then data checks will be skipped. Names must match argument names
 except that \code{landCover} should be called \code{refRast} and
 \code{projectPoly} should be called \code{projectPolyOrig}. See
-\code{\link{loadSpatialInputs}}.}
+\code{\link[=loadSpatialInputs]{loadSpatialInputs()}}.}
 }}
 }
 \value{
-A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
+A CaribouHabitat Object see \code{\link[=CaribouHabitat-class]{CaribouHabitat-class()}}
 }
 \description{
 Calculate the relative probability of caribou habitat use in spring, summer, fall and
@@ -109,9 +109,9 @@ information is the \code{landCover} but this is updated based on disturbance
 information. All data sources can be provided either as filenames or as
 spatial files. If filenames are provided then the \code{landCover} is assumed
 to be the Provincial Landcover for Ontario and is converted to resource types
-using \code{\link{reclassPLC}}. The result is a CaribouHabitat object which has
+using \code{\link[=reclassPLC]{reclassPLC()}}. The result is a CaribouHabitat object which has
 methods defined for plotting and extracting the results. To update an existing
-CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
+CaribouHabitat object with new data see \code{\link[=updateCaribou]{updateCaribou()}}.
 }
 \examples{
 # create example rasters
@@ -155,7 +155,7 @@ plot(results(res, type ="processedData"))
 
 }
 \seealso{
-\code{\link{CaribouHabitat-class}} for information on the object
-returned and \code{\link{updateCaribou}} for updating an existing
+\code{\link[=CaribouHabitat-class]{CaribouHabitat-class()}} for information on the object
+returned and \code{\link[=updateCaribou]{updateCaribou()}} for updating an existing
 CaribouHabitat object.
 }

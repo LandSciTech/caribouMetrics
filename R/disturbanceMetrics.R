@@ -31,7 +31,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'Note that locations where landCover is NA or 0 are omitted from the tabulated
 #'area. Missing layers are omitted from the output, not interpreted as 0
 #'disturbance. To update an existing DisturbanceMetrics object with new data see
-#'\code{\link[caribouMetrics]{updateDisturbance}}.
+#'[updateDisturbance()].
 #'
 #'@param landCover filename or RasterLayer. 0 and NA values are assumed to be
 #'  water and omitted from the tabulated area. Note landCover is also used to
@@ -75,13 +75,13 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'   not NULL then data checks will be skipped. Names must match argument names
 #'   except that `landCover` should be called `refRast` and
 #'   `projectPoly` should be called `projectPolyOrig`
-#'   See \code{\link{loadSpatialInputs}}.}
+#'   See [loadSpatialInputs()].}
 #' }
 #' 
-#'@return A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
+#'@return A DisturbanceMetrics Object see [DisturbanceMetrics-class()]
 #'
-#'@seealso \code{\link{DisturbanceMetrics-class}} for information on the object
-#'  returned and \code{\link{updateDisturbance}} for updating an existing
+#'@seealso [DisturbanceMetrics-class()] for information on the object
+#'  returned and [updateDisturbance()] for updating an existing
 #'  DisturbanceMetrics object.
 #'
 #'@source Environment Canada. 2011. Scientific Assessment to Inform the

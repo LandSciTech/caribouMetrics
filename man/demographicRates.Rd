@@ -21,7 +21,7 @@ demographicRates(
 }
 \arguments{
 \item{covTable}{data.frame. A table of covariate values to be used. Column
-names must match the coefficient names in \code{\link{popGrowthTableJohnsonECCC}}.
+names must match the coefficient names in \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.
 Each row is a different scenario.}
 
 \item{popGrowthPars}{list. Coefficient values and (optionally) quantiles returned by
@@ -84,7 +84,7 @@ recruitment (calves per cow)}
 }
 }
 \description{
-A wrapper around \code{\link{sampleRates}} to sample
+A wrapper around \code{\link[=sampleRates]{sampleRates()}} to sample
 survival and recruitment rates.
 }
 \examples{
@@ -100,5 +100,5 @@ demographicRates(covTableSim, coefs)
 
 }
 \seealso{
-\code{\link{sampleRates}} for more details
+\code{\link[=sampleRates]{sampleRates()}} for more details
 }

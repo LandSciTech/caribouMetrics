@@ -21,7 +21,7 @@ sampleRates(
 }
 \arguments{
 \item{covTable}{data.frame. A table of covariate values to be used. Column
-names must match the coefficient names in \code{\link{popGrowthTableJohnsonECCC}}.
+names must match the coefficient names in \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.
 Each row is a different scenario.}
 
 \item{coefSamples}{matrix. Bootstrapped coefficients with one row per

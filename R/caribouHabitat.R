@@ -30,9 +30,9 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'information. All data sources can be provided either as filenames or as
 #'spatial files. If filenames are provided then the `landCover` is assumed
 #'to be the Provincial Landcover for Ontario and is converted to resource types
-#'using \code{\link{reclassPLC}}. The result is a CaribouHabitat object which has
+#'using [reclassPLC()]. The result is a CaribouHabitat object which has
 #'methods defined for plotting and extracting the results. To update an existing
-#'CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
+#'CaribouHabitat object with new data see [updateCaribou()].
 #'
 #'
 #'@param landCover filename or RasterLayer. Provincial landcover class
@@ -89,18 +89,18 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'   supplied coefficients that were trained on standardized data which will
 #'   cause the input data to be scaled.}
 #'   \item{ptDensity}{number. Only used if a list element in `linFeat` is a raster.
-#'   See \code{\link{rasterizeLineDensity}}.}
+#'   See [rasterizeLineDensity()].}
 #'   \item{preppedData}{list. A list containing pre-prepared input data sets. If
 #'   not NULL then data checks will be skipped. Names must match argument names
 #'   except that `landCover` should be called `refRast` and
 #'   `projectPoly` should be called `projectPolyOrig`. See
-#'   \code{\link{loadSpatialInputs}}.}
+#'   [loadSpatialInputs()].}
 #' }
 #' 
-#'@return A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
+#'@return A CaribouHabitat Object see [CaribouHabitat-class()]
 #'
-#'@seealso \code{\link{CaribouHabitat-class}} for information on the object
-#'  returned and \code{\link{updateCaribou}} for updating an existing
+#'@seealso [CaribouHabitat-class()] for information on the object
+#'  returned and [updateCaribou()] for updating an existing
 #'  CaribouHabitat object.
 #'
 #' @source Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,

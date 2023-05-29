@@ -45,7 +45,7 @@ can have a different resolution from the \code{refRast}.}
 list where the first element is a function that takes the corresponding
 \code{inputsList} element as its first argument and the subsequent elements
 are named arguments for that function, or a matrix that will be passed to
-\code{\link[raster]{reclassify}}.}
+\code{\link[raster:reclassify]{raster::reclassify()}}.}
 
 \item{bufferWidth}{numeric. The width of a moving window that will be applied
 to the data. If it is supplied a buffer of 3*\code{bufferWidth} around the
@@ -54,7 +54,7 @@ This can be used to avoid edge effects in moving window calculations}
 
 \item{ptDensity}{number. Only used if an element of \code{inputsList} is a
 list that contains a mixture of rasters and lines and is included in
-convertToRast. See \code{\link{rasterizeLineDensity}}.}
+convertToRast. See \code{\link[=rasterizeLineDensity]{rasterizeLineDensity()}}.}
 }
 \value{
 A named list with aligned spatial data components

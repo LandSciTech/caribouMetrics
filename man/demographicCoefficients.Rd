@@ -21,7 +21,7 @@ only option is "Johnson" for the model used in Johnson et. al. (2020), but
 additional options may be added in the future.}
 
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
-number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.}
+number to use see \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} for options.}
 
 \item{useQuantiles}{logical or numeric. If it is a numeric
 vector it must be length 2 and give the low and high limits of the
@@ -32,9 +32,9 @@ If \code{useQuantiles = TRUE}, replicate populations
 will be assigned to quantiles in the default range of 0.025 and 0.975.}
 
 \item{populationGrowthTable}{data.frame. By default
-\code{\link{popGrowthTableJohnsonECCC}} is used. A custom table of model
+\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is used. A custom table of model
 parameters can be provided but it must match the column names of
-\code{\link{popGrowthTableJohnsonECCC}}.}
+\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.}
 }
 \value{
 A list with elements: \describe{ \item{"modelVersion"}{The name of
@@ -47,8 +47,8 @@ selected quantiles between 0.025 and 0.975 with length \code{replicates}} }
 } }
 }
 \description{
-A wrapper around \code{\link{getCoefs}} to select coefficients for the
-appropriate model version and \code{\link{sampleCoefs}} to sample
+A wrapper around \code{\link[=getCoefs]{getCoefs()}} to select coefficients for the
+appropriate model version and \code{\link[=sampleCoefs]{sampleCoefs()}} to sample
 coefficients for each replicate population, for both the survival and
 recruitment models. Also optionally, generates quantiles.
 }

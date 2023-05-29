@@ -1,10 +1,10 @@
 #' Sample expected survival and recruitment rates
 #'
-#' A wrapper around \code{\link{sampleRates}} to sample
+#' A wrapper around [sampleRates()] to sample
 #' survival and recruitment rates.
 #'
 #' @param covTable data.frame. A table of covariate values to be used. Column
-#'   names must match the coefficient names in \code{\link{popGrowthTableJohnsonECCC}}.
+#'   names must match the coefficient names in [popGrowthTableJohnsonECCC()].
 #'   Each row is a different scenario.
 #' @param popGrowthPars list. Coefficient values and (optionally) quantiles returned by
 #'  `demographicCoefficients`.
@@ -60,7 +60,7 @@
 #'       recruitment (calves per cow)}
 #'   }
 #'
-#' @seealso \code{\link{sampleRates}} for more details
+#' @seealso [sampleRates()] for more details
 #'
 #' @examples
 #' # get coefficient samples

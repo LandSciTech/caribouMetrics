@@ -54,12 +54,12 @@ See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturb
 based on \code{paramTable}}
 
 \item{populationGrowthTable}{data.frame. By default
-\code{\link{popGrowthTableJohnsonECCC}} is used. A custom table of model
+\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is used. A custom table of model
 parameters can be provided but it must match the column names of
-\code{\link{popGrowthTableJohnsonECCC}}.}
+\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.}
 
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
-number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.}
+number to use see \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} for options.}
 
 \item{writeFilesDir}{characater. If not NULL \code{simSurvObs} and \code{ageRatioOut}
 results will be saved to csv files in the directory provided}

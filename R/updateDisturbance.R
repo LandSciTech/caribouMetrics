@@ -20,10 +20,10 @@
 #'   rasterized. Either way points are included in the raster output.
 #' @param isPercent logical. Should the results be returned as a percentage?
 #'
-#'@return A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
+#'@return A DisturbanceMetrics Object see [DisturbanceMetrics-class()]
 #'
-#'@seealso \code{\link{DisturbanceMetrics-class}} for information on the object
-#'  returned and \code{\link{disturbanceMetrics}} for making a new
+#'@seealso [DisturbanceMetrics-class()] for information on the object
+#'  returned and [disturbanceMetrics()] for making a new
 #'  DisturbanceMetrics object. 
 #' @export
 #'

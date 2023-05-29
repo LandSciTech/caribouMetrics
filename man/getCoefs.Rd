@@ -7,10 +7,10 @@
 getCoefs(populationGrowthTable, resVar, modVer, modNum)
 }
 \arguments{
-\item{populationGrowthTable}{data.frame. \code{\link{popGrowthTableJohnsonECCC}} is
+\item{populationGrowthTable}{data.frame. \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is
 included in the package and should be used in most cases. A custom table of
 model parameters can be provided but it must match the column names of
-\code{\link{popGrowthTableJohnsonECCC}}.}
+\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.}
 
 \item{resVar}{character. Response variable, typically "femaleSurvival" or
 "recruitment"}

@@ -64,11 +64,11 @@ because it will preserve layer names when the file is reloaded.}
 not NULL then data checks will be skipped. Names must match argument names
 except that \code{landCover} should be called \code{refRast} and
 \code{projectPoly} should be called \code{projectPolyOrig}
-See \code{\link{loadSpatialInputs}}.}
+See \code{\link[=loadSpatialInputs]{loadSpatialInputs()}}.}
 }}
 }
 \value{
-A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
+A DisturbanceMetrics Object see \code{\link[=DisturbanceMetrics-class]{DisturbanceMetrics-class()}}
 }
 \description{
 Calculate the predictors described in Table 52 of Environment Canada (2011)
@@ -85,7 +85,7 @@ Note assume natDist and anthroDist include 40 years of cumulative disturbance.
 Note that locations where landCover is NA or 0 are omitted from the tabulated
 area. Missing layers are omitted from the output, not interpreted as 0
 disturbance. To update an existing DisturbanceMetrics object with new data see
-\code{\link[caribouMetrics]{updateDisturbance}}.
+\code{\link[=updateDisturbance]{updateDisturbance()}}.
 }
 \examples{
 # create example rasters
@@ -114,7 +114,7 @@ disturbanceMetrics(landCover = lc,
 
 }
 \seealso{
-\code{\link{DisturbanceMetrics-class}} for information on the object
-returned and \code{\link{updateDisturbance}} for updating an existing
+\code{\link[=DisturbanceMetrics-class]{DisturbanceMetrics-class()}} for information on the object
+returned and \code{\link[=updateDisturbance]{updateDisturbance()}} for updating an existing
 DisturbanceMetrics object.
 }
