@@ -239,7 +239,7 @@ test_that("results match expected", {
   
   # when we have a lot of collars the distance between observations and "true"
   # pop is smaller than when we have few.
-  manyObs <- doScn()
+  manyObs <- doScn(nCollar = 3000)
   doPlot(manyObs, var = c("Recruitment", "Adult female survival"))
   
   fewCollarObs <- doScn(nCollar = 30)
