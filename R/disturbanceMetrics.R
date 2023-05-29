@@ -48,15 +48,15 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'   \item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance including
 #'   harvest. This can have an effect on any type of landcover except water.
 #'   Should include 40 years cumulative disturbance.}
-#'   \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
+#'   \item{padProjPoly}{logical. Should the area around the `projectPoly` be
 #'   used to avoid edge effects? If FALSE, the default, only data from inside the
-#'   \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
+#'   `projectPoly` is used. If TRUE then `projectPoly` is buffered and
 #'   the other variables are clipped to the extent of the buffered area. Results
-#'   are always clipped to the original \code{projectPoly}. It is ideal to set
+#'   are always clipped to the original `projectPoly`. It is ideal to set
 #'   this to TRUE and provide a dataset that is larger than the
-#'   \code{projectPoly} to avoid edge effects.}
+#'   `projectPoly` to avoid edge effects.}
 #'   \item{padFocal}{logical. This value is passed to the pad argument in
-#'   \code{raster::focal}, if it is FALSE then cells near the edge will return
+#'   `raster::focal`, if it is FALSE then cells near the edge will return
 #'   NA, if it is TRUE a value will be returned for each cell that assumes cells
 #'   outside the input data are 0 for all resource types. This is not a good
 #'   assumption and should be used with caution.}
@@ -73,8 +73,8 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'   because it will preserve layer names when the file is reloaded.}
 #'   \item{preppedData}{list. A list containing pre-prepared input data sets. If
 #'   not NULL then data checks will be skipped. Names must match argument names
-#'   except that \code{landCover} should be called \code{refRast} and
-#'   \code{projectPoly} should be called \code{projectPolyOrig}
+#'   except that `landCover` should be called `refRast` and
+#'   `projectPoly` should be called `projectPolyOrig`
 #'   See \code{\link{loadSpatialInputs}}.}
 #' }
 #' 

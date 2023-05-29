@@ -14,10 +14,10 @@
 #'   number to use see \code{\link{popGrowthTableJohnsonECCC}} for options.
 #' @param useQuantiles logical or numeric. If it is a numeric
 #'   vector it must be length 2 and give the low and high limits of the
-#'   quantiles to use. If \code{useQuantiles != FALSE}, each replicate population is
+#'   quantiles to use. If `useQuantiles != FALSE`, each replicate population is
 #'   assigned to a quantile of the distribution of variation around the expected
 #'   values, and remains in that quantile as covariates change.
-#'   If \code{useQuantiles = TRUE}, replicate populations
+#'   If `useQuantiles = TRUE`, replicate populations
 #'   will be assigned to quantiles in the default range of 0.025 and 0.975.
 #' @param populationGrowthTable data.frame. By default
 #'   \code{\link{popGrowthTableJohnsonECCC}} is used. A custom table of model
@@ -27,17 +27,17 @@
 #' @return A list with elements: \describe{ \item{"modelVersion"}{The name of
 #'   the model version} \item{"coefSamples_Survival" and
 #'   "coefSamples_Recruitment"}{ lists with elements: \describe{
-#'   \item{"coefSamples"}{Bootstrapped coefficients with \code{replicates} rows}
+#'   \item{"coefSamples"}{Bootstrapped coefficients with `replicates` rows}
 #'   \item{"coefValues"}{Coefficient values taken from
-#'   \code{populationGrowthTable}} \item{"quantiles"}{A vector of randomly
-#'   selected quantiles between 0.025 and 0.975 with length \code{replicates}} }
+#'   `populationGrowthTable`} \item{"quantiles"}{A vector of randomly
+#'   selected quantiles between 0.025 and 0.975 with length `replicates`} }
 #'   } }
 #'
 #' @references Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
 #'   Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking
 #'   population dynamics to habitat for a threatened species in Canada. Journal
 #'   of Applied Ecology, 57(7), pp.1314-1327.
-#'   \url{https://doi.org/10.1111/1365-2664.13637}
+#'   <https://doi.org/10.1111/1365-2664.13637>
 #'
 #' @examples
 #' # sample coefficients for default models

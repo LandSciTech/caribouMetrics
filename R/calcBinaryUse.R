@@ -11,7 +11,7 @@ NULL
 #'   data.frame with columns PID, Spring, Summer, Fall, Winter, or a numeric
 #'   vector containing ID values, in which case spring, summer, fall and winter
 #'   must also be supplied
-#' @param tholdTable By default \code{threshTable} which contains thresholds
+#' @param tholdTable By default `threshTable` which contains thresholds
 #'   determimed by Rempel (2021) using Youden's J and a false
 #'   negative cost of 5. Change at own risk.
 #' @param bySeason logical. If FALSE (the default) the result is a single value
@@ -21,12 +21,12 @@ NULL
 #'
 #'
 #' @return
-#'  If \code{bySeason} is \code{FALSE} and \code{x} is a CaribouHabitat object then the result is a RasterLayer.
-#'  If \code{bySeason} is \code{TRUE} and \code{x} is a CaribouHabitat object then the result is a RasterBrick.  
-#'  If \code{bySeason} is \code{FALSE} and \code{x} is a data.frame then the result is a data.frame.
-#'  If \code{bySeason} is \code{TRUE} and \code{x} is a data.frame then the result is a data.frame.
-#'  If \code{bySeason} is \code{FALSE} and \code{x} is a vector then the result is a vector.
-#'  If \code{bySeason} is \code{TRUE} and \code{x} is a vector then the result is a data.frame.  
+#'  If `bySeason` is `FALSE` and `x` is a CaribouHabitat object then the result is a RasterLayer.
+#'  If `bySeason` is `TRUE` and `x` is a CaribouHabitat object then the result is a RasterBrick.  
+#'  If `bySeason` is `FALSE` and `x` is a data.frame then the result is a data.frame.
+#'  If `bySeason` is `TRUE` and `x` is a data.frame then the result is a data.frame.
+#'  If `bySeason` is `FALSE` and `x` is a vector then the result is a vector.
+#'  If `bySeason` is `TRUE` and `x` is a vector then the result is a data.frame.  
 #'  
 #' @examples 
 #' # create example rasters

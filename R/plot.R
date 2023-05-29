@@ -9,11 +9,11 @@ NULL
 #'
 #' @param x A CaribouHabitat object
 #' @param season character. By default "all" or supply a vector of seasons ie
-#'   \code{c("Spring", "Summer", "Fall", "Winter")}
+#'   `c("Spring", "Summer", "Fall", "Winter")`
 #' @param raster.title character. Title to give map
 #' @param tmap logical. Should tmap be used for plotting by default it is used
 #'   if installed
-#' @param ... Other agruments passed to \code{tmap::qtm} or \code{raster::plot}
+#' @param ... Other agruments passed to `tmap::qtm` or `raster::plot`
 #'
 #' @return If tmap is TRUE a tmap object if FALSE a plot is created in the viewer
 #' 

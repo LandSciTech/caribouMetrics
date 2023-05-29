@@ -29,8 +29,8 @@
 #'   scenarios rows. If FALSE the returned data.frame has one row per scenario
 #'   and additional columns summarizing the variation among replicates. See
 #'   Value for details.
-#' @param quantilesToUse numeric vector of length \code{coefSamples}. Only relevant when
-#'   \code{ignorePrecision = FALSE}. Each replicate population is assigned to a quantile
+#' @param quantilesToUse numeric vector of length `coefSamples`. Only relevant when
+#'   `ignorePrecision = FALSE`. Each replicate population is assigned to a quantile
 #'   of the distribution of variation around the expected values, and remains in that
 #'   quantile as covariates change. If NULL sampling is done independently for each combination
 #'   of scenario and replicate, so the value for a particular replicate population in one
@@ -38,27 +38,27 @@
 #'   Useful for projecting impacts of changing disturbance on the
 #'   trajectories of replicate populations.
 #' @param predInterval numeric vector with length 2. The default 95\% interval is
-#'   (\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and \code{quantilesToUse = NULL}.
+#'   (`c(0.025,0.975)`). Only relevant when `returnSample = TRUE` and `quantilesToUse = NULL`.
 #' @param transformFn functions used to transform demographic rates.
 #'
 #' @inheritParams demographicRates
 #'
 #' @return A data.frame of predictions. The data.frame includes all columns in
-#'   \code{covTable} with additional columns depending on \code{returnSample}.
+#'   `covTable` with additional columns depending on `returnSample`.
 #'
-#'   If \code{returnSample = FALSE} the number of rows is the same as the
-#'   number of rows in \code{covTable}, additional columns are:
+#'   If `returnSample = FALSE` the number of rows is the same as the
+#'   number of rows in `covTable`, additional columns are:
 #'   \describe{
 #'     \item{"average"}{The mean estimated values of the response variable)}
 #'     \item{"stdErr"}{Standard error of the estimated values}
-#'     \item{"PIlow"/"PIhigh"}{If \code{quantilesToUse = NULL} these are the percentiles given by predInterval.
+#'     \item{"PIlow"/"PIhigh"}{If `quantilesToUse = NULL` these are the percentiles given by predInterval.
 #'       If using quantiles, maximum and minimum values are returned.}
 #'   }
-#'   If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
-#'    replicates} additional columns are:
+#'   If `returnSample = TRUE` the number of rows is `nrow(covTable) *
+#'    replicates` additional columns are:
 #'   \describe{
 #'     \item{"scnID"}{A unique identifier for scenarios provided in
-#'        \code{covTable}}
+#'        `covTable`}
 #'     \item{"replicate"}{A replicate identifier, unique within each scenario}
 #'     \item{value}{The expected values of the response variable}
 #'   }

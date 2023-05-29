@@ -12,7 +12,7 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #' @seealso See \code{\link{caribouHabitat}} for options when creating a
 #'   CaribouHabitat object.
 #' @slot landCover Raster with land cover classified into resource types. See
-#'   \code{resTypeCode} for a legend.
+#'   `resTypeCode` for a legend.
 #' @slot esker Raster of esker density in m^2 per hectare.
 #' @slot natDist Raster of natural disturbance.
 #' @slot anthroDist Raster of anthropogenic disturbances.
@@ -21,7 +21,7 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #' @slot processedData RasterStack with named layers for each input variable
 #'   used in the RSF
 #' @slot habitatUse RasterStack with named layers for each season
-#' @slot attributes A list of arguments from the \code{caribouHabtat} call. 
+#' @slot attributes A list of arguments from the `caribouHabtat` call. 
 #' @name CaribouHabitat-class
 #' @rdname CaribouHabitat-class
 #' @export CaribouHabitat
@@ -75,7 +75,7 @@ CaribouHabitat <- setClass("CaribouHabitat",
 #' @slot projectPoly Sf object with polygon of project boundary.
 #' @slot processedData RasterStack with named layers for each input variable used in the RSF
 #' @slot disturbanceMetrics Data frame of disturbance metric values
-#' @slot attributes A list of arguments from the \code{caribouHabtat} call. 
+#' @slot attributes A list of arguments from the `caribouHabtat` call. 
 #' @name DisturbanceMetrics-class
 #' @rdname DisturbanceMetrics-class
 #' @export DisturbanceMetrics

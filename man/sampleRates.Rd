@@ -73,8 +73,7 @@ number of rows in \code{covTable}, additional columns are:
 \item{"PIlow"/"PIhigh"}{If \code{quantilesToUse = NULL} these are the percentiles given by predInterval.
 If using quantiles, maximum and minimum values are returned.}
 }
-If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
-   replicates} additional columns are:
+If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) * replicates} additional columns are:
 \describe{
 \item{"scnID"}{A unique identifier for scenarios provided in
 \code{covTable}}

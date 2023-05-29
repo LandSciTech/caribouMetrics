@@ -2,12 +2,12 @@
 #'
 #' Given default parameter values, this is an implementation of the 2-stage
 #' population growth model described in Dyson et al. (in Prep). Set
-#' \code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson
-#' et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar =
-#' FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
+#' `probOption = "matchJohnson2020"` to reproduce the model used in Johnson
+#' et al. 2020. Set `probOption = "continuous"`, `interannualVar =
+#' FALSE`, and `K = FALSE` to reproduce the simpler 2-stage demographic
 #' model without interannual variability, density dependence, or discrete
 #' numbers of animals used by Stewart et al. (in prep). See
-#' \code{vignette("caribouDemography")} for additional details and examples.
+#' `vignette("caribouDemography")` for additional details and examples.
 #'
 #' @param N0 Number or vector of numbers. Initial population size for one or more
 #'   sample populations.
@@ -30,7 +30,7 @@
 #' @param interannualVar list or logical. List containing interannual
 #'   variability parameters. These can be either coefficients of variation
 #'   (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to
-#'   \code{FALSE} ignore interannual variability.
+#'   `FALSE` ignore interannual variability.
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
 #' @param adjustR Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).

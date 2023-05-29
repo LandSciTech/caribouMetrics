@@ -10,10 +10,10 @@
 #'
 #' @return A list with elements:
 #'    \describe{
-#'       \item{"coefSamples"}{Bootstrapped coefficients with \code{replicates}
+#'       \item{"coefSamples"}{Bootstrapped coefficients with `replicates`
 #'         rows}
 #'       \item{"coefValues"}{Coefficient values taken from
-#'         \code{populationGrowthTable}}
+#'         `populationGrowthTable`}
 #'     }
 #'
 #' @examples

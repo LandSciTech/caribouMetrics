@@ -7,7 +7,7 @@
 #'   names must match the coefficient names in \code{\link{popGrowthTableJohnsonECCC}}.
 #'   Each row is a different scenario.
 #' @param popGrowthPars list. Coefficient values and (optionally) quantiles returned by
-#'  \code{demographicCoefficients}.
+#'  `demographicCoefficients`.
 #' @param ignorePrecision logical. Should the precision of the model be used if
 #'   it is available? When precision is used variation among populations around the
 #'   National mean responses is considered in addition to the uncertainty about
@@ -18,30 +18,30 @@
 #'   Value for details.
 #' @param useQuantiles logical or numeric. If it is a numeric
 #'   vector it must be length 2 and give the low and high limits of the
-#'   quantiles to use. Only relevant when \code{ignorePrecision = FALSE}.
-#'   If \code{useQuantiles != FALSE}, each replicate population is
+#'   quantiles to use. Only relevant when `ignorePrecision = FALSE`.
+#'   If `useQuantiles != FALSE`, each replicate population is
 #'   assigned to a quantile of the distribution of variation around the expected
 #'   values, and remains in that quantile as covariates change.
-#'   If \code{useQuantiles != FALSE} and popGrowthPars contains quantiles, those quantiles will be used.
-#'   If \code{useQuantiles = TRUE} and popGrowthPars does not contain quantiles, replicate populations
+#'   If `useQuantiles != FALSE` and popGrowthPars contains quantiles, those quantiles will be used.
+#'   If `useQuantiles = TRUE` and popGrowthPars does not contain quantiles, replicate populations
 #'   will be assigned to quantiles in the default range of 0.025 and 0.975.
-#'   If \code{useQuantiles = FALSE}, sampling is done independently for each combination of
+#'   If `useQuantiles = FALSE`, sampling is done independently for each combination of
 #'   scenario and replicate, so the value for a particular replicate population
 #'   in one scenario is unrelated to the values for that replicate in other
 #'   scenarios. Useful for projecting impacts of changing disturbance on the
 #'   trajectories of replicate populations.
 #' @param predInterval numeric vector with length 2. The default 95\% interval is
-#'   (\code{c(0.025,0.975)}). Only relevant when \code{returnSample = TRUE} and
-#'   \code{quantilesToUse = NULL}.
+#'   (`c(0.025,0.975)`). Only relevant when `returnSample = TRUE` and
+#'   `quantilesToUse = NULL`.
 #' @param transformFns list of functions used to transform demographic rates.
 #'        The default is \code{list(S_transform = function(y){(y*46-0.5)/45},R_transform = function(y){y})}.
 #'        The back transformation is applied to survival rates as in Johnson et al. 2020.
 #'
 #' @return A data.frame of predictions. The data.frame includes all columns in
-#'   \code{covTable} with additional columns depending on \code{returnSample}.
+#'   `covTable` with additional columns depending on `returnSample`.
 #'
-#'   If \code{returnSample = FALSE} the number of rows is the same as the
-#'   number of rows in \code{covTable}, additional columns are:
+#'   If `returnSample = FALSE` the number of rows is the same as the
+#'   number of rows in `covTable`, additional columns are:
 #'   \describe{
 #'     \item{"S_bar" and "R_bar"}{The mean estimated values of survival and
 #'       recruitment (calves per cow)}
@@ -50,11 +50,11 @@
 #'       95\% of values fall within this range.
 #'       If using quantiles, maximum and minimum values are returned.}
 #'   }
-#'   If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
-#'    replicates} additional columns are:
+#'   If `returnSample = TRUE` the number of rows is `nrow(covTable) *
+#'    replicates` additional columns are:
 #'   \describe{
 #'     \item{"scnID"}{A unique identifier for scenarios provided in
-#'        \code{covTable}}
+#'        `covTable`}
 #'     \item{"replicate"}{A replicate identifier, unique within each scenario}
 #'     \item{"S_bar" and "R_bar"}{The expected values of survival and
 #'       recruitment (calves per cow)}

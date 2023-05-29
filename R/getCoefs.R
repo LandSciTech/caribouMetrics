@@ -18,11 +18,11 @@
 #'   only option is "Johnson" for the model used in Johnson et. al. (2020), but
 #'   additional options may be added in the future.
 #' @param modNum character vector. Which model number(s) to use see
-#'   \code{popGrowthTableJohnsonECCC$ModelNumber} for typical options.
+#'   `popGrowthTableJohnsonECCC$ModelNumber` for typical options.
 #'
 #' @return a named list with one element per model version. The names are
-#'   \code{modVer_modNum_Type}. Each element contains a data.frame that
-#'   is a subset of \code{populationGrowthTable} for the selected model
+#'   `modVer_modNum_Type`. Each element contains a data.frame that
+#'   is a subset of `populationGrowthTable` for the selected model
 #'   
 #' @examples 
 #' getCoefs(popGrowthTableJohnsonECCC, "femaleSurvival", "Johnson", "M1")

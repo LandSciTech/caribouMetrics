@@ -1,7 +1,7 @@
 #' Calculate the moving window average of raster
 #'
 #' Calculates a moving window average for each raster cell using a circular
-#' window. If \code{veloxpkg = TRUE} it uses the velox package.
+#' window. If `veloxpkg = TRUE` it uses the velox package.
 #'
 #' @param rast a Raster* object which must have equal x and y resolution or they
 #'   will be forced to match

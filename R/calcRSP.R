@@ -6,7 +6,7 @@
 #'  This function takes a raster or dataframe that identifies the range and the
 #'  proportions of resource types and density of linear features for each
 #'  cell or polygon. A dataframe with coefficents must also be provided. The names of
-#'  of the \code{resourceProp} and \code{coefs} objects must match
+#'  of the `resourceProp` and `coefs` objects must match
 #'  those expected. The following table explains the meaning of the resource
 #'  type codes.
 #'
@@ -28,7 +28,7 @@
 #' @param resourceProp A dataframe containing the proportions/densities of each
 #'   resource in the polygon and identifying the range.
 #' @param coefs A dataframe containing coefficients for each season resource.
-#'   With in the package \code{coefTableHR} which is supplied with the package
+#'   With in the package `coefTableHR` which is supplied with the package
 #'   is used and any other table must have the same column names.
 #' @param seasons A character vector containing "all" (default) or any of
 #'   "Spring", "Summer", "Fall", "Winter".

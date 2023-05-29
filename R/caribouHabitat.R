@@ -26,9 +26,9 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'
 #'Caribou habitat use is calculated based on the availability of resources and
 #'the presence of disturbances on the landscape. The primary source of resource
-#'information is the \code{landCover} but this is updated based on disturbance
+#'information is the `landCover` but this is updated based on disturbance
 #'information. All data sources can be provided either as filenames or as
-#'spatial files. If filenames are provided then the \code{landCover} is assumed
+#'spatial files. If filenames are provided then the `landCover` is assumed
 #'to be the Provincial Landcover for Ontario and is converted to resource types
 #'using \code{\link{reclassPLC}}. The result is a CaribouHabitat object which has
 #'methods defined for plotting and extracting the results. To update an existing
@@ -48,13 +48,13 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  the name of the caribou range represented by the polygon which corresponds
 #'  to the Range column in the caribouRange data.frame
 #'@param caribouRange character or data.frame. If character the range where
-#'  caribou were located. See \code{unique(coefTableHR$Range)} for options. If
+#'  caribou were located. See `unique(coefTableHR$Range)` for options. If
 #'  data.frame it must have two columns Range and coefRange. Range is the name
 #'  of the geographical area and is used to link the table to the provided
-#'  \code{projectPoly} polygons. coefRange is the name of the caribou range that
+#'  `projectPoly` polygons. coefRange is the name of the caribou range that
 #'  the coefficients should be used from.
 #'@param coefTable data.frame. table of coefficients to be used in the
-#'   model. Must match the format and naming of the default \code{coefTableHR}
+#'   model. Must match the format and naming of the default `coefTableHR`
 #'@param ... optional arguments:
 #' \describe{
 #'   \item{natDist:}{filename or RasterLayer. Presence or absence of natural 
@@ -64,15 +64,15 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'   harvest.}
 #'   \item{eskerSave}{filename to save rasterized esker data.}
 #'   \item{linFeatSave}{filename to save rasterized linear feature data.}
-#'   \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
+#'   \item{padProjPoly}{logical. Should the area around the `projectPoly` be
 #'   used to avoid edge effects? If FALSE, the default, only data from inside the
-#'   \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
+#'   `projectPoly` is used. If TRUE then `projectPoly` is buffered and
 #'   the other variables are clipped to the extent of the buffered area. Results
-#'   are always clipped to the original \code{projectPoly}. It is ideal to set
+#'   are always clipped to the original `projectPoly`. It is ideal to set
 #'   this to TRUE and provide a data set that is larger than the
-#'   \code{projectPoly} to avoid edge effects.}
+#'   `projectPoly` to avoid edge effects.}
 #'   \item{padFocal}{logical. This value is passed to the pad argument in
-#'   \code{raster::focal}, if it is FALSE then cells near the edge will return
+#'   `raster::focal`, if it is FALSE then cells near the edge will return
 #'   NA, if it is TRUE a value will be returned for each cell that assumes cells
 #'   outside the input data are 0 for all resource types. This is not a good
 #'   assumption and should be used with caution.}
@@ -88,12 +88,12 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'   \item{doScale}{logical. FALSE by default. Set to TRUE only if you have
 #'   supplied coefficients that were trained on standardized data which will
 #'   cause the input data to be scaled.}
-#'   \item{ptDensity}{number. Only used if a list element in \code{linFeat} is a raster.
+#'   \item{ptDensity}{number. Only used if a list element in `linFeat` is a raster.
 #'   See \code{\link{rasterizeLineDensity}}.}
 #'   \item{preppedData}{list. A list containing pre-prepared input data sets. If
 #'   not NULL then data checks will be skipped. Names must match argument names
-#'   except that \code{landCover} should be called \code{refRast} and
-#'   \code{projectPoly} should be called \code{projectPolyOrig}. See
+#'   except that `landCover` should be called `refRast` and
+#'   `projectPoly` should be called `projectPolyOrig`. See
 #'   \code{\link{loadSpatialInputs}}.}
 #' }
 #' 
@@ -111,7 +111,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
 #'  woodland caribou (Rangifer tarandus caribou) across a gradient of
 #'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
-#'  \url{https://doi.org/10.1139/cjz-2015-0101}
+#'  <https://doi.org/10.1139/cjz-2015-0101>
 #'  
 #' @examples 
 #' # create example rasters

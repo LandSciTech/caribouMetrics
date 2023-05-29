@@ -4,11 +4,11 @@
 #' the data that have not changed. New data is supplied as a named list and the
 #' object is updated depending on the elements provided in the list.
 #'
-#' If \code{newData} contains only linFeat or anthroDist then the new data will
+#' If `newData` contains only linFeat or anthroDist then the new data will
 #' be combined with the existing data in the DisturbanceMetrics object to
 #' determine the buffered anthropogenic disturbance
 #'
-#' If  \code{newData} contains only natDist then only Fire is updated.
+#' If  `newData` contains only natDist then only Fire is updated.
 #'
 #' @param distMet DisturbanceMetrics object
 #' @param newData named list of objects to be used to update distMet.

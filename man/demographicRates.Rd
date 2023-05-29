@@ -74,8 +74,7 @@ recruitment (calves per cow)}
 95\\% of values fall within this range.
 If using quantiles, maximum and minimum values are returned.}
 }
-If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) *
-   replicates} additional columns are:
+If \code{returnSample = TRUE} the number of rows is \code{nrow(covTable) * replicates} additional columns are:
 \describe{
 \item{"scnID"}{A unique identifier for scenarios provided in
 \code{covTable}}

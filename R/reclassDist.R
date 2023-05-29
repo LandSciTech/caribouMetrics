@@ -2,28 +2,28 @@
 #'
 #' Classify disturbances that have occurred in a user defined time
 #' period. The output from this function can be used as either the
-#' \code{natDist} or \code{anthroDist} inputs for \code{caribouMetrics()} or
-#' \code{disturbanceMetrics()}.
+#' `natDist` or `anthroDist` inputs for `caribouMetrics()` or
+#' `disturbanceMetrics()`.
 #'
-#' @param distYr \code{sf object or rasterLayer}. A simple feature collection or
+#' @param distYr sf object or rasterLayer. A simple feature collection or
 #'   raster layer covering the focal area and including the year of disturbance
 #'   or time since disturbance as well as geometry (multipolygon) of the
 #'   disturbance.
-#' @param endYr \code{numeric} default 0. Four digit year indicating the latest
-#'   year to include from \code{distYr}. If 0 assume \code{dateField} values indicate time since disturbance.
-#' @param numCumYrs \code{numeric}. Number of years before \code{endYr} to
+#' @param endYr numeric default 0. Four digit year indicating the latest
+#'   year to include from `distYr`. If 0 assume `dateField` values indicate time since disturbance.
+#' @param numCumYrs numeric. Number of years before `endYr` to
 #'   include.
-#' @param template \code{rasterLayer}. A raster of the focal region, used as a
+#' @param template rasterLayer. A raster of the focal region, used as a
 #'   template to which disturbance information is projected. This layers
 #'   dimensions determine the dimensions of the output. It is recommended to use
-#'   the \code{landCover} raster layer used in \code{caribouMetrics()} or
-#'   \code{disturbanceMetrics()} to ensure equal dimensions
-#' @param dateField \code{character}. Name of the column in which disturbance
+#'   the `landCover` raster layer used in `caribouMetrics()` or
+#'   `disturbanceMetrics()` to ensure equal dimensions
+#' @param dateField character. Name of the column in which disturbance
 #'   year/time since disturbance is recorded.
 #'
 #'
-#' @return Returns a binary \code{RasterLayer} with the same dimensions as the
-#'   \code{template} input. Values of 1 represent areas of disturbance
+#' @return Returns a binary `RasterLayer` with the same dimensions as the
+#'   `template` input. Values of 1 represent areas of disturbance
 #'
 #' @examples
 #' library(sf)

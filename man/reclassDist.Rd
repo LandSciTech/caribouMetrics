@@ -7,24 +7,24 @@
 reclassDist(distYr, endYr = 0, numCumYrs, template, dateField)
 }
 \arguments{
-\item{distYr}{\code{sf object or rasterLayer}. A simple feature collection or
+\item{distYr}{sf object or rasterLayer. A simple feature collection or
 raster layer covering the focal area and including the year of disturbance
 or time since disturbance as well as geometry (multipolygon) of the
 disturbance.}
 
-\item{endYr}{\code{numeric} default 0. Four digit year indicating the latest
+\item{endYr}{numeric default 0. Four digit year indicating the latest
 year to include from \code{distYr}. If 0 assume \code{dateField} values indicate time since disturbance.}
 
-\item{numCumYrs}{\code{numeric}. Number of years before \code{endYr} to
+\item{numCumYrs}{numeric. Number of years before \code{endYr} to
 include.}
 
-\item{template}{\code{rasterLayer}. A raster of the focal region, used as a
+\item{template}{rasterLayer. A raster of the focal region, used as a
 template to which disturbance information is projected. This layers
 dimensions determine the dimensions of the output. It is recommended to use
 the \code{landCover} raster layer used in \code{caribouMetrics()} or
 \code{disturbanceMetrics()} to ensure equal dimensions}
 
-\item{dateField}{\code{character}. Name of the column in which disturbance
+\item{dateField}{character. Name of the column in which disturbance
 year/time since disturbance is recorded.}
 }
 \value{

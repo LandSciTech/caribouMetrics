@@ -80,8 +80,7 @@ projections for each sample population.
 Given default parameter values, this is an implementation of the 2-stage
 population growth model described in Dyson et al. (in Prep). Set
 \code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson
-et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar =
-FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
+et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar = FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
 model without interannual variability, density dependence, or discrete
 numbers of animals used by Stewart et al. (in prep). See
 \code{vignette("caribouDemography")} for additional details and examples.
