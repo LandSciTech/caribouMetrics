@@ -12,22 +12,22 @@ getKMSurvivalEstimates <- function(dSubset) {
   reg.out <- summary(sModel)
   # TODO: Josie can this be deleted?
   if (0) {
-    check <- data.frame(strata = reg.out$strata, survival = reg.out$surv,
-                        time = reg.out$time)
-    check$type <- "est"
-    check$Year <- as.numeric(gsub("as.factor(Year)=", "", as.character(check$strata),
-                                  fixed = T))
-    check$strata <- NULL
-    tt <- subset(oo$exData, select = c(Year, survival))
-    tt$time <- 12
-    tt$type <- "truth"
-    check <- rbind(check, tt)
-    base <- ggplot2::ggplot(check,
-                            ggplot2::aes(x = time, y = survival, colour = type,
-                                         shape = type)) +
-      ggplot2::geom_point() +
-      ggplot2::facet_wrap(~Year)
-    print(base)
+    # check <- data.frame(strata = reg.out$strata, survival = reg.out$surv,
+    #                     time = reg.out$time)
+    # check$type <- "est"
+    # check$Year <- as.numeric(gsub("as.factor(Year)=", "", as.character(check$strata),
+    #                               fixed = T))
+    # check$strata <- NULL
+    # tt <- subset(oo$exData, select = c(Year, survival))
+    # tt$time <- 12
+    # tt$type <- "truth"
+    # check <- rbind(check, tt)
+    # base <- ggplot2::ggplot(check,
+    #                         ggplot2::aes(x = time, y = survival, colour = type,
+    #                                      shape = type)) +
+    #   ggplot2::geom_point() +
+    #   ggplot2::facet_wrap(~Year)
+    # print(base)
   }
 
   if (is.null(reg.out$strata)) {
@@ -39,12 +39,12 @@ getKMSurvivalEstimates <- function(dSubset) {
   data.u <- data.frame(reg.out$strata, reg.out$upper)
   data6 <- data.frame(table(data5$reg.out.strata))
   num <- data6$Freq
-  if (class(data5$reg.out.strata) == "character") {
+  if (inherits(data5$reg.out.strata, "character")) {
     data5$reg.out.strata <- as.factor(data5$reg.out.strata)
   }
   levs <- data.frame(levels(data5$reg.out.strata))
   names(levs) <- c("reg.out.strata")
-  data7 <- subset(data6, Freq > 0)
+  data7 <- subset(data6, data6$Freq > 0)
   survs <- numeric(length(data7$Freq))
   se <- numeric(length(data7$Freq))
   lower <- numeric(length(data7$Freq))
@@ -149,7 +149,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
       returnSample = TRUE
     )
     if (is.element("N", names(pars))) {
-      pars <- subset(pars, select = c(replicate, N))
+      pars <- subset(pars, select = c("replicate", "N"))
       names(pars)[names(pars) == "N"] <- "N0"
     }
     pars <- merge(pars, rateSamples)
@@ -157,19 +157,21 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
       pars,
       caribouPopGrowth(pars$N0,
                        R_bar = pars$R_bar, S_bar = pars$S_bar,
-                       numSteps = stepLength, K = FALSE, l_R = 1e-06, adjustR = adjustR
+                       numSteps = stepLength, K = FALSE, l_R = 1e-06, adjustR = adjustR, 
+                       progress = FALSE
       )
     )
 
     # add results to output set
-    fds <- subset(pars, select = c(replicate, Anthro, fire_excl_anthro, S_t, R_t, N,
-                                   lambda, n_recruits, surviving_adFemales))
+    fds <- subset(pars, select = c("replicate", "Anthro", "fire_excl_anthro",
+                                   "S_t", "R_t", "N",
+                                   "lambda", "n_recruits", "surviving_adFemales"))
     fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
     names(fds) <- c("Replicate", "Anthro", "fire_excl_anthro", "survival",
                     "recruitment", "N", "lambda", "n_recruits", "n_cows")
     # apparent number of calves per cow, not actual, from unadjusted R_t
     fds$n_recruits <- fds$recruitment * fds$n_cows
-    fds <- tidyr::pivot_longer(fds, !Replicate, names_to = "MetricTypeID",
+    fds <- tidyr::pivot_longer(fds, !.data$Replicate, names_to = "MetricTypeID",
                                values_to = "Amount")
     fds$Timestep <- t * stepLength
     if (t == 1) {
@@ -181,13 +183,13 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
 
   popMetrics$MetricTypeID <- as.character(popMetrics$MetricTypeID)
   popMetrics$Replicate <- paste0("x", popMetrics$Replicate)
-  return(subset(popMetrics, Replicate == "x1"))
+  return(subset(popMetrics, popMetrics$Replicate == "x1"))
 }
 
 simCalfCowRatios <- function(cowCounts, minYr, exData) {
   # assume info from only one herd
-  ageRatioOut <- subset(cowCounts, (Year >= minYr),
-                        select = c(Year, Class, Count))
+  ageRatioOut <- subset(cowCounts, (cowCounts$Year >= minYr),
+                        select = c("Year", "Class", "Count"))
   ageRatioOut <- tidyr::pivot_wider(ageRatioOut, id_cols = c("Year"),
                                     names_from = "Class", values_from = "Count")
   ageRatioOut <- merge(ageRatioOut,
@@ -200,8 +202,8 @@ simCalfCowRatios <- function(cowCounts, minYr, exData) {
                                prob = n_recs / ageRatioOut$n_cows
                              )
   )
-  ageRatioOut <- subset(ageRatioOut, select = c(Year, calf, cow))
-  ageRatioOut <- tidyr::pivot_longer(ageRatioOut, cols = c(calf, cow),
+  ageRatioOut <- subset(ageRatioOut, select = c("Year", "calf", "cow"))
+  ageRatioOut <- tidyr::pivot_longer(ageRatioOut, cols = c(.data$calf, .data$cow),
                                      names_to = "Class", values_to = "Count")
   return(ageRatioOut)
 }
@@ -211,10 +213,12 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   # topUp=T
   # for simplicity, ignore variation in survival probability among months
   initYear <- min(exData$Year)
-  freqStartsByYear <- subset(freqStartsByYear, (Year >= initYear) & (numStarts > 0))
+  freqStartsByYear <- subset(freqStartsByYear, 
+                             (freqStartsByYear$Year >= initYear) & 
+                               (freqStartsByYear$numStarts > 0))
   
   freqStartsByYear <- freqStartsByYear[order(freqStartsByYear$Year), ]
-  survivalSeries <- subset(exData, select = c(survival, Year))
+  survivalSeries <- subset(exData, select = c("survival", "Year"))
   
   # freqStartsByYear$numStarts=10000;collarNumYears=2
   
@@ -236,7 +240,8 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
     }
     startYear <- freqStartsByYear$Year[k]
     if (topUp) {
-      collarsExisting <- nrow(subset(simSurvObs, (enter == 0) & (Year == startYear)))
+      collarsExisting <- nrow(subset(simSurvObs, (simSurvObs$enter == 0) & 
+                                       (simSurvObs$Year == startYear)))
       nstarts <- max(0, freqStartsByYear$numStarts[k] - collarsExisting)
     } else {
       nstarts <- freqStartsByYear$numStarts[k]
@@ -259,7 +264,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   # 1-sum(simSurvObs$event)/nrow(simSurvObs)
   # exData
   
-  simSurvObs <- subset(simSurvObs, is.element(Year, exData$Year))
+  simSurvObs <- subset(simSurvObs, is.element(simSurvObs$Year, exData$Year))
   simSurvObs <- simSurvObs[order(simSurvObs$Year), ]
   
   addBit <- unique(subset(freqStartsByYear,
@@ -342,7 +347,7 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
     )
   )
 
-  paramNames <- subset(paramNames, is.element(parameter, rrSurvMod$parameters.to.save))
+  paramNames <- subset(paramNames, is.element(paramNames$parameter, rrSurvMod$parameters.to.save))
 
   if (grepl("mean|median", param)) {
     yr <- NA_integer_
@@ -380,7 +385,7 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
     results <- data.frame(
       Year = yr,
       Parameter = subset(paramNames, paramNames$parameter == param,
-                         select = name, drop = T
+                         select = "name", drop = T
       ),
       Mean = round(rrSurvMod$BUGSoutput$mean[[param]], digits = 3),
       SD = round(rrSurvMod$BUGSoutput$sd[[param]], digits = 3),
@@ -402,7 +407,7 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
                           values_to = "Value")
     results$Year <- as.numeric(results$Year)
     results$Parameter <- subset(paramNames, paramNames$parameter == param,
-                                select = name, drop = T
+                                select = "name", drop = T
     )
     results <- as.data.frame(results)
   }
@@ -470,9 +475,9 @@ testPopGrowthTable <- function(df) {
   # should only give one model number in table because no method to select a mod num
   if (!is.null(df$ModelNumber)) {
     nmod <- df %>%
-      group_by(responseVariable) %>%
-      summarise(nmod = n_distinct(ModelNumber)) %>%
-      pull(nmod)
+      group_by(.data$responseVariable) %>%
+      summarise(nmod = n_distinct(.data$ModelNumber)) %>%
+      pull(.data$nmod)
 
     if (any(nmod > 1)) {
       stop("The model coefficient file loaded contains more than one model per response variable",
@@ -484,7 +489,7 @@ testPopGrowthTable <- function(df) {
   # add expected columns that should never change
   df <- mutate(df,
                modelVersion = "Johnson",
-               ModelNumber = ifelse(responseVariable == "recruitment", "M4", "M1"),
+               ModelNumber = ifelse(.data$responseVariable == "recruitment", "M4", "M1"),
                Type = "National"
   )
 
@@ -512,16 +517,16 @@ testPopGrowthTable <- function(df) {
     )
   }
 
-  testStdCI <- df %>% mutate(stdOrCI = !is.na(StdErr) | (!is.na(lowerCI) & !is.na(upperCI)))
+  testStdCI <- df %>% mutate(stdOrCI = !is.na(.data$StdErr) | (!is.na(.data$lowerCI) & !is.na(.data$upperCI)))
 
   if (!all(testStdCI$stdOrCI)) {
     stop("The model coefficient file loaded is missing StdErr or lowerCI and upperCI for:\n",
          "femaleSurvival: ",
-         testStdCI %>% filter(!stdOrCI, responseVariable == "femaleSurvival") %>%
-           pull(Coefficient) %>% paste0(collapse = ", "), "\n",
+         testStdCI %>% filter(!.data$stdOrCI, .data$responseVariable == "femaleSurvival") %>%
+           pull(.data$Coefficient) %>% paste0(collapse = ", "), "\n",
          "recruitment: ",
-         testStdCI %>% filter(!stdOrCI, responseVariable == "recruitment") %>%
-           pull(Coefficient) %>% paste0(collapse = ", "),
+         testStdCI %>% filter(!.data$stdOrCI, .data$responseVariable == "recruitment") %>%
+           pull(.data$Coefficient) %>% paste0(collapse = ", "),
          call. = FALSE
     )
   }

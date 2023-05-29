@@ -98,36 +98,36 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
                                        K = FALSE, adjustR = adjustR))
   simSurvBig <- pars %>%
     select("Anthro", "S_t") %>%
-    group_by(Anthro) %>%
-    summarize(Mean = mean(S_t), lower = quantile(S_t, 0.025),
-              upper = quantile(S_t, 0.975))
+    group_by(.data$Anthro) %>%
+    summarize(Mean = mean(.data$S_t), lower = quantile(.data$S_t, 0.025),
+              upper = quantile(.data$S_t, 0.975))
   simSurvBig$Parameter <- "Adult female survival"
   simRecBig <- pars %>%
     select("Anthro", "R_t") %>%
-    group_by(Anthro) %>%
-    summarize(Mean = mean(R_t), lower = quantile(R_t, 0.025),
-              upper = quantile(R_t, 0.975))
+    group_by(.data$Anthro) %>%
+    summarize(Mean = mean(.data$R_t), lower = quantile(.data$R_t, 0.025),
+              upper = quantile(.data$R_t, 0.975))
   simRecBig$Parameter <- "Recruitment"
   simLamBig <- pars %>%
     select("Anthro", "lambda") %>%
-    group_by(Anthro) %>%
-    summarize(Mean = mean(lambda), lower = quantile(lambda, 0.025),
-              upper = quantile(lambda, 0.975))
+    group_by(.data$Anthro) %>%
+    summarize(Mean = mean(.data$lambda), lower = quantile(.data$lambda, 0.025),
+              upper = quantile(.data$lambda, 0.975))
   simLamBig$Parameter <- "Population growth rate"
   simFpopBig <- pars %>%
     select("Anthro", "N") %>%
-    group_by(Anthro) %>%
-    summarize(Mean = mean(N), lower = quantile(N, 0.025),
-              upper = quantile(N, 0.975))
+    group_by(.data$Anthro) %>%
+    summarize(Mean = mean(.data$N), lower = quantile(.data$N, 0.025),
+              upper = quantile(.data$N, 0.975))
   simFpopBig$Parameter <- "Female population size"
   simBig <- rbind(simSurvBig, simRecBig, simLamBig, simFpopBig)
 
-  parsSelect <- subset(pars, select = c(Anthro, S_t, R_t, lambda, N))
+  parsSelect <- subset(pars, select = c("Anthro", "S_t", "R_t", "lambda", "N"))
   names(parsSelect) <- c("Anthro", "Adult female survival",
                          "Recruitment", "Population growth rate",
                          "Female population size")
   parsSelect <- parsSelect %>%
-    tidyr::pivot_longer(!Anthro, names_to = "Parameter", values_to = "Value")
+    tidyr::pivot_longer(!.data$Anthro, names_to = "Parameter", values_to = "Value")
 
   simBig <- list(summary = simBig, samples = parsSelect)
 

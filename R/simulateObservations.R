@@ -123,8 +123,8 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   } else {
     simDisturbance <- distScen
     simDisturbance$time <- simDisturbance$Year - paramTable$startYear + 1
-    simDisturbance <- filter(simDisturbance, Year <= (paramTable$startYear + paramTable$obsYears - 1 + paramTable$projYears) &
-                               Year >= paramTable$startYear)
+    simDisturbance <- filter(simDisturbance, .data$Year <= (paramTable$startYear + paramTable$obsYears - 1 + paramTable$projYears) &
+                               .data$Year >= paramTable$startYear)
   }
 
   # simulate true population trajectory
@@ -143,23 +143,23 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
 
   simDisturbance$time <- NULL
   if (printPlot) {
-    base1 <- ggplot2::ggplot(data = popMetrics, ggplot2::aes(
-      x = Timestep, y = Amount, colour = Replicate,
-      group = Replicate
+    base1 <- ggplot2::ggplot(data = popMetrics, ggplot2::aes_string(
+      x = "Timestep", y = "Amount", colour = "Replicate",
+      group = "Replicate"
     )) +
       ggplot2::geom_line() +
-      ggplot2::facet_wrap(~MetricTypeID, scales = "free") +
+      ggplot2::facet_wrap("MetricTypeID", scales = "free") +
       ggplot2::xlab("Time") +
       ggplot2::theme(legend.position = "none")
     print(base1)
   }
 
-  popMetricsWide <- tidyr::pivot_wider(popMetrics, id_cols = c(Replicate, Timestep),
-                                       names_from = MetricTypeID,
-                                       values_from = Amount)
+  popMetricsWide <- tidyr::pivot_wider(popMetrics, id_cols = c(.data$Replicate, .data$Timestep),
+                                       names_from = "MetricTypeID",
+                                       values_from = "Amount")
   popMetricsWide$Year <- paramTable$startYear + popMetricsWide$Timestep - 1
 
-  exData <- subset(popMetricsWide, (Timestep <= paramTable$obsYears))
+  exData <- subset(popMetricsWide, (popMetricsWide$Timestep <= paramTable$obsYears))
 
   # Now apply observation process model to get simulated calf:cow and survival data.
   # Use sample sizes in example input data e.g. Eaker
@@ -171,7 +171,7 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   # simulate survival data from survival probability.
   if (is.element("collarInterval", names(paramTable)) & is.null(freqStartsByYearIn)) {
     freqStartsByYear <- subset(freqStartsByYear,
-                               is.element(Year, unique(exData$Year)))
+                               is.element(freqStartsByYear$Year, unique(exData$Year)))
     renewYrs <- intersect(min(exData$Year) + seq(0, 100) * paramTable$collarInterval,
                           unique(exData$Year))
     freqStartsByYear$numStarts[!is.element(freqStartsByYear$Year, renewYrs)] <- 0
@@ -187,7 +187,7 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   # if cowMult is provided, set cows as a function of number of surviving cows at
   # month 5
   if (is.element("cowMult", names(paramTable)) & is.null(cowCountsIn)) {
-    survsCalving <- subset(simSurvObs, exit >= 6)
+    survsCalving <- subset(simSurvObs, simSurvObs$exit >= 6)
 
     if (nrow(survsCalving) > 0) {
       cowCounts <- as.data.frame(table(survsCalving$Year))

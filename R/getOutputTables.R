@@ -64,7 +64,8 @@ getOutputTables <- function(caribouBayesDemogMod,
     if (sum(survInput$event, na.rm = T) > 0) {
       obsSurv <- getKMSurvivalEstimates(survInput)
     } else {
-      obsSurv <- unique(subset(survInput, !is.na(enter), select = c(Year)))
+      obsSurv <- unique(subset(survInput, !is.na(survInput$enter),
+                               select = c("Year")))
       obsSurv$surv <- NA
       obsSurv$Var1 <- obsSurv$Year
     }
@@ -74,12 +75,13 @@ getOutputTables <- function(caribouBayesDemogMod,
   
   obsSurv$Mean <- obsSurv$surv
   obsSurv$Year <- as.numeric(gsub("as.factor(Year)=", "", obsSurv$Var1, fixed = T))
-  obsSurv <- subset(obsSurv, Year > 1000)
+  obsSurv <- subset(obsSurv, obsSurv$Year > 1000)
   
   obsSurv$parameter <- "Adult female survival"
   obsSurv$type <- "observed"
   
-  obsRec <- subset(simObsList$ageRatioIn, select = c(Year, Count, Class))
+  obsRec <- subset(simObsList$ageRatioIn, 
+                   select = c("Year", "Count", "Class"))
   obsRec <- tidyr::pivot_wider(obsRec, id_cols = c("Year"), names_from = "Class",
                                values_from = "Count")
   obsRec$Mean <- obsRec$calf / obsRec$cow
@@ -87,23 +89,23 @@ getOutputTables <- function(caribouBayesDemogMod,
   obsRec$type <- "observed"
   
   if(!is.null(exData)){
-    trueSurv <- subset(exData, select = c(Year, survival))
+    trueSurv <- subset(exData, select = c("Year", "survival"))
     names(trueSurv) <- c("Year", "Mean")
     trueSurv$parameter <- "Adult female survival"
     trueSurv$type <- "true"
     
-    trueRec <- subset(exData, select = c(Year, recruitment))
+    trueRec <- subset(exData, select = c("Year", "recruitment"))
     names(trueRec) <- c("Year", "Mean")
     trueRec$parameter <- "Recruitment"
     trueRec$type <- "true"
     
-    obsLam <- subset(exData, select = c(Year, lambda))
+    obsLam <- subset(exData, select = c("Year", "lambda"))
     names(obsLam) <- c("Year", "Mean")
     obsLam <- movingAveGrowthRate(obsLam, paramTable$assessmentYrs)
     obsLam$parameter <- "Population growth rate"
     obsLam$type <- "true"
     
-    obsSize <- subset(exData, select = c(Year, N))
+    obsSize <- subset(exData, select = c("Year", "N"))
     names(obsSize) <- c("Year", "Mean")
     # pop size returned from Bayesian model is at the start of the year, not the end.
     obsSize$Year <- obsSize$Year + 1
@@ -128,7 +130,8 @@ getOutputTables <- function(caribouBayesDemogMod,
     simNational <- getSimsNational(Anthro = unique(simObsList$disturbanceIn$Anthro))
   }
   
-  simBigO <- subset(simNational$summary, select = c(Anthro, Mean, lower, upper, Parameter))
+  simBigO <- subset(simNational$summary, select = c("Anthro", "Mean", "lower",
+                                                    "upper", "Parameter"))
   names(simBigO) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
   
   # combine paramTable and simDisturbance and add to all output tables, nest params in a list
@@ -147,7 +150,7 @@ getOutputTables <- function(caribouBayesDemogMod,
     # get Kolmogorov smirnov distance between samples at each point
     
     variables <- unique(simNational$summary$parameter)
-    anthroPts <- unique(subset(rr.summary, select = c(Year, Anthro)))
+    anthroPts <- unique(subset(rr.summary, select = c("Year", "Anthro")))
     # TO DO: make this step faster
     bmSamples <- tabAllRes(result, startYear, endYear, doSummary = F)
     bmSamples$type <- "local"
@@ -157,16 +160,16 @@ getOutputTables <- function(caribouBayesDemogMod,
     simSamples$type <- "national"
     
     allSamples <- rbind(subset(bmSamples,
-                               is.element(Parameter, unique(simSamples$Parameter))),
+                               is.element(bmSamples$Parameter, unique(simSamples$Parameter))),
                         simSamples)
     
     ksDists <- allSamples %>%
-      group_by(Year, Parameter) %>%
+      group_by(.data$Year, .data$Parameter) %>%
       group_modify(~ {
         getKSDist(.x$Value, .x$type)
       })
   } else {
-    ksDists <- unique(subset(rr.summary, select = c(Year, Parameter)))
+    ksDists <- unique(subset(rr.summary, select = c("Year", "Parameter")))
     ksDists$KSDistance <- NA
     ksDists$KSpvalue <- NA
   }

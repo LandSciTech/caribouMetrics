@@ -127,16 +127,16 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   if (anyNA(select(disturbance, "Anthro", "fire_excl_anthro"))) {
     warning(
       "Years ",
-      filter(disturbance, if_any(c(Anthro, fire_excl_anthro), is.na)) %>%
-        pull(Year) %>% paste0(collapse = ", "),
+      filter(disturbance, if_any(c(.data$Anthro, .data$fire_excl_anthro), is.na)) %>%
+        pull(.data$Year) %>% paste0(collapse = ", "),
       " have missing disturbance data. ",
       "Anthro will be filled from the next year with data and fire will be fill with 0s"
     )
 
-    disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup") %>%
+    disturbance <- tidyr::fill(disturbance, .data$Anthro, .direction = "downup") %>%
       mutate(
-        fire_excl_anthro = tidyr::replace_na(fire_excl_anthro, 0),
-        Total_dist = fire_excl_anthro + Anthro
+        fire_excl_anthro = tidyr::replace_na(.data$fire_excl_anthro, 0),
+        Total_dist = .data$fire_excl_anthro + .data$Anthro
       )
     if(anyNA(select(disturbance, "Anthro", "fire_excl_anthro"))){
       stop("None of the disturbance data is within the requested year range",
@@ -194,7 +194,7 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
 
   # Note: biased results from years with <12 months of observations.
   # And problems with adding animals part way through the year, so omitting those
-  dSubset <- subset(data, enter == 0) # ;dSubset=subset(dSubset,!((exit<12)&(event==0)))
+  dSubset <- subset(data, data$enter == 0) # ;dSubset=subset(dSubset,!((exit<12)&(event==0)))
   if (nrow(dSubset) == 0) {
     stop("Collars not present at the start of a year are omitted from survival ",
          "analysis in that year. Please ensure there is at least one year with",
@@ -216,9 +216,9 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
     survData <- getKMSurvivalEstimates(dSubset)
     # omitting years with less than 12 months of observations of collared animals
     sumDat <- dSubset %>%
-      group_by(Year) %>%
-      summarise(minEnter = min(enter), maxExit = max(exit))
-    includeYrs <- subset(sumDat, minEnter == 0 & maxExit == 12)
+      group_by(.data$Year) %>%
+      summarise(minEnter = min(.data$enter), maxExit = max(.data$exit))
+    includeYrs <- subset(sumDat, sumDat$minEnter == 0 & sumDat$maxExit == 12)
     survData$Year <- as.numeric(gsub("as.factor(Year)=", "",
                                      as.character(survData$Var1), fixed = T))
     survData <- merge(survData, includeYrs)
@@ -239,7 +239,7 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
                                      function(x) sum(x$event))) == 0)
       yearsOne <- as.numeric(names(survOne))
       data.sub <- data[data$Year %in% yearsOne, ]
-      nriskYears <- data.frame(with(data.sub, table(Year)))
+      nriskYears <- data.frame(table(data.sub$Year))
 
       binLikFile <- file.path(saveJAGStxt, "binLik.txt")
 
@@ -280,7 +280,7 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
     survData$Var1 <- as.character(survData$Var1)
   } else {
     message("expanding survival record")
-    dExpand <- apply(subset(dSubset, select = c(id, Year, event, enter, exit)),
+    dExpand <- apply(subset(dSubset, select = c("id", "Year", "event", "enter", "exit")),
                      1, expandSurvivalRecord)
     survData <- do.call(rbind, dExpand)
   }
@@ -427,7 +427,7 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   ageRatioIn <- rbind(
     mutate(data3t, Class = "calf"), 
     mutate(data4t, Class = "cow")
-  ) %>% arrange(Year)
+  ) %>% arrange(.data$Year)
 
   return(list(result = rr.surv, 
               inData = list(survDataIn = survDatat, 

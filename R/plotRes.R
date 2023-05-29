@@ -127,13 +127,15 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
         df$grp <- paste0(df$grp, df[[i]])
       }
     }
-    x1 <- ggplot2::ggplot(df, ggplot2::aes(x = Year, y = Mean, fill = Type, col = Type))
+    x1 <- ggplot2::ggplot(df, ggplot2::aes_string(x = "Year", y = "Mean", 
+                                                  fill = "Type", col = "Type"))
   } else {
-    x1 <- ggplot2::ggplot(df, ggplot2::aes(x = Year, y = Mean))
+    x1 <- ggplot2::ggplot(df, ggplot2::aes_string(x = "Year", y = "Mean"))
   }
   x2 <- x1 + ggplot2::theme_classic() + ggplot2::xlab("Year") +
     ggplot2::ylab(parameter) +
-    ggplot2::geom_line(ggplot2::aes(x = Year, y = Mean), linewidth = 1.75) +ggplot2::scale_color_discrete(type=pal2)+
+    ggplot2::geom_line(ggplot2::aes_string(x = "Year", y = "Mean"), linewidth = 1.75) +
+    ggplot2::scale_color_discrete(type=pal2)+
     ggplot2::theme(
       axis.text.y = ggplot2::element_text(size = labFontSize),
       axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, size = labFontSize),
@@ -146,8 +148,8 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     ))
   
   if (!ksDists) {
-    x2 <- x2 + ggplot2::geom_ribbon(ggplot2::aes(ymin = `Lower 95% CRI`,
-                                                 ymax = `Upper 95% CRI`),
+    x2 <- x2 + ggplot2::geom_ribbon(ggplot2::aes_string(ymin = "`Lower 95% CRI`",
+                                                 ymax = "`Upper 95% CRI`"),
                                     show.legend = FALSE, alpha = 0.25, colour = NA
     ) +ggplot2::scale_fill_discrete(type=pal2)+
       ggplot2::scale_y_continuous(limits = c(
@@ -162,8 +164,8 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
       obs$obsError <- FALSE
       obs$obsError[obs$type == "observed"] <- TRUE
       x2 <- x2 + ggplot2::geom_point(data = obs,
-                                     ggplot2::aes(x = Year, y = Mean,
-                                                  shape = obsError), col = "black",
+                                     ggplot2::aes_string(x = "Year", y = "Mean",
+                                                  shape = "obsError"), col = "black",
                                      show.legend = TRUE) +
         ggplot2::scale_shape_manual(values = c(16, 2))
     }

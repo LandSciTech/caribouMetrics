@@ -56,6 +56,6 @@ scns <- expand.grid(
 
 eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
 scResults <- runScnSet(scns, eParsIn, getSimsNational(), getKSDists = FALSE,
-                       # only set to speed up vignette. Normally keep defaults.
-                       Niter = 150, Nburn = 100)
+                       # only set to speed up example. Normally keep defaults.
+                       Niter = 10, Nburn = 2)
 }
