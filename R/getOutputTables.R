@@ -49,7 +49,7 @@ getOutputTables <- function(caribouBayesDemogMod,
                             paramTable = data.frame(param = "observed"),
                             exData = NULL,
                             simNational,
-                            getKSDists) {
+                            getKSDists = FALSE) {
   # result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;
   # simObsList=oo;simNational=simBig
   

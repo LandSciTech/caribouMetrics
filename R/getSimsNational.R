@@ -95,7 +95,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
   pars <- cbind(pars, caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
                                        S_bar = pars$S_bar, numSteps = 1,
-                                       K = FALSE, adjustR = adjustR))
+                                       K = FALSE, adjustR = adjustR, progress = FALSE))
   simSurvBig <- pars %>%
     select("Anthro", "S_t") %>%
     group_by(.data$Anthro) %>%
