@@ -4,7 +4,7 @@
 #' survival and recruitment rates.
 #'
 #' @param covTable data.frame. A table of covariate values to be used. Column
-#'   names must match the coefficient names in [popGrowthTableJohnsonECCC()].
+#'   names must match the coefficient names in [popGrowthTableJohnsonECCC].
 #'   Each row is a different scenario.
 #' @param popGrowthPars list. Coefficient values and (optionally) quantiles returned by
 #'  `demographicCoefficients`.
