@@ -1,5 +1,5 @@
 ---
-title: "Disturbance Metrics and Caribou Demography"
+title: "Caribou Demography"
 output: 
   rmarkdown::html_vignette
 vignette: >
@@ -16,66 +16,31 @@ knitr::opts_chunk$set(
 ```
 
 ## Introduction
-This vignette gives details on the use of the `disturbanceMetrics`, `demographicCoefficients`, `demographicRates`, and `caribouPopGrowth` functions. Together, these functions represent an implementation of the aspatial caribou demographic model developed by Johnson et al. ([2020](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637)), and modified by Dyson et al. (in prep) and Stewart et al. (in prep). 
+caribouMetrics includes a population and demographic model that allows users to predict demographic rates for a given level of disturbance and project population growth over time. Demographic rates are predicted using model coefficients published in [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) or [ECCC (2011)](https://www.registrelep-sararegistry.gc.ca/virtual_sara/files/ri_boreal_caribou_science_0811_eng.pdf). Population growth is projected using a two-stage demographic model with density dependence and interannual variability based on Johnson et. al. (2020) but with some modifications as described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350).
+
+
+`demographicCoefficients()` selects the regression coefficient values and standard errors for the desired model version (see `popGrowthTableJohnsonECCC` for options) and then samples from the Gaussian distribution for each replicate population. Each population is optionally assigned to quantiles of the Beta error distributions for survival and recruitment. Using quantiles means that the population will stay in these quantiles as disturbance changes over time, so there is persistent variation in recruitment and survival among example populations. 
+
+Next `demographicRates()` is used to apply the sampled coefficients to the disturbance covariates to calculate the expected recruitment ($\bar{R}_t$) and survival ($\bar{S}_t$) according to the beta regression models estimated by Johnson et al. [@johnson_science_2020]:  :$$\bar{R}_t~Beta(\mu^R_t,\phi^R);log(\mu^R_t)=\dot{\beta^R_0}+\dot{\beta^R_a}A_t+\dot{\beta}^R_fF_t,$$
+
+$$\bar{S}_t~(46\times Beta(\mu^S_t,\phi^S)-0.5)/45;log(\mu^S_t)=\dot{\beta^S_0}+\dot{\beta^S_a}A_t.$$
+$\phi^R$ and $\phi^S$ are the precisions of the Beta distributed errors and are only available for some model versions.
+
+
+Finally, we can use the estimated demographic rates given the amount of distrubance to project the population growth rate under these conditions. This is accomplished with 
+
+
+
 
 ```{r setup, results='hide',message=F, warning=T}
 library(caribouMetrics)
 library(dplyr)
-library(raster)
-library(sf)
 library(ggplot2)
 library(tidyr)
 theme_set(theme_bw())
 pthBase <- system.file("extdata", package = "caribouMetrics")
 ```
 
-## Disturbance metrics
-The example data set loaded below includes a small area in the Nipigon caribou range that we will use as an example.
-
-```{r load data, results='hide',message=F, warning=T}
-# load example data and classify plc into Resource Types
-landCoverD = raster(file.path(pthBase, "landCover.tif")) %>% 
-  reclassPLC()
-natDistD = raster(file.path(pthBase, "natDist.tif"))
-anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
-linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
-projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE)
-linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE)
-roadsD = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE)
-railD = st_read(file.path(pthBase, "rail.shp"), quiet = TRUE)
-utilitiesD = st_read(file.path(pthBase, "utilities.shp"), quiet = TRUE)
-```
-
-`disturbanceMetrics` will prepare the data and then calculate disturbance metrics used as predictor variables by Johnson et al. (2020). The function can be run in several different ways, and the simplest is to provide spatial objects for each input. 
-
-```{r disturbanceMetricsRaster, results='hide',message=F, warning=T}
-disturbance <- disturbanceMetrics(
-  landCover=!is.na(landCoverD),
-  natDist = natDistD,
-  anthroDist = anthroDistD,
-  linFeat = linFeatDras,
-  projectPoly = projectPolyD
-)
-```
-
-```{r plotDisturbance, fig.width=8, fig.height=5}
-plot(disturbance@processedData)
-```
-Multiple linear feature inputs can also be provided in vector form. See `vignette("caribouHabitat", package = "caribouMetrics")` for other data processing and input options. 
-
-```{r disturbanceMetricsVector, results='hide',message=F, warning=T}
-disturbanceV <- disturbanceMetrics(
-  landCover=!is.na(landCoverD),
-  natDist = natDistD,
-  anthroDist = anthroDistD,
-  linFeat = list(roads = roadsD, rail = railD, utilities = utilitiesD),
-  projectPoly = projectPolyD
-)
-```
-
-```{r plotDisturbanceVector, fig.width=8, fig.height=5}
-plot(disturbanceV@processedData)
-```
 
 ## Simple demographic projection for a single example landscape
 
