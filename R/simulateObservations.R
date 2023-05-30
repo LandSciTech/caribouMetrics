@@ -154,7 +154,7 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
     print(base1)
   }
 
-  popMetricsWide <- tidyr::pivot_wider(popMetrics, id_cols = c(.data$Replicate, .data$Timestep),
+  popMetricsWide <- tidyr::pivot_wider(popMetrics, id_cols = c("Replicate", "Timestep"),
                                        names_from = "MetricTypeID",
                                        values_from = "Amount")
   popMetricsWide$Year <- paramTable$startYear + popMetricsWide$Timestep - 1

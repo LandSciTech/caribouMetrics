@@ -203,7 +203,7 @@ simCalfCowRatios <- function(cowCounts, minYr, exData) {
                              )
   )
   ageRatioOut <- subset(ageRatioOut, select = c("Year", "calf", "cow"))
-  ageRatioOut <- tidyr::pivot_longer(ageRatioOut, cols = c(.data$calf, .data$cow),
+  ageRatioOut <- tidyr::pivot_longer(ageRatioOut, cols = c("calf", "cow"),
                                      names_to = "Class", values_to = "Count")
   return(ageRatioOut)
 }
