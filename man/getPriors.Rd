@@ -26,7 +26,7 @@ getPriors(
 modifier is supplied here the corresponding argument below is ignored.}
 
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
-number to use see \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} for options.}
+number to use see \link{popGrowthTableJohnsonECCC} for options.}
 
 \item{rAnthroSlopeSEMod}{anthropogenic disturbance slope recruitment uncertainty
 multiplier. 1 - 10}

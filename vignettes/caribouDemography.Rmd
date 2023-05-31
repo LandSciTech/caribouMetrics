@@ -21,15 +21,13 @@ caribouMetrics includes a population and demographic model that allows users to 
 
 `demographicCoefficients()` selects the regression coefficient values and standard errors for the desired model version (see `popGrowthTableJohnsonECCC` for options) and then samples from the Gaussian distribution for each replicate population. Each population is optionally assigned to quantiles of the Beta error distributions for survival and recruitment. Using quantiles means that the population will stay in these quantiles as disturbance changes over time, so there is persistent variation in recruitment and survival among example populations. 
 
-Next `demographicRates()` is used to apply the sampled coefficients to the disturbance covariates to calculate the expected recruitment ($\bar{R}_t$) and survival ($\bar{S}_t$) according to the beta regression models estimated by Johnson et al. [@johnson_science_2020]:  :$$\bar{R}_t~Beta(\mu^R_t,\phi^R);log(\mu^R_t)=\dot{\beta^R_0}+\dot{\beta^R_a}A_t+\dot{\beta}^R_fF_t,$$
+Next `demographicRates()` is used to apply the sampled coefficients to the disturbance covariates to calculate the expected recruitment ($\bar{R}_t$) and survival ($\bar{S}_t$) according to the beta regression models estimated by Johnson et al. (2020):  :$$\bar{R}_t \sim Beta(\mu^R_t,\phi^R);log(\mu^R_t)=\dot{\beta^R_0}+\dot{\beta^R_a}A_t+\dot{\beta}^R_fF_t,$$
 
-$$\bar{S}_t~(46\times Beta(\mu^S_t,\phi^S)-0.5)/45;log(\mu^S_t)=\dot{\beta^S_0}+\dot{\beta^S_a}A_t.$$
+$$\bar{S}_t \sim (46\times Beta(\mu^S_t,\phi^S)-0.5)/45;log(\mu^S_t)=\dot{\beta^S_0}+\dot{\beta^S_a}A_t.$$
 $\phi^R$ and $\phi^S$ are the precisions of the Beta distributed errors and are only available for some model versions.
 
 
-Finally, we can use the estimated demographic rates given the amount of distrubance to project the population growth rate under these conditions. This is accomplished with 
-
-
+Finally, we can use the estimated demographic rates given the amount of disturbance to project the population growth rate under these conditions. This is accomplished with an implementation of the 2-stage population growth model used in Johnson et al. (2020) but with some differences described in Dyson et al. (2022) The number of post-juvenile females that survive from year $t$ to the next year $W_t$ is binomially distributed with survival probability $S_t$: $W_{t} \sim \text{Binomial}(N_t,S_t)$. The number of juveniles recruiting to the post-juvenile class is a Poisson distributed function of the number of surviving post-juvenile females and the adjusted recruitment rate $X_t$: $J_{t} \sim \text{Poisson}(X_t,W_t)$. The post-juvenile female population in the next year includes both survivors and new recruits: $N_{t+1}=W_t+J_t$. Annual population growth rate $\lambda_t$ is set to 0 when $N_t$ is 0, and is otherwise $\lambda_t=N_{t+1}/N_t$. 
 
 
 ```{r setup, results='hide',message=F, warning=T}
@@ -44,25 +42,43 @@ pthBase <- system.file("extdata", package = "caribouMetrics")
 
 ## Simple demographic projection for a single example landscape
 
-A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. We begin by sampling coefficients for 500 replicate populations using default models M1 and M4. Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the `caribouPopGrowth` function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but uncertainty in the model means that a few sample populations persist.
+A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. 
+
+First we define a disturbance scenario with 40% anthropogenic disturbance and 2% fire disturbance. If we had spatial data for the disturbance in our area of interest we could use `disturbanceMetrics()` to directly calculate the disturbance. (See [Disturbance Metrics](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html) vignette for an example).
+```{r make-dist}
+disturbance <- data.frame(Anthro = 40, fire_excl_anthro = 2)
+```
+
+We begin by sampling coefficients for 500 replicate populations using default models "M1" and "M4". The returned object is a list containing the coefficients and standard errors from the national model as well as the sampled coefficients and the quantiles that they have been assigned to.
+
+```{r coefs}
+popGrowthPars <- demographicCoefficients(500)
+
+head(popGrowthPars$coefSamples_Survival$coefSamples)
+head(popGrowthPars$coefSamples_Survival$coefValues)
+head(popGrowthPars$coefSamples_Survival$coefStdErrs)
+head(popGrowthPars$coefSamples_Survival$quantiles)
+```
+
+Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the `caribouPopGrowth` function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but uncertainty in the model means that a few sample populations persist.
 
 
 ```{r simpleProjection, results='hide',message=F, warning=T}
-   popGrowthPars <- demographicCoefficients(500)
-   rateSamples <- demographicRates(
-          covTable = disturbanceV@disturbanceMetrics,
-          popGrowthPars = popGrowthPars,
-          ignorePrecision = FALSE,
-          returnSample = TRUE,
-          useQuantiles = FALSE)     
-   rateSamples$N0 <- 100
-   demography <- cbind(rateSamples,
-                       caribouPopGrowth(N = rateSamples$N0,
-                                        numSteps = 20,
-                                        R_bar = rateSamples$R_bar,
-                                        S_bar = rateSamples$S_bar))
+rateSamples <- demographicRates(
+  covTable = disturbance,
+  popGrowthPars = popGrowthPars,
+  ignorePrecision = FALSE,
+  returnSample = TRUE,
+  useQuantiles = FALSE)     
+rateSamples$N0 <- 100
+demography <- cbind(rateSamples,
+                    caribouPopGrowth(N = rateSamples$N0,
+                                     numSteps = 20,
+                                     R_bar = rateSamples$R_bar,
+                                     S_bar = rateSamples$S_bar))
 
 ```
+
 ```{r plotSimpleDemography, fig.width=8, fig.height=5}
 
 fds <- pivot_longer(demography, !(scnID:replicate) & !N0, names_to = "Metric",
@@ -135,6 +151,7 @@ rateSummariesIgnorePrecision <- demographicRates(
   useQuantiles = FALSE
 )
 ```
+
 ### No precision
 The Johnson et al. (2020) model with parameter uncertainty but no precision. The bands are the 2.5% and 97.5% quantiles of 500 sample parameter values.
 ```{r parameterUncertaintyOnly,echo=FALSE, fig.width=8, fig.height=5}
@@ -145,7 +162,7 @@ rateSamples$fullGrp = paste(rateSamples$rep, rateSamples$fire_excl_anthro)
 
 base1 <- ggplot(data = rateSummariesIgnorePrecision, 
                 aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh))+
-  geom_line(colour = "black", size = 2)+
+  geom_line(colour = "black", linewidth = 2)+
   geom_ribbon(alpha = 0.25)+
   xlab("Anthropogenic Disturbance (%)")+
   ylab("Adult Female Survival")+
@@ -160,7 +177,7 @@ plot_recruitment3 <- ggplot(
   aes(x = Anthro, y = R_bar * 100, group = fire_excl_anthro, colour = fire_excl_anthro, type = fire_excl_anthro, 
       ymin = R_PIlow * 100, ymax = R_PIhigh * 100, fill = fire_excl_anthro)
   )+
-  geom_line(size = 2)+
+  geom_line(linewidth = 2)+
   geom_ribbon(alpha = 0.15, colour = NA)+
   scale_fill_gradient(low = "green", high = "red")+
   scale_colour_gradient(low = "green", high = "red")+
@@ -179,7 +196,7 @@ base1 <- ggplot(data = rateSummaries,
                 aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh))+
   geom_line(data = subset(rateSamples, fire_excl_anthro == 0), size = 0.5, 
             aes(x = Anthro, y = S_bar, group = rep, colour = rep), inherit.aes = FALSE)+
-  geom_line(colour = "black", size = 2)+
+  geom_line(colour = "black", linewidth = 2)+
   geom_ribbon(alpha = 0.25)+
   xlab("Anthropogenic Disturbance (%)")+
   ylab("Adult Female Survival")+
@@ -193,8 +210,8 @@ plot_recruitment3 <- ggplot(data = rateSummaries,
                                 colour = fire_excl_anthro, type = fire_excl_anthro))+
   geom_line(data = rateSamples,  
             aes(x = Anthro, y = R_bar * 100, group = fullGrp, colour = fire_excl_anthro),
-            size = 0.5, alpha = 0.2, inherit.aes = FALSE)+
-  geom_line(size = 2)+
+            linewidth = 0.5, alpha = 0.2, inherit.aes = FALSE)+
+  geom_line(linewidth = 2)+
   scale_colour_gradient(low = "green", high = "red")+
   scale_y_continuous(limits = c(0, 60),
                      breaks = c(0, 10, 20, 30, 40, 50, 60))+
@@ -217,7 +234,7 @@ AnthroChange <- 5 #For illustration assume 5% increase in anthropogenic disturba
 # at each time,  sample demographic rates and project, save results
 pars <- data.frame(N0 = N0)
 for (t in 1:numTimesteps) {
-  covariates <- disturbanceV@disturbanceMetrics
+  covariates <- disturbance
   covariates$Anthro <- covariates$Anthro + AnthroChange * (t - 1)
 
   rateSamples <- demographicRates(

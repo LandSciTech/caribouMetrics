@@ -9,8 +9,14 @@
 #' [sampleCoefs()]
 #' 
 #' @details 
+#' 
+#' TODO: confirm this is the right equation
+#' ## Recruitment
+#' Recruitment is modeled as
 #' \deqn{\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t \sim \text{Normal}(0,\sigma^2_{R})}
 #' 
+#' ## Survival
+#' \deqn{S_t=\text{min}(46 \tilde{S_t}-0.5)/45,1); \log(\tilde{S_t})=\beta^S_0+\beta^S_a A_t+\epsilon^S_t; \epsilon^S_t \sim \text{Normal}(0,\sigma^2_{S})}
 #'
 #' @param coefSamples matrix. Bootstrapped coefficients with one row per
 #'   replicate and one column per coefficient

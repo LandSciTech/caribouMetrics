@@ -11,7 +11,7 @@ getOutputTables(
   paramTable = data.frame(param = "observed"),
   exData = NULL,
   simNational,
-  getKSDists
+  getKSDists = FALSE
 )
 }
 \arguments{

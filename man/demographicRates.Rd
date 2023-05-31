@@ -21,7 +21,7 @@ demographicRates(
 }
 \arguments{
 \item{covTable}{data.frame. A table of covariate values to be used. Column
-names must match the coefficient names in \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.
+names must match the coefficient names in \link{popGrowthTableJohnsonECCC}.
 Each row is a different scenario.}
 
 \item{popGrowthPars}{list. Coefficient values and (optionally) quantiles returned by

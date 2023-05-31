@@ -55,7 +55,8 @@ period and the end of the projection period.}
 \item{survAnalysisMethod}{Survival analysis method either "KaplanMeier" or
 "Exponential". Exponential is only recommended for small sample sizes}
 
-\item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
+\item{adjustR}{Logical. Adjust R to account for delayed age at first
+reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{assessmentYrs}{Number of years over which to assess lambda (growth
 rate)}

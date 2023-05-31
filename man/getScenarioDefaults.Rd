@@ -53,10 +53,11 @@ the projection period}
 
 \item{obsYears}{Number of years of observations}
 
-\item{N0}{Number or vector of numbers. Initial population size for one or more
-sample populations.}
+\item{N0}{Number or vector of numbers. Initial population size for one or
+more sample populations.}
 
-\item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
+\item{adjustR}{Logical. Adjust R to account for delayed age at first
+reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{assessmentYrs}{Number of years over which to assess lambda (growth
 rate)}

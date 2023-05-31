@@ -35,11 +35,12 @@ replicate populations will be assigned to quantiles in the default range of
 0.025 and 0.975.}
 
 \item{populationGrowthTable}{data.frame. By default
-\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is used. A custom table of model parameters
+\link{popGrowthTableJohnsonECCC} is used. A custom table of model parameters
 can be provided but it must match the column names of
-\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.}
+\link{popGrowthTableJohnsonECCC}.}
 
-\item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
+\item{adjustR}{Logical. Adjust R to account for delayed age at first
+reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{forceUpdate}{logical. If the default inputs are used the result is
 cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}

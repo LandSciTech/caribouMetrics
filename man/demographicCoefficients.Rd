@@ -21,7 +21,7 @@ option is "Johnson" for the model used in Johnson et. al. (2020), but
 additional options may be added in the future.}
 
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
-number to use see \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} for options.}
+number to use see \link{popGrowthTableJohnsonECCC} for options.}
 
 \item{useQuantiles}{logical or numeric. If it is a numeric vector it must be
 length 2 and give the low and high limits of the quantiles to use. If
@@ -32,9 +32,9 @@ replicate populations will be assigned to quantiles in the default range of
 0.025 and 0.975.}
 
 \item{populationGrowthTable}{data.frame. By default
-\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}} is used. A custom table of model parameters
+\link{popGrowthTableJohnsonECCC} is used. A custom table of model parameters
 can be provided but it must match the column names of
-\code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.}
+\link{popGrowthTableJohnsonECCC}.}
 }
 \value{
 A list with elements:

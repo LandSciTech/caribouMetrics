@@ -27,8 +27,8 @@ caribouPopGrowth(
 )
 }
 \arguments{
-\item{N0}{Number or vector of numbers. Initial population size for one or more
-sample populations.}
+\item{N0}{Number or vector of numbers. Initial population size for one or
+more sample populations.}
 
 \item{numSteps}{Number. Number of years to project.}
 
@@ -62,13 +62,14 @@ one or more sample populations.}
 
 \item{interannualVar}{list or logical. List containing interannual
 variability parameters. These can be either coefficients of variation
-(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to
-\code{FALSE} ignore interannual variability.}
+(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to \code{FALSE}
+ignore interannual variability.}
 
 \item{probOption}{Character. Choices are "binomial","continuous" or
 "matchJohnson2020". See description for details.}
 
-\item{adjustR}{Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
+\item{adjustR}{Logical. Adjust R to account for delayed age at first
+reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{progress}{Logical. Should progress updates be shown?}
 }
@@ -77,11 +78,26 @@ A data.frame of population size (N0) and average growth rate (lambda)
 projections for each sample population.
 }
 \description{
-Given default parameter values, this is an implementation of the 2-stage
-population growth model described in Dyson et al. (in Prep). Set
-\code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson
-et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar = FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
-model without interannual variability, density dependence, or discrete
-numbers of animals used by Stewart et al. (in prep). See
-\code{vignette("caribouDemography")} for additional details and examples.
+Estimate population growth given estimated demographic rates based on the
+amount of disturbance in the landscape. This is accomplished with an
+implementation of the 2-stage population growth model used in Johnson et al.
+(2020) but with some differences described in Dyson et al. (2022). Given
+default parameter values, this is an implementation of the 2-stage population
+growth model described in Dyson et al. (in Prep). Set \code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson et al. 2020. Set
+\code{probOption = "continuous"}, \code{interannualVar = FALSE}, and \code{K = FALSE} to
+reproduce the simpler 2-stage demographic model without interannual
+variability, density dependence, or discrete numbers of animals used by
+Stewart et al. (in prep). See \code{vignette("caribouDemography")} for additional
+details and examples.
+}
+\details{
+The number of post-juvenile females that survive from year \eqn{t} to the
+next year \eqn{W_t} is binomially distributed with survival probability
+\eqn{S_t}: \eqn{W_{t} \sim \text{Binomial}(N_t,S_t)}. The number of juveniles
+recruiting to the post-juvenile class is a Poisson distributed function of
+the number of surviving post-juvenile females and the adjusted recruitment
+rate \eqn{X_t}: \eqn{J_{t} \sim \text{Poisson}(X_t, W_t)}. The post-juvenile
+female population in the next year includes both survivors and new recruits:
+\eqn{N_{t+1}=W_t+J_t}. Annual population growth rate \eqn{\lambda_t} is set
+to 0 when \eqn{N_t} is 0, and is otherwise \eqn{\lambda_t=N_{t+1}/N_t}.
 }

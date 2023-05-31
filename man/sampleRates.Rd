@@ -21,7 +21,7 @@ sampleRates(
 }
 \arguments{
 \item{covTable}{data.frame. A table of covariate values to be used. Column
-names must match the coefficient names in \code{\link[=popGrowthTableJohnsonECCC]{popGrowthTableJohnsonECCC()}}.
+names must match the coefficient names in \link{popGrowthTableJohnsonECCC}.
 Each row is a different scenario.}
 
 \item{coefSamples}{matrix. Bootstrapped coefficients with one row per
@@ -88,7 +88,17 @@ values and optionally the model precision. \code{coefSamples} and \code{coefValu
 \code{\link[=sampleCoefs]{sampleCoefs()}}
 }
 \details{
+TODO: confirm this is the right equation
+\subsection{Recruitment}{
+
+Recruitment is modeled as
 \deqn{\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t \sim \text{Normal}(0,\sigma^2_{R})}
+}
+
+\subsection{Survival}{
+
+\deqn{S_t=\text{min}(46 \tilde{S_t}-0.5)/45,1); \log(\tilde{S_t})=\beta^S_0+\beta^S_a A_t+\epsilon^S_t; \epsilon^S_t \sim \text{Normal}(0,\sigma^2_{S})}
+}
 }
 \examples{
 cfs <- getCoefs(popGrowthTableJohnsonECCC, "recruitment", "Johnson", "M3")
