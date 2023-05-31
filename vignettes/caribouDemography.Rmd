@@ -3,7 +3,7 @@ title: "Caribou Demography"
 output: 
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Disturbance Metrics and Caribou Demography}
+  %\VignetteIndexEntry{Caribou Demography}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
