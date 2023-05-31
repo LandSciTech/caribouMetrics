@@ -15,12 +15,7 @@ Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ca
     person(given="Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change",
            role = "cph"))
 Description: caribouMetrics provides implementations of several different models.
-    Firstly, it implements the caribou resource selection probability functions 
-    described in Hornseth and Rempel (2016)<doi:10.1139/cjz-2015-0101> "Seasonal 
-    resource selection of woodland  caribou (Rangifer tarandus caribou) across a 
-    gradient of anthropogenic disturbance". This allows for a spatial prediction of
-    caribou habitat use across 13 caribou ranges in Ontario. The package also includes
-    an implementation of the population and demographic models in "Science to inform
+    Firstly, it implements the population and demographic models in "Science to inform
     policy: linking population dynamics to habitat for a threatened species in Canada"
     by Johnson et. al. (2020) <doi:10.1111/1365-2664.13637> and the "Environment Canada 
     Scientific Assessment to Inform the Identification of Critical Habitat for Woodland 
@@ -28,7 +23,19 @@ Description: caribouMetrics provides implementations of several different models
     <https://www.registrelep-sararegistry.gc.ca/virtual_sara/files/ri_boreal_caribou_science_0811_eng.pdf>.
     These functions allow users to calculate metrics of disturbance, predict
     demographic rates for a given level of disturbance and simulate population
-    growth over time. 
+    growth over time. In addition to these national scale models, we provide a
+    simple Bayesian integrated population model that integrates prior information 
+    from national analysis of demographic-disturbance relationships with
+    available local demographic data to reduce uncertainty in population 
+    viability projections. Our model is an extension of work by
+    Eacker et al. (2019) <doi:10.1002/wsb.950> with some modifications and an
+    added ability to simulate observation data given parameters that define a
+    common caribou monitoring program. The package also includes an implementation 
+    of the caribou resource selection probability functions described in Hornseth and
+    Rempel (2016) <doi:10.1139/cjz-2015-0101> "Seasonal 
+    resource selection of woodland  caribou (Rangifer tarandus caribou) across a 
+    gradient of anthropogenic disturbance". This allows for a spatial prediction of
+    caribou habitat use across 13 caribou ranges in Ontario.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
