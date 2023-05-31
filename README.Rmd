@@ -115,7 +115,7 @@ Predict demographic rates and population growth based on their relationship to h
 * [**Bayesian Demographic Projection**](https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html): Project demographic rates and population growth based on the national demographic model and local caribou observations.
 * [**Disturbance Metrics**](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html): Calculate buffered anthropogenic disturbance and fire disturbance percentages for a given area.
 * [**Ontario Habitat Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html): Calculate caribou habitat use with Ontario RSF models.
-
+* [**User Interface Help**](https://landscitech.github.io/caribouMetrics/articles/UI_help.html)
 
 ## Getting help
 

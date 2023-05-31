@@ -74,3 +74,11 @@ cumFirePresence2 <- reclassDist(fireYr,
 plot(cumFirePresence2)
 
 }
+\seealso{
+Functions for calculating disturbance:
+\code{\link{DisturbanceMetrics-class}},
+\code{\link{disturbanceMetrics}()},
+\code{\link{results}()},
+\code{\link{updateDisturbance}()}
+}
+\concept{disturbance}

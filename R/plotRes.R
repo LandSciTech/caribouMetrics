@@ -22,7 +22,8 @@
 #' @return a ggplot object or list of ggplot objects if a vector of parameters
 #'   was given.
 #' @export
-#'
+#' 
+#' @family demography
 #' @examples
 #' scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 #'                             obsAnthroSlope = 1, projAnthroSlope = 5,

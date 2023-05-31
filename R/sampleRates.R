@@ -4,67 +4,18 @@
 
 #' Sample demographic rates
 #'
-#' Sample expected survival or recruitment rates based on samples of coefficient
-#' values and optionally the model precision. `coefSamples` and `coefValues` can be created with
-#' [sampleCoefs()]
 #' 
-#' @details 
-#' 
-#' TODO: confirm this is the right equation
-#' ## Recruitment
-#' Recruitment is modeled as
-#' \deqn{\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t \sim \text{Normal}(0,\sigma^2_{R})}
-#' 
-#' ## Survival
-#' \deqn{S_t=\text{min}(46 \tilde{S_t}-0.5)/45,1); \log(\tilde{S_t})=\beta^S_0+\beta^S_a A_t+\epsilon^S_t; \epsilon^S_t \sim \text{Normal}(0,\sigma^2_{S})}
-#'
 #' @param coefSamples matrix. Bootstrapped coefficients with one row per
 #'   replicate and one column per coefficient
 #' @param coefValues data.table. One row table with expected values for each
 #'   coefficient
-#' @param modVer character. Which model version to use. Currently the
-#'   only option is "Johnson" for the model used in Johnson et. al. (2020), but
-#'   additional options may be added in the future.
-#' @param resVar character. Response variable, typically "femaleSurvival" or
-#'   "recruitment"
-#' @param ignorePrecision logical. Should the precision of the model be used if
-#'   it is available? When precision is used variation among populations around the
-#'   National mean responses is considered in addition to the uncertainty about
-#'   the coefficient estimates.
-#' @param returnSample logical. If TRUE the returned data.frame has replicates *
-#'   scenarios rows. If FALSE the returned data.frame has one row per scenario
-#'   and additional columns summarizing the variation among replicates. See
-#'   Value for details.
-#' @param quantilesToUse numeric vector of length `coefSamples`. Only relevant when
-#'   `ignorePrecision = FALSE`. Each replicate population is assigned to a quantile
-#'   of the distribution of variation around the expected values, and remains in that
-#'   quantile as covariates change. If NULL sampling is done independently for each combination
-#'   of scenario and replicate, so the value for a particular replicate population in one
-#'   scenario is unrelated to the values for that replicate in other scenarios.
-#'   Useful for projecting impacts of changing disturbance on the
-#'   trajectories of replicate populations.
-#' @param predInterval numeric vector with length 2. The default 95\% interval is
-#'   (`c(0.025,0.975)`). Only relevant when `returnSample = TRUE` and `quantilesToUse = NULL`.
-#' @param transformFn functions used to transform demographic rates.
+#' @inheritParams demographicCoefficients
+#' @param quantilesToUse numeric vector of length `coefSamples`. See `useQuantiles`.
+#' @param transformFn function used to transform demographic rates.
 #'
 #' @inheritParams demographicRates
 #'
-#' @return A data.frame of predictions. The data.frame includes all columns in
-#'   `covTable` with additional columns depending on `returnSample`.
-#'
-#'   If `returnSample = FALSE` the number of rows is the same as the
-#'   number of rows in `covTable`, additional columns are:
-#'   * "average": The mean estimated values of the response variable) 
-#'   * "stdErr": Standard error of the estimated values
-#'   * "PIlow"/"PIhigh": If `quantilesToUse = NULL` these are the percentiles given by predInterval.
-#'     If using quantiles, maximum and minimum values are returned.
-#'    
-#'   If `returnSample = TRUE` the number of rows is `nrow(covTable) * replicates` 
-#'   additional columns are:
-#'   * "scnID": A unique identifier for scenarios provided in `covTable` 
-#'   * "replicate": A replicate identifier, unique within each scenario
-#'   * "value": The expected values of the response variable 
-#'    
+#' @return For `sampleRates` a similar data frame for one response variable
 #'
 #' @examples 
 #' cfs <- getCoefs(popGrowthTableJohnsonECCC, "recruitment", "Johnson", "M3")
@@ -91,12 +42,14 @@
 #'             quantilesToUse = quantile(x = c(0, 1),
 #'                                       probs = seq(0.025, 0.975, length.out = 10)))
 #'
+#'
+#' @rdname demographicRates
 #' @export
 
 sampleRates <- function(covTable,
                         coefSamples,
                         coefValues,
-                        modVer,
+                        modelVersion,
                         resVar,
                         ignorePrecision,
                         returnSample,
@@ -119,7 +72,7 @@ sampleRates <- function(covTable,
   covTableRed <- covTable[, whichCovariates]
 
   # set up components that are different for different model versions
-  if (grepl(x = modVer, pattern = "Johnson")) {
+  if (grepl(x = modelVersion, pattern = "Johnson")) {
     predictSDFun <- function(x, intt){transformFn(exp(intt + x))}
     phiSampleFun <- betaSample
     predictFun <- function(coefValues, covTableRed){transformFn(
@@ -133,7 +86,7 @@ sampleRates <- function(covTable,
                                            "Precision"))]))
     )}
     recruitDiv <- 1
-  } else if (grepl(x = modVer, pattern = "ECCC")) {
+  } else if (grepl(x = modelVersion, pattern = "ECCC")) {
     predictSDFun <- function(x, intt){intt + x}
     phiSampleFun <- normalSample
     predictFun <- function(coefValues, covTableRed){

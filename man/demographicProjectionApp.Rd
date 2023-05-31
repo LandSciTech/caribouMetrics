@@ -18,3 +18,19 @@ if(interactive()){
 }
 
 }
+\seealso{
+Caribou demography functions:
+\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{demographicCoefficients}()},
+\code{\link{demographicRates}()},
+\code{\link{getOutputTables}()},
+\code{\link{getPriors}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{getSimsNational}()},
+\code{\link{plotRes}()},
+\code{\link{popGrowthTableJohnsonECCC}},
+\code{\link{runScnSet}()},
+\code{\link{simulateObservations}()}
+}
+\concept{demography}

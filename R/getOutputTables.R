@@ -26,6 +26,8 @@
 #'   the "true" value of the simulated population or the "observed" value
 #'   simulated based on the collaring program parameters.
 #' * kdDists: Kolmogorov–Smirnov distances and p-values, NA if getKSDists is false
+#' 
+#' @family demography
 #' @export
 #'
 #' @examples

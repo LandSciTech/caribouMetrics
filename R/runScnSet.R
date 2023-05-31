@@ -15,6 +15,8 @@
 #' @return A list similar to [getOutputTables()] where tables for each scenario
 #'   have been appended together. Plus an error log for any scenarios that
 #'   failed to run.
+#'   
+#' @family demography
 #' @export
 #'
 #' @examples

@@ -95,7 +95,7 @@ except that \code{landCover} should be called \code{refRast} and
 }}
 }
 \value{
-A CaribouHabitat Object see \code{\link[=CaribouHabitat-class]{CaribouHabitat-class()}}
+A CaribouHabitat Object see \linkS4class{CaribouHabitat}
 }
 \description{
 Calculate the relative probability of caribou habitat use in spring, summer, fall and
@@ -155,7 +155,24 @@ plot(results(res, type ="processedData"))
 
 }
 \seealso{
-\code{\link[=CaribouHabitat-class]{CaribouHabitat-class()}} for information on the object
-returned and \code{\link[=updateCaribou]{updateCaribou()}} for updating an existing
-CaribouHabitat object.
+\linkS4class{CaribouHabitat} for information on the object
+returned, \code{\link[=updateCaribou]{updateCaribou()}} for updating an existing
+CaribouHabitat object, and \link{plot-CaribouHabitat} for the plot method.
+
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{coefTableHR}},
+\code{\link{coefTableStd}},
+\code{\link{fnlcToResType}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{plcToResType}},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{reclassPLC}()},
+\code{\link{resTypeCode}},
+\code{\link{results}()},
+\code{\link{rfuToResType}},
+\code{\link{threshTable}},
+\code{\link{updateCaribou}()}
 }
+\concept{habitat}

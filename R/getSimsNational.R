@@ -35,6 +35,8 @@ if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
 #'    Column names are Anthro, Mean, lower, upper, Parameter.
 #'  * samples: a tibble with parameter values for each scenario and replicate
 #'    4 rows per replicate \* scenario. Column names are Anthro, Parameter and Value
+#' 
+#' @family demography
 #' @export
 #'
 #' @examples

@@ -2,7 +2,7 @@
 % Please edit documentation in R/caribouBayesianIPM.R
 \name{caribouBayesianIPM}
 \alias{caribouBayesianIPM}
-\title{Run Bayesian integrated population model for caribou}
+\title{Bayesian integrated population model for caribou}
 \usage{
 caribouBayesianIPM(
   survData = system.file("extdata/simSurvData.csv", package = "caribouMetrics"),
@@ -94,3 +94,19 @@ year. This will reduce the sample size in years when new collars are added.
 mod <- caribouBayesianIPM(Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
 str(mod, max.level = 2)
 }
+\seealso{
+Caribou demography functions:
+\code{\link{caribouPopGrowth}()},
+\code{\link{demographicCoefficients}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{demographicRates}()},
+\code{\link{getOutputTables}()},
+\code{\link{getPriors}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{getSimsNational}()},
+\code{\link{plotRes}()},
+\code{\link{popGrowthTableJohnsonECCC}},
+\code{\link{runScnSet}()},
+\code{\link{simulateObservations}()}
+}
+\concept{demography}

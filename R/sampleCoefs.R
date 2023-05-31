@@ -3,12 +3,12 @@
 #' Sample coefficient values from the normal distribution based on the
 #' coefficient and standard error
 #'
-#' @param coefTable data.table. Table of must have columns "Coefficient" for the
+#' @param coefTable data.table. Table must have columns "Coefficient" for the
 #'   name of the coefficient, "Value" for the value of the coefficient and
-#'   "StdErr" for the standard error of coefficients
-#' @param replicates number of samples to take.
+#'   "StdErr" for the standard error of coefficients. Typically created with
+#'   [getCoefs()]
 #'
-#' @return A list with elements:
+#' @return For `sampleCoefs` a list with elements:
 #'   * "coefSamples": Bootstrapped coefficients with `replicates` rows
 #'   * "coefValues": Coefficient values taken from `populationGrowthTable`
 #'
@@ -17,6 +17,7 @@
 #'
 #' sampleCoefs(cfs[[1]], 10)
 #'
+#' @rdname demographicCoefficients
 #' @export
 
 sampleCoefs <- function(coefTable, replicates){

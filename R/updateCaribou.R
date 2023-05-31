@@ -81,6 +81,7 @@ NULL
 #' plot(res, season = "Winter")
 #' plot(res2, season = "Winter")
 #' 
+#' @family habitat
 #' @export
 setGeneric("updateCaribou", function(CarHab, newData, ...) standardGeneric("updateCaribou"))
 

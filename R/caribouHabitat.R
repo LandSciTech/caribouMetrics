@@ -1,6 +1,7 @@
 #' @include AAAClassDefinitions.R
 NULL
 
+#' @noRd
 setMethod(f = "initialize", signature = "CaribouHabitat",
           definition = function(.Object, landCover, esker, 
                                 natDist, anthroDist, 
@@ -95,11 +96,11 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'   `projectPoly` should be called `projectPolyOrig`. See
 #'   [loadSpatialInputs()].
 #' 
-#'@return A CaribouHabitat Object see [CaribouHabitat-class()]
+#'@return A CaribouHabitat Object see [CaribouHabitat-class]
 #'
-#'@seealso [CaribouHabitat-class()] for information on the object
-#'  returned and [updateCaribou()] for updating an existing
-#'  CaribouHabitat object.
+#'@seealso [CaribouHabitat-class] for information on the object
+#'  returned, [updateCaribou()] for updating an existing
+#'  CaribouHabitat object, and [plot-CaribouHabitat] for the plot method.
 #'
 #' @source Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
 #'   C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
@@ -152,8 +153,8 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #' plot(results(res, type ="processedData"))
 #'
 #' @importFrom rlang .data
-#'@export
-
+#' @family habitat
+#' @export
 #' @rdname caribouHabitat
 caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL, 
                            projectPoly = NULL,

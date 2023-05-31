@@ -33,6 +33,7 @@ The `disturbanceMetrics()` function is used to calculate the metrics described i
 * fire_excl_anthro: % fire not overlapping with anthropogenic disturbance
 
 `disturbanceMetrics()` uses several spatial data layers to calculate the percentage disturbance in an area: 
+
 | Name (Argument) | Description|
 |-------------------------------------------------------|------------------------------------------------------------------|
 | Land cover (landCover) | A raster where 0 and NA values are assumed to be water and are omitted from the total area, defines the raster grid |
@@ -41,13 +42,16 @@ The `disturbanceMetrics()` function is used to calculate the metrics described i
 | Anthropogenic disturbance (anthroDist)| Cumulative anthropogenic disturbance over the past 40 years |
 |Project polygon (projPoly)| An sf object containing polygon(s) of the study area(s)| 
 
-The example data set loaded below includes a small area in the Nipigon caribou range that we will use as an example.
+The example data set loaded below includes a small area in the Nipigon caribou range that we will use as an example. Disturbance data sets can be converted from polygons of year of disturbance or time since disturbance using (`reclassDist`). In the example below fire data with polygons containing year of disturbance are converted to a presence absence raster of cumulative disturbance over the past 40 years.
 
 ```{r load data, results='hide',message=F, warning=T}
-# load example data and classify plc into Resource Types
-landCoverD = raster(file.path(pthBase, "landCover.tif")) %>% 
-  reclassPLC()
-natDistD = raster(file.path(pthBase, "natDist.tif"))
+# load example data and classify cumulative natural disturbance
+landCoverD = raster(file.path(pthBase, "landCover.tif")) 
+natDistD <- sf::st_read(file.path(pthBase, "fireAFFES2020.shp")) %>% 
+  reclassDist(endYr = 2020, numCumYrs = 40, template = landCoverD, 
+              dateField = "FIRE_YEAR")
+
+
 anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
 linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE)

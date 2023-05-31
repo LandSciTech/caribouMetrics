@@ -25,6 +25,8 @@
 #'@seealso [DisturbanceMetrics-class()] for information on the object
 #'  returned and [disturbanceMetrics()] for making a new
 #'  DisturbanceMetrics object. 
+#' 
+#' @family disturbance
 #' @export
 #'
 #' @examples

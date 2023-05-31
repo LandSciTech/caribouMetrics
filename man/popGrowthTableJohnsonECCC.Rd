@@ -21,4 +21,20 @@ population dynamics to habitat for a threatened species in Canada. Journal
 of Applied Ecology, 57(7), pp.1314-1327.
 \url{https://doi.org/10.1111/1365-2664.13637}
 }
+\seealso{
+Caribou demography functions:
+\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{demographicCoefficients}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{demographicRates}()},
+\code{\link{getOutputTables}()},
+\code{\link{getPriors}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{getSimsNational}()},
+\code{\link{plotRes}()},
+\code{\link{runScnSet}()},
+\code{\link{simulateObservations}()}
+}
+\concept{demography}
 \keyword{datasets}

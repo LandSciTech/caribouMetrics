@@ -34,6 +34,8 @@
 #'   convertToRast. See [rasterizeLineDensity()].
 #'
 #' @return A named list with aligned spatial data components
+#' 
+#' @family habitat
 #' @export
 #'
 #' @examples

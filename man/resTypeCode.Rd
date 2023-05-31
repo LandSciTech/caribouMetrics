@@ -17,4 +17,22 @@ resTypeCode
 \description{
 A table to get numeric value associated with each resource type in rasters.
 }
+\seealso{
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableHR}},
+\code{\link{coefTableStd}},
+\code{\link{fnlcToResType}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{plcToResType}},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{reclassPLC}()},
+\code{\link{results}()},
+\code{\link{rfuToResType}},
+\code{\link{threshTable}},
+\code{\link{updateCaribou}()}
+}
+\concept{habitat}
 \keyword{datasets}

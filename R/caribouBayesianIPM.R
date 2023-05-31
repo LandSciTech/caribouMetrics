@@ -2,7 +2,7 @@
 # License GPL-3
 #NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
-#' Run Bayesian integrated population model for caribou
+#' Bayesian integrated population model for caribou
 #'
 #' TODO: fill in this description based on terminology in paper.
 #'
@@ -44,7 +44,7 @@
 #'     * survDataIn:  survival data 
 #'     * disturbanceIn: disturbance data
 #'     * ageRatioIn: composition data
-#'
+#' @family demography
 #' @export
 #'
 #' @examples

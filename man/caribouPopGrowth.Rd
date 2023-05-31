@@ -2,7 +2,7 @@
 % Please edit documentation in R/caribouPopGrowth.R
 \name{caribouPopGrowth}
 \alias{caribouPopGrowth}
-\title{Caribou demographic model}
+\title{Caribou population growth model}
 \usage{
 caribouPopGrowth(
   N0,
@@ -101,3 +101,23 @@ female population in the next year includes both survivors and new recruits:
 \eqn{N_{t+1}=W_t+J_t}. Annual population growth rate \eqn{\lambda_t} is set
 to 0 when \eqn{N_t} is 0, and is otherwise \eqn{\lambda_t=N_{t+1}/N_t}.
 }
+\examples{
+caribouPopGrowth(100, 2, 0.5, 0.7)
+
+}
+\seealso{
+Caribou demography functions:
+\code{\link{caribouBayesianIPM}()},
+\code{\link{demographicCoefficients}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{demographicRates}()},
+\code{\link{getOutputTables}()},
+\code{\link{getPriors}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{getSimsNational}()},
+\code{\link{plotRes}()},
+\code{\link{popGrowthTableJohnsonECCC}},
+\code{\link{runScnSet}()},
+\code{\link{simulateObservations}()}
+}
+\concept{demography}

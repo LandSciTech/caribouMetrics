@@ -1,10 +1,18 @@
 #' Sample demographic regression model coefficients
 #'
-#' A wrapper around [getCoefs()] to select coefficients for the appropriate
-#' model version and [sampleCoefs()] to sample coefficients for each replicate
-#' population, for both the survival and recruitment models. Also optionally,
-#' generates quantiles.
 #'
+#' Select the regression coefficient values and standard errors for the desired
+#' model version (see `popGrowthTableJohnsonECCC` for options) and then sample
+#' from the Gaussian distribution for each replicate population.
+#' `demographicCoefficients` is a wrapper around [getCoefs()], which selects
+#' coefficients and [sampleCoefs()], which samples coefficients, for both the
+#' survival and recruitment models.
+#'
+#' Each population is optionally assigned to quantiles of the error
+#' distributions for survival and recruitment. Using quantiles means that the
+#' population will stay in these quantiles as disturbance changes over time, so
+#' there is persistent variation in recruitment and survival among example
+#' populations.
 #'
 #' @param replicates integer. Number of replicate populations.
 #' @param modelVersion character. Which model version to use. Currently the only
@@ -19,19 +27,21 @@
 #'   remains in that quantile as covariates change. If `useQuantiles = TRUE`,
 #'   replicate populations will be assigned to quantiles in the default range of
 #'   0.025 and 0.975.
-#' @param populationGrowthTable data.frame. By default
-#'   [popGrowthTableJohnsonECCC] is used. A custom table of model parameters
-#'   can be provided but it must match the column names of
-#'   [popGrowthTableJohnsonECCC].
+#' @param populationGrowthTable data.frame.[popGrowthTableJohnsonECCC] is
+#'   included in the package and should be used in most cases. A custom table of
+#'   model coefficients and standard errors or confidence intervals can be
+#'   provided but it must match the column names of [popGrowthTableJohnsonECCC].
+#'   If the table does not contain the standard error it is calculated from the
+#'   confidence interval.
 #'
-#' @return A list with elements:
+#' @return For `demographicCoefficients` a list with elements:
 #'   * "modelVersion": The name of the model version
 #'   * "coefSamples_Survival" and"coefSamples_Recruitment":
 #'   lists with elements:
 #'     * "coefSamples": Bootstrapped coefficients with `replicates` rows
 #'     * "coefValues": Coefficient values taken from `populationGrowthTable`
 #'     * "quantiles": A vector of randomly selected quantiles between 0.025 and
-#'       0.975 with length `replicates`
+#'   0.975 with length `replicates`
 #'
 #' @references Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
 #'   P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
@@ -47,6 +57,7 @@
 #' demographicCoefficients(10, modelVersion = "Johnson", survivalModelNumber = "M1",
 #'                         recruitmentModelNumber = "M3")
 #'
+#' @family demography
 #' @export
 
 demographicCoefficients <- function(replicates,
@@ -73,14 +84,14 @@ demographicCoefficients <- function(replicates,
 
   DT_S <- getCoefs(populationGrowthTable,
                     resVar = "femaleSurvival",
-                    modVer = modelVersion,
+                    modelVersion = modelVersion,
                     modNum = survivalModelNumber)[[1]]
 
   coefSamples_S <- sampleCoefs(DT_S, replicates)
 
   DT_R <- getCoefs(populationGrowthTable,
                     resVar = "recruitment",
-                    modVer = modelVersion,
+                    modelVersion = modelVersion,
                     modNum = recruitmentModelNumber)[[1]]
 
   coefSamples_R <- sampleCoefs(DT_R, replicates)

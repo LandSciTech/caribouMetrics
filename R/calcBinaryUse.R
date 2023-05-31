@@ -67,7 +67,7 @@ NULL
 #' 
 #' plot(calcBinaryUse(res))
 #' plot(calcBinaryUse(res, bySeason = TRUE))
-#' 
+#' @family habitat
 #' @export
 setGeneric("calcBinaryUse", function(x, ...) standardGeneric("calcBinaryUse"))
 

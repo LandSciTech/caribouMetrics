@@ -15,6 +15,7 @@
 #'   C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
 #'   J.M., 2021. Modeling Cumulative Effects of Climate and Development on
 #'   Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
+#' @family habitat
 "coefTableHR"
 
 #' Model coefficients from standardized data for caribou ranges
@@ -33,9 +34,10 @@
 #'   selection of woodland caribou (Rangifer tarandus caribou) across a gradient
 #'   of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 #'   <https://doi.org/10.1139/cjz-2015-0101>
+#' @family habitat
 "coefTableStd"
 
-#' Category 2 thresholds table
+#' Binary habitat use thresholds table
 #'
 #' A table containing the thresholds used to assign habitat as Category 2 (ie in
 #' use) based on probability of use. Developed by Rempel and Hornseth using
@@ -55,6 +57,7 @@
 #'   C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
 #'   J.M., 2021. Modeling Cumulative Effects of Climate and Development on
 #'   Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
+#' @family habitat
 "threshTable"
 
 #' Lookup table for PLC to resource type
@@ -71,6 +74,7 @@
 #'  woodland caribou (Rangifer tarandus caribou) across a gradient of
 #'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 #'  <https://doi.org/10.1139/cjz-2015-0101>
+#' @family habitat
 "plcToResType"
 
 #' Lookup table for FNLC to resource type
@@ -85,6 +89,7 @@
 #' @format A data frame with 26 rows and 2 variables: 
 #'   * PLCCode: FNLC number code
 #'   * ResourceType: Letter code indicating the resource type
+#' @family habitat
 "fnlcToResType"
 
 #' Lookup table for RFU to resource type
@@ -100,6 +105,7 @@
 #'  woodland caribou (Rangifer tarandus caribou) across a gradient of
 #'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 #'  <https://doi.org/10.1139/cjz-2015-0101>
+#' @family habitat
 "rfuToResType"
 
 #' Lookup table for resource type codes
@@ -108,5 +114,6 @@
 #' @format A data frame with 9 rows and 2 columns:
 #'   * ResourceType: Letter code indicating the resource type
 #'   * code: the raster value corresponding to the resource type
-#'   
+#' 
+#' @family habitat  
 "resTypeCode"

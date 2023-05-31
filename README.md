@@ -87,17 +87,17 @@ demRates <- demographicRates(covTable = disturb_tbl,
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8478733 0.05588989
-#>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7298801 0.9210579 0.1813372 0.09266436 0.06503448 0.3802487
+#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8478733 0.05504942
+#>     S_PIlow  S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh
+#> 1 0.7465345 0.9273387 0.1813372 0.1037841 0.03718358 0.4006457
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
 popGrow
-#>     N0    lambda   N       R_t      S_t n_recruits surviving_adFemales
-#> 1 2000 0.9252384 420 0.1838532 0.854512         35                 385
+#>     N0    lambda   N       R_t       S_t n_recruits surviving_adFemales
+#> 1 2000 0.9266228 435 0.1833266 0.8506052         36                 399
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(
@@ -119,6 +119,7 @@ ipm <- caribouBayesianIPM(simObs$simSurvObs, simObs$ageRatioOut,
 #> using Kaplan-Meier survival model
 
 natSim <- getSimsNational(Anthro = unique(simObs$simDisturbance$Anthro))
+#> Warning: Setting expected survival S_bar to be between l_S and h_S.
 
 ipmTbls <- getOutputTables(ipm, paramTable = simObs$paramTable, 
                             exData = simObs$exData, 
@@ -187,6 +188,8 @@ and the following articles/vignettes/tutorials:
 - [**Ontario Habitat
   Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html):
   Calculate caribou habitat use with Ontario RSF models.
+- [**User Interface
+  Help**](https://landscitech.github.io/caribouMetrics/articles/UI_help.html)
 
 ## Getting help
 

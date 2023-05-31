@@ -25,4 +25,22 @@ plcToResType
 A table to convert Provincial Land Cover classes to resource types used in
 caribou resource selection model.
 }
+\seealso{
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableHR}},
+\code{\link{coefTableStd}},
+\code{\link{fnlcToResType}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{reclassPLC}()},
+\code{\link{resTypeCode}},
+\code{\link{results}()},
+\code{\link{rfuToResType}},
+\code{\link{threshTable}},
+\code{\link{updateCaribou}()}
+}
+\concept{habitat}
 \keyword{datasets}

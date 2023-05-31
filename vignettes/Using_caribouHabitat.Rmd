@@ -39,7 +39,7 @@ Several different data sets are used in the RSPF model to describe conditions th
 |Project polygon (projPoly)| An sf object containing polygon(s) of the study area(s), must contain a Range column| Used to set the boundaries of the analysis and link range-specific coefficients to spatial data|
 
 ## Simple Example
-The example data set loaded below includes a small area in the Nipigon caribou range that we will use as an example. The provincial land cover (PLC) data are converted to resource types based on look up tables provided in the package. 
+The example data set loaded below includes a small area in the Nipigon caribou range that we will use as an example. The provincial land cover (PLC) data are converted to resource types based on look up tables provided in the package using `reclassPLC()`. 
 
 ```{r load data}
 # load example data and classify plc into Resource Types

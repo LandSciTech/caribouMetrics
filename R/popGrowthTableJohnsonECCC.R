@@ -8,4 +8,5 @@
 #'   population dynamics to habitat for a threatened species in Canada. Journal
 #'   of Applied Ecology, 57(7), pp.1314-1327.
 #'   <https://doi.org/10.1111/1365-2664.13637>
+#' @family demography
 "popGrowthTableJohnsonECCC"

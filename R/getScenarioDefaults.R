@@ -44,7 +44,7 @@
 #' @return a data.frame of parameter values including a label that combines all
 #'   the parameter names and values into a string
 #' @export
-#'
+#' @family demography
 #' @examples
 #' getScenarioDefaults()
 #'

@@ -42,6 +42,8 @@
 #'   * ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
 #'   * exData: a tibble of expected population metrics based on the national model,
 #'   * paramTable: a data frame recording the input parameters for the simulation.
+#' 
+#' @family demography
 #' @export
 #'
 #' @examples

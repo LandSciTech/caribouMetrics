@@ -43,6 +43,8 @@
 #'
 #' @examples
 #' getPriors()
+#' 
+#' @family demography
 #' @export
 getPriors <- function(modList = NULL,
                       survivalModelNumber = "M1",
@@ -56,7 +58,7 @@ getPriors <- function(modList = NULL,
                       rInterannualVar = 0.46 * 0.5,
                       rInterannualVarSE = 0.22,
                       populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
-                      modVer = "Johnson",
+                      modelVersion = "Johnson",
                       returnValues = TRUE) {
   # modList=paramTable
 
@@ -72,7 +74,7 @@ getPriors <- function(modList = NULL,
 
   popGrowthPars <- demographicCoefficients(
     2,
-    modelVersion = modVer,
+    modelVersion = modelVersion,
     survivalModelNumber = modList$survivalModelNumber,
     recruitmentModelNumber = modList$recruitmentModelNumber,
     populationGrowthTable = populationGrowthTable

@@ -45,22 +45,23 @@
 #' # not (0)
 #' cumFirePresence <- reclassDist(fireYr,
 #'                                endYr = 2010,
-#'                                numCumYrs = 30,
+#'                                numCumYrs = 40,
 #'                                template = lc,
 #'                                dateField = "FIRE_YEAR")
 #' 
 #' plot(cumFirePresence)
 #' 
 #' # with time since disturbance
-#' fireYr$FIRE_YEAR <- c(40, 15, 10, 20)
+#' fireYr$FIRE_YEAR <- c(50, 15, 10, 20)
 #' cumFirePresence2 <- reclassDist(fireYr,
 #'                                endYr = 0,
-#'                                numCumYrs = 30,
+#'                                numCumYrs = 40,
 #'                                template = lc,
 #'                                dateField = "FIRE_YEAR")
 #'                                
 #' plot(cumFirePresence2)
 #'
+#' @family disturbance
 #' @export
 #' 
 

@@ -5,6 +5,7 @@
 #' 
 #' @return launches a shiny app in the browser
 #' @export
+#' @family demography
 #'
 #' @examples
 #' if(interactive()){

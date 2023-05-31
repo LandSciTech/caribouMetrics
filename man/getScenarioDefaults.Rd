@@ -105,3 +105,19 @@ Eacker, D.R., Hebblewhite, M., Steenweg, R., Russell, M., Flasko, A. and
 Hervieux, D., 2019. Web‐based application for threatened woodland caribou
 population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.
 }
+\seealso{
+Caribou demography functions:
+\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{demographicCoefficients}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{demographicRates}()},
+\code{\link{getOutputTables}()},
+\code{\link{getPriors}()},
+\code{\link{getSimsNational}()},
+\code{\link{plotRes}()},
+\code{\link{popGrowthTableJohnsonECCC}},
+\code{\link{runScnSet}()},
+\code{\link{simulateObservations}()}
+}
+\concept{demography}

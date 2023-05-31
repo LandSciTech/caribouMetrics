@@ -53,10 +53,12 @@ percentage covered by fire that does not overlap anthropogenic disturbance.
 See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturbance scenario is simulated
 based on \code{paramTable}}
 
-\item{populationGrowthTable}{data.frame. By default
-\link{popGrowthTableJohnsonECCC} is used. A custom table of model parameters
-can be provided but it must match the column names of
-\link{popGrowthTableJohnsonECCC}.}
+\item{populationGrowthTable}{data.frame.\link{popGrowthTableJohnsonECCC} is
+included in the package and should be used in most cases. A custom table of
+model coefficients and standard errors or confidence intervals can be
+provided but it must match the column names of \link{popGrowthTableJohnsonECCC}.
+If the table does not contain the standard error it is calculated from the
+confidence interval.}
 
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
 number to use see \link{popGrowthTableJohnsonECCC} for options.}
@@ -89,3 +91,19 @@ scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
                             
 simO <- simulateObservations(scns)
 }
+\seealso{
+Caribou demography functions:
+\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{demographicCoefficients}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{demographicRates}()},
+\code{\link{getOutputTables}()},
+\code{\link{getPriors}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{getSimsNational}()},
+\code{\link{plotRes}()},
+\code{\link{popGrowthTableJohnsonECCC}},
+\code{\link{runScnSet}()}
+}
+\concept{demography}

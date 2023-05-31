@@ -59,3 +59,21 @@ lc[6:7, 6:7] <- 21 #treed fen
 resTypes <- reclassPLC(lc)
 plot(resTypes)
 }
+\seealso{
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableHR}},
+\code{\link{coefTableStd}},
+\code{\link{fnlcToResType}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{plcToResType}},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{resTypeCode}},
+\code{\link{results}()},
+\code{\link{rfuToResType}},
+\code{\link{threshTable}},
+\code{\link{updateCaribou}()}
+}
+\concept{habitat}

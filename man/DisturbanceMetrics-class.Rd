@@ -45,4 +45,11 @@ Missing layers are omitted from the output, not interpreted as 0 disturbance
 \seealso{
 See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}} for options when creating a
 DisturbanceMetrics object.
+
+Functions for calculating disturbance:
+\code{\link{disturbanceMetrics}()},
+\code{\link{reclassDist}()},
+\code{\link{results}()},
+\code{\link{updateDisturbance}()}
 }
+\concept{disturbance}

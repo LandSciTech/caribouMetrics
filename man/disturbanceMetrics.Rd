@@ -114,10 +114,16 @@ disturbanceMetrics(landCover = lc,
                    padFocal = TRUE,
                    bufferWidth = 1)
 
-
 }
 \seealso{
 \code{\link[=DisturbanceMetrics-class]{DisturbanceMetrics-class()}} for information on the object
 returned and \code{\link[=updateDisturbance]{updateDisturbance()}} for updating an existing
 DisturbanceMetrics object.
+
+Functions for calculating disturbance:
+\code{\link{DisturbanceMetrics-class}},
+\code{\link{reclassDist}()},
+\code{\link{results}()},
+\code{\link{updateDisturbance}()}
 }
+\concept{disturbance}

@@ -28,6 +28,8 @@
 #' rastLines <- rasterizeLineDensity(lf, lc)
 #' 
 #' plot(rastLines)
+#' 
+#' @family habitat
 #' @export
 #' 
 rasterizeLineDensity <- function(x, r, ptDensity = 1) {

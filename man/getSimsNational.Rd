@@ -34,10 +34,12 @@ remains in that quantile as covariates change. If \code{useQuantiles = TRUE},
 replicate populations will be assigned to quantiles in the default range of
 0.025 and 0.975.}
 
-\item{populationGrowthTable}{data.frame. By default
-\link{popGrowthTableJohnsonECCC} is used. A custom table of model parameters
-can be provided but it must match the column names of
-\link{popGrowthTableJohnsonECCC}.}
+\item{populationGrowthTable}{data.frame.\link{popGrowthTableJohnsonECCC} is
+included in the package and should be used in most cases. A custom table of
+model coefficients and standard errors or confidence intervals can be
+provided but it must match the column names of \link{popGrowthTableJohnsonECCC}.
+If the table does not contain the standard error it is calculated from the
+confidence interval.}
 
 \item{adjustR}{Logical. Adjust R to account for delayed age at first
 reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
@@ -60,3 +62,19 @@ Get a set of simulation results from the national model
 \examples{
 getSimsNational()
 }
+\seealso{
+Caribou demography functions:
+\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{demographicCoefficients}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{demographicRates}()},
+\code{\link{getOutputTables}()},
+\code{\link{getPriors}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{plotRes}()},
+\code{\link{popGrowthTableJohnsonECCC}},
+\code{\link{runScnSet}()},
+\code{\link{simulateObservations}()}
+}
+\concept{demography}

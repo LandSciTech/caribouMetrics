@@ -24,6 +24,7 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #' @slot attributes A list of arguments from the `caribouHabtat` call. 
 #' @name CaribouHabitat-class
 #' @rdname CaribouHabitat-class
+#' @family habitat
 #' @export CaribouHabitat
 #' @importClassesFrom raster RasterLayer
 
@@ -78,6 +79,7 @@ CaribouHabitat <- setClass("CaribouHabitat",
 #' @slot attributes A list of arguments from the `caribouHabtat` call. 
 #' @name DisturbanceMetrics-class
 #' @rdname DisturbanceMetrics-class
+#' @family disturbance
 #' @export DisturbanceMetrics
 #' @importClassesFrom raster RasterLayer
 

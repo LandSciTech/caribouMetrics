@@ -48,6 +48,7 @@
 #'  availability of models for conservation.
 #'  <https://doi.org/10.1101/2022.06.01.494350>
 #'
+#' @family habitat
 #'@export
 reclassPLC <- function(plc, plcLU = plcToResType){
   if(!is.null(plcLU)){

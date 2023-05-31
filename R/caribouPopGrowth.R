@@ -1,4 +1,4 @@
-#' Caribou demographic model
+#' Caribou population growth model
 #'
 #' Estimate population growth given estimated demographic rates based on the
 #' amount of disturbance in the landscape. This is accomplished with an
@@ -54,8 +54,10 @@
 #'
 #' @return A data.frame of population size (N0) and average growth rate (lambda)
 #'   projections for each sample population.
+#' @examples 
+#' caribouPopGrowth(100, 2, 0.5, 0.7)
 #'
-#'
+#' @family demography
 #' @export
 caribouPopGrowth <- function(N0,
                              numSteps,

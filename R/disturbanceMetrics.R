@@ -112,7 +112,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'                    padFocal = TRUE,
 #'                    bufferWidth = 1)
 #'
-#'
+#' @family disturbance
 #'@export
 disturbanceMetrics <- function(landCover = NULL, linFeat = NULL, 
                                projectPoly = NULL, isPercent = TRUE, ...) {
