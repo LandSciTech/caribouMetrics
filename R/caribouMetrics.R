@@ -7,8 +7,7 @@
 #' demographic model that allows users predict to demographic rates for a given
 #' level of disturbance and project population growth over time. Demographic
 #' rates are predicted using model coefficients published in [Johnson et. al.
-#' (2020)](doi:10.1111/1365-2664.13637) or [ECCC
-#' (2011)](https://www.registrelep-sararegistry.gc.ca/virtual_sara/files/ri_boreal_caribou_science_0811_eng.pdf).
+#' (2020)](doi:10.1111/1365-2664.13637).
 #' Population growth is projected using a two-stage demographic model with
 #' density dependence and interannual variability based on Johnson et. al.
 #' (2020) but with some modifications as described in [Dyson et al.

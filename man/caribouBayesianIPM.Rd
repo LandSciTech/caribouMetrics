@@ -82,7 +82,10 @@ a list with elements:
 }
 }
 \description{
-TODO: fill in this description based on terminology in paper.
+Build a Bayesian integrated population model that integrates prior
+information from Johnson et al.'s (2020) national analysis of
+demographic-disturbance relationships with local demographic data to project
+population growth.
 }
 \details{
 Note that if \code{survData} contains values for enter that are > 0 these rows

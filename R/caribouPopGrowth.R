@@ -14,15 +14,31 @@
 #' details and examples.
 #'
 #' The number of post-juvenile females that survive from year \eqn{t} to the
-#' next year \eqn{W_t} is binomially distributed with survival probability
-#' \eqn{S_t}: \eqn{W_{t} \sim \text{Binomial}(N_t,S_t)}. The number of juveniles
-#' recruiting to the post-juvenile class is a Poisson distributed function of
-#' the number of surviving post-juvenile females and the adjusted recruitment
-#' rate \eqn{X_t}: \eqn{J_{t} \sim \text{Poisson}(X_t, W_t)}. The post-juvenile
-#' female population in the next year includes both survivors and new recruits:
-#' \eqn{N_{t+1}=W_t+J_t}. Annual population growth rate \eqn{\lambda_t} is set
-#' to 0 when \eqn{N_t} is 0, and is otherwise \eqn{\lambda_t=N_{t+1}/N_t}.
+#' census \eqn{\dot{W}_t} is binomially distributed with survival probability
+#' \eqn{\dot{S}_t}: \eqn{\dot{W}_{t} \sim \text{Binomial}(\dot{N}_t,\dot{S}_t)}.
+#' Maximum potential recruitment rate is adjusted for sex ratio and (optionally)
+#' delayed age at first reproduction
+#' \deqn{\dot{X}_t=\frac{\dot{R}_t/2}{1+\dot{R}_t/2}.} Realized recruitment rate
+#' varies with population density, and the number of juveniles recruiting to the
+#' post-juvenile class at the census is a binomially distributed function of the
+#' number of surviving post-juvenile females and the adjusted recruitment rate:
+#' \deqn{\dot{J}_{t} \sim
+#' \text{Binomial}(\dot{W}_t,\dot{X}_t[p_0-(p_0-p_k)(\frac{\dot{W}_t}{N_0k})^b]\frac{\dot{W}_t}{\dot{W}_t+a}).}
+#' Given default parameters, recruitment rate is lowest \eqn{(0.5\dot{X}_t)}
+#' when \eqn{\dot{N}_t=1}, approaches a maximum of \eqn{\dot{X}_t} at
+#' intermediate population sizes, and declines to \eqn{0.6\dot{X}_t} as the
+#' population reaches carrying capacity of \eqn{k=100} times the initial
+#' population size. The post-juvenile female population in the next year
+#' includes both survivors and new recruits:
+#' \eqn{\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)}.
 #'
+#' Interannual variation in survival and recruitment is modelled using truncated
+#' beta distributions: \eqn{\dot{R}_t
+#' \sim \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim
+#' \text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)}. Coefficients of variation
+#' among years \eqn{(\nu_R,\nu_S)} and maximum/minimum values
+#' \eqn{l_R,h_R,l_S,h_S} for recruitment and survival are set to default
+#' parameters in the function.
 #'
 #' @param N0 Number or vector of numbers. Initial population size for one or
 #'   more sample populations.
@@ -44,7 +60,7 @@
 #' @param h_S Number. Maximum survival.
 #' @param interannualVar list or logical. List containing interannual
 #'   variability parameters. These can be either coefficients of variation
-#'   (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to `FALSE`
+#'   (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to `FALSE` to
 #'   ignore interannual variability.
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
@@ -52,9 +68,30 @@
 #'   reproduction (DeCesare et al. 2012; Eacker et al. 2019).
 #' @param progress Logical. Should progress updates be shown?
 #'
-#' @return A data.frame of population size (N0) and average growth rate (lambda)
-#'   projections for each sample population.
-#' @examples 
+#' @return A data.frame of population size (`N`) and average growth rate
+#'   (`lambda`) projections for each sample population.
+#'
+#' @references 
+#'   Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
+#'   Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
+#'   Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Existing
+#'   caribou habitat and demographic models need improvement for Ring of Fire
+#'   impact assessment: A roadmap for improving the usefulness, transparency,
+#'   and availability of models for conservation.
+#'   <https://doi.org/10.1101/2022.06.01.494350>
+#'   
+#'   Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
+#'   P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+#'   linking population dynamics to habitat for a threatened species in Canada.
+#'   Journal of Applied Ecology, 57(7), pp.1314-1327.
+#'   <https://doi.org/10.1111/1365-2664.13637>
+#'
+#'   Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty, A.M.,
+#'   Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and Hughes, J.,
+#'   2023. Climate‐informed forecasts reveal dramatic local habitat shifts and
+#'   population uncertainty for northern boreal caribou. Ecological
+#'   Applications, 33(3), p.e2816.
+#' @examples
 #' caribouPopGrowth(100, 2, 0.5, 0.7)
 #'
 #' @family demography

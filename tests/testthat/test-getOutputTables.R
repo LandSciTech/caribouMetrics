@@ -48,3 +48,12 @@ test_that("works with out sim obs",{
   expect_type(mod_tbl, "list")
   
 })
+
+test_that("works with out simNational", {
+  mod_real <- caribouBayesianIPM(Niter = 100, Nburn = 10)
+  
+  
+  mod_tbl <- getOutputTables(mod_real)
+  
+  expect_type(mod_tbl, "list")
+})

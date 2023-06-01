@@ -10,7 +10,7 @@ getOutputTables(
   endYear = max(caribouBayesDemogMod$inData$disturbanceIn$Year),
   paramTable = data.frame(param = "observed"),
   exData = NULL,
-  simNational,
+  simNational = NULL,
   getKSDists = FALSE
 )
 }

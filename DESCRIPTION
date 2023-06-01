@@ -17,10 +17,7 @@ Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ca
 Description: caribouMetrics provides implementations of several different models.
     Firstly, it implements the population and demographic models in "Science to inform
     policy: linking population dynamics to habitat for a threatened species in Canada"
-    by Johnson et. al. (2020) <doi:10.1111/1365-2664.13637> and the "Environment Canada 
-    Scientific Assessment to Inform the Identification of Critical Habitat for Woodland 
-    Caribou (Rangifer tarandus caribou), Boreal Population, in Canada 2011 Update" report 
-    <https://www.registrelep-sararegistry.gc.ca/virtual_sara/files/ri_boreal_caribou_science_0811_eng.pdf>.
+    by Johnson et. al. (2020) <doi:10.1111/1365-2664.13637>.
     These functions allow users to calculate metrics of disturbance, predict
     demographic rates for a given level of disturbance and simulate population
     growth over time. In addition to these national scale models, we provide a
@@ -120,4 +117,4 @@ Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
-URL: https://landscitech.github.io/caribouMetrics
+URL: https://landscitech.github.io/caribouMetrics, https://github.com/LandSciTech/caribouMetrics

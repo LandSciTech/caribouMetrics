@@ -1,7 +1,5 @@
 #' Sample coefficients
 #'
-#' Sample coefficient values from the normal distribution based on the
-#' coefficient and standard error
 #'
 #' @param coefTable data.table. Table must have columns "Coefficient" for the
 #'   name of the coefficient, "Value" for the value of the coefficient and

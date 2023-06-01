@@ -4,7 +4,13 @@
 
 #' Bayesian integrated population model for caribou
 #'
-#' TODO: fill in this description based on terminology in paper.
+#' Build a Bayesian integrated population model that integrates prior
+#' information from Johnson et al.'s (2020) national analysis of
+#' demographic-disturbance relationships with local demographic data to project
+#' population growth.
+#' 
+#' 
+#'
 #'
 #' Note that if `survData` contains values for enter that are > 0 these rows
 #' will be dropped to avoid errors when collars are added in the middle of the
@@ -41,7 +47,7 @@
 #' @return a list with elements:
 #'   * result: an `rjags` model object see [R2jags::jags()].
 #'   * inData: a list of data that is used as input to the jags model:
-#'     * survDataIn:  survival data 
+#'     * survDataIn:  survival data
 #'     * disturbanceIn: disturbance data
 #'     * ageRatioIn: composition data
 #' @family demography

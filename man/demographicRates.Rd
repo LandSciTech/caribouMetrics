@@ -120,35 +120,32 @@ recruitment (calves per cow)
 For \code{sampleRates} a similar data frame for one response variable
 }
 \description{
-Apply sampled coefficients to disturbance covariates to calculate expected
-recruitment (\eqn{\bar{R}_t}) and survival (\eqn{\bar{S}_t}) according to the
-beta regression models estimated by Johnson et al. (2020): \deqn{\bar{R}_t
-\sim Beta(\mu^R_t,\phi^R);
-log(\mu^R_t)=\dot{\beta^R_0}+\dot{\beta^R_a}A_t+\dot{\beta}^R_fF_t}
-
-\deqn{\bar{S}_t \sim (46\times
-Beta(\mu^S_t,\phi^S)-0.5)/45;log(\mu^S_t)=\dot{\beta^S_0}+\dot{\beta^S_a}A_t}
-
-\eqn{\phi^R} and \eqn{\phi^S} are the precisions of the Beta distributed
-errors and are only available for some model versions, or can optionally be
-ignored.
-
-\code{demographicRates} is a wrapper around \code{sampleRates} to sample both survival
-and recruitment rates based on the result of \code{\link[=demographicCoefficients]{demographicCoefficients()}} and
-using recommended defaults.
+Apply sampled coefficients to disturbance covariates to
+calculate expected recruitment and survival.\code{demographicRates} is a wrapper
+around \code{sampleRates} to sample both survival and recruitment rates based on
+the result of \code{\link[=demographicCoefficients]{demographicCoefficients()}} and using recommended defaults.
 }
 \details{
-TODO: confirm this is the right equation
-\subsection{Recruitment}{
+First the mean recruitment (\eqn{\mu^R_t}) and survival
+(\eqn{\mu^S_t}) are calculated from the sampled coefficients and provided
+disturbance covariates according to the beta regression models estimated by
+Johnson et al. (2020):
+\deqn{log(\mu^R_t)=\dot{\beta^R_0}+\dot{\beta^R_a}A_t+\dot{\beta}^R_fF_t}
 
-Recruitment is modeled as
-\deqn{\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t \sim \text{Normal}(0,\sigma^2_{R})}
-}
+\deqn{log(\mu^S_t)=\dot{\beta^S_0}+\dot{\beta^S_a}A_t}
 
-\subsection{Survival}{
+Then each replicate population is assigned to a quantile (if \code{useQuantiles = TRUE}) of the Beta distributed expected recruitment \eqn{\bar{R}_t} and
+survival \eqn{\bar{S}_t} where \eqn{\phi^R} and \eqn{\phi^S} are the
+precisions of the Beta distributed errors:
 
-\deqn{S_t=\text{min}(46 \tilde{S_t}-0.5)/45,1); \log(\tilde{S_t})=\beta^S_0+\beta^S_a A_t+\epsilon^S_t; \epsilon^S_t \sim \text{Normal}(0,\sigma^2_{S})}
-}
+\deqn{\bar{R}_t \sim \text{Beta}(\mu^R_t,\phi^R)}
+
+\deqn{\bar{S}_t \sim (46\times \text{Beta}(\mu^S_t,\phi^S)-0.5)/45)}
+
+Using quantiles means that the population will stay in these quantiles as
+disturbance changes over time, so there is persistent variation in
+recruitment and survival among example populations. A transformation
+function is also applied to survival to avoid survival probabilities of 1.
 }
 \examples{
 # get coefficient samples

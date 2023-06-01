@@ -87,16 +87,13 @@ from the Gaussian distribution for each replicate population.
 \code{demographicCoefficients} is a wrapper around \code{\link[=getCoefs]{getCoefs()}}, which selects
 coefficients and \code{\link[=sampleCoefs]{sampleCoefs()}}, which samples coefficients, for both the
 survival and recruitment models.
-
-Sample coefficient values from the normal distribution based on the
-coefficient and standard error
 }
 \details{
 Each population is optionally assigned to quantiles of the error
 distributions for survival and recruitment. Using quantiles means that the
 population will stay in these quantiles as disturbance changes over time, so
 there is persistent variation in recruitment and survival among example
-populations.
+populations. See \code{\link[=demographicRates]{demographicRates()}} for more details.
 }
 \examples{
 # sample coefficients for default models

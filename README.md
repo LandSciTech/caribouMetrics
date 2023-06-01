@@ -15,11 +15,10 @@ population and demographic model that allows users predict to
 demographic rates for a given level of disturbance and project
 population growth over time. Demographic rates are predicted using model
 coefficients published in [Johnson et.
-al. (2020)](doi:10.1111/1365-2664.13637) or [ECCC
-(2011)](https://www.registrelep-sararegistry.gc.ca/virtual_sara/files/ri_boreal_caribou_science_0811_eng.pdf).
-Population growth is projected using a two-stage demographic model with
-density dependence and interannual variability based on Johnson et.
-al. (2020) but with some modifications as described in [Dyson et
+al. (2020)](doi:10.1111/1365-2664.13637). Population growth is projected
+using a two-stage demographic model with density dependence and
+interannual variability based on Johnson et. al. (2020) but with some
+modifications as described in [Dyson et
 al. (2022)](https://doi.org/10.1101/2022.06.01.494350). In addition to
 these national scale models, we provide a simple Bayesian integrated
 population model that integrates prior information from national
@@ -87,9 +86,9 @@ demRates <- demographicRates(covTable = disturb_tbl,
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8478733 0.05504942
+#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8478733 0.04989658
 #>     S_PIlow  S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7465345 0.9273387 0.1813372 0.1037841 0.03718358 0.4006457
+#> 1 0.7404495 0.9239784 0.1813372 0.1014497 0.06930776 0.4205101
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
@@ -97,7 +96,7 @@ popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar,
 
 popGrow
 #>     N0    lambda   N       R_t       S_t n_recruits surviving_adFemales
-#> 1 2000 0.9266228 435 0.1833266 0.8506052         36                 399
+#> 1 2000 0.9223887 396 0.1804897 0.8558959         33                 363
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(

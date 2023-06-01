@@ -12,7 +12,7 @@
 #' distributions for survival and recruitment. Using quantiles means that the
 #' population will stay in these quantiles as disturbance changes over time, so
 #' there is persistent variation in recruitment and survival among example
-#' populations.
+#' populations. See [demographicRates()] for more details. 
 #'
 #' @param replicates integer. Number of replicate populations.
 #' @param modelVersion character. Which model version to use. Currently the only
@@ -26,7 +26,7 @@
 #'   quantile of the distribution of variation around the expected values, and
 #'   remains in that quantile as covariates change. If `useQuantiles = TRUE`,
 #'   replicate populations will be assigned to quantiles in the default range of
-#'   0.025 and 0.975.
+#'   0.025 and 0.975.  
 #' @param populationGrowthTable data.frame.[popGrowthTableJohnsonECCC] is
 #'   included in the package and should be used in most cases. A custom table of
 #'   model coefficients and standard errors or confidence intervals can be

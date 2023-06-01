@@ -50,7 +50,7 @@ getOutputTables <- function(caribouBayesDemogMod,
                             endYear = max(caribouBayesDemogMod$inData$disturbanceIn$Year), 
                             paramTable = data.frame(param = "observed"),
                             exData = NULL,
-                            simNational,
+                            simNational = NULL,
                             getKSDists = FALSE) {
   # result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;
   # simObsList=oo;simNational=simBig
@@ -126,29 +126,36 @@ getOutputTables <- function(caribouBayesDemogMod,
                   subset(obsSurv, select = c("Year", "Mean", "parameter", "type")), 
                   trueSurv)
   
-  if(!all(unique(simObsList$disturbanceIn$Anthro) %in% simNational$summary$Anthro)){
-    message("recalculating national sims to match anthropogenic distubance scenario")
-    
-    simNational <- getSimsNational(Anthro = unique(simObsList$disturbanceIn$Anthro))
-  }
-  
-  simBigO <- subset(simNational$summary, select = c("Anthro", "Mean", "lower",
-                                                    "upper", "Parameter"))
-  names(simBigO) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
-  
   # combine paramTable and simDisturbance and add to all output tables, nest params in a list
   dist_params <- merge(simObsList$disturbanceIn, paramTable)
   
-  rr.summary <- merge(rr.summary, dist_params)
-  simBigO <- merge(simBigO, dist_params)
-
+  if(!is.null(simNational)){
+    if(!all(unique(simObsList$disturbanceIn$Anthro) %in% simNational$summary$Anthro)){
+      message("recalculating national sims to match anthropogenic distubance scenario")
+      
+      simNational <- getSimsNational(Anthro = unique(simObsList$disturbanceIn$Anthro))
+    }
+    
+    simBigO <- subset(simNational$summary, select = c("Anthro", "Mean", "lower",
+                                                      "upper", "Parameter"))
+    names(simBigO) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
+    
+    simBigO <- merge(simBigO, dist_params)
+  } else {
+    simBigO <- NULL
+  }
   
+  rr.summary <- merge(rr.summary, dist_params)
   obsAll <- merge(obsAll, dist_params)
   rr.summary.all <- rr.summary
   sim.all <- simBigO
   obs.all <- obsAll
   
   if (getKSDists) {
+    if(is.null(simNational)){
+      stop("Cannot calculate KSDists without simNational.", 
+           "Set getKSDists = FALSE or provide simNational.", call. = FALSE)
+    }
     # get Kolmogorov smirnov distance between samples at each point
     
     variables <- unique(simNational$summary$parameter)
