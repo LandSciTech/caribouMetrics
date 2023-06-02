@@ -91,7 +91,7 @@ str(mod_tbl)
 
 And plot the results with `plotRes()`.
 ```{r}
-plotRes(mod_tbl, "Recruitment")
+plotRes(mod_tbl, "Recruitment", labFontSize = 10)
 ```
 
 We can also compare out local observed data to what would be projected by the national model. 
@@ -208,7 +208,6 @@ plotRes(scResults,
 
 ```
 
-TO DO: Add something about getPriors and how that can be adjusted?
 
 
 ### Troubleshooting
