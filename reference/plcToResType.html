@@ -18,7 +18,7 @@ caribou resource selection model."><!-- mathjax --><script src="https://cdnjs.cl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -33,7 +33,7 @@ caribou resource selection model."><!-- mathjax --><script src="https://cdnjs.cl
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -42,10 +42,19 @@ caribou resource selection model."><!-- mathjax --><script src="https://cdnjs.cl
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -55,7 +64,7 @@ caribou resource selection model."><!-- mathjax --><script src="https://cdnjs.cl
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Lookup table for PLC to resource type</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/data.R" class="external-link"><code>R/data.R</code></a></small>
     <div class="hidden name"><code>plcToResType.Rd</code></div>
     </div>
 
@@ -70,21 +79,34 @@ caribou resource selection model.</p>
 
     <div id="format">
     <h2>Format</h2>
-    <p>A data frame with 30 rows and 2 variables:</p><dl><dt>PLCCode</dt>
-<dd><p>Provincial landcover number code</p></dd>
-
-  <dt>ResourceType</dt>
-<dd><p>Letter code indicating the resource type</p></dd>
- 
-
-</dl></div>
+    <p>A data frame with 30 rows and 2 variables:</p><ul><li><p>PLCCode: Provincial landcover number code</p></li>
+<li><p>ResourceType: Letter code indicating the resource type</p></li>
+</ul></div>
     <div id="source">
     <h2>Source</h2>
     <p>LSL script for work published in:
- Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
- woodland caribou (Rangifer tarandus caribou) across a gradient of
- anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
- <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">https://doi.org/10.1139/cjz-2015-0101</a></p>
+Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
+woodland caribou (Rangifer tarandus caribou) across a gradient of
+anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+<a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">https://doi.org/10.1139/cjz-2015-0101</a></p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>Caribou habitat functions:
+<code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code>,
+<code><a href="calcBinaryUse.html">calcBinaryUse</a>()</code>,
+<code><a href="caribouHabitat.html">caribouHabitat</a>()</code>,
+<code><a href="coefTableHR.html">coefTableHR</a></code>,
+<code><a href="coefTableStd.html">coefTableStd</a></code>,
+<code><a href="fnlcToResType.html">fnlcToResType</a></code>,
+<code><a href="loadSpatialInputs.html">loadSpatialInputs</a>()</code>,
+<code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a>()</code>,
+<code><a href="reclassPLC.html">reclassPLC</a>()</code>,
+<code><a href="resTypeCode.html">resTypeCode</a></code>,
+<code><a href="results.html">results</a>()</code>,
+<code><a href="rfuToResType.html">rfuToResType</a></code>,
+<code><a href="threshTable.html">threshTable</a></code>,
+<code><a href="updateCaribou.html">updateCaribou</a>()</code></p></div>
     </div>
 
   </div>

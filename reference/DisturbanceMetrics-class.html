@@ -4,10 +4,10 @@ Environment Canada (2011) Scientific Assessment to Inform the Identification
 of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal
 Population, in Canada: 2011 Update. Ottawa, Ontario. Output variables
 include:
-Fire: % fire
-Anthro: % non-overlapping anthropogenic disturbance.
+Fire: Percent fire
+Anthro: Percent non-overlapping buffered anthropogenic disturbance.
 Total_dist: Percent total non-overlapping fire and anthropogenic disturbance.
-fire_excl_anthro: % fire not overlapping with anthropogenic disturbance.
+fire_excl_anthro: Percent fire not overlapping with anthropogenic disturbance.
 
 "><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -27,7 +27,7 @@ fire_excl_anthro: % fire not overlapping with anthropogenic disturbance.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -42,7 +42,7 @@ fire_excl_anthro: % fire not overlapping with anthropogenic disturbance.
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -51,10 +51,19 @@ fire_excl_anthro: % fire not overlapping with anthropogenic disturbance.
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -64,7 +73,7 @@ fire_excl_anthro: % fire not overlapping with anthropogenic disturbance.
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Disturbance Metrics class</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/AAAClassDefinitions.R" class="external-link"><code>R/AAAClassDefinitions.R</code></a></small>
     <div class="hidden name"><code>DisturbanceMetrics-class.Rd</code></div>
     </div>
 
@@ -73,10 +82,10 @@ fire_excl_anthro: % fire not overlapping with anthropogenic disturbance.
 Environment Canada (2011) Scientific Assessment to Inform the Identification
 of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal
 Population, in Canada: 2011 Update. Ottawa, Ontario. Output variables
-include:</p><ul><li><p>Fire: % fire</p></li>
-<li><p>Anthro: % non-overlapping anthropogenic disturbance.</p></li>
+include:</p><ul><li><p>Fire: Percent fire</p></li>
+<li><p>Anthro: Percent non-overlapping buffered anthropogenic disturbance.</p></li>
 <li><p>Total_dist: Percent total non-overlapping fire and anthropogenic disturbance.</p></li>
-<li><p>fire_excl_anthro: % fire not overlapping with anthropogenic disturbance.</p></li>
+<li><p>fire_excl_anthro: Percent fire not overlapping with anthropogenic disturbance.</p></li>
 </ul></div>
 
 
@@ -124,8 +133,13 @@ Missing layers are omitted from the output, not interpreted as 0 disturbance</p>
 </dl></div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>See <code><a href="disturbanceMetrics.html">disturbanceMetrics</a></code> for options when creating a
-  DisturbanceMetrics object.</p></div>
+    <div class="dont-index"><p>See <code><a href="disturbanceMetrics.html">disturbanceMetrics()</a></code> for options when creating a
+DisturbanceMetrics object.</p>
+<p>Functions for calculating disturbance:
+<code><a href="disturbanceMetrics.html">disturbanceMetrics</a>()</code>,
+<code><a href="reclassDist.html">reclassDist</a>()</code>,
+<code><a href="results.html">results</a>()</code>,
+<code><a href="updateDisturbance.html">updateDisturbance</a>()</code></p></div>
     </div>
 
   </div>

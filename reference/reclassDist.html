@@ -20,7 +20,7 @@ disturbanceMetrics()."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -35,7 +35,7 @@ disturbanceMetrics()."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -44,10 +44,19 @@ disturbanceMetrics()."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -57,7 +66,7 @@ disturbanceMetrics()."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Reclassify natural disturbance and harvest layers</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/reclassDist.R" class="external-link"><code>R/reclassDist.R</code></a></small>
     <div class="hidden name"><code>reclassDist.Rd</code></div>
     </div>
 
@@ -75,24 +84,24 @@ period. The output from this function can be used as either the
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>distYr</dt>
-<dd><p><code>sf object or rasterLayer</code>. A simple feature collection or
+<dd><p>sf object or rasterLayer. A simple feature collection or
 raster layer covering the focal area and including the year of disturbance
 or time since disturbance as well as geometry (multipolygon) of the
 disturbance.</p></dd>
 
 
 <dt>endYr</dt>
-<dd><p><code>numeric</code> default 0. Four digit year indicating the latest
+<dd><p>numeric default 0. Four digit year indicating the latest
 year to include from <code>distYr</code>. If 0 assume <code>dateField</code> values indicate time since disturbance.</p></dd>
 
 
 <dt>numCumYrs</dt>
-<dd><p><code>numeric</code>. Number of years before <code>endYr</code> to
+<dd><p>numeric. Number of years before <code>endYr</code> to
 include.</p></dd>
 
 
 <dt>template</dt>
-<dd><p><code>rasterLayer</code>. A raster of the focal region, used as a
+<dd><p>rasterLayer. A raster of the focal region, used as a
 template to which disturbance information is projected. This layers
 dimensions determine the dimensions of the output. It is recommended to use
 the <code>landCover</code> raster layer used in <code><a href="caribouMetrics.html">caribouMetrics()</a></code> or
@@ -100,7 +109,7 @@ the <code>landCover</code> raster layer used in <code><a href="caribouMetrics.ht
 
 
 <dt>dateField</dt>
-<dd><p><code>character</code>. Name of the column in which disturbance
+<dd><p>character. Name of the column in which disturbance
 year/time since disturbance is recorded.</p></dd>
 
 </dl></div>
@@ -108,9 +117,16 @@ year/time since disturbance is recorded.</p></dd>
     <h2>Value</h2>
     
 
-<p>Returns a binary <code>RasterLayer</code> with the same dimensions as the</p>
-<p></p>
-<p><code>template</code> input. Values of 1 represent areas of disturbance</p>
+<p>Returns a binary <code>RasterLayer</code> with the same dimensions as the
+<code>template</code> input. Values of 1 represent areas of disturbance</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>Functions for calculating disturbance:
+<code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class</a></code>,
+<code><a href="disturbanceMetrics.html">disturbanceMetrics</a>()</code>,
+<code><a href="results.html">results</a>()</code>,
+<code><a href="updateDisturbance.html">updateDisturbance</a>()</code></p></div>
     </div>
 
     <div id="ref-examples">
@@ -135,7 +151,7 @@ year/time since disturbance is recorded.</p></dd>
 <span class="r-in"><span><span class="co"># not (0)</span></span></span>
 <span class="r-in"><span><span class="va">cumFirePresence</span> <span class="op">&lt;-</span> <span class="fu">reclassDist</span><span class="op">(</span><span class="va">fireYr</span>,</span></span>
 <span class="r-in"><span>                               endYr <span class="op">=</span> <span class="fl">2010</span>,</span></span>
-<span class="r-in"><span>                               numCumYrs <span class="op">=</span> <span class="fl">30</span>,</span></span>
+<span class="r-in"><span>                               numCumYrs <span class="op">=</span> <span class="fl">40</span>,</span></span>
 <span class="r-in"><span>                               template <span class="op">=</span> <span class="va">lc</span>,</span></span>
 <span class="r-in"><span>                               dateField <span class="op">=</span> <span class="st">"FIRE_YEAR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -143,10 +159,10 @@ year/time since disturbance is recorded.</p></dd>
 <span class="r-plt img"><img src="reclassDist-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># with time since disturbance</span></span></span>
-<span class="r-in"><span><span class="va">fireYr</span><span class="op">$</span><span class="va">FIRE_YEAR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">15</span>, <span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fireYr</span><span class="op">$</span><span class="va">FIRE_YEAR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">15</span>, <span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cumFirePresence2</span> <span class="op">&lt;-</span> <span class="fu">reclassDist</span><span class="op">(</span><span class="va">fireYr</span>,</span></span>
 <span class="r-in"><span>                               endYr <span class="op">=</span> <span class="fl">0</span>,</span></span>
-<span class="r-in"><span>                               numCumYrs <span class="op">=</span> <span class="fl">30</span>,</span></span>
+<span class="r-in"><span>                               numCumYrs <span class="op">=</span> <span class="fl">40</span>,</span></span>
 <span class="r-in"><span>                               template <span class="op">=</span> <span class="va">lc</span>,</span></span>
 <span class="r-in"><span>                               dateField <span class="op">=</span> <span class="st">"FIRE_YEAR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>                               </span></span>

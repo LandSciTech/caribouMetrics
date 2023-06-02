@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -41,10 +41,19 @@
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -57,17 +66,102 @@
     </div>
 
     <table class="ref-index"><colgroup><col class="alias"><col class="title"></colgroup><tbody><tr><th colspan="2">
-          <h2 id="all-functions">All functions <a href="#all-functions" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <h2 id="overview">Overview <a href="#overview" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Overview of the package.</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="caribouMetrics.html">caribouMetrics</a></code> </p>
+        </td>
+        <td><p>caribouMetrics: Models and metrics of boreal caribou responses to forest
+landscapes</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="caribou-demography">Caribou demography <a href="#caribou-demography" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Functions for predicting boreal caribou demographic rates and projecting population growth</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="caribouBayesianIPM.html">caribouBayesianIPM()</a></code> </p>
+        </td>
+        <td><p>Bayesian integrated population model for caribou</p></td>
+      </tr><tr><td>
+          <p><code><a href="caribouPopGrowth.html">caribouPopGrowth()</a></code> </p>
+        </td>
+        <td><p>Caribou population growth model</p></td>
+      </tr><tr><td>
+          <p><code><a href="demographicCoefficients.html">demographicCoefficients()</a></code> <code><a href="demographicCoefficients.html">getCoefs()</a></code> <code><a href="demographicCoefficients.html">sampleCoefs()</a></code> </p>
+        </td>
+        <td><p>Sample demographic regression model coefficients</p></td>
+      </tr><tr><td>
+          <p><code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code> </p>
+        </td>
+        <td><p>Run the Bayesian caribou demographic projection app</p></td>
+      </tr><tr><td>
+          <p><code><a href="demographicRates.html">demographicRates()</a></code> <code><a href="demographicRates.html">sampleRates()</a></code> </p>
+        </td>
+        <td><p>Sample expected survival and recruitment rates</p></td>
+      </tr><tr><td>
+          <p><code><a href="getOutputTables.html">getOutputTables()</a></code> </p>
+        </td>
+        <td><p>Summarize results of Bayesian demographic model in tables</p></td>
+      </tr><tr><td>
+          <p><code><a href="getPriors.html">getPriors()</a></code> </p>
+        </td>
+        <td><p>Get model priors from national models</p></td>
+      </tr><tr><td>
+          <p><code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code> </p>
+        </td>
+        <td><p>Generate default scenario parameters</p></td>
+      </tr><tr><td>
+          <p><code><a href="getSimsNational.html">getSimsNational()</a></code> </p>
+        </td>
+        <td><p>Get a set of simulation results from the national model</p></td>
+      </tr><tr><td>
+          <p><code><a href="plotRes.html">plotRes()</a></code> </p>
+        </td>
+        <td><p>Plot caribou Bayesian IPM results</p></td>
+      </tr><tr><td>
+          <p><code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code> </p>
+        </td>
+        <td><p>Population growth model table for Johnson models</p></td>
+      </tr><tr><td>
+          <p><code><a href="runScnSet.html">runScnSet()</a></code> </p>
+        </td>
+        <td><p>Run the caribou Bayesian IPM for multiple parameter sets</p></td>
+      </tr><tr><td>
+          <p><code><a href="simulateObservations.html">simulateObservations()</a></code> </p>
+        </td>
+        <td><p>Simulate survival data</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="summarizing-disturbance">Summarizing disturbance <a href="#summarizing-disturbance" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Functions for determining the percentage of a landscape that has been disturbed</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class</a></code> <code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics</a></code> </p>
+        </td>
+        <td><p>Disturbance Metrics class</p></td>
+      </tr><tr><td>
+          <p><code><a href="disturbanceMetrics.html">disturbanceMetrics()</a></code> </p>
+        </td>
+        <td><p>Calculate metrics of natural and anthropogenic disturbance</p></td>
+      </tr><tr><td>
+          <p><code><a href="reclassDist.html">reclassDist()</a></code> </p>
+        </td>
+        <td><p>Reclassify natural disturbance and harvest layers</p></td>
+      </tr><tr><td>
+          <p><code><a href="results.html">results()</a></code> </p>
+        </td>
+        <td><p>Extract results</p></td>
+      </tr><tr><td>
+          <p><code><a href="updateDisturbance.html">updateDisturbance()</a></code> </p>
+        </td>
+        <td><p>Update an existing DisturbanceMetrics Object</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="caribou-habitiat">Caribou habitiat <a href="#caribou-habitiat" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Functions for predicting boreal caribou habitat use in 13 Ontario caribou ranges</p>
         </th>
       </tr></tbody><tbody><tr><td>
           <p><code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code> <code><a href="CaribouHabitat-class.html">CaribouHabitat</a></code> </p>
         </td>
         <td><p>Caribou Habitat class</p></td>
-      </tr><tr><td>
-          <p><code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class</a></code> <code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics</a></code> </p>
-        </td>
-        <td><p>Disturbance Metrics class</p></td>
       </tr><tr><td>
           <p><code><a href="calcBinaryUse.html">calcBinaryUse()</a></code> </p>
         </td>
@@ -77,11 +171,6 @@
         </td>
         <td><p>Calculate relative probability of caribou habitat use</p></td>
       </tr><tr><td>
-          <p><code><a href="caribouMetrics.html">caribouMetrics</a></code> </p>
-        </td>
-        <td><p>caribouMetrics: Models and metrics of boreal caribou responses to forest
-landscapes</p></td>
-      </tr><tr><td>
           <p><code><a href="coefTableHR.html">coefTableHR</a></code> </p>
         </td>
         <td><p>Model coefficients for caribou ranges</p></td>
@@ -90,25 +179,9 @@ landscapes</p></td>
         </td>
         <td><p>Model coefficients from standardized data for caribou ranges</p></td>
       </tr><tr><td>
-          <p><code><a href="demographicCoefficients.html">demographicCoefficients()</a></code> </p>
-        </td>
-        <td><p>Sample demographic regression model coefficients</p></td>
-      </tr><tr><td>
-          <p><code><a href="demographicRates.html">demographicRates()</a></code> </p>
-        </td>
-        <td><p>Sample expected survival and recruitment rates</p></td>
-      </tr><tr><td>
-          <p><code><a href="disturbanceMetrics.html">disturbanceMetrics()</a></code> </p>
-        </td>
-        <td><p>Calculate metrics of natural and anthropogenic disturbance</p></td>
-      </tr><tr><td>
           <p><code><a href="fnlcToResType.html">fnlcToResType</a></code> </p>
         </td>
         <td><p>Lookup table for FNLC to resource type</p></td>
-      </tr><tr><td>
-          <p><code><a href="getCoefs.html">getCoefs()</a></code> </p>
-        </td>
-        <td><p>Get coefficients for model version</p></td>
       </tr><tr><td>
           <p><code><a href="loadSpatialInputs.html">loadSpatialInputs()</a></code> </p>
         </td>
@@ -118,25 +191,9 @@ landscapes</p></td>
         </td>
         <td><p>Lookup table for PLC to resource type</p></td>
       </tr><tr><td>
-          <p><code><a href="plot-CaribouHabitat-ANY-method.html">plot(<i>&lt;CaribouHabitat&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plot method for CaribouHabitat Objects</p></td>
-      </tr><tr><td>
-          <p><code><a href="popGrowthJohnson.html">popGrowthJohnson()</a></code> </p>
-        </td>
-        <td><p>Caribou demographic model</p></td>
-      </tr><tr><td>
-          <p><code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code> </p>
-        </td>
-        <td><p>Population growth model table for Johnson models</p></td>
-      </tr><tr><td>
           <p><code><a href="rasterizeLineDensity.html">rasterizeLineDensity()</a></code> </p>
         </td>
         <td><p>Rasterize line density</p></td>
-      </tr><tr><td>
-          <p><code><a href="reclassDist.html">reclassDist()</a></code> </p>
-        </td>
-        <td><p>Reclassify natural disturbance and harvest layers</p></td>
       </tr><tr><td>
           <p><code><a href="reclassPLC.html">reclassPLC()</a></code> </p>
         </td>
@@ -154,25 +211,17 @@ landscapes</p></td>
         </td>
         <td><p>Lookup table for RFU to resource type</p></td>
       </tr><tr><td>
-          <p><code><a href="sampleCoefs.html">sampleCoefs()</a></code> </p>
-        </td>
-        <td><p>Sample coefficients</p></td>
-      </tr><tr><td>
-          <p><code><a href="sampleRates.html">sampleRates()</a></code> </p>
-        </td>
-        <td><p>Sample demographic rates</p></td>
-      </tr><tr><td>
           <p><code><a href="threshTable.html">threshTable</a></code> </p>
         </td>
-        <td><p>Category 2 thresholds table</p></td>
+        <td><p>Binary habitat use thresholds table</p></td>
       </tr><tr><td>
           <p><code><a href="updateCaribou.html">updateCaribou()</a></code> </p>
         </td>
         <td><p>Update an existing CaribouHabitat Object</p></td>
       </tr><tr><td>
-          <p><code><a href="updateDisturbance.html">updateDisturbance()</a></code> </p>
+          <p><code><a href="plot-CaribouHabitat.html">plot(<i>&lt;CaribouHabitat&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Update an existing DisturbanceMetrics Object</p></td>
+        <td><p>Plot method for <code>CaribouHabitat</code> Objects</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

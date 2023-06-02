@@ -19,7 +19,7 @@ object is updated depending on the elements provided in the list."><!-- mathjax 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -34,7 +34,7 @@ object is updated depending on the elements provided in the list."><!-- mathjax 
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -43,10 +43,19 @@ object is updated depending on the elements provided in the list."><!-- mathjax 
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -56,7 +65,7 @@ object is updated depending on the elements provided in the list."><!-- mathjax 
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Update an existing DisturbanceMetrics Object</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/updateDisturbance.R" class="external-link"><code>R/updateDisturbance.R</code></a></small>
     <div class="hidden name"><code>updateDisturbance.Rd</code></div>
     </div>
 
@@ -97,7 +106,7 @@ rasterized. Either way points are included in the raster output.</p></dd>
     <h2>Value</h2>
     
 
-<p>A DisturbanceMetrics Object see <code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class</a></code></p>
+<p>A DisturbanceMetrics Object see <code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class()</a></code></p>
 
 
     </div>
@@ -110,9 +119,14 @@ determine the buffered anthropogenic disturbance</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class</a></code> for information on the object
- returned and <code><a href="disturbanceMetrics.html">disturbanceMetrics</a></code> for making a new
- DisturbanceMetrics object.</p></div>
+    <div class="dont-index"><p><code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class()</a></code> for information on the object
+returned and <code><a href="disturbanceMetrics.html">disturbanceMetrics()</a></code> for making a new
+DisturbanceMetrics object.</p>
+<p>Functions for calculating disturbance:
+<code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class</a></code>,
+<code><a href="disturbanceMetrics.html">disturbanceMetrics</a>()</code>,
+<code><a href="reclassDist.html">reclassDist</a>()</code>,
+<code><a href="results.html">results</a>()</code></p></div>
     </div>
 
     <div id="ref-examples">

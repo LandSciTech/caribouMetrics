@@ -19,7 +19,7 @@ expected to be relevant to boreal caribou (Hornseth and Rempel, 2016)."><!-- mat
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -34,7 +34,7 @@ expected to be relevant to boreal caribou (Hornseth and Rempel, 2016)."><!-- mat
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -43,10 +43,19 @@ expected to be relevant to boreal caribou (Hornseth and Rempel, 2016)."><!-- mat
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -56,7 +65,7 @@ expected to be relevant to boreal caribou (Hornseth and Rempel, 2016)."><!-- mat
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Reclassify provincial land cover</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/reclassPLC.R" class="external-link"><code>R/reclassPLC.R</code></a></small>
     <div class="hidden name"><code>reclassPLC.Rd</code></div>
     </div>
 
@@ -73,16 +82,16 @@ expected to be relevant to boreal caribou (Hornseth and Rempel, 2016).</p>
     <div id="source">
     <h2>Source</h2>
     <p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
- woodland caribou (Rangifer tarandus caribou) across a gradient of
- anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
- <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">https://doi.org/10.1139/cjz-2015-0101</a></p>
+woodland caribou (Rangifer tarandus caribou) across a gradient of
+anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+<a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">https://doi.org/10.1139/cjz-2015-0101</a></p>
 <p>Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
- Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
- Baltzer, J. L., Stewart, F. E. C., &amp; Hughes, J. (in press). Existing caribou
- habitat and demographic models need improvement for Ring of Fire impact
- assessment: A roadmap for improving the usefulness, transparency, and
- availability of models for conservation.
- <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">https://doi.org/10.1101/2022.06.01.494350</a></p>
+Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
+Baltzer, J. L., Stewart, F. E. C., &amp; Hughes, J. (in press). Existing caribou
+habitat and demographic models need improvement for Ring of Fire impact
+assessment: A roadmap for improving the usefulness, transparency, and
+availability of models for conservation.
+<a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">https://doi.org/10.1101/2022.06.01.494350</a></p>
     </div>
     <div id="arguments">
     <h2>Arguments</h2>
@@ -115,8 +124,26 @@ lookup table must have two columns with names "PLCCode" and "ResourceType"
 where "PLCCode" is the value in the land cover raster and "ResourceType" is
 the corresponding letter code for the resource type. The possible resource
 types are included in <code>resTypeCode</code> and descriptions of these codes can
-be found in table S1.3 of [supplementary material](https://osf.io/x6e2q) for
+be found in table S1.3 of <a href="https://osf.io/x6e2q" class="external-link">supplementary material</a> for
 Dyson et. al (2022).</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>Caribou habitat functions:
+<code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code>,
+<code><a href="calcBinaryUse.html">calcBinaryUse</a>()</code>,
+<code><a href="caribouHabitat.html">caribouHabitat</a>()</code>,
+<code><a href="coefTableHR.html">coefTableHR</a></code>,
+<code><a href="coefTableStd.html">coefTableStd</a></code>,
+<code><a href="fnlcToResType.html">fnlcToResType</a></code>,
+<code><a href="loadSpatialInputs.html">loadSpatialInputs</a>()</code>,
+<code><a href="plcToResType.html">plcToResType</a></code>,
+<code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a>()</code>,
+<code><a href="resTypeCode.html">resTypeCode</a></code>,
+<code><a href="results.html">results</a>()</code>,
+<code><a href="rfuToResType.html">rfuToResType</a></code>,
+<code><a href="threshTable.html">threshTable</a></code>,
+<code><a href="updateCaribou.html">updateCaribou</a>()</code></p></div>
     </div>
 
     <div id="ref-examples">

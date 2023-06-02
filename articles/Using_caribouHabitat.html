@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -50,7 +50,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -59,12 +59,22 @@
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -80,7 +90,7 @@
       <h1 data-toc-skip>Using caribouHabitat</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/vignettes/Using_caribouHabitat.Rmd" class="external-link"><code>vignettes/Using_caribouHabitat.Rmd</code></a></small>
       <div class="hidden name"><code>Using_caribouHabitat.Rmd</code></div>
 
     </div>
@@ -91,14 +101,16 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This vignette gives details on the use of the
-<code>caribouHabitat</code> function. See
-<code><a href="../articles/Getting_started.html">vignette("Getting_started", package = "caribouMetrics")</a></code> for
-an overview of the function. This function implements the caribou
-resource selection probability functions (RSPF) described in <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel,
+<code>caribouHabitat</code> function. This function implements the
+caribou resource selection probability functions (RSPF) described in <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel,
 2016</a> in R. They were previously written in LSL and a goal of this
 package is to make them more accessible to a wider range of users.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning this package</span></span>
+<span><span class="co">#&gt; will retire shortly. Please refer to R-spatial evolution reports on</span></span>
+<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html for details.</span></span>
+<span><span class="co">#&gt; This package is now running under evolution status 0</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
@@ -120,12 +132,74 @@ package is to make them more accessible to a wider range of users.</p>
 <span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="data-needed">Data Needed<a class="anchor" aria-label="anchor" href="#data-needed"></a>
+</h2>
+<p>Several different data sets are used in the RSPF model to describe
+conditions that affect caribou habitat selection. The data includes
+types of forest, wetlands, eskers, linear features and disturbance
+histories. The table below describes each data set, and what it is used
+for.</p>
+<table class="table">
+<colgroup>
+<col width="26%">
+<col width="32%">
+<col width="41%">
+</colgroup>
+<thead><tr class="header">
+<th>Name (Argument)</th>
+<th>Description</th>
+<th>Purpose</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Land cover (landCover)</td>
+<td>A raster of land cover classified into 7 forest or wetland resource
+types</td>
+<td>Covariates in RSPF model</td>
+</tr>
+<tr class="even">
+<td>Eskers (esker)</td>
+<td>A raster or sf object identifying eskers (deposited ridges of
+sediment), if presented as a raster data must be in m/ha</td>
+<td>Covariate in RSPF model</td>
+</tr>
+<tr class="odd">
+<td>Linear features (linFeat)</td>
+<td>a raster, sf object, or list of these identifying the location of
+linear features (e.g. roads, rail), if presented as a raster data must
+be in m/ha</td>
+<td>Covariate in RSPF model</td>
+</tr>
+<tr class="even">
+<td>Natural disturbance (natDist)</td>
+<td>Cumulative natural disturbance (mostly fire) over the past 30
+years</td>
+<td>Covariate in RSPF model and used to set forest classes in grid cell
+to 0 if &gt; 35% disturbed</td>
+</tr>
+<tr class="odd">
+<td>Anthropogenic disturbance (anthroDist)</td>
+<td>Presence of anthropogenic disturbance</td>
+<td>Used to set forest classes in grid cell to 0 if &gt; 35%
+disturbed</td>
+</tr>
+<tr class="even">
+<td>Project polygon (projPoly)</td>
+<td>An sf object containing polygon(s) of the study area(s), must
+contain a Range column</td>
+<td>Used to set the boundaries of the analysis and link range-specific
+coefficients to spatial data</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
 <h2 id="simple-example">Simple Example<a class="anchor" aria-label="anchor" href="#simple-example"></a>
 </h2>
 <p>The example data set loaded below includes a small area in the
 Nipigon caribou range that we will use as an example. The provincial
 land cover (PLC) data are converted to resource types based on look up
-tables provided in the package.</p>
+tables provided in the package using <code><a href="../reference/reclassPLC.html">reclassPLC()</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load example data and classify plc into Resource Types</span></span>
 <span><span class="va">landCoverD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -144,7 +218,9 @@ tables provided in the package.</p>
 the explanatory variables in the Hornseth and Rempel RSPF models and
 then calculate the probability of habitat use in each season at each
 location. The function can be run in several different ways, but the
-simplest is to provide spatial objects for each data set.</p>
+simplest is to provide spatial objects for each data set and a string
+identifying one of the Ontario caribou ranges for the
+<code>caribouRange</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span> , </span>
@@ -153,7 +229,8 @@ simplest is to provide spatial objects for each data set.</p>
 <span>  anthroDist <span class="op">=</span> <span class="va">anthroDistD</span>, </span>
 <span>  linFeat <span class="op">=</span> <span class="va">linFeatDras</span>, </span>
 <span>  projectPoly <span class="op">=</span> <span class="va">projectPolyD</span>,</span>
-<span>  caribouRange <span class="op">=</span> <span class="st">"Nipigon"</span></span>
+<span>  caribouRange <span class="op">=</span> <span class="st">"Nipigon"</span>, </span>
+<span>  padProjPoly <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; cropping landCover to extent of projectPoly</span></span>
 <span><span class="co">#&gt; cropping linFeat to extent of projectPoly</span></span>
@@ -163,9 +240,129 @@ simplest is to provide spatial objects for each data set.</p>
 <span><span class="co">#&gt; resampling linFeat to match landCover resolution</span></span>
 <span><span class="co">#&gt; resampling esker to match landCover resolution</span></span>
 <span><span class="co">#&gt; Applying moving window.</span></span></code></pre></div>
+<p>The <code>caribouHabitat</code> function returns an S4 object with
+the class <code>CaribouHabitat</code>. To access a RasterStack object
+with a layer for each covariate in the RSPF model and the predictions
+for each season use the <code>results</code> function.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">carHab1</span>, max.level <span class="op">=</span> <span class="fl">2</span>, give.attr <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Formal class 'CaribouHabitat' [package "caribouMetrics"] with 9 slots</span></span>
+<span><span class="co">#&gt;   ..@ landCover    :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ esker        :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ natDist      :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ anthroDist   :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ linFeat      :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ projectPoly  :Classes 'sf' and 'data.frame':   1 obs. of  3 variables:</span></span>
+<span><span class="co">#&gt;   ..@ processedData:Formal class 'RasterBrick' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ habitatUse   :Formal class 'RasterBrick' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ attributes   :List of 5</span></span>
+<span><span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; class      : RasterStack </span></span>
+<span><span class="co">#&gt; dimensions : 198, 227, 44946, 17  (nrow, ncol, ncell, nlayers)</span></span>
+<span><span class="co">#&gt; resolution : 400, 400  (x, y)</span></span>
+<span><span class="co">#&gt; extent     : 681188, 771988, 12562405, 12641605  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; crs        : +proj=lcc +lat_0=0 +lon_0=-85 +lat_1=44.5 +lat_2=53.5 +x_0=930000 +y_0=6430000 +datum=NAD83 +units=m +no_defs </span></span>
+<span><span class="co">#&gt; names      :         Fall,       Spring,       Summer,       Winter,          CON,          DEC,          DTN,         LGOP,         LGTP,          LGW,          MIX,           ST,        other,       TDENLF,          ESK, ... </span></span>
+<span><span class="co">#&gt; min values : 8.657622e-05, 6.827987e-05, 1.018278e-03, 1.027156e-02, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 8.233438e-03, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, 0.000000e+00, ... </span></span>
+<span><span class="co">#&gt; max values :   0.78978251,   0.71744692,   0.53834877,   0.36828837,   0.66955135,   0.23526463,   0.47914826,   0.05465825,   0.25801612,   1.00000000,   0.70017525,   0.15172801,   0.20388714,  20.20940451,   1.70401961, ...</span></span></code></pre></div>
+<p>You can create a plot of the results directly from the
+<code>CaribouHabitat</code> object. If <code>tmap</code> is installed it
+will be used to make a plot, if not <code>plot.raster</code> will be
+used. You can provide the season(s) you wish to display and additional
+arguments that will be passed on to either <code>qtm</code> or
+<code>plot.raster</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fall"</span>, <span class="st">"Summer"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/plot1-1.png" width="768"></p>
+</div>
+<div class="section level2">
+<h2 id="multi-range">Multi-Range<a class="anchor" aria-label="anchor" href="#multi-range"></a>
+</h2>
+<p><code>caribouHabitat</code> can also be run over multiple ranges
+simultaneously. For multiple ranges to be run the
+<code>caribouRanges</code> argument must be a data frame with two
+columns, <code>Range</code> indicating the name of the caribou range
+(must match <code>projectPoly</code>) and <code>coefRange</code>
+indicating the name of the range whose coefficients should be used <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel
+(2016)</a>. Typically, these should be the same. It is possible to run
+the function with coefficients swapped between ranges but this is not
+recommended as the models were trained separately on each range. For our
+example we have split the area of our data set into four polygons and
+arbitrarily assigned them caribou range names to demonstrate the
+difference in predictions depending on the coefficients associated with
+that range.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">caribouRanges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pagwachuan"</span>, <span class="st">"Missisa"</span>, <span class="st">"Nipigon"</span>, <span class="st">"James Bay"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># split the area into 4 polygons</span></span>
+<span><span class="va">corners</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">projectPolyD</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>                 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_centroid</a></span><span class="op">(</span><span class="va">projectPolyD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">projectPolyD4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">st_sf</a></span><span class="op">(</span>Range <span class="op">=</span> <span class="va">caribouRanges</span>,</span>
+<span>                     geometry <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html" class="external-link">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">corners</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">5</span>, <span class="fl">1</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                       <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">corners</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                       <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">corners</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>, <span class="fl">3</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                       <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html" class="external-link">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">corners</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">1</span>,<span class="fl">5</span>, <span class="fl">4</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_set_crs</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">projectPolyD</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">projectPolyD4</span>, key.pos <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Using_caribouHabitat_files/figure-html/multi%20example-1.png" width="768"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">caribouRange</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Range <span class="op">=</span> <span class="va">caribouRanges</span>, </span>
+<span>                           coefRange <span class="op">=</span> <span class="va">caribouRanges</span>, </span>
+<span>                           stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">MultRange</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span>landCover <span class="op">=</span> <span class="va">landCoverD</span>,</span>
+<span>                            esker <span class="op">=</span> <span class="va">eskerDras</span>, </span>
+<span>                            linFeat <span class="op">=</span> <span class="va">linFeatDras</span>,  </span>
+<span>                            natDist <span class="op">=</span> <span class="va">natDistD</span>,</span>
+<span>                            anthroDist <span class="op">=</span> <span class="va">anthroDistD</span>,</span>
+<span>                            projectPoly <span class="op">=</span> <span class="va">projectPolyD4</span>, </span>
+<span>                            caribouRange <span class="op">=</span> <span class="va">caribouRange</span>, </span>
+<span>                            padProjPoly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; cropping landCover to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping linFeat to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping natDist to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping anthroDist to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping esker to extent of projectPoly</span></span>
+<span><span class="co">#&gt; resampling linFeat to match landCover resolution</span></span>
+<span><span class="co">#&gt; resampling esker to match landCover resolution</span></span>
+<span><span class="co">#&gt; Applying moving window.</span></span>
+<span><span class="co">#&gt; cropping landCover to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping linFeat to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping natDist to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping anthroDist to extent of projectPoly</span></span>
+<span><span class="co">#&gt; cropping esker to extent of projectPoly</span></span>
+<span><span class="co">#&gt; resampling linFeat to match landCover resolution</span></span>
+<span><span class="co">#&gt; resampling esker to match landCover resolution</span></span>
+<span><span class="co">#&gt; Applying moving window.</span></span></code></pre></div>
+<p>The same S4 object as that created by a single range run is produced,
+allowing the same type of interrogation of the results.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">MultRange</span>, max.level <span class="op">=</span> <span class="fl">2</span>, give.attr <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Formal class 'CaribouHabitat' [package "caribouMetrics"] with 9 slots</span></span>
+<span><span class="co">#&gt;   ..@ landCover    :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ esker        :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ natDist      :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ anthroDist   :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ linFeat      :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ projectPoly  :Classes 'sf' and 'data.frame':   4 obs. of  2 variables:</span></span>
+<span><span class="co">#&gt;   ..@ processedData:Formal class 'RasterBrick' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ habitatUse   :Formal class 'RasterBrick' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ attributes   :List of 5</span></span>
+<span><span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">MultRange</span><span class="op">)</span></span>
+<span><span class="co">#&gt; class      : RasterStack </span></span>
+<span><span class="co">#&gt; dimensions : 198, 227, 44946, 17  (nrow, ncol, ncell, nlayers)</span></span>
+<span><span class="co">#&gt; resolution : 400, 400  (x, y)</span></span>
+<span><span class="co">#&gt; extent     : 681188, 771988, 12562405, 12641605  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; crs        : +proj=lcc +lat_0=0 +lon_0=-85 +lat_1=44.5 +lat_2=53.5 +x_0=930000 +y_0=6430000 +datum=NAD83 +units=m +no_defs </span></span>
+<span><span class="co">#&gt; names      :          Fall,        Spring,        Summer,        Winter,           CON,           DEC,           DTN,          LGOP,          LGTP,           LGW,           MIX,            ST,         other,        TDENLF,           ESK, ... </span></span>
+<span><span class="co">#&gt; min values :  2.294091e-73, 4.681433e-288,  0.000000e+00, 7.253407e-201,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00,  1.362075e-02,  9.552293e-04,  0.000000e+00,  0.000000e+00,  0.000000e+00,  0.000000e+00, ... </span></span>
+<span><span class="co">#&gt; max values :    0.78978251,    0.77388344,    0.97389022,    0.99407102,    0.64269190,    0.17910640,    0.30427950,    0.05465825,    0.25801612,    0.99744426,    0.62948885,    0.12789345,    0.14402574,   20.20940451,    1.54770768, ...</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">MultRange</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Winter"</span>, <span class="st">"Spring"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Using_caribouHabitat_files/figure-html/results2-1.png" width="768"></p>
 </div>
 <div class="section level2">
 <h2 id="example-with-padding">Example with padding<a class="anchor" aria-label="anchor" href="#example-with-padding"></a>
@@ -173,7 +370,7 @@ simplest is to provide spatial objects for each data set.</p>
 <p>In most cases you will have a project area that is smaller than the
 environmental data sets available. For our example we will create this
 project area by selecting a rectangle inside our example data set.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ext</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span> <span class="op">-</span> <span class="fl">30000</span></span>
 <span><span class="va">projectPolyD2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">ext</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_set_crs</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The information that is outside our project area is still useful for
@@ -181,7 +378,7 @@ preventing edge effects in our results. To use this data you can set
 <code>padProjPoly = TRUE</code> in the <code>caribouHabitat</code> call
 which will set a buffer around the project area based on the size of the
 moving window used to scale variables for that range.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>, </span>
 <span>  esker <span class="op">=</span> <span class="va">eskerDshp</span>, </span>
@@ -196,7 +393,7 @@ moving window used to scale variables for that range.</p>
 <span><span class="co">#&gt; old-style crs object detected; please recreate object with a recent sf::st_crs()</span></span>
 <span><span class="co">#&gt; old-style crs object detected; please recreate object with a recent sf::st_crs()</span></span>
 <span><span class="co">#&gt; Applying moving window.</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">landCoverD</span>, raster <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">carHab2</span><span class="op">@</span><span class="va">landCover</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/tm_raster.html" class="external-link">tm_raster</a></span><span class="op">(</span>style <span class="op">=</span> <span class="st">"cat"</span>, </span>
@@ -215,7 +412,7 @@ Next we will demonstrate the importance of setting
 the difference in the results for padding using the data outside the
 project area, no padding, and using 0s to pad the area outside the
 project using <code>padFocal = TRUE</code></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>, </span>
 <span>  esker <span class="op">=</span> <span class="va">eskerDshp</span>, </span>
@@ -255,7 +452,7 @@ project using <code>padFocal = TRUE</code></p>
 <span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab3</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, borders <span class="op">=</span> <span class="st">"red"</span>, </span>
 <span>            shape.is.master <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/compare%20pad-1.png" width="768"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab3</span>, season <span class="op">=</span> <span class="st">"Fall"</span>, title <span class="op">=</span> <span class="st">"No padding"</span>, </span>
 <span>     raster.breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.025</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -263,7 +460,7 @@ project using <code>padFocal = TRUE</code></p>
 <span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab3</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, borders <span class="op">=</span> <span class="st">"red"</span>, </span>
 <span>            shape.is.master <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/compare%20pad-2.png" width="768"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab4</span>, season <span class="op">=</span> <span class="st">"Fall"</span>, title <span class="op">=</span> <span class="st">"Pad with 0 outside project"</span>, </span>
 <span>     raster.breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.025</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -298,7 +495,7 @@ several different ways. You can provide the data as filepaths instead of
 spatial objects, you can provide the eskers and linear features as
 vector files which will be converted to rasters, and you can provide a
 list of sf objects to be combined into the linear features raster.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>, </span>
 <span>  esker <span class="op">=</span> <span class="va">eskerDshp</span>, </span>
@@ -326,7 +523,7 @@ across our study area and what effect this will have on caribou habitat.
 Since the only data set that is changing is the linear features it will
 be faster to use <code>updateCaribou</code> rather than
 <code>caribouHabitat</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create series of data sets</span></span>
 <span><span class="va">ext</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/extent.html" class="external-link">extent</a></span><span class="op">(</span><span class="va">linFeatDras</span><span class="op">)</span></span>
 <span></span>
@@ -345,7 +542,7 @@ be faster to use <code>updateCaribou</code> rather than
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">linFeatDras3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">linFeatDras</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/updateCaribou-1.png" width="576"></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Run caribouHabitat to process all the data once</span></span>
 <span><span class="co"># Use Missisa range because roads have a larger effect in that model</span></span>
@@ -378,7 +575,7 @@ be faster to use <code>updateCaribou</code> rather than
 <span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHabLF1</span>, season <span class="op">=</span> <span class="st">"Spring"</span>, title <span class="op">=</span> <span class="st">"linFeat 1"</span>, raster.breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">/</span><span class="fl">10</span>, </span>
 <span>     legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/updateCaribou-2.png" width="576"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHabLF2</span>, season <span class="op">=</span> <span class="st">"Spring"</span>, title <span class="op">=</span> <span class="st">"linFeat 2"</span>, raster.breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">/</span><span class="fl">10</span>, </span>
 <span>     legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/updateCaribou-3.png" width="576"></p>
@@ -390,7 +587,7 @@ when there are more roads (linFeat 2).</p>
 </h2>
 <p>To go through a large number of updated data sets we can use the
 <code>purrr</code> package to iterate over different sets of data</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">linFeatScns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/lst.html" class="external-link">lst</a></span><span class="op">(</span><span class="va">linFeatDras2</span>, <span class="va">linFeatDras3</span>, <span class="va">linFeatDras</span><span class="op">)</span></span>
 <span></span>
@@ -420,7 +617,7 @@ attribute without recomputing the entire function using the
 <code>updateCaribou</code> function. In the example below the coefRange
 is changed from Nipigon to Missisa and the predictions are re-calculated
 using the coefficients from the Missisa model</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHab1</span><span class="op">@</span><span class="va">attributes</span><span class="op">$</span><span class="va">caribouRange</span><span class="op">$</span><span class="va">coefRange</span> <span class="op">&lt;-</span> <span class="st">"Missisa"</span></span>
 <span></span>
 <span><span class="va">misCoef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateCaribou.html">updateCaribou</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span>
@@ -435,7 +632,7 @@ using the coefficients from the Missisa model</p>
 <code>coefTable</code> argument and if those coefficients are
 standardized the data can be standardized by supplying the argument
 <code>doScale = TRUE</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">carHabStd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>,</span>
 <span>  esker <span class="op">=</span> <span class="va">eskerDras</span>,</span>
@@ -477,7 +674,7 @@ of these codes can be found in table S1.3 of <a href="https://osf.io/x6e2q/?view
 material</a> for Dyson et. al (in press). The resulting map below is
 quite different from the map above for the PLC because I used the same
 raw data for both but interpreted the codes differently.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">landCoverRaw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="co"># modify values to match Far North land cover (Not needed if the raw data is</span></span>
@@ -504,12 +701,12 @@ raw data for both but interpreted the codes differently.</p>
 <p>You can also determine a binary high or low caribou use result either
 by season or for the range as a whole using <code>calcBinaryUse</code>.
 The high/low use thresholds were provided by Rempel et al (2021).</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binCarHab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calcBinaryUse.html">calcBinaryUse</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span>
 <span><span class="va">binCarHab1Seasons</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calcBinaryUse.html">calcBinaryUse</a></span><span class="op">(</span><span class="va">carHab1</span>, bySeason <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tmap/man/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">binCarHab1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/binUse-1.png" width="768"></p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># tmap::qtm(binCarHab1Seasons)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -523,7 +720,7 @@ polygon. The resulting list can then be used as input for both
 include the linear features twice so that they can be converted to
 raster line density for <code>caribouHabitat</code> but kept as lines
 for <code>disturbanceMetrics</code>.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadSpatialInputs.html">loadSpatialInputs</a></span><span class="op">(</span>projectPoly <span class="op">=</span> <span class="va">projectPolyD2</span>, refRast <span class="op">=</span> <span class="va">landCoverD</span>,</span>
 <span>                        inputsList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>esker <span class="op">=</span> <span class="va">eskerDshp</span>, </span>

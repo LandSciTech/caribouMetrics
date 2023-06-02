@@ -7,13 +7,16 @@
     <loc>https://landscitech.github.io/caribouMetrics/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://landscitech.github.io/caribouMetrics/articles/Getting_started.html</loc>
+    <loc>https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html</loc>
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/articles/UI_help.html</loc>
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetric.html</loc>
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html</loc>
@@ -28,6 +31,9 @@
     <loc>https://landscitech.github.io/caribouMetrics/index.html</loc>
   </url>
   <url>
+    <loc>https://landscitech.github.io/caribouMetrics/news/index.html</loc>
+  </url>
+  <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/CaribouHabitat-class.html</loc>
   </url>
   <url>
@@ -37,10 +43,16 @@
     <loc>https://landscitech.github.io/caribouMetrics/reference/calcBinaryUse.html</loc>
   </url>
   <url>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/caribouBayesianIPM.html</loc>
+  </url>
+  <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/caribouHabitat.html</loc>
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/caribouMetrics.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/caribouPopGrowth.html</loc>
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/coefTableHR.html</loc>
@@ -52,6 +64,9 @@
     <loc>https://landscitech.github.io/caribouMetrics/reference/demographicCoefficients.html</loc>
   </url>
   <url>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/demographicProjectionApp.html</loc>
+  </url>
+  <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/demographicRates.html</loc>
   </url>
   <url>
@@ -61,7 +76,16 @@
     <loc>https://landscitech.github.io/caribouMetrics/reference/fnlcToResType.html</loc>
   </url>
   <url>
-    <loc>https://landscitech.github.io/caribouMetrics/reference/getCoefs.html</loc>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/getOutputTables.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/getPriors.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/getScenarioDefaults.html</loc>
+  </url>
+  <url>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/getSimsNational.html</loc>
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/index.html</loc>
@@ -73,10 +97,10 @@
     <loc>https://landscitech.github.io/caribouMetrics/reference/plcToResType.html</loc>
   </url>
   <url>
-    <loc>https://landscitech.github.io/caribouMetrics/reference/plot-CaribouHabitat-ANY-method.html</loc>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/plot-CaribouHabitat.html</loc>
   </url>
   <url>
-    <loc>https://landscitech.github.io/caribouMetrics/reference/popGrowthJohnson.html</loc>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/plotRes.html</loc>
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/popGrowthTableJohnsonECCC.html</loc>
@@ -100,10 +124,10 @@
     <loc>https://landscitech.github.io/caribouMetrics/reference/rfuToResType.html</loc>
   </url>
   <url>
-    <loc>https://landscitech.github.io/caribouMetrics/reference/sampleCoefs.html</loc>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/runScnSet.html</loc>
   </url>
   <url>
-    <loc>https://landscitech.github.io/caribouMetrics/reference/sampleRates.html</loc>
+    <loc>https://landscitech.github.io/caribouMetrics/reference/simulateObservations.html</loc>
   </url>
   <url>
     <loc>https://landscitech.github.io/caribouMetrics/reference/threshTable.html</loc>

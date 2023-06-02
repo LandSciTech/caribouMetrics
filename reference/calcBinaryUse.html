@@ -18,7 +18,7 @@ any season or each season using thresholds given in a table."><!-- mathjax --><s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -33,7 +33,7 @@ any season or each season using thresholds given in a table."><!-- mathjax --><s
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -42,10 +42,19 @@ any season or each season using thresholds given in a table."><!-- mathjax --><s
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -55,7 +64,7 @@ any season or each season using thresholds given in a table."><!-- mathjax --><s
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate binary use</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/calcBinaryUse.R" class="external-link"><code>R/calcBinaryUse.R</code></a></small>
     <div class="hidden name"><code>calcBinaryUse.Rd</code></div>
     </div>
 
@@ -101,11 +110,29 @@ TRUE then the result is a 0 or 1 for each season.</p></dd>
     
 
 <p>If <code>bySeason</code> is <code>FALSE</code> and <code>x</code> is a CaribouHabitat object then the result is a RasterLayer.
- If <code>bySeason</code> is <code>TRUE</code> and <code>x</code> is a CaribouHabitat object then the result is a RasterBrick.  
- If <code>bySeason</code> is <code>FALSE</code> and <code>x</code> is a data.frame then the result is a data.frame.
- If <code>bySeason</code> is <code>TRUE</code> and <code>x</code> is a data.frame then the result is a data.frame.
- If <code>bySeason</code> is <code>FALSE</code> and <code>x</code> is a vector then the result is a vector.
- If <code>bySeason</code> is <code>TRUE</code> and <code>x</code> is a vector then the result is a data.frame.</p>
+If <code>bySeason</code> is <code>TRUE</code> and <code>x</code> is a CaribouHabitat object then the result is a RasterBrick.
+If <code>bySeason</code> is <code>FALSE</code> and <code>x</code> is a data.frame then the result is a data.frame.
+If <code>bySeason</code> is <code>TRUE</code> and <code>x</code> is a data.frame then the result is a data.frame.
+If <code>bySeason</code> is <code>FALSE</code> and <code>x</code> is a vector then the result is a vector.
+If <code>bySeason</code> is <code>TRUE</code> and <code>x</code> is a vector then the result is a data.frame.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>Caribou habitat functions:
+<code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code>,
+<code><a href="caribouHabitat.html">caribouHabitat</a>()</code>,
+<code><a href="coefTableHR.html">coefTableHR</a></code>,
+<code><a href="coefTableStd.html">coefTableStd</a></code>,
+<code><a href="fnlcToResType.html">fnlcToResType</a></code>,
+<code><a href="loadSpatialInputs.html">loadSpatialInputs</a>()</code>,
+<code><a href="plcToResType.html">plcToResType</a></code>,
+<code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a>()</code>,
+<code><a href="reclassPLC.html">reclassPLC</a>()</code>,
+<code><a href="resTypeCode.html">resTypeCode</a></code>,
+<code><a href="results.html">results</a>()</code>,
+<code><a href="rfuToResType.html">rfuToResType</a></code>,
+<code><a href="threshTable.html">threshTable</a></code>,
+<code><a href="updateCaribou.html">updateCaribou</a>()</code></p></div>
     </div>
 
     <div id="ref-examples">
@@ -156,7 +183,6 @@ TRUE then the result is a 0 or 1 for each season.</p></dd>
 <span class="r-plt img"><img src="calcBinaryUse-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">calcBinaryUse</span><span class="op">(</span><span class="va">res</span>, bySeason <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="calcBinaryUse-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

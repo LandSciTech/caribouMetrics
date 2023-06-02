@@ -19,7 +19,7 @@ object is updated depending on the elements provided in the list."><!-- mathjax 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -34,7 +34,7 @@ object is updated depending on the elements provided in the list."><!-- mathjax 
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -43,10 +43,19 @@ object is updated depending on the elements provided in the list."><!-- mathjax 
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -56,7 +65,7 @@ object is updated depending on the elements provided in the list."><!-- mathjax 
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Update an existing CaribouHabitat Object</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/updateCaribou.R" class="external-link"><code>R/updateCaribou.R</code></a></small>
     <div class="hidden name"><code>updateCaribou.Rd</code></div>
     </div>
 
@@ -118,9 +127,8 @@ returned. If TRUE then only the habitatUse RasterStack is returned.</p></dd>
     <h2>Value</h2>
     
 
-<p>If <code>resultsOnly</code> is FALSE an updated CaribouHabitat object. If</p>
-<p></p>
-<p><code>resultsOnly</code> is TRUE a RasterStack with a layer for each season.</p>
+<p>If <code>resultsOnly</code> is FALSE an updated CaribouHabitat object. If
+<code>resultsOnly</code> is TRUE a RasterStack with a layer for each season.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -130,6 +138,24 @@ updated.</p>
 object will be replaced and new projections made for the whole landscape. If
 natDist or anthroDist are not provided then the data stored in the
 CaribouHabitat object is reused.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>Caribou habitat functions:
+<code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code>,
+<code><a href="calcBinaryUse.html">calcBinaryUse</a>()</code>,
+<code><a href="caribouHabitat.html">caribouHabitat</a>()</code>,
+<code><a href="coefTableHR.html">coefTableHR</a></code>,
+<code><a href="coefTableStd.html">coefTableStd</a></code>,
+<code><a href="fnlcToResType.html">fnlcToResType</a></code>,
+<code><a href="loadSpatialInputs.html">loadSpatialInputs</a>()</code>,
+<code><a href="plcToResType.html">plcToResType</a></code>,
+<code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a>()</code>,
+<code><a href="reclassPLC.html">reclassPLC</a>()</code>,
+<code><a href="resTypeCode.html">resTypeCode</a></code>,
+<code><a href="results.html">results</a>()</code>,
+<code><a href="rfuToResType.html">rfuToResType</a></code>,
+<code><a href="threshTable.html">threshTable</a></code></p></div>
     </div>
 
     <div id="ref-examples">

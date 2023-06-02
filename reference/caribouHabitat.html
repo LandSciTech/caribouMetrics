@@ -19,7 +19,7 @@ winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -34,7 +34,7 @@ winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -43,10 +43,19 @@ winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -56,7 +65,7 @@ winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate relative probability of caribou habitat use</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/caribouHabitat.R" class="external-link"><code>R/caribouHabitat.R</code></a></small>
     <div class="hidden name"><code>caribouHabitat.Rd</code></div>
     </div>
 
@@ -81,13 +90,13 @@ winter for caribou ranges in Northern Ontario, based on Hornseth and Rempel,
     <div id="source">
     <h2>Source</h2>
     <p>Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
-  C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
-  J.M., 2021. Modeling Cumulative Effects of Climate and Development on
-  Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.</p>
+C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.</p>
 <p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
- woodland caribou (Rangifer tarandus caribou) across a gradient of
- anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
- <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">https://doi.org/10.1139/cjz-2015-0101</a></p>
+woodland caribou (Rangifer tarandus caribou) across a gradient of
+anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+<a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">https://doi.org/10.1139/cjz-2015-0101</a></p>
     </div>
     <div id="arguments">
     <h2>Arguments</h2>
@@ -130,75 +139,52 @@ model. Must match the format and naming of the default <code>coefTableHR</code><
 
 
 <dt>...</dt>
-<dd><p>optional arguments:</p><dl><dt>natDist:</dt>
-<dd><p>filename or RasterLayer. Presence or absence of natural 
-  disturbance, primarily by fire. This should reflect cumulative natural 
-  disturbance over the preceding 30 years</p></dd>
-
-  <dt>anthroDist:</dt>
-<dd><p>filename or RasterLayer. Anthropogenic disturbance including 
-  harvest.</p></dd>
-
-  <dt>eskerSave</dt>
-<dd><p>filename to save rasterized esker data.</p></dd>
-
-  <dt>linFeatSave</dt>
-<dd><p>filename to save rasterized linear feature data.</p></dd>
-
-  <dt>padProjPoly</dt>
-<dd><p>logical. Should the area around the <code>projectPoly</code> be
-  used to avoid edge effects? If FALSE, the default, only data from inside the
-  <code>projectPoly</code> is used. If TRUE then <code>projectPoly</code> is buffered and
-  the other variables are clipped to the extent of the buffered area. Results
-  are always clipped to the original <code>projectPoly</code>. It is ideal to set
-  this to TRUE and provide a data set that is larger than the
-  <code>projectPoly</code> to avoid edge effects.</p></dd>
-
-  <dt>padFocal</dt>
-<dd><p>logical. This value is passed to the pad argument in
-  <code><a href="https://rdrr.io/pkg/terra/man/focal.html" class="external-link">raster::focal</a></code>, if it is FALSE then cells near the edge will return
-  NA, if it is TRUE a value will be returned for each cell that assumes cells
-  outside the input data are 0 for all resource types. This is not a good
-  assumption and should be used with caution.</p></dd>
-
-  <dt>saveOutput</dt>
-<dd><p>character. The filename to save the rasterBrick of habitat
-  use probabilities to. Note this will overwrite any existing files. The .grd
-  format is recommended because it will preserve layer names when the file is
-  reloaded.</p></dd>
-
-  <dt>winArea</dt>
-<dd><p>number. This is the area of the moving window that is used to
-  average proportions of each resource type at broader spatial scales. The
-  Hornseth and Rempel (2016) models used specific window areas which are
-  defined within this package and used as the default. You should only specify
-  a window size if you have good reason.</p></dd>
-
-  <dt>doScale</dt>
-<dd><p>logical. FALSE by default. Set to TRUE only if you have
-  supplied coefficients that were trained on standardized data which will
-  cause the input data to be scaled.</p></dd>
-
-  <dt>ptDensity</dt>
-<dd><p>number. Only used if a list element in <code>linFeat</code> is a raster.
-  See <code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a></code>.</p></dd>
-
-  <dt>preppedData</dt>
-<dd><p>list. A list containing pre-prepared input data sets. If
-  not NULL then data checks will be skipped. Names must match argument names
-  except that <code>landCover</code> should be called <code>refRast</code> and
-  <code>projectPoly</code> should be called <code>projectPolyOrig</code>. See
-  <code><a href="loadSpatialInputs.html">loadSpatialInputs</a></code>.</p></dd>
-
-
-</dl></dd>
+<dd><p>optional arguments:</p><ul><li><p>natDist: filename or RasterLayer. Presence or absence of natural
+disturbance, primarily by fire. This should reflect cumulative natural
+disturbance over the preceding 30 years</p></li>
+<li><p>anthroDist: filename or RasterLayer. Anthropogenic disturbance including
+harvest.</p></li>
+<li><p>eskerSave: filename to save rasterized esker data.</p></li>
+<li><p>linFeatSave: filename to save rasterized linear feature data.</p></li>
+<li><p>padProjPoly: logical. Should the area around the <code>projectPoly</code> be
+used to avoid edge effects? If FALSE, the default, only data from inside the
+<code>projectPoly</code> is used. If TRUE then <code>projectPoly</code> is buffered and
+the other variables are clipped to the extent of the buffered area. Results
+are always clipped to the original <code>projectPoly</code>. It is ideal to set
+this to TRUE and provide a data set that is larger than the
+<code>projectPoly</code> to avoid edge effects.</p></li>
+<li><p>padFocal: logical. This value is passed to the pad argument in
+<code><a href="https://rdrr.io/pkg/terra/man/focal.html" class="external-link">raster::focal</a></code>, if it is FALSE then cells near the edge will return
+NA, if it is TRUE a value will be returned for each cell that assumes cells
+outside the input data are 0 for all resource types. This is not a good
+assumption and should be used with caution.</p></li>
+<li><p>saveOutput: character. The filename to save the rasterBrick of habitat
+use probabilities to. Note this will overwrite any existing files. The .grd
+format is recommended because it will preserve layer names when the file is
+reloaded.</p></li>
+<li><p>winArea: number. This is the area of the moving window that is used to
+average proportions of each resource type at broader spatial scales. The
+Hornseth and Rempel (2016) models used specific window areas which are
+defined within this package and used as the default. You should only specify
+a window size if you have good reason.</p></li>
+<li><p>doScale: logical. FALSE by default. Set to TRUE only if you have
+supplied coefficients that were trained on standardized data which will
+cause the input data to be scaled.</p></li>
+<li><p>ptDensity: number. Only used if a list element in <code>linFeat</code> is a raster.
+See <code><a href="rasterizeLineDensity.html">rasterizeLineDensity()</a></code>.</p></li>
+<li><p>preppedData: list. A list containing pre-prepared input data sets. If
+not NULL then data checks will be skipped. Names must match argument names
+except that <code>landCover</code> should be called <code>refRast</code> and
+<code>projectPoly</code> should be called <code>projectPolyOrig</code>. See
+<code><a href="loadSpatialInputs.html">loadSpatialInputs()</a></code>.</p></li>
+</ul></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>A CaribouHabitat Object see <code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code></p>
+<p>A CaribouHabitat Object see <a href="CaribouHabitat-class.html">CaribouHabitat</a></p>
 
 
     </div>
@@ -210,15 +196,30 @@ information is the <code>landCover</code> but this is updated based on disturban
 information. All data sources can be provided either as filenames or as
 spatial files. If filenames are provided then the <code>landCover</code> is assumed
 to be the Provincial Landcover for Ontario and is converted to resource types
-using <code><a href="reclassPLC.html">reclassPLC</a></code>. The result is a CaribouHabitat object which has
+using <code><a href="reclassPLC.html">reclassPLC()</a></code>. The result is a CaribouHabitat object which has
 methods defined for plotting and extracting the results. To update an existing
-CaribouHabitat object with new data see <a href="updateCaribou.html">updateCaribou</a>.</p>
+CaribouHabitat object with new data see <code><a href="updateCaribou.html">updateCaribou()</a></code>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code> for information on the object
- returned and <code><a href="updateCaribou.html">updateCaribou</a></code> for updating an existing
- CaribouHabitat object.</p></div>
+    <div class="dont-index"><p><a href="CaribouHabitat-class.html">CaribouHabitat</a> for information on the object
+returned, <code><a href="updateCaribou.html">updateCaribou()</a></code> for updating an existing
+CaribouHabitat object, and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> for the plot method.</p>
+<p>Caribou habitat functions:
+<code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code>,
+<code><a href="calcBinaryUse.html">calcBinaryUse</a>()</code>,
+<code><a href="coefTableHR.html">coefTableHR</a></code>,
+<code><a href="coefTableStd.html">coefTableStd</a></code>,
+<code><a href="fnlcToResType.html">fnlcToResType</a></code>,
+<code><a href="loadSpatialInputs.html">loadSpatialInputs</a>()</code>,
+<code><a href="plcToResType.html">plcToResType</a></code>,
+<code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a>()</code>,
+<code><a href="reclassPLC.html">reclassPLC</a>()</code>,
+<code><a href="resTypeCode.html">resTypeCode</a></code>,
+<code><a href="results.html">results</a>()</code>,
+<code><a href="rfuToResType.html">rfuToResType</a></code>,
+<code><a href="threshTable.html">threshTable</a></code>,
+<code><a href="updateCaribou.html">updateCaribou</a>()</code></p></div>
     </div>
 
     <div id="ref-examples">

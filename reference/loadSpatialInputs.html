@@ -19,7 +19,7 @@ objects."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -34,7 +34,7 @@ objects."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -43,10 +43,19 @@ objects."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -56,7 +65,7 @@ objects."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Load Spatial Input Data</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/loadSpatialInputs.R" class="external-link"><code>R/loadSpatialInputs.R</code></a></small>
     <div class="hidden name"><code>loadSpatialInputs.Rd</code></div>
     </div>
 
@@ -125,7 +134,7 @@ can have a different resolution from the <code>refRast</code>.</p></dd>
 list where the first element is a function that takes the corresponding
 <code>inputsList</code> element as its first argument and the subsequent elements
 are named arguments for that function, or a matrix that will be passed to
-<code><a href="https://rdrr.io/pkg/raster/man/reclassify.html" class="external-link">reclassify</a></code>.</p></dd>
+<code><a href="https://rdrr.io/pkg/raster/man/reclassify.html" class="external-link">raster::reclassify()</a></code>.</p></dd>
 
 
 <dt>bufferWidth</dt>
@@ -138,7 +147,7 @@ This can be used to avoid edge effects in moving window calculations</p></dd>
 <dt>ptDensity</dt>
 <dd><p>number. Only used if an element of <code>inputsList</code> is a
 list that contains a mixture of rasters and lines and is included in
-convertToRast. See <code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a></code>.</p></dd>
+convertToRast. See <code><a href="rasterizeLineDensity.html">rasterizeLineDensity()</a></code>.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -146,6 +155,24 @@ convertToRast. See <code><a href="rasterizeLineDensity.html">rasterizeLineDensit
     
 
 <p>A named list with aligned spatial data components</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>Caribou habitat functions:
+<code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code>,
+<code><a href="calcBinaryUse.html">calcBinaryUse</a>()</code>,
+<code><a href="caribouHabitat.html">caribouHabitat</a>()</code>,
+<code><a href="coefTableHR.html">coefTableHR</a></code>,
+<code><a href="coefTableStd.html">coefTableStd</a></code>,
+<code><a href="fnlcToResType.html">fnlcToResType</a></code>,
+<code><a href="plcToResType.html">plcToResType</a></code>,
+<code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a>()</code>,
+<code><a href="reclassPLC.html">reclassPLC</a>()</code>,
+<code><a href="resTypeCode.html">resTypeCode</a></code>,
+<code><a href="results.html">results</a>()</code>,
+<code><a href="rfuToResType.html">rfuToResType</a></code>,
+<code><a href="threshTable.html">threshTable</a></code>,
+<code><a href="updateCaribou.html">updateCaribou</a>()</code></p></div>
     </div>
 
     <div id="ref-examples">

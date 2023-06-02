@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -50,7 +50,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -59,12 +59,22 @@
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -80,7 +90,7 @@
       <h1 data-toc-skip>User Interface Help</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/vignettes/UI_help.Rmd" class="external-link"><code>vignettes/UI_help.Rmd</code></a></small>
       <div class="hidden name"><code>UI_help.Rmd</code></div>
 
     </div>
@@ -262,85 +272,85 @@ definition.</p>
 <tr class="even">
 <td>Initial Population Size</td>
 <td>N</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>P_0: Maximum recruitment multiplier</td>
 <td>P_0</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="even">
 <td>P_K: Recruitment multiplier at carrying capacity</td>
 <td>P_K</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>a: Density dependence shape parameter</td>
 <td>a</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="even">
 <td>b: Allee effect parameter</td>
 <td>b</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>K: Carrying capacity multiplier</td>
 <td>K</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="even">
 <td>r_max: Maximum population growth rate</td>
 <td>r_max</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>s: Sex ratio</td>
 <td>s</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="even">
 <td>l_R: Minimum recruitment</td>
 <td>l_R</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>h_R: Maximum recruitment</td>
 <td>h_R</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="even">
 <td>l_S: Minimum survival</td>
 <td>l_S</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>h_S: Maximum survival</td>
 <td>h_S</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="even">
 <td>Interannual Variation</td>
 <td>interannualVar</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>probOption</td>
 <td>probOption</td>
-<td><code><a href="../reference/popGrowthJohnson.html">popGrowthJohnson()</a></code></td>
+<td><code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code></td>
 <td></td>
 </tr>
 <tr class="even">

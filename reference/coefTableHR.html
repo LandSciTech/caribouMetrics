@@ -19,7 +19,7 @@ Ontario."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -34,7 +34,7 @@ Ontario."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/Getting_started.html">Getting started</a>
+      <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
     </li>
     <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
@@ -43,10 +43,19 @@ Ontario."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Disturbance Metrics and Caribou Demography</a>
+      <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
+    </li>
+    <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
     </li>
   </ul></li>
-      </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
+      </ul><ul class="nav navbar-nav navbar-right"><li>
+  <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
@@ -56,7 +65,7 @@ Ontario."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Model coefficients for caribou ranges</h1>
-    
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/data.R" class="external-link"><code>R/data.R</code></a></small>
     <div class="hidden name"><code>coefTableHR.Rd</code></div>
     </div>
 
@@ -72,28 +81,36 @@ Ontario.</p>
 
     <div id="format">
     <h2>Format</h2>
-    <p>A data frame with 547 rows and 5 variables:</p><dl><dt>Season</dt>
-<dd><p>season, one of Spring, Summer, Fall, Winter</p></dd>
-
-  <dt>Variable</dt>
-<dd><p>the shortform variable name for this resource type</p></dd>
-
-  <dt>Coefficient</dt>
-<dd><p>modelled coefficients</p></dd>
- 
-  <dt>WinArea</dt>
-<dd><p>window area for moving window average</p></dd>
- 
-  <dt>Range</dt>
-<dd><p>the caribou range name</p></dd>
-
-</dl></div>
+    <p>A data frame with 547 rows and 5 variables:</p><ul><li><p>Season: season, one of Spring, Summer, Fall, Winter</p></li>
+<li><p>Variable: the shortform variable name for this resource type</p></li>
+<li><p>Coefficient: modelled coefficients</p></li>
+<li><p>WinArea: window area for moving window average</p></li>
+<li><p>Range: the caribou range name</p></li>
+</ul></div>
     <div id="source">
     <h2>Source</h2>
     <p>Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
-  C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
-  J.M., 2021. Modeling Cumulative Effects of Climate and Development on
-  Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.</p>
+C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>Caribou habitat functions:
+<code><a href="CaribouHabitat-class.html">CaribouHabitat-class</a></code>,
+<code><a href="calcBinaryUse.html">calcBinaryUse</a>()</code>,
+<code><a href="caribouHabitat.html">caribouHabitat</a>()</code>,
+<code><a href="coefTableStd.html">coefTableStd</a></code>,
+<code><a href="fnlcToResType.html">fnlcToResType</a></code>,
+<code><a href="loadSpatialInputs.html">loadSpatialInputs</a>()</code>,
+<code><a href="plcToResType.html">plcToResType</a></code>,
+<code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a>()</code>,
+<code><a href="reclassPLC.html">reclassPLC</a>()</code>,
+<code><a href="resTypeCode.html">resTypeCode</a></code>,
+<code><a href="results.html">results</a>()</code>,
+<code><a href="rfuToResType.html">rfuToResType</a></code>,
+<code><a href="threshTable.html">threshTable</a></code>,
+<code><a href="updateCaribou.html">updateCaribou</a>()</code></p></div>
     </div>
 
   </div>
