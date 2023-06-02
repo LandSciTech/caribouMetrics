@@ -9,10 +9,10 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #' An object containing data and results for the caribou habitat resource
 #' selection function
 #'
-#' @seealso See \code{\link{caribouHabitat}} for options when creating a
+#' @seealso See [caribouHabitat()] for options when creating a
 #'   CaribouHabitat object.
 #' @slot landCover Raster with land cover classified into resource types. See
-#'   \code{resTypeCode} for a legend.
+#'   `resTypeCode` for a legend.
 #' @slot esker Raster of esker density in m^2 per hectare.
 #' @slot natDist Raster of natural disturbance.
 #' @slot anthroDist Raster of anthropogenic disturbances.
@@ -21,9 +21,10 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #' @slot processedData RasterStack with named layers for each input variable
 #'   used in the RSF
 #' @slot habitatUse RasterStack with named layers for each season
-#' @slot attributes A list of arguments from the \code{caribouHabtat} call. 
+#' @slot attributes A list of arguments from the `caribouHabtat` call. 
 #' @name CaribouHabitat-class
 #' @rdname CaribouHabitat-class
+#' @family habitat
 #' @export CaribouHabitat
 #' @importClassesFrom raster RasterLayer
 
@@ -57,17 +58,15 @@ CaribouHabitat <- setClass("CaribouHabitat",
 #' of Critical Habitat for Woodland Caribou (Rangifer tarandus caribou), Boreal
 #' Population, in Canada: 2011 Update. Ottawa, Ontario. Output variables
 #' include:
-#' \itemize{
-#'   \item {Fire:} {\% fire}
-#'   \item {Anthro:} {\% non-overlapping anthropogenic disturbance.}
-#'   \item {Total_dist:} {Percent total non-overlapping fire and anthropogenic disturbance.}
-#'   \item {fire_excl_anthro:} {\% fire not overlapping with anthropogenic disturbance.}
-#' }
+#'  * Fire: Percent fire
+#'  * Anthro: Percent non-overlapping buffered anthropogenic disturbance.
+#'  * Total_dist: Percent total non-overlapping fire and anthropogenic disturbance.
+#'  * fire_excl_anthro: Percent fire not overlapping with anthropogenic disturbance.
 #'
 #' Note that NA values are omitted from tabulated area.
 #' Missing layers are omitted from the output, not interpreted as 0 disturbance
 #'
-#' @seealso See \code{\link{disturbanceMetrics}} for options when creating a
+#' @seealso See [disturbanceMetrics()] for options when creating a
 #'   DisturbanceMetrics object.
 #'   
 #' @slot landCover Raster distinguishing land from water. 0 or NA is water.
@@ -77,9 +76,10 @@ CaribouHabitat <- setClass("CaribouHabitat",
 #' @slot projectPoly Sf object with polygon of project boundary.
 #' @slot processedData RasterStack with named layers for each input variable used in the RSF
 #' @slot disturbanceMetrics Data frame of disturbance metric values
-#' @slot attributes A list of arguments from the \code{caribouHabtat} call. 
+#' @slot attributes A list of arguments from the `caribouHabtat` call. 
 #' @name DisturbanceMetrics-class
 #' @rdname DisturbanceMetrics-class
+#' @family disturbance
 #' @export DisturbanceMetrics
 #' @importClassesFrom raster RasterLayer
 

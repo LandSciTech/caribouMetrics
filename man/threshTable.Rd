@@ -3,24 +3,26 @@
 \docType{data}
 \name{threshTable}
 \alias{threshTable}
-\title{Category 2 thresholds table}
+\title{Binary habitat use thresholds table}
 \format{
-A data frame with 48 rows and 6 variables: \describe{
-  \item{Range}{the caribou range name} 
-  \item{Season}{season, one of Spring, Summer, Fall, Winter}
-  \item{Sensitivity}{the proportion of presences correctly predicted as presence}
-  \item{Specificity}{the proportion of absences correctly predicted as absence} 
-  \item{Threshold}{the value for the lowest probability of use that is considered 
-  a predicted presence}
-  \item{AUC}{the area under the resource operating characteristic (ROC) curve; 
-  it ranges from 0-1 and indicates the overall success of the model for predicting
-   both presence and absence} }
+A data frame with 48 rows and 6 variables:
+\itemize{
+\item Range: the caribou range name
+\item Season: season, one of Spring, Summer, Fall, Winter
+\item Sensitivity: the proportion of presences correctly predicted as presence
+\item Specificity: the proportion of absences correctly predicted as absence
+\item Threshold: the value for the lowest probability of use that is considered
+a predicted presence
+\item AUC: the area under the resource operating characteristic (ROC) curve;
+it ranges from 0-1 and indicates the overall success of the model for predicting
+both presence and absence
+}
 }
 \source{
 Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
-  C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
-  J.M., 2021. Modeling Cumulative Effects of Climate and Development on
-  Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
+C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
 }
 \usage{
 threshTable
@@ -30,4 +32,22 @@ A table containing the thresholds used to assign habitat as Category 2 (ie in
 use) based on probability of use. Developed by Rempel and Hornseth using
 Youden's J and a false negative cost of 5.
 }
+\seealso{
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableHR}},
+\code{\link{coefTableStd}},
+\code{\link{fnlcToResType}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{plcToResType}},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{reclassPLC}()},
+\code{\link{resTypeCode}},
+\code{\link{results}()},
+\code{\link{rfuToResType}},
+\code{\link{updateCaribou}()}
+}
+\concept{habitat}
 \keyword{datasets}

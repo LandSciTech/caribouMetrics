@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot,CaribouHabitat,ANY-method}
 \alias{plot,CaribouHabitat,ANY-method}
-\title{Plot method for CaribouHabitat Objects}
+\title{Plot method for \code{CaribouHabitat} Objects}
 \usage{
 \S4method{plot}{CaribouHabitat,ANY}(
   x,
@@ -29,7 +29,7 @@ if installed}
 If tmap is TRUE a tmap object if FALSE a plot is created in the viewer
 }
 \description{
-This will plot the predicted habitat use from a CaribouHabitat object.
+Plot the predicted habitat use from a \code{CaribouHabitat} object.
 }
 \examples{
 # create example rasters

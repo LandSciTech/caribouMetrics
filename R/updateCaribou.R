@@ -7,10 +7,10 @@ NULL
 #' data that have not changed. New data is supplied as a named list and the
 #' object is updated depending on the elements provided in the list.
 #'
-#' If \code{newData} contains only linFeat then only linear features will be
+#' If `newData` contains only linFeat then only linear features will be
 #' updated.
 #'
-#' If  \code{newData} contains landCover the landCover in the CaribouHabitat
+#' If  `newData` contains landCover the landCover in the CaribouHabitat
 #' object will be replaced and new projections made for the whole landscape. If
 #' natDist or anthroDist are not provided then the data stored in the
 #' CaribouHabitat object is reused.
@@ -22,14 +22,14 @@ NULL
 #' @param resultsOnly logical. If FALSE the whole CaribouHabitat object is
 #'   returned. If TRUE then only the habitatUse RasterStack is returned.
 #' @param coefTable data.frame. Optional table of coefficients to be used in the
-#'   model. Must match the format and naming of \code{coefTableHR}
+#'   model. Must match the format and naming of `coefTableHR`
 #' @param doScale logical. FALSE by default. Set to TRUE only if you have
 #'   supplied coefficients that were trained on standardized data which will
 #'   cause the input data to be scaled.
 #' @param ... other arguments passed to methods. Not currently used.
 #'
-#' @return If \code{resultsOnly} is FALSE an updated CaribouHabitat object. If
-#'   \code{resultsOnly} is TRUE a RasterStack with a layer for each season.
+#' @return If `resultsOnly` is FALSE an updated CaribouHabitat object. If
+#'   `resultsOnly` is TRUE a RasterStack with a layer for each season.
 #'   
 #' @examples 
 #' # create example rasters
@@ -81,6 +81,7 @@ NULL
 #' plot(res, season = "Winter")
 #' plot(res2, season = "Winter")
 #' 
+#' @family habitat
 #' @export
 setGeneric("updateCaribou", function(CarHab, newData, ...) standardGeneric("updateCaribou"))
 

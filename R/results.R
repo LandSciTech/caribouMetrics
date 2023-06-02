@@ -82,7 +82,9 @@ NULL
 #' 
 #' # can get other slots as well
 #' resDMrasters <- results(dm, type = "processedData")
-
+#' 
+#' @family habitat
+#' @family disturbance
 #' @export
 setGeneric("results", function(x, ...) standardGeneric("results"))
 

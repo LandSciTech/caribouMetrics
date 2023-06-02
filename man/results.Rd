@@ -23,7 +23,7 @@ returned as a RasterStack.}
 }
 \value{
 By default a RasterStack if x is a CaribouHabitat object and a
-  data.frame if x is a DisturbanceMetrics object.
+data.frame if x is a DisturbanceMetrics object.
 }
 \description{
 Extract results from CaribouHabitat or DisturbanceMetrics object.
@@ -96,4 +96,30 @@ resDM <- results(dm)
 
 # can get other slots as well
 resDMrasters <- results(dm, type = "processedData")
+
 }
+\seealso{
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableHR}},
+\code{\link{coefTableStd}},
+\code{\link{fnlcToResType}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{plcToResType}},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{reclassPLC}()},
+\code{\link{resTypeCode}},
+\code{\link{rfuToResType}},
+\code{\link{threshTable}},
+\code{\link{updateCaribou}()}
+
+Functions for calculating disturbance:
+\code{\link{DisturbanceMetrics-class}},
+\code{\link{disturbanceMetrics}()},
+\code{\link{reclassDist}()},
+\code{\link{updateDisturbance}()}
+}
+\concept{disturbance}
+\concept{habitat}

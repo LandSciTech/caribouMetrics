@@ -5,18 +5,20 @@
 \alias{coefTableHR}
 \title{Model coefficients for caribou ranges}
 \format{
-A data frame with 547 rows and 5 variables: \describe{
-  \item{Season}{season, one of Spring, Summer, Fall, Winter}
-  \item{Variable}{the shortform variable name for this resource type}
-  \item{Coefficient}{modelled coefficients} 
-  \item{WinArea}{window area for moving window average} 
-  \item{Range}{the caribou range name}}
+A data frame with 547 rows and 5 variables:
+\itemize{
+\item Season: season, one of Spring, Summer, Fall, Winter
+\item Variable: the shortform variable name for this resource type
+\item Coefficient: modelled coefficients
+\item WinArea: window area for moving window average
+\item Range: the caribou range name
+}
 }
 \source{
 Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
-  C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
-  J.M., 2021. Modeling Cumulative Effects of Climate and Development on
-  Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
+C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
+J.M., 2021. Modeling Cumulative Effects of Climate and Development on
+Moose, Wolf, and Caribou Populations. The Journal of Wildlife Management.
 }
 \usage{
 coefTableHR
@@ -26,4 +28,22 @@ A table containing the coefficients modelled by Hornseth and Rempel for the
 resource selection probability functions for 13 caribou ranges in Northern
 Ontario.
 }
+\seealso{
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableStd}},
+\code{\link{fnlcToResType}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{plcToResType}},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{reclassPLC}()},
+\code{\link{resTypeCode}},
+\code{\link{results}()},
+\code{\link{rfuToResType}},
+\code{\link{threshTable}},
+\code{\link{updateCaribou}()}
+}
+\concept{habitat}
 \keyword{datasets}

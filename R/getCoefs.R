@@ -2,55 +2,45 @@
 # License GPL-3
 #NOTICE: This function has been modified from https://github.com/tati-micheletti/caribouPopGrowthModel/blob/master/R/makeDTforPopGrowth.R
 
-#' Get coefficients for model version
+#' Get demographic regression model coefficients for model version
 #'
-#' Get the coefficients for the chosen model version(s), number(s) and response
-#' variable from a table of coefficients for many models. If the table does not
-#' contain the standard error it is calculated from the confidence interval.
-#'
-#' @param populationGrowthTable data.frame. \code{\link{popGrowthTableJohnsonECCC}} is
-#'   included in the package and should be used in most cases. A custom table of
-#'   model parameters can be provided but it must match the column names of
-#'   \code{\link{popGrowthTableJohnsonECCC}}.
 #' @param resVar character. Response variable, typically "femaleSurvival" or
-#' "recruitment"
-#' @param modVer character vector. Which model version(s) to use. Currently the
-#'   only option is "Johnson" for the model used in Johnson et. al. (2020), but
-#'   additional options may be added in the future.
+#'   "recruitment"
 #' @param modNum character vector. Which model number(s) to use see
-#'   \code{popGrowthTableJohnsonECCC$ModelNumber} for typical options.
+#'   [popGrowthTableJohnsonECCC] for typical options.
 #'
-#' @return a named list with one element per model version. The names are
-#'   \code{modVer_modNum_Type}. Each element contains a data.frame that
-#'   is a subset of \code{populationGrowthTable} for the selected model
-#'   
-#' @examples 
+#' @return For `getCoefs`: a named list with one element per model version. The names are
+#'   `modelVersion_modNum_Type`. Each element contains a data.frame that is a subset
+#'   of `populationGrowthTable` for the selected model
+#'
+#' @examples
 #' getCoefs(popGrowthTableJohnsonECCC, "femaleSurvival", "Johnson", "M1")
 #'
+#' @rdname demographicCoefficients
 #' @export
 #' 
 
 getCoefs <- function(populationGrowthTable,
                      resVar,
-                     modVer,
+                     modelVersion,
                      modNum){
   
   populationGrowthTable <- filter(populationGrowthTable, 
                                   .data$responseVariable == resVar)
   populationGrowthTable <- data.table::as.data.table(populationGrowthTable)
   
-  ## Check that both a modVer and modNum parameter have been supplied.
+  ## Check that both a modelVersion and modNum parameter have been supplied.
   ## Not required for recruitment models
   if (resVar == "femaleSurvival"){
-    if (length(modVer) != length(modNum)){
-      modVer <- rep(modVer, times = length(modNum))}
+    if (length(modelVersion) != length(modNum)){
+      modelVersion <- rep(modelVersion, times = length(modNum))}
   }
   
-  if(length(modVer) != length(modNum)){
-    stop("Please provide one modNum for each modVer. length(modVer) == length(modNum)",
+  if(length(modelVersion) != length(modNum)){
+    stop("Please provide one modNum for each modelVersion. length(modelVersion) == length(modNum)",
          call. = FALSE)
   } 
-  selectedMods <- data.frame(modelVersion = modVer, responseVariable = resVar, 
+  selectedMods <- data.frame(modelVersion = modelVersion, responseVariable = resVar, 
                              ModelNumber = modNum)
   
   missingMods <- anti_join(selectedMods, populationGrowthTable, 
@@ -66,23 +56,23 @@ getCoefs <- function(populationGrowthTable,
   
   Type <- "National"
   
-  if (length(Type) != length(modVer)){
-    modType <- rep(Type, times = length(modVer))
+  if (length(Type) != length(modelVersion)){
+    modType <- rep(Type, times = length(modelVersion))
   } else {
     modType <- Type
   }
   
-  modName <- paste(modVer, modNum,Type, sep = "_")
+  modName <- paste(modelVersion, modNum,Type, sep = "_")
   
   calcFromCI <- function(ci_upper, ci_lower){
     SD <- (ci_upper-ci_lower)/3.92
     return(SD)
   }
   
-  DTs <- lapply(seq_along(modVer), FUN = function(modelIndex){
+  DTs <- lapply(seq_along(modelVersion), FUN = function(modelIndex){
     populationGrowthTable = data.table::as.data.table(populationGrowthTable)
     DT <- populationGrowthTable[populationGrowthTable$responseVariable %in% resVar &
-                                  populationGrowthTable$modelVersion  %in% modVer[modelIndex] &
+                                  populationGrowthTable$modelVersion  %in% modelVersion[modelIndex] &
                                   populationGrowthTable$ModelNumber %in% modNum[modelIndex] &
                                   populationGrowthTable$Type %in% modType[modelIndex],]
     if (any(is.na(DT[["StdErr"]]))){ 

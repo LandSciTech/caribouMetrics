@@ -5,7 +5,7 @@
 #' @param x an sf object containing lines and/or points
 #' @param r a RasterLayer object to be used as a template for the output raster
 #' @param ptDensity a number giving the density to assign to points, in units of
-#'   \code{res(r)}. A value of 1 indicates one straight line crossing of the pixel. A
+#'   `res(r)`. A value of 1 indicates one straight line crossing of the pixel. A
 #'   value of 2+2*2^0.5 is horizontal, vertical, and diagonal crossings. If
 #'   NULL, points in x will be ignored.
 #'
@@ -28,6 +28,8 @@
 #' rastLines <- rasterizeLineDensity(lf, lc)
 #' 
 #' plot(rastLines)
+#' 
+#' @family habitat
 #' @export
 #' 
 rasterizeLineDensity <- function(x, r, ptDensity = 1) {
@@ -38,7 +40,7 @@ rasterizeLineDensity <- function(x, r, ptDensity = 1) {
   
   rp2 <- st_intersection(rPoly, st_set_agr(x, "constant")) %>% 
     mutate(length = st_length(.data$geometry) %>% units::set_units(NULL)) %>% 
-    select(.data$ID, .data$length, .data$geometry) %>% st_drop_geometry() %>% 
+    select("ID", "length", "geometry") %>% st_drop_geometry() %>% 
     group_by(.data$ID) %>% 
     summarise(length = round(sum(.data$length, na.rm = TRUE)/(res(r)[1]*res(r)[2]/10000), digits = 1))
   

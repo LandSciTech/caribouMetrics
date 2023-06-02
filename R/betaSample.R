@@ -105,9 +105,12 @@ addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
   return(bar_t)
 }
 
-
-# Copied from truncdist package because causing breaking issues and maintainer
-# did not reply. Issue is if statements with length > 1 in R 4.2
+# Copyright 2023 Frederick Novomestky, Saralees Nadarajah & Her Majesty the Queen
+# in Right of Canada as represented by the Minister of the Environment 
+# License GPL-3 
+# NOTICE: This function has been modified from the truncdist package
+# because because of an issue with if statements with length > 1 in R 4.2
+# I modified to add any()
 qtrunc <- function (p, spec, a = -Inf, b = Inf, ...) {
   if (a >= b) 
     stop("argument a is greater than or equal to b")

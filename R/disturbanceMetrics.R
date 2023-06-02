@@ -22,16 +22,17 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'Scientific Assessment to Inform the Identification of Critical Habitat for
 #'Woodland Caribou (Rangifer tarandus caribou), Boreal Population, in
 #'Canada:2011 Update. Ottawa, Ontario.The variables calculated by this function
-#'include: \itemize{ \item {Fire:} {\% fire} \item {Anthro:} {\% non-overlapping
-#'anthropogenic disturbance.} \item {Total_dist:} {Percent total non-overlapping
-#'fire and anthropogenic disturbance.} \item {fire_excl_anthro:} {\% fire not
-#'overlapping with anthropogenic disturbance.} }
+#'include:
+#'* Fire: % fire
+#'* Anthro: % non-overlapping anthropogenic disturbance.
+#'* Total_dist: Percent total non-overlapping fire and anthropogenic disturbance.
+#'* fire_excl_anthro: % fire not overlapping with anthropogenic disturbance.
 #'
 #'Note assume natDist and anthroDist include 40 years of cumulative disturbance.
 #'Note that locations where landCover is NA or 0 are omitted from the tabulated
 #'area. Missing layers are omitted from the output, not interpreted as 0
 #'disturbance. To update an existing DisturbanceMetrics object with new data see
-#'\code{\link[caribouMetrics]{updateDisturbance}}.
+#'[updateDisturbance()].
 #'
 #'@param landCover filename or RasterLayer. 0 and NA values are assumed to be
 #'  water and omitted from the tabulated area. Note landCover is also used to
@@ -41,47 +42,46 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'@param projectPoly filename or sf object. Polygons defining range boundaries.
 #'@param isPercent logical. Should the results be returned as a percentage? 
 #'@param ... optional arguments:
-#' \describe{
-#'   \item{natDist}{filename or RasterLayer. Presence or absence of natural
+#'   * natDist: filename or RasterLayer. Presence or absence of natural
 #'   disturbance, primarily by fire. Should include 40 years cumulative
-#'   disturbance.}
-#'   \item{anthroDist}{filename or RasterLayer. Anthropogenic disturbance including
+#'   disturbance.
+#'   * anthroDist: filename or RasterLayer. Anthropogenic disturbance including
 #'   harvest. This can have an effect on any type of landcover except water.
-#'   Should include 40 years cumulative disturbance.}
-#'   \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
+#'   Should include 40 years cumulative disturbance.
+#'   * padProjPoly: logical. Should the area around the `projectPoly` be
 #'   used to avoid edge effects? If FALSE, the default, only data from inside the
-#'   \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
+#'   `projectPoly` is used. If TRUE then `projectPoly` is buffered and
 #'   the other variables are clipped to the extent of the buffered area. Results
-#'   are always clipped to the original \code{projectPoly}. It is ideal to set
+#'   are always clipped to the original `projectPoly`. It is ideal to set
 #'   this to TRUE and provide a dataset that is larger than the
-#'   \code{projectPoly} to avoid edge effects.}
-#'   \item{padFocal}{logical. This value is passed to the pad argument in
-#'   \code{raster::focal}, if it is FALSE then cells near the edge will return
+#'   `projectPoly` to avoid edge effects.
+#'   * padFocal: logical. This value is passed to the pad argument in
+#'   `raster::focal`, if it is FALSE then cells near the edge will return
 #'   NA, if it is TRUE a value will be returned for each cell that assumes cells
 #'   outside the input data are 0 for all resource types. This is not a good
-#'   assumption and should be used with caution.}
-#'   \item{bufferWidth}{number. Width of buffer applied to anthropogenic
-#'   disturbance in metres. Default is 500.}
-#'   \item{linBuffMethod}{character. The method used to buffer linear features if
+#'   assumption and should be used with caution.
+#'   * bufferWidth: number. Width of buffer applied to anthropogenic
+#'   disturbance in metres. Default is 500.
+#'   * linBuffMethod: character. The method used to buffer linear features if
 #'   they are supplied as sf lines. The default is "raster" in which case they
 #'   are rasterized using the stars package and buffered using a moving window
 #'   method. If "sf" then the lines are buffered with st_buffer and then
-#'   rasterized. Either way points are included in the raster output.}
-#'   \item{saveOutput}{character. The filename to save the RasterBrick of binary
+#'   rasterized. Either way points are included in the raster output.
+#'   * saveOutput: character. The filename to save the RasterBrick of binary
 #'   disturbances with buffered anthropogenic disturbance. Note this will
 #'   overwrite existing files with the same name. The .grd format is recommended
-#'   because it will preserve layer names when the file is reloaded.}
-#'   \item{preppedData}{list. A list containing pre-prepared input data sets. If
+#'   because it will preserve layer names when the file is reloaded.
+#'   * preppedData: list. A list containing pre-prepared input data sets. If
 #'   not NULL then data checks will be skipped. Names must match argument names
-#'   except that \code{landCover} should be called \code{refRast} and
-#'   \code{projectPoly} should be called \code{projectPolyOrig}
-#'   See \code{\link{loadSpatialInputs}}.}
-#' }
+#'   except that `landCover` should be called `refRast` and
+#'   `projectPoly` should be called `projectPolyOrig`
+#'   See [loadSpatialInputs()].
 #' 
-#'@return A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
+#' 
+#'@return A DisturbanceMetrics Object see [DisturbanceMetrics-class()]
 #'
-#'@seealso \code{\link{DisturbanceMetrics-class}} for information on the object
-#'  returned and \code{\link{updateDisturbance}} for updating an existing
+#'@seealso [DisturbanceMetrics-class()] for information on the object
+#'  returned and [updateDisturbance()] for updating an existing
 #'  DisturbanceMetrics object.
 #'
 #'@source Environment Canada. 2011. Scientific Assessment to Inform the
@@ -112,7 +112,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'                    padFocal = TRUE,
 #'                    bufferWidth = 1)
 #'
-#'
+#' @family disturbance
 #'@export
 disturbanceMetrics <- function(landCover = NULL, linFeat = NULL, 
                                projectPoly = NULL, isPercent = TRUE, ...) {

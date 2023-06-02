@@ -21,7 +21,7 @@ rasterized. Either way points are included in the raster output.}
 \item{isPercent}{logical. Should the results be returned as a percentage?}
 }
 \value{
-A DisturbanceMetrics Object see \code{\link{DisturbanceMetrics-class}}
+A DisturbanceMetrics Object see \code{\link[=DisturbanceMetrics-class]{DisturbanceMetrics-class()}}
 }
 \description{
 Update a DisturbanceMetrics object in order to avoid reprocessing parts of
@@ -70,7 +70,14 @@ lf2 <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10, 10),
 dm2 <- updateDisturbance(dm, newData = list(linFeat = lf2))
 }
 \seealso{
-\code{\link{DisturbanceMetrics-class}} for information on the object
- returned and \code{\link{disturbanceMetrics}} for making a new
- DisturbanceMetrics object.
+\code{\link[=DisturbanceMetrics-class]{DisturbanceMetrics-class()}} for information on the object
+returned and \code{\link[=disturbanceMetrics]{disturbanceMetrics()}} for making a new
+DisturbanceMetrics object.
+
+Functions for calculating disturbance:
+\code{\link{DisturbanceMetrics-class}},
+\code{\link{disturbanceMetrics}()},
+\code{\link{reclassDist}()},
+\code{\link{results}()}
 }
+\concept{disturbance}

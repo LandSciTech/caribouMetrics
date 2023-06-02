@@ -1,0 +1,218 @@
+---
+title: "Bayesian Demographic Projection"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Bayesian Demographic Projection}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7, 
+  fig.height = 3.5
+)
+```
+
+```{r setup}
+library(caribouMetrics)
+library(ggplot2)
+library(dplyr)
+
+theme_set(theme_bw())
+```
+
+caribouMetrics provides a simple Bayesian integrated population model that integrates prior information from Johnson et al.'s (2020) national analysis of demographic-disturbance relationships with available local demographic data to project population growth. In addition, methods are provided for simulating local population dynamics and monitoring programs. 
+
+Boreal caribou monitoring programs typically involve marking caribou with  telemetry GPS/VHF collars which are used to monitor caribou over time and detect the death of marked animals. This data is then used to estimate survival, while recruitment is estimated by locating collared individuals using aircraft and then surveying the entire group of caribou to estimate the ratio of cows:calves in the group. Because this estimate is based on more than just the sample of collared cows, the sample size for recruitment estimates is typically larger than for survival. 
+
+## Bayesian model description
+
+Following Eacker et al. (2020), the observed number of calves $\hat{J}_t$ is a binomially distributed function of the observed number of adult female caribou $\hat{W}_t$ and the estimated recruitment rate $R_t$: $$\hat{J}_t \sim \text{Binomial}(\hat{W}_t,R_t).$$
+
+True recruitment rate is modelled as a function of anthropogenic disturbance and fire with a log link and Gaussian distributed random year effect: $$\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t \sim \text{Normal}(0,\sigma^2_{R}).$$ 
+Estimated recruitment probability is adjusted for sex ratio to get expected recruits per female: $X_t=R_t/2$. Recruitment can be also adjust for delayed age of first reproduction (`adjustR`): $X_t=\frac{R_t/2}{1+R_t/2}.$, but to maintain consistency with Johnson et al. (2020) this is not the default.
+
+Also following Eacker et al. (2020), Kaplan-Meier estimates of observed adult female survival probability $\hat{S}_t$ and associated precisions $\tau_t$ are estimated from known-fate radio collar data using the survival R package (`survival::survfit.formula()`), with precisions for years with no observed mortality estimated using a separate Bayesian model. Observed estimated survival is a Gaussian distributed function of the true survival probability: $$\hat{S_t} \sim \text{Normal}(S_t,1/\tau_t).$$ 
+True survival probability is modelled as an adjusted function of buffered anthropogenic disturbance $A_t$ with a log link and Gaussian distributed random year effect: $$S_t=\text{min}(46 \tilde{S_t}-0.5)/45,1); \log(\tilde{S_t})=\beta^S_0+\beta^S_a A_t+\epsilon^S_t; \epsilon^S_t \sim \text{Normal}(0,\sigma^2_{S}).$$ 
+An alternative parametric exponential survival model is also provided (`survAnalysisMethod = "Exponential"`), wherein the observed state (alive or dead, $\hat{I}_{i,t,m}$) of an individual animal $i$ in year $t$ and month $m$ is Bernoulli distributed: 
+$$\hat{I}_{i,t,m} \sim \text{Bernoulli}(S^{1/12}_t\hat{I}_{i,t,m-1}).$$
+
+All regression coefficients are assumed to be Gaussian distributed, with priors derived from the expected values and 95% confidence intervals estimated by Johnson et al (2020) (Table \@ref(tab:priors)). We calibrated the prior distributions so that the 95% prediction interval from the IPM matches the range between the 2.5% and 97.5% quantiles of 1000 simulated recruitments.  
+
+We assume a simple two-class demographic model, with a census in late winter of surviving females and new recruits to the post-juvenile (aged 1+) class. The number of post-juvenile females that survive from year $t$ to the census $W_t$ is binomially distributed with survival probability $S_t$: $W_{t} \sim \text{Binomial}(N_t,S_t)$. The number of juveniles recruiting to the post-juvenile class at the census is a Poisson distributed function of the number of surviving post-juvenile females and the adjusted recruitment rate $X_t$: $J_{t} \sim \text{Poisson}(X_tW_t)$. The post-juvenile female population in the next year includes both survivors and new recruits: $N_{t+1}=W_t+J_t$. Annual population growth rate $\lambda_t$ is set to 0 when $N_t$ is 0, and is otherwise $\lambda_t=N_{t+1}/N_t$. For more stable estimates of population status, `assessmentYrs` can be set to >1 and average population growth over a period of $y$ years, calculated as $\bar{\lambda}_{y,t}=\sum_{x=t-y+1}^{x=t}\lambda_x$. 
+
+## Worked examples
+### Using real observed data
+caribouMetrics includes example csv files of collar survival and calf cow count  data as well as disturbance data that can be used as templates for the format for observed data. 
+```{r load-obs}
+survObs <- read.csv(system.file("extdata/simSurvData.csv", package = "caribouMetrics"))
+ageRatioObs <- read.csv(system.file("extdata/simAgeRatio.csv", package = "caribouMetrics"))
+distObs <- read.csv(system.file("extdata/simDisturbance.csv", package = "caribouMetrics"))
+
+survObs %>% group_by(Year) %>% 
+  summarise(n_collars = n(),
+            n_die = sum(event)) %>% 
+  ggplot(aes(Year))+
+  geom_line(aes(y = n_collars))+
+  geom_col(aes(y = n_die))+
+  labs(y = "Number of Collars (line) and deaths (bars)")
+
+ageRatioObs %>% 
+  ggplot(aes(Year, Count, fill = Class))+
+  geom_col(position = "dodge")
+
+distObs %>% ggplot(aes(Year, Anthro))+
+  geom_line()
+
+```
+Plotting the data shows that the collaring program included 60 individuals with collars being replenished every 4 years over a monitoring period of 15 years. Calf cow surveys typically counted ~150 cows and ~50 calves. There is no disturbance in the years of the observation data but disturbance is expected to increase quickly in the future.
+
+These data sets can be supplied to `caribouBayesianIPM()`to project the impact on the caribou population as disturbance increases over the next 20 years. 
+
+```{r mod-real}
+mod_real <- caribouBayesianIPM(survData = survObs, ageRatio = ageRatioObs, 
+                              disturbance = distObs, 
+                              # only set to speed up vignette. Normally keep defaults.
+                              Niter = 150, Nburn = 100)
+
+str(mod_real, max.level = 2)
+```
+
+The returned object contains an `rjags` object and a list with the modified input data. We can get tables summarizing the results using `getOutputTables()`.
+```{r}
+mod_tbl <- getOutputTables(mod_real)
+str(mod_tbl)
+```
+
+And plot the results with `plotRes()`.
+```{r}
+plotRes(mod_tbl, "Recruitment", labFontSize = 10)
+```
+
+We can also compare out local observed data to what would be projected by the national model. 
+```{r}
+simNational <- getSimsNational()
+
+mod_nat_tbl <- getOutputTables(mod_real, 
+                               simNational = simNational,
+                               getKSDists = FALSE)
+
+plotRes(mod_nat_tbl,
+        c("Recruitment", "Adult female survival", "Population growth rate"),
+        labFontSize = 10)
+
+```
+
+From these graphs we can see that this local population seems to have slightly higher demographic rates than would have been predicted by the national model alone and that the uncertainty around the predictions is lower when the local observations are included. Note that the population's response to anthropogenic disturbance in completely determined by the national model since there was 0% disturbance during the observation period.  
+
+### Simulate observed data
+
+To create simulated observation data we first create a plausible true population trajectory by simulating from the the national model and a disturbance scenario. Then realistic observations are simulated from this true population based on a collaring program with the given parameters. See `caribouPopGrowth()` for an explanation of the national model implementation. 
+
+To run the simulations we need to supply parameters that determine the disturbance scenario, the trajectory of the true population relative to the national model mean, and the collaring program details. All these parameters are set with `getScenarioDefaults()` which will create a table with the default values of all parameters and override the defaults for any values that are supplied. Below we define a scenario where we have 20 years of observations and 20 years of projection, increasing anthropogenic disturbance over time, and 30 collars deployed every year. We assume that 2 cows will be observed in aerial surveys for every collared cow. The default values are set for our simulated true population meaning that we assume the population has the same response to disturbance as the national model and that the population demographic rates are close to the national average.
+See `getScenarioDefaults()` for a detailed description of each parameter.
+
+```{r sim-obs}
+scn_params <- getScenarioDefaults(
+  # Anthropogenic disturbance increases by 2% per year in observation period and
+  # 3% per year in projection period
+  obsAnthroSlope = 2, projAnthroSlope = 3,
+  # 20 years each of observations and projections
+  obsYears = 20, projYears = 20,
+  # Collaring program aims to keep 30 collars active
+  collarCount = 30,
+  # Collars are topped up every year
+  collarInterval = 1,
+  # Assume will see 2 cows in aerial survey for every collar deployed
+  cowMult = 2
+  )
+
+scn_params
+
+sim_obs <- simulateObservations(
+  scn_params, 
+  # collars fall off after 4 years and are deployed in May and fall off in August
+  collarNumYears = 4, collarOffTime = 8, collarOnTime = 5, 
+  printPlot = TRUE)
+
+
+sim_obs$simSurvObs %>% group_by(Year) %>% 
+  summarise(ncollar = n(), ndeaths = sum(event), 
+            ndropped = sum(exit == 5 & event == 0),
+            nadded = sum(enter == 7), 
+            survsCalving = sum(exit >= 6)) %>% 
+  ggplot(aes(Year))+
+  geom_line(aes(y = ncollar))+
+  geom_col(aes(y = ndeaths))+
+  labs(y = "Number of Collars (line) and deaths (bars)")
+
+sim_obs$ageRatioOut %>% 
+  ggplot(aes(Year, Count, fill = Class))+
+  geom_col(position = "dodge")
+
+sim_obs$simDisturbance %>% ggplot(aes(Year, Anthro))+
+  geom_line()
+```
+
+We can provide the simulated observations to `caribouBayesianIPM()` to project the population growth over time. This time we supply the expected true population metrics as well as the model results to `getOutputTables()` so that we can see how well our monitoring program captured the true population. 
+
+```{r mod-sim-obs}
+mod_sim <- caribouBayesianIPM(survData = sim_obs$simSurvObs,
+                              ageRatio = sim_obs$ageRatioOut, 
+                              disturbance = sim_obs$simDisturbance, 
+                              # only set to speed up vignette. Normally keep defaults.
+                              Niter = 150, Nburn = 100)
+
+mod_sim_tbl <- getOutputTables(mod_sim, exData = sim_obs$exData, 
+                               paramTable = sim_obs$paramTable,
+                               simNational = simNational,
+                               getKSDists = FALSE)
+
+plotRes(mod_sim_tbl,
+        c("Recruitment", "Adult female survival", "Population growth rate"),
+        labFontSize = 10)
+```
+
+
+### Comparing many scenarios
+
+```{r many-scns, fig.height=8, fig.width=7}
+eParsIn <- list()
+eParsIn$collarOnTime <- 1
+eParsIn$collarOffTime <- 12
+eParsIn$collarNumYears <- 3
+
+# adjust recruitment for delayed age of first reproduction
+adjustR <- T 
+
+simBig <- getSimsNational(adjustR = adjustR)
+
+scns <- expand.grid(
+  obsYears = 10, projYears = 10, collarCount = 100, cowMult = 2, collarInterval = 2,
+  assessmentYrs = 1, iAnthro = 0, obsAnthroSlope = 0, projAnthroSlope = 0, 
+  sQuantile = c(0.1, 0.5, 0.9), rQuantile = c(0.1, 0.5, 0.9), N0 = 1000
+)
+scResults <- runScnSet(
+  scns, eParsIn, simBig, getKSDists = FALSE,
+  # only set to speed up vignette. Normally keep defaults.
+  Niter = 150, Nburn = 100)
+
+plotRes(scResults,
+        c("Recruitment", "Adult female survival", "Population growth rate"), 
+        facetVars = c("rQuantile", "sQuantile"))
+
+```
+
+
+
+### Troubleshooting
+The national model results are cached if the default values are used. This cache can but updated by running `getSimsNational(forceUpdate = TRUE)`
+
+
+
+

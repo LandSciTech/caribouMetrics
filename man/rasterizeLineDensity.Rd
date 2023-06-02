@@ -18,7 +18,7 @@ NULL, points in x will be ignored.}
 }
 \value{
 A RasterLayer object with values representing the density of lines in meters
-  per hectare.
+per hectare.
 }
 \description{
 Rasterize line density in meters per hectare.
@@ -40,4 +40,23 @@ lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10000, 10000
 rastLines <- rasterizeLineDensity(lf, lc)
 
 plot(rastLines)
+
 }
+\seealso{
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableHR}},
+\code{\link{coefTableStd}},
+\code{\link{fnlcToResType}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{plcToResType}},
+\code{\link{reclassPLC}()},
+\code{\link{resTypeCode}},
+\code{\link{results}()},
+\code{\link{rfuToResType}},
+\code{\link{threshTable}},
+\code{\link{updateCaribou}()}
+}
+\concept{habitat}

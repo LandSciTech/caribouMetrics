@@ -5,9 +5,11 @@
 \alias{fnlcToResType}
 \title{Lookup table for FNLC to resource type}
 \format{
-A data frame with 26 rows and 2 variables: \describe{
-  \item{PLCCode}{FNLC number code}
-  \item{ResourceType}{Letter code indicating the resource type} }
+A data frame with 26 rows and 2 variables:
+\itemize{
+\item PLCCode: FNLC number code
+\item ResourceType: Letter code indicating the resource type
+}
 }
 \usage{
 fnlcToResType
@@ -21,4 +23,22 @@ The FNLC classes were linked to resource types by comparing the descriptions
 of FNLC classes to the PLC classes and then linking them to the corresponding
 resource types
 }
+\seealso{
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableHR}},
+\code{\link{coefTableStd}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{plcToResType}},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{reclassPLC}()},
+\code{\link{resTypeCode}},
+\code{\link{results}()},
+\code{\link{rfuToResType}},
+\code{\link{threshTable}},
+\code{\link{updateCaribou}()}
+}
+\concept{habitat}
 \keyword{datasets}

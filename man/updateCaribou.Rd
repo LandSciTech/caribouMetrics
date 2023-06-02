@@ -39,7 +39,7 @@ returned. If TRUE then only the habitatUse RasterStack is returned.}
 }
 \value{
 If \code{resultsOnly} is FALSE an updated CaribouHabitat object. If
-  \code{resultsOnly} is TRUE a RasterStack with a layer for each season.
+\code{resultsOnly} is TRUE a RasterStack with a layer for each season.
 }
 \description{
 Update a CaribouHabitat object in order to avoid reprocessing parts of the
@@ -106,3 +106,21 @@ plot(res, season = "Winter")
 plot(res2, season = "Winter")
 
 }
+\seealso{
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableHR}},
+\code{\link{coefTableStd}},
+\code{\link{fnlcToResType}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{plcToResType}},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{reclassPLC}()},
+\code{\link{resTypeCode}},
+\code{\link{results}()},
+\code{\link{rfuToResType}},
+\code{\link{threshTable}}
+}
+\concept{habitat}

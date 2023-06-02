@@ -59,7 +59,7 @@ coefTableStd <- bind_rows(lst(Spring, Summer, Fall, Winter ), .id = "Season") %>
          Range = ifelse(Range == "James_Bay", "James Bay", Range), 
          WinArea = 10000) %>% 
   arrange(Range, Season) %>% 
-  select(Season, Variable, Range, Coefficient, WinArea) %>% 
+  select("Season", "Variable", "Range", "Coefficient", "WinArea") %>% 
   filter(!is.na(Coefficient))
 
 usethis::use_data(coefTableStd, overwrite = TRUE)

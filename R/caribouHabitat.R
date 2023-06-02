@@ -1,6 +1,7 @@
 #' @include AAAClassDefinitions.R
 NULL
 
+#' @noRd
 setMethod(f = "initialize", signature = "CaribouHabitat",
           definition = function(.Object, landCover, esker, 
                                 natDist, anthroDist, 
@@ -26,13 +27,13 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'
 #'Caribou habitat use is calculated based on the availability of resources and
 #'the presence of disturbances on the landscape. The primary source of resource
-#'information is the \code{landCover} but this is updated based on disturbance
+#'information is the `landCover` but this is updated based on disturbance
 #'information. All data sources can be provided either as filenames or as
-#'spatial files. If filenames are provided then the \code{landCover} is assumed
+#'spatial files. If filenames are provided then the `landCover` is assumed
 #'to be the Provincial Landcover for Ontario and is converted to resource types
-#'using \code{\link{reclassPLC}}. The result is a CaribouHabitat object which has
+#'using [reclassPLC()]. The result is a CaribouHabitat object which has
 #'methods defined for plotting and extracting the results. To update an existing
-#'CaribouHabitat object with new data see \link[caribouMetrics]{updateCaribou}.
+#'CaribouHabitat object with new data see [updateCaribou()].
 #'
 #'
 #'@param landCover filename or RasterLayer. Provincial landcover class
@@ -48,60 +49,58 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  the name of the caribou range represented by the polygon which corresponds
 #'  to the Range column in the caribouRange data.frame
 #'@param caribouRange character or data.frame. If character the range where
-#'  caribou were located. See \code{unique(coefTableHR$Range)} for options. If
+#'  caribou were located. See `unique(coefTableHR$Range)` for options. If
 #'  data.frame it must have two columns Range and coefRange. Range is the name
 #'  of the geographical area and is used to link the table to the provided
-#'  \code{projectPoly} polygons. coefRange is the name of the caribou range that
+#'  `projectPoly` polygons. coefRange is the name of the caribou range that
 #'  the coefficients should be used from.
 #'@param coefTable data.frame. table of coefficients to be used in the
-#'   model. Must match the format and naming of the default \code{coefTableHR}
+#'   model. Must match the format and naming of the default `coefTableHR`
 #'@param ... optional arguments:
-#' \describe{
-#'   \item{natDist:}{filename or RasterLayer. Presence or absence of natural 
+#'   * natDist: filename or RasterLayer. Presence or absence of natural 
 #'   disturbance, primarily by fire. This should reflect cumulative natural 
-#'   disturbance over the preceding 30 years}
-#'   \item{anthroDist:}{filename or RasterLayer. Anthropogenic disturbance including 
-#'   harvest.}
-#'   \item{eskerSave}{filename to save rasterized esker data.}
-#'   \item{linFeatSave}{filename to save rasterized linear feature data.}
-#'   \item{padProjPoly}{logical. Should the area around the \code{projectPoly} be
+#'   disturbance over the preceding 30 years
+#'   * anthroDist: filename or RasterLayer. Anthropogenic disturbance including 
+#'   harvest.
+#'   * eskerSave: filename to save rasterized esker data.
+#'   * linFeatSave: filename to save rasterized linear feature data.
+#'   * padProjPoly: logical. Should the area around the `projectPoly` be
 #'   used to avoid edge effects? If FALSE, the default, only data from inside the
-#'   \code{projectPoly} is used. If TRUE then \code{projectPoly} is buffered and
+#'   `projectPoly` is used. If TRUE then `projectPoly` is buffered and
 #'   the other variables are clipped to the extent of the buffered area. Results
-#'   are always clipped to the original \code{projectPoly}. It is ideal to set
+#'   are always clipped to the original `projectPoly`. It is ideal to set
 #'   this to TRUE and provide a data set that is larger than the
-#'   \code{projectPoly} to avoid edge effects.}
-#'   \item{padFocal}{logical. This value is passed to the pad argument in
-#'   \code{raster::focal}, if it is FALSE then cells near the edge will return
+#'   `projectPoly` to avoid edge effects.
+#'   * padFocal: logical. This value is passed to the pad argument in
+#'   `raster::focal`, if it is FALSE then cells near the edge will return
 #'   NA, if it is TRUE a value will be returned for each cell that assumes cells
 #'   outside the input data are 0 for all resource types. This is not a good
-#'   assumption and should be used with caution.}
-#'   \item{saveOutput}{character. The filename to save the rasterBrick of habitat
+#'   assumption and should be used with caution.
+#'   * saveOutput: character. The filename to save the rasterBrick of habitat
 #'   use probabilities to. Note this will overwrite any existing files. The .grd
 #'   format is recommended because it will preserve layer names when the file is
-#'   reloaded.}
-#'   \item{winArea}{number. This is the area of the moving window that is used to
+#'   reloaded.
+#'   * winArea: number. This is the area of the moving window that is used to
 #'   average proportions of each resource type at broader spatial scales. The
 #'   Hornseth and Rempel (2016) models used specific window areas which are
 #'   defined within this package and used as the default. You should only specify
-#'   a window size if you have good reason.}
-#'   \item{doScale}{logical. FALSE by default. Set to TRUE only if you have
+#'   a window size if you have good reason.
+#'   * doScale: logical. FALSE by default. Set to TRUE only if you have
 #'   supplied coefficients that were trained on standardized data which will
-#'   cause the input data to be scaled.}
-#'   \item{ptDensity}{number. Only used if a list element in \code{linFeat} is a raster.
-#'   See \code{\link{rasterizeLineDensity}}.}
-#'   \item{preppedData}{list. A list containing pre-prepared input data sets. If
+#'   cause the input data to be scaled.
+#'   * ptDensity: number. Only used if a list element in `linFeat` is a raster.
+#'   See [rasterizeLineDensity()].
+#'   * preppedData: list. A list containing pre-prepared input data sets. If
 #'   not NULL then data checks will be skipped. Names must match argument names
-#'   except that \code{landCover} should be called \code{refRast} and
-#'   \code{projectPoly} should be called \code{projectPolyOrig}. See
-#'   \code{\link{loadSpatialInputs}}.}
-#' }
+#'   except that `landCover` should be called `refRast` and
+#'   `projectPoly` should be called `projectPolyOrig`. See
+#'   [loadSpatialInputs()].
 #' 
-#'@return A CaribouHabitat Object see \code{\link{CaribouHabitat-class}}
+#'@return A CaribouHabitat Object see [CaribouHabitat-class]
 #'
-#'@seealso \code{\link{CaribouHabitat-class}} for information on the object
-#'  returned and \code{\link{updateCaribou}} for updating an existing
-#'  CaribouHabitat object.
+#'@seealso [CaribouHabitat-class] for information on the object
+#'  returned, [updateCaribou()] for updating an existing
+#'  CaribouHabitat object, and [plot()] for the plot method.
 #'
 #' @source Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
 #'   C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,
@@ -111,7 +110,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
 #'  woodland caribou (Rangifer tarandus caribou) across a gradient of
 #'  anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
-#'  \url{https://doi.org/10.1139/cjz-2015-0101}
+#'  <https://doi.org/10.1139/cjz-2015-0101>
 #'  
 #' @examples 
 #' # create example rasters
@@ -154,8 +153,8 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #' plot(results(res, type ="processedData"))
 #'
 #' @importFrom rlang .data
-#'@export
-
+#' @family habitat
+#' @export
 #' @rdname caribouHabitat
 caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL, 
                            projectPoly = NULL,
@@ -227,9 +226,9 @@ caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL,
       left_join(coefTable %>% group_by(.data$Range) %>%
                   summarize(WinArea = first(.data$WinArea)),
                 by = c(coefRange = "Range")) %>% 
-      select(-.data$coefRange) 
+      select(-"coefRange") 
     projPolyLst <- split(projPolyLst, projPolyLst$WinArea) %>% 
-      purrr::map(~select(.x, -.data$WinArea))
+      purrr::map(~select(.x, -"WinArea"))
     
     # caribouRange values for each winArea
     carRangeLst <- caribouRange %>%
@@ -237,7 +236,7 @@ caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL,
                   summarize(WinArea = first(.data$WinArea)),
                 by = c(coefRange = "Range")) 
     carRangeLst <- split(carRangeLst, carRangeLst$WinArea) %>% 
-      purrr::map(~select(.x, -.data$WinArea))
+      purrr::map(~select(.x, -"WinArea"))
     
     resultLst <- purrr::map2(projPolyLst, carRangeLst,
                              ~do.call(caribouHabitat, 

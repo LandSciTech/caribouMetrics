@@ -5,18 +5,20 @@
 \alias{coefTableStd}
 \title{Model coefficients from standardized data for caribou ranges}
 \format{
-A data frame with 224 rows and 5 variables: \describe{
-  \item{Season}{season, one of Spring, Summer, Fall, Winter}
-  \item{Variable}{the shortform variable name for this resource type}
-  \item{Coefficient}{modelled coefficients} 
-  \item{WinArea}{window area for moving window average} 
-  \item{Range}{the caribou range name} }
+A data frame with 224 rows and 5 variables:
+\itemize{
+\item Season: season, one of Spring, Summer, Fall, Winter
+\item Variable: the shortform variable name for this resource type
+\item Coefficient: modelled coefficients
+\item WinArea: window area for moving window average
+\item Range: the caribou range name
+}
 }
 \source{
 Table 3 of: Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource
-  selection of woodland caribou (Rangifer tarandus caribou) across a gradient
-  of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
-  \url{https://doi.org/10.1139/cjz-2015-0101}
+selection of woodland caribou (Rangifer tarandus caribou) across a gradient
+of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
+\url{https://doi.org/10.1139/cjz-2015-0101}
 }
 \usage{
 coefTableStd
@@ -26,4 +28,22 @@ A table containing the standardized coefficients modelled by Hornseth and
 Rempel for the resource selection probability functions for 6 caribou ranges
 in Northern Ontario.
 }
+\seealso{
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableHR}},
+\code{\link{fnlcToResType}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{plcToResType}},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{reclassPLC}()},
+\code{\link{resTypeCode}},
+\code{\link{results}()},
+\code{\link{rfuToResType}},
+\code{\link{threshTable}},
+\code{\link{updateCaribou}()}
+}
+\concept{habitat}
 \keyword{datasets}

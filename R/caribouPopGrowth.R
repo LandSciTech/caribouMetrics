@@ -1,16 +1,47 @@
-#' Caribou demographic model
+#' Caribou population growth model
 #'
-#' Given default parameter values, this is an implementation of the 2-stage
-#' population growth model described in Dyson et al. (in Prep). Set
-#' \code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson
-#' et al. 2020. Set \code{probOption = "continuous"}, \code{interannualVar =
-#' FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage demographic
-#' model without interannual variability, density dependence, or discrete
-#' numbers of animals used by Stewart et al. (in prep). See
-#' \code{vignette("caribouDemography")} for additional details and examples.
+#' Estimate population growth given estimated demographic rates based on the
+#' amount of disturbance in the landscape. This is accomplished with an
+#' implementation of the 2-stage population growth model used in Johnson et al.
+#' (2020) but with some differences described in Dyson et al. (2022). Given
+#' default parameter values, this is an implementation of the 2-stage population
+#' growth model described in Dyson et al. (in Prep). Set `probOption =
+#' "matchJohnson2020"` to reproduce the model used in Johnson et al. 2020. Set
+#' `probOption = "continuous"`, `interannualVar = FALSE`, and `K = FALSE` to
+#' reproduce the simpler 2-stage demographic model without interannual
+#' variability, density dependence, or discrete numbers of animals used by
+#' Stewart et al. (in prep). See `vignette("caribouDemography")` for additional
+#' details and examples.
 #'
-#' @param N Number or vector of numbers. Initial population size for one or more
-#'   sample populations.
+#' The number of post-juvenile females that survive from year \eqn{t} to the
+#' census \eqn{\dot{W}_t} is binomially distributed with survival probability
+#' \eqn{\dot{S}_t}: \eqn{\dot{W}_{t} \sim \text{Binomial}(\dot{N}_t,\dot{S}_t)}.
+#' Maximum potential recruitment rate is adjusted for sex ratio and (optionally)
+#' delayed age at first reproduction
+#' \deqn{\dot{X}_t=\frac{\dot{R}_t/2}{1+\dot{R}_t/2}.} Realized recruitment rate
+#' varies with population density, and the number of juveniles recruiting to the
+#' post-juvenile class at the census is a binomially distributed function of the
+#' number of surviving post-juvenile females and the adjusted recruitment rate:
+#' \deqn{\dot{J}_{t} \sim
+#' \text{Binomial}(\dot{W}_t,\dot{X}_t[p_0-(p_0-p_k)(\frac{\dot{W}_t}{N_0k})^b]\frac{\dot{W}_t}{\dot{W}_t+a}).}
+#' Given default parameters, recruitment rate is lowest \eqn{(0.5\dot{X}_t)}
+#' when \eqn{\dot{N}_t=1}, approaches a maximum of \eqn{\dot{X}_t} at
+#' intermediate population sizes, and declines to \eqn{0.6\dot{X}_t} as the
+#' population reaches carrying capacity of \eqn{k=100} times the initial
+#' population size. The post-juvenile female population in the next year
+#' includes both survivors and new recruits:
+#' \eqn{\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)}.
+#'
+#' Interannual variation in survival and recruitment is modelled using truncated
+#' beta distributions: \eqn{\dot{R}_t
+#' \sim \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim
+#' \text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)}. Coefficients of variation
+#' among years \eqn{(\nu_R,\nu_S)} and maximum/minimum values
+#' \eqn{l_R,h_R,l_S,h_S} for recruitment and survival are set to default
+#' parameters in the function.
+#'
+#' @param N0 Number or vector of numbers. Initial population size for one or
+#'   more sample populations.
 #' @param numSteps Number. Number of years to project.
 #' @param R_bar Number or vector of numbers. Expected recruitment rate (calf:cow
 #'   ratio) for one or more sample populations.
@@ -29,19 +60,43 @@
 #' @param h_S Number. Maximum survival.
 #' @param interannualVar list or logical. List containing interannual
 #'   variability parameters. These can be either coefficients of variation
-#'   (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to
-#'   \code{FALSE} ignore interannual variability.
+#'   (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to `FALSE` to
+#'   ignore interannual variability.
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
-#' @param adjustR Logical. Adjust R to account for delayed age at first reproduction (DeCesare et al. 2012; Eacker et al. 2019).
+#' @param adjustR Logical. Adjust R to account for delayed age at first
+#'   reproduction (DeCesare et al. 2012; Eacker et al. 2019).
 #' @param progress Logical. Should progress updates be shown?
 #'
-#' @return A data.frame of population size (N) and average growth rate (lambda)
-#'   projections for each sample population.
+#' @return A data.frame of population size (`N`) and average growth rate
+#'   (`lambda`) projections for each sample population.
 #'
+#' @references 
+#'   Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
+#'   Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
+#'   Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Existing
+#'   caribou habitat and demographic models need improvement for Ring of Fire
+#'   impact assessment: A roadmap for improving the usefulness, transparency,
+#'   and availability of models for conservation.
+#'   <https://doi.org/10.1101/2022.06.01.494350>
+#'   
+#'   Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
+#'   P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+#'   linking population dynamics to habitat for a threatened species in Canada.
+#'   Journal of Applied Ecology, 57(7), pp.1314-1327.
+#'   <https://doi.org/10.1111/1365-2664.13637>
 #'
+#'   Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty, A.M.,
+#'   Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and Hughes, J.,
+#'   2023. Climate‐informed forecasts reveal dramatic local habitat shifts and
+#'   population uncertainty for northern boreal caribou. Ecological
+#'   Applications, 33(3), p.e2816.
+#' @examples
+#' caribouPopGrowth(100, 2, 0.5, 0.7)
+#'
+#' @family demography
 #' @export
-popGrowthJohnson <- function(N,
+caribouPopGrowth <- function(N0,
                              numSteps,
                              R_bar,
                              S_bar,
@@ -58,9 +113,11 @@ popGrowthJohnson <- function(N,
                              h_S=1,
                              interannualVar = list(R_CV=0.46,S_CV=0.08696),
                              probOption="binomial",
-                             adjustR=F,
+                             adjustR=FALSE,
                              progress = interactive()){
-  rr=data.frame(N=N)
+  rr=data.frame(N0=N0)
+  
+  N <- N0
 
   R_bar[R_bar<0]=0.000001
   S_bar[S_bar<0]=0.000001
@@ -82,12 +139,12 @@ popGrowthJohnson <- function(N,
   h_R = s*h_R
   l_R = s*l_R
 
-  if(length(N) != length(R_bar) && length(R_bar) > 1){
-    stop("R_bar must have length = 1 or the same length as N", call. = FALSE)
+  if(length(N0) != length(R_bar) && length(R_bar) > 1){
+    stop("R_bar must have length = 1 or the same length as N0", call. = FALSE)
   }
 
-  if(length(N) != length(S_bar) && length(S_bar) > 1){
-    stop("S_bar  must have length = 1 or the same length as N", call. = FALSE)
+  if(length(N0) != length(S_bar) && length(S_bar) > 1){
+    stop("S_bar  must have length = 1 or the same length as N0", call. = FALSE)
   }
 
   if(!is.element("R_phi",names(interannualVar))){
@@ -110,7 +167,7 @@ popGrowthJohnson <- function(N,
       roundDigits=0
       doBinomial=T
     }
-    rK <- K * N
+    rK <- K * N0
   }
 
   if(a<=0){
@@ -119,7 +176,7 @@ popGrowthJohnson <- function(N,
 
   for(t in 1:numSteps){
     if(progress){
-      print(paste("projecting step ",t))
+      message(paste("projecting step ",t))
     }
     if(is.null(interannualVar)||any(is.na(interannualVar))||((length(interannualVar)==1)&&!interannualVar)){
       R_t= R_bar

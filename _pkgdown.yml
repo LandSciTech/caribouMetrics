@@ -1,2 +1,29 @@
 url: https://landscitech.github.io/caribouMetrics
 
+navbar:
+  structure:
+    left:  [home, reference, articles]
+    right: [search, github]
+
+reference:
+  - title: Overview
+    desc: Overview of the package.
+    contents:
+      - caribouMetrics
+
+  - title: Caribou demography
+    desc: Functions for predicting boreal caribou demographic rates and projecting population growth
+    contents:
+      - has_concept("demography")
+      
+  - title: Summarizing disturbance
+    desc: Functions for determining the percentage of a landscape that has been disturbed
+    contents:
+      - has_concept("disturbance")
+
+  - title: Caribou habitiat
+    desc: Functions for predicting boreal caribou habitat use in 13 Ontario caribou ranges
+    contents:
+      - has_concept("habitat")
+      - plot,CaribouHabitat,ANY-method
+
