@@ -100,7 +100,7 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'
 #'@seealso [CaribouHabitat-class] for information on the object
 #'  returned, [updateCaribou()] for updating an existing
-#'  CaribouHabitat object, and [plot-CaribouHabitat] for the plot method.
+#'  CaribouHabitat object, and [plot()] for the plot method.
 #'
 #' @source Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
 #'   C.E., Cairns, D., Stelfox, B., Hunt, L.M., Mackereth, R.W. and Jackson,

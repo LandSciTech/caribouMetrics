@@ -157,7 +157,7 @@ plot(results(res, type ="processedData"))
 \seealso{
 \linkS4class{CaribouHabitat} for information on the object
 returned, \code{\link[=updateCaribou]{updateCaribou()}} for updating an existing
-CaribouHabitat object, and \link{plot-CaribouHabitat} for the plot method.
+CaribouHabitat object, and \code{\link[=plot]{plot()}} for the plot method.
 
 Caribou habitat functions:
 \code{\link{CaribouHabitat-class}},
