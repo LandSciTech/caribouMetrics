@@ -112,7 +112,7 @@ Suggests:
     pfocal,
     BayesianCaribouDemographicProjection
 Remotes: LandSciTech/pfocal,
-    LandSciTech/BayesianCaribouDemographicProjection@make-pkg
+    LandSciTech/BayesianCaribouDemographicProjection
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
