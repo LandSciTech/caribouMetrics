@@ -118,3 +118,16 @@ test_that("works when inputs have different crs", {
   )
   expect_type(out3, "list")
 })
+
+out4 <- loadSpatialInputs(projectPoly = singlePolyP, refRast = landCoverP, 
+                         inputsList = list(esker = eskerP, 
+                                           linFeat = linFeatP, 
+                                           natDist = natDistP, 
+                                           anthroDist = anthroDistP), 
+                         reclassOptions = list(refRast = reclassPLC, 
+                                               natDist = cbind(NA, 0)), 
+                         rastOut = "terra")
+
+test_that("outputs terra", {
+  expect_s4_class(out4$refRast, "SpatRaster")
+})

@@ -1,8 +1,7 @@
 #' Load Spatial Input Data
 #'
 #' Load spatial input data from file and then align the inputs to the
-#' `projectPoly` and `refRast`. Inputs can be file names or spatial
-#' objects.
+#' `projectPoly` and `refRast`. Inputs can be file names or spatial objects.
 #'
 #' @param projectPoly character or sf. A polygon delineating the study area.
 #' @param refRast character or raster. A raster which will be used as the
@@ -10,31 +9,33 @@
 #' @param inputsList list. A named list of inputs that are either spatial
 #'   objects or file names of spatial objects. ".shp" is the only extension
 #'   accepted for vector data and all other extensions will be passed to
-#'   `raster`. If an element is a list these are assumed to be linear
-#'   features and they are combined.
-#' @param convertToRast character. Optional. Names of elements of
-#'   `inputsList` that should be converted to raster after loading.
+#'   `raster`. If an element is a list these are assumed to be linear features
+#'   and they are combined.
+#' @param convertToRast character. Optional. Names of elements of `inputsList`
+#'   that should be converted to raster after loading.
 #' @param convertToRastDens character. Optional. Names of elements of
 #'   `inputsList` that should be converted to raster line density after loading.
 #' @param altTemplate raster. Optional template raster for raster inputs that
 #'   can have a different resolution from the `refRast`.
-#' @param useTemplate character. Optional. Names of elements of
-#'   `inputsList` that use `altTemplate`.
+#' @param useTemplate character. Optional. Names of elements of `inputsList`
+#'   that use `altTemplate`.
 #' @param reclassOptions list. An optional named list containing a function, a
 #'   list where the first element is a function that takes the corresponding
-#'   `inputsList` element as its first argument and the subsequent elements
-#'   are named arguments for that function, or a matrix that will be passed to
+#'   `inputsList` element as its first argument and the subsequent elements are
+#'   named arguments for that function, or a matrix that will be passed to
 #'   [raster::reclassify()].
 #' @param bufferWidth numeric. The width of a moving window that will be applied
 #'   to the data. If it is supplied a buffer of 3*`bufferWidth` around the
 #'   `projectPoly` is used so that rasters will be cropped to a larger area.
 #'   This can be used to avoid edge effects in moving window calculations
-#' @param ptDensity number. Only used if an element of `inputsList` is a
-#'   list that contains a mixture of rasters and lines and is included in
+#' @param ptDensity number. Only used if an element of `inputsList` is a list
+#'   that contains a mixture of rasters and lines and is included in
 #'   convertToRast. See [rasterizeLineDensity()].
+#' @param rastOut character. The format that rasters should be output with.
+#'   "raster" for RasterLayers and "terra" for SpatRasters
 #'
 #' @return A named list with aligned spatial data components
-#' 
+#'
 #' @family habitat
 #' @export
 #'
@@ -71,7 +72,7 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
                               convertToRastDens = NULL,
                               altTemplate = NULL, useTemplate = NULL,
                               reclassOptions = NULL, bufferWidth = NULL,
-                              ptDensity = 1){
+                              ptDensity = 1, rastOut = "raster"){
   
   allData <- list(inputsList, projectPoly = projectPoly, refRast = refRast) %>% 
     purrr::list_flatten()
@@ -145,9 +146,10 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
     
     tmplts <- allData$refRast
     
-    allData[convertToRast] <- purrr::map(allData[convertToRast],  
-                                              terra::rasterize, allData$refRast,
-                                         background = 0)
+    allData[convertToRast] <- purrr::map(
+      allData[convertToRast],  
+      ~ terra::rasterize(.x, terra::rast(allData$refRast), background = 0)
+    )
   }
   
   if(!is.null(convertToRastDens)){
@@ -200,6 +202,16 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
     
     allData[names(reclassOptions)] <- reclassed
   }
+  
+  if(rastOut == "raster"){
+    allData <- rapply(allData, function(x){as(x, "Raster")},
+                      classes = c("SpatRaster"), how = "replace")
+  } else if(rastOut == "terra"){
+    allData <- rapply(allData, terra::rast, classes = c("RasterLayer"), how = "replace")
+  } else {
+    stop("rastOut must be 'terra' or 'raster' not: ", rastOut)
+  }
+
 
   return(allData)
 }
