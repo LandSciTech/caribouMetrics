@@ -71,12 +71,7 @@ calcRSP <- function(resourceProp, coefs, seasons = "all", doScale = FALSE){
       resourceProp <- terra::scale(resourceProp)
       
       # memory safe assigning values
-      resourceProp[["CONST"]] <- terra::init(
-        resourceProp[["CONST"]], 
-        fun = function(x){rep(1, x)}, 
-        filename = tempfile(pattern = "spat", 
-                            tmpdir = terra::terraOptions(print = FALSE)$tempdir, 
-                            fileext = ".grd"))
+      resourceProp[["CONST"]] <- makeDummyRast(resourceProp[["CONST"]], 1)
     }
     
     # Select relevant seasons

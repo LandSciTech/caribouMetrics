@@ -20,18 +20,10 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
   natDummy <- terra::ncell(natDist) == 1
   
   if(anthroDummy){
-    anthroDist <- terra::init(
-      landCover, fun = function(x){rep(0, x)}, 
-      filename = tempfile(pattern = "spat", 
-                          tmpdir = terra::terraOptions(print = FALSE)$tempdir, 
-                          fileext = ".grd"))
+    anthroDist <- makeDummyRast(landCover)
   }
   if(natDummy){
-    natDist <- terra::init(
-      landCover, fun = function(x){rep(0, x)}, 
-      filename = tempfile(pattern = "spat", 
-                          tmpdir = terra::terraOptions(print = FALSE)$tempdir, 
-                          fileext = ".grd"))
+    natDist <- makeDummyRast(landCover)
   }
   
   # Transfer DTN from natDist to landCover
@@ -91,4 +83,13 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
   }
   
   return(landCover)
+}
+
+
+makeDummyRast <- function(r, val = 0){
+  terra::init(
+    r, fun = function(x){rep(val, x)}, 
+    filename = tempfile(pattern = "spat", 
+                        tmpdir = terra::terraOptions(print = FALSE)$tempdir, 
+                        fileext = ".grd"))
 }
