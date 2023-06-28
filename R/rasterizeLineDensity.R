@@ -33,23 +33,20 @@
 #' @export
 #' 
 rasterizeLineDensity <- function(x, r, ptDensity = 1) {
-  r <- raster::init(r, fun = "cell")
+  if(any(c("POINT", "MULTIPOINT") %in% 
+         sf::st_geometry_type(x, by_geometry = TRUE))){
+    lfPt <- sf::st_collection_extract(x, "POINT")
+    x <- sf::st_collection_extract(x, "LINESTRING")
+  } else {
+    lfPt <- slice(x, 0)
+  }
   
-  rPoly <- spex::polygonize(r) %>% set_names("ID", "geometry") %>% 
-    st_set_agr("constant") %>% st_set_crs(raster::wkt(r))
+  line_len <- terra::rasterizeGeom(terra::vect(x), r, fun = "length")
   
-  rp2 <- st_intersection(rPoly, st_set_agr(x, "constant")) %>% 
-    mutate(length = st_length(.data$geometry) %>% units::set_units(NULL)) %>% 
-    select("ID", "length", "geometry") %>% st_drop_geometry() %>% 
-    group_by(.data$ID) %>% 
-    summarise(length = round(sum(.data$length, na.rm = TRUE)/(res(r)[1]*res(r)[2]/10000), digits = 1))
+  cell_area <- terra::cellSize(r)/10000 
   
-  rp2 <- left_join(rPoly %>% st_drop_geometry(), rp2, by = "ID") %>% 
-    mutate(length = replace_na(.data$length, 0))
-  
-  r <- raster::init(r, fun = function(x){rp2$length})
+  r <- round(line_len/cell_area, digits = 1)
 
-  lfPt <- x %>% dplyr::filter(st_is(x , "POINT"))
   
   if(!is.null(ptDensity)){
     if(ptDensity > 2+2*2^0.5){
@@ -58,12 +55,11 @@ rasterizeLineDensity <- function(x, r, ptDensity = 1) {
               call. = FALSE)
     }
       
-    if(nrow(lfPt)>0){
-      lfR <- raster::rasterize(lfPt, r, field = "linFID")    
+    if(nrow(lfPt) > 0){
+      lfR <- terra::rasterizeGeom(terra::vect(lfPt), r, fun = "count")    
       
-      lfR[!is.na(lfR)] <- ptDensity * res(r)[1]
+      lfR <- lfR * ptDensity * res(r)[1]
       
-      lfR[is.na(lfR)] <- 0
       lfR <- round(lfR / (res(r)[1] * res(r)[2] / 10000), digits = 1)
       r <- r + lfR
     }

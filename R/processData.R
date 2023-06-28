@@ -12,39 +12,40 @@ setGeneric("processData", function(inData, newData, ...) standardGeneric("proces
 setMethod(
   "processData", signature(inData = "CaribouHabitat", newData = "missing"), 
   function(inData) {
-    
+ 
     tmplt <- inData@attributes$tmplt
     
     # resample to 16ha and flag cells with >35% disturbance
     expVars <- applyDist(inData@landCover, inData@natDist, inData@anthroDist, 
                          tmplt)
-    
+ 
     # create raster attribute table
-    inData@landCover <- raster::ratify(inData@landCover)
-    
-    levels(inData@landCover)[[1]] <- left_join(raster::levels(inData@landCover)[[1]], 
-                                               resTypeCode, by = c(ID = "code"))
+    inData@landCover <- terra::categories(
+      inData@landCover, layer = 1,
+      left_join(terra::unique(inData@landCover),
+                resTypeCode, by = c(landCover = "code")) %>%
+        setNames(c("ID", "ResourceType")))
     
     # Resample linFeat and esker to 16 ha
-    if(any(raster::res(inData@linFeat) < raster::res(tmplt)[1])){
+    if(any(terra::res(inData@linFeat) < terra::res(tmplt)[1])){
       message("resampling linFeat to match landCover resolution")
       
-      inData@linFeat <- raster::resample(inData@linFeat, tmplt,
+      inData@linFeat <- terra::resample(inData@linFeat, tmplt,
                                          method = "bilinear")
     }
-    if(!compareRaster(expVars[[1]], inData@linFeat, stopiffalse = FALSE)){
+    if(!terra::compareGeom(expVars[[1]], inData@linFeat, stopOnError = FALSE)){
       stop("linFeat could not be aligned with landCover.",
            " Please provide a higher resolution raster or a shapefile",
            call. = FALSE)
     }
     
-    if(any(raster::res(inData@esker) < raster::res(tmplt)[1])){
+    if(any(terra::res(inData@esker) < terra::res(tmplt)[1])){
       message("resampling esker to match landCover resolution")
       
-      inData@esker <- raster::resample(inData@esker, tmplt,
+      inData@esker <- terra::resample(inData@esker, tmplt,
                                        method = "bilinear")
     }
-    if(!compareRaster(expVars[[1]], inData@esker, stopiffalse = FALSE)){
+    if(!terra::compareGeom(expVars[[1]], inData@esker, stopOnError = FALSE)){
       stop("esker could not be aligned with landCover.",
            " Please provide a higher resolution raster or a shapefile",
            call. = FALSE)
@@ -60,14 +61,12 @@ setMethod(
     
     # window radius is radius of circle with winArea rounded to even number of
     # raster cells based on resolution
-    winRad <- (sqrt(inData@attributes$winArea*10000/pi)/res(expVars[[1]])[1]) %>% 
-      round(digits = 0)*res(expVars[[1]])[1] %>% 
+    winRad <- (sqrt(inData@attributes$winArea*10000/pi)/terra::res(expVars[[1]])[1]) %>% 
+      round(digits = 0)*terra::res(expVars[[1]])[1] %>% 
       round()
     
     # calculate moving window average for all explanatory variables
-    expVars <- expVars %>% 
-      addLayer(inData@linFeat) %>% 
-      addLayer(inData@esker) 
+    expVars <- c(expVars, inData@linFeat, inData@esker) 
     
     layernames <- c(resTypeCode %>% arrange(.data$code) %>%
                       pull(.data$ResourceType) %>% 
@@ -75,7 +74,7 @@ setMethod(
                     "TDENLF", "ESK")
     
     if(!inData@attributes$padProjPoly){
-      expVars <- raster::mask(expVars, inData@projectPoly)
+      expVars <- terra::mask(expVars, inData@projectPoly)
     }
     
     message("Applying moving window.")
@@ -84,10 +83,10 @@ setMethod(
                                nms = layernames, 
                                pad = inData@attributes$padFocal, usePfocal = FALSE)
     
-    inData@processedData <- expVars %>% 
-      raster::addLayer(expVars[["MIX"]] + expVars[["DEC"]]) %>% 
-      raster::addLayer(raster::init(expVars[[1]], 
-                                    fun = function(x){rep(1, x)})) %>% 
+    inData@processedData <- c(expVars, 
+                              expVars[["MIX"]] + expVars[["DEC"]], 
+                              terra::init(expVars[[1]], 
+                                                  fun = function(x){rep(1, x)})) %>% 
       `names<-`(c(names(expVars), "LGMD", "CONST"))
     
     return(inData)

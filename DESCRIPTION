@@ -44,7 +44,6 @@ Imports:
     data.table,
     sf,
     tidyr,
-    spex,
     units,
     purrr,
     methods,

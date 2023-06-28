@@ -107,7 +107,7 @@ setMethod(
       rangeCoefLst <- split(rangeCoefLst, rangeCoefLst$coefRange)
       
       applyCalcRSP <- function(dat, rangeCoef, doScale, coefTable){
-        dat <- raster::mask(dat, rangeCoef)
+        dat <- terra::mask(dat, rangeCoef)
         
         coefT <- coefTable %>% 
           filter(.data$Range %in% rangeCoef$coefRange)
@@ -123,7 +123,7 @@ setMethod(
       
       habUseLst$fun <- function(...){sum(..., na.rm = TRUE)}
       
-      CarHab@habitatUse <- do.call(raster::overlay, habUseLst)
+      CarHab@habitatUse <- do.call(terra::lapp, habUseLst)
 
       # 0 created by sum when all are NA but reintroduce NA from processed
       getNA <- !is.na(CarHab@processedData$CON)
@@ -146,11 +146,11 @@ setMethod(
     #                              getCover=TRUE)
     # projRas[projRas==0] <- NA
     # 
-    CarHab@habitatUse <- raster::mask(CarHab@habitatUse, CarHab@projectPoly)
+    CarHab@habitatUse <- terra::crop(CarHab@habitatUse, CarHab@projectPoly)
     # CarHab@habitatUse <- raster::crop(CarHab@habitatUse, CarHab@projectPoly,
     #                                   snap = "out")
     # 
-    CarHab@processedData <- raster::mask(CarHab@processedData, CarHab@projectPoly)
+    CarHab@processedData <- terra::mask(CarHab@processedData, CarHab@projectPoly)
     # CarHab@processedData <- raster::crop(CarHab@processedData, CarHab@projectPoly,
     #                                      snap = "out")
     

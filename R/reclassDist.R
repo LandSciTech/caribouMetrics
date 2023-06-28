@@ -28,8 +28,8 @@
 #' @examples
 #' library(sf)
 #' # create template raster
-#' lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0,
-#'                      ymx = 10, crs = 5070)
+#' lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
+#'                   ymax = 10, crs = "EPSG:5070")
 #' 
 #' # create fire polygons 
 #' corners <- matrix(c(0,0,10,10,5, 0,10,10,0,5), ncol = 2)
@@ -66,7 +66,7 @@
 #' 
 
 reclassDist <- function(distYr, endYr = 0, numCumYrs, template, dateField){
-  if(inherits(distYr, "RasterLayer")){
+  if(inherits(distYr, "SpatRaster")){
     if(endYr == 0){
       out <-  distYr < numCumYrs
     } else {
@@ -92,16 +92,13 @@ reclassDist <- function(distYr, endYr = 0, numCumYrs, template, dateField){
                                           endYr))
     }
     
-    if(requireNamespace("fasterize", quietly = TRUE)){
-      if(st_geometry_type(out, by_geometry = FALSE) == "GEOMETRY"){
-        out <- st_cast(out)
-      }
-      out <- fasterize::fasterize(out, template, background = 0)
-    } else {
-      message("To speed up install fasterize package")
-      out <- raster::rasterize(out, template)
+    
+    if(st_geometry_type(out, by_geometry = FALSE) == "GEOMETRY"){
+      out <- sf::st_cast(out)
     }
+    out <- terra::rasterize(out, template, background = 0)
+    
   }
-  out <- raster::reclassify(out, cbind(NA, 0))
+  out <- terra::classify(out, cbind(NA, 0))
   return(out)
 }

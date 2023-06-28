@@ -41,7 +41,7 @@
 #' @noRd
 
 calcRSP <- function(resourceProp, coefs, seasons = "all", doScale = FALSE){
-
+  
     expectedColNamesResProp <- c("DEC", "MIX", "LGOP", "CON", "LGTP",
                                  "ST", "LGW", "DTN", "ESK", "TDENLF", "LGMD",
                                  "CONST")
@@ -68,12 +68,15 @@ calcRSP <- function(resourceProp, coefs, seasons = "all", doScale = FALSE){
     }
     
     if(doScale){
-      resourceProp <- raster::scale(resourceProp)
+      resourceProp <- terra::scale(resourceProp)
       
       # memory safe assigning values
-      resourceProp[["CONST"]] <- raster::init(resourceProp[["CONST"]], 
-                                              fun = function(x){rep(1, x)}, 
-                                              filename = raster::rasterTmpFile())
+      resourceProp[["CONST"]] <- terra::init(
+        resourceProp[["CONST"]], 
+        fun = function(x){rep(1, x)}, 
+        filename = tempfile(pattern = "spat", 
+                            tmpdir = terra::terraOptions(print = FALSE)$tempdir, 
+                            fileext = ".grd"))
     }
     
     # Select relevant seasons
@@ -96,7 +99,7 @@ calcRSP <- function(resourceProp, coefs, seasons = "all", doScale = FALSE){
     out <-lapply(coefs2, function(y){
       1/(1+exp(-((resourceProp*y$Coefficient) %>% sum())))
     }) %>%
-      raster::stack()
+      terra::rast()
     
     return(out)
   }

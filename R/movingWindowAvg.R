@@ -16,11 +16,11 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
                             na.rm = TRUE, pad = FALSE, padValue = NA, 
                             usePfocal = requireNamespace("pfocal", quietly = TRUE)){
   
-  nl <- nlayers(rast)
+  nl <- terra::nlyr(rast)
   # if(raster::res(rast)[1] != raster::res(rast)[2]){
   #   raster::res(rast) <- c(raster::res(rast)[1], raster::res(rast)[1])
   # }
-  cf2 <- focalWeight(rast, radius, "circle")
+  cf2 <- terra::focalMat(rast, radius, "circle")
   
   if(nrow(cf2) > ncol(cf2)){
     dif <- nrow(cf2) - ncol(cf2)
@@ -128,7 +128,7 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
     if(!pad){
       if(na.rm){
         # ignore NAs inside the raster but still remove them on the edges
-        rast <- raster::subs(rast, data.frame(NA,0), subsWithNA = FALSE)
+        rast <- terra::classify(rast, data.frame(NA,0), others = NULL)
         # pfocal does not have a pad argument but the equivalent is:
         padValue <- NA
         na.rm <- FALSE
@@ -148,12 +148,12 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
     }
   } else {
     if(nl == 1){
-      rast <- raster::focal(rast, w = cf2, na.rm = na.rm, pad = pad,
-                            padValue = padValue)
+      rast <- terra::focal(rast, w = cf2, na.rm = na.rm, pad = pad,
+                            padValue = padValue, na.policy = "omit")
     } else {
       for(i in 1:nl){
-        rast[[i]] <- raster::focal(rast[[i]], w = cf2, na.rm = na.rm, pad = pad,
-                                   padValue = padValue)
+        rast[[i]] <- terra::focal(rast[[i]], w = cf2, na.rm = na.rm, pad = pad,
+                                   padValue = padValue, na.policy = "omit")
       }
     }
   }

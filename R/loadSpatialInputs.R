@@ -23,7 +23,7 @@
 #'   list where the first element is a function that takes the corresponding
 #'   `inputsList` element as its first argument and the subsequent elements are
 #'   named arguments for that function, or a matrix that will be passed to
-#'   [raster::reclassify()].
+#'   [terra::classify()].
 #' @param bufferWidth numeric. The width of a moving window that will be applied
 #'   to the data. If it is supplied a buffer of 3*`bufferWidth` around the
 #'   `projectPoly` is used so that rasters will be cropped to a larger area.
@@ -72,7 +72,7 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
                               convertToRastDens = NULL,
                               altTemplate = NULL, useTemplate = NULL,
                               reclassOptions = NULL, bufferWidth = NULL,
-                              ptDensity = 1, rastOut = "raster"){
+                              ptDensity = 1, rastOut = "terra"){
   
   allData <- list(inputsList, projectPoly = projectPoly, refRast = refRast) %>% 
     purrr::list_flatten()
@@ -103,9 +103,16 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   
   allData <- purrr::list_flatten(list(loaded, combined, spatObjs))
   
-  if(!is(allData$refRast, "Raster")){
-    stop("refRast must be a raster", call. = FALSE)
+  if(is(allData$refRast, "Raster")){
+    allData$refRast <- terra::rast(allData$refRast)
   }
+  
+  if(!is(allData$refRast, "SpatRaster")){
+    stop("refRast must be a SpatRaster or RasterLayer", call. = FALSE)
+  }
+  
+  # convert and RasterLayer inputs to SpatRaster
+  allData <- rapply(allData, f = terra::rast, classes = "RasterLayer", how = "replace")
   
   # Align and crop the data
   projPolyOut <- prepProjPoly(allData$projectPoly, allData$refRast, bufferWidth,
@@ -116,7 +123,7 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   
   rm(projPolyOut)
   
-  rasters <- purrr::keep(allData, ~is(.x, "Raster"))
+  rasters <- purrr::keep(allData, ~is(.x, "SpatRaster"))
   rasters <- rasters[-which(names(rasters) == "refRast")]
   rasters <- prepRasts(rasters,
                        landCover = allData$refRast, 
@@ -124,7 +131,7 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
                        tmplt = altTemplate,
                        useTmplt = useTemplate)
   
-  notRasters <- purrr::discard(allData, ~is(.x, "Raster"))
+  notRasters <- purrr::discard(allData, ~is(.x, "SpatRaster"))
   notRasters <- notRasters[-which(names(notRasters) %in% 
                                     c("projectPoly", "projectPolyOrig"))] 
   notRasters <- purrr::map2(notRasters, names(notRasters), 
@@ -142,26 +149,26 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
   if(!is.null(convertToRast)){
     # skip ones that are already rasters
     convertToRast <- dplyr::setdiff(convertToRast,
-                                        names(purrr::keep(allData, is, "Raster")))
+                                        names(purrr::keep(allData, is, "SpatRaster")))
     
     tmplts <- allData$refRast
     
     allData[convertToRast] <- purrr::map(
       allData[convertToRast],  
-      ~ terra::rasterize(.x, terra::rast(allData$refRast), background = 0)
+      ~ terra::rasterize(.x, allData$refRast, background = 0)
     )
   }
   
   if(!is.null(convertToRastDens)){
     # skip ones that are already rasters
     convertToRastDens <- dplyr::setdiff(convertToRastDens,
-                                    names(purrr::keep(allData, is, "Raster")))
+                                    names(purrr::keep(allData, is, "SpatRaster")))
     
     if(!is.null(useTemplate)){
       useTemplate <- dplyr::setdiff(useTemplate,
-                                    names(purrr::keep(allData, is, "Raster")))
+                                    names(purrr::keep(allData, is, "SpatRaster")))
       if(is.null(altTemplate)){
-        altTemplate <- raster(allData$refRast) %>% raster::`res<-`(c(400, 400))
+        altTemplate <- terra::rast(allData$refRast) %>% terra::`res<-`(c(400, 400))
       }
     } 
     
@@ -184,7 +191,7 @@ loadSpatialInputs <- function(projectPoly, refRast, inputsList, convertToRast = 
       reclassed, reclassOptions, 
       function(x, fn){
         if(is.matrix(fn)){
-          return(raster::reclassify(x, fn))
+          return(terra::classify(x, fn))
         } else if(is.function(fn)){
           return(fn(x))
         } else if(is.list(fn)){

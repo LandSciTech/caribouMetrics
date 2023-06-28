@@ -218,7 +218,7 @@ caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL,
     
     # NOTE: to adjust res of final model change this res and the res in
     # default argument in inputData
-    dots$tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
+    dots$tmplt <- terra::rast(landCover) %>% terra::`res<-`(c(400, 400))
     
     # polygons of ranges split into list with different winAreas
     projPolyLst <- projectPoly %>% 
@@ -309,7 +309,7 @@ doMosaic <- function(rastLst){
   
   rastLst$fun <- mean
   
-  out <- do.call(raster::mosaic, rastLst)
+  out <- do.call(terra::mosaic, rastLst)
   
   names(out) <- names(rastLst[[1]])
   

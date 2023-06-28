@@ -24,7 +24,8 @@
 #'@return a RasterLayer with classes matching `resTypeCode`
 #'
 #' @examples
-#' lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+#' lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
+#'                   ymax = 10, crs = "EPSG:5070")
 #' lc[] <- 13 # conifer
 #' lc[1:3, 1:3] <- 1 # open water
 #' lc[3:5, 3:5] <- 11 # deciduous
@@ -77,12 +78,16 @@ reclassPLC <- function(plc, plcLU = plcToResType){
            call. = FALSE)
     }
     
-    uniPLC <- raster::unique(plc)
+    if(is(plc, "RasterLayer")){
+      plc <- terra::rast(plc)
+    }
+    
+    uniPLC <- terra::unique(plc)[,1]
     if(!all(uniPLC %in% c(plcLU[,1], NA))){
       # check dataType aligns with minValue to avoid errors
-      if(raster::minValue(plc) < 0 && grepl("U", raster::dataType(plc))){
-        warning("raster::dataType(plc) is unsigned (", raster::dataType(plc),
-             ") but the minimum value is negative (", raster::minValue(plc),
+      if(terra::global(plc, min)[1,1] < 0 && grepl("U", terra::datatype(lc))){
+        warning("raster::dataType(plc) is unsigned (", terra::datatype(plc),
+             ") but the minimum value is negative (", terra::global(plc, min)[1,1],
              "). Please resave plc with an appropriate datatype.", call. = FALSE)
       }
       stop("All unique values in plc must be present in plcLU: ",
@@ -98,5 +103,5 @@ reclassPLC <- function(plc, plcLU = plcToResType){
     select(-"ResourceType") %>% 
     as.matrix(rclPLC, rownames.force = FALSE)
   
-  plc <- reclassify(plc, rclPLC)
+  plc <- terra::classify(plc, rclPLC)
 }

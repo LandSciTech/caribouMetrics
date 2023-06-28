@@ -172,8 +172,8 @@ test_that("raster road input works as expected", {
     winArea = 500, 
     ptDensity = 2
   )
-  expect_gt(data_list_linFrdRast2@linFeat %>% raster::cellStats(max),
-            data_list_linFrdRast1@linFeat %>% raster::cellStats(max))
+  expect_gt(data_list_linFrdRast2@linFeat %>% terra::global(max),
+            data_list_linFrdRast1@linFeat %>% terra::global(max))
 })
 
 test_that("results match when input is paths or data",{
@@ -240,7 +240,7 @@ resultCompare <- readRDS(file.path("data", "resultCompare.rds"))
 
 testthat::test_that("results match previous results",{
   testthat::expect_true(
-    raster::all.equal(resultCompare, 
+    terra::all.equal(terra::rast(resultCompare), 
                       data_esktif_linFtif@habitatUse)
   )
 })
@@ -248,3 +248,6 @@ testthat::test_that("results match previous results",{
 #tidy created files
 file.remove(file.path(pthBase, "linFeatTif400.tif"))
 file.remove(file.path(pthBase, "eskerTif400.tif"))
+
+
+

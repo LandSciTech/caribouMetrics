@@ -72,7 +72,7 @@ test_that("with spatial objects", {
 })
 
 test_that("use pre-loaded spatial inputs in caribouHabitat or disturbanceMetrics", {
-  res1 <- caribouHabitat(preppedData = out2, caribouRange = "Churchill")
+  res1 <- caribouHabitat(preppedData = out4, caribouRange = "Churchill")
   
   # should be the same as if they were used directly
   res2 <- caribouHabitat(landCover = reclassPLC(landCover),
@@ -119,15 +119,22 @@ test_that("works when inputs have different crs", {
   expect_type(out3, "list")
 })
 
-out4 <- loadSpatialInputs(projectPoly = singlePolyP, refRast = landCoverP, 
-                         inputsList = list(esker = eskerP, 
-                                           linFeat = linFeatP, 
-                                           natDist = natDistP, 
-                                           anthroDist = anthroDistP), 
-                         reclassOptions = list(refRast = reclassPLC, 
-                                               natDist = cbind(NA, 0)), 
-                         rastOut = "terra")
+out4 <- loadSpatialInputs(
+  projectPoly = singlePoly, refRast = landCover, 
+  inputsList = list(esker = esker, 
+                    linFeat = linFeat, 
+                    natDist = natDist, 
+                    anthroDist = anthroDist), 
+  convertToRastDens = c("esker", "linFeat"),
+  useTemplate = c("esker", "linFeat"),
+  reclassOptions = list(refRast = reclassPLC, 
+                        natDist = list(fn = reclassDist,
+                                       endYr = 2020, 
+                                       numCumYrs = 30,
+                                       dateField = "FIRE_YEAR")),
+  rastOut = "raster"
+)
 
-test_that("outputs terra", {
-  expect_s4_class(out4$refRast, "SpatRaster")
+test_that("outputs raster when asked", {
+  expect_s4_class(out4$refRast, "RasterLayer")
 })

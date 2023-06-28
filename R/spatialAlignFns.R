@@ -13,28 +13,27 @@ transformIf <- function(x, y, nmx, nmy){
       return(x)
     } else {
      message(nmx, " being transformed to have crs matching ", nmy)
-     return(st_transform(x, st_crs(y)))
+     return(sf::st_transform(x, st_crs(y)))
     }
   }
-  if(inherits(x,"RasterLayer")){
+  if(inherits(x,"SpatRaster")){
     return(x)
   }
 }
 
 cropIf <- function(x, y, nmx, nmy){
   if(inherits(x, "sf")){
-    if(raster::extent(x) != raster::extent(y)){
+    if(terra::ext(x) != terra::ext(y)){
       message("cropping ", nmx, " to extent of ", nmy)
-      return(st_crop(x, y))
+      return(sf::st_crop(x, y))
     } else {
       return(x)
     }
   }
-  if(inherits(x,"RasterLayer")){
-    if(!compareRaster(x, y, extent = TRUE, rowcol = FALSE, crs = FALSE, 
-                      orig = FALSE, stopiffalse = FALSE)){
+  if(inherits(x,"SpatRaster")){
+    if(terra::ext(x) != terra::ext(y)){
       message("cropping ", nmx, " to extent of ", nmy)
-      return(raster::crop(x, y, snap = "out"))
+      return(terra::crop(x, y, snap = "out"))
     } else {
       return(x)
     }
@@ -51,7 +50,6 @@ checkOverlap <- function(x,y, nmx, nmy){
   }
 }
 
-
 checkAlign <- function(x, y, nmx, nmy){
   x <- transformIf(x, y, nmx, nmy)
   x <- checkOverlap(x, y, nmx, nmy)
@@ -60,10 +58,10 @@ checkAlign <- function(x, y, nmx, nmy){
 }
 
 checkCompRast <- function(x, y, nmx, nmy, y2 = NULL){
-  chk1 <- raster::compareRaster(x, y, stopiffalse = FALSE)
+  chk1 <- terra::compareGeom(x, y, stopOnError = FALSE)
   
   if(!is.null(y2)){
-    chk2 <- raster::compareRaster(x, y2, stopiffalse = FALSE)
+    chk2 <- terra::compareGeom(x, y2, stopOnError = FALSE)
   } else {
     chk2 <- FALSE
   }
@@ -72,7 +70,7 @@ checkCompRast <- function(x, y, nmx, nmy, y2 = NULL){
     stop(nmx, " and ",  nmy,
          " rasters do not have the same extent,",
          " number of rows and columns, projection, resolution, or origin. ",
-         "Use raster::compareRaster() to identify the problem.", call. = FALSE)
+         "Use terra::compareGeom() to identify the problem.", call. = FALSE)
   }
 
   invisible(TRUE)

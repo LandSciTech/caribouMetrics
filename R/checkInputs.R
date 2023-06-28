@@ -20,7 +20,7 @@
     }
   }
   
-  if(!all(raster::unique(landCover) %in% resTypeCode$code)){
+  if(!all(terra::unique(landCover)[,1] %in% resTypeCode$code)){
     stop("landCover raster has values outside the range of: ", 
          paste0(resTypeCode$code, collapse = ", "), 
          ". landCover must be reclassified to resource types",
