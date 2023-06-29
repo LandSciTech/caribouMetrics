@@ -284,17 +284,15 @@ processAnthroDM <- function(anthroDist, linFeat, landCover,
                                 touches = TRUE, background = 0) 
       
       anthroDist <- terra::mask(anthroDist, lfRas, inverse = TRUE,
-                                 maskvalue = 0, updatevalue = 1)
-    } else {
+                                maskvalue = 0, updatevalue = 1)
+    } 
+    if(nrow(lfPt) > 0){
+      lfRasPt <- terra::rasterize(terra::vect(lfPt), anthroDist, 
+                                field = 1, background = 0) 
       
-      if(nrow(lfPt) > 0){
-        lfRas <- terra::rasterize(terra::vect(lfPt), anthroDist, 
-                                  field = 1, background = 0) 
-        
-        anthroDist <- terra::mask(anthroDist, lfRas, inverse = TRUE,
-                                   maskvalue = 0, updatevalue = 1)
-      } 
-    }
+      anthroDist <- terra::mask(anthroDist, lfRasPt, inverse = TRUE,
+                                maskvalue = 0, updatevalue = 1)
+    } 
   }else{
     lfRas <- linFeat
     
@@ -342,18 +340,14 @@ processAnthroDM <- function(anthroDist, linFeat, landCover,
 }
 
 calcDMSpatial <- function(anthroDist, natDist, landCover, inData){
-  fire_excl_anthro <- terra::lapp(c(natDist, 
-                                      anthroDist),
-                                      fun = function(x,y){
-                                        (x - y) > 0 
-                                      })
+  fire_excl_anthro <- terra::lapp(c(natDist, anthroDist),
+                                  fun = function(x, y){
+                                    (x - y) > 0 
+                                  })
   
   all <- (anthroDist + natDist) > 0
   
-  outStack <- c(anthroDist, 
-                            natDist, 
-                            all, 
-                            fire_excl_anthro)
+  outStack <- c(anthroDist, natDist, all, fire_excl_anthro)
   
   rm(anthroDist, natDist, all, fire_excl_anthro)
   
