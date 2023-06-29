@@ -128,7 +128,7 @@ test_that("fire_excl_anthro lt fire",
 
 test_that("line sf with points works", {
   # make points
-  pts <- st_sf(linFID = 1:10, geometry = st_sample(projectPolyD, 10))
+  pts <- sf::st_sf(linFID = 1:10, geometry = sf::st_sample(projectPolyD, 10))
   
   linFeatDpts <- linFeatDshp %>% bind_rows(pts) %>% st_set_agr("constant")
   
@@ -187,19 +187,19 @@ test_that("NAs handled correctly", {
     projectPoly = projectPolyD,
     bufferWidth = 500
   )
-  ext <- raster::extent(749233.8, 757072.9, 12564948, 12572160)
-  na_out <- raster::crop(is.na(dm_na_lc@processedData[[1]]), ext)
-  na_lc <- raster::crop(is.na(dm_na_lc@landCover), ext)
-  expect_true(raster::compareRaster(na_out, na_lc, values = TRUE, 
-                                    stopiffalse = FALSE, showwarning = TRUE))
+  ext <- terra::ext(749233.8, 757072.9, 12564948, 12572160)
+  na_out <- terra::crop(is.na(dm_na_lc@processedData[[1]]), ext)
+  na_lc <- terra::crop(is.na(dm_na_lc@landCover), ext)
+  expect_true(terra::global(terra::compare(na_out, na_lc, oper = "=="), min)[1,1] == 1)
 })
 
 # Compare output to previous run. This will raise a flag if the result has
 # changed. Update the stored result if the change was expected.
-resultCompare <- readRDS(file.path("data", "dm_resultCompare.rds"))
+resultCompare <- readRDS(file.path(test_path("data"), "dm_resultCompare.rds"))
 
 # To update
-# saveRDS(dm@disturbanceMetrics, file.path("tests/testthat/data", "dm_resultCompare.rds"))
+# saveRDS(dm@disturbanceMetrics, file.path("tests/testthat/data", "dm_resultCompare.rds"), 
+# version = 2)
 
 testthat::test_that("results match previous results",{
   testthat::expect_equal(dm@disturbanceMetrics, resultCompare)

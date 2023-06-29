@@ -189,7 +189,8 @@ demRates <- demographicRates(covTable = covTableSim,
                              popGrowthPars = demCoefs)
 
 # To update
-# saveRDS(demRates, file.path("tests/testthat/data", "demog_resultCompare.rds"))
+# saveRDS(demRates, file.path("tests/testthat/data", "demog_resultCompare.rds"), 
+# version = 2)
 
 testthat::test_that("results match previous results",{
   testthat::expect_equal(demRates$S_bar, resultCompare$S_bar)
