@@ -32,7 +32,7 @@
 #'   that contains a mixture of rasters and lines and is included in
 #'   convertToRast. See [rasterizeLineDensity()].
 #' @param rastOut character. The format that rasters should be output with.
-#'   "raster" for RasterLayers and "terra" for SpatRasters
+#'   "raster" for RasterLayers and "terra" for SpatRasters. The default is "terra".
 #'
 #' @return A named list with aligned spatial data components
 #'
@@ -41,8 +41,8 @@
 #'
 #' @examples
 #' # create example rasters
-#' lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000,
-#'                      resolution = 250, crs = 5070)
+#' lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000, 
+#'                      resolution = 250, crs = "EPSG:5070")
 #' lc[] <- 0
 #' nd <- lc
 #' nd[1:30, 1:30] <- 1

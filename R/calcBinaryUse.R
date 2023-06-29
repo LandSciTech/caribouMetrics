@@ -21,8 +21,8 @@ NULL
 #'
 #'
 #' @return
-#'  If `bySeason` is `FALSE` and `x` is a CaribouHabitat object then the result is a RasterLayer.
-#'  If `bySeason` is `TRUE` and `x` is a CaribouHabitat object then the result is a RasterBrick.  
+#'  If `bySeason` is `FALSE` and `x` is a CaribouHabitat object then the result is 1 layer SpatRaster.
+#'  If `bySeason` is `TRUE` and `x` is a CaribouHabitat object then the result is SpatRaster with a layer per season.  
 #'  If `bySeason` is `FALSE` and `x` is a data.frame then the result is a data.frame.
 #'  If `bySeason` is `TRUE` and `x` is a data.frame then the result is a data.frame.
 #'  If `bySeason` is `FALSE` and `x` is a vector then the result is a vector.
@@ -30,7 +30,7 @@ NULL
 #'  
 #' @examples 
 #' # create example rasters
-#' lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
+#' lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000, 
 #'                      resolution = 250, crs = sf::st_crs(5070)$wkt)
 #' lc[] <- 0
 #' nd <- lc

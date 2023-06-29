@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(caribouMetrics)
 library(dplyr)
-library(raster)
+library(terra)
 library(sf)
 library(ggplot2)
 library(tidyr)
@@ -46,14 +46,14 @@ The example data set loaded below includes a small area in the Nipigon caribou r
 
 ```{r load data, results='hide',message=F, warning=T}
 # load example data and classify cumulative natural disturbance
-landCoverD = raster(file.path(pthBase, "landCover.tif")) 
+landCoverD = rast(file.path(pthBase, "landCover.tif")) 
 natDistD <- sf::st_read(file.path(pthBase, "fireAFFES2020.shp")) %>% 
   reclassDist(endYr = 2020, numCumYrs = 40, template = landCoverD, 
               dateField = "FIRE_YEAR")
 
 
-anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
-linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
+anthroDistD = rast(file.path(pthBase, "anthroDist.tif"))
+linFeatDras = rast(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE)
 linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE)
 roadsD = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE)

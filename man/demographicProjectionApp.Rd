@@ -13,7 +13,7 @@ launches a shiny app in the browser
 This requires the "BayesianCaribouDemographicProjection" to be is installed.
 }
 \examples{
-if(interactive()){
+if(FALSE){
  demographicProjectionApp()
 }
 

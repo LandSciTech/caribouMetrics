@@ -21,7 +21,7 @@
 #'  `fnlcToResType` for the Ontario Far North Land Cover, or a custom
 #'  lookup table. See Details.
 #'
-#'@return a RasterLayer with classes matching `resTypeCode`
+#'@return a SpatRaster with classes matching `resTypeCode`
 #'
 #' @examples
 #' lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
@@ -86,7 +86,7 @@ reclassPLC <- function(plc, plcLU = plcToResType){
     if(!all(uniPLC %in% c(plcLU[,1], NA))){
       # check dataType aligns with minValue to avoid errors
       if(terra::global(plc, min)[1,1] < 0 && grepl("U", terra::datatype(lc))){
-        warning("raster::dataType(plc) is unsigned (", terra::datatype(plc),
+        warning("terra::dataType(plc) is unsigned (", terra::datatype(plc),
              ") but the minimum value is negative (", terra::global(plc, min)[1,1],
              "). Please resave plc with an appropriate datatype.", call. = FALSE)
       }

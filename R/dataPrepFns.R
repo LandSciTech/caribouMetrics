@@ -50,7 +50,7 @@ prepRasts <- function(rastLst, landCover, projectPoly, tmplt = NULL,
     stop("all raster data sets must have matching CRS", call. = FALSE)
   }
   
-  # check alignment of each raster against projectPoly and compareRaster with
+  # check alignment of each raster against projectPoly and compareGeom with
   # landCover
   rastLst <- purrr::map2(rastLst, names(rastLst),
               ~checkAlign(.x, projectPoly, .y, "projectPoly")) 

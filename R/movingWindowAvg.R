@@ -8,7 +8,7 @@
 #' @param radius the radius of the circular window
 #' @param nms the names of each raster layer
 #' @param offset Should offsetting be used to match Hornseth and Rempel 2016
-#' @param na.rm,pad,padValue arguments passed on to raster::focal
+#' @param na.rm,pad,padValue arguments passed on to terra::focal
 #' 
 #' @noRd
 
@@ -17,9 +17,7 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
                             usePfocal = requireNamespace("pfocal", quietly = TRUE)){
   
   nl <- terra::nlyr(rast)
-  # if(raster::res(rast)[1] != raster::res(rast)[2]){
-  #   raster::res(rast) <- c(raster::res(rast)[1], raster::res(rast)[1])
-  # }
+
   cf2 <- terra::focalMat(rast, radius, "circle")
   
   if(nrow(cf2) > ncol(cf2)){
@@ -131,7 +129,7 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
         rast <- terra::classify(rast, data.frame(NA,0), others = NULL)
         # pfocal does not have a pad argument but the equivalent is:
         padValue <- NA
-        na.rm <- FALSE
+        # na.rm <- FALSE
       } else {
         padValue <- NA
       }
@@ -148,12 +146,12 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
     }
   } else {
     if(nl == 1){
-      rast <- terra::focal(rast, w = cf2, na.rm = na.rm, pad = pad,
-                            padValue = padValue, na.policy = "omit")
+      rast <- terra::focal(rast, w = cf2, na.rm = na.rm, na.policy = "omit", 
+                           fillValue = padValue)
     } else {
       for(i in 1:nl){
-        rast[[i]] <- terra::focal(rast[[i]], w = cf2, na.rm = na.rm, pad = pad,
-                                   padValue = padValue, na.policy = "omit")
+        rast[[i]] <- terra::focal(rast[[i]], w = cf2, na.rm = na.rm, fillvalue = padValue,
+                                  na.policy = "omit")
       }
     }
   }
@@ -164,4 +162,28 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
   return(rast)
 }
 
+# terra focal examples for understanding inputs
    
+# v <- vect(system.file("ex/lux.shp", package="terra"))
+# r <- rast(system.file("ex/elev.tif", package="terra"))
+# r[45:50, 45:50] <- NA
+# 
+# m <- focalMat(r, 0.01)
+# 
+# # also try "mean" or "min"
+# f <- "sum" 
+# # na.rm=FALSE
+# plot(focal(r, m, f) , fun=lines(v))
+# 
+# # na.rm=TRUE
+# plot(focal(r, m, f, na.rm=TRUE), fun=lines(v))
+# 
+# # only change cells that are NA
+# plot(focal(r, m, f, na.policy="only", na.rm=TRUE), fun=lines(v))
+# 
+# # do not change cells that are NA
+# plot(focal(r, m, f, na.policy="omit", na.rm=TRUE), fun=lines(v))
+# 
+# plot(focal(r, m, f, na.policy="omit", na.rm=FALSE, fillvalue = 0), fun=lines(v))
+# 
+# plot(focal(r, m, f, na.rm=TRUE, fillvalue = 0), fun=lines(v))

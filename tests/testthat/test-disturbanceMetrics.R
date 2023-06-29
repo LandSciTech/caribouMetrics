@@ -2,9 +2,9 @@
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
 # load example data
-plcD = raster(file.path(pthBase, "landCover.tif")) # Defines the study area - NA values are omitted from calculation, everything else is included.
-natDistD = raster(file.path(pthBase, "natDist.tif"))
-anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
+plcD = terra::rast(file.path(pthBase, "landCover.tif")) # Defines the study area - NA values are omitted from calculation, everything else is included.
+natDistD = terra::rast(file.path(pthBase, "natDist.tif"))
+anthroDistD = terra::rast(file.path(pthBase, "anthroDist.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE) %>% 
@@ -15,7 +15,7 @@ railD = st_read(file.path(pthBase, "rail.shp"), quiet = TRUE) %>%
   st_set_agr("constant")
 utilitiesD = st_read(file.path(pthBase, "utilities.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
-linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
+linFeatDras = terra::rast(file.path(pthBase, "linFeatTif.tif"))
 
 dm <- disturbanceMetrics(
   landCover = plcD,
@@ -65,7 +65,7 @@ test_that("error if rasters don't align",{
     landCover = plcD,
     natDist = natDistD, 
     anthroDist = anthroDistD, 
-    linFeat = raster::`res<-`(linFeatDras, 400), 
+    linFeat = terra::`res<-`(linFeatDras, 400), 
     projectPoly = projectPolyD
   ), "rasters do not have the same")
 })
@@ -159,6 +159,20 @@ test_that("linBuffMethod sf works",{
   )
   
   expect_s4_class(dm_sf, "DisturbanceMetrics")
+})
+
+test_that("RasterLayer input works",{
+  dm_rast <- disturbanceMetrics(
+    landCover = as(plcD, "Raster"),
+    natDist = as(natDistD, "Raster"), 
+    anthroDist = as(anthroDistD, "Raster"), 
+    linFeat = linFeatDshp, 
+    projectPoly = projectPolyD,
+    bufferWidth = 500,
+    linBuffMethod = "sf"
+  )
+  
+  expect_s4_class(dm_rast, "DisturbanceMetrics")
 })
 
 test_that("NAs handled correctly", {

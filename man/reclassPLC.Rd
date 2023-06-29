@@ -29,7 +29,7 @@ Options are: \code{plcToResType} for Provincial Land Cover,
 lookup table. See Details.}
 }
 \value{
-a RasterLayer with classes matching \code{resTypeCode}
+a SpatRaster with classes matching \code{resTypeCode}
 }
 \description{
 Reclassify provincial land cover classes into resource types used for
@@ -49,7 +49,8 @@ be found in table S1.3 of \href{https://osf.io/x6e2q}{supplementary material} fo
 Dyson et. al (2022).
 }
 \examples{
-lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
+                  ymax = 10, crs = "EPSG:5070")
 lc[] <- 13 # conifer
 lc[1:3, 1:3] <- 1 # open water
 lc[3:5, 3:5] <- 11 # deciduous

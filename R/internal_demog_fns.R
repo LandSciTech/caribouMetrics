@@ -171,7 +171,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                     "recruitment", "N", "lambda", "n_recruits", "n_cows")
     # apparent number of calves per cow, not actual, from unadjusted R_t
     fds$n_recruits <- fds$recruitment * fds$n_cows
-    fds <- tidyr::pivot_longer(fds, !.data$Replicate, names_to = "MetricTypeID",
+    fds <- tidyr::pivot_longer(fds, !"Replicate", names_to = "MetricTypeID",
                                values_to = "Amount")
     fds$Timestep <- t * stepLength
     if (t == 1) {

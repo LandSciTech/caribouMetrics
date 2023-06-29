@@ -3,19 +3,20 @@
 #' Rasterize line density in meters per hectare.
 #'
 #' @param x an sf object containing lines and/or points
-#' @param r a RasterLayer object to be used as a template for the output raster
+#' @param r a SpatRaster or RasterLayer object to be used as a template for the
+#'   output raster
 #' @param ptDensity a number giving the density to assign to points, in units of
 #'   `res(r)`. A value of 1 indicates one straight line crossing of the pixel. A
 #'   value of 2+2*2^0.5 is horizontal, vertical, and diagonal crossings. If
 #'   NULL, points in x will be ignored.
 #'
-#' @return A RasterLayer object with values representing the density of lines in meters
-#'   per hectare.
-#' @examples 
+#' @return A SpatRaster object with values representing the density of lines in
+#'   meters per hectare.
+#' @examples
 #' # create example raster
-#' lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
-#'                      resolution = 250, crs = 5070)
-#' 
+#' lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000, 
+#'                      resolution = 250, crs = "EPSG:5070")
+#'
 #' #' # create line
 #' lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10000, 10000),
 #'                                                             ncol = 2, byrow = TRUE)),
@@ -24,11 +25,11 @@
 #'                                    sf::st_linestring(matrix(c(5001, 10001, 5001, 1),
 #'                                                             ncol = 2, byrow = TRUE))),
 #'                                    crs = 5070))
-#'                              
+#'
 #' rastLines <- rasterizeLineDensity(lf, lc)
-#' 
+#'
 #' plot(rastLines)
-#' 
+#'
 #' @family habitat
 #' @export
 #' 
@@ -58,9 +59,9 @@ rasterizeLineDensity <- function(x, r, ptDensity = 1) {
     if(nrow(lfPt) > 0){
       lfR <- terra::rasterizeGeom(terra::vect(lfPt), r, fun = "count")    
       
-      lfR <- lfR * ptDensity * res(r)[1]
+      lfR <- lfR * ptDensity * terra::res(r)[1]
       
-      lfR <- round(lfR / (res(r)[1] * res(r)[2] / 10000), digits = 1)
+      lfR <- round(lfR / (terra::res(r)[1] * terra::res(r)[2] / 10000), digits = 1)
       r <- r + lfR
     }
   }

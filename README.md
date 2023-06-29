@@ -11,7 +11,7 @@
 The caribouMetrics R package provides reproducible and open source
 implementations of several models of Boreal woodland caribou (*Rangifer
 tarandus caribou*) demography and habitat use. These include a
-population and demographic model that allows users predict to
+population and demographic model that allows users to predict
 demographic rates for a given level of disturbance and project
 population growth over time. Demographic rates are predicted using model
 coefficients published in [Johnson et.
@@ -50,18 +50,26 @@ package.
 
 ``` r
 library(caribouMetrics)
+#> The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
+#> which was just loaded, will retire in October 2023.
+#> Please refer to R-spatial evolution reports for details, especially
+#> https://r-spatial.org/r/2023/05/15/evolution4.html.
+#> It may be desirable to make the sf package available;
+#> package maintainers should consider adding sf to Suggests:.
+#> The sp package is now running under evolution status 2
+#>      (status 2 uses the sf package in place of rgdal)
 
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
 # load example data
-landCoverD <- raster::raster(file.path(pthBase, "landCover.tif")) 
+landCoverD <- terra::rast(file.path(pthBase, "landCover.tif")) 
   # convert PLC classes to resource types used in the model 
 landCoverD <- reclassPLC(landCoverD)
-eskerDras <- raster::raster(file.path(pthBase, "eskerTif.tif"))
+eskerDras <- terra::rast(file.path(pthBase, "eskerTif.tif"))
 eskerDshp <- sf::read_sf(file.path(pthBase, "esker.shp"))
-natDistD <- raster::raster(file.path(pthBase, "natDist.tif"))
-anthroDistD <-raster::raster(file.path(pthBase, "anthroDist.tif"))
-linFeatDras <- raster::raster(file.path(pthBase, "linFeatTif.tif"))
+natDistD <- terra::rast(file.path(pthBase, "natDist.tif"))
+anthroDistD <-terra::rast(file.path(pthBase, "anthroDist.tif"))
+linFeatDras <- terra::rast(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD <- sf::read_sf(file.path(pthBase, "projectPoly.shp"))
 
 # calculate disturbance 
@@ -86,9 +94,9 @@ demRates <- demographicRates(covTable = disturb_tbl,
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.734581   40.56555        0.5862182   0 0.8478733 0.04989658
+#> 1    1 39.86675 1.732936   40.45363        0.5868729   0 0.8479506 0.05932629
 #>     S_PIlow  S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7404495 0.9239784 0.1813372 0.1014497 0.06930776 0.4205101
+#> 1 0.7352235 0.9380413 0.1816836 0.1002984 0.04896882 0.3716495
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
@@ -96,7 +104,7 @@ popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar,
 
 popGrow
 #>     N0    lambda   N       R_t       S_t n_recruits surviving_adFemales
-#> 1 2000 0.9223887 396 0.1804897 0.8558959         33                 363
+#> 1 2000 0.9248875 418 0.1831704 0.8538016         42                 376
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(
@@ -118,7 +126,6 @@ ipm <- caribouBayesianIPM(simObs$simSurvObs, simObs$ageRatioOut,
 #> using Kaplan-Meier survival model
 
 natSim <- getSimsNational(Anthro = unique(simObs$simDisturbance$Anthro))
-#> Warning: Setting expected survival S_bar to be between l_S and h_S.
 
 ipmTbls <- getOutputTables(ipm, paramTable = simObs$paramTable, 
                             exData = simObs$exData, 
@@ -188,7 +195,10 @@ and the following articles/vignettes/tutorials:
   Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html):
   Calculate caribou habitat use with Ontario RSF models.
 - [**User Interface
-  Help**](https://landscitech.github.io/caribouMetrics/articles/UI_help.html)
+  Help**](https://landscitech.github.io/caribouMetrics/articles/UI_help.html):
+  Instructions for using the SyncroSim user interface for integrating
+  SpaDES, LandR and FireSense projections with caribou habitat and
+  demographic models (WIP)
 
 ## Getting help
 

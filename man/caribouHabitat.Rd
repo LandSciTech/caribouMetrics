@@ -26,14 +26,14 @@ caribouHabitat(
 )
 }
 \arguments{
-\item{landCover}{filename or RasterLayer. Provincial landcover class}
+\item{landCover}{filename, SpatRaster or RasterLayer. Provincial landcover class}
 
-\item{esker}{filename, RasterLayer or sf object. Eskers. If it is a
-RasterLayer then it should be esker density in m^2/ha.}
+\item{esker}{filename, SpatRaster or RasterLayer or sf object. Eskers. If it is a
+raster then it should be esker density in m^2/ha.}
 
-\item{linFeat}{filename, RasterLayer, sf object or a list of these that will
-be combined. Linear features. If it is a RasterLayer then it should be
-linear feature density in m^2/ha. If a RasterLayer is provided as a list
+\item{linFeat}{filename, SpatRaster, RasterLayer, or sf object or a list of these that will
+be combined. Linear features. If it is a raster then it should be
+linear feature density in m^2/ha. If a raster is provided as a list
 element then ptDensity will be used to assign a density of linear features
 in the pixel (default is 1).}
 
@@ -54,10 +54,10 @@ model. Must match the format and naming of the default \code{coefTableHR}}
 
 \item{...}{optional arguments:
 \itemize{
-\item natDist: filename or RasterLayer. Presence or absence of natural
+\item natDist: filename, SpatRaster or RasterLayer. Presence or absence of natural
 disturbance, primarily by fire. This should reflect cumulative natural
 disturbance over the preceding 30 years
-\item anthroDist: filename or RasterLayer. Anthropogenic disturbance including
+\item anthroDist: filename, SpatRaster or RasterLayer. Anthropogenic disturbance including
 harvest.
 \item eskerSave: filename to save rasterized esker data.
 \item linFeatSave: filename to save rasterized linear feature data.
@@ -69,11 +69,11 @@ are always clipped to the original \code{projectPoly}. It is ideal to set
 this to TRUE and provide a data set that is larger than the
 \code{projectPoly} to avoid edge effects.
 \item padFocal: logical. This value is passed to the pad argument in
-\code{raster::focal}, if it is FALSE then cells near the edge will return
+\code{terra::focal}, if it is FALSE then cells near the edge will return
 NA, if it is TRUE a value will be returned for each cell that assumes cells
 outside the input data are 0 for all resource types. This is not a good
 assumption and should be used with caution.
-\item saveOutput: character. The filename to save the rasterBrick of habitat
+\item saveOutput: character. The filename to save the raster of habitat
 use probabilities to. Note this will overwrite any existing files. The .grd
 format is recommended because it will preserve layer names when the file is
 reloaded.
@@ -115,8 +115,8 @@ CaribouHabitat object with new data see \code{\link[=updateCaribou]{updateCaribo
 }
 \examples{
 # create example rasters
-lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
-                     resolution = 250, crs = 5070)
+lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000, 
+                     resolution = 250, crs = "EPSG:5070")
 lc[] <- 0
 nd <- lc
 nd[1:30, 1:30] <- 1

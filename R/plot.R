@@ -13,14 +13,14 @@ NULL
 #' @param raster.title character. Title to give map
 #' @param tmap logical. Should tmap be used for plotting by default it is used
 #'   if installed
-#' @param ... Other agruments passed to `tmap::qtm` or `raster::plot`
+#' @param ... Other agruments passed to `tmap::qtm` or `terra::plot`
 #'
 #' @return If tmap is TRUE a tmap object if FALSE a plot is created in the viewer
 #' 
 #' @examples 
 #' # create example rasters
-#' lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
-#'                      resolution = 250, crs = 5070)
+#' lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000, 
+#'                      resolution = 250, crs = "EPSG:5070")
 #' lc[] <- 0
 #' nd <- lc
 #' nd[1:30, 1:30] <- 1
@@ -63,7 +63,7 @@ NULL
 #'        raster.title = "Legend title")
 #' }
 #' 
-#' # force plot with base graphics arguments passed to raster::plot()
+#' # force plot with base graphics arguments passed to terra::plot()
 #' plot(res, tmap = FALSE, main = c("title1", "title2"))
 #' 
 #' @export

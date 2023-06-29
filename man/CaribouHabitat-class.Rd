@@ -12,23 +12,23 @@ selection function
 \section{Slots}{
 
 \describe{
-\item{\code{landCover}}{Raster with land cover classified into resource types. See
+\item{\code{landCover}}{SpatRaster with land cover classified into resource types. See
 \code{resTypeCode} for a legend.}
 
-\item{\code{esker}}{Raster of esker density in m^2 per hectare.}
+\item{\code{esker}}{SpatRaster of esker density in m^2 per hectare.}
 
-\item{\code{natDist}}{Raster of natural disturbance.}
+\item{\code{natDist}}{SpatRaster of natural disturbance.}
 
-\item{\code{anthroDist}}{Raster of anthropogenic disturbances.}
+\item{\code{anthroDist}}{SpatRaster of anthropogenic disturbances.}
 
-\item{\code{linFeat}}{Raster of linear feature density in m^2 per hectare.}
+\item{\code{linFeat}}{SpatRaster of linear feature density in m^2 per hectare.}
 
 \item{\code{projectPoly}}{Sf object with polygon of project boundary.}
 
-\item{\code{processedData}}{RasterStack with named layers for each input variable
+\item{\code{processedData}}{SpatRaster with named layers for each input variable
 used in the RSF}
 
-\item{\code{habitatUse}}{RasterStack with named layers for each season}
+\item{\code{habitatUse}}{SpatRaster with named layers for each season}
 
 \item{\code{attributes}}{A list of arguments from the \code{caribouHabtat} call.}
 }}

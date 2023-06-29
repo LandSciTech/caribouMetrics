@@ -36,7 +36,6 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
   
   # convert to 16 ha resolution stack of ResType proportion to match 16 ha
   # hexagons in Rempel
-  #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
   
   landCover <- terra::segregate(landCover, classes = resTypeCode$code) %>% 
     terra::resample(tmplt, method = "bilinear")
@@ -77,7 +76,7 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
     pull(.data$code)
   
   for (i in toChange) {
-    landCover[[i]] <- raster::mask(landCover[[i]], anyDist35,
+    landCover[[i]] <- terra::mask(landCover[[i]], anyDist35,
                                    maskvalue = 1,
                                    updatevalue = 0)
   }

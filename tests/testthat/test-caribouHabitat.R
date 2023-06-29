@@ -103,14 +103,14 @@ paths_list_linF <- caribouHabitat(
 
 
 # Test all different ways to run with data #====================================
-landCoverD = raster(file.path(pthBase, "landCover.tif")) %>% 
+landCoverD = terra::rast(file.path(pthBase, "landCover.tif")) %>% 
   reclassPLC()
-eskerDras = raster(file.path(pthBase, "eskerTif400.tif"))
+eskerDras = terra::rast(file.path(pthBase, "eskerTif400.tif"))
 eskerDshp = st_read(file.path(pthBase, "esker.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
-natDistD = raster(file.path(pthBase, "natDist.tif"))
-anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
-linFeatDras = raster(file.path(pthBase, "linFeatTif400.tif"))
+natDistD = terra::rast(file.path(pthBase, "natDist.tif"))
+anthroDistD = terra::rast(file.path(pthBase, "anthroDist.tif"))
+linFeatDras = terra::rast(file.path(pthBase, "linFeatTif400.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE) %>% 
@@ -233,7 +233,7 @@ test_that("results are different when disturbance is missing", {
 # we want to change the object in future
 # Do to changes in CRS order we simply check that the two rasters are
 # equivalent to each other
-resultCompare <- readRDS(file.path("data", "resultCompare.rds"))
+resultCompare <- readRDS(file.path(test_path("data"), "resultCompare.rds"))
 
 # To update
 # saveRDS(data_esktif_linFtif@habitatUse, 

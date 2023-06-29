@@ -111,17 +111,15 @@ updateDisturbance <- function(distMet, newData, linBuffMethod = "raster",
   
   if(!is.null(newData$natDist)){
     # check natDist is real if not make dummy
-    if(raster::ncell(newData2@natDist) == 1){
-      newData2@natDist <- raster::init(distMet@landCover, 
-                              fun = function(x){rep(0, x)}, 
-                              filename = raster::rasterTmpFile())
+    if(terra::ncell(newData2@natDist) == 1){
+      newData2@natDist <- makeDummyRast(distMet@landCover)
     }
     natDist <- newData2@natDist
   } else {
     natDist <- distMet@natDist
   }
   
-  natDist <- reclassify(natDist, cbind(NA, 0))
+  natDist <- terra::classify(natDist, cbind(NA, 0))
   
   distMet@processedData <- calcDMSpatial(anthroDist, natDist, distMet@landCover,
                                          distMet)

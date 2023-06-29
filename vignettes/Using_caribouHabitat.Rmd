@@ -4,8 +4,10 @@ output:
   rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using caribouHabitat}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -21,7 +23,7 @@ This vignette gives details on the use of the `caribouHabitat` function. This fu
 ```{r setup}
 library(caribouMetrics)
 library(dplyr)
-library(raster)
+library(terra)
 library(sf)
 pthBase <- system.file("extdata", package = "caribouMetrics")
 ```
@@ -43,13 +45,13 @@ The example data set loaded below includes a small area in the Nipigon caribou r
 
 ```{r load data}
 # load example data and classify plc into Resource Types
-landCoverD = raster(file.path(pthBase, "landCover.tif")) %>% 
+landCoverD = rast(file.path(pthBase, "landCover.tif")) %>% 
   reclassPLC()
-eskerDras = raster(file.path(pthBase, "eskerTif.tif"))
+eskerDras = rast(file.path(pthBase, "eskerTif.tif"))
 eskerDshp = st_read(file.path(pthBase, "esker.shp"), quiet = TRUE, agr = "constant")
-natDistD = raster(file.path(pthBase, "natDist.tif"))
-anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
-linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
+natDistD = rast(file.path(pthBase, "natDist.tif"))
+anthroDistD = rast(file.path(pthBase, "anthroDist.tif"))
+linFeatDras = rast(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE, 
                        agr = "constant")
 linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE, agr = "constant")
@@ -72,14 +74,14 @@ carHab1 <- caribouHabitat(
 )
 ```
 
-The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat`. To access a RasterStack object with a layer for each covariate in the RSPF model and the predictions for each season use the `results` function.
+The `caribouHabitat` function returns an S4 object with the class `CaribouHabitat`. To access a "SpatRaster" object with a layer for each covariate in the RSPF model and the predictions for each season use the `results` function.
 
 ```{r results1}
 str(carHab1, max.level = 2, give.attr = FALSE)
 results(carHab1)
 ```
 
-You can create a plot of the results directly from the `CaribouHabitat` object. If `tmap` is installed it will be used to make a plot, if not `plot.raster` will be used. You can provide the season(s) you wish to display and additional arguments that will be passed on to either `qtm` or `plot.raster`. 
+You can create a plot of the results directly from the `CaribouHabitat` object. If `tmap` is installed it will be used to make a plot, if not `terra::plot` will be used. You can provide the season(s) you wish to display and additional arguments that will be passed on to either `qtm` or `terra::plot`. 
 
 ```{r plot1, fig.width=8}
 plot(carHab1, season = c("Fall", "Summer"))
@@ -132,7 +134,7 @@ plot(MultRange, season = c("Winter", "Spring"))
 In most cases you will have a project area that is smaller than the environmental data sets available. For our example we will create this project area by selecting a rectangle inside our example data set. 
 
 ```{r create projPoly}
-ext <- raster::extent(landCoverD) - 30000
+ext <- ext(landCoverD) - 30000
 projectPolyD2 <- st_bbox(ext) %>% st_as_sfc() %>% st_as_sf() %>% st_set_crs(st_crs(landCoverD))
 ```
 
@@ -228,16 +230,16 @@ For example we can create several data sets that show roads expanding across our
 
 ```{r updateCaribou, fig.width=6, fig.height=6}
 # Create series of data sets
-ext <- raster::extent(linFeatDras)
+ext <- ext(linFeatDras)
 
 height <- dim(linFeatDras)[1]/4
 
 linFeatDras1 <- linFeatDras[1:height, , drop = FALSE] %>%
-  raster::extend(linFeatDras, value = 0)
+  extend(linFeatDras, fill = 0)
 linFeatDras2 <- linFeatDras[1:(height*2), , drop = FALSE] %>%
-  raster::extend(linFeatDras, value = 0)
+  extend(linFeatDras, fill = 0)
 linFeatDras3 <- linFeatDras[1:(height*3), , drop = FALSE] %>%
-  raster::extend(linFeatDras, value = 0)
+  extend(linFeatDras, fill = 0)
 
 par(mfrow = c(2, 2))
 plot(linFeatDras1)
@@ -325,11 +327,11 @@ carHabStd <- caribouHabitat(
 `reclassPLC` assumes that the land cover data come from the Provincial Land Cover (PLC) data for Ontario and uses the included table `plcToResType` to reclassify the raster values from the PLC codes to "resource types" which are groups of land cover classes used in the models. You can also supply land cover data from different sources, for example, the Ontario Far North Land Cover (FNLC) data, in which case you must supply the appropriate lookup table to convert the land cover classes to resource types. The `fnlcToResType` table is also included with the package but if a different data set was used you could also supply a custom lookup table. The custom lookup table must have two columns with names "PLCCode" and "ResourceType" where "PLCCode" is the value in the land cover raster and "ResourceType" is the corresponding letter code for the resource type. The possible resource types are included in `resTypeCode` and descriptions of these codes can be found in table S1.3 of [supplementary material](https://osf.io/x6e2q/?view_only=fb71321265d14dbeb3d932e4de66be0c) for Dyson et. al (in press). The resulting map below is quite different from the map above for the PLC because I used the same raw data for both but interpreted the codes differently.
 
 ```{r fnlc}
-landCoverRaw <- raster(file.path(pthBase, "landCover.tif")) 
+landCoverRaw <- rast(file.path(pthBase, "landCover.tif")) 
 
 # modify values to match Far North land cover (Not needed if the raw data is
 # actually from the Far North land cover data set)
-landCoverRaw <- subs(landCoverRaw, data.frame(from = c(28, 29), to  = c(-9, -99)), subsWithNA = FALSE)
+landCoverRaw <- subst(landCoverRaw, from = c(28, 29), to  = c(-9, -99))
 
 # use the Far North Land cover lookup table to reclassify the land cover to
 # resource types
@@ -375,8 +377,8 @@ res <- loadSpatialInputs(projectPoly = projectPolyD2, refRast = landCoverD,
                                           anthroDist = anthroDistD),
                         convertToRastDens = c("esker", "linFeatRas"),
                         useTemplate = c("esker", "linFeatRas"),
-                        altTemplate = raster(landCoverD) %>% 
-                          raster::`res<-`(c(400, 400)),
+                        altTemplate = rast(landCoverD) %>% 
+                          `res<-`(c(400, 400)),
                         bufferWidth = 10000)
 
 str(res, max.level = 1)

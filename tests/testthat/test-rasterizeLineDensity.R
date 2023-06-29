@@ -58,7 +58,7 @@ test_that("can handle points", {
 #   spst_im <- spatstat.geom::pixellate(x = spatstat.geom::as.psp(sf::st_geometry(line)),
 #                                       W = raster.as.im(ras),
 #                                       DivideByPixelArea = F)
-#   spst_rast <- terra::rast(spst_im/(res(ras)[1]*res(ras)[2]/10000))
+#   spst_rast <- terra::rast(spst_im/(terra::res(ras)[1]*terra::res(ras)[2]/10000))
 #   spst_rast <- round(spst_rast, digits = 1)
 #   terra::crs(spst_rast) <- terra::crs(ras)
 #   spst_rast

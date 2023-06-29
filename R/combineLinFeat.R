@@ -29,19 +29,29 @@ combineLinFeat <- function(linFeats){
 processLinFeat <- function(x, crsUse = NULL){
   if(is.character(x)){
     if(grepl(".shp$", x)){
-      x <- st_read(x, quiet = TRUE, agr = "constant")
+      x <- sf::st_read(x, quiet = TRUE, agr = "constant")
     } else {
-      x <- raster::raster(x)
+      x <- terra::rast(x)
     }
   }
-  if(is(x, "Raster")){
-    x <- raster::rasterToPoints(x, fun = function(x){x > 0}, 
-                                    spatial = TRUE) %>% 
+  if(is(x, "RasterLayer")){
+    x <- terra::rast(x)
+  } 
+  if(is(x, "SpatRaster")){
+    x <- terra::subst(x, from = 0, to = NA) %>% 
+      terra::as.points(na.rm = TRUE) %>% 
       sf::st_as_sf() %>% sf::st_set_agr("constant")
   } 
   if(is(x, "Spatial")){
     x <- sf::st_as_sf(x) %>% sf::st_set_agr("constant")
   }
+  
+  if(!is(x, "sf")){
+    stop("linFeat elements must be one of the classes: sf, Spatial, ",
+         "RasterLayer, or SpatRaster, not ",
+         class(x), call. = FALSE)
+  }
+  
   if(is.null(crsUse)){
     return(x)
   }

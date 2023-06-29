@@ -14,7 +14,8 @@ loadSpatialInputs(
   useTemplate = NULL,
   reclassOptions = NULL,
   bufferWidth = NULL,
-  ptDensity = 1
+  ptDensity = 1,
+  rastOut = "terra"
 )
 }
 \arguments{
@@ -26,11 +27,11 @@ template that all other rasters must align to (but see \code{alttemplate}).}
 \item{inputsList}{list. A named list of inputs that are either spatial
 objects or file names of spatial objects. ".shp" is the only extension
 accepted for vector data and all other extensions will be passed to
-\code{raster}. If an element is a list these are assumed to be linear
-features and they are combined.}
+\code{raster}. If an element is a list these are assumed to be linear features
+and they are combined.}
 
-\item{convertToRast}{character. Optional. Names of elements of
-\code{inputsList} that should be converted to raster after loading.}
+\item{convertToRast}{character. Optional. Names of elements of \code{inputsList}
+that should be converted to raster after loading.}
 
 \item{convertToRastDens}{character. Optional. Names of elements of
 \code{inputsList} that should be converted to raster line density after loading.}
@@ -38,36 +39,38 @@ features and they are combined.}
 \item{altTemplate}{raster. Optional template raster for raster inputs that
 can have a different resolution from the \code{refRast}.}
 
-\item{useTemplate}{character. Optional. Names of elements of
-\code{inputsList} that use \code{altTemplate}.}
+\item{useTemplate}{character. Optional. Names of elements of \code{inputsList}
+that use \code{altTemplate}.}
 
 \item{reclassOptions}{list. An optional named list containing a function, a
 list where the first element is a function that takes the corresponding
-\code{inputsList} element as its first argument and the subsequent elements
-are named arguments for that function, or a matrix that will be passed to
-\code{\link[raster:reclassify]{raster::reclassify()}}.}
+\code{inputsList} element as its first argument and the subsequent elements are
+named arguments for that function, or a matrix that will be passed to
+\code{\link[terra:classify]{terra::classify()}}.}
 
 \item{bufferWidth}{numeric. The width of a moving window that will be applied
 to the data. If it is supplied a buffer of 3*\code{bufferWidth} around the
 \code{projectPoly} is used so that rasters will be cropped to a larger area.
 This can be used to avoid edge effects in moving window calculations}
 
-\item{ptDensity}{number. Only used if an element of \code{inputsList} is a
-list that contains a mixture of rasters and lines and is included in
+\item{ptDensity}{number. Only used if an element of \code{inputsList} is a list
+that contains a mixture of rasters and lines and is included in
 convertToRast. See \code{\link[=rasterizeLineDensity]{rasterizeLineDensity()}}.}
+
+\item{rastOut}{character. The format that rasters should be output with.
+"raster" for RasterLayers and "terra" for SpatRasters. The default is "terra".}
 }
 \value{
 A named list with aligned spatial data components
 }
 \description{
 Load spatial input data from file and then align the inputs to the
-\code{projectPoly} and \code{refRast}. Inputs can be file names or spatial
-objects.
+\code{projectPoly} and \code{refRast}. Inputs can be file names or spatial objects.
 }
 \examples{
 # create example rasters
-lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000,
-                     resolution = 250, crs = 5070)
+lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000, 
+                     resolution = 250, crs = "EPSG:5070")
 lc[] <- 0
 nd <- lc
 nd[1:30, 1:30] <- 1

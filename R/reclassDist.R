@@ -5,7 +5,7 @@
 #' `natDist` or `anthroDist` inputs for `caribouMetrics()` or
 #' `disturbanceMetrics()`.
 #'
-#' @param distYr sf object or rasterLayer. A simple feature collection or
+#' @param distYr sf object, SpatRaster or RasterLayer. A simple feature collection or
 #'   raster layer covering the focal area and including the year of disturbance
 #'   or time since disturbance as well as geometry (multipolygon) of the
 #'   disturbance.
@@ -13,8 +13,8 @@
 #'   year to include from `distYr`. If 0 assume `dateField` values indicate time since disturbance.
 #' @param numCumYrs numeric. Number of years before `endYr` to
 #'   include.
-#' @param template rasterLayer. A raster of the focal region, used as a
-#'   template to which disturbance information is projected. This layers
+#' @param template SpatRaster or RasterLayer. A raster of the focal region, used as a
+#'   template to which disturbance information is projected. This layer's
 #'   dimensions determine the dimensions of the output. It is recommended to use
 #'   the `landCover` raster layer used in `caribouMetrics()` or
 #'   `disturbanceMetrics()` to ensure equal dimensions
@@ -22,7 +22,7 @@
 #'   year/time since disturbance is recorded.
 #'
 #'
-#' @return Returns a binary `RasterLayer` with the same dimensions as the
+#' @return Returns a binary SpatRaster with the same dimensions as the
 #'   `template` input. Values of 1 represent areas of disturbance
 #'
 #' @examples

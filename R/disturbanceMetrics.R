@@ -34,18 +34,18 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'disturbance. To update an existing DisturbanceMetrics object with new data see
 #'[updateDisturbance()].
 #'
-#'@param landCover filename or RasterLayer. 0 and NA values are assumed to be
+#'@param landCover filename, SpatRaster or RasterLayer. 0 and NA values are assumed to be
 #'  water and omitted from the tabulated area. Note landCover is also used to
 #'  define the input grid, so must be provided even if all values are 1.
-#'@param linFeat filename, RasterLayer, sf object or a list of these that will
+#'@param linFeat filename, SpatRaster, RasterLayer, sf object or a list of these that will
 #'  be combined. Linear features.
 #'@param projectPoly filename or sf object. Polygons defining range boundaries.
 #'@param isPercent logical. Should the results be returned as a percentage? 
 #'@param ... optional arguments:
-#'   * natDist: filename or RasterLayer. Presence or absence of natural
+#'   * natDist: filename, SpatRaster or RasterLayer. Presence or absence of natural
 #'   disturbance, primarily by fire. Should include 40 years cumulative
 #'   disturbance.
-#'   * anthroDist: filename or RasterLayer. Anthropogenic disturbance including
+#'   * anthroDist: filename, SpatRaster or RasterLayer. Anthropogenic disturbance including
 #'   harvest. This can have an effect on any type of landcover except water.
 #'   Should include 40 years cumulative disturbance.
 #'   * padProjPoly: logical. Should the area around the `projectPoly` be
@@ -56,7 +56,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'   this to TRUE and provide a dataset that is larger than the
 #'   `projectPoly` to avoid edge effects.
 #'   * padFocal: logical. This value is passed to the pad argument in
-#'   `raster::focal`, if it is FALSE then cells near the edge will return
+#'   `terra::focal`, if it is FALSE then cells near the edge will return
 #'   NA, if it is TRUE a value will be returned for each cell that assumes cells
 #'   outside the input data are 0 for all resource types. This is not a good
 #'   assumption and should be used with caution.
@@ -64,10 +64,10 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'   disturbance in metres. Default is 500.
 #'   * linBuffMethod: character. The method used to buffer linear features if
 #'   they are supplied as sf lines. The default is "raster" in which case they
-#'   are rasterized using the stars package and buffered using a moving window
+#'   are rasterized and then buffered using a moving window
 #'   method. If "sf" then the lines are buffered with st_buffer and then
 #'   rasterized. Either way points are included in the raster output.
-#'   * saveOutput: character. The filename to save the RasterBrick of binary
+#'   * saveOutput: character. The filename to save the raster of binary
 #'   disturbances with buffered anthropogenic disturbance. Note this will
 #'   overwrite existing files with the same name. The .grd format is recommended
 #'   because it will preserve layer names when the file is reloaded.
@@ -90,7 +90,8 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'  
 #' @examples 
 #' # create example rasters
-#' lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+#' lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
+#'                   ymax = 10, crs = "EPSG:5070")
 #' nd <- lc
 #' nd[1:3, 1:3] <- 1
 #' ad <- lc
@@ -164,7 +165,7 @@ disturbanceMetrics <- function(landCover = NULL, linFeat = NULL,
                 " Use .grd format to preserve names")
       }
  
-      raster::writeRaster(x@processedData, filename = dots$saveOutput, 
+      terra::writeRaster(x@processedData, filename = dots$saveOutput, 
                           overwrite = TRUE, bylayer = byLayer, 
                           suffix = "names")
     }

@@ -36,12 +36,12 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'CaribouHabitat object with new data see [updateCaribou()].
 #'
 #'
-#'@param landCover filename or RasterLayer. Provincial landcover class
-#'@param esker filename, RasterLayer or sf object. Eskers. If it is a
-#'  RasterLayer then it should be esker density in m^2/ha.
-#'@param linFeat filename, RasterLayer, sf object or a list of these that will
-#'  be combined. Linear features. If it is a RasterLayer then it should be
-#'  linear feature density in m^2/ha. If a RasterLayer is provided as a list
+#'@param landCover filename, SpatRaster or RasterLayer. Provincial landcover class
+#'@param esker filename, SpatRaster or RasterLayer or sf object. Eskers. If it is a
+#'  raster then it should be esker density in m^2/ha.
+#'@param linFeat filename, SpatRaster, RasterLayer, or sf object or a list of these that will
+#'  be combined. Linear features. If it is a raster then it should be
+#'  linear feature density in m^2/ha. If a raster is provided as a list
 #'  element then ptDensity will be used to assign a density of linear features
 #'  in the pixel (default is 1).
 #'@param projectPoly filename or sf object. Polygon defining the project area.
@@ -57,10 +57,10 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'@param coefTable data.frame. table of coefficients to be used in the
 #'   model. Must match the format and naming of the default `coefTableHR`
 #'@param ... optional arguments:
-#'   * natDist: filename or RasterLayer. Presence or absence of natural 
+#'   * natDist: filename, SpatRaster or RasterLayer. Presence or absence of natural 
 #'   disturbance, primarily by fire. This should reflect cumulative natural 
 #'   disturbance over the preceding 30 years
-#'   * anthroDist: filename or RasterLayer. Anthropogenic disturbance including 
+#'   * anthroDist: filename, SpatRaster or RasterLayer. Anthropogenic disturbance including 
 #'   harvest.
 #'   * eskerSave: filename to save rasterized esker data.
 #'   * linFeatSave: filename to save rasterized linear feature data.
@@ -72,11 +72,11 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'   this to TRUE and provide a data set that is larger than the
 #'   `projectPoly` to avoid edge effects.
 #'   * padFocal: logical. This value is passed to the pad argument in
-#'   `raster::focal`, if it is FALSE then cells near the edge will return
+#'   `terra::focal`, if it is FALSE then cells near the edge will return
 #'   NA, if it is TRUE a value will be returned for each cell that assumes cells
 #'   outside the input data are 0 for all resource types. This is not a good
 #'   assumption and should be used with caution.
-#'   * saveOutput: character. The filename to save the rasterBrick of habitat
+#'   * saveOutput: character. The filename to save the raster of habitat
 #'   use probabilities to. Note this will overwrite any existing files. The .grd
 #'   format is recommended because it will preserve layer names when the file is
 #'   reloaded.
@@ -114,8 +114,8 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #'  
 #' @examples 
 #' # create example rasters
-#' lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
-#'                      resolution = 250, crs = 5070)
+#' lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000, 
+#'                      resolution = 250, crs = "EPSG:5070")
 #' lc[] <- 0
 #' nd <- lc
 #' nd[1:30, 1:30] <- 1
@@ -295,7 +295,7 @@ caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL,
               " Use .grd format to preserve names")
     }
     
-    raster::writeRaster(x@habitatUse, filename = dots$saveOutput, 
+    terra::writeRaster(x@habitatUse, filename = dots$saveOutput, 
                         overwrite = TRUE, bylayer = byLayer, 
                         suffix = "names")
   }

@@ -18,11 +18,11 @@ setMethod(
     # resample to 16ha and flag cells with >35% disturbance
     expVars <- applyDist(inData@landCover, inData@natDist, inData@anthroDist, 
                          tmplt)
- 
+
     # create raster attribute table
     inData@landCover <- terra::categories(
       inData@landCover, layer = 1,
-      left_join(terra::unique(inData@landCover),
+      left_join(terra::unique(inData@landCover) %>% setNames("landCover"),
                 resTypeCode, by = c(landCover = "code")) %>%
         setNames(c("ID", "ResourceType")))
     
@@ -129,17 +129,21 @@ setMethod(
       
     }
     
-    if(!all(sapply(newData[setdiff(names(newData), "linFeat")], is, "RasterLayer"))){
-      stop("All data supplied in the newData list must be RasterLayer objects", 
+    newData <- rapply(newData, f = terra::rast, classes = "RasterLayer", how = "replace")
+    
+    if(!all(sapply(newData[setdiff(names(newData), "linFeat")], is, "SpatRaster"))){
+      stop("All data supplied in the newData list must be SpatRaster or RasterLayer objects", 
            call. = FALSE)
     }
     
     # check alignment of new data with projectPoly except for linFeat
-    if(!do.call(raster::compareRaster, 
-                c(`names<-`(newData[which(names(newData) != "linFeat")], NULL),
-                  list(inData@landCover,inData@landCover,
-                       res = TRUE, extent = FALSE, 
-                       rowcol = FALSE, stopiffalse = FALSE)))){
+    rastCRSMatch <- lapply(newData[which(names(newData) != "linFeat")],
+                           terra::compareGeom,
+                           y = inData@landCover, crs = TRUE, res = TRUE, ext = FALSE, 
+                           rowcol = FALSE, stopOnError = FALSE) %>%
+      unlist() %>% all()
+    
+    if(!rastCRSMatch){
       stop("all raster data sets must have matching resolution", call. = FALSE)
     }
     
@@ -171,16 +175,16 @@ setMethod(
     }
     
     # resample linFeat if provided
-    if(inherits(newData$linFeat, "Raster")){
+    if(inherits(newData$linFeat, "SpatRaster")){
       message("resampling linFeat to match landCover resolution")
-      newData$linFeat <- raster::resample(newData$linFeat, tmplt, 
+      newData$linFeat <- terra::resample(newData$linFeat, tmplt, 
                                           method = "bilinear")
       inData@linFeat <- newData$linFeat
     } 
     
     # calculate moving window average for changed explanatory variables
     if(all(c("linFeat", "landCover") %in% names(newData))){
-      expVars <- expVars %>% addLayer(inData@linFeat)
+      expVars <- c(expVars, inData@linFeat)
       
       layernames <- c(resTypeCode %>% arrange(.data$code) %>%
                         pull(.data$ResourceType) %>% as.character(), "TDENLF")
@@ -195,8 +199,8 @@ setMethod(
     
     # window radius is radius of circle with winArea rounded to even number of
     # raster cells based on resolution
-    winRad <- (sqrt(inData@attributes$winArea*10000/pi)/res(expVars[[1]])[1]) %>% 
-      round(digits = 0)*res(expVars[[1]])[1] %>% 
+    winRad <- (sqrt(inData@attributes$winArea*10000/pi)/terra::res(expVars[[1]])[1]) %>% 
+      round(digits = 0)*terra::res(expVars[[1]])[1] %>% 
       round()
     
     message("Applying moving window.")
@@ -207,15 +211,13 @@ setMethod(
                                usePfocal = FALSE)
     
     if(all(c("MIX","DEC") %in% names(expVars))){
-      expVars <- expVars %>% 
-        raster::addLayer(expVars[["MIX"]] + expVars[["DEC"]]) %>% 
+      expVars <- c(expVars, (expVars[["MIX"]] + expVars[["DEC"]])) %>% 
         `names<-`(c(names(expVars), "LGMD"))
     }
     
     notUpdated <- which(!names(inData@processedData) %in% names(expVars)) 
     
-    expVars <- raster::stack(expVars, 
-                             inData@processedData[[notUpdated]])
+    expVars <- c(expVars, inData@processedData[[notUpdated]])
     # order output stack to match 
     inData@processedData <- expVars[[names(inData@processedData)]]
     
@@ -301,8 +303,8 @@ processAnthroDM <- function(anthroDist, linFeat, landCover,
   }
   
   # window radius 
-  winRad <- (inData@attributes$bufferWidth/res(anthroDist[[1]])[1]) %>% 
-    round(digits = 0)*res(anthroDist[[1]])[1] %>% 
+  winRad <- (inData@attributes$bufferWidth/terra::res(anthroDist[[1]])[1]) %>% 
+    round(digits = 0)*terra::res(anthroDist[[1]])[1] %>% 
     round()
   
   if(!inData@attributes$padProjPoly){
