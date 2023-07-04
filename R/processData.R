@@ -81,7 +81,9 @@ setMethod(
     
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,
                                nms = layernames, 
-                               pad = inData@attributes$padFocal, usePfocal = FALSE)
+                               naExternal = ifelse(inData@attributes$padFocal,
+                                                   "expand", "NA"), 
+                               naInternal = "interpolate")
     
     inData@processedData <- c(expVars, 
                               expVars[["MIX"]] + expVars[["DEC"]], 
@@ -207,8 +209,9 @@ setMethod(
     
     expVars <- movingWindowAvg(rast = expVars, radius = winRad,
                                nms = layernames, 
-                               pad = inData@attributes$padFocal, 
-                               usePfocal = FALSE)
+                               naExternal = ifelse(inData@attributes$padFocal,
+                                                   "expand", "NA"), 
+                               naInternal = "interpolate")
     
     if(all(c("MIX","DEC") %in% names(expVars))){
       expVars <- c(expVars, (expVars[["MIX"]] + expVars[["DEC"]])) %>% 
@@ -312,9 +315,11 @@ processAnthroDM <- function(anthroDist, linFeat, landCover,
   }
   
   anthroDist <- movingWindowAvg(rast = anthroDist, radius = winRad,
-                                nms = "ANTHRO", 
-                                pad = inData@attributes$padFocal, 
-                                offset = FALSE, usePfocal = FALSE)
+                                nms = "ANTHRO",
+                                naExternal = ifelse(inData@attributes$padFocal,
+                                                    "expand", "NA"), 
+                                naInternal = "interpolate", 
+                                offset = FALSE)
   
   anthroDist <- anthroDist > 0 
   
@@ -375,7 +380,7 @@ calcDM <- function(inData, isPercent){
   message("calculating disturbance metrics")
 
   rr <- terra::extract(inData@processedData, terra::vect(inData@projectPoly), 
-                      fun = "mean", bind = TRUE) %>% 
+                      fun = "mean", bind = TRUE, na.rm = TRUE) %>% 
     as.data.frame() %>% 
     select(all_of(names(inData@processedData)), everything()) %>% 
     mutate(zone = 1:n(), .before = everything())

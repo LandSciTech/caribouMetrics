@@ -27,6 +27,11 @@ dm <- disturbanceMetrics(
   bufferWidth = 500
 )
 
+test_that("results not na",{
+  dm@disturbanceMetrics %>% unlist() %>% is.na() %>% any() %>% `!`() %>% 
+    expect_true()
+})
+
 # dm@disturbanceMetrics
 # plot(dm@processedData)
 

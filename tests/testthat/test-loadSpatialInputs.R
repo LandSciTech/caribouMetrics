@@ -88,9 +88,12 @@ test_that("works when inputs have different crs", {
                           natDist = list(fn = reclassDist,
                                          endYr = 2020, 
                                          numCumYrs = 30,
-                                         dateField = "FIRE_YEAR"))
+                                         dateField = "FIRE_YEAR")),
+    rastOut = "raster"
   )
   expect_type(out3, "list")
+  
+  expect_s4_class(out3$refRast, "RasterLayer")
 })
 
 out4 <- loadSpatialInputs(
@@ -105,8 +108,7 @@ out4 <- loadSpatialInputs(
                         natDist = list(fn = reclassDist,
                                        endYr = 2020, 
                                        numCumYrs = 30,
-                                       dateField = "FIRE_YEAR")),
-  rastOut = "raster"
+                                       dateField = "FIRE_YEAR"))
 )
 
 test_that("use pre-loaded spatial inputs in caribouHabitat or disturbanceMetrics", {
@@ -136,6 +138,3 @@ test_that("use pre-loaded spatial inputs in caribouHabitat or disturbanceMetrics
   
 })
 
-test_that("outputs raster when asked", {
-  expect_s4_class(out4$refRast, "RasterLayer")
-})

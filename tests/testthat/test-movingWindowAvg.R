@@ -2,70 +2,69 @@
 mat <- matrix(c(rep(1,5000), rep(2, 5000)), nrow = 100, ncol = 100)
 exps <- terra::rast(mat, crs = "EPSG:5070")
 lyrs <- terra::segregate(exps)
+lyrs[55:60, 20:80] <- NA
 pt <- st_sfc(st_point(c(49.5, 50))) %>% st_sf(PID = 1) %>%
-  set_names(c("PID", "geometry")) %>% st_set_geometry("geometry")
+  set_names(c("PID", "geometry")) %>% st_set_geometry("geometry") %>% 
+  terra::vect()
 
-res <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = FALSE)
+# res <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = FALSE)
+# 
+# res2 <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE)
 
-res2 <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE)
+res_rast <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = FALSE)
 
-test_that("movingWindowAvg gives expected result on dummy data", {
-  # pfocal is giving wrong answers, it is not used by default any more so not
-  # figuring out now
+res2_rast <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE)
+
+test_that("defaults give expected result on dummy data", {
+  # result matches expected
+  expect_equal(terra::extract(res_rast$X1, pt)[1,2], 13/21)
   
-  # expect_equal(terra::extract(res$X1, pt), 13/21)
-  # expect_gt(terra::extract(res$X1, pt), terra::extract(res2$X1, pt))
-  })
+  # Offset results in larger window
+  expect_gt(terra::extract(res_rast$X1, pt)[1,2], 
+            terra::extract(res2_rast$X1, pt)[1,2])
+  
+  # edge should be 1
+  expect_equal(res_rast[[1]][1,5][1,1], 1)
+  #outside NA is not affected
+  expect_equal(res_rast[[1]][54, 21][1,1], 1)
+  # inside NA is still NA
+  expect_true(is.na(res_rast[[1]][55,20]))
+})
 
-test_that("pfocal and raster versions give same results",{
-  res_rast <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = FALSE, 
-                              usePfocal = FALSE)
+test_that("other options work",{
   
   res2_rast <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, 
-                               usePfocal = FALSE)
+                               naExternal = "NA", naInternal = "interpolate")
   
-  expect_equal(terra::extract(res_rast$X1, pt)[1,2], 13/21)
-  expect_gt(terra::extract(res_rast$X1, pt)[1,2], terra::extract(res2_rast$X1, pt)[1,2])
+  # NA edges leads to edge cells becoming NA and internal NAs are not
+  # catching but stay NA
+  expect_true(is.na(res2_rast[[1]][1,5]))
+  expect_true(!is.na(res2_rast[[1]][54, 21]))
+  expect_true(is.na(res2_rast[[1]][55,20]))
   
-  # expect_equal(res, res_rast)
-  # 
-  # expect_equal(res2, res2_rast)
+  res3_rast <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, 
+                               naExternal = "expand")
   
-  # for different padding situations as well
-  # res2_pad <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, pad = TRUE,
-  #                             padValue = NA)
+  # expand edges leads to edge cells not being NA and internal NAs are not
+  # catching but stay NA
+  expect_equal(res3_rast[[1]][1,5][1,1], 1)
+  expect_equal(res3_rast[[1]][54,21][1,1], 1)
+  expect_true(is.na(res3_rast[[1]][55,20]))
   
-  res2_pad_rast <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, pad = TRUE,
-                                   padValue = NA, usePfocal = FALSE)
   
-  # expect_equal(res2_pad, res2_pad_rast)
+  res4_rast <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, 
+                               naInternal = "interpolate")
+  # there is a little "bleeding" from the interpolation
+  expect_gt(res4_rast[[1]][54,55][1,1], 0)
+  expect_true(is.na(res4_rast[[1]][55,20]))
+
   
-  # res2_pad1 <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, pad = TRUE,
-  #                             padValue = 1)
+  res5_rast <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, 
+                               naInternal = "zero")
+  # NA assumed to be 0
+  expect_lt(res5_rast[[1]][54,45][1,1], 1)
+  expect_true(is.na(res5_rast[[1]][55,20]))
   
-  res2_pad1_rast <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, pad = TRUE,
-                                   padValue = 1, usePfocal = FALSE)
-  
-  expect_true(terra::all.equal(res2_pad_rast, res2_rast))
-  
-  res2_pad_naF <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, pad = TRUE,
-                              padValue = NA, na.rm = FALSE)
-  
-  res2_pad_naF_rast <- movingWindowAvg(lyrs, 2.5, c("X1", "X2"), offset = TRUE, pad = TRUE,
-                                   padValue = NA, usePfocal = FALSE, na.rm = FALSE)
-  
-  expect_equal(res2_pad_naF, res2_pad_naF_rast)
-  
-  # for NAs not on the edge
-  lyrs2 <- lyrs
-  lyrs2[40,50] <- NA
-  
-  res3 <- movingWindowAvg(lyrs2, 2.5, c("X1", "X2"), offset = TRUE)
-  
-  res3_rast <- movingWindowAvg(lyrs2, 2.5, c("X1", "X2"), offset = TRUE,
-                                   usePfocal = FALSE)
-  
-  expect_equal(res3, res3_rast)
 })
 
 # use bench::mark to compare speed

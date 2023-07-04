@@ -1,7 +1,7 @@
 # create example raster
 lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000,
                   resolution = 250, crs = "EPSG:5070")
-lc[] <- 1:ncell(lc)
+lc[] <- 1:terra::ncell(lc)
 
 # create line
 lf <- sf::st_sf(geometry = sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10000, 10000),

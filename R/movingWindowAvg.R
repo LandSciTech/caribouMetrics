@@ -13,8 +13,18 @@
 #' @noRd
 
 movingWindowAvg <- function(rast, radius, nms, offset = TRUE, 
-                            na.rm = TRUE, pad = FALSE, padValue = NA, 
-                            usePfocal = requireNamespace("pfocal", quietly = TRUE)){
+                            naInternal = c("ignore", "interpolate", "zero"),
+                            naExternal = c("ignore", "NA", "expand"),
+                            usePfocal = FALSE){
+  naInternal <- match.arg(naInternal)
+  naExternal <- match.arg(naExternal)
+  
+  # changed later if needed 
+  doMask <- FALSE
+  mean_fun <- "mean"
+  na.rm <- FALSE
+  padValue <- NA
+  pad <- FALSE
   
   nl <- terra::nlyr(rast)
 
@@ -120,9 +130,11 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
     stop("The project area is smaller than the window area", call. = FALSE)
   }
   
-  
-  
   if(usePfocal){
+    if(!requireNamespace("pfocal", quietly = TRUE)){
+      stop("Install pfocal with remotes::install_github('LandSciTech/pfocal') ",
+           "to use this option")
+    }
     if(!pad){
       if(na.rm){
         # ignore NAs inside the raster but still remove them on the edges
@@ -133,7 +145,7 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
       } else {
         padValue <- NA
       }
-
+      
     }
     if(nl == 1){
       rast <- pfocal::pfocal(rast, kernel = cf2, na.rm = na.rm, 
@@ -145,15 +157,52 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
       }
     }
   } else {
-    if(nl == 1){
-      rast <- terra::focal(rast, w = cf2, na.rm = na.rm, na.policy = "omit", 
-                           fillValue = padValue)
+    if(naInternal == "interpolate"){
+      rastIn <- rast
+      # interpolate NAs inside the raster 
+      rast <- terra::focal(rast, nrow(cf2), "mean", na.rm = TRUE, 
+                           na.policy = "only")
+      
+      doMask <- TRUE
+    } else if(naInternal == "ignore") {
+      na.rm <- TRUE
+      # mean_fun <- function(i){
+      #   weighted.mean(i/m, m, na.rm = TRUE)
+      # } 
+    } else if(naInternal == "zero"){
+      rastIn <- rast
+      # Set NAs inside the raster to 0
+      rast <- terra::subst(rast, from = NA, to = 0)
+      
+      doMask <- TRUE 
     } else {
-      for(i in 1:nl){
-        rast[[i]] <- terra::focal(rast[[i]], w = cf2, na.rm = na.rm, fillvalue = padValue,
-                                  na.policy = "omit")
-      }
+      stop("naInternal does not have an expected value", call. = FALSE)
     }
+    
+    if(naExternal == "NA"){
+      padValue <- NA
+      na.rm <- FALSE
+      if(naInternal == "ignore"){
+        stop("naInternal == 'ignore' and naExternal == 'NA' are not compatible",
+             call. = FALSE)
+      }
+    } else if (naExternal == "ignore"){
+      na.rm <- TRUE
+    } else if( naExternal == "expand"){
+      pad <- TRUE
+    }
+    rast <- terra::focal(rast, w = cf2, fun = mean_fun,
+                         na.rm = na.rm, 
+                         fillvalue = padValue,
+                         expand = pad,
+                         na.policy = "omit")
+    
+  }
+  
+  
+  if(doMask){
+    # add back internal NAs with masking
+    rast <- terra::mask(rast, rastIn)
   }
   
   

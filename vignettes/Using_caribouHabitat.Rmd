@@ -135,7 +135,8 @@ In most cases you will have a project area that is smaller than the environmenta
 
 ```{r create projPoly}
 ext <- ext(landCoverD) - 30000
-projectPolyD2 <- st_bbox(ext) %>% st_as_sfc() %>% st_as_sf() %>% st_set_crs(st_crs(landCoverD))
+projectPolyD2 <- st_bbox(ext) %>% st_as_sfc() %>% st_as_sf() %>%
+  st_set_crs(st_crs(landCoverD))
 ```
 
 The information that is outside our project area is still useful for preventing edge effects in our results. To use this data you can set `padProjPoly = TRUE` in the `caribouHabitat` call which will set a buffer around the project area based on the size of the moving window used to scale variables for that range. 

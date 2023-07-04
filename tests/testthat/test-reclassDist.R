@@ -12,9 +12,9 @@ test_that("all options work", {
                          template = plcD,
                          dateField = "FIRE_YEAR")
   
-  expect_s4_class(natDist, "Raster")
+  expect_s4_class(natDist, "SpatRaster")
   
-  fireYrRast <- terra::rasterize(fireYr, raster = plcD, field = "FIRE_YEAR", 
+  fireYrRast <- terra::rasterize(terra::vect(fireYr), plcD, field = "FIRE_YEAR", 
                                      background = 0)
   # with raster year input
   natDist2 <- reclassDist(fireYrRast,
@@ -44,7 +44,7 @@ test_that("all options work", {
   expect_true(terra::global(natDist - natDist4, "max") == 0)
   
   # if it was na in input raster should come out as 0
-  fireYrRast2 <- terra::rasterize(fireYr, raster = plcD, field = "FIRE_YEAR", 
+  fireYrRast2 <- terra::rasterize(terra::vect(fireYr), plcD, field = "FIRE_YEAR", 
                        background = NA)
   
   natDist5 <- reclassDist(2010 - fireYrRast2,

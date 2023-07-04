@@ -275,25 +275,25 @@ resRange2 <- caribouHabitat(
 )
 
 test_that("results for two ranges done separately same as done together",{
-  ext1 <- terra::ext(resRange1@habitatUse)
+  ext1 <- terra::ext(resRange1@habitatUse) %>% as.vector()
   pointCompare <- st_sf(ID = 1, 
-                        geometry = st_sfc(st_point(c((ext1@xmax - ext1@xmin)/2 + ext1@xmin, 
-                                                     (ext1@ymax - ext1@ymin)/2 + ext1@ymin))),
+                        geometry = st_sfc(st_point(c((ext1["xmax"] - ext1["xmin"])/2 + ext1["xmin"], 
+                                                     (ext1["ymax"] - ext1["ymin"])/2 + ext1["ymin"]))),
                         crs = st_crs(resRange1@habitatUse))
   expect_lt(
-  terra::extract(resRange1@habitatUse$Fall, pointCompare)-
-    terra::extract(resTwoRangeDifWin@habitatUse$Fall, pointCompare),
+  terra::extract(resRange1@habitatUse$Fall, pointCompare)[1,1]-
+    terra::extract(resTwoRangeDifWin@habitatUse$Fall, pointCompare)[1,1],
   0.01
   )
   
-  ext2 <- terra::ext(resRange2@habitatUse)
+  ext2 <- terra::ext(resRange2@habitatUse) %>% as.vector()
   pointCompare <- st_sf(ID = 1, 
-                        geometry = st_sfc(st_point(c((ext2@xmax - ext2@xmin)/2 + ext2@xmin, 
-                                                     (ext2@ymax - ext2@ymin)/2 + ext2@ymin))),
+                        geometry = st_sfc(st_point(c((ext2["xmax"] - ext2["xmin"])/2 + ext2["xmin"], 
+                                                     (ext2["ymax"] - ext2["ymin"])/2 + ext2["ymin"]))),
                         crs = st_crs(resRange2@habitatUse))
   expect_lt(
-    terra::extract(resRange2@habitatUse$Fall, pointCompare)-
-      terra::extract(resTwoRangeDifWin@habitatUse$Fall, pointCompare),
+    terra::extract(resRange2@habitatUse$Fall, pointCompare)[1,1]-
+      terra::extract(resTwoRangeDifWin@habitatUse$Fall, pointCompare)[1,1],
     0.01
   )
   
