@@ -94,9 +94,9 @@ demRates <- demographicRates(covTable = disturb_tbl,
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.86675 1.732936   40.45363        0.5868729   0 0.8479506 0.05932629
-#>     S_PIlow  S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7352235 0.9380413 0.1816836 0.1002984 0.04896882 0.3716495
+#> 1    1 39.86675 1.732936   40.45363        0.5868729   0 0.8479506 0.05405621
+#>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
+#> 1 0.7487979 0.9302797 0.1816836 0.09490028 0.06382286 0.3828127
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
@@ -104,7 +104,7 @@ popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar,
 
 popGrow
 #>     N0    lambda   N       R_t       S_t n_recruits surviving_adFemales
-#> 1 2000 0.9248875 418 0.1831704 0.8538016         42                 376
+#> 1 2000 0.9200186 376 0.1803221 0.8396411         22                 354
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(
@@ -126,6 +126,7 @@ ipm <- caribouBayesianIPM(simObs$simSurvObs, simObs$ageRatioOut,
 #> using Kaplan-Meier survival model
 
 natSim <- getSimsNational(Anthro = unique(simObs$simDisturbance$Anthro))
+#> Warning: Setting expected survival S_bar to be between l_S and h_S.
 
 ipmTbls <- getOutputTables(ipm, paramTable = simObs$paramTable, 
                             exData = simObs$exData, 

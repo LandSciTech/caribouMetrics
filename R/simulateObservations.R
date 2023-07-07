@@ -145,8 +145,8 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
 
   simDisturbance$time <- NULL
   if (printPlot) {
-    base1 <- ggplot2::ggplot(data = popMetrics, ggplot2::aes_string(
-      x = "Timestep", y = "Amount", colour = "Replicate",
+    base1 <- ggplot2::ggplot(data = popMetrics, ggplot2::aes(
+      x = .data[["Timestep"]], y = .data[["Amount"]], colour = .data[["Replicate"]],
       group = "Replicate"
     )) +
       ggplot2::geom_line() +

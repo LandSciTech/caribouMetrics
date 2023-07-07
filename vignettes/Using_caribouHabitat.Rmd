@@ -134,7 +134,7 @@ plot(MultRange, season = c("Winter", "Spring"))
 In most cases you will have a project area that is smaller than the environmental data sets available. For our example we will create this project area by selecting a rectangle inside our example data set. 
 
 ```{r create projPoly}
-ext <- ext(landCoverD) - 30000
+ext <- ext(landCoverD) - 10000
 projectPolyD2 <- st_bbox(ext) %>% st_as_sfc() %>% st_as_sf() %>%
   st_set_crs(st_crs(landCoverD))
 ```
@@ -164,7 +164,7 @@ tmap::qtm(landCoverD, raster = "black")+
 ```
 
 The black area on the map above shows the extent of the original `landCover` data, the raster shows the `landCover` data that has been cropped to a buffer around `projectPoly` which is the black rectangle.  
-Next we will demonstrate the importance of setting `padProjPoly = TRUE`, if the data is available, by showing the difference in the results for padding using the data outside the project area, no padding, and using 0s to pad the area outside the project using `padFocal = TRUE` 
+Next we will demonstrate the importance of setting `padProjPoly = TRUE`, if the data is available, by showing the difference in the results for padding using the data outside the project area, no padding, and using the value from the edge to pad the area outside the project using `padFocal = TRUE` 
 
 ```{r compare pad, fig.width=8, fig.height=5}
 carHab3 <- caribouHabitat(
@@ -199,7 +199,7 @@ plot(carHab3, season = "Fall", title = "No padding",
   tmap::qtm(carHab3@projectPoly, fill = NULL, borders = "red", 
             shape.is.master = TRUE)
 
-plot(carHab4, season = "Fall", title = "Pad with 0 outside project", 
+plot(carHab4, season = "Fall", title = "Pad with same value as edge", 
      raster.breaks = c(0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 1),
      layout.legend.outside = TRUE)+
   tmap::qtm(carHab3@projectPoly, fill = NULL, borders = "red", 
@@ -207,7 +207,7 @@ plot(carHab4, season = "Fall", title = "Pad with 0 outside project",
 
 ```
 
-The difference is large in this example because the project area is very small compared to the window size. The example with no padding is the default because it prevents users from relying on questionable results. The example padded with data outside the project polygon is the preferred option since it makes use of all available information but it is not the default because it should only be used when the data provided is larger than the project area. The version where cells are padded with 0s gives results but they can be misleading. Based on the land cover data in the previous map you can see that there is an area with resource type LGOP near the border of `projectPoly` on the top right. LGOP has a strong positive effect on caribou habitat use so in the version padded with data cells on the top right edge have higher probability of use than in the version with 0s as padding. In general the predictions are lower around the edges in the version with 0s as padding because the cells outside the `projectPoly` are 0 when taking the weighted sum of values in the window. Therefore it is highly recommended to provide data for the area around the project and to use `padProjPoly = TRUE`.  
+The difference is large in this example because the project area is very small compared to the window size. The example with no padding is the default because it prevents users from relying on questionable results. The example padded with data outside the project polygon is the preferred option since it makes use of all available information but it is not the default because it should only be used when the data provided is larger than the project area. The version where cells are padded the values from the edge gives results but they can be misleading. Based on the land cover data in the previous map you can see that there is an area with resource type LGOP just inside the border of `projectPoly` in the top middle. LGOP has a strong positive effect on caribou habitat so when values from the edge are used to pad the data the patch of higher use habitat becomes larger than it really is in the version that uses real data. Therefore it is highly recommended to provide data for the area around the project and to use `padProjPoly = TRUE`.  
 
 ## Example with other inputs
 As mentioned above `caribouHabitat` can be called in several different ways. You can provide the data as filepaths instead of spatial objects, you can provide the eskers and linear features as vector files which will be converted to rasters, and you can provide a list of sf objects to be combined into the linear features raster. 
