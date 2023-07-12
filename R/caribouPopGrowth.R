@@ -58,6 +58,7 @@
 #' @param h_R Number. Maximum recruitment.
 #' @param l_S Number. Minimum survival.
 #' @param h_S Number. Maximum survival.
+#' @param c Number. Bias correction term.
 #' @param interannualVar list or logical. List containing interannual
 #'   variability parameters. These can be either coefficients of variation
 #'   (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to `FALSE` to
@@ -65,7 +66,7 @@
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
 #' @param adjustR Logical. Adjust R to account for delayed age at first
-#'   reproduction (DeCesare et al. 2012; Eacker et al. 2019).
+#'   reproduction (DeCesare et al. 2012; Eacker et al. 2019). 
 #' @param progress Logical. Should progress updates be shown?
 #'
 #' @return A data.frame of population size (`N`) and average growth rate
@@ -111,6 +112,7 @@ caribouPopGrowth <- function(N0,
                              h_R=0.82,
                              l_S=0.61,
                              h_S=1,
+                             c=1,
                              interannualVar = list(R_CV=0.46,S_CV=0.08696),
                              probOption="binomial",
                              adjustR=FALSE,
@@ -188,6 +190,9 @@ caribouPopGrowth <- function(N0,
     if(is.element("R_phi",names(interannualVar))){
       R_t=s*R_t
     }
+    
+    #bias adjustment, if any
+    R_t=c*R_t
 
     if(adjustR){
       R_tadj=R_t/(1+R_t)
