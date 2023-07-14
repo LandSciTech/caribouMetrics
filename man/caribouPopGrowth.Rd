@@ -20,6 +20,7 @@ caribouPopGrowth(
   h_R = 0.82,
   l_S = 0.61,
   h_S = 1,
+  c = 1,
   interannualVar = list(R_CV = 0.46, S_CV = 0.08696),
   probOption = "binomial",
   adjustR = FALSE,
@@ -59,6 +60,8 @@ one or more sample populations.}
 \item{l_S}{Number. Minimum survival.}
 
 \item{h_S}{Number. Maximum survival.}
+
+\item{c}{Number. Bias correction term.}
 
 \item{interannualVar}{list or logical. List containing interannual
 variability parameters. These can be either coefficients of variation

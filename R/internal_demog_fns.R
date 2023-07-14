@@ -165,12 +165,10 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
     # add results to output set
     fds <- subset(pars, select = c("replicate", "Anthro", "fire_excl_anthro",
                                    "S_t", "R_t", "N",
-                                   "lambda", "n_recruits", "surviving_adFemales"))
+                                   "lambda"))
     fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
     names(fds) <- c("Replicate", "Anthro", "fire_excl_anthro", "survival",
-                    "recruitment", "N", "lambda", "n_recruits", "n_cows")
-    # apparent number of calves per cow, not actual, from unadjusted R_t
-    fds$n_recruits <- fds$recruitment * fds$n_cows
+                    "recruitment", "N", "lambda")
     fds <- tidyr::pivot_longer(fds, !.data$Replicate, names_to = "MetricTypeID",
                                values_to = "Amount")
     fds$Timestep <- t * stepLength
@@ -193,15 +191,15 @@ simCalfCowRatios <- function(cowCounts, minYr, exData) {
   ageRatioOut <- tidyr::pivot_wider(ageRatioOut, id_cols = c("Year"),
                                     names_from = "Class", values_from = "Count")
   ageRatioOut <- merge(ageRatioOut,
-                       subset(exData, select = c("Year", "n_recruits", "n_cows")))
-  # rbinom needs n_recruits to be <= n_cows and n_cows not 0
-  n_recs <- pmin(ageRatioOut$n_cows, ageRatioOut$n_recruits)
+                       subset(exData, select = c("Year", "recruitment")))
+  #apparent number of calves (M+F) from apparent number of cows using apparent recruitment rate
   ageRatioOut$calf <- ifelse(ageRatioOut$n_cows == 0, 0,
                              rbinom(
                                n = nrow(ageRatioOut), size = ageRatioOut$cow,
-                               prob = n_recs / ageRatioOut$n_cows
+                               prob = ageRatioOut$recruitment
                              )
   )
+  ageRatioOut$recruitment = NULL
   ageRatioOut <- subset(ageRatioOut, select = c("Year", "calf", "cow"))
   ageRatioOut <- tidyr::pivot_longer(ageRatioOut, cols = c("calf", "cow"),
                                      names_to = "Class", values_to = "Count")
