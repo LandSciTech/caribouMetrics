@@ -39,7 +39,6 @@ LazyData: true
 RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
 Imports:
-    raster,
     dplyr,
     data.table,
     sf,

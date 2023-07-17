@@ -236,9 +236,9 @@ test_that("results are different when disturbance is missing", {
 resultCompare <- readRDS(file.path(test_path("data"), "resultCompare.rds"))
 
 # To update
-# saveRDS(data_esktif_linFtif@habitatUse, 
-          # file.path("tests/testthat/data", "resultCompare.rds"), 
-          # version = 2)
+# saveRDS(terra::wrap(data_esktif_linFtif@habitatUse),
+#         file.path("tests/testthat/data", "resultCompare.rds"),
+#         version = 2)
 
 testthat::test_that("results match previous results",{
   testthat::expect_true(

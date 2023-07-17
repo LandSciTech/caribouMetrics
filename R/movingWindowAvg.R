@@ -25,6 +25,7 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
   na.rm <- FALSE
   padValue <- NA
   pad <- FALSE
+  doAltFun <- FALSE
   
   nl <- terra::nlyr(rast)
 
@@ -166,9 +167,17 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
       doMask <- TRUE
     } else if(naInternal == "ignore") {
       na.rm <- TRUE
-      # mean_fun <- function(i){
-      #   weighted.mean(i/m, m, na.rm = TRUE)
-      # } 
+      if(packageVersion("terra") < "1.7.41"){
+        mean_fun <- function(i, weights, na.rm){
+          weighted.mean(i, w = weights, na.rm=na.rm)
+        } 
+        
+        w <- as.vector(cf2)
+        cf2 <- ncol(cf2)
+        doAltFun <- TRUE
+        
+        message("update to terra version > 1.7.41 for faster moving window")
+      }
     } else if(naInternal == "zero"){
       rastIn <- rast
       # Set NAs inside the raster to 0
@@ -191,11 +200,27 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
     } else if( naExternal == "expand"){
       pad <- TRUE
     }
-    rast <- terra::focal(rast, w = cf2, fun = mean_fun,
-                         na.rm = na.rm, 
-                         fillvalue = padValue,
-                         expand = pad,
-                         na.policy = "omit")
+    
+    if(doAltFun){
+      if(terra::nlyr(rast) > 1){
+        lapply(1:terra:nlyr(rast), \(x){
+          rast <- terra::focal(rast[[x]], w = cf2, fun = mean_fun,
+                               weights = w,
+                               na.rm = na.rm, 
+                               fillvalue = padValue,
+                               expand = pad,
+                               na.policy = "omit")
+        })
+      }
+
+    } else {
+      rast <- terra::focal(rast, w = cf2, fun = mean_fun,
+                           na.rm = na.rm, 
+                           fillvalue = padValue,
+                           expand = pad,
+                           na.policy = "omit")
+    }
+
     
   }
   

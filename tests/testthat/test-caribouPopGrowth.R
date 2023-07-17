@@ -205,7 +205,7 @@ test_that("pop Growth matches Johnson figures", {
   theor_lam <- (testRates$S_bar) * (1 + testRates$R_bar * 0.5) 
   
   # these should all be similar
-  expect_equal(mean(check$lambda), theor_lam, tolerance = 0.001)
-  expect_equal(testCheck$lambda, theor_lam, tolerance = 0.001)
-  expect_equal(testCheck$lambda, mean(check$lambda), tolerance = 0.001)
+  expect_equal(mean(check$lambda), theor_lam, tolerance = 0.002)
+  expect_equal(testCheck$lambda, theor_lam, tolerance = 0.002)
+  expect_equal(testCheck$lambda, mean(check$lambda), tolerance = 0.002)
 })

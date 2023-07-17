@@ -31,7 +31,8 @@
 #'
 #' @examples
 #' # create example rasters
-#' lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+#' lc <- terra::rast(xmin = 0, xmax = 10, ymin = 0, ymax = 10, 
+#'                      ncols = 10, nrow = 10, crs = "EPSG:5070")
 #' nd <- lc
 #' nd[1:3, 1:3] <- 1
 #' ad <- lc

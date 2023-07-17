@@ -217,7 +217,7 @@ test_that("NAs handled correctly", {
 resultCompare <- readRDS(file.path(test_path("data"), "dm_resultCompare.rds"))
 
 # To update
-# saveRDS(dm@disturbanceMetrics, file.path("tests/testthat/data", "dm_resultCompare.rds"), 
+# saveRDS(dm@disturbanceMetrics, file.path("tests/testthat/data", "dm_resultCompare.rds"),
 # version = 2)
 
 testthat::test_that("results match previous results",{
