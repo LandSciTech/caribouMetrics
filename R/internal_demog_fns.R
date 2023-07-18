@@ -202,7 +202,7 @@ simCalfCowRatios <- function(cowCounts, minYr, exData) {
   ageRatioOut <- merge(ageRatioOut,
                        subset(exData, select = c("Year", "recruitment")))
   #apparent number of calves (M+F) from apparent number of cows using apparent recruitment rate
-  ageRatioOut$calf <- ifelse(ageRatioOut$n_cows == 0, 0,
+  ageRatioOut$calf <- ifelse(ageRatioOut$cow == 0, 0,
                              rbinom(
                                n = nrow(ageRatioOut), size = ageRatioOut$cow,
                                prob = ageRatioOut$recruitment
