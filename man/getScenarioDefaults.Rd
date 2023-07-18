@@ -25,8 +25,8 @@ getScenarioDefaults(
   uMax = 0.2,
   zMin = 0,
   zMax = 0.2,
+  cowMult = 6,
   collarInterval = NA,
-  cowMult = NA,
   cowCount = NA,
   collarCount = NA,
   startYear = NA,
@@ -80,11 +80,10 @@ rate)}
 
 \item{zMax}{number in 0, 1. Maximum probability of missing calves in composition survey.}
 
+\item{cowMult}{number. The apparent number of adult females per collared animal in composition survey.}
+
 \item{collarInterval}{number. Optional. Number of years between collar deployments. If
 missing assumed to be every year}
-
-\item{cowMult}{number. Optional. If provided number of cows is \code{cowMult} \*
-number of surviving collared cows at month 5}
 
 \item{cowCount}{Optional. Only used in \code{runScnSet()} to set the number of cows per
 year in recruitment survey}
