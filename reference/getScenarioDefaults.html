@@ -95,8 +95,8 @@ simulateObservations()"><!-- mathjax --><script src="https://cdnjs.cloudflare.co
 <span>  uMax <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  zMin <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  zMax <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  cowMult <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>  collarInterval <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  cowMult <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  cowCount <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  collarCount <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  startYear <span class="op">=</span> <span class="cn">NA</span>,</span>
@@ -192,14 +192,13 @@ rate)</p></dd>
 <dd><p>number in 0, 1. Maximum probability of missing calves in composition survey.</p></dd>
 
 
+<dt>cowMult</dt>
+<dd><p>number. The apparent number of adult females per collared animal in composition survey.</p></dd>
+
+
 <dt>collarInterval</dt>
 <dd><p>number. Optional. Number of years between collar deployments. If
 missing assumed to be every year</p></dd>
-
-
-<dt>cowMult</dt>
-<dd><p>number. Optional. If provided number of cows is <code>cowMult</code> \*
-number of surviving collared cows at month 5</p></dd>
 
 
 <dt>cowCount</dt>
@@ -264,10 +263,10 @@ population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     0       0              2               2         1         1       0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sQuantile projYears obsYears   N0 adjustR assessmentYrs qMin qMax uMin uMax</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       0.5        35       15 1000    TRUE             3    0  0.6    0  0.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   zMin zMax curYear ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0  0.2    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                  label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_obsYears15_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro0_iFire0_</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   zMin zMax cowMult curYear ID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0  0.2       6    2023  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                           label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_cowMult6_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_obsYears15_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro0_iFire0_</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   startYear</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      2009</span>
 <span class="r-in"><span></span></span>
@@ -277,10 +276,10 @@ population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    10      20              2               2         1         1       0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sQuantile projYears obsYears   N0 adjustR assessmentYrs qMin qMax uMin uMax</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       0.5        35        1 1000    TRUE             3    0  0.6    0  0.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   zMin zMax curYear ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0  0.2    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                   label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_obsYears1_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro20_iFire10_</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   zMin zMax cowMult curYear ID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0  0.2       6    2023  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                            label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_cowMult6_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_obsYears1_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro20_iFire10_</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   startYear</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      2023</span>
 <span class="r-in"><span></span></span>
