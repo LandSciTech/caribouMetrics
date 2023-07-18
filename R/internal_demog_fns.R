@@ -102,7 +102,8 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                           recSlopeMultiplier = 1, sefSlopeMultiplier = 1,
                           recQuantile = 0.5, sefQuantile = 0.5,
-                          stepLength = 1, N0 = 1000, adjustR = T) {
+                          stepLength = 1, N0 = 1000, adjustR = T,cowMult=1,
+                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0) {
   # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
   # recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
   # stepLength=1;N0=1000
@@ -130,7 +131,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   )
   # manually set quantiles for example population
   popGrowthParsSmall$coefSamples_Survival$quantiles <- sefQuantile
-
+  
   # Only use precision if included in the table for this model number for both
   # rec and surv
   usePrec <- "Precision" %in% names(popGrowthParsSmall$coefSamples_Survival$coefValues) &
@@ -148,16 +149,24 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
       ignorePrecision = !usePrec,
       returnSample = TRUE
     )
+    if(t ==1){
+      #set bias correction term for each example population - constant over time.
+      bc = unique(subset(rateSamples$replicate));nr=nrow(bc)
+      bc$c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
+    }
+    rateSamples$c = NULL; rateSamples = merge(rateSamples, bc)
+    
     if (is.element("N", names(pars))) {
       pars <- subset(pars, select = c("replicate", "N"))
       names(pars)[names(pars) == "N"] <- "N0"
     }
     pars <- merge(pars, rateSamples)
+    
     pars <- cbind(
       pars,
       caribouPopGrowth(pars$N0,
                        R_bar = pars$R_bar, S_bar = pars$S_bar,
-                       numSteps = stepLength, K = FALSE, l_R = 1e-06, adjustR = adjustR, 
+                       numSteps = stepLength, K = FALSE, l_R = 1e-06, adjustR = adjustR, c=pars$c,
                        progress = FALSE
       )
     )

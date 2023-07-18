@@ -139,7 +139,8 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
       recSlopeMultiplier = paramTable$rSlopeMod,
       sefSlopeMultiplier = paramTable$sSlopeMod, recQuantile = paramTable$rQuantile,
       sefQuantile = paramTable$sQuantile,
-      N0 = paramTable$N0, adjustR = paramTable$adjustR 
+      N0 = paramTable$N0, adjustR = paramTable$adjustR,cowMult=paramTable$cowMult,
+      qMin=paramTable$qMin,qMax=paramTable$qMax,uMin=paramTable$uMin,uMax=paramTable$uMax,zMin=paramTable$zMin,zMax=paramTable$zMax 
     )
   )
 

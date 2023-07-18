@@ -17,7 +17,7 @@ getScenarioDefaults(
   projYears = 35,
   obsYears = 15,
   N0 = 1000,
-  adjustR = FALSE,
+  adjustR = TRUE,
   assessmentYrs = 3,
   qMin = 0,
   qMax = 0.6,
@@ -127,6 +127,7 @@ population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.
 Caribou demography functions:
 \code{\link{caribouBayesianIPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
