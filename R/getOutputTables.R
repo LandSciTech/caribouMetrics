@@ -133,7 +133,7 @@ getOutputTables <- function(caribouBayesDemogMod,
     if(!all(unique(simObsList$disturbanceIn$Anthro) %in% simNational$summary$Anthro)){
       message("recalculating national sims to match anthropogenic distubance scenario")
       
-      simNational <- getSimsNational(Anthro = unique(simObsList$disturbanceIn$Anthro))
+      simNational <- getSimsNational(Anthro = unique(simObsList$disturbanceIn$Anthro),cPars=paramTable)
     }
     
     simBigO <- subset(simNational$summary, select = c("Anthro", "Mean", "lower",

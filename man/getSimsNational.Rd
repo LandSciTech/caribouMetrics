@@ -11,7 +11,8 @@ getSimsNational(
   fire_excl_anthro = 0,
   useQuantiles = NULL,
   populationGrowthTable = NULL,
-  adjustR = FALSE,
+  adjustR = TRUE,
+  cPars = getScenarioDefaults(),
   forceUpdate = F
 )
 }
@@ -43,6 +44,8 @@ confidence interval.}
 
 \item{adjustR}{Logical. Adjust R to account for delayed age at first
 reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
+
+\item{cPars}{optional. Parameters for calculating composition survey bias term.}
 
 \item{forceUpdate}{logical. If the default inputs are used the result is
 cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}

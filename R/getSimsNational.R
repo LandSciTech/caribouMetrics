@@ -29,6 +29,7 @@ if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
 #' @inheritParams demographicCoefficients
 #' @inheritParams caribouPopGrowth
 #' @param N0 initial population size
+#' @param cPars optional. Parameters for calculating composition survey bias term.
 #'
 #' @return a list with two elements:
 #'  * summary: a tibble with a summary of parameter values for each scenario.
@@ -43,7 +44,7 @@ if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
 #' getSimsNational()
 getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, by = 1),
                             fire_excl_anthro = 0, useQuantiles  = NULL,
-                            populationGrowthTable  = NULL, adjustR = FALSE, forceUpdate = F) {
+                            populationGrowthTable  = NULL, adjustR = TRUE, cPars=getScenarioDefaults(), forceUpdate = F) {
   # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;
   # useQuantiles =NULL;adjustR=F;forceUpdate=F
   doSave <- FALSE
@@ -94,10 +95,16 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
                                        popGrowthPars = popGrowthPars,
                                        returnSample = T)
   }
+  
+  bc = unique(subset(rateSamplesAll,select=replicate));nr=nrow(bc)
+  bc$c = compositionBiasCorrection(q=runif(nr,cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
+                                   z=runif(nr,cPars$zMin,cPars$zMax))
+  rateSamplesAll$c = NULL; rateSamplesAll= merge(rateSamplesAll, bc)
+  
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
   pars <- cbind(pars, caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
                                        S_bar = pars$S_bar, numSteps = 1,
-                                       K = FALSE, adjustR = adjustR, progress = FALSE))
+                                       K = FALSE, adjustR = adjustR, c=pars$c, progress = FALSE))
   simSurvBig <- pars %>%
     select("Anthro", "S_t") %>%
     group_by(.data$Anthro) %>%
