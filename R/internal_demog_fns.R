@@ -151,7 +151,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
     )
     if(t ==1){
       #set bias correction term for each example population - constant over time.
-      bc = unique(subset(rateSamples$replicate));nr=nrow(bc)
+      bc = unique(rateSamples,select=replicate);nr=nrow(bc)
       bc$c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
     }
     rateSamples$c = NULL; rateSamples = merge(rateSamples, bc)
