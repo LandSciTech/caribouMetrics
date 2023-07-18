@@ -17,6 +17,12 @@
 #' @param sQuantile number in 0, 1. Survival quantile
 #' @param projYears Number of years of projections
 #' @param obsYears Number of years of observations
+#' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.
+#' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.
+#' @param uMin number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.
+#' @param uMax number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.
+#' @param zMin number in 0, 1. Minimum probability of missing calves in composition survey.
+#' @param zMax number in 0, 1. Maximum probability of missing calves in composition survey.
 #' @inheritParams caribouPopGrowth
 #' @inheritParams caribouBayesianIPM
 #' @param collarInterval number. Optional. Number of years between collar deployments. If
@@ -55,7 +61,8 @@ getScenarioDefaults <- function(paramTable = NULL,
                          iFire = 0, iAnthro = 0, obsAnthroSlope = 2, projAnthroSlope = 2,
                          rSlopeMod = 1, sSlopeMod = 1,
                          rQuantile = 0.5, sQuantile = 0.5, projYears = 35, obsYears = 15, N0 = 1000,
-                         adjustR = FALSE, assessmentYrs = 3,
+                         adjustR = FALSE, assessmentYrs = 3,qMin=0,qMax =0.6,
+                         uMin = 0, uMax = 0.2, zMin = 0, zMax = 0.2,
                          collarInterval = NA, cowMult = NA, cowCount = NA, 
                          collarCount = NA, startYear = NA,
                          curYear = 2023) {
