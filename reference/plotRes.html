@@ -127,6 +127,7 @@ was given.</p>
     <div class="dont-index"><p>Caribou demography functions:
 <code><a href="caribouBayesianIPM.html">caribouBayesianIPM</a>()</code>,
 <code><a href="caribouPopGrowth.html">caribouPopGrowth</a>()</code>,
+<code><a href="compositionBiasCorrection.html">compositionBiasCorrection</a>()</code>,
 <code><a href="demographicCoefficients.html">demographicCoefficients</a>()</code>,
 <code><a href="demographicProjectionApp.html">demographicProjectionApp</a>()</code>,
 <code><a href="demographicRates.html">demographicRates</a>()</code>,
@@ -146,20 +147,20 @@ was given.</p>
 <span class="r-in"><span>                            collarCount <span class="op">=</span> <span class="fl">20</span>, cowCount <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">simO</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulateObservations.html">simulateObservations</a></span><span class="op">(</span><span class="va">scns</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in `$&lt;-.data.frame`(`*tmp*`, "c", value = numeric(0)):</span> replacement has 0 rows, data has 2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="caribouBayesianIPM.html">caribouBayesianIPM</a></span><span class="op">(</span>survData <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simSurvObs</span>, ageRatio <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">ageRatioOut</span>,</span></span>
 <span class="r-in"><span>                          disturbance <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simDisturbance</span>,</span></span>
 <span class="r-in"><span>                          startYear <span class="op">=</span> <span class="fl">2014</span>, Nchains <span class="op">=</span> <span class="fl">1</span>, Niter <span class="op">=</span> <span class="fl">100</span>, Nburn <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>                          Nthin <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> using Kaplan-Meier survival model</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'simO' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">out_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">out</span>, exData <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">exData</span>, paramTable <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">paramTable</span>,</span></span>
 <span class="r-in"><span>                           simNational <span class="op">=</span> <span class="fu"><a href="getSimsNational.html">getSimsNational</a></span><span class="op">(</span><span class="op">)</span>, getKSDists <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using saved object</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'out' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plotRes</span><span class="op">(</span><span class="va">out_tbl</span>, parameter <span class="op">=</span> <span class="st">"Recruitment"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 10 rows containing missing values (`geom_point()`).</span>
-<span class="r-plt img"><img src="plotRes-1.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'out_tbl' not found</span>
 </code></pre></div>
     </div>
   </div>

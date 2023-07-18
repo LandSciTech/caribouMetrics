@@ -108,6 +108,7 @@ details and examples.</p>
 <span>  h_R <span class="op">=</span> <span class="fl">0.82</span>,</span>
 <span>  l_S <span class="op">=</span> <span class="fl">0.61</span>,</span>
 <span>  h_S <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  c <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  interannualVar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>R_CV <span class="op">=</span> <span class="fl">0.46</span>, S_CV <span class="op">=</span> <span class="fl">0.08696</span><span class="op">)</span>,</span>
 <span>  probOption <span class="op">=</span> <span class="st">"binomial"</span>,</span>
 <span>  adjustR <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -178,6 +179,10 @@ one or more sample populations.</p></dd>
 
 <dt>h_S</dt>
 <dd><p>Number. Maximum survival.</p></dd>
+
+
+<dt>c</dt>
+<dd><p>Number. Bias correction term.</p></dd>
 
 
 <dt>interannualVar</dt>
@@ -260,6 +265,7 @@ Applications, 33(3), p.e2816.</p>
     <h2>See also</h2>
     <div class="dont-index"><p>Caribou demography functions:
 <code><a href="caribouBayesianIPM.html">caribouBayesianIPM</a>()</code>,
+<code><a href="compositionBiasCorrection.html">compositionBiasCorrection</a>()</code>,
 <code><a href="demographicCoefficients.html">demographicCoefficients</a>()</code>,
 <code><a href="demographicProjectionApp.html">demographicProjectionApp</a>()</code>,
 <code><a href="demographicRates.html">demographicRates</a>()</code>,
@@ -276,8 +282,8 @@ Applications, 33(3), p.e2816.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">caribouPopGrowth</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">2</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    N0    lambda  N       R_t      S_t n_recruits surviving_adFemales</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 100 0.8890659 79 0.4945753 0.708096         15                  64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    N0  lambda  N       R_t       S_t n_recruits surviving_adFemales</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 100 0.88625 78 0.4852655 0.6970169         16                  62</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

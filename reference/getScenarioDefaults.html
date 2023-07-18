@@ -87,8 +87,14 @@ simulateObservations()"><!-- mathjax --><script src="https://cdnjs.cloudflare.co
 <span>  projYears <span class="op">=</span> <span class="fl">35</span>,</span>
 <span>  obsYears <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>  N0 <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  adjustR <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  adjustR <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  assessmentYrs <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  qMin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  qMax <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  uMin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  uMax <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  zMin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  zMax <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  collarInterval <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  cowMult <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  cowCount <span class="op">=</span> <span class="cn">NA</span>,</span>
@@ -162,6 +168,30 @@ reproduction (DeCesare et al. 2012; Eacker et al. 2019).</p></dd>
 rate)</p></dd>
 
 
+<dt>qMin</dt>
+<dd><p>number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.</p></dd>
+
+
+<dt>qMax</dt>
+<dd><p>number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.</p></dd>
+
+
+<dt>uMin</dt>
+<dd><p>number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.</p></dd>
+
+
+<dt>uMax</dt>
+<dd><p>number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.</p></dd>
+
+
+<dt>zMin</dt>
+<dd><p>number in 0, 1. Minimum probability of missing calves in composition survey.</p></dd>
+
+
+<dt>zMax</dt>
+<dd><p>number in 0, 1. Maximum probability of missing calves in composition survey.</p></dd>
+
+
 <dt>collarInterval</dt>
 <dd><p>number. Optional. Number of years between collar deployments. If
 missing assumed to be every year</p></dd>
@@ -214,6 +244,7 @@ population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.</p>
     <div class="dont-index"><p>Caribou demography functions:
 <code><a href="caribouBayesianIPM.html">caribouBayesianIPM</a>()</code>,
 <code><a href="caribouPopGrowth.html">caribouPopGrowth</a>()</code>,
+<code><a href="compositionBiasCorrection.html">compositionBiasCorrection</a>()</code>,
 <code><a href="demographicCoefficients.html">demographicCoefficients</a>()</code>,
 <code><a href="demographicProjectionApp.html">demographicProjectionApp</a>()</code>,
 <code><a href="demographicRates.html">demographicRates</a>()</code>,
@@ -231,10 +262,12 @@ population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">getScenarioDefaults</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   iFire iAnthro obsAnthroSlope projAnthroSlope rSlopeMod sSlopeMod rQuantile</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     0       0              2               2         1         1       0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sQuantile projYears obsYears   N0 adjustR assessmentYrs curYear ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       0.5        35       15 1000   FALSE             3    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                         label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_assessmentYrs3_adjustRFALSE_N01000_obsYears15_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro0_iFire0_</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sQuantile projYears obsYears   N0 adjustR assessmentYrs qMin qMax uMin uMax</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       0.5        35       15 1000    TRUE             3    0  0.6    0  0.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   zMin zMax curYear ID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0  0.2    2023  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                  label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_obsYears15_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro0_iFire0_</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   startYear</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      2009</span>
 <span class="r-in"><span></span></span>
@@ -242,10 +275,12 @@ population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.</p>
 <span class="r-in"><span><span class="fu">getScenarioDefaults</span><span class="op">(</span>paramTable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>iFire <span class="op">=</span> <span class="fl">10</span>, iAnthro <span class="op">=</span> <span class="fl">20</span>, obsYears <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, obsYears <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   iFire iAnthro obsAnthroSlope projAnthroSlope rSlopeMod sSlopeMod rQuantile</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    10      20              2               2         1         1       0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sQuantile projYears obsYears   N0 adjustR assessmentYrs curYear ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       0.5        35        1 1000   FALSE             3    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                          label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_assessmentYrs3_adjustRFALSE_N01000_obsYears1_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro20_iFire10_</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sQuantile projYears obsYears   N0 adjustR assessmentYrs qMin qMax uMin uMax</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       0.5        35        1 1000    TRUE             3    0  0.6    0  0.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   zMin zMax curYear ID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0  0.2    2023  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                   label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_obsYears1_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro20_iFire10_</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   startYear</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      2023</span>
 <span class="r-in"><span></span></span>
