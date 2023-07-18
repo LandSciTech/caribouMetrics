@@ -150,8 +150,8 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     ))
   
   if (!ksDists) {
-    x2 <- x2 + ggplot2::geom_ribbon(ggplot2::aes(ymin = .data[["`Lower 95% CRI`"]],
-                                                 ymax = .data[["`Upper 95% CRI`"]]),
+    x2 <- x2 + ggplot2::geom_ribbon(ggplot2::aes(ymin = .data[["Lower 95% CRI"]],
+                                                 ymax = .data[["Upper 95% CRI"]]),
                                     show.legend = FALSE, alpha = 0.25, colour = NA
     ) +ggplot2::scale_fill_discrete(type=pal2)+
       ggplot2::scale_y_continuous(limits = c(

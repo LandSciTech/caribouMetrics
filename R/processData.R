@@ -8,7 +8,6 @@ setGeneric("processData", function(inData, newData, ...) standardGeneric("proces
 
 # Method for initial processing when no new data is provided
 #' @noRd
-#' @importFrom raster plot
 setMethod(
   "processData", signature(inData = "CaribouHabitat", newData = "missing"), 
   function(inData) {

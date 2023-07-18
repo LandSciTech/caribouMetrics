@@ -15,9 +15,9 @@
 #'   Potential names are: natDist, anthroDist, and linFeat.
 #' @param linBuffMethod character. The method used to buffer linear features if
 #'   they are supplied as sf lines. The default is "raster" in which case they
-#'   are rasterized using the stars package and buffered using a moving window
-#'   method. If "sf" then the lines are buffered with st_buffer and then
-#'   rasterized. Either way points are included in the raster output.
+#'   are rasterized then buffered using a moving window method. If "sf" then the
+#'   lines are buffered with st_buffer and then rasterized. Either way points
+#'   are included in the raster output.
 #' @param isPercent logical. Should the results be returned as a percentage?
 #'
 #'@return A DisturbanceMetrics Object see [DisturbanceMetrics-class()]

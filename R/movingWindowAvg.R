@@ -203,7 +203,7 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
     
     if(doAltFun){
       if(terra::nlyr(rast) > 1){
-        lapply(1:terra:nlyr(rast), \(x){
+        lapply(1:terra::nlyr(rast), \(x){
           rast <- terra::focal(rast[[x]], w = cf2, fun = mean_fun,
                                weights = w,
                                na.rm = na.rm, 

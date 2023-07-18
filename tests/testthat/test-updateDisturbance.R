@@ -100,26 +100,26 @@ test_that("updateDisturbance works with nondefault inputs", {
 
 # run benchmark to see if it is actually speeding things up
 
-bm3 <- bench::mark(
-  distMet = dm2 <- disturbanceMetrics(
-    landCover = plcD,
-    natDist = natDistD,
-    anthroDist = anthroDistD,
-    linFeat = linFeatDras,
-    projectPoly = projectPolyD,
-    padFocal = FALSE, # assume data outside area is 0 for all variables
-    bufferWidth = 500
-  ),
-  updateAnthro = updateDisturbance(dm2, newData = list(anthroDist = anthroDistD)),
-  updateLF = updateDisturbance(dm2, newData = list(linFeat = linFeatDras)),
-  updateNat = updateDisturbance(dm2, newData = list(natDist = natDistD)),
-  updateAll = updateDisturbance(dm2, newData = list(linFeat = linFeatDras,
-                                                   anthroDist = anthroDistD,
-                                                   natDist = natDistD)),
-  min_iterations = 5,
-  filter_gc = FALSE,
-  check = FALSE
-)
+# bm3 <- bench::mark(
+#   distMet = dm2 <- disturbanceMetrics(
+#     landCover = plcD,
+#     natDist = natDistD,
+#     anthroDist = anthroDistD,
+#     linFeat = linFeatDras,
+#     projectPoly = projectPolyD,
+#     padFocal = FALSE, # assume data outside area is 0 for all variables
+#     bufferWidth = 500
+#   ),
+#   updateAnthro = updateDisturbance(dm2, newData = list(anthroDist = anthroDistD)),
+#   updateLF = updateDisturbance(dm2, newData = list(linFeat = linFeatDras)),
+#   updateNat = updateDisturbance(dm2, newData = list(natDist = natDistD)),
+#   updateAll = updateDisturbance(dm2, newData = list(linFeat = linFeatDras,
+#                                                    anthroDist = anthroDistD,
+#                                                    natDist = natDistD)),
+#   min_iterations = 5,
+#   filter_gc = FALSE,
+#   check = FALSE
+# )
 
 # bm3
 # # A tibble: 5 x 13

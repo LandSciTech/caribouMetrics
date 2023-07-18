@@ -36,7 +36,7 @@ Description: caribouMetrics provides implementations of several different models
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Imports:
     dplyr,
@@ -49,7 +49,6 @@ Imports:
     exactextractr,
     matrixStats,
     simstudy,
-    stars,
     rlang,
     terra,
     R2jags,

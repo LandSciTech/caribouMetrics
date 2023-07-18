@@ -33,8 +33,10 @@
 #' @import purrr
 #' @importFrom methods as is new slot slot<- slotNames
 #' @importFrom stats qbeta qlnorm qnorm rbeta rbinom rnorm runif as.formula
-#'   ks.test quantile time
-#' @importFrom utils read.csv write.csv
+#'   ks.test quantile time setNames weighted.mean
+#' @importFrom utils read.csv write.csv packageVersion
+#' @importFrom terra plot
+#' @importFrom rlang .data
 #'
 #' 
 NULL

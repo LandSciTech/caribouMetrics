@@ -9,7 +9,7 @@
 #' @param inputsList list. A named list of inputs that are either spatial
 #'   objects or file names of spatial objects. ".shp" is the only extension
 #'   accepted for vector data and all other extensions will be passed to
-#'   `raster`. If an element is a list these are assumed to be linear features
+#'   [terra::rast()]. If an element is a list these are assumed to be linear features
 #'   and they are combined.
 #' @param convertToRast character. Optional. Names of elements of `inputsList`
 #'   that should be converted to raster after loading.

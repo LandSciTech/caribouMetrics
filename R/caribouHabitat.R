@@ -152,7 +152,6 @@ setMethod(f = "initialize", signature = "CaribouHabitat",
 #' # plot the predictor variables
 #' plot(results(res, type ="processedData"))
 #'
-#' @importFrom rlang .data
 #' @family habitat
 #' @export
 #' @rdname caribouHabitat

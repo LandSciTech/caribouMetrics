@@ -27,7 +27,7 @@ template that all other rasters must align to (but see \code{alttemplate}).}
 \item{inputsList}{list. A named list of inputs that are either spatial
 objects or file names of spatial objects. ".shp" is the only extension
 accepted for vector data and all other extensions will be passed to
-\code{raster}. If an element is a list these are assumed to be linear features
+\code{\link[terra:rast]{terra::rast()}}. If an element is a list these are assumed to be linear features
 and they are combined.}
 
 \item{convertToRast}{character. Optional. Names of elements of \code{inputsList}
