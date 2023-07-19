@@ -43,10 +43,8 @@ Imports:
     data.table,
     sf,
     tidyr,
-    units,
     purrr,
     methods,
-    exactextractr,
     matrixStats,
     simstudy,
     rlang,
@@ -104,10 +102,10 @@ Suggests:
     tmap,
     tmaptools,
     ggplot2,
-    fasterize,
     rsyncrosim,
     pfocal,
-    BayesianCaribouDemographicProjection
+    BayesianCaribouDemographicProjection,
+    raster
 Remotes: LandSciTech/pfocal,
     LandSciTech/BayesianCaribouDemographicProjection
 Additional_repositories: https://landscitech.github.io/drat

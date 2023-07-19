@@ -73,9 +73,10 @@ res <- caribouHabitat(landCover = lc,
                caribouRange = "Nipigon",
                winArea = 1000 #leave as default NULL except for small examples
 )
-
-plot(calcBinaryUse(res))
-plot(calcBinaryUse(res, bySeason = TRUE))
+if(interactive()){
+  plot(calcBinaryUse(res))
+  plot(calcBinaryUse(res, bySeason = TRUE))
+}
 }
 \seealso{
 Caribou habitat functions:

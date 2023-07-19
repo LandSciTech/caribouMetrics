@@ -1,6 +1,9 @@
 
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
+# this makes sure raster package is attached (not loaded) so that as(x, "Raster") works
+raster::raster()
+
 # load example data
 plcD = terra::rast(file.path(pthBase, "landCover.tif")) # Defines the study area - NA values are omitted from calculation, everything else is included.
 natDistD = terra::rast(file.path(pthBase, "natDist.tif"))
