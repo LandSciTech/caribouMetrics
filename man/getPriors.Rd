@@ -16,6 +16,13 @@ getPriors(
   rIntSEMod = 3,
   rInterannualVar = 0.46 * 0.5,
   rInterannualVarSE = 0.22,
+  qMin = 0,
+  qMax = 0.6,
+  uMin = 0,
+  uMax = 0.2,
+  zMin = 0,
+  zMax = 0.2,
+  cowMult = 6,
   populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
   modelVersion = "Johnson",
   returnValues = TRUE
@@ -46,6 +53,20 @@ multiplier. 1 - 10}
 \item{rInterannualVar}{interannual coefficient of variation for recruitment. 0-1}
 
 \item{rInterannualVarSE}{uncertainty about interannual variation in recruitment. 0-1.}
+
+\item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
+
+\item{qMax}{number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.}
+
+\item{uMin}{number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.}
+
+\item{uMax}{number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.}
+
+\item{zMin}{number in 0, 1. Minimum probability of missing calves in composition survey.}
+
+\item{zMax}{number in 0, 1. Maximum probability of missing calves in composition survey.}
+
+\item{cowMult}{number. The apparent number of adult females per collared animal in composition survey.}
 
 \item{populationGrowthTable}{data.frame.\link{popGrowthTableJohnsonECCC} is
 included in the package and should be used in most cases. A custom table of
@@ -81,7 +102,9 @@ standard error,
 \item beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
 error times modifier,
 \item sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,
-\item sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival
+\item sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival,
+\item bias.Prior1: Mean composition survey bias correction term,
+\item bias.Prior2: Standard deviation of composition survey bias correction term
 }
 }
 \description{

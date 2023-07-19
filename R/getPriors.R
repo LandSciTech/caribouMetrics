@@ -17,6 +17,13 @@
 #' @param sInterannualVarSE uncertainty about interannual variation in survival. 0-1
 #' @param rInterannualVar interannual coefficient of variation for recruitment. 0-1
 #' @param rInterannualVarSE uncertainty about interannual variation in recruitment. 0-1.
+#' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.
+#' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.
+#' @param uMin number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.
+#' @param uMax number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.
+#' @param zMin number in 0, 1. Minimum probability of missing calves in composition survey.
+#' @param zMax number in 0, 1. Maximum probability of missing calves in composition survey.
+#' @param cowMult number. The apparent number of adult females per collared animal in composition survey.
 #' @inheritParams getCoefs
 #' @inheritParams demographicCoefficients
 #'
@@ -39,8 +46,10 @@
 #' * beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
 #'   error times modifier,
 #' * sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,
-#' * sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival
-#'
+#' * sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival,
+#' * bias.Prior1: Mean composition survey bias correction term,
+#' * bias.Prior2: Standard deviation of composition survey bias correction term
+#' 
 #' @examples
 #' getPriors()
 #' 
@@ -57,8 +66,13 @@ getPriors <- function(modList = NULL,
                       rIntSEMod = 3,
                       rInterannualVar = 0.46 * 0.5,
                       rInterannualVarSE = 0.22,
+                      qMin=0, qMax =0.6, 
+                      uMin = 0, uMax = 0.2, 
+                      zMin = 0, zMax = 0.2, 
+                      cowMult = 6,
                       populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                       modelVersion = "Johnson",
+                      
                       returnValues = TRUE) {
   # modList=paramTable
 
@@ -107,6 +121,15 @@ getPriors <- function(modList = NULL,
       paste0(diff_pars, collapse = ", ")
     )
   }
+  
+  #####
+  #get bias coefficient priors
+  nr=10000
+  c = compositionBiasCorrection(w=modList$cowMult,q=runif(nr,modList$qMin,modList$qMax),
+                                u=runif(nr,modList$uMin,modList$uMax),
+                                z=runif(nr,modList$zMin,modList$zMax))
+  bias.Prior1 = mean(c)
+  bias.Prior2 = sd(c)
 
   if (returnValues) {
     betaPriors <- list(
@@ -123,7 +146,9 @@ getPriors <- function(modList = NULL,
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = sPriorStdErrs$Anthro * modList$sAnthroSlopeSEMod,
       sig.Saf.Prior1 = modList$sInterannualVar,
-      sig.Saf.Prior2 = modList$sInterannualVarSE
+      sig.Saf.Prior2 = modList$sInterannualVarSE,
+      bias.Prior1 = bias.Prior1,
+      bias.Prior2 = bias.Prior2
     )
 
     # replace NULL values with 0 for when anthro or fire is not included
@@ -150,7 +175,9 @@ getPriors <- function(modList = NULL,
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = paste0(round(sPriorStdErrs$Anthro, 4), "*", modList$sAnthroSlopeSEMod),
       sig.Saf.Prior1 = modList$sInterannualVar,
-      sig.Saf.Prior2 = modList$sInterannualVarSE
+      sig.Saf.Prior2 = modList$sInterannualVarSE,
+      bias.Prior1 = bias.Prior1,
+      bias.Prior2 = bias.Prior2
     )
   }
   return(betaPriors)

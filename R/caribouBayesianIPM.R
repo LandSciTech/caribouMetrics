@@ -357,9 +357,9 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   }
 
   if (inp$adjustR) {
-    adjustString <- "Rfemale[k] <- (R[k]/2)/(1+(R[k]/2))"
+    adjustString <- "Rfemale[k] <- (composition.bias*R[k]/2)/(1+(composition.bias*R[k]/2))"
   } else {
-    adjustString <- "Rfemale[k] <- R[k]/2"
+    adjustString <- "Rfemale[k] <- composition.bias*R[k]/2"
   }
 
   if (inp$survAnalysisMethod == "KaplanMeier") {
@@ -397,6 +397,8 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
     sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
     sig.R.Prior1 = betaPriors$sig.R.Prior1,
     sig.R.Prior2 = betaPriors$sig.R.Prior2,
+    bias.Prior1 = betaPriors$bias.Prior1,
+    bias.Prior2 = betaPriors$bias.Prior2,
     Ninit = inp$N0,
     assessmentYrs = inp$assessmentYrs,
     nCounts = length(which(is.na(data3t$Count) == FALSE)),
