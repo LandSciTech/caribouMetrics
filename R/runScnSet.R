@@ -50,6 +50,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
     oo <- simulateObservations(cs, collarNumYears = ePars$collarNumYears,
                                collarOffTime = ePars$collarOffTime,
                                collarOnTime = ePars$collarOnTime)
+    
     betaPriors <- getPriors(cs)
     minYr <- min(oo$exData$Year)
     maxYr <- max(oo$simDisturbance$Year)

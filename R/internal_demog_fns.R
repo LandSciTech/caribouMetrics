@@ -173,11 +173,11 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
 
     # add results to output set
     fds <- subset(pars, select = c("replicate", "Anthro", "fire_excl_anthro",
-                                   "S_t", "R_t", "N",
+                                   "S_t", "R_t", "X_t", "N",
                                    "lambda"))
     fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
     names(fds) <- c("Replicate", "Anthro", "fire_excl_anthro", "survival",
-                    "recruitment", "N", "lambda")
+                    "recruitment","Rfemale", "N", "lambda")
     fds <- tidyr::pivot_longer(fds, !.data$Replicate, names_to = "MetricTypeID",
                                values_to = "Amount")
     fds$Timestep <- t * stepLength

@@ -89,7 +89,7 @@ getOutputTables <- function(caribouBayesDemogMod,
   obsRec$Mean <- obsRec$calf / obsRec$cow
   obsRec$parameter <- "Recruitment"
   obsRec$type <- "observed"
-  
+
   if(!is.null(exData)){
     trueSurv <- subset(exData, select = c("Year", "survival"))
     names(trueSurv) <- c("Year", "Mean")
@@ -100,6 +100,11 @@ getOutputTables <- function(caribouBayesDemogMod,
     names(trueRec) <- c("Year", "Mean")
     trueRec$parameter <- "Recruitment"
     trueRec$type <- "true"
+
+    trueX <- subset(exData, select = c("Year", "Rfemale"))
+    names(trueX) <- c("Year", "Mean")
+    trueX$parameter <- "Female-only recruitment"
+    trueX$type <- "true"
     
     obsLam <- subset(exData, select = c("Year", "lambda"))
     names(obsLam) <- c("Year", "Mean")
@@ -117,12 +122,14 @@ getOutputTables <- function(caribouBayesDemogMod,
     obsLam <- NULL
     obsSize <- NULL
     trueRec <- NULL
+    trueX <- NULL
     trueSurv <- NULL
   }
   obsAll <- rbind(obsLam,
                   obsSize,
                   subset(obsRec, select = c("Year", "Mean", "parameter", "type")),
-                  trueRec, 
+                  trueRec,
+                  trueX,
                   subset(obsSurv, select = c("Year", "Mean", "parameter", "type")), 
                   trueSurv)
   

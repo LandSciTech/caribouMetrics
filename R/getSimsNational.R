@@ -117,6 +117,13 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
     summarize(Mean = mean(.data$R_t), lower = quantile(.data$R_t, 0.025),
               upper = quantile(.data$R_t, 0.975))
   simRecBig$Parameter <- "Recruitment"
+  simXBig <- pars %>%
+    select("Anthro", "X_t") %>%
+    group_by(.data$Anthro) %>%
+    summarize(Mean = mean(.data$X_t), lower = quantile(.data$X_t, 0.025),
+              upper = quantile(.data$X_t, 0.975))
+  simXBig$Parameter <- "Female-only recruitment"
+  
   simLamBig <- pars %>%
     select("Anthro", "lambda") %>%
     group_by(.data$Anthro) %>%
@@ -129,11 +136,11 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
     summarize(Mean = mean(.data$N), lower = quantile(.data$N, 0.025),
               upper = quantile(.data$N, 0.975))
   simFpopBig$Parameter <- "Female population size"
-  simBig <- rbind(simSurvBig, simRecBig, simLamBig, simFpopBig)
+  simBig <- rbind(simSurvBig, simRecBig, simXBig, simLamBig, simFpopBig)
 
-  parsSelect <- subset(pars, select = c("Anthro", "S_t", "R_t", "lambda", "N"))
+  parsSelect <- subset(pars, select = c("Anthro", "S_t", "R_t","X_t", "lambda", "N"))
   names(parsSelect) <- c("Anthro", "Adult female survival",
-                         "Recruitment", "Population growth rate",
+                         "Recruitment","Female-only recruitment", "Population growth rate",
                          "Female population size")
   parsSelect <- parsSelect %>%
     tidyr::pivot_longer(!.data$Anthro, names_to = "Parameter", values_to = "Value")
