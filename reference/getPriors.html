@@ -84,6 +84,13 @@
 <span>  rIntSEMod <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  rInterannualVar <span class="op">=</span> <span class="fl">0.46</span> <span class="op">*</span> <span class="fl">0.5</span>,</span>
 <span>  rInterannualVarSE <span class="op">=</span> <span class="fl">0.22</span>,</span>
+<span>  qMin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  qMax <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>  uMin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  uMax <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  zMin <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  zMax <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  cowMult <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>  populationGrowthTable <span class="op">=</span> <span class="fu">caribouMetrics</span><span class="fu">::</span><span class="va"><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></span>,</span>
 <span>  modelVersion <span class="op">=</span> <span class="st">"Johnson"</span>,</span>
 <span>  returnValues <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -137,6 +144,34 @@ multiplier. 1 - 10</p></dd>
 <dd><p>uncertainty about interannual variation in recruitment. 0-1.</p></dd>
 
 
+<dt>qMin</dt>
+<dd><p>number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.</p></dd>
+
+
+<dt>qMax</dt>
+<dd><p>number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.</p></dd>
+
+
+<dt>uMin</dt>
+<dd><p>number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.</p></dd>
+
+
+<dt>uMax</dt>
+<dd><p>number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.</p></dd>
+
+
+<dt>zMin</dt>
+<dd><p>number in 0, 1. Minimum probability of missing calves in composition survey.</p></dd>
+
+
+<dt>zMax</dt>
+<dd><p>number in 0, 1. Maximum probability of missing calves in composition survey.</p></dd>
+
+
+<dt>cowMult</dt>
+<dd><p>number. The apparent number of adult females per collared animal in composition survey.</p></dd>
+
+
 <dt>populationGrowthTable</dt>
 <dd><p>data.frame.<a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a> is
 included in the package and should be used in most cases. A custom table of
@@ -178,7 +213,9 @@ standard error,</p></li>
 <li><p>beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
 error times modifier,</p></li>
 <li><p>sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,</p></li>
-<li><p>sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival</p></li>
+<li><p>sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival,</p></li>
+<li><p>bias.Prior1: Mean composition survey bias correction term,</p></li>
+<li><p>bias.Prior2: Standard deviation of composition survey bias correction term</p></li>
 </ul></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -242,6 +279,12 @@ error times modifier,</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sig.Saf.Prior2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $bias.Prior1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.049389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $bias.Prior2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.07990396</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
