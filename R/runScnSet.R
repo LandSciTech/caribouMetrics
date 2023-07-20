@@ -66,7 +66,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
       errorLog[[p]] <- list(cs = cs, error = out)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
                    obs.all = obs.all, ksDists = ksDists, errorLog = errorLog),
-              "temp.Rds")
+              "results/temp.Rds")
       next
     }
 
@@ -74,7 +74,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
       errorLog[[p]] <- list(cs = cs, error = out$result)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
                    obs.all = obs.all, ksDists = ksDists, errorLog = errorLog),
-              "temp.Rds")
+              "results/temp.Rds")
       next
     }
 

@@ -199,7 +199,9 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
       cowCounts$Class <- "cow"
       cowCounts$Count <- paramTable$cowMult * cowCounts$Count
     } else {
-      cowCounts$Count <- NA
+      cowCounts <- data.frame(Year = unique(simSurvObs$Year), 
+                              Count = NA, 
+                              Class = "cow")
     }
   }
   # given observed total animals & proportion calfs/cows from simulation - get
