@@ -22,8 +22,8 @@
 #' @param uMin number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.
 #' @param uMax number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.
 #' @param zMin number in 0, 1. Minimum probability of missing calves in composition survey.
-#' @param zMax number in 0, 1. Maximum probability of missing calves in composition survey.
-#' @param cowMult number. The apparent number of adult females per collared animal in composition survey.
+#' @param zMax number in 0, <1. Maximum probability of missing calves in composition survey.
+#' @param cowMult number >= 1. The apparent number of adult females per collared animal in composition survey.
 #' @inheritParams caribouPopGrowth
 #' @inheritParams caribouBayesianIPM
 #' @param collarInterval number. Optional. Number of years between collar deployments. If

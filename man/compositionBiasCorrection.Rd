@@ -14,7 +14,7 @@ compositionBiasCorrection(w, q, u, z)
 
 \item{u}{number in 0, 1. Probability of misidentifying young bulls as adult females and vice versa in composition survey.}
 
-\item{z}{number in 0, 1. Probability of missing calves in composition survey.}
+\item{z}{number in 0, <1. Probability of missing calves in composition survey.}
 }
 \value{
 number. Composition bias correction value.

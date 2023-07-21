@@ -123,13 +123,13 @@ getPriors <- function(modList = NULL,
   }
   
   #####
-  #get bias coefficient priors
+  #get bias coefficient priors - lognormally distributed
   nr=10000
   c = compositionBiasCorrection(w=modList$cowMult,q=runif(nr,modList$qMin,modList$qMax),
                                 u=runif(nr,modList$uMin,modList$uMax),
                                 z=runif(nr,modList$zMin,modList$zMax))
-  bias.Prior1 = mean(c)
-  bias.Prior2 = sd(c)
+  bias.Prior1 = mean(log(c))
+  bias.Prior2 = sd(log(c))
 
   if (returnValues) {
     betaPriors <- list(

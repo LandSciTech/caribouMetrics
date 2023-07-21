@@ -78,9 +78,9 @@ rate)}
 
 \item{zMin}{number in 0, 1. Minimum probability of missing calves in composition survey.}
 
-\item{zMax}{number in 0, 1. Maximum probability of missing calves in composition survey.}
+\item{zMax}{number in 0, <1. Maximum probability of missing calves in composition survey.}
 
-\item{cowMult}{number. The apparent number of adult females per collared animal in composition survey.}
+\item{cowMult}{number >= 1. The apparent number of adult females per collared animal in composition survey.}
 
 \item{collarInterval}{number. Optional. Number of years between collar deployments. If
 missing assumed to be every year}
