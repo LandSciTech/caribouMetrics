@@ -129,8 +129,8 @@ getPriors <- function(modList = NULL,
                                 u=runif(nr,modList$uMin,modList$uMax),
                                 z=runif(nr,modList$zMin,modList$zMax))
   bias.Prior1 = mean(log(c))
-  bias.Prior2 = sd(log(c))
-
+  bias.Prior2 = max(sd(log(c)),0.001)
+                    
   if (returnValues) {
     betaPriors <- list(
       l.R.Prior1 = rPriorCoefs$Intercept,
