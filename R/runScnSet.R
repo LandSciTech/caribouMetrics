@@ -37,7 +37,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
                       getKSDists = TRUE, printProgress = FALSE, 
                       Niter = formals(caribouBayesianIPM)$Niter,
                       Nburn = formals(caribouBayesianIPM)$Nburn) {
-  # ePars=eParsIn;survAnalysisMethod="KaplanMeier";getKSDists=T;printProgress=F
+  # ePars=eParsIn;survAnalysisMethod="KaplanMeier";getKSDists=T;printProgress=F;Niter = formals(caribouBayesianIPM)$Niter;Nburn = formals(caribouBayesianIPM)$Nburn
   scns <- getScenarioDefaults(scns)
   errorLog <- list()
   for (p in 1:nrow(scns)) {

@@ -93,7 +93,7 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   if (betaPriors[[1]] == "default") {
     betaPriors <- getPriors()
   }
-
+  
   # Run model
   if (is.character(inp$ageRatio)) {
     ageRatio <- read.csv(inp$ageRatio, header = T)

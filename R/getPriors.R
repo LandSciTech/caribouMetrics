@@ -138,7 +138,7 @@ getPriors <- function(modList = NULL,
   
   bias.Prior1 = mu
   bias.Prior2 = sig2^0.5
-                    
+      
   if (returnValues) {
     betaPriors <- list(
       l.R.Prior1 = rPriorCoefs$Intercept,
