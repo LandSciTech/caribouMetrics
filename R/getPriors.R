@@ -131,7 +131,7 @@ getPriors <- function(modList = NULL,
                                 u=runif(nr,modList$uMin,modList$uMax),
                                 z=runif(nr,modList$zMin,modList$zMax))
   m = mean(c)
-  v=var(c)
+  v=var(c);v[v==0]=0.00001
   
   sig2 = log(1+v/m^2)
   mu = log(m)-sig2/2
