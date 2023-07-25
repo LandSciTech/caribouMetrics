@@ -10,10 +10,26 @@
 #' @family demography
 #' @examples
 #' 
-compositionBiasCorrection<-function(w,q,u,z){
+compositionBiasCorrection<-function(w,q,u,z,approx=F){
   if(max(z)>=1){
     stop("Composition bias correct term is undefined when the probability of missing calves z >= 1.")
   }
   c = w*(q*u+1-u)/((q*u+w-u)*(1-z))
-  return(c)
+  
+  if(approx){
+    #get mean and sd as fn of w
+    cr = data.frame(w=w,c=c)
+    cs <- cr %>%
+      group_by(w) %>%
+      summarise(m = mean(c), v = var(c))
+    cs$v[cs$v==0]=0.000001
+    
+    #now find lognormal parameters from mean and variance
+    #https://www.johndcook.com/blog/2022/02/24/find-log-normal-parameters/
+    cs$sig2 = log(1+cs$v/cs$m^2)
+    cs$mu = log(cs$m)-cs$sig2/2
+    return(cs)
+  }else{
+    return(c)
+  }
 }
