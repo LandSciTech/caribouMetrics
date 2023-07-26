@@ -19,6 +19,7 @@
 #' @param ksDists logical. If true the `modTables$ksDists` table is used to
 #'   create plots for each parameter.
 #' @param legendPosition "bottom", "right", "left","top", or "none". Legend position.
+#' @param breakInterval number. How many years between x tick marks?
 #'
 #' @return a ggplot object or list of ggplot objects if a vector of parameters
 #'   was given.
@@ -42,7 +43,7 @@
 #'
 #' plotRes(out_tbl, parameter = "Recruitment")
 plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
-                   facetVars = NULL, labFontSize = 14, ksDists = FALSE,legendPosition="right") {
+                   facetVars = NULL, labFontSize = 14, ksDists = FALSE,legendPosition="right",breakInterval=1) {
   # allRes=scResults$ksDists; parameter="Recruitment";obs=scResults$obs.all;
   # lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("obsYears","sQuantile")
   
@@ -86,11 +87,12 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   if (is.null(facetVars)) {
     titleFontSize <- 16
     # labFontSize <- 14
-    breakInterval <- 1
   } else {
     titleFontSize <- 11
     labFontSize <- 10
-    breakInterval <- 2
+    if(breakInterval==1){
+      breakInterval <- 2
+    }
   }
   if (ksDists) {
     # plot Kolmogorov Smirnov distances

@@ -12,7 +12,8 @@ plotRes(
   facetVars = NULL,
   labFontSize = 14,
   ksDists = FALSE,
-  legendPosition = "right"
+  legendPosition = "right",
+  breakInterval = 1
 )
 }
 \arguments{
@@ -32,7 +33,9 @@ facets. Font size is 10 pt if facets are used.}
 \item{ksDists}{logical. If true the \code{modTables$ksDists} table is used to
 create plots for each parameter.}
 
-\item{legendPosition}{"bottom", "right", "left" or "top". Legend position.}
+\item{legendPosition}{"bottom", "right", "left","top", or "none". Legend position.}
+
+\item{breakInterval}{number. How many years between x tick marks?}
 }
 \value{
 a ggplot object or list of ggplot objects if a vector of parameters
