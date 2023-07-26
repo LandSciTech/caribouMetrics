@@ -18,6 +18,7 @@
 #'   facets. Font size is 10 pt if facets are used.
 #' @param ksDists logical. If true the `modTables$ksDists` table is used to
 #'   create plots for each parameter.
+#' @param legendPosition "bottom", "right", "left","top", or "none". Legend position.
 #'
 #' @return a ggplot object or list of ggplot objects if a vector of parameters
 #'   was given.
@@ -41,7 +42,7 @@
 #'
 #' plotRes(out_tbl, parameter = "Recruitment")
 plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
-                   facetVars = NULL, labFontSize = 14, ksDists = FALSE) {
+                   facetVars = NULL, labFontSize = 14, ksDists = FALSE,legendPosition="right") {
   # allRes=scResults$ksDists; parameter="Recruitment";obs=scResults$obs.all;
   # lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("obsYears","sQuantile")
   
@@ -138,6 +139,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     ggplot2::geom_line(ggplot2::aes_string(x = "Year", y = "Mean"), linewidth = 1.75) +
     ggplot2::scale_color_discrete(type=pal2)+
     ggplot2::theme(
+      legend.position = legendPosition,
       axis.text.y = ggplot2::element_text(size = labFontSize),
       axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, size = labFontSize),
       axis.title.x = ggplot2::element_text(size = titleFontSize, face = "bold"),

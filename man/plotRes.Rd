@@ -11,7 +11,8 @@ plotRes(
   highBound = 1,
   facetVars = NULL,
   labFontSize = 14,
-  ksDists = FALSE
+  ksDists = FALSE,
+  legendPosition = "right"
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ facets. Font size is 10 pt if facets are used.}
 
 \item{ksDists}{logical. If true the \code{modTables$ksDists} table is used to
 create plots for each parameter.}
+
+\item{legendPosition}{"bottom", "right", "left" or "top". Legend position.}
 }
 \value{
 a ggplot object or list of ggplot objects if a vector of parameters
