@@ -3,9 +3,9 @@
 # License GPL-3
 #NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
-#' Plot caribou Bayesian IPM results
+#' Plot caribou Bayesian model results
 #'
-#' Plot results of the caribou Bayesian IPM with the option to include the
+#' Plot results of the caribou Bayesian model with the option to include the
 #' national model and observed data
 #'
 #' @param modTables list. A list of model results tables created using
@@ -118,7 +118,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   
   if (!ksDists & !is.null(simRange)) {
     
-    df$Type <- "IPM"
+    df$Type <- "Bayesian"
     simRange$Type <- "national"
     nameSel <- c(c("Year", "Mean", "Lower 95% CRI", "Upper 95% CRI", "Type"), facetVars)
     df <- rbind(subset(df, select = nameSel), subset(simRange, select = nameSel))
@@ -161,7 +161,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   
   if (!ksDists & !is.null(obs)) {
     if(nrow(obs) > 0){
-      obs$Type <- "IPM"
+      obs$Type <- "Bayesian"
       obs$obsError <- FALSE
       obs$obsError[obs$type == "observed"] <- TRUE
       x2 <- x2 + ggplot2::geom_point(data = obs,

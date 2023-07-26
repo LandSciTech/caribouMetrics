@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotRes.R
 \name{plotRes}
 \alias{plotRes}
-\title{Plot caribou Bayesian IPM results}
+\title{Plot caribou Bayesian model results}
 \usage{
 plotRes(
   modTables,
@@ -36,7 +36,7 @@ a ggplot object or list of ggplot objects if a vector of parameters
 was given.
 }
 \description{
-Plot results of the caribou Bayesian IPM with the option to include the
+Plot results of the caribou Bayesian model with the option to include the
 national model and observed data
 }
 \examples{

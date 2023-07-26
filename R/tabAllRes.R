@@ -1,4 +1,4 @@
-#' Tabulate results from caribou Bayesian IPM
+#' Tabulate results from caribou Bayesian model
 #'
 #' Create a summary table for each population parameter modelled by
 #' [caribouBayesianIPM()]
