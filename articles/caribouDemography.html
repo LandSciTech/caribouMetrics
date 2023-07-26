@@ -187,12 +187,12 @@ that they have been assigned to.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefSamples</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       Intercept        Anthro Precision</span></span>
-<span><span class="co">#&gt; [1,] -0.1390009 -0.0009119075  69.22123</span></span>
-<span><span class="co">#&gt; [2,] -0.1471411 -0.0007598385  78.67755</span></span>
-<span><span class="co">#&gt; [3,] -0.1395056 -0.0008914289  48.95424</span></span>
-<span><span class="co">#&gt; [4,] -0.1400631 -0.0006572281  60.10952</span></span>
-<span><span class="co">#&gt; [5,] -0.1384606 -0.0008383241  57.35271</span></span>
-<span><span class="co">#&gt; [6,] -0.1462009 -0.0008792231  69.41819</span></span>
+<span><span class="co">#&gt; [1,] -0.1490322 -0.0005950521  68.78377</span></span>
+<span><span class="co">#&gt; [2,] -0.1353767 -0.0008456491  60.90918</span></span>
+<span><span class="co">#&gt; [3,] -0.1379726 -0.0005694751  40.84022</span></span>
+<span><span class="co">#&gt; [4,] -0.1428436 -0.0010634348  56.30813</span></span>
+<span><span class="co">#&gt; [5,] -0.1377863 -0.0007074659  54.09090</span></span>
+<span><span class="co">#&gt; [6,] -0.1497805 -0.0010489761  61.66461</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefValues</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Intercept Anthro Precision</span></span>
 <span><span class="co">#&gt; 1:    -0.142 -8e-04  63.43724</span></span>
@@ -200,7 +200,7 @@ that they have been assigned to.</p>
 <span><span class="co">#&gt;      Intercept      Anthro Precision</span></span>
 <span><span class="co">#&gt; 1: 0.007908163 0.000127551  8.272731</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">quantiles</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9026553 0.4762024 0.8379259 0.8893287 0.1430361 0.8455411</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.36578156 0.76367735 0.41718437 0.05546092 0.63231463 0.93692385</span></span></code></pre></div>
 <p>Next we calculate sample demographic rates given sampled model
 coefficients and disturbance metrics for our example landscape, setting
 <code>returnSample = TRUE</code> so that the results returned contain a
@@ -330,7 +330,7 @@ disturbance changes.</p>
 <span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre>
 <p><img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"></p>
-<pre><code><span><span class="co">#&gt; Warning: Removed 5 rows containing missing values (`geom_line()`).</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Warning: Removed 1 row containing missing values (`geom_line()`).</span></span></code></pre>
 <p><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
 </div>
 </div>
