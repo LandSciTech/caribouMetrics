@@ -66,7 +66,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   
   exp_param_nms <- c(
     "Adult female survival", "Recruitment",
-    "Female-only recruitment", "Population growth rate", "Female population size",
+    "Adjusted recruitment", "Population growth rate", "Female population size",
     "Mean adult female survival",
     "Mean recruitment", "Mean female recruitment",
     "Median population growth rate",

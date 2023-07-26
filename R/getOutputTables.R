@@ -103,7 +103,7 @@ getOutputTables <- function(caribouBayesDemogMod,
 
     trueX <- subset(exData, select = c("Year", "Rfemale"))
     names(trueX) <- c("Year", "Mean")
-    trueX$parameter <- "Female-only recruitment"
+    trueX$parameter <- "Adjusted recruitment"
     trueX$type <- "true"
     
     obsLam <- subset(exData, select = c("Year", "lambda"))

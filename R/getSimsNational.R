@@ -122,7 +122,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
     group_by(.data$Anthro) %>%
     summarize(Mean = mean(.data$X_t), lower = quantile(.data$X_t, 0.025),
               upper = quantile(.data$X_t, 0.975))
-  simXBig$Parameter <- "Female-only recruitment"
+  simXBig$Parameter <- "Adjusted recruitment"
   
   simLamBig <- pars %>%
     select("Anthro", "lambda") %>%
@@ -140,7 +140,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
 
   parsSelect <- subset(pars, select = c("Anthro", "S_t", "R_t","X_t", "lambda", "N"))
   names(parsSelect) <- c("Anthro", "Adult female survival",
-                         "Recruitment","Female-only recruitment", "Population growth rate",
+                         "Recruitment","Adjusted recruitment", "Population growth rate",
                          "Female population size")
   parsSelect <- parsSelect %>%
     tidyr::pivot_longer(!.data$Anthro, names_to = "Parameter", values_to = "Value")

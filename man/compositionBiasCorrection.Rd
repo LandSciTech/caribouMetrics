@@ -5,7 +5,7 @@
 \title{Calculate bias correction term for calf:cow composition survey.
 TO DO: documentation borrowing from manuscript.}
 \usage{
-compositionBiasCorrection(w, q, u, z)
+compositionBiasCorrection(w, q, u, z, approx = F)
 }
 \arguments{
 \item{w}{number. The apparent number of adult females per collared animal in composition survey.}

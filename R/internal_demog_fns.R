@@ -346,7 +346,7 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
     ),
     name = c(
       "Adult female survival", "Recruitment",
-      "Female-only recruitment", "Population growth rate", "Female population size",
+      "Adjusted recruitment", "Population growth rate", "Female population size",
       "Mean adult female survival",
       "Mean recruitment", "Mean female recruitment",
       "Median population growth rate",
