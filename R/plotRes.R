@@ -85,7 +85,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
             acc_vals = list(Parameter = exp_param_nms))
   
   if (is.null(facetVars)) {
-    titleFontSize <- 16
+    titleFontSize <- 16*labFontSize/14
     # labFontSize <- 14
   } else {
     titleFontSize <- 11
