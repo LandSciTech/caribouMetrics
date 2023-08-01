@@ -204,6 +204,7 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
                               Class = "cow")
     }
   }
+  
   # given observed total animals & proportion calfs/cows from simulation - get
   # calf/cow ratio
   ageRatioOut <- simCalfCowRatios(cowCounts, minYr, exData)
