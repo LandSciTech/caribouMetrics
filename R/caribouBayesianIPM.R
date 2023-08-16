@@ -368,9 +368,9 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   }
 
   if (inp$adjustR) {
-    adjustString <- "Rfemale[k] <- (exp(composition.bias)*R[k]/2)/(1+(exp(composition.bias)*R[k]/2))"
+    adjustString <- "Rfemale[k] <- (composition.bias*R[k]/2)/(1+(composition.bias*R[k]/2))"
   } else {
-    adjustString <- "Rfemale[k] <- exp(composition.bias)*R[k]/2"
+    adjustString <- "Rfemale[k] <- composition.bias*R[k]/2"
   }
 
   if (inp$survAnalysisMethod == "KaplanMeier") {
@@ -378,13 +378,24 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   } else {
     survString <- paste(c("for(t in 1:12){", "surv[surv_id[k],t+1] ~ dbern(S.annual.KM[survYr[surv_id[k]]]^(1/12)*surv[surv_id[k],t])", "}"), collapse = "\n")
   }
+  
+  if(is.na(betaPriors$bias.Prior1)){
+    biasString <- "composition.bias <- bias.Prior1+0*bias.Prior2"
+  }else{
+    if(betaPriors$bias.Prior2==0){
+      biasString <- "composition.bias <- exp(bias.Prior1+0*bias.Prior2)"
+    }else{
+      biasString <- paste0(c("lbias~dnorm(bias.Prior1,pow(bias.Prior2,-2))","composition.bias <- exp(lbias)"),collapse="\n")
+    }
+  }
 
   jagsTemplate <- paste(readLines(system.file("templates/JAGS_template.txt",
                                               package = "caribouMetrics"
   )), collapse = "\n")
   jagsTemplate <- gsub("_survString_", survString, jagsTemplate, fixed = T)
   jagsTemplate <- gsub("_adjustString_", adjustString, jagsTemplate, fixed = T)
-
+  jagsTemplate <- gsub("_biasString_", biasString, jagsTemplate, fixed = T)
+  
   jagsFile <- file.path(saveJAGStxt, "JAGS_run.txt")
 
   sink(jagsFile)

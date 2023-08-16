@@ -23,12 +23,15 @@ compositionBiasCorrection<-function(w,q,u,z,approx=F){
     cs <- cr %>%
       group_by(w) %>%
       summarise(m = mean(c), v = var(c))
-    cs$v[cs$v==0]=0.000001
-    
+
     #now find lognormal parameters from mean and variance
     #https://www.johndcook.com/blog/2022/02/24/find-log-normal-parameters/
-    cs$sig2 = log(1+cs$v/cs$m^2)
+    cs$sig2 = NA
+    cs$sig2[(cs$v==0)|(cs$m==0)]=0
+    cs$sig2[!((cs$v==0)|(cs$m==0))] = log(1+cs$v/cs$m^2)
     cs$mu = log(cs$m)-cs$sig2/2
+    cs$mu[cs$m==0]=NA
+    
     return(cs)
   }else{
     return(c)
