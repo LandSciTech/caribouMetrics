@@ -11,6 +11,7 @@
 #' @examples
 #' 
 compositionBiasCorrection<-function(w,q,u,z,approx=F){
+  w = max(w,1) 
   if(max(z)>=1){
     stop("Composition bias correct term is undefined when the probability of missing calves z >= 1.")
   }

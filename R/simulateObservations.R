@@ -61,11 +61,11 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
                                  survivalModelNumber = "M1",
                                  recruitmentModelNumber = "M4",
                                  writeFilesDir = NULL) {
-  # printPlot=T;cowCounts=ePars$cowCounts;freqStartsByYear=ePars$freqStartsByYear;
+  # paramTable=cs;printPlot=T;cowCounts=NULL;freqStartsByYear=NULL;
   # collarNumYears=ePars$collarNumYears;collarOffTime=ePars$collarOffTime;
   # collarOnTime=ePars$collarOnTime
-  # distScen = NULL;popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC;
-  # survivalModelNumber = "M1";recruitmentModelNumber = "M4"
+  # distScen = NULL;populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC;
+  # survivalModelNumber = "M1";recruitmentModelNumber = "M4";writeFilesDir=NULL
   if (is.character(cowCounts)) {
     cowCounts <- read.csv(cowCounts)
   }
@@ -181,6 +181,8 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   } 
 
   if (is.null(freqStartsByYearIn)) {
+    #freqStartsByYear$numStarts=0
+    
     simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears,
                                   collarOffTime, collarOnTime, topUp = T)
   } else {

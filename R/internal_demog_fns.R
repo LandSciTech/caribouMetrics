@@ -219,7 +219,19 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
                             collarOnTime, topUp = FALSE) {
   # topUp=T
   # for simplicity, ignore variation in survival probability among months
+  
+  zeroPartIn = subset(freqStartsByYear,numStarts=0)
+  if(nrow(zeroPartIn)>0){
+    zeroPart = data.frame(id=1,Year=zeroPartIn$Year,event=NA,enter=NA,exit=NA)
+  }
+
+  if(nrow(zeroPartIn)==nrow(freqStartsByYear)){
+    return(zeroPart)
+  }  
+  
   initYear <- min(exData$Year)
+  
+  
   freqStartsByYear <- subset(freqStartsByYear, 
                              (freqStartsByYear$Year >= initYear) & 
                                (freqStartsByYear$numStarts > 0))
@@ -240,6 +252,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   simSurvObs <- data.frame(id = NA, Year = NA, event = NA, enter = NA, exit = NA)
   simSurvObs <- subset(simSurvObs, !is.na(id))
   # collarNumYears=4
+  
   for (k in 1:nrow(freqStartsByYear)) {
     # k =1
     if (is.na(freqStartsByYear$numStarts[k]) | (freqStartsByYear$numStarts[k] <= 0)) {
@@ -429,6 +442,7 @@ movingAveGrowthRate <- function(obs, assessmentYrs) {
     return(obs)
   }
   obsOut <- obs
+  assessmentYrs = min(assessmentYrs,nrow(obsOut))
   for (k in assessmentYrs:nrow(obsOut)) {
     # k=3
     obsOut$Mean[k] <- mean(obs$Mean[(k - assessmentYrs + 1):k])
