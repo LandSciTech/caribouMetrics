@@ -250,7 +250,7 @@ population as disturbance increases over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:12] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpuoMcnF/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/Rtmp24o0Rx/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -268,11 +268,11 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;  $ rr.summary.all:'data.frame':  175 obs. of  13 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year            : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
 <span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adjusted recruitment" "Adult female survival" "Recruitment" "Female population size" ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.215 0.876 0.41 1000 1.062 ...</span></span>
-<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.021 0.031 0.027 0 0.04 ...</span></span>
-<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.181 0.793 0.365 1000 0.982 ...</span></span>
-<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.257 0.912 0.481 1000 1.132 ...</span></span>
-<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.96 NA NA NA NA 0.95 ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.224 0.893 0.424 1000 1.096 ...</span></span>
+<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.026 0.017 0.035 0 0.038 ...</span></span>
+<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.183 0.863 0.363 1000 1.025 ...</span></span>
+<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.276 0.928 0.491 1000 1.17 ...</span></span>
+<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 1 NA NA NA NA 0.99 ...</span></span>
 <span><span class="co">#&gt;   ..$ X               : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ Anthro          : int [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;   ..$ fire_excl_anthro: num [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
@@ -388,9 +388,7 @@ parameter.</p>
 <span>  <span class="va">scn_params</span>, </span>
 <span>  <span class="co"># collars fall off after 4 years and are deployed in May and fall off in August</span></span>
 <span>  collarNumYears <span class="op">=</span> <span class="fl">4</span>, collarOffTime <span class="op">=</span> <span class="fl">8</span>, collarOnTime <span class="op">=</span> <span class="fl">5</span>, </span>
-<span>  printPlot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: In subset.data.frame(freqStartsByYear, numStarts = 0) :</span></span>
-<span><span class="co">#&gt;  extra argument 'numStarts' will be disregarded</span></span></code></pre></div>
+<span>  printPlot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/sim-obs-1.png" width="672"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -403,8 +401,7 @@ parameter.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Year</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">ncollar</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">ndeaths</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Number of Collars (line) and deaths (bars)"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 20 rows containing missing values (`position_stack()`).</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Number of Collars (line) and deaths (bars)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/sim-obs-2.png" width="672"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -428,17 +425,7 @@ see how well our monitoring program captured the true population.</p>
 <span>                              disturbance <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">simDisturbance</span>, </span>
 <span>                              <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>                              Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = sim_obs$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; sim_obs$ageRatioOut, : warning, low sample size of adult females in at least</span></span>
-<span><span class="co">#&gt; one year</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = sim_obs$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; sim_obs$ageRatioOut, : Collars not present at the start of a year are omitted</span></span>
-<span><span class="co">#&gt; from survival analysis in that year. There are no years with collars in the</span></span>
-<span><span class="co">#&gt; first month.</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = sim_obs$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; sim_obs$ageRatioOut, : missing composition data; missing years: c("2004",</span></span>
-<span><span class="co">#&gt; "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014",</span></span>
-<span><span class="co">#&gt; "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span></span>
 <span><span class="va">mod_sim_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">mod_sim</span>, exData <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">exData</span>, </span>
 <span>                               paramTable <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">paramTable</span>,</span>
@@ -449,11 +436,11 @@ see how well our monitoring program captured the true population.</p>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span>, <span class="st">"Population growth rate"</span><span class="op">)</span>,</span>
 <span>        labFontSize <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $Recruitment</span></span>
-<span><span class="co">#&gt; Warning: Removed 40 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 20 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/mod-sim-obs-1.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $`Adult female survival`</span></span>
-<span><span class="co">#&gt; Warning: Removed 20 rows containing missing values (`geom_point()`).</span></span></code></pre>
+<span><span class="co">#&gt; Warning: Removed 21 rows containing missing values (`geom_point()`).</span></span></code></pre>
 <p><img src="BayesianDemographicProjection_files/figure-html/mod-sim-obs-2.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $`Population growth rate`</span></span></code></pre>
@@ -483,120 +470,39 @@ see how well our monitoring program captured the true population.</p>
 <span>  <span class="va">scns</span>, <span class="va">eParsIn</span>, <span class="va">simBig</span>, getKSDists <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>  Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: In subset.data.frame(freqStartsByYear, numStarts = 0) :</span></span>
-<span><span class="co">#&gt;  extra argument 'numStarts' will be disregarded</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : Collars not present at the start of a year are omitted from</span></span>
-<span><span class="co">#&gt; survival analysis in that year. There are no years with collars in the first</span></span>
-<span><span class="co">#&gt; month.</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : missing composition data; missing years: c("2014", "2015",</span></span>
-<span><span class="co">#&gt; "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")</span></span>
-<span><span class="co">#&gt; Warning: In subset.data.frame(freqStartsByYear, numStarts = 0) :</span></span>
-<span><span class="co">#&gt;  extra argument 'numStarts' will be disregarded</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : Collars not present at the start of a year are omitted from</span></span>
-<span><span class="co">#&gt; survival analysis in that year. There are no years with collars in the first</span></span>
-<span><span class="co">#&gt; month.</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : missing composition data; missing years: c("2014", "2015",</span></span>
-<span><span class="co">#&gt; "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")</span></span>
-<span><span class="co">#&gt; Warning: In subset.data.frame(freqStartsByYear, numStarts = 0) :</span></span>
-<span><span class="co">#&gt;  extra argument 'numStarts' will be disregarded</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : Collars not present at the start of a year are omitted from</span></span>
-<span><span class="co">#&gt; survival analysis in that year. There are no years with collars in the first</span></span>
-<span><span class="co">#&gt; month.</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : missing composition data; missing years: c("2014", "2015",</span></span>
-<span><span class="co">#&gt; "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")</span></span>
-<span><span class="co">#&gt; Warning: In subset.data.frame(freqStartsByYear, numStarts = 0) :</span></span>
-<span><span class="co">#&gt;  extra argument 'numStarts' will be disregarded</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : Collars not present at the start of a year are omitted from</span></span>
-<span><span class="co">#&gt; survival analysis in that year. There are no years with collars in the first</span></span>
-<span><span class="co">#&gt; month.</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : missing composition data; missing years: c("2014", "2015",</span></span>
-<span><span class="co">#&gt; "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")</span></span>
-<span><span class="co">#&gt; Warning: In subset.data.frame(freqStartsByYear, numStarts = 0) :</span></span>
-<span><span class="co">#&gt;  extra argument 'numStarts' will be disregarded</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : Collars not present at the start of a year are omitted from</span></span>
-<span><span class="co">#&gt; survival analysis in that year. There are no years with collars in the first</span></span>
-<span><span class="co">#&gt; month.</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : missing composition data; missing years: c("2014", "2015",</span></span>
-<span><span class="co">#&gt; "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")</span></span>
-<span><span class="co">#&gt; Warning: In subset.data.frame(freqStartsByYear, numStarts = 0) :</span></span>
-<span><span class="co">#&gt;  extra argument 'numStarts' will be disregarded</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : Collars not present at the start of a year are omitted from</span></span>
-<span><span class="co">#&gt; survival analysis in that year. There are no years with collars in the first</span></span>
-<span><span class="co">#&gt; month.</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : missing composition data; missing years: c("2014", "2015",</span></span>
-<span><span class="co">#&gt; "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")</span></span>
-<span><span class="co">#&gt; Warning: In subset.data.frame(freqStartsByYear, numStarts = 0) :</span></span>
-<span><span class="co">#&gt;  extra argument 'numStarts' will be disregarded</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : Collars not present at the start of a year are omitted from</span></span>
-<span><span class="co">#&gt; survival analysis in that year. There are no years with collars in the first</span></span>
-<span><span class="co">#&gt; month.</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : missing composition data; missing years: c("2014", "2015",</span></span>
-<span><span class="co">#&gt; "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")</span></span>
-<span><span class="co">#&gt; Warning: In subset.data.frame(freqStartsByYear, numStarts = 0) :</span></span>
-<span><span class="co">#&gt;  extra argument 'numStarts' will be disregarded</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : Collars not present at the start of a year are omitted from</span></span>
-<span><span class="co">#&gt; survival analysis in that year. There are no years with collars in the first</span></span>
-<span><span class="co">#&gt; month.</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : missing composition data; missing years: c("2014", "2015",</span></span>
-<span><span class="co">#&gt; "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")</span></span>
-<span><span class="co">#&gt; Warning: In subset.data.frame(freqStartsByYear, numStarts = 0) :</span></span>
-<span><span class="co">#&gt;  extra argument 'numStarts' will be disregarded</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : Collars not present at the start of a year are omitted from</span></span>
-<span><span class="co">#&gt; survival analysis in that year. There are no years with collars in the first</span></span>
-<span><span class="co">#&gt; month.</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : missing composition data; missing years: c("2014", "2015",</span></span>
-<span><span class="co">#&gt; "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023")</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">scResults</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span>, <span class="st">"Population growth rate"</span><span class="op">)</span>, </span>
 <span>        facetVars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rQuantile"</span>, <span class="st">"sQuantile"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $Recruitment</span></span>
-<span><span class="co">#&gt; Warning: Removed 180 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 90 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/many-scns-1.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $`Adult female survival`</span></span>
