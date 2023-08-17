@@ -253,19 +253,26 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   simSurvObs <- subset(simSurvObs, !is.na(id))
   # collarNumYears=4
   
+
   for (k in 1:nrow(freqStartsByYear)) {
     # k =1
     if (is.na(freqStartsByYear$numStarts[k]) | (freqStartsByYear$numStarts[k] <= 0)) {
       next
     }
     startYear <- freqStartsByYear$Year[k]
+    collarsExisting <- nrow(subset(simSurvObs, (simSurvObs$enter == 0) & 
+                                     (simSurvObs$Year == startYear)))
+    
     if (topUp) {
-      collarsExisting <- nrow(subset(simSurvObs, (simSurvObs$enter == 0) & 
-                                       (simSurvObs$Year == startYear)))
       nstarts <- max(0, freqStartsByYear$numStarts[k] - collarsExisting)
     } else {
       nstarts <- freqStartsByYear$numStarts[k]
     }
+    #ensure number of collars does not exceed population size
+    cPop = exData$N[exData$Year==startYear]
+    
+    if(cPop<(nstarts+collarsExisting)){nstarts=0}
+    
     if (nstarts == 0) {
       next
     }
