@@ -187,12 +187,12 @@ that they have been assigned to.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefSamples</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       Intercept        Anthro Precision</span></span>
-<span><span class="co">#&gt; [1,] -0.1503519 -0.0007460150  75.60400</span></span>
-<span><span class="co">#&gt; [2,] -0.1477827 -0.0006151691  68.90942</span></span>
-<span><span class="co">#&gt; [3,] -0.1420101 -0.0007883040  49.08531</span></span>
-<span><span class="co">#&gt; [4,] -0.1386885 -0.0008854416  60.05595</span></span>
-<span><span class="co">#&gt; [5,] -0.1381944 -0.0009525155  58.36718</span></span>
-<span><span class="co">#&gt; [6,] -0.1426948 -0.0007483359  63.94613</span></span>
+<span><span class="co">#&gt; [1,] -0.1450719 -0.0008721155  67.57160</span></span>
+<span><span class="co">#&gt; [2,] -0.1564092 -0.0005600864  63.97960</span></span>
+<span><span class="co">#&gt; [3,] -0.1455313 -0.0010231736  81.69086</span></span>
+<span><span class="co">#&gt; [4,] -0.1485544 -0.0008262231  74.75708</span></span>
+<span><span class="co">#&gt; [5,] -0.1411330 -0.0008248803  66.89593</span></span>
+<span><span class="co">#&gt; [6,] -0.1452596 -0.0007099851  65.49285</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefValues</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Intercept Anthro Precision</span></span>
 <span><span class="co">#&gt; 1:    -0.142 -8e-04  63.43724</span></span>
@@ -200,7 +200,7 @@ that they have been assigned to.</p>
 <span><span class="co">#&gt;      Intercept      Anthro Precision</span></span>
 <span><span class="co">#&gt; 1: 0.007908163 0.000127551  8.272731</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">quantiles</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9673848 0.5123747 0.7865230 0.6532565 0.9312124 0.1982465</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.3219940 0.4038577 0.3962425 0.4362224 0.1354208 0.8817134</span></span></code></pre></div>
 <p>Next we calculate sample demographic rates given sampled model
 coefficients and disturbance metrics for our example landscape, setting
 <code>returnSample = TRUE</code> so that the results returned contain a
@@ -329,7 +329,9 @@ disturbance changes.</p>
 <span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre>
-<p><img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
+<p><img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"></p>
+<pre><code><span><span class="co">#&gt; Warning: Removed 1 row containing missing values (`geom_line()`).</span></span></code></pre>
+<p><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
 </div>
 </div>
 <div class="section level2">
@@ -343,7 +345,7 @@ landscape where the anthropogenic disturbance footprint is increasing by
 use a simpler 2-stage demographic model without interannual variability,
 density dependence, or discrete numbers of animals, as in Stewart et
 al. in prep.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">numTimesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">stepLength</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>

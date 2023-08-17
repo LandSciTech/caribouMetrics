@@ -250,7 +250,7 @@ population as disturbance increases over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:12] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpOOe8FT/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpSAV7Nm/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -268,10 +268,10 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;  $ rr.summary.all:'data.frame':  175 obs. of  13 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year            : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
 <span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adjusted recruitment" "Adult female survival" "Recruitment" "Female population size" ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.212 0.886 0.405 1000 1.072 ...</span></span>
-<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.022 0.019 0.025 0 0.035 ...</span></span>
-<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.177 0.845 0.363 1000 1.002 ...</span></span>
-<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.264 0.924 0.464 1000 1.134 ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.218 0.887 0.413 1000 1.078 ...</span></span>
+<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.022 0.019 0.029 0 0.035 ...</span></span>
+<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.182 0.848 0.359 1000 1.016 ...</span></span>
+<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.264 0.915 0.463 1000 1.141 ...</span></span>
 <span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 1 NA NA NA NA 0.97 ...</span></span>
 <span><span class="co">#&gt;   ..$ X               : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ Anthro          : int [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
@@ -480,9 +480,6 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
@@ -490,9 +487,6 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">scResults</span>,</span>
