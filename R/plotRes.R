@@ -169,9 +169,10 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
       obs$Type <- "Bayesian"
       obs$obsError <- FALSE
       obs$obsError[obs$type == "observed"] <- TRUE
+      obs <- filter(obs, !(Year > curYear & obsError))
       x2 <- x2 + ggplot2::geom_point(data = obs,
                                      ggplot2::aes(x = .data[["Year"]], y = .data[["Mean"]],
-                                                  shape = "obsError"), col = "black",
+                                                  shape = .data[["obsError"]]), col = "black",
                                      show.legend = TRUE) +
         ggplot2::scale_shape_manual(values = c(16, 2))
     }
