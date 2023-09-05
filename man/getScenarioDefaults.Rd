@@ -17,10 +17,16 @@ getScenarioDefaults(
   projYears = 35,
   obsYears = 15,
   N0 = 1000,
-  adjustR = FALSE,
+  adjustR = TRUE,
   assessmentYrs = 3,
+  qMin = 0,
+  qMax = 0.6,
+  uMin = 0,
+  uMax = 0.2,
+  zMin = 0,
+  zMax = 0.2,
+  cowMult = 6,
   collarInterval = NA,
-  cowMult = NA,
   cowCount = NA,
   collarCount = NA,
   startYear = NA,
@@ -62,11 +68,22 @@ reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 \item{assessmentYrs}{Number of years over which to assess lambda (growth
 rate)}
 
+\item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
+
+\item{qMax}{number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.}
+
+\item{uMin}{number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.}
+
+\item{uMax}{number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.}
+
+\item{zMin}{number in 0, 1. Minimum probability of missing calves in composition survey.}
+
+\item{zMax}{number in 0, <1. Maximum probability of missing calves in composition survey.}
+
+\item{cowMult}{number >= 1. The apparent number of adult females per collared animal in composition survey.}
+
 \item{collarInterval}{number. Optional. Number of years between collar deployments. If
 missing assumed to be every year}
-
-\item{cowMult}{number. Optional. If provided number of cows is \code{cowMult} \*
-number of surviving collared cows at month 5}
 
 \item{cowCount}{Optional. Only used in \code{runScnSet()} to set the number of cows per
 year in recruitment survey}
@@ -109,6 +126,7 @@ population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.
 Caribou demography functions:
 \code{\link{caribouBayesianIPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},

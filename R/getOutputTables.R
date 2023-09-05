@@ -66,8 +66,13 @@ getOutputTables <- function(caribouBayesDemogMod,
     if (sum(survInput$event, na.rm = T) > 0) {
       obsSurv <- getKMSurvivalEstimates(survInput)
     } else {
-      obsSurv <- unique(subset(survInput, !is.na(survInput$enter),
+      if(!is.element("id",names(survInput))){
+        survInput$id=NA
+        survInput$id[!is.na(survInput$enter)]=1
+      }
+      obsSurv <- unique(subset(survInput, !is.na(survInput$id),
                                select = c("Year")))
+      
       obsSurv$surv <- NA
       obsSurv$Var1 <- obsSurv$Year
     }
@@ -89,7 +94,7 @@ getOutputTables <- function(caribouBayesDemogMod,
   obsRec$Mean <- obsRec$calf / obsRec$cow
   obsRec$parameter <- "Recruitment"
   obsRec$type <- "observed"
-  
+
   if(!is.null(exData)){
     trueSurv <- subset(exData, select = c("Year", "survival"))
     names(trueSurv) <- c("Year", "Mean")
@@ -100,6 +105,11 @@ getOutputTables <- function(caribouBayesDemogMod,
     names(trueRec) <- c("Year", "Mean")
     trueRec$parameter <- "Recruitment"
     trueRec$type <- "true"
+
+    trueX <- subset(exData, select = c("Year", "Rfemale"))
+    names(trueX) <- c("Year", "Mean")
+    trueX$parameter <- "Adjusted recruitment"
+    trueX$type <- "true"
     
     obsLam <- subset(exData, select = c("Year", "lambda"))
     names(obsLam) <- c("Year", "Mean")
@@ -117,12 +127,14 @@ getOutputTables <- function(caribouBayesDemogMod,
     obsLam <- NULL
     obsSize <- NULL
     trueRec <- NULL
+    trueX <- NULL
     trueSurv <- NULL
   }
   obsAll <- rbind(obsLam,
                   obsSize,
                   subset(obsRec, select = c("Year", "Mean", "parameter", "type")),
-                  trueRec, 
+                  trueRec,
+                  trueX,
                   subset(obsSurv, select = c("Year", "Mean", "parameter", "type")), 
                   trueSurv)
   
@@ -133,7 +145,7 @@ getOutputTables <- function(caribouBayesDemogMod,
     if(!all(unique(simObsList$disturbanceIn$Anthro) %in% simNational$summary$Anthro)){
       message("recalculating national sims to match anthropogenic distubance scenario")
       
-      simNational <- getSimsNational(Anthro = unique(simObsList$disturbanceIn$Anthro))
+      simNational <- getSimsNational(Anthro = unique(simObsList$disturbanceIn$Anthro),cPars=paramTable)
     }
     
     simBigO <- subset(simNational$summary, select = c("Anthro", "Mean", "lower",

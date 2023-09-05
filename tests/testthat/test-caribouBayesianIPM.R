@@ -221,7 +221,7 @@ test_that("results match expected", {
       filter(parameter != "Female population size")
   }
   
-  # difference between national model and IPM
+  # difference between national model and Bayesian model
   calcDifNat <- function(mod, min_year = 0){
     mod$rr.summary.all %>% select(Parameter, Mean, Year) %>% 
       right_join(mod$sim.all %>% select(parameter, Mean, Year),
@@ -366,7 +366,7 @@ test_that("results match expected", {
   
   # KS distances JH added to characterize deviation from national model bands
   # not just the mean. So should test what happens when there is no sample info
-  # provided. distribution of means from national model vs IPM. Set standards
+  # provided. distribution of means from national model vs Bayesian model. Set standards
   # that when no obs the differences don't get much worse than they are now. See
   # the doc JH will send to show what we are looking for
   

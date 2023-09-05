@@ -61,11 +61,11 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
                                  survivalModelNumber = "M1",
                                  recruitmentModelNumber = "M4",
                                  writeFilesDir = NULL) {
-  # printPlot=T;cowCounts=ePars$cowCounts;freqStartsByYear=ePars$freqStartsByYear;
+  # paramTable=cs;printPlot=T;cowCounts=NULL;freqStartsByYear=NULL;
   # collarNumYears=ePars$collarNumYears;collarOffTime=ePars$collarOffTime;
   # collarOnTime=ePars$collarOnTime
-  # distScen = NULL;popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC;
-  # survivalModelNumber = "M1";recruitmentModelNumber = "M4"
+  # distScen = NULL;populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC;
+  # survivalModelNumber = "M1";recruitmentModelNumber = "M4";writeFilesDir=NULL
   if (is.character(cowCounts)) {
     cowCounts <- read.csv(cowCounts)
   }
@@ -139,7 +139,8 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
       recSlopeMultiplier = paramTable$rSlopeMod,
       sefSlopeMultiplier = paramTable$sSlopeMod, recQuantile = paramTable$rQuantile,
       sefQuantile = paramTable$sQuantile,
-      N0 = paramTable$N0, adjustR = paramTable$adjustR 
+      N0 = paramTable$N0, adjustR = paramTable$adjustR,cowMult=paramTable$cowMult,
+      qMin=paramTable$qMin,qMax=paramTable$qMax,uMin=paramTable$uMin,uMax=paramTable$uMax,zMin=paramTable$zMin,zMax=paramTable$zMax 
     )
   )
 
@@ -180,6 +181,8 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   } 
 
   if (is.null(freqStartsByYearIn)) {
+    #freqStartsByYear$numStarts=0
+    
     simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears,
                                   collarOffTime, collarOnTime, topUp = T)
   } else {
@@ -198,9 +201,12 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
       cowCounts$Class <- "cow"
       cowCounts$Count <- paramTable$cowMult * cowCounts$Count
     } else {
-      cowCounts$Count <- NA
+      cowCounts <- data.frame(Year = unique(simSurvObs$Year), 
+                              Count = NA, 
+                              Class = "cow")
     }
   }
+  
   # given observed total animals & proportion calfs/cows from simulation - get
   # calf/cow ratio
   ageRatioOut <- simCalfCowRatios(cowCounts, minYr, exData)

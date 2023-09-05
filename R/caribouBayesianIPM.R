@@ -71,8 +71,8 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
                        inputList = list(), saveJAGStxt = tempdir(),
                        quiet = TRUE) {
   # survData=oo$simSurvObs;ageRatio=oo$ageRatioOut;disturbance=oo$simDisturbance;
-  # betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=paramTable$N0;survAnalysisMethod = "KaplanMeier"
-  # Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inputList=list()
+  # betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"; adjustR=F
+  # Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inputList=list();saveJAGStxt=tempdir();quiet=F
 
   # combine defaults in function with inputs from input list
   inputArgs <- c(
@@ -93,7 +93,7 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   if (betaPriors[[1]] == "default") {
     betaPriors <- getPriors()
   }
-
+  
   # Run model
   if (is.character(inp$ageRatio)) {
     ageRatio <- read.csv(inp$ageRatio, header = T)
@@ -200,58 +200,62 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
 
   # Note: biased results from years with <12 months of observations.
   # And problems with adding animals part way through the year, so omitting those
+  #data = data.frame(id=1,Year=2023,event=NA,enter=NA,exit=NA)
   dSubset <- subset(data, data$enter == 0) # ;dSubset=subset(dSubset,!((exit<12)&(event==0)))
   if (nrow(dSubset) == 0) {
-    stop("Collars not present at the start of a year are omitted from survival ",
-         "analysis in that year. Please ensure there is at least one year with",
-         " a collar in the first month.")
-  }
-
-  if (nrow(dSubset) == 1) {
-    warning("Switching to exponential survival analysis method because there is",
-            " only one collared animal.")
+    #stop("Collars not present at the start of a year are omitted from survival ",
+    #     "analysis in that year. Please ensure there is at least one year with",
+    #     " a collar in the first month.")
+    warning("Collars not present at the start of a year are omitted from survival ",
+         "analysis in that year. There are no years with collars in the first month.")
     inp$survAnalysisMethod <- "Exponential"
-  }
-  if (sum(dSubset$event, na.rm = T) == 0) {
-    warning("Switching to exponential survival analysis method because there ",
-            "are no recorded deaths.")
-    inp$survAnalysisMethod <- "Exponential"
-  }
-
-  if (inp$survAnalysisMethod == "KaplanMeier") {
-    survData <- getKMSurvivalEstimates(dSubset)
-    # omitting years with less than 12 months of observations of collared animals
-    sumDat <- dSubset %>%
-      group_by(.data$Year) %>%
-      summarise(minEnter = min(.data$enter), maxExit = max(.data$exit))
-    includeYrs <- subset(sumDat, sumDat$minEnter == 0 & sumDat$maxExit == 12)
-    survData$Year <- as.numeric(gsub("as.factor(Year)=", "",
-                                     as.character(survData$Var1), fixed = T))
-    survData <- merge(survData, includeYrs)
-    if (nrow(survData) == 0) {
-      warning("Years with less than 12 months of collar data are omitted from",
-              " survival analysis. Please ensure there is 12 months of collar ",
-              "data in at least one year.")
-      warning("Switching to exponential survival analysis method because there ",
-              "are no years with 12 months of collar data.")
+    survData = merge(data.frame(X1=0,X2=0,X3=0,X4=0,X5=0,X6=0,X7=0,X8=0,X9=0,X10=0,X11=0,X12=0,X13=0),data)
+  }else{
+    if (nrow(dSubset) == 1) {
+      warning("Switching to exponential survival analysis method because there is",
+              " only one collared animal.")
       inp$survAnalysisMethod <- "Exponential"
     }
-  }
-  if (inp$survAnalysisMethod == "KaplanMeier") {
-    message("using Kaplan-Meier survival model")
-    if (any(survData$surv == 1)) {
-      # which years does survival equal 1
-      survOne <- which(unlist(lapply(split(survData, survData$Year),
-                                     function(x) sum(x$event))) == 0)
-      yearsOne <- as.numeric(names(survOne))
-      data.sub <- data[data$Year %in% yearsOne, ]
-      nriskYears <- data.frame(table(data.sub$Year))
-
-      binLikFile <- file.path(saveJAGStxt, "binLik.txt")
-
-      # Specify model
-      sink(binLikFile)
-      cat("
+    if (sum(dSubset$event, na.rm = T) == 0) {
+      warning("Switching to exponential survival analysis method because there ",
+              "are no recorded deaths.")
+      inp$survAnalysisMethod <- "Exponential"
+    }
+    
+    if (inp$survAnalysisMethod == "KaplanMeier") {
+      survData <- getKMSurvivalEstimates(dSubset)
+      # omitting years with less than 12 months of observations of collared animals
+      sumDat <- dSubset %>%
+        group_by(.data$Year) %>%
+        summarise(minEnter = min(.data$enter), maxExit = max(.data$exit))
+      includeYrs <- subset(sumDat, sumDat$minEnter == 0 & sumDat$maxExit == 12)
+      survData$Year <- as.numeric(gsub("as.factor(Year)=", "",
+                                       as.character(survData$Var1), fixed = T))
+      survData <- merge(survData, includeYrs)
+      if (nrow(survData) == 0) {
+        warning("Years with less than 12 months of collar data are omitted from",
+                " survival analysis. Please ensure there is 12 months of collar ",
+                "data in at least one year.")
+        warning("Switching to exponential survival analysis method because there ",
+                "are no years with 12 months of collar data.")
+        inp$survAnalysisMethod <- "Exponential"
+      }
+    }
+    if (inp$survAnalysisMethod == "KaplanMeier") {
+      message("using Kaplan-Meier survival model")
+      if (any(survData$surv == 1)) {
+        # which years does survival equal 1
+        survOne <- which(unlist(lapply(split(survData, survData$Year),
+                                       function(x) sum(x$event))) == 0)
+        yearsOne <- as.numeric(names(survOne))
+        data.sub <- data[data$Year %in% yearsOne, ]
+        nriskYears <- data.frame(table(data.sub$Year))
+        
+        binLikFile <- file.path(saveJAGStxt, "binLik.txt")
+        
+        # Specify model
+        sink(binLikFile)
+        cat("
 	   model{
 	     for(i in 1:N){
 	      lived[i] ~ dbin(s[i], atrisk[i])
@@ -259,39 +263,42 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
 	      }
 	     }
 	      ", fill = TRUE)
-      sink()
-
-      data1 <- list(N = nrow(nriskYears), lived = nriskYears$Freq,
-                    atrisk = nriskYears$Freq)
-      params <- c("s")
-      inits <- function() {
-        list(s = runif(nrow(nriskYears), 0.80, 0.99))
+        sink()
+        
+        data1 <- list(N = nrow(nriskYears), lived = nriskYears$Freq,
+                      atrisk = nriskYears$Freq)
+        params <- c("s")
+        inits <- function() {
+          list(s = runif(nrow(nriskYears), 0.80, 0.99))
+        }
+        
+        # run model in JAGS
+        out1 <- R2jags::jags(
+          data = data1, inits = inits, parameters.to.save = params,
+          model.file = binLikFile, n.chains = 2, n.iter = 5000,
+          n.burnin = 1000, n.thin = 1, quiet = quiet
+        )
+        # create standard deviation variable from survData$tau above
+        survData$tau <- 1 / (survData$se^2)
+        survData$tau[survOne] <- 1 / (out1$BUGSoutput$sd$s^2)
+      } else {
+        survData$tau <- 1 / (survData$se^2)
       }
-
-      # run model in JAGS
-      out1 <- R2jags::jags(
-        data = data1, inits = inits, parameters.to.save = params,
-        model.file = binLikFile, n.chains = 2, n.iter = 5000,
-        n.burnin = 1000, n.thin = 1, quiet = quiet
-      )
-      # create standard deviation variable from survData$tau above
-      survData$tau <- 1 / (survData$se^2)
-      survData$tau[survOne] <- 1 / (out1$BUGSoutput$sd$s^2)
+      
+      surv_id <- which(survData$surv != 1)
+      nSurv <- length(surv_id)
+      survData$Var1 <- as.character(survData$Var1)
     } else {
-      survData$tau <- 1 / (survData$se^2)
+      message("expanding survival record")
+      dExpand <- apply(subset(dSubset, select = c("id", "Year", "event", "enter", "exit")),
+                       1, expandSurvivalRecord)
+      survData <- do.call(rbind, dExpand)
     }
-
-    surv_id <- which(survData$surv != 1)
-    nSurv <- length(surv_id)
-    survData$Var1 <- as.character(survData$Var1)
-  } else {
-    message("expanding survival record")
-    dExpand <- apply(subset(dSubset, select = c("id", "Year", "event", "enter", "exit")),
-                     1, expandSurvivalRecord)
-    survData <- do.call(rbind, dExpand)
   }
 
+
   # split data into calf and cow recruitment data
+
   calf.cnt <- subset(ageRatio, ageRatio$Class == "calf")
   calf.cnt$Class <- factor(calf.cnt$Class)
   cow.cnt <- subset(ageRatio, ageRatio$Class == "cow")
@@ -309,8 +316,12 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   data3$Count <- ifelse(data3$Count > data4$Count, NA, data3$Count)
   data4$Count <- ifelse(data3$Count > data4$Count, NA, data4$Count)
 
+  data3$Count[(data3$Count==1)&(data4$Count==1)]=NA #JAGS fails in this case
+  data4$Count[(data3$Count==1)&(data4$Count==1)]=NA #JAGS fails in this case
+  
   xCalf <- which(is.na(data3$Count) == T)
   xCow <- which(is.na(data4$Count) == T)
+  
   Years4 <- levels(as.factor(data4$Year))[xCalf]
 
   if (any(is.na(data3$Count) == T)) {
@@ -357,9 +368,9 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   }
 
   if (inp$adjustR) {
-    adjustString <- "Rfemale[k] <- (R[k]/2)/(1+(R[k]/2))"
+    adjustString <- "Rfemale[k] <- (composition.bias*R[k]/2)/(1+(composition.bias*R[k]/2))"
   } else {
-    adjustString <- "Rfemale[k] <- R[k]/2"
+    adjustString <- "Rfemale[k] <- composition.bias*R[k]/2"
   }
 
   if (inp$survAnalysisMethod == "KaplanMeier") {
@@ -367,13 +378,24 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   } else {
     survString <- paste(c("for(t in 1:12){", "surv[surv_id[k],t+1] ~ dbern(S.annual.KM[survYr[surv_id[k]]]^(1/12)*surv[surv_id[k],t])", "}"), collapse = "\n")
   }
+  
+  if(is.na(betaPriors$bias.Prior1)){
+    biasString <- "composition.bias <- bias.Prior1+0*bias.Prior2"
+  }else{
+    if(betaPriors$bias.Prior2==0){
+      biasString <- "composition.bias <- exp(bias.Prior1+0*bias.Prior2)"
+    }else{
+      biasString <- paste0(c("lbias~dnorm(bias.Prior1,pow(bias.Prior2,-2))","composition.bias <- exp(lbias)"),collapse="\n")
+    }
+  }
 
   jagsTemplate <- paste(readLines(system.file("templates/JAGS_template.txt",
                                               package = "caribouMetrics"
   )), collapse = "\n")
   jagsTemplate <- gsub("_survString_", survString, jagsTemplate, fixed = T)
   jagsTemplate <- gsub("_adjustString_", adjustString, jagsTemplate, fixed = T)
-
+  jagsTemplate <- gsub("_biasString_", biasString, jagsTemplate, fixed = T)
+  
   jagsFile <- file.path(saveJAGStxt, "JAGS_run.txt")
 
   sink(jagsFile)
@@ -397,6 +419,8 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
     sig.Saf.Prior2 = betaPriors$sig.Saf.Prior2,
     sig.R.Prior1 = betaPriors$sig.R.Prior1,
     sig.R.Prior2 = betaPriors$sig.R.Prior2,
+    bias.Prior1 = betaPriors$bias.Prior1,
+    bias.Prior2 = betaPriors$bias.Prior2,
     Ninit = inp$N0,
     assessmentYrs = inp$assessmentYrs,
     nCounts = length(which(is.na(data3t$Count) == FALSE)),
@@ -423,6 +447,9 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   sp.params <- c("S.annual.KM", "R", "Rfemale", "pop.growth",
                  "fpop.size", "var.R.real", "l.R", "l.Saf",
                  "beta.Rec.anthro", "beta.Rec.fire", "beta.Saf")
+
+  
+  
   rr.surv <- try(R2jags::jags(
     data = sp.data, parameters.to.save = sp.params,
     model.file = jagsFile,

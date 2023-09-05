@@ -3,9 +3,9 @@
 # License GPL-3
 #NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
-#' Plot caribou Bayesian IPM results
+#' Plot caribou Bayesian model results
 #'
-#' Plot results of the caribou Bayesian IPM with the option to include the
+#' Plot results of the caribou Bayesian model with the option to include the
 #' national model and observed data
 #'
 #' @param modTables list. A list of model results tables created using
@@ -18,6 +18,8 @@
 #'   facets. Font size is 10 pt if facets are used.
 #' @param ksDists logical. If true the `modTables$ksDists` table is used to
 #'   create plots for each parameter.
+#' @param legendPosition "bottom", "right", "left","top", or "none". Legend position.
+#' @param breakInterval number. How many years between x tick marks?
 #'
 #' @return a ggplot object or list of ggplot objects if a vector of parameters
 #'   was given.
@@ -41,7 +43,7 @@
 #'
 #' plotRes(out_tbl, parameter = "Recruitment")
 plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
-                   facetVars = NULL, labFontSize = 14, ksDists = FALSE) {
+                   facetVars = NULL, labFontSize = 14, ksDists = FALSE,legendPosition="right",breakInterval=1) {
   # allRes=scResults$ksDists; parameter="Recruitment";obs=scResults$obs.all;
   # lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("obsYears","sQuantile")
   
@@ -66,7 +68,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   
   exp_param_nms <- c(
     "Adult female survival", "Recruitment",
-    "Female-only recruitment", "Population growth rate", "Female population size",
+    "Adjusted recruitment", "Population growth rate", "Female population size",
     "Mean adult female survival",
     "Mean recruitment", "Mean female recruitment",
     "Median population growth rate",
@@ -83,13 +85,14 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
             acc_vals = list(Parameter = exp_param_nms))
   
   if (is.null(facetVars)) {
-    titleFontSize <- 16
+    titleFontSize <- 16*labFontSize/14
     # labFontSize <- 14
-    breakInterval <- 1
   } else {
     titleFontSize <- 11
     labFontSize <- 10
-    breakInterval <- 2
+    if(breakInterval==1){
+      breakInterval <- 2
+    }
   }
   if (ksDists) {
     # plot Kolmogorov Smirnov distances
@@ -118,7 +121,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   
   if (!ksDists & !is.null(simRange)) {
     
-    df$Type <- "IPM"
+    df$Type <- "Bayesian"
     simRange$Type <- "national"
     nameSel <- c(c("Year", "Mean", "Lower 95% CRI", "Upper 95% CRI", "Type"), facetVars)
     df <- rbind(subset(df, select = nameSel), subset(simRange, select = nameSel))
@@ -139,6 +142,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
                        linewidth = 1.75) +
     ggplot2::scale_color_discrete(type=pal2)+
     ggplot2::theme(
+      legend.position = legendPosition,
       axis.text.y = ggplot2::element_text(size = labFontSize),
       axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, size = labFontSize),
       axis.title.x = ggplot2::element_text(size = titleFontSize, face = "bold"),
@@ -162,7 +166,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   
   if (!ksDists & !is.null(obs)) {
     if(nrow(obs) > 0){
-      obs$Type <- "IPM"
+      obs$Type <- "Bayesian"
       obs$obsError <- FALSE
       obs$obsError[obs$type == "observed"] <- TRUE
       x2 <- x2 + ggplot2::geom_point(data = obs,

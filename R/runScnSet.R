@@ -1,4 +1,4 @@
-#' Run the caribou Bayesian IPM for multiple parameter sets
+#' Run the caribou Bayesian model for multiple parameter sets
 #'
 #' Define scenarios in a table and [simulateObservations()], run the
 #' [caribouBayesianIPM()] model and [getOutputTables()] for each scenario.
@@ -37,7 +37,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
                       getKSDists = TRUE, printProgress = FALSE, 
                       Niter = formals(caribouBayesianIPM)$Niter,
                       Nburn = formals(caribouBayesianIPM)$Nburn) {
-  # ePars=eParsIn;survAnalysisMethod="KaplanMeier";getKSDists=T;printProgress=F
+  # ePars=eParsIn;survAnalysisMethod="Exponential";simNational=simBig;getKSDists=T;printProgress=F;Niter = formals(caribouBayesianIPM)$Niter;Nburn = formals(caribouBayesianIPM)$Nburn
   scns <- getScenarioDefaults(scns)
   errorLog <- list()
   for (p in 1:nrow(scns)) {
@@ -50,6 +50,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
     oo <- simulateObservations(cs, collarNumYears = ePars$collarNumYears,
                                collarOffTime = ePars$collarOffTime,
                                collarOnTime = ePars$collarOnTime)
+    
     betaPriors <- getPriors(cs)
     minYr <- min(oo$exData$Year)
     maxYr <- max(oo$simDisturbance$Year)
@@ -65,7 +66,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
       errorLog[[p]] <- list(cs = cs, error = out)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
                    obs.all = obs.all, ksDists = ksDists, errorLog = errorLog),
-              "temp.Rds")
+              "results/temp.Rds")
       next
     }
 
@@ -73,7 +74,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
       errorLog[[p]] <- list(cs = cs, error = out$result)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
                    obs.all = obs.all, ksDists = ksDists, errorLog = errorLog),
-              "temp.Rds")
+              "results/temp.Rds")
       next
     }
 

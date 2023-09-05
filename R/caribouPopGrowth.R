@@ -58,6 +58,7 @@
 #' @param h_R Number. Maximum recruitment.
 #' @param l_S Number. Minimum survival.
 #' @param h_S Number. Maximum survival.
+#' @param c Number. Bias correction term.
 #' @param interannualVar list or logical. List containing interannual
 #'   variability parameters. These can be either coefficients of variation
 #'   (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to `FALSE` to
@@ -65,7 +66,7 @@
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
 #' @param adjustR Logical. Adjust R to account for delayed age at first
-#'   reproduction (DeCesare et al. 2012; Eacker et al. 2019).
+#'   reproduction (DeCesare et al. 2012; Eacker et al. 2019). 
 #' @param progress Logical. Should progress updates be shown?
 #'
 #' @return A data.frame of population size (`N`) and average growth rate
@@ -111,6 +112,7 @@ caribouPopGrowth <- function(N0,
                              h_R=0.82,
                              l_S=0.61,
                              h_S=1,
+                             c=1,
                              interannualVar = list(R_CV=0.46,S_CV=0.08696),
                              probOption="binomial",
                              adjustR=FALSE,
@@ -188,10 +190,11 @@ caribouPopGrowth <- function(N0,
     if(is.element("R_phi",names(interannualVar))){
       R_t=s*R_t
     }
-
+    
+    #adjusting for bias and delayed reproduction
     if(adjustR){
-      R_tadj=R_t/(1+R_t)
-    }else{R_tadj=R_t}
+      R_tadj=c*R_t/(1+c*R_t)
+    }else{R_tadj=c*R_t}
 
     Ntm1=N
 
@@ -242,7 +245,8 @@ caribouPopGrowth <- function(N0,
   rr$lambda=matrixStats::rowMeans2(as.matrix(subset(rr,select=lamBits)),na.rm=T)
   rr=subset(rr,select=setdiff(names(rr),lamBits))
   rr$N=N
-  rr$R_t=R_t/s
+  rr$R_t=R_t/s #apparent reproduction
+  rr$X_t=R_tadj
   rr$S_t=S_t
   rr$n_recruits = n_recruits
   rr$surviving_adFemales = surviving_adFemales

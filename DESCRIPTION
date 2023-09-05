@@ -63,6 +63,7 @@ Collate:
     'caribouPopGrowth.R'
     'checkInputs.R'
     'combineLinFeat.R'
+    'compositionBiasCorrection.R'
     'data.R'
     'dataPrepFns.R'
     'demographicCoefficients.R'

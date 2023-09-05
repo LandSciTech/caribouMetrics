@@ -14,8 +14,8 @@ demographicRates(
   predInterval = list(PI_R = c(0.025, 0.975), PI_S = c(0.025, 0.975)),
   transformFns = list(S_transform = function(y) {
      (y * 46 - 0.5)/45
- }, R_transform
-    = function(y) {
+ },
+    R_transform = function(y) {
      y
  })
 )
@@ -188,6 +188,7 @@ sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
 Caribou demography functions:
 \code{\link{caribouBayesianIPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{getOutputTables}()},

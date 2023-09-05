@@ -102,7 +102,8 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                           recSlopeMultiplier = 1, sefSlopeMultiplier = 1,
                           recQuantile = 0.5, sefQuantile = 0.5,
-                          stepLength = 1, N0 = 1000, adjustR = T) {
+                          stepLength = 1, N0 = 1000, adjustR = T,cowMult=1,
+                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0) {
   # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
   # recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
   # stepLength=1;N0=1000
@@ -130,7 +131,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   )
   # manually set quantiles for example population
   popGrowthParsSmall$coefSamples_Survival$quantiles <- sefQuantile
-
+  
   # Only use precision if included in the table for this model number for both
   # rec and surv
   usePrec <- "Precision" %in% names(popGrowthParsSmall$coefSamples_Survival$coefValues) &
@@ -148,30 +149,36 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
       ignorePrecision = !usePrec,
       returnSample = TRUE
     )
+    if(t ==1){
+      #set bias correction term for each example population - constant over time.
+      bc = unique(subset(rateSamples,select=replicate));nr=nrow(bc)
+      bc$c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
+    }
+    rateSamples$c = NULL; rateSamples = merge(rateSamples, bc)
+    
     if (is.element("N", names(pars))) {
       pars <- subset(pars, select = c("replicate", "N"))
       names(pars)[names(pars) == "N"] <- "N0"
     }
     pars <- merge(pars, rateSamples)
+    
     pars <- cbind(
       pars,
       caribouPopGrowth(pars$N0,
                        R_bar = pars$R_bar, S_bar = pars$S_bar,
-                       numSteps = stepLength, K = FALSE, l_R = 1e-06, adjustR = adjustR, 
+                       numSteps = stepLength, K = FALSE, l_R = 1e-06, adjustR = adjustR, c=pars$c,
                        progress = FALSE
       )
     )
 
     # add results to output set
     fds <- subset(pars, select = c("replicate", "Anthro", "fire_excl_anthro",
-                                   "S_t", "R_t", "N",
-                                   "lambda", "n_recruits", "surviving_adFemales"))
+                                   "S_t", "R_t", "X_t", "N",
+                                   "lambda"))
     fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
     names(fds) <- c("Replicate", "Anthro", "fire_excl_anthro", "survival",
-                    "recruitment", "N", "lambda", "n_recruits", "n_cows")
-    # apparent number of calves per cow, not actual, from unadjusted R_t
-    fds$n_recruits <- fds$recruitment * fds$n_cows
-    fds <- tidyr::pivot_longer(fds, !"Replicate", names_to = "MetricTypeID",
+                    "recruitment","Rfemale", "N", "lambda")
+    fds <- tidyr::pivot_longer(fds, !.data$Replicate, names_to = "MetricTypeID",
                                values_to = "Amount")
     fds$Timestep <- t * stepLength
     if (t == 1) {
@@ -193,15 +200,15 @@ simCalfCowRatios <- function(cowCounts, minYr, exData) {
   ageRatioOut <- tidyr::pivot_wider(ageRatioOut, id_cols = c("Year"),
                                     names_from = "Class", values_from = "Count")
   ageRatioOut <- merge(ageRatioOut,
-                       subset(exData, select = c("Year", "n_recruits", "n_cows")))
-  # rbinom needs n_recruits to be <= n_cows and n_cows not 0
-  n_recs <- pmin(ageRatioOut$n_cows, ageRatioOut$n_recruits)
-  ageRatioOut$calf <- ifelse(ageRatioOut$n_cows == 0, 0,
+                       subset(exData, select = c("Year", "recruitment")))
+  #apparent number of calves (M+F) from apparent number of cows using apparent recruitment rate
+  ageRatioOut$calf <- ifelse(ageRatioOut$cow == 0, 0,
                              rbinom(
                                n = nrow(ageRatioOut), size = ageRatioOut$cow,
-                               prob = n_recs / ageRatioOut$n_cows
+                               prob = ageRatioOut$recruitment
                              )
   )
+  ageRatioOut$recruitment = NULL
   ageRatioOut <- subset(ageRatioOut, select = c("Year", "calf", "cow"))
   ageRatioOut <- tidyr::pivot_longer(ageRatioOut, cols = c("calf", "cow"),
                                      names_to = "Class", values_to = "Count")
@@ -212,7 +219,19 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
                             collarOnTime, topUp = FALSE) {
   # topUp=T
   # for simplicity, ignore variation in survival probability among months
+  
+  zeroPartIn = subset(freqStartsByYear,numStarts==0)
+  if(nrow(zeroPartIn)>0){
+    zeroPart = data.frame(id=1,Year=zeroPartIn$Year,event=NA,enter=NA,exit=NA)
+  }
+
+  if(nrow(zeroPartIn)==nrow(freqStartsByYear)){
+    return(zeroPart)
+  }  
+  
   initYear <- min(exData$Year)
+  
+  
   freqStartsByYear <- subset(freqStartsByYear, 
                              (freqStartsByYear$Year >= initYear) & 
                                (freqStartsByYear$numStarts > 0))
@@ -233,19 +252,27 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   simSurvObs <- data.frame(id = NA, Year = NA, event = NA, enter = NA, exit = NA)
   simSurvObs <- subset(simSurvObs, !is.na(id))
   # collarNumYears=4
+  
+
   for (k in 1:nrow(freqStartsByYear)) {
     # k =1
     if (is.na(freqStartsByYear$numStarts[k]) | (freqStartsByYear$numStarts[k] <= 0)) {
       next
     }
     startYear <- freqStartsByYear$Year[k]
+    collarsExisting <- nrow(subset(simSurvObs, (simSurvObs$enter == 0) & 
+                                     (simSurvObs$Year == startYear)))
+    
     if (topUp) {
-      collarsExisting <- nrow(subset(simSurvObs, (simSurvObs$enter == 0) & 
-                                       (simSurvObs$Year == startYear)))
       nstarts <- max(0, freqStartsByYear$numStarts[k] - collarsExisting)
     } else {
       nstarts <- freqStartsByYear$numStarts[k]
     }
+    #ensure number of collars does not exceed population size
+    cPop = exData$N[exData$Year==startYear]
+    
+    if(cPop<(nstarts+collarsExisting)){nstarts=0}
+    
     if (nstarts == 0) {
       next
     }
@@ -339,7 +366,7 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
     ),
     name = c(
       "Adult female survival", "Recruitment",
-      "Female-only recruitment", "Population growth rate", "Female population size",
+      "Adjusted recruitment", "Population growth rate", "Female population size",
       "Mean adult female survival",
       "Mean recruitment", "Mean female recruitment",
       "Median population growth rate",
@@ -422,6 +449,7 @@ movingAveGrowthRate <- function(obs, assessmentYrs) {
     return(obs)
   }
   obsOut <- obs
+  assessmentYrs = min(assessmentYrs,nrow(obsOut))
   for (k in assessmentYrs:nrow(obsOut)) {
     # k=3
     obsOut$Mean[k] <- mean(obs$Mean[(k - assessmentYrs + 1):k])

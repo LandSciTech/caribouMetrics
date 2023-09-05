@@ -9,7 +9,7 @@ mod_tab <- suppressWarnings(getOutputTables(mod, simNational = getSimsNational()
 param_nms <- c(
   "Adult female survival", "Recruitment", "Population growth rate", 
   "Female population size",
-  "Female-only recruitment"
+  "Adjusted recruitment"
 )
 
 test_that("simplest plot works", {

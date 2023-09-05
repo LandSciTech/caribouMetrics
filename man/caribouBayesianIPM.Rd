@@ -100,6 +100,7 @@ str(mod, max.level = 2)
 \seealso{
 Caribou demography functions:
 \code{\link{caribouPopGrowth}()},
+\code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},

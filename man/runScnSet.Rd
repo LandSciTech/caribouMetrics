@@ -2,7 +2,7 @@
 % Please edit documentation in R/runScnSet.R
 \name{runScnSet}
 \alias{runScnSet}
-\title{Run the caribou Bayesian IPM for multiple parameter sets}
+\title{Run the caribou Bayesian model for multiple parameter sets}
 \usage{
 runScnSet(
   scns,
@@ -63,6 +63,7 @@ scResults <- runScnSet(scns, eParsIn, getSimsNational(), getKSDists = FALSE,
 Caribou demography functions:
 \code{\link{caribouBayesianIPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotRes.R
 \name{plotRes}
 \alias{plotRes}
-\title{Plot caribou Bayesian IPM results}
+\title{Plot caribou Bayesian model results}
 \usage{
 plotRes(
   modTables,
@@ -11,7 +11,9 @@ plotRes(
   highBound = 1,
   facetVars = NULL,
   labFontSize = 14,
-  ksDists = FALSE
+  ksDists = FALSE,
+  legendPosition = "right",
+  breakInterval = 1
 )
 }
 \arguments{
@@ -30,13 +32,17 @@ facets. Font size is 10 pt if facets are used.}
 
 \item{ksDists}{logical. If true the \code{modTables$ksDists} table is used to
 create plots for each parameter.}
+
+\item{legendPosition}{"bottom", "right", "left","top", or "none". Legend position.}
+
+\item{breakInterval}{number. How many years between x tick marks?}
 }
 \value{
 a ggplot object or list of ggplot objects if a vector of parameters
 was given.
 }
 \description{
-Plot results of the caribou Bayesian IPM with the option to include the
+Plot results of the caribou Bayesian model with the option to include the
 national model and observed data
 }
 \examples{
@@ -60,6 +66,7 @@ plotRes(out_tbl, parameter = "Recruitment")
 Caribou demography functions:
 \code{\link{caribouBayesianIPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
