@@ -164,7 +164,7 @@ test_that("works when only 1 collared animal",{
 test_that("results match expected", {
   # save to speed up tests
   # simBig <- suppressWarnings(getSimsNational(N0 = 3000))
-  # saveRDS(simBig, "tests/testthat/data/simBig3000.rds")
+  # saveRDS(simBig, "tests/testthat/data/simBig3000.rds", version = 2)
   
   simBig <- readRDS("data/simBig3000.rds")
   doScn <- function(nCollar = 2000, nobsYears = 10, collarOn = 1, collarOff = 12, 

@@ -1,10 +1,13 @@
 
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
+# this makes sure raster package is attached (not loaded) so that as(x, "Raster") works
+raster::raster()
+
 # load example data
-plcD = raster(file.path(pthBase, "landCover.tif")) # Defines the study area - NA values are omitted from calculation, everything else is included.
-natDistD = raster(file.path(pthBase, "natDist.tif"))
-anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
+plcD = terra::rast(file.path(pthBase, "landCover.tif")) # Defines the study area - NA values are omitted from calculation, everything else is included.
+natDistD = terra::rast(file.path(pthBase, "natDist.tif"))
+anthroDistD = terra::rast(file.path(pthBase, "anthroDist.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE) %>% 
@@ -15,7 +18,7 @@ railD = st_read(file.path(pthBase, "rail.shp"), quiet = TRUE) %>%
   st_set_agr("constant")
 utilitiesD = st_read(file.path(pthBase, "utilities.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
-linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
+linFeatDras = terra::rast(file.path(pthBase, "linFeatTif.tif"))
 
 dm <- disturbanceMetrics(
   landCover = plcD,
@@ -26,6 +29,11 @@ dm <- disturbanceMetrics(
   padFocal = FALSE, # assume data outside area is 0 for all variables
   bufferWidth = 500
 )
+
+test_that("results not na",{
+  dm@disturbanceMetrics %>% unlist() %>% is.na() %>% any() %>% `!`() %>% 
+    expect_true()
+})
 
 # dm@disturbanceMetrics
 # plot(dm@processedData)
@@ -65,7 +73,7 @@ test_that("error if rasters don't align",{
     landCover = plcD,
     natDist = natDistD, 
     anthroDist = anthroDistD, 
-    linFeat = raster::`res<-`(linFeatDras, 400), 
+    linFeat = terra::`res<-`(linFeatDras, 400), 
     projectPoly = projectPolyD
   ), "rasters do not have the same")
 })
@@ -128,7 +136,7 @@ test_that("fire_excl_anthro lt fire",
 
 test_that("line sf with points works", {
   # make points
-  pts <- st_sf(linFID = 1:10, geometry = st_sample(projectPolyD, 10))
+  pts <- sf::st_sf(linFID = 1:10, geometry = sf::st_sample(projectPolyD, 10))
   
   linFeatDpts <- linFeatDshp %>% bind_rows(pts) %>% st_set_agr("constant")
   
@@ -161,6 +169,20 @@ test_that("linBuffMethod sf works",{
   expect_s4_class(dm_sf, "DisturbanceMetrics")
 })
 
+test_that("RasterLayer input works",{
+  dm_rast <- disturbanceMetrics(
+    landCover = as(plcD, "Raster"),
+    natDist = as(natDistD, "Raster"), 
+    anthroDist = as(anthroDistD, "Raster"), 
+    linFeat = linFeatDshp, 
+    projectPoly = projectPolyD,
+    bufferWidth = 500,
+    linBuffMethod = "sf"
+  )
+  
+  expect_s4_class(dm_rast, "DisturbanceMetrics")
+})
+
 test_that("NAs handled correctly", {
   natDistD[natDistD == 0] <- NA
   anthroDistD[anthroDistD == 0] <- NA
@@ -187,19 +209,19 @@ test_that("NAs handled correctly", {
     projectPoly = projectPolyD,
     bufferWidth = 500
   )
-  ext <- raster::extent(749233.8, 757072.9, 12564948, 12572160)
-  na_out <- raster::crop(is.na(dm_na_lc@processedData[[1]]), ext)
-  na_lc <- raster::crop(is.na(dm_na_lc@landCover), ext)
-  expect_true(raster::compareRaster(na_out, na_lc, values = TRUE, 
-                                    stopiffalse = FALSE, showwarning = TRUE))
+  ext <- terra::ext(749233.8, 757072.9, 12564948, 12572160)
+  na_out <- terra::crop(is.na(dm_na_lc@processedData[[1]]), ext)
+  na_lc <- terra::crop(is.na(dm_na_lc@landCover), ext)
+  expect_true(terra::global(terra::compare(na_out, na_lc, oper = "=="), min)[1,1] == 1)
 })
 
 # Compare output to previous run. This will raise a flag if the result has
 # changed. Update the stored result if the change was expected.
-resultCompare <- readRDS(file.path("data", "dm_resultCompare.rds"))
+resultCompare <- readRDS(file.path(test_path("data"), "dm_resultCompare.rds"))
 
 # To update
-# saveRDS(dm@disturbanceMetrics, file.path("tests/testthat/data", "dm_resultCompare.rds"))
+# saveRDS(dm@disturbanceMetrics, file.path("tests/testthat/data", "dm_resultCompare.rds"),
+# version = 2)
 
 testthat::test_that("results match previous results",{
   testthat::expect_equal(dm@disturbanceMetrics, resultCompare)

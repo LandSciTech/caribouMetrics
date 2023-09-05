@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The caribouMetrics R package provides reproducible and open source implementations of several models of Boreal woodland caribou (_Rangifer tarandus caribou_) demography and habitat use. These include a population and demographic model that allows users predict to demographic rates for a given level of disturbance and project population growth over time. Demographic rates are predicted using model coefficients published in [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637). Population growth is projected using a two-stage demographic model with density dependence and interannual variability based on Johnson et. al. (2020) but with some modifications as described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). In addition to these national scale models, we provide a simple Bayesian integrated population model that integrates prior information from national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections. Our model is an extension of work by [Eacker et al. (2019)](https://doi.org/10.1002/wsb.950) with some modifications and an added ability to simulate observation data given parameters that define a common caribou monitoring program.   Finally, caribouMetrics contains a set of functions which implement the caribou resource selection probability functions (RSPF) for Ontario boreal caribou ranges described in [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101).
+The caribouMetrics R package provides reproducible and open source implementations of several models of Boreal woodland caribou (_Rangifer tarandus caribou_) demography and habitat use. These include a population and demographic model that allows users to predict demographic rates for a given level of disturbance and project population growth over time. Demographic rates are predicted using model coefficients published in [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637). Population growth is projected using a two-stage demographic model with density dependence and interannual variability based on Johnson et. al. (2020) but with some modifications as described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). In addition to these national scale models, we provide a simple Bayesian integrated population model that integrates prior information from national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections. Our model is an extension of work by [Eacker et al. (2019)](https://doi.org/10.1002/wsb.950) with some modifications and an added ability to simulate observation data given parameters that define a common caribou monitoring program.   Finally, caribouMetrics contains a set of functions which implement the caribou resource selection probability functions (RSPF) for Ontario boreal caribou ranges described in [Hornseth and Rempel (2016)](https://doi.org/10.1139/cjz-2015-0101).
 
 ## Installation
 
@@ -39,14 +39,14 @@ library(caribouMetrics)
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
 # load example data
-landCoverD <- raster::raster(file.path(pthBase, "landCover.tif")) 
+landCoverD <- terra::rast(file.path(pthBase, "landCover.tif")) 
   # convert PLC classes to resource types used in the model 
 landCoverD <- reclassPLC(landCoverD)
-eskerDras <- raster::raster(file.path(pthBase, "eskerTif.tif"))
+eskerDras <- terra::rast(file.path(pthBase, "eskerTif.tif"))
 eskerDshp <- sf::read_sf(file.path(pthBase, "esker.shp"))
-natDistD <- raster::raster(file.path(pthBase, "natDist.tif"))
-anthroDistD <-raster::raster(file.path(pthBase, "anthroDist.tif"))
-linFeatDras <- raster::raster(file.path(pthBase, "linFeatTif.tif"))
+natDistD <- terra::rast(file.path(pthBase, "natDist.tif"))
+anthroDistD <-terra::rast(file.path(pthBase, "anthroDist.tif"))
+linFeatDras <- terra::rast(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD <- sf::read_sf(file.path(pthBase, "projectPoly.shp"))
 
 # calculate disturbance 
@@ -115,7 +115,7 @@ Predict demographic rates and population growth based on their relationship to h
 * [**Bayesian Demographic Projection**](https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html): Project demographic rates and population growth based on the national demographic model and local caribou observations.
 * [**Disturbance Metrics**](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html): Calculate buffered anthropogenic disturbance and fire disturbance percentages for a given area.
 * [**Ontario Habitat Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html): Calculate caribou habitat use with Ontario RSF models.
-* [**User Interface Help**](https://landscitech.github.io/caribouMetrics/articles/UI_help.html)
+* [**User Interface Help**](https://landscitech.github.io/caribouMetrics/articles/UI_help.html): Instructions for using the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models (WIP)
 
 ## Getting help
 

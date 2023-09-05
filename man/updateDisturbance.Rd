@@ -14,9 +14,9 @@ Potential names are: natDist, anthroDist, and linFeat.}
 
 \item{linBuffMethod}{character. The method used to buffer linear features if
 they are supplied as sf lines. The default is "raster" in which case they
-are rasterized using the stars package and buffered using a moving window
-method. If "sf" then the lines are buffered with st_buffer and then
-rasterized. Either way points are included in the raster output.}
+are rasterized then buffered using a moving window method. If "sf" then the
+lines are buffered with st_buffer and then rasterized. Either way points
+are included in the raster output.}
 
 \item{isPercent}{logical. Should the results be returned as a percentage?}
 }
@@ -37,7 +37,8 @@ If  \code{newData} contains only natDist then only Fire is updated.
 }
 \examples{
 # create example rasters
-lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+lc <- terra::rast(xmin = 0, xmax = 10, ymin = 0, ymax = 10, 
+                     ncols = 10, nrow = 10, crs = "EPSG:5070")
 nd <- lc
 nd[1:3, 1:3] <- 1
 ad <- lc

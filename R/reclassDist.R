@@ -5,7 +5,7 @@
 #' `natDist` or `anthroDist` inputs for `caribouMetrics()` or
 #' `disturbanceMetrics()`.
 #'
-#' @param distYr sf object or rasterLayer. A simple feature collection or
+#' @param distYr sf object, SpatRaster or RasterLayer. A simple feature collection or
 #'   raster layer covering the focal area and including the year of disturbance
 #'   or time since disturbance as well as geometry (multipolygon) of the
 #'   disturbance.
@@ -13,8 +13,8 @@
 #'   year to include from `distYr`. If 0 assume `dateField` values indicate time since disturbance.
 #' @param numCumYrs numeric. Number of years before `endYr` to
 #'   include.
-#' @param template rasterLayer. A raster of the focal region, used as a
-#'   template to which disturbance information is projected. This layers
+#' @param template SpatRaster or RasterLayer. A raster of the focal region, used as a
+#'   template to which disturbance information is projected. This layer's
 #'   dimensions determine the dimensions of the output. It is recommended to use
 #'   the `landCover` raster layer used in `caribouMetrics()` or
 #'   `disturbanceMetrics()` to ensure equal dimensions
@@ -22,14 +22,14 @@
 #'   year/time since disturbance is recorded.
 #'
 #'
-#' @return Returns a binary `RasterLayer` with the same dimensions as the
+#' @return Returns a binary SpatRaster with the same dimensions as the
 #'   `template` input. Values of 1 represent areas of disturbance
 #'
 #' @examples
 #' library(sf)
 #' # create template raster
-#' lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0,
-#'                      ymx = 10, crs = 5070)
+#' lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
+#'                   ymax = 10, crs = "EPSG:5070")
 #' 
 #' # create fire polygons 
 #' corners <- matrix(c(0,0,10,10,5, 0,10,10,0,5), ncol = 2)
@@ -66,7 +66,7 @@
 #' 
 
 reclassDist <- function(distYr, endYr = 0, numCumYrs, template, dateField){
-  if(inherits(distYr, "RasterLayer")){
+  if(inherits(distYr, "SpatRaster")){
     if(endYr == 0){
       out <-  distYr < numCumYrs
     } else {
@@ -92,16 +92,13 @@ reclassDist <- function(distYr, endYr = 0, numCumYrs, template, dateField){
                                           endYr))
     }
     
-    if(requireNamespace("fasterize", quietly = TRUE)){
-      if(st_geometry_type(out, by_geometry = FALSE) == "GEOMETRY"){
-        out <- st_cast(out)
-      }
-      out <- fasterize::fasterize(out, template, background = 0)
-    } else {
-      message("To speed up install fasterize package")
-      out <- raster::rasterize(out, template)
+    
+    if(st_geometry_type(out, by_geometry = FALSE) == "GEOMETRY"){
+      out <- sf::st_cast(out)
     }
+    out <- terra::rasterize(out, template, background = 0)
+    
   }
-  out <- raster::reclassify(out, cbind(NA, 0))
+  out <- terra::classify(out, cbind(NA, 0))
   return(out)
 }

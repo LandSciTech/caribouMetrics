@@ -35,8 +35,7 @@ inputData <- function(landCover, esker, linFeat, projectPoly, caribouRange,
                                      ptDensity = ptDensity)
   }
   
-  
-  if(raster::isLonLat(preppedData$refRast)){
+  if(terra::is.lonlat(preppedData$refRast)){
     stop("landCover must have a projected CRS", call. = FALSE)
   }
   
@@ -62,33 +61,33 @@ inputData <- function(landCover, esker, linFeat, projectPoly, caribouRange,
   .checkInputs(caribouRange, winArea, preppedData$refRast, coefTable)
   
   if(is.null(preppedData$natDist)){
-    preppedData$natDist <- raster(matrix(NA))
+    preppedData$natDist <- terra::rast(matrix(NA))
   }
   
   if(is.null(preppedData$anthroDist)){
-    preppedData$anthroDist <- raster(matrix(NA))
+    preppedData$anthroDist <- terra::rast(matrix(NA))
   }
   
   if(!is.null(linFeatSave)){
-    raster::writeRaster(preppedData$linFeat, 
+    terra::writeRaster(preppedData$linFeat, 
                         linFeatSave, overwrite = TRUE)
-    preppedData$linFeat <- raster(linFeatSave)
+    preppedData$linFeat <- terra::rast(linFeatSave)
   }
   
   if(!is.null(eskerSave)){
-    raster::writeRaster(preppedData$esker, eskerSave, overwrite = TRUE)
-    preppedData$esker <- raster(eskerSave)
+    terra::writeRaster(preppedData$esker, eskerSave, overwrite = TRUE)
+    preppedData$esker <- terra::rast(eskerSave)
   }
   
   if(is.null(tmplt)){
-    tmplt <- raster(preppedData$refRast) %>% raster::`res<-`(c(400, 400))
+    tmplt <- terra::rast(preppedData$refRast) %>% terra::`res<-`(c(400, 400))
   } 
   
   return(new("CaribouHabitat", preppedData$refRast, preppedData$esker, 
              preppedData$natDist, preppedData$anthroDist,
              preppedData$linFeat, preppedData$projectPolyOrig,  
-             processedData = raster(matrix(NA)), 
-             habitatUse = raster(matrix(NA)),
+             processedData = terra::rast(matrix(NA)), 
+             habitatUse = terra::rast(matrix(NA)),
              attributes = list(caribouRange = caribouRange, winArea = winArea,
                                padProjPoly = padProjPoly, padFocal = padFocal, 
                                tmplt = tmplt)))

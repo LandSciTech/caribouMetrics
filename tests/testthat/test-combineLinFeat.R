@@ -21,9 +21,9 @@ utilities <- st_sf(geometry = st_sfc(st_bbox(roads) %>%
                                        st_linestring()))%>% 
   st_set_crs(st_crs(roads))
 
-linFeatDras <- raster::raster(file.path(pthBase, "linFeatTif.tif"))
+linFeatDras <- terra::rast(file.path(pthBase, "linFeatTif.tif"))
 
-roadsSp <- as_Spatial(roads)
+roadsSp <- sf::as_Spatial(roads)
 
 
 test_that("results are same with different input formats",{

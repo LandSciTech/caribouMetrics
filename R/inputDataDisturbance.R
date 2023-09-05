@@ -24,26 +24,26 @@ inputDataDisturbance <- function(landCover, projectPoly, linFeat = NULL,
                                 bufferWidth = bufWidth) 
   }
   
-  if(raster::isLonLat(preppedData$refRast)){
+  if(terra::is.lonlat(preppedData$refRast)){
     stop("landCover must have a projected CRS", call. = FALSE)
   }
   
   if(is.null(preppedData$natDist)){
-    preppedData$natDist <- raster(matrix(NA))
+    preppedData$natDist <- terra::rast(matrix(NA))
   }
   
   if(is.null(preppedData$anthroDist)){
-    preppedData$anthroDist <- raster(matrix(NA))
+    preppedData$anthroDist <- terra::rast(matrix(NA))
   }
   
   if(is.null(preppedData$linFeat)){
-    preppedData$linFeat <- raster(matrix(NA))
+    preppedData$linFeat <- terra::rast(matrix(NA))
   }
   
   return(new("DisturbanceMetrics", preppedData$refRast, preppedData$natDist, 
              preppedData$anthroDist, 
              preppedData$linFeat, preppedData$projectPolyOrig,  
-             processedData = raster(matrix(NA)), 
+             processedData = terra::rast(matrix(NA)), 
              disturbanceMetrics = data.frame(),
              attributes = list(bufferWidth = bufferWidth,
                                padProjPoly = padProjPoly, 

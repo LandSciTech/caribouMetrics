@@ -7,7 +7,7 @@
 reclassDist(distYr, endYr = 0, numCumYrs, template, dateField)
 }
 \arguments{
-\item{distYr}{sf object or rasterLayer. A simple feature collection or
+\item{distYr}{sf object, SpatRaster or RasterLayer. A simple feature collection or
 raster layer covering the focal area and including the year of disturbance
 or time since disturbance as well as geometry (multipolygon) of the
 disturbance.}
@@ -18,8 +18,8 @@ year to include from \code{distYr}. If 0 assume \code{dateField} values indicate
 \item{numCumYrs}{numeric. Number of years before \code{endYr} to
 include.}
 
-\item{template}{rasterLayer. A raster of the focal region, used as a
-template to which disturbance information is projected. This layers
+\item{template}{SpatRaster or RasterLayer. A raster of the focal region, used as a
+template to which disturbance information is projected. This layer's
 dimensions determine the dimensions of the output. It is recommended to use
 the \code{landCover} raster layer used in \code{caribouMetrics()} or
 \code{disturbanceMetrics()} to ensure equal dimensions}
@@ -28,7 +28,7 @@ the \code{landCover} raster layer used in \code{caribouMetrics()} or
 year/time since disturbance is recorded.}
 }
 \value{
-Returns a binary \code{RasterLayer} with the same dimensions as the
+Returns a binary SpatRaster with the same dimensions as the
 \code{template} input. Values of 1 represent areas of disturbance
 }
 \description{
@@ -40,8 +40,8 @@ period. The output from this function can be used as either the
 \examples{
 library(sf)
 # create template raster
-lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0,
-                     ymx = 10, crs = 5070)
+lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
+                  ymax = 10, crs = "EPSG:5070")
 
 # create fire polygons 
 corners <- matrix(c(0,0,10,10,5, 0,10,10,0,5), ncol = 2)

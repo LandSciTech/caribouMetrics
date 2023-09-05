@@ -8,13 +8,13 @@ context("caribouHabitat messages")
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
 # load data for tests
-landCoverD = raster(file.path(pthBase, "landCover.tif")) %>% 
+landCoverD = terra::rast(file.path(pthBase, "landCover.tif")) %>% 
   reclassPLC()
-eskerDras = raster(file.path(pthBase, "eskerTif.tif"))
+eskerDras = terra::rast(file.path(pthBase, "eskerTif.tif"))
 eskerDshp = st_read(file.path(pthBase, "esker.shp"), quiet = TRUE)
-natDistD = raster(file.path(pthBase, "natDist.tif"))
-anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
-linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
+natDistD = terra::rast(file.path(pthBase, "natDist.tif"))
+anthroDistD = terra::rast(file.path(pthBase, "anthroDist.tif"))
+linFeatDras = terra::rast(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE)
 linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE)
 
@@ -130,7 +130,7 @@ test_that("error if caribouRange missing or doesn't match", {
 }) 
 
 test_that("error if spatial data doesn't align", {
-  landCoverD2 <- raster::shift(landCoverD, 100)
+  landCoverD2 <- terra::shift(landCoverD, 100)
 
   expect_error(caribouHabitat(
     landCover = landCoverD2, 
@@ -157,8 +157,9 @@ test_that("error if spatial data doesn't align", {
 }) 
 
 test_that("error if landCover is in lonlat", {
-  landCoverD3 <- landCoverD %>% projectRaster(crs = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
-                                  method = "ngb")
+  landCoverD3 <- landCoverD %>% 
+    terra::project(y = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0",
+                   method = "near")
   
   expect_error(caribouHabitat(
     landCover = landCoverD3, 
@@ -172,7 +173,7 @@ test_that("error if landCover is in lonlat", {
 })
 
 test_that("error if landCover is not in resource types", {
-  landCoverD4 <- raster(file.path(pthBase, "landCover.tif"))
+  landCoverD4 <- terra::rast(file.path(pthBase, "landCover.tif"))
   
   expect_error(caribouHabitat(
     landCover = landCoverD4,

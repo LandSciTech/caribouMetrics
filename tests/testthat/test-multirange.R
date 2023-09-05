@@ -4,16 +4,16 @@
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
 
-landCoverD = raster(file.path(pthBase, "landCover.tif")) %>% 
+landCoverD = terra::rast(file.path(pthBase, "landCover.tif")) %>% 
   reclassPLC()
-eskerDras = raster(file.path(pthBase, "eskerTif.tif"))
+eskerDras = terra::rast(file.path(pthBase, "eskerTif.tif"))
 eskerDshp = st_read(file.path(pthBase, "esker.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 
-natDistD = raster(file.path(pthBase, "natDist.tif"))
-anthroDistD = raster(file.path(pthBase, "anthroDist.tif"))
+natDistD = terra::rast(file.path(pthBase, "natDist.tif"))
+anthroDistD = terra::rast(file.path(pthBase, "anthroDist.tif"))
 
-linFeatDras = raster(file.path(pthBase, "linFeatTif.tif"))
+linFeatDras = terra::rast(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD = st_read(file.path(pthBase, "projectPoly.shp"), quiet = TRUE) %>% 
   st_set_agr("constant")
 linFeatDshp = st_read(file.path(pthBase, "roads.shp"), quiet = TRUE) %>% 
@@ -34,15 +34,15 @@ twoRange <- st_sfc(st_polygon(list(projPolyPts[c(1, 2, 3 ,1),])),
          Range = c("Missisa", "Nipigon")) %>% 
   st_set_crs(st_crs(projectPolyD))
 
-landCoverD2 <- raster::merge(landCoverD, 
-                             raster::shift(landCoverD, 
-                                           dx = raster::nrow(landCoverD)*
-                                             raster::xres(landCoverD), 
-                                           dy = raster::nrow(landCoverD)*
-                                             raster::xres(landCoverD)))
+landCoverD2 <- terra::merge(landCoverD, 
+                             terra::shift(landCoverD, 
+                                           dx = terra::nrow(landCoverD)*
+                                             terra::xres(landCoverD), 
+                                           dy = terra::nrow(landCoverD)*
+                                             terra::xres(landCoverD)))
 # plot(landCoverD2)
 # side by side polygons that might end up with different extent/origin
-# poly3 <- raster::drawPoly()
+# poly3 <- terra::draw()
 # poly3 <- st_as_sf(poly3)
 # dput(poly3)
 
@@ -209,17 +209,17 @@ threeRange <- rbind(poly1, poly2, poly3) %>%
 # supply polygon with multiple ranges
 
 eskerD2 <- eskerDras %>%
-  raster::merge(raster::shift(eskerDras, 
-                              dx = raster::nrow(eskerDras)*
-                                raster::xres(eskerDras), 
-                              dy = raster::nrow(eskerDras)*
-                                raster::xres(eskerDras))) 
+  terra::merge(terra::shift(eskerDras, 
+                              dx = terra::nrow(eskerDras)*
+                                terra::xres(eskerDras), 
+                              dy = terra::nrow(eskerDras)*
+                                terra::xres(eskerDras))) 
 linFeatD2 <- linFeatDras %>% 
-  raster::merge(raster::shift(linFeatDras, 
-                              dx = raster::nrow(linFeatDras)*
-                                raster::xres(linFeatDras), 
-                              dy = raster::nrow(linFeatDras)*
-                                raster::xres(linFeatDras))) 
+  terra::merge(terra::shift(linFeatDras, 
+                              dx = terra::nrow(linFeatDras)*
+                                terra::xres(linFeatDras), 
+                              dy = terra::nrow(linFeatDras)*
+                                terra::xres(linFeatDras))) 
 
 
 # same coefficients as range
@@ -275,25 +275,25 @@ resRange2 <- caribouHabitat(
 )
 
 test_that("results for two ranges done separately same as done together",{
-  ext1 <- raster::extent(resRange1@habitatUse)
+  ext1 <- terra::ext(resRange1@habitatUse) %>% as.vector()
   pointCompare <- st_sf(ID = 1, 
-                        geometry = st_sfc(st_point(c((ext1@xmax - ext1@xmin)/2 + ext1@xmin, 
-                                                     (ext1@ymax - ext1@ymin)/2 + ext1@ymin))),
+                        geometry = st_sfc(st_point(c((ext1["xmax"] - ext1["xmin"])/2 + ext1["xmin"], 
+                                                     (ext1["ymax"] - ext1["ymin"])/2 + ext1["ymin"]))),
                         crs = st_crs(resRange1@habitatUse))
   expect_lt(
-  raster::extract(resRange1@habitatUse$Fall, pointCompare)-
-    raster::extract(resTwoRangeDifWin@habitatUse$Fall, pointCompare),
+  terra::extract(resRange1@habitatUse$Fall, pointCompare)[1,1]-
+    terra::extract(resTwoRangeDifWin@habitatUse$Fall, pointCompare)[1,1],
   0.01
   )
   
-  ext2 <- raster::extent(resRange2@habitatUse)
+  ext2 <- terra::ext(resRange2@habitatUse) %>% as.vector()
   pointCompare <- st_sf(ID = 1, 
-                        geometry = st_sfc(st_point(c((ext2@xmax - ext2@xmin)/2 + ext2@xmin, 
-                                                     (ext2@ymax - ext2@ymin)/2 + ext2@ymin))),
+                        geometry = st_sfc(st_point(c((ext2["xmax"] - ext2["xmin"])/2 + ext2["xmin"], 
+                                                     (ext2["ymax"] - ext2["ymin"])/2 + ext2["ymin"]))),
                         crs = st_crs(resRange2@habitatUse))
   expect_lt(
-    raster::extract(resRange2@habitatUse$Fall, pointCompare)-
-      raster::extract(resTwoRangeDifWin@habitatUse$Fall, pointCompare),
+    terra::extract(resRange2@habitatUse$Fall, pointCompare)[1,1]-
+      terra::extract(resTwoRangeDifWin@habitatUse$Fall, pointCompare)[1,1],
     0.01
   )
   

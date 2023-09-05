@@ -30,8 +30,8 @@ Extract results from CaribouHabitat or DisturbanceMetrics object.
 }
 \examples{
 # create example rasters for habitat
-lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
-                     resolution = 250, crs = 5070)
+lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000, 
+                     resolution = 250, crs = "EPSG:5070")
 lc[] <- 0
 nd <- lc
 nd[1:30, 1:30] <- 1
@@ -62,14 +62,15 @@ res <- caribouHabitat(landCover = lc,
                winArea = 1000 #leave as default NULL except for small examples
 )
 
-# default gets raster stack of both habitatUse and processedData slots
+# default gets raster of both habitatUse and processedData slots
 resBoth <- results(res)
 
 # provide a slot name to get one of them
 resHabUse <- results(res, type = "habitatUse")
 
 # create example rasters for disturbance metrics
-lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
+                  ymax = 10, crs = "EPSG:5070")
 nd <- lc
 nd[1:3, 1:3] <- 1
 ad <- lc

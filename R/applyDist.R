@@ -16,18 +16,14 @@
 
 applyDist <- function(landCover, natDist, anthroDist, tmplt){
   # check anthroDist and natDist are real if not make dummy
-  anthroDummy <- raster::ncell(anthroDist) == 1
-  natDummy <- raster::ncell(natDist) == 1
+  anthroDummy <- terra::ncell(anthroDist) == 1
+  natDummy <- terra::ncell(natDist) == 1
   
   if(anthroDummy){
-    anthroDist <- raster::init(landCover, 
-                               fun = function(x){rep(0, x)}, 
-                               filename = raster::rasterTmpFile())
+    anthroDist <- makeDummyRast(landCover)
   }
   if(natDummy){
-    natDist <- raster::init(landCover, 
-                            fun = function(x){rep(0, x)}, 
-                            filename = raster::rasterTmpFile())
+    natDist <- makeDummyRast(landCover)
   }
   
   # Transfer DTN from natDist to landCover
@@ -35,23 +31,22 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
     filter(.data$ResourceType == "DTN") %>%
     pull(.data$code)
   
-  landCover <- mask(landCover, natDist, maskvalue = 1, 
-                    updatevalue = DTNcode)
+  landCover <- terra::mask(landCover, natDist, maskvalue = 1, 
+                           updatevalue = DTNcode)
   
   # convert to 16 ha resolution stack of ResType proportion to match 16 ha
   # hexagons in Rempel
-  #tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
   
-  landCover <- raster::layerize(landCover, classes = resTypeCode$code) %>% 
-    raster::resample(tmplt, method = "bilinear")
+  landCover <- terra::segregate(landCover, classes = resTypeCode$code) %>% 
+    terra::resample(tmplt, method = "bilinear")
   
   # if no distubance data provided return landCover
   if(anthroDummy && natDummy){
     return(landCover)
   }
   
-  allDist16ha <- raster::stack(anthroDist, natDist) %>% 
-    raster::resample(tmplt, method = "bilinear")
+  allDist16ha <- c(anthroDist, natDist) %>% 
+    terra::resample(tmplt, method = "bilinear")
   rm(anthroDist, natDist)
   
   # Get proportion of land in 16 ha area that has each type of disturbance
@@ -68,9 +63,9 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
            ifelse(land == 0, 0, dist/land))
   }
   
-  allDist16ha <- raster::stack(
-    raster::overlay(allDist16ha[[1]], land, fun = propLandDist),
-    raster::overlay(allDist16ha[[2]], land, fun = propLandDist)
+  allDist16ha <- c(
+    terra::lapp(c(allDist16ha[[1]], land), fun = propLandDist),
+    terra::lapp(c(allDist16ha[[2]], land), fun = propLandDist)
   )
   
   # make landCover have 0 forest classes when 16 ha area disturbed > 0.35 by natural
@@ -81,10 +76,19 @@ applyDist <- function(landCover, natDist, anthroDist, tmplt){
     pull(.data$code)
   
   for (i in toChange) {
-    landCover[[i]] <- raster::mask(landCover[[i]], anyDist35,
+    landCover[[i]] <- terra::mask(landCover[[i]], anyDist35,
                                    maskvalue = 1,
                                    updatevalue = 0)
   }
   
   return(landCover)
+}
+
+
+makeDummyRast <- function(r, val = 0){
+  terra::init(
+    r, fun = function(x){rep(val, x)}, 
+    filename = tempfile(pattern = "spat", 
+                        tmpdir = terra::terraOptions(print = FALSE)$tempdir, 
+                        fileext = ".grd"))
 }

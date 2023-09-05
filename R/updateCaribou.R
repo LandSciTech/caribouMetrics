@@ -33,8 +33,8 @@ NULL
 #'   
 #' @examples 
 #' # create example rasters
-#' lc <- raster::raster(xmn = 0, xmx = 25000, ymn = 0, ymx = 25000, 
-#'                      resolution = 250, crs = 5070)
+#' lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000, 
+#'                      resolution = 250, crs = "EPSG:5070")
 #' lc[] <- 0
 #' nd <- lc
 #' nd[1:30, 1:30] <- 1
@@ -107,7 +107,7 @@ setMethod(
       rangeCoefLst <- split(rangeCoefLst, rangeCoefLst$coefRange)
       
       applyCalcRSP <- function(dat, rangeCoef, doScale, coefTable){
-        dat <- raster::mask(dat, rangeCoef)
+        dat <- terra::mask(dat, rangeCoef)
         
         coefT <- coefTable %>% 
           filter(.data$Range %in% rangeCoef$coefRange)
@@ -117,18 +117,11 @@ setMethod(
       
       habUseLst <- lapply(rangeCoefLst, applyCalcRSP, dat = CarHab@processedData,
                           doScale = doScale, coefTable = coefTable)
-    
+
       # do.call doesn't work with names
       names(habUseLst) <- NULL
       
-      habUseLst$fun <- function(...){sum(..., na.rm = TRUE)}
-      
-      CarHab@habitatUse <- do.call(raster::overlay, habUseLst)
-
-      # 0 created by sum when all are NA but reintroduce NA from processed
-      getNA <- !is.na(CarHab@processedData$CON)
-      getNA[getNA == 0] <- NA
-      CarHab@habitatUse <- CarHab@habitatUse * getNA
+      CarHab@habitatUse <- do.call(terra::merge, habUseLst)
       
       names(CarHab@habitatUse) <- names(habUseLst[[1]])
     } else {
@@ -146,11 +139,11 @@ setMethod(
     #                              getCover=TRUE)
     # projRas[projRas==0] <- NA
     # 
-    CarHab@habitatUse <- raster::mask(CarHab@habitatUse, CarHab@projectPoly)
+    CarHab@habitatUse <- terra::mask(CarHab@habitatUse, CarHab@projectPoly)
     # CarHab@habitatUse <- raster::crop(CarHab@habitatUse, CarHab@projectPoly,
     #                                   snap = "out")
     # 
-    CarHab@processedData <- raster::mask(CarHab@processedData, CarHab@projectPoly)
+    CarHab@processedData <- terra::mask(CarHab@processedData, CarHab@projectPoly)
     # CarHab@processedData <- raster::crop(CarHab@processedData, CarHab@projectPoly,
     #                                      snap = "out")
     

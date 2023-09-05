@@ -11,42 +11,42 @@ setClassUnion("missingOrNULLOrChar", c("missing", "NULL","character"))
 #'
 #' @seealso See [caribouHabitat()] for options when creating a
 #'   CaribouHabitat object.
-#' @slot landCover Raster with land cover classified into resource types. See
+#' @slot landCover SpatRaster with land cover classified into resource types. See
 #'   `resTypeCode` for a legend.
-#' @slot esker Raster of esker density in m^2 per hectare.
-#' @slot natDist Raster of natural disturbance.
-#' @slot anthroDist Raster of anthropogenic disturbances.
-#' @slot linFeat Raster of linear feature density in m^2 per hectare.
+#' @slot esker SpatRaster of esker density in m^2 per hectare.
+#' @slot natDist SpatRaster of natural disturbance.
+#' @slot anthroDist SpatRaster of anthropogenic disturbances.
+#' @slot linFeat SpatRaster of linear feature density in m^2 per hectare.
 #' @slot projectPoly Sf object with polygon of project boundary.
-#' @slot processedData RasterStack with named layers for each input variable
+#' @slot processedData SpatRaster with named layers for each input variable
 #'   used in the RSF
-#' @slot habitatUse RasterStack with named layers for each season
+#' @slot habitatUse SpatRaster with named layers for each season
 #' @slot attributes A list of arguments from the `caribouHabtat` call. 
 #' @name CaribouHabitat-class
 #' @rdname CaribouHabitat-class
 #' @family habitat
 #' @export CaribouHabitat
-#' @importClassesFrom raster RasterLayer
+#' @importClassesFrom terra SpatRaster
 
 CaribouHabitat <- setClass("CaribouHabitat",
-                           slots = c(landCover = "RasterLayer", 
-                                     esker  = "RasterLayer",
-                                     natDist  = "RasterLayer",
-                                     anthroDist = "RasterLayer",
-                                     linFeat  = "RasterLayer", 
+                           slots = c(landCover = "SpatRaster", 
+                                     esker  = "SpatRaster",
+                                     natDist  = "SpatRaster",
+                                     anthroDist = "SpatRaster",
+                                     linFeat  = "SpatRaster", 
                                      projectPoly = "sf", 
-                                     processedData = "Raster",
-                                     habitatUse = "Raster",
+                                     processedData = "SpatRaster",
+                                     habitatUse = "SpatRaster",
                                      attributes = "list"),
                            prototype = list(
-                             landCover = raster(matrix(NA)), 
-                             esker  = raster(matrix(NA)),
-                             natDist = raster(matrix(NA)),
-                             linFeat  = raster(matrix(NA)),
+                             landCover = terra::rast(matrix(NA)), 
+                             esker  = terra::rast(matrix(NA)),
+                             natDist = terra::rast(matrix(NA)),
+                             linFeat  = terra::rast(matrix(NA)),
                              projectPoly = st_sf(col1 = NA,
                                                  geometry = st_sfc(st_point(x = c(1,1)))),
-                             processedData = raster::stack(raster(matrix(NA))),
-                             habitatUse = raster::stack(raster(matrix(NA))),
+                             processedData = terra::rast(matrix(NA)),
+                             habitatUse = terra::rast(matrix(NA)),
                              attributes = list()
                            ))
 
@@ -69,35 +69,35 @@ CaribouHabitat <- setClass("CaribouHabitat",
 #' @seealso See [disturbanceMetrics()] for options when creating a
 #'   DisturbanceMetrics object.
 #'   
-#' @slot landCover Raster distinguishing land from water. 0 or NA is water.
-#' @slot natDist Raster of natural disturbance.
-#' @slot anthroDist Raster of anthropogenic disturbances.
+#' @slot landCover SpatRaster distinguishing land from water. 0 or NA is water.
+#' @slot natDist SpatRaster of natural disturbance.
+#' @slot anthroDist SpatRaster of anthropogenic disturbances.
 #' @slot linFeat Sf object with linear features including roads, utilities, and rail.
 #' @slot projectPoly Sf object with polygon of project boundary.
-#' @slot processedData RasterStack with named layers for each input variable used in the RSF
+#' @slot processedData SpatRaster with named layers for each input variable used in the RSF
 #' @slot disturbanceMetrics Data frame of disturbance metric values
 #' @slot attributes A list of arguments from the `caribouHabtat` call. 
 #' @name DisturbanceMetrics-class
 #' @rdname DisturbanceMetrics-class
 #' @family disturbance
 #' @export DisturbanceMetrics
-#' @importClassesFrom raster RasterLayer
+#' @importClassesFrom terra SpatRaster
 
 DisturbanceMetrics <- setClass("DisturbanceMetrics",
-                           slots = c(landCover  = "RasterLayer",
-                                     natDist  = "RasterLayer",
-                                     anthroDist = "RasterLayer", 
+                           slots = c(landCover  = "SpatRaster",
+                                     natDist  = "SpatRaster",
+                                     anthroDist = "SpatRaster", 
                                      linFeat  = "list", #this is a hack - need to allow raster or sf, but can't setClassUnion because sf class is not exported from sf package. 
                                      projectPoly = "sf", 
-                                     processedData = "Raster",
+                                     processedData = "SpatRaster",
                                      disturbanceMetrics = "data.frame",
                                      attributes = "list"),
                            prototype = list(
-                             landCover = raster(matrix(NA)),
+                             landCover = terra::rast(matrix(NA)),
                              linFeat  = list(),
                              projectPoly = st_sf(col1 = NA,
                                                  geometry = st_sfc(st_point(x = c(1,1)))),
-                             processedData = raster::stack(raster(matrix(NA))),
+                             processedData = terra::rast(matrix(NA)),
                              disturbanceMetrics = data.frame(),
                              attributes = list()
                            ))

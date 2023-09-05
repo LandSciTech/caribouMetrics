@@ -8,7 +8,7 @@
 #' @family demography
 #'
 #' @examples
-#' if(interactive()){
+#' if(FALSE){
 #'  demographicProjectionApp()
 #' }
 #'

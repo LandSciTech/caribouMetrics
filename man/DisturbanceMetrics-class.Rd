@@ -25,17 +25,17 @@ Missing layers are omitted from the output, not interpreted as 0 disturbance
 \section{Slots}{
 
 \describe{
-\item{\code{landCover}}{Raster distinguishing land from water. 0 or NA is water.}
+\item{\code{landCover}}{SpatRaster distinguishing land from water. 0 or NA is water.}
 
-\item{\code{natDist}}{Raster of natural disturbance.}
+\item{\code{natDist}}{SpatRaster of natural disturbance.}
 
-\item{\code{anthroDist}}{Raster of anthropogenic disturbances.}
+\item{\code{anthroDist}}{SpatRaster of anthropogenic disturbances.}
 
 \item{\code{linFeat}}{Sf object with linear features including roads, utilities, and rail.}
 
 \item{\code{projectPoly}}{Sf object with polygon of project boundary.}
 
-\item{\code{processedData}}{RasterStack with named layers for each input variable used in the RSF}
+\item{\code{processedData}}{SpatRaster with named layers for each input variable used in the RSF}
 
 \item{\code{disturbanceMetrics}}{Data frame of disturbance metric values}
 

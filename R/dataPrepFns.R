@@ -20,8 +20,8 @@ prepProjPoly <- function(projectPoly, landCover, bufferWidth, padProjPoly){
     # winRad <- (sqrt(max(winArea)*10000/pi)/res(landCover)[1]) %>% 
     #   round(digits = 0)*res(landCover)[1]
     
-    winRad <- (bufferWidth/res(landCover)[1]) %>% 
-      round(digits = 0)*res(landCover)[1] %>% 
+    winRad <- (bufferWidth/terra::res(landCover)[1]) %>% 
+      round(digits = 0)*terra::res(landCover)[1] %>% 
       round()
     
     projectPoly <- projectPoly %>% st_buffer(winRad*3)
@@ -35,21 +35,22 @@ prepRasts <- function(rastLst, landCover, projectPoly, tmplt = NULL,
   landCover <- checkAlign(landCover, projectPoly, "landCover", "projectPoly") 
   
   if(is.null(tmplt)){
-    tmplt <- raster(landCover) %>% raster::`res<-`(c(400, 400))
+    tmplt <- terra::rast(landCover) %>% terra::`res<-`(c(400, 400))
   }
     
   # remove NULLs from rastLst
   rastLst <- rastLst[which(!vapply(rastLst, function(x) is.null(x), 
                                    FUN.VALUE = TRUE))]
+  rastCRSMatch <- lapply(rastLst, terra::compareGeom,
+                         y = landCover, crs = TRUE, res = FALSE, ext = FALSE, 
+                         rowcol = FALSE, stopOnError = FALSE) %>%
+    unlist() %>% all()
   
-  if(!do.call(raster::compareRaster, 
-              c(rastLst, 
-                list(landCover, landCover, crs = TRUE, res = FALSE, extent = FALSE,
-                     rowcol = FALSE, stopiffalse = FALSE)))){
+  if(!rastCRSMatch){
     stop("all raster data sets must have matching CRS", call. = FALSE)
   }
   
-  # check alignment of each raster against projectPoly and compareRaster with
+  # check alignment of each raster against projectPoly and compareGeom with
   # landCover
   rastLst <- purrr::map2(rastLst, names(rastLst),
               ~checkAlign(.x, projectPoly, .y, "projectPoly")) 
@@ -116,8 +117,8 @@ loadFromFile <- function(indata){
   }
   
   
-  indata[vect] <- lapply(indata[vect], st_read, quiet = TRUE, agr = "constant")
-  indata[rast]<- lapply(indata[rast], raster)
+  indata[vect] <- lapply(indata[vect], sf::st_read, quiet = TRUE, agr = "constant")
+  indata[rast]<- lapply(indata[rast], terra::rast)
   
   return(indata)
 }

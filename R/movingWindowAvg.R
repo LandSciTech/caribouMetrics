@@ -8,19 +8,28 @@
 #' @param radius the radius of the circular window
 #' @param nms the names of each raster layer
 #' @param offset Should offsetting be used to match Hornseth and Rempel 2016
-#' @param na.rm,pad,padValue arguments passed on to raster::focal
+#' @param na.rm,pad,padValue arguments passed on to terra::focal
 #' 
 #' @noRd
 
 movingWindowAvg <- function(rast, radius, nms, offset = TRUE, 
-                            na.rm = TRUE, pad = FALSE, padValue = NA, 
-                            usePfocal = requireNamespace("pfocal", quietly = TRUE)){
+                            naInternal = c("ignore", "interpolate", "zero"),
+                            naExternal = c("ignore", "NA", "expand"),
+                            usePfocal = FALSE){
+  naInternal <- match.arg(naInternal)
+  naExternal <- match.arg(naExternal)
   
-  nl <- nlayers(rast)
-  # if(raster::res(rast)[1] != raster::res(rast)[2]){
-  #   raster::res(rast) <- c(raster::res(rast)[1], raster::res(rast)[1])
-  # }
-  cf2 <- focalWeight(rast, radius, "circle")
+  # changed later if needed 
+  doMask <- FALSE
+  mean_fun <- "mean"
+  na.rm <- FALSE
+  padValue <- NA
+  pad <- FALSE
+  doAltFun <- FALSE
+  
+  nl <- terra::nlyr(rast)
+
+  cf2 <- terra::focalMat(rast, radius, "circle")
   
   if(nrow(cf2) > ncol(cf2)){
     dif <- nrow(cf2) - ncol(cf2)
@@ -122,20 +131,22 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
     stop("The project area is smaller than the window area", call. = FALSE)
   }
   
-  
-  
   if(usePfocal){
+    if(!requireNamespace("pfocal", quietly = TRUE)){
+      stop("Install pfocal with remotes::install_github('LandSciTech/pfocal') ",
+           "to use this option")
+    }
     if(!pad){
       if(na.rm){
         # ignore NAs inside the raster but still remove them on the edges
-        rast <- raster::subs(rast, data.frame(NA,0), subsWithNA = FALSE)
+        rast <- terra::classify(rast, data.frame(NA,0), others = NULL)
         # pfocal does not have a pad argument but the equivalent is:
         padValue <- NA
-        na.rm <- FALSE
+        # na.rm <- FALSE
       } else {
         padValue <- NA
       }
-
+      
     }
     if(nl == 1){
       rast <- pfocal::pfocal(rast, kernel = cf2, na.rm = na.rm, 
@@ -147,15 +158,76 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
       }
     }
   } else {
-    if(nl == 1){
-      rast <- raster::focal(rast, w = cf2, na.rm = na.rm, pad = pad,
-                            padValue = padValue)
-    } else {
-      for(i in 1:nl){
-        rast[[i]] <- raster::focal(rast[[i]], w = cf2, na.rm = na.rm, pad = pad,
-                                   padValue = padValue)
+    if(naInternal == "interpolate"){
+      rastIn <- rast
+      # interpolate NAs inside the raster 
+      rast <- terra::focal(rast, nrow(cf2), "mean", na.rm = TRUE, 
+                           na.policy = "only")
+      
+      doMask <- TRUE
+    } else if(naInternal == "ignore") {
+      na.rm <- TRUE
+      if(packageVersion("terra") < "1.7.41"){
+        mean_fun <- function(i, weights, na.rm){
+          weighted.mean(i, w = weights, na.rm=na.rm)
+        } 
+        
+        w <- as.vector(cf2)
+        cf2 <- ncol(cf2)
+        doAltFun <- TRUE
+        
+        message("update to terra version > 1.7.41 for faster moving window")
       }
+    } else if(naInternal == "zero"){
+      rastIn <- rast
+      # Set NAs inside the raster to 0
+      rast <- terra::subst(rast, from = NA, to = 0)
+      
+      doMask <- TRUE 
+    } else {
+      stop("naInternal does not have an expected value", call. = FALSE)
     }
+    
+    if(naExternal == "NA"){
+      padValue <- NA
+      na.rm <- FALSE
+      if(naInternal == "ignore"){
+        stop("naInternal == 'ignore' and naExternal == 'NA' are not compatible",
+             call. = FALSE)
+      }
+    } else if (naExternal == "ignore"){
+      na.rm <- TRUE
+    } else if( naExternal == "expand"){
+      pad <- TRUE
+    }
+    
+    if(doAltFun){
+      if(terra::nlyr(rast) > 1){
+        lapply(1:terra::nlyr(rast), \(x){
+          rast <- terra::focal(rast[[x]], w = cf2, fun = mean_fun,
+                               weights = w,
+                               na.rm = na.rm, 
+                               fillvalue = padValue,
+                               expand = pad,
+                               na.policy = "omit")
+        })
+      }
+
+    } else {
+      rast <- terra::focal(rast, w = cf2, fun = mean_fun,
+                           na.rm = na.rm, 
+                           fillvalue = padValue,
+                           expand = pad,
+                           na.policy = "omit")
+    }
+
+    
+  }
+  
+  
+  if(doMask){
+    # add back internal NAs with masking
+    rast <- terra::mask(rast, rastIn)
   }
   
   
@@ -164,4 +236,28 @@ movingWindowAvg <- function(rast, radius, nms, offset = TRUE,
   return(rast)
 }
 
+# terra focal examples for understanding inputs
    
+# v <- vect(system.file("ex/lux.shp", package="terra"))
+# r <- rast(system.file("ex/elev.tif", package="terra"))
+# r[45:50, 45:50] <- NA
+# 
+# m <- focalMat(r, 0.01)
+# 
+# # also try "mean" or "min"
+# f <- "sum" 
+# # na.rm=FALSE
+# plot(focal(r, m, f) , fun=lines(v))
+# 
+# # na.rm=TRUE
+# plot(focal(r, m, f, na.rm=TRUE), fun=lines(v))
+# 
+# # only change cells that are NA
+# plot(focal(r, m, f, na.policy="only", na.rm=TRUE), fun=lines(v))
+# 
+# # do not change cells that are NA
+# plot(focal(r, m, f, na.policy="omit", na.rm=TRUE), fun=lines(v))
+# 
+# plot(focal(r, m, f, na.policy="omit", na.rm=FALSE, fillvalue = 0), fun=lines(v))
+# 
+# plot(focal(r, m, f, na.rm=TRUE, fillvalue = 0), fun=lines(v))

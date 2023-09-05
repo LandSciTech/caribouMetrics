@@ -15,9 +15,9 @@
 #'   Potential names are: natDist, anthroDist, and linFeat.
 #' @param linBuffMethod character. The method used to buffer linear features if
 #'   they are supplied as sf lines. The default is "raster" in which case they
-#'   are rasterized using the stars package and buffered using a moving window
-#'   method. If "sf" then the lines are buffered with st_buffer and then
-#'   rasterized. Either way points are included in the raster output.
+#'   are rasterized then buffered using a moving window method. If "sf" then the
+#'   lines are buffered with st_buffer and then rasterized. Either way points
+#'   are included in the raster output.
 #' @param isPercent logical. Should the results be returned as a percentage?
 #'
 #'@return A DisturbanceMetrics Object see [DisturbanceMetrics-class()]
@@ -31,7 +31,8 @@
 #'
 #' @examples
 #' # create example rasters
-#' lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+#' lc <- terra::rast(xmin = 0, xmax = 10, ymin = 0, ymax = 10, 
+#'                      ncols = 10, nrow = 10, crs = "EPSG:5070")
 #' nd <- lc
 #' nd[1:3, 1:3] <- 1
 #' ad <- lc
@@ -111,17 +112,15 @@ updateDisturbance <- function(distMet, newData, linBuffMethod = "raster",
   
   if(!is.null(newData$natDist)){
     # check natDist is real if not make dummy
-    if(raster::ncell(newData2@natDist) == 1){
-      newData2@natDist <- raster::init(distMet@landCover, 
-                              fun = function(x){rep(0, x)}, 
-                              filename = raster::rasterTmpFile())
+    if(terra::ncell(newData2@natDist) == 1){
+      newData2@natDist <- makeDummyRast(distMet@landCover)
     }
     natDist <- newData2@natDist
   } else {
     natDist <- distMet@natDist
   }
   
-  natDist <- reclassify(natDist, cbind(NA, 0))
+  natDist <- terra::classify(natDist, cbind(NA, 0))
   
   distMet@processedData <- calcDMSpatial(anthroDist, natDist, distMet@landCover,
                                          distMet)

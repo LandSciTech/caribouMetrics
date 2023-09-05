@@ -18,11 +18,11 @@ disturbanceMetrics(
 )
 }
 \arguments{
-\item{landCover}{filename or RasterLayer. 0 and NA values are assumed to be
+\item{landCover}{filename, SpatRaster or RasterLayer. 0 and NA values are assumed to be
 water and omitted from the tabulated area. Note landCover is also used to
 define the input grid, so must be provided even if all values are 1.}
 
-\item{linFeat}{filename, RasterLayer, sf object or a list of these that will
+\item{linFeat}{filename, SpatRaster, RasterLayer, sf object or a list of these that will
 be combined. Linear features.}
 
 \item{projectPoly}{filename or sf object. Polygons defining range boundaries.}
@@ -31,10 +31,10 @@ be combined. Linear features.}
 
 \item{...}{optional arguments:
 \itemize{
-\item natDist: filename or RasterLayer. Presence or absence of natural
+\item natDist: filename, SpatRaster or RasterLayer. Presence or absence of natural
 disturbance, primarily by fire. Should include 40 years cumulative
 disturbance.
-\item anthroDist: filename or RasterLayer. Anthropogenic disturbance including
+\item anthroDist: filename, SpatRaster or RasterLayer. Anthropogenic disturbance including
 harvest. This can have an effect on any type of landcover except water.
 Should include 40 years cumulative disturbance.
 \item padProjPoly: logical. Should the area around the \code{projectPoly} be
@@ -45,7 +45,7 @@ are always clipped to the original \code{projectPoly}. It is ideal to set
 this to TRUE and provide a dataset that is larger than the
 \code{projectPoly} to avoid edge effects.
 \item padFocal: logical. This value is passed to the pad argument in
-\code{raster::focal}, if it is FALSE then cells near the edge will return
+\code{terra::focal}, if it is FALSE then cells near the edge will return
 NA, if it is TRUE a value will be returned for each cell that assumes cells
 outside the input data are 0 for all resource types. This is not a good
 assumption and should be used with caution.
@@ -53,10 +53,10 @@ assumption and should be used with caution.
 disturbance in metres. Default is 500.
 \item linBuffMethod: character. The method used to buffer linear features if
 they are supplied as sf lines. The default is "raster" in which case they
-are rasterized using the stars package and buffered using a moving window
+are rasterized and then buffered using a moving window
 method. If "sf" then the lines are buffered with st_buffer and then
 rasterized. Either way points are included in the raster output.
-\item saveOutput: character. The filename to save the RasterBrick of binary
+\item saveOutput: character. The filename to save the raster of binary
 disturbances with buffered anthropogenic disturbance. Note this will
 overwrite existing files with the same name. The .grd format is recommended
 because it will preserve layer names when the file is reloaded.
@@ -92,7 +92,8 @@ disturbance. To update an existing DisturbanceMetrics object with new data see
 }
 \examples{
 # create example rasters
-lc <- raster::raster(nrows = 10, ncols = 10, xmn = 0, xmx = 10, ymn = 0, ymx = 10, crs = 5070)
+lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
+                  ymax = 10, crs = "EPSG:5070")
 nd <- lc
 nd[1:3, 1:3] <- 1
 ad <- lc
