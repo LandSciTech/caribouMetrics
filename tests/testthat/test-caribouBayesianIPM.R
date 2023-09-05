@@ -166,7 +166,7 @@ test_that("results match expected", {
   # simBig <- suppressWarnings(getSimsNational(N0 = 3000))
   # saveRDS(simBig, "tests/testthat/data/simBig3000.rds", version = 2)
   
-  simBig <- readRDS("data/simBig3000.rds")
+  simBig <- readRDS( file.path(test_path(), "data/simBig3000.rds"))
   doScn <- function(nCollar = 2000, nobsYears = 10, collarOn = 1, collarOff = 12, 
                     iAnthro = 0, obsAnthroSlope = 0, projAnthroSlope = 0, 
                     sQuantile = 0.5,  rQuantile = 0.5, rSlopeMod = 1, sSlopeMod = 1, 
@@ -188,7 +188,7 @@ test_that("results match expected", {
   
   doPlot <- function(scResults, var = "Recruitment"){
     if (interactive()) {
-      print(plotRes(scResults, var,
+      return(plotRes(scResults, var,
                     lowBound = 0,  facetVars = NULL
       ))
     }
@@ -239,11 +239,13 @@ test_that("results match expected", {
   
   # when we have a lot of collars the distance between observations and "true"
   # pop is smaller than when we have few.
-  manyObs <- doScn(nCollar = 3000)
-  doPlot(manyObs, var = c("Recruitment", "Adult female survival"))
+  manyObs <- doScn(nCollar = 2000, rQuantile = 0.9, sQuantile = 0.9)
+  doPlot(manyObs)+
+    ggplot2::ggtitle("2000 collars")
   
-  fewCollarObs <- doScn(nCollar = 30)
-  doPlot(fewCollarObs)
+  fewCollarObs <- doScn(nCollar = 30, rQuantile = 0.9, sQuantile = 0.9)
+  doPlot(fewCollarObs)+
+    ggplot2::ggtitle("30 collars")
   
   difMany <- calcDif(manyObs$obs.all)
   difFew <- calcDif(fewCollarObs$obs.all)
@@ -286,7 +288,7 @@ test_that("results match expected", {
   set.seed(1234)
   # Can look at K-M results directly with use survInput from the model 
   obs12_1 <- simulateObservations(
-    paramTable = getScenarioDefaults(obsYears = 12, cowCount = 1000, 
+    paramTable = getScenarioDefaults(obsYears = 12, cowMult = 3, 
                                      collarCount = 400),
     collarOffTime = 12, collarOnTime = 1
   )
@@ -296,7 +298,7 @@ test_that("results match expected", {
                                 Niter = 100, Nburn = 10)
   set.seed(1234)
   obs9_3 <- simulateObservations(
-    paramTable = getScenarioDefaults(obsYears = 12, cowCount = 1000, 
+    paramTable = getScenarioDefaults(obsYears = 12, cowMult = 3,
                                      collarCount = 400),
     collarOffTime = 9, collarOnTime = 3
   )
