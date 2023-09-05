@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -242,7 +242,7 @@ population as disturbance increases over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:12] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpMMb0nJ/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpCzr2R2/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -260,11 +260,11 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;  $ rr.summary.all:'data.frame':  175 obs. of  13 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year            : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
 <span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adjusted recruitment" "Adult female survival" "Recruitment" "Female population size" ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.212 0.889 0.411 1000 1.08 ...</span></span>
-<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.022 0.016 0.027 0 0.034 ...</span></span>
-<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.173 0.854 0.37 1000 1.009 ...</span></span>
-<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.254 0.922 0.471 1000 1.15 ...</span></span>
-<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.99 NA NA NA NA 1 ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.216 0.884 0.41 1000 1.075 ...</span></span>
+<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.023 0.02 0.029 0 0.038 ...</span></span>
+<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.184 0.839 0.353 1000 0.995 ...</span></span>
+<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.269 0.914 0.462 1000 1.139 ...</span></span>
+<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.98 NA NA NA NA 0.99 ...</span></span>
 <span><span class="co">#&gt;   ..$ X               : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ Anthro          : int [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;   ..$ fire_excl_anthro: num [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
@@ -290,8 +290,7 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;   ..$ KSpvalue  : logi [1:175] NA NA NA NA NA NA ...</span></span></code></pre></div>
 <p>And plot the results with <code><a href="../reference/plotRes.html">plotRes()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">mod_tbl</span>, <span class="st">"Recruitment"</span>, labFontSize <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 20 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">mod_tbl</span>, <span class="st">"Recruitment"</span>, labFontSize <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
 <p>We can also compare out local observed data to what would be
 projected by the national model.</p>
@@ -307,12 +306,10 @@ projected by the national model.</p>
 <span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">mod_nat_tbl</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span>, <span class="st">"Population growth rate"</span><span class="op">)</span>,</span>
 <span>        labFontSize <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $Recruitment</span></span>
-<span><span class="co">#&gt; Warning: Removed 20 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; $Recruitment</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $`Adult female survival`</span></span>
-<span><span class="co">#&gt; Warning: Removed 20 rows containing missing values (`geom_point()`).</span></span></code></pre>
+<span><span class="co">#&gt; $`Adult female survival`</span></span></code></pre>
 <p><img src="BayesianDemographicProjection_files/figure-html/unnamed-chunk-4-2.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $`Population growth rate`</span></span></code></pre>
@@ -427,12 +424,10 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">mod_sim_tbl</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span>, <span class="st">"Population growth rate"</span><span class="op">)</span>,</span>
 <span>        labFontSize <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $Recruitment</span></span>
-<span><span class="co">#&gt; Warning: Removed 20 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; $Recruitment</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/mod-sim-obs-1.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $`Adult female survival`</span></span>
-<span><span class="co">#&gt; Warning: Removed 21 rows containing missing values (`geom_point()`).</span></span></code></pre>
+<span><span class="co">#&gt; $`Adult female survival`</span></span></code></pre>
 <p><img src="BayesianDemographicProjection_files/figure-html/mod-sim-obs-2.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $`Population growth rate`</span></span></code></pre>
@@ -471,10 +466,10 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
@@ -493,12 +488,10 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">scResults</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span>, <span class="st">"Population growth rate"</span><span class="op">)</span>, </span>
 <span>        facetVars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rQuantile"</span>, <span class="st">"sQuantile"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $Recruitment</span></span>
-<span><span class="co">#&gt; Warning: Removed 90 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; $Recruitment</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/many-scns-1.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $`Adult female survival`</span></span>
-<span><span class="co">#&gt; Warning: Removed 90 rows containing missing values (`geom_point()`).</span></span></code></pre>
+<span><span class="co">#&gt; $`Adult female survival`</span></span></code></pre>
 <p><img src="BayesianDemographicProjection_files/figure-html/many-scns-2.png" width="672"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $`Population growth rate`</span></span></code></pre>
