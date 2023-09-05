@@ -169,7 +169,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
       obs$Type <- "Bayesian"
       obs$obsError <- FALSE
       obs$obsError[obs$type == "observed"] <- TRUE
-      obs <- filter(obs, !(Year > curYear & obsError))
+      obs <- filter(obs, !is.na(.data$Mean))
       x2 <- x2 + ggplot2::geom_point(data = obs,
                                      ggplot2::aes(x = .data[["Year"]], y = .data[["Mean"]],
                                                   shape = .data[["obsError"]]), col = "black",
