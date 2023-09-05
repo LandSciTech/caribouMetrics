@@ -107,13 +107,13 @@ caribou), Boreal Population, in Canada:2011 Update. Ottawa, Ontario.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>landCover</dt>
-<dd><p>filename or RasterLayer. 0 and NA values are assumed to be
+<dd><p>filename, SpatRaster or RasterLayer. 0 and NA values are assumed to be
 water and omitted from the tabulated area. Note landCover is also used to
 define the input grid, so must be provided even if all values are 1.</p></dd>
 
 
 <dt>linFeat</dt>
-<dd><p>filename, RasterLayer, sf object or a list of these that will
+<dd><p>filename, SpatRaster, RasterLayer, sf object or a list of these that will
 be combined. Linear features.</p></dd>
 
 
@@ -126,10 +126,10 @@ be combined. Linear features.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>optional arguments:</p><ul><li><p>natDist: filename or RasterLayer. Presence or absence of natural
+<dd><p>optional arguments:</p><ul><li><p>natDist: filename, SpatRaster or RasterLayer. Presence or absence of natural
 disturbance, primarily by fire. Should include 40 years cumulative
 disturbance.</p></li>
-<li><p>anthroDist: filename or RasterLayer. Anthropogenic disturbance including
+<li><p>anthroDist: filename, SpatRaster or RasterLayer. Anthropogenic disturbance including
 harvest. This can have an effect on any type of landcover except water.
 Should include 40 years cumulative disturbance.</p></li>
 <li><p>padProjPoly: logical. Should the area around the <code>projectPoly</code> be
@@ -140,7 +140,7 @@ are always clipped to the original <code>projectPoly</code>. It is ideal to set
 this to TRUE and provide a dataset that is larger than the
 <code>projectPoly</code> to avoid edge effects.</p></li>
 <li><p>padFocal: logical. This value is passed to the pad argument in
-<code><a href="https://rdrr.io/pkg/terra/man/focal.html" class="external-link">raster::focal</a></code>, if it is FALSE then cells near the edge will return
+<code><a href="https://rdrr.io/pkg/terra/man/focal.html" class="external-link">terra::focal</a></code>, if it is FALSE then cells near the edge will return
 NA, if it is TRUE a value will be returned for each cell that assumes cells
 outside the input data are 0 for all resource types. This is not a good
 assumption and should be used with caution.</p></li>
@@ -148,10 +148,10 @@ assumption and should be used with caution.</p></li>
 disturbance in metres. Default is 500.</p></li>
 <li><p>linBuffMethod: character. The method used to buffer linear features if
 they are supplied as sf lines. The default is "raster" in which case they
-are rasterized using the stars package and buffered using a moving window
+are rasterized and then buffered using a moving window
 method. If "sf" then the lines are buffered with st_buffer and then
 rasterized. Either way points are included in the raster output.</p></li>
-<li><p>saveOutput: character. The filename to save the RasterBrick of binary
+<li><p>saveOutput: character. The filename to save the raster of binary
 disturbances with buffered anthropogenic disturbance. Note this will
 overwrite existing files with the same name. The .grd format is recommended
 because it will preserve layer names when the file is reloaded.</p></li>
@@ -194,7 +194,8 @@ DisturbanceMetrics object.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># create example rasters</span></span></span>
-<span class="r-in"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span>nrows <span class="op">=</span> <span class="fl">10</span>, ncols <span class="op">=</span> <span class="fl">10</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">10</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">10</span>, crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span>nrows <span class="op">=</span> <span class="fl">10</span>, ncols <span class="op">=</span> <span class="fl">10</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">10</span>, ymin <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                  ymax <span class="op">=</span> <span class="fl">10</span>, crs <span class="op">=</span> <span class="st">"EPSG:5070"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">nd</span> <span class="op">&lt;-</span> <span class="va">lc</span></span></span>
 <span class="r-in"><span><span class="va">nd</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="va">ad</span> <span class="op">&lt;-</span> <span class="va">lc</span></span></span>
@@ -219,37 +220,37 @@ DisturbanceMetrics object.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> calculating disturbance metrics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class "DisturbanceMetrics"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "landCover":</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 10, 10, 100  (nrow, ncol, ncell)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 1, 1  (x, y)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> names      : layer </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> values     : 1, 1  (min, max)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 10, 10, 1  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 1, 1  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source(s)   : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> name        : lyr.1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> min value   :     1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> max value   :     1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "natDist":</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 10, 10, 100  (nrow, ncol, ncell)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 1, 1  (x, y)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> names      : layer </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> values     : 1, 1  (min, max)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 10, 10, 1  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 1, 1  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source(s)   : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> name        : lyr.1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> min value   :     1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> max value   :     1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "anthroDist":</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterLayer </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 10, 10, 100  (nrow, ncol, ncell)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 1, 1  (x, y)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> names      : layer </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> values     : 1, 1  (min, max)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 10, 10, 1  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 1, 1  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source(s)   : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> name        : lyr.1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> min value   :     1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> max value   :     1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "linFeat":</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
@@ -267,21 +268,20 @@ DisturbanceMetrics object.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 0 ymin: 0 xmax: 10 ymax: 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: NAD83 / Conus Albers</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sf..st_as_sfc.sf..st_bbox.ad..</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 POLYGON ((0 0, 10 0, 10 10,...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "processedData":</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> class      : RasterBrick </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions : 10, 10, 100, 4  (nrow, ncol, ncell, nlayers)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> resolution : 1, 1  (x, y)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> extent     : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> crs        : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> source     : memory</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> names      : Anthro, Fire, Total_dist, fire_excl_anthro </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> min values :      0,    0,          0,                0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> max values :      1,    1,          1,                1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 10, 10, 4  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 1, 1  (x, y)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : NAD83 / Conus Albers (EPSG:5070) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> source(s)   : memory</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> names       : Anthro, Fire, Total_dist, fire_excl_anthro </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> min values  :      0,    0,          0,                0 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> max values  :      1,    1,          1,                1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "disturbanceMetrics":</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   zone Anthro Fire Total_dist fire_excl_anthro</span>

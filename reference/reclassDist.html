@@ -84,7 +84,7 @@ period. The output from this function can be used as either the
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>distYr</dt>
-<dd><p>sf object or rasterLayer. A simple feature collection or
+<dd><p>sf object, SpatRaster or RasterLayer. A simple feature collection or
 raster layer covering the focal area and including the year of disturbance
 or time since disturbance as well as geometry (multipolygon) of the
 disturbance.</p></dd>
@@ -101,8 +101,8 @@ include.</p></dd>
 
 
 <dt>template</dt>
-<dd><p>rasterLayer. A raster of the focal region, used as a
-template to which disturbance information is projected. This layers
+<dd><p>SpatRaster or RasterLayer. A raster of the focal region, used as a
+template to which disturbance information is projected. This layer's
 dimensions determine the dimensions of the output. It is recommended to use
 the <code>landCover</code> raster layer used in <code><a href="caribouMetrics.html">caribouMetrics()</a></code> or
 <code><a href="disturbanceMetrics.html">disturbanceMetrics()</a></code> to ensure equal dimensions</p></dd>
@@ -117,7 +117,7 @@ year/time since disturbance is recorded.</p></dd>
     <h2>Value</h2>
     
 
-<p>Returns a binary <code>RasterLayer</code> with the same dimensions as the
+<p>Returns a binary SpatRaster with the same dimensions as the
 <code>template</code> input. Values of 1 represent areas of disturbance</p>
     </div>
     <div id="see-also">
@@ -134,8 +134,8 @@ year/time since disturbance is recorded.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span>
 <span class="r-in"><span><span class="co"># create template raster</span></span></span>
-<span class="r-in"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span>nrows <span class="op">=</span> <span class="fl">10</span>, ncols <span class="op">=</span> <span class="fl">10</span>, xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">10</span>, ymn <span class="op">=</span> <span class="fl">0</span>,</span></span>
-<span class="r-in"><span>                     ymx <span class="op">=</span> <span class="fl">10</span>, crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span>nrows <span class="op">=</span> <span class="fl">10</span>, ncols <span class="op">=</span> <span class="fl">10</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">10</span>, ymin <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                  ymax <span class="op">=</span> <span class="fl">10</span>, crs <span class="op">=</span> <span class="st">"EPSG:5070"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create fire polygons </span></span></span>
 <span class="r-in"><span><span class="va">corners</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">10</span>,<span class="fl">10</span>,<span class="fl">5</span>, <span class="fl">0</span>,<span class="fl">10</span>,<span class="fl">10</span>,<span class="fl">0</span>,<span class="fl">5</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>

@@ -101,18 +101,18 @@ anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>landCover</dt>
-<dd><p>filename or RasterLayer. Provincial landcover class</p></dd>
+<dd><p>filename, SpatRaster or RasterLayer. Provincial landcover class</p></dd>
 
 
 <dt>esker</dt>
-<dd><p>filename, RasterLayer or sf object. Eskers. If it is a
-RasterLayer then it should be esker density in m^2/ha.</p></dd>
+<dd><p>filename, SpatRaster or RasterLayer or sf object. Eskers. If it is a
+raster then it should be esker density in m^2/ha.</p></dd>
 
 
 <dt>linFeat</dt>
-<dd><p>filename, RasterLayer, sf object or a list of these that will
-be combined. Linear features. If it is a RasterLayer then it should be
-linear feature density in m^2/ha. If a RasterLayer is provided as a list
+<dd><p>filename, SpatRaster, RasterLayer, or sf object or a list of these that will
+be combined. Linear features. If it is a raster then it should be
+linear feature density in m^2/ha. If a raster is provided as a list
 element then ptDensity will be used to assign a density of linear features
 in the pixel (default is 1).</p></dd>
 
@@ -139,10 +139,10 @@ model. Must match the format and naming of the default <code>coefTableHR</code><
 
 
 <dt>...</dt>
-<dd><p>optional arguments:</p><ul><li><p>natDist: filename or RasterLayer. Presence or absence of natural
+<dd><p>optional arguments:</p><ul><li><p>natDist: filename, SpatRaster or RasterLayer. Presence or absence of natural
 disturbance, primarily by fire. This should reflect cumulative natural
 disturbance over the preceding 30 years</p></li>
-<li><p>anthroDist: filename or RasterLayer. Anthropogenic disturbance including
+<li><p>anthroDist: filename, SpatRaster or RasterLayer. Anthropogenic disturbance including
 harvest.</p></li>
 <li><p>eskerSave: filename to save rasterized esker data.</p></li>
 <li><p>linFeatSave: filename to save rasterized linear feature data.</p></li>
@@ -154,11 +154,11 @@ are always clipped to the original <code>projectPoly</code>. It is ideal to set
 this to TRUE and provide a data set that is larger than the
 <code>projectPoly</code> to avoid edge effects.</p></li>
 <li><p>padFocal: logical. This value is passed to the pad argument in
-<code><a href="https://rdrr.io/pkg/terra/man/focal.html" class="external-link">raster::focal</a></code>, if it is FALSE then cells near the edge will return
+<code><a href="https://rdrr.io/pkg/terra/man/focal.html" class="external-link">terra::focal</a></code>, if it is FALSE then cells near the edge will return
 NA, if it is TRUE a value will be returned for each cell that assumes cells
 outside the input data are 0 for all resource types. This is not a good
 assumption and should be used with caution.</p></li>
-<li><p>saveOutput: character. The filename to save the rasterBrick of habitat
+<li><p>saveOutput: character. The filename to save the raster of habitat
 use probabilities to. Note this will overwrite any existing files. The .grd
 format is recommended because it will preserve layer names when the file is
 reloaded.</p></li>
@@ -225,8 +225,8 @@ CaribouHabitat object, and <code><a href="https://rdrr.io/r/graphics/plot.defaul
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># create example rasters</span></span></span>
-<span class="r-in"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span>xmn <span class="op">=</span> <span class="fl">0</span>, xmx <span class="op">=</span> <span class="fl">25000</span>, ymn <span class="op">=</span> <span class="fl">0</span>, ymx <span class="op">=</span> <span class="fl">25000</span>, </span></span>
-<span class="r-in"><span>                     resolution <span class="op">=</span> <span class="fl">250</span>, crs <span class="op">=</span> <span class="fl">5070</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span>xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">25000</span>, ymin <span class="op">=</span> <span class="fl">0</span>, ymax <span class="op">=</span> <span class="fl">25000</span>, </span></span>
+<span class="r-in"><span>                     resolution <span class="op">=</span> <span class="fl">250</span>, crs <span class="op">=</span> <span class="st">"EPSG:5070"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">lc</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span></span>
 <span class="r-in"><span><span class="va">nd</span> <span class="op">&lt;-</span> <span class="va">lc</span></span></span>
 <span class="r-in"><span><span class="va">nd</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
@@ -256,12 +256,20 @@ CaribouHabitat object, and <code><a href="https://rdrr.io/r/graphics/plot.defaul
 <span class="r-in"><span>               caribouRange <span class="op">=</span> <span class="st">"Nipigon"</span>,</span></span>
 <span class="r-in"><span>               winArea <span class="op">=</span> <span class="fl">1000</span> <span class="co">#leave as default NULL except for small examples</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> old-style crs object detected; please recreate object with a recent sf::st_crs()</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> cropping linFeat to extent of projectPoly</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> cropping esker to extent of projectPoly</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Applying moving window.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot the relative probability of use</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> which was just loaded, will retire in October 2023.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Please refer to R-spatial evolution reports for details, especially</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> https://r-spatial.org/r/2023/05/15/evolution4.html.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> It may be desirable to make the sf package available;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> package maintainers should consider adding sf to Suggests:.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The sp package is now running under evolution status 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>      (status 2 uses the sf package in place of rgdal)</span>
 <span class="r-plt img"><img src="caribouHabitat-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot the predictor variables</span></span></span>

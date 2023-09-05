@@ -99,14 +99,6 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,</span></span>
-<span><span class="co">#&gt; which was just loaded, will retire in October 2023.</span></span>
-<span><span class="co">#&gt; Please refer to R-spatial evolution reports for details, especially</span></span>
-<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html.</span></span>
-<span><span class="co">#&gt; It may be desirable to make the sf package available;</span></span>
-<span><span class="co">#&gt; package maintainers should consider adding sf to Suggests:.</span></span>
-<span><span class="co">#&gt; The sp package is now running under evolution status 2</span></span>
-<span><span class="co">#&gt;      (status 2 uses the sf package in place of rgdal)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
@@ -116,20 +108,15 @@
 <span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: sp</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'raster'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:dplyr':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     select</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; terra 1.7.39</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'tidyr'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:raster':</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:terra':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     extract</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -193,14 +180,14 @@ presence absence raster of cumulative disturbance over the past 40
 years.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load example data and classify cumulative natural disturbance</span></span>
-<span><span class="va">landCoverD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="va">landCoverD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="va">natDistD</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"fireAFFES2020.shp"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/reclassDist.html">reclassDist</a></span><span class="op">(</span>endYr <span class="op">=</span> <span class="fl">2020</span>, numCumYrs <span class="op">=</span> <span class="fl">40</span>, template <span class="op">=</span> <span class="va">landCoverD</span>, </span>
 <span>              dateField <span class="op">=</span> <span class="st">"FIRE_YEAR"</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va">anthroDistD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">linFeatDras</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/raster.html" class="external-link">raster</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"linFeatTif.tif"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">anthroDistD</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"anthroDist.tif"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">linFeatDras</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"linFeatTif.tif"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">projectPolyD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"projectPoly.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">linFeatDshp</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"roads.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">roadsD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"roads.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -224,19 +211,19 @@ with one column per metric use the <code>results</code> function.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">disturbance</span>, max.level <span class="op">=</span> <span class="fl">2</span>, give.attr <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Formal class 'DisturbanceMetrics' [package "caribouMetrics"] with 8 slots</span></span>
-<span><span class="co">#&gt;   ..@ landCover         :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
-<span><span class="co">#&gt;   ..@ natDist           :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
-<span><span class="co">#&gt;   ..@ anthroDist        :Formal class 'RasterLayer' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ landCover         :S4 class 'SpatRaster' [package "terra"]</span></span>
+<span><span class="co">#&gt;   ..@ natDist           :S4 class 'SpatRaster' [package "terra"]</span></span>
+<span><span class="co">#&gt;   ..@ anthroDist        :S4 class 'SpatRaster' [package "terra"]</span></span>
 <span><span class="co">#&gt;   ..@ linFeat           :List of 1</span></span>
 <span><span class="co">#&gt;   ..@ projectPoly       :Classes 'sf' and 'data.frame':  1 obs. of  2 variables:</span></span>
-<span><span class="co">#&gt;   ..@ processedData     :Formal class 'RasterBrick' [package "raster"] with 13 slots</span></span>
+<span><span class="co">#&gt;   ..@ processedData     :S4 class 'SpatRaster' [package "terra"]</span></span>
 <span><span class="co">#&gt;   ..@ disturbanceMetrics:'data.frame':   1 obs. of  6 variables:</span></span>
 <span><span class="co">#&gt;   ..@ attributes        :List of 3</span></span>
 <span><span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID</span></span>
-<span><span class="co">#&gt; 1    1 46.74151 1.728116   47.29954        0.5580347   0</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    1 46.74151 1.726477   47.29954        0.5580347   0</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_disturbanceMetric_files/figure-html/plotDisturbance-1.png" width="768"></p>
 <p>Multiple linear feature inputs can also be provided in vector form.
 See <code>vignette("caribouHabitat", package = "caribouMetrics")</code>
@@ -250,7 +237,7 @@ for other data processing and input options.</p>
 <span>  projectPoly <span class="op">=</span> <span class="va">projectPolyD</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbanceV</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbanceV</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_disturbanceMetric_files/figure-html/plotDisturbanceVector-1.png" width="768"></p>
 </div>
   </div>
