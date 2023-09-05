@@ -1,3 +1,6 @@
+# caribouMetrics 0.3.0
+* Changed to use terra for all spatial processing. Still accepts RasterLayer inputs but outputs SpatRasters.
+
 # caribouMetrics 0.2.0
 
 * Added a `NEWS.md` file to track changes to the package.
