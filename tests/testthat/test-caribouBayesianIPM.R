@@ -186,11 +186,12 @@ test_that("results match expected", {
                                             Niter = 100, Nburn = 10))
   }
   
-  doPlot <- function(scResults, var = "Recruitment"){
+  doPlot <- function(scResults, var = "Recruitment", title = ""){
     if (interactive()) {
       return(plotRes(scResults, var,
                     lowBound = 0,  facetVars = NULL
-      ))
+      )+
+        ggplot2::ggtitle(title))
     }
   }
   
@@ -240,12 +241,11 @@ test_that("results match expected", {
   # when we have a lot of collars the distance between observations and "true"
   # pop is smaller than when we have few.
   manyObs <- doScn(nCollar = 2000, rQuantile = 0.9, sQuantile = 0.9)
-  doPlot(manyObs)+
-    ggplot2::ggtitle("2000 collars")
+  doPlot(manyObs, title = "2000 collars")
+    
   
   fewCollarObs <- doScn(nCollar = 30, rQuantile = 0.9, sQuantile = 0.9)
-  doPlot(fewCollarObs)+
-    ggplot2::ggtitle("30 collars")
+  doPlot(fewCollarObs, title = "30 collars")
   
   difMany <- calcDif(manyObs$obs.all)
   difFew <- calcDif(fewCollarObs$obs.all)

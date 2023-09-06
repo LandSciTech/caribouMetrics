@@ -1,5 +1,6 @@
 test_that("default works", {
-  scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowCount = 100, collarCount = 50)
+  scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowMult = 3,
+                              collarCount = 50)
   expect_is(simulateObservations(scns),
             "list")
 })
@@ -40,7 +41,7 @@ test_that("multiple scenarios not allowed",{
 # internally, do same in getPriors
 
 test_that("collarCount and cowCount behave", {
-  scns <- getScenarioDefaults(collarCount = 30, cowCount = 100)
+  scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = NA)
   
   simObs <- simulateObservations(scns)
   
@@ -134,7 +135,8 @@ test_that("collarCount and cowCount behave", {
     expect_true()
   
   # for collarInterval 
-  scns3 <- getScenarioDefaults(collarCount = 30, cowCount = 100, collarInterval = 3)
+  scns3 <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = NA,
+                               collarInterval = 3)
   
   simObs5 <- simulateObservations(scns3)
   
