@@ -9,10 +9,13 @@
 #'   [getScenarioDefaults()] for details.
 #' @param printPlot logical. print a plot of the true population trajectory?
 #' @param cowCounts data.frame. Optional. Number of cows counted in aerial
-#'   surveys each year. If NULL `paramTable$cowCount` is used and the number of
-#'   cows observed is assumed to be equal each year.  If a data.fram is provided
-#'   it must have 3 columns "Year", "Count", and "Class" where class is "cow" in
-#'   all rows
+#'   surveys each year. If NULL, and `paramTable` contains `cowMult` the number
+#'   of cows that survive calving based on the collar data is multiplied by
+#'   `cowMult` to determine the number of cows counted in aerial surveys. If
+#'   `paramTable` does not contain `cowMult` `paramTable$cowCount` is used to
+#'   set the number of cows counted in aerial surveys each year. If a data.frame
+#'   is provided it must have 3 columns "Year", "Count", and "Class" where class
+#'   is "cow" in all rows.
 #' @param freqStartsByYear data.frame. Optional. Number of collars deployed in
 #'   each year. If NULL `paramTable$collarCount` is used as the target number of
 #'   collars and each year that collars are deployed they will be topped up to
@@ -42,15 +45,15 @@
 #'   * ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
 #'   * exData: a tibble of expected population metrics based on the national model,
 #'   * paramTable: a data frame recording the input parameters for the simulation.
-#' 
+#'
 #' @family demography
 #' @export
 #'
 #' @examples
-#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10, 
+#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 #'                             obsAnthroSlope = 1, projAnthroSlope = 5,
 #'                             collarCount = 20, cowCount = 100)
-#'                             
+#'
 #' simO <- simulateObservations(scns)
 simulateObservations <- function(paramTable, cowCounts = NULL,
                                  freqStartsByYear = NULL,

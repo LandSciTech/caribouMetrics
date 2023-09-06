@@ -80,7 +80,7 @@ rate)}
 
 \item{zMax}{number in 0, <1. Maximum probability of missing calves in composition survey.}
 
-\item{cowMult}{number >= 1. The apparent number of adult females per collared animal in composition survey.}
+\item{cowMult}{number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use \code{cowCount}.}
 
 \item{collarInterval}{number. Optional. Number of years between collar deployments. If
 missing assumed to be every year}
@@ -88,8 +88,7 @@ missing assumed to be every year}
 \item{cowCount}{Optional. Only used in \code{runScnSet()} to set the number of cows per
 year in recruitment survey}
 
-\item{collarCount}{Optional. If provided target number of deployed collars is overwritten with
-this value.}
+\item{collarCount}{number >= 1. The target number of collars active each year. Set to NA to use \code{freqStartsPerYear} in \verb{simulateObservations(}}
 
 \item{startYear}{year. First year in observation period. Optional, if not provided
 it will be calculated from \code{curYear} and \code{obsYears}}

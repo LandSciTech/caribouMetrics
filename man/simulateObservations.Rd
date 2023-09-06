@@ -24,10 +24,13 @@ simulateObservations(
 \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for details.}
 
 \item{cowCounts}{data.frame. Optional. Number of cows counted in aerial
-surveys each year. If NULL \code{paramTable$cowCount} is used and the number of
-cows observed is assumed to be equal each year.  If a data.fram is provided
-it must have 3 columns "Year", "Count", and "Class" where class is "cow" in
-all rows}
+surveys each year. If NULL, and \code{paramTable} contains \code{cowMult} the number
+of cows that survive calving based on the collar data is multiplied by
+\code{cowMult} to determine the number of cows counted in aerial surveys. If
+\code{paramTable} does not contain \code{cowMult} \code{paramTable$cowCount} is used to
+set the number of cows counted in aerial surveys each year. If a data.frame
+is provided it must have 3 columns "Year", "Count", and "Class" where class
+is "cow" in all rows.}
 
 \item{freqStartsByYear}{data.frame. Optional. Number of collars deployed in
 each year. If NULL \code{paramTable$collarCount} is used as the target number of
@@ -85,10 +88,10 @@ realistic observations are simulated from this true population based on a
 collaring program with the given parameters.
 }
 \examples{
-scns <- getScenarioDefaults(projYears = 10, obsYears = 10, 
+scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
                             obsAnthroSlope = 1, projAnthroSlope = 5,
                             collarCount = 20, cowCount = 100)
-                            
+
 simO <- simulateObservations(scns)
 }
 \seealso{

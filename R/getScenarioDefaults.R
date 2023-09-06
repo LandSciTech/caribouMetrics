@@ -23,15 +23,14 @@
 #' @param uMax number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.
 #' @param zMin number in 0, 1. Minimum probability of missing calves in composition survey.
 #' @param zMax number in 0, <1. Maximum probability of missing calves in composition survey.
-#' @param cowMult number >= 1. The apparent number of adult females per collared animal in composition survey.
+#' @param cowMult number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use `cowCount`.
+#' @param collarCount number >= 1. The target number of collars active each year. Set to NA to use `freqStartsPerYear` in `simulateObservations(`
 #' @inheritParams caribouPopGrowth
 #' @inheritParams caribouBayesianIPM
 #' @param collarInterval number. Optional. Number of years between collar deployments. If
 #'   missing assumed to be every year
 #' @param cowCount Optional. Only used in `runScnSet()` to set the number of cows per
 #'   year in recruitment survey
-#' @param collarCount Optional. If provided target number of deployed collars is overwritten with
-#'   this value.
 #' @param curYear year. The current year. All years before are part of the
 #'   observation period and years after are part of the projection period.
 #' @param startYear year. First year in observation period. Optional, if not provided
