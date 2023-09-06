@@ -29,7 +29,7 @@
 #' @examples
 #' scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 #'                             obsAnthroSlope = 1, projAnthroSlope = 5,
-#'                             collarCount = 20, cowCount = 100)
+#'                             collarCount = 20, cowMult = 5)
 #'
 #' simO <- simulateObservations(scns)
 #'
@@ -140,7 +140,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     ggplot2::ylab(parameter) +
     ggplot2::geom_line(ggplot2::aes(x = .data[["Year"]], y = .data[["Mean"]]), 
                        linewidth = 1.75) +
-    ggplot2::scale_color_discrete(type=pal2)+
+    ggplot2::scale_color_discrete(type=pal2, name = NULL)+
     ggplot2::theme(
       legend.position = legendPosition,
       axis.text.y = ggplot2::element_text(size = labFontSize),
@@ -157,7 +157,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     x2 <- x2 + ggplot2::geom_ribbon(ggplot2::aes(ymin = .data[["Lower 95% CRI"]],
                                                  ymax = .data[["Upper 95% CRI"]]),
                                     show.legend = FALSE, alpha = 0.25, colour = NA
-    ) +ggplot2::scale_fill_discrete(type=pal2)+
+    ) +ggplot2::scale_fill_discrete(type=pal2, name = NULL)+
       ggplot2::scale_y_continuous(limits = c(
         ifelse(any(df$`Lower 95% CRI` < lowBound), NA, lowBound),
         ifelse(any(df$`Upper 95% CRI` > 1), NA, highBound)
@@ -172,9 +172,13 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
       obs <- filter(obs, !is.na(.data$Mean))
       x2 <- x2 + ggplot2::geom_point(data = obs,
                                      ggplot2::aes(x = .data[["Year"]], y = .data[["Mean"]],
-                                                  shape = .data[["obsError"]]), col = "black",
+                                                  shape = .data[["obsError"]]), 
+                                     col = "black", fill = "black", inherit.aes = FALSE,
                                      show.legend = TRUE) +
-        ggplot2::scale_shape_manual(values = c(16, 2))
+        ggplot2::scale_shape_manual(values = c(16, 2), 
+                                    labels = c(`TRUE` = "observed", 
+                                               `FALSE` = "true\nsimulated"), 
+                                    name = NULL)
     }
   }
   
