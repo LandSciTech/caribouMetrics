@@ -132,15 +132,18 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   # simulate true population trajectory
   suppressMessages(
     popMetrics <- simTrajectory(
-      numYears = paramTable$obsYears + paramTable$projYears, covariates = simDisturbance,
+      numYears = paramTable$obsYears + paramTable$projYears, 
+      covariates = simDisturbance,
       popGrowthTable = populationGrowthTable,
       survivalModelNumber = survivalModelNumber,
       recruitmentModelNumber = recruitmentModelNumber,
       recSlopeMultiplier = paramTable$rSlopeMod,
       sefSlopeMultiplier = paramTable$sSlopeMod, recQuantile = paramTable$rQuantile,
       sefQuantile = paramTable$sQuantile,
-      N0 = paramTable$N0, adjustR = paramTable$adjustR,cowMult=paramTable$cowMult,
-      qMin=paramTable$qMin,qMax=paramTable$qMax,uMin=paramTable$uMin,uMax=paramTable$uMax,zMin=paramTable$zMin,zMax=paramTable$zMax 
+      N0 = paramTable$N0, adjustR = paramTable$adjustR,
+      cowMult = ifelse(is.null(paramTable$cowMult), 1, paramTable$cowMult),
+      qMin = paramTable$qMin, qMax = paramTable$qMax, uMin = paramTable$uMin,
+      uMax = paramTable$uMax, zMin = paramTable$zMin, zMax = paramTable$zMax
     )
   )
 
