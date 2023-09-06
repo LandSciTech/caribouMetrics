@@ -103,10 +103,13 @@ collaring program with the given parameters.</p>
 
 <dt>cowCounts</dt>
 <dd><p>data.frame. Optional. Number of cows counted in aerial
-surveys each year. If NULL <code>paramTable$cowCount</code> is used and the number of
-cows observed is assumed to be equal each year.  If a data.fram is provided
-it must have 3 columns "Year", "Count", and "Class" where class is "cow" in
-all rows</p></dd>
+surveys each year. If NULL, and <code>paramTable</code> contains <code>cowMult</code> the number
+of cows that survive calving based on the collar data is multiplied by
+<code>cowMult</code> to determine the number of cows counted in aerial surveys. If
+<code>paramTable</code> does not contain <code>cowMult</code> <code>paramTable$cowCount</code> is used to
+set the number of cows counted in aerial surveys each year. If a data.frame
+is provided it must have 3 columns "Year", "Count", and "Class" where class
+is "cow" in all rows.</p></dd>
 
 
 <dt>freqStartsByYear</dt>
@@ -196,11 +199,11 @@ results will be saved to csv files in the directory provided</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">scns</span> <span class="op">&lt;-</span> <span class="fu"><a href="getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span>projYears <span class="op">=</span> <span class="fl">10</span>, obsYears <span class="op">=</span> <span class="fl">10</span>, </span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">scns</span> <span class="op">&lt;-</span> <span class="fu"><a href="getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span>projYears <span class="op">=</span> <span class="fl">10</span>, obsYears <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>                            obsAnthroSlope <span class="op">=</span> <span class="fl">1</span>, projAnthroSlope <span class="op">=</span> <span class="fl">5</span>,</span></span>
 <span class="r-in"><span>                            collarCount <span class="op">=</span> <span class="fl">20</span>, cowCount <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in getScenarioDefaults(projYears = 10, obsYears = 10, obsAnthroSlope = 1,     projAnthroSlope = 5, collarCount = 20, cowCount = 100):</span> Specify number of cows per year in recruitment survey (cowCount) or multiplier of number of collared cows in recruitment survey (cowMult), but not both.</span>
-<span class="r-in"><span>                            </span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">simO</span> <span class="op">&lt;-</span> <span class="fu">simulateObservations</span><span class="op">(</span><span class="va">scns</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'scns' not found</span>
 </code></pre></div>
