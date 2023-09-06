@@ -48,7 +48,7 @@ national model and observed data
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
                             obsAnthroSlope = 1, projAnthroSlope = 5,
-                            collarCount = 20, cowCount = 100)
+                            collarCount = 20, cowMult = 5)
 
 simO <- simulateObservations(scns)
 
