@@ -127,67 +127,71 @@ estimate is based on more than just the sample of collared cows, the
 sample size for recruitment estimates is typically larger than for
 survival.</p>
 <div class="section level2">
-<h2 id="bayesian-model-description">Bayesian model description<a class="anchor" aria-label="anchor" href="#bayesian-model-description"></a>
+<h2 id="integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model">Integration of local demographic data and national
+disturbance-demographic relationships in a Bayesian population
+model<a class="anchor" aria-label="anchor" href="#integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model"></a>
 </h2>
-<p>Following Eacker et al. (2020), the observed number of calves <span class="math inline">\(\hat{J}_t\)</span> is a binomially distributed
+<p>Following Eacker et al. (2019), the observed number of calves <span class="math inline">\(\hat{J}_t\)</span> is a binomially distributed
 function of the observed number of adult female caribou <span class="math inline">\(\hat{W}_t\)</span> and the estimated recruitment
 rate <span class="math inline">\(R_t\)</span>: <span class="math display">\[\hat{J}_t \sim
 \text{Binomial}(\hat{W}_t,R_t).\]</span></p>
-<p>True recruitment rate is modelled as a function of anthropogenic
-disturbance and fire with a log link and Gaussian distributed random
-year effect: <span class="math display">\[\log(R_t)=\beta^R_0+\beta^R_a
-A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t \sim
-\text{Normal}(0,\sigma^2_{R}).\]</span> Estimated recruitment
-probability is adjusted for sex ratio to get expected recruits per
-female: <span class="math inline">\(X_t=R_t/2\)</span>. Recruitment can
-be also adjust for delayed age of first reproduction
-(<code>adjustR</code>): <span class="math inline">\(X_t=\frac{R_t/2}{1+R_t/2}.\)</span>, but to
-maintain consistency with Johnson et al. (2020) this is not the
-default.</p>
-<p>Also following Eacker et al. (2020), Kaplan-Meier estimates of
+<p>We model recruitment probability as a function of anthropogenic
+disturbance and fire with a log link (Dyson et al., 2022; Johnson et
+al., 2020; Stewart et al., 2023) and Gaussian distributed random year
+effect (Eacker et al., 2019): <span class="math display">\[\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f
+F_t+\epsilon^R_t; \epsilon^R_t
+\sim \text{Normal}(0,\sigma^2_{R}).\]</span> Estimated recruitment
+probability is adjusted for sex ratio, misidentification biases, and age
+of first reproduction (DeCesare et al., 2012; Eacker et al., 2019) to
+get expected recruits per female: <span class="math display">\[X_t=\frac{cR_t/2}{1+cR_t/2};
+c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)}.\]</span> The composition survey bias
+correction term <span class="math inline">\(c\)</span> depends on the
+apparent number of adult females per collared animal <span class="math inline">\(w\)</span>, the ratio of young bulls to adult
+females <span class="math inline">\(q\)</span>, the probability of
+misidentifying young bulls as adult females and vice versa <span class="math inline">\(u\)</span>, and the probability of missing a calf
+<span class="math inline">\(z\)</span> (see
+compositionBiasCorrection()). To maintain consistency with Johnson et
+al. (2020) we also provide an option (<code>adjustR = FALSE</code>) to
+only adjust for sex ratio and misidentification biases <span class="math inline">\(X_t=cR_t/2\)</span>.</p>
+<p>In the Bayesian model, prior uncertainty about the value of the bias
+correction term <span class="math inline">\(c\)</span> is approximated
+with a Log-normal distribution. Given the apparent number of adult
+females per collared animal <span class="math inline">\(w\)</span>, the
+mean and standard deviation of 10,000 samples of <span class="math inline">\(\log{c}\)</span> is calculated with the default
+being to assume the ratio of young bulls to adult females <span class="math inline">\(q\)</span> varies uniformly between 0 and 0.6, the
+adult misidentification probability <span class="math inline">\(u\)</span> varies uniformly between 0 and 0.2, and
+the probability of missing a calf <span class="math inline">\(z\)</span>
+varies uniformly between 0 and 0.2 (see getPriors).</p>
+<p>Also following Eacker et al. (2019), Kaplan-Meier estimates of
 observed adult female survival probability <span class="math inline">\(\hat{S}_t\)</span> and associated precisions <span class="math inline">\(\tau_t\)</span> are estimated from known-fate
-radio collar data using the survival R package
-(<code><a href="https://rdrr.io/pkg/survival/man/survfit.formula.html" class="external-link">survival::survfit.formula()</a></code>), with precisions for years
-with no observed mortality estimated using a separate Bayesian model.
-Observed estimated survival is a Gaussian distributed function of the
-true survival probability: <span class="math display">\[\hat{S_t} \sim
-\text{Normal}(S_t,1/\tau_t).\]</span> True survival probability is
-modelled as an adjusted function of buffered anthropogenic disturbance
-<span class="math inline">\(A_t\)</span> with a log link and Gaussian
-distributed random year effect: <span class="math display">\[S_t=\text{min}(46 \tilde{S_t}-0.5)/45,1);
+radio collar data using the <a href="https://CRAN.R-project.org/package=survival" class="external-link">survival</a> package,
+with precisions for years with no observed mortality estimated using a
+separate Bayesian model. Observed estimated survival is a Gaussian
+distributed function of the true survival probability: <span class="math display">\[\hat{S_t} \sim
+\text{Normal}(S_t,1/\tau_t).\]</span> As in the national demographic
+model, we model survival probability as an adjusted function of buffered
+anthropogenic disturbance <span class="math inline">\(A_t\)</span> with
+a log link (Dyson et al., 2022; Johnson et al., 2020; Stewart et al.,
+2023) and Gaussian distributed random year effect (Eacker et al., 2019):
+<span class="math display">\[S_t=\text{min}(46 \tilde{S_t}-0.5)/45,1);
 \log(\tilde{S_t})=\beta^S_0+\beta^S_a A_t+\epsilon^S_t; \epsilon^S_t
-\sim \text{Normal}(0,\sigma^2_{S}).\]</span> An alternative parametric
-exponential survival model is also provided
-(<code>survAnalysisMethod = "Exponential"</code>), wherein the observed
-state (alive or dead, <span class="math inline">\(\hat{I}_{i,t,m}\)</span>) of an individual animal
-<span class="math inline">\(i\)</span> in year <span class="math inline">\(t\)</span> and month <span class="math inline">\(m\)</span> is Bernoulli distributed: <span class="math display">\[\hat{I}_{i,t,m} \sim
-\text{Bernoulli}(S^{1/12}_t\hat{I}_{i,t,m-1}).\]</span></p>
+\sim \text{Normal}(0,\sigma^2_{S}).\]</span> To handle cases in which
+there is little or no survival data, we also implemented an alternative
+parametric exponential survival model, wherein the observed state (alive
+or dead, <span class="math inline">\(\hat{I}_{i,t,m}\)</span>) of an
+individual animal <span class="math inline">\(i\)</span> in year <span class="math inline">\(t\)</span> and month <span class="math inline">\(m\)</span> is Bernoulli distributed (Schaub and
+Kery, 2021): <span class="math display">\[\hat{I}_{i,t,m} \sim
+\text{Bernoulli}(S^{1/12}_t\hat{I}_{i,t,m-1}).\]</span> The exponential
+survival method can be used in all cases instead of the Kaplan-Meier
+method by setting <code>survAnalysisMethod = "Exponential"</code>.</p>
 <p>All regression coefficients are assumed to be Gaussian distributed,
 with priors derived from the expected values and 95% confidence
-intervals estimated by Johnson et al (2020) (Table @ref(tab:priors)). We
-calibrated the prior distributions so that the 95% prediction interval
-from the IPM matches the range between the 2.5% and 97.5% quantiles of
-1000 simulated recruitments.</p>
-<p>We assume a simple two-class demographic model, with a census in late
-winter of surviving females and new recruits to the post-juvenile (aged
-1+) class. The number of post-juvenile females that survive from year
-<span class="math inline">\(t\)</span> to the census <span class="math inline">\(W_t\)</span> is binomially distributed with
-survival probability <span class="math inline">\(S_t\)</span>: <span class="math inline">\(W_{t} \sim \text{Binomial}(N_t,S_t)\)</span>. The
-number of juveniles recruiting to the post-juvenile class at the census
-is a Poisson distributed function of the number of surviving
-post-juvenile females and the adjusted recruitment rate <span class="math inline">\(X_t\)</span>: <span class="math inline">\(J_{t}
-\sim \text{Poisson}(X_tW_t)\)</span>. The post-juvenile female
-population in the next year includes both survivors and new recruits:
-<span class="math inline">\(N_{t+1}=W_t+J_t\)</span>. Annual population
-growth rate <span class="math inline">\(\lambda_t\)</span> is set to 0
-when <span class="math inline">\(N_t\)</span> is 0, and is otherwise
-<span class="math inline">\(\lambda_t=N_{t+1}/N_t\)</span>. For more
-stable estimates of population status, <code>assessmentYrs</code> can be
-set to &gt;1 and average population growth over a period of <span class="math inline">\(y\)</span> years, calculated as <span class="math inline">\(\bar{\lambda}_{y,t}=\sum_{x=t-y+1}^{x=t}\lambda_x\)</span>.</p>
-</div>
-<div class="section level2">
-<h2 id="worked-examples">Worked examples<a class="anchor" aria-label="anchor" href="#worked-examples"></a>
-</h2>
+intervals estimated by Johnson et al (2020)
+(<code>popGrowthTableJohnsonECCC</code>). We calibrated the prior
+distributions so that the 95% prior prediction intervals for survival
+and recruitment from the Bayesian model match the range between the 2.5%
+and 97.5% quantiles of 1000 simulated survival and recruitment
+trajectories (see <code><a href="../reference/getPriors.html">getPriors()</a></code>).</p>
 <div class="section level3">
 <h3 id="using-real-observed-data">Using real observed data<a class="anchor" aria-label="anchor" href="#using-real-observed-data"></a>
 </h3>
@@ -242,7 +246,7 @@ population as disturbance increases over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:12] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/Rtmpa1HvaV/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpGQlhdQ/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -260,11 +264,11 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;  $ rr.summary.all:'data.frame':  175 obs. of  13 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year            : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
 <span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adjusted recruitment" "Adult female survival" "Recruitment" "Female population size" ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.214 0.878 0.409 1000 1.068 ...</span></span>
-<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.02 0.025 0.024 0 0.038 ...</span></span>
-<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.183 0.833 0.365 1000 1.004 ...</span></span>
-<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.252 0.919 0.457 1000 1.144 ...</span></span>
-<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 1 NA NA NA NA 0.98 ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.218 0.873 0.416 1000 1.061 ...</span></span>
+<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.02 0.026 0.029 0 0.041 ...</span></span>
+<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.184 0.815 0.369 1000 0.98 0.846 0.155 980 0.302 0.995 ...</span></span>
+<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.255 0.916 0.467 1000 1.13 ...</span></span>
+<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.95 NA NA NA NA 0.98 ...</span></span>
 <span><span class="co">#&gt;   ..$ X               : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ Anthro          : int [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;   ..$ fire_excl_anthro: num [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
@@ -292,8 +296,9 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">mod_tbl</span>, <span class="st">"Recruitment"</span>, labFontSize <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
-<p>We can also compare out local observed data to what would be
-projected by the national model.</p>
+<p>We can also compare our local observed data to what would be
+projected by the national model with out considering local population
+specific data.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simNational</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSimsNational.html">getSimsNational</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Setting expected survival S_bar to be between l_S and h_S.</span></span>
@@ -322,15 +327,80 @@ population’s response to anthropogenic disturbance in completely
 determined by the national model since there was 0% disturbance during
 the observation period.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="simulation-of-local-population-dynamics-and-monitoring">Simulation of local population dynamics and monitoring<a class="anchor" aria-label="anchor" href="#simulation-of-local-population-dynamics-and-monitoring"></a>
+</h2>
+<p>To simulate plausible demographic trajectories for example
+populations we used a modified version of Johnson et al’s (2020)
+two-stage demographic model described by Dyson et al. (2022). The true
+number of post-juvenile females that survive from year <span class="math inline">\(t\)</span> to the census, <span class="math inline">\(\dot{W}_t\)</span>, is binomially distributed with
+true survival probability <span class="math inline">\(\dot{S}_t\)</span>: <span class="math inline">\(\dot{W}_{t} \sim
+\text{Binomial}(\dot{N}_t,\dot{S}_t)\)</span>. Maximum potential
+recruitment rate is adjusted for sex ratio, misidentification biases and
+(optionally) delayed age at first reproduction (DeCesare et al., 2012;
+Eacker et al., 2019): <span class="math display">\[\dot{X}_t=\frac{c\dot{R}_t/2}{1+c\dot{R}_t/2};c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)},
+\]</span> where <span class="math inline">\(w\)</span> is a multiplier
+that defines the apparent number of adult females in the composition
+survey as a function of the number of collared animals, <span class="math inline">\(q\)</span> is the ratio of young bulls to adult
+females, <span class="math inline">\(u\)</span> is the probability of
+misidentifying young bulls as adult females and vice versa, and <span class="math inline">\(z\)</span> is the probability of missing a
+calf.</p>
+<p>Realized recruitment rate varies with population density (Lacy et
+al., 2017), and the number of juveniles recruiting to the post-juvenile
+class at the census is a binomially distributed function of the number
+of surviving post-juvenile females and the adjusted recruitment rate:
+<span class="math display">\[\dot{J}_{t} \sim
+\text{Binomial}(\dot{W}_t,\dot{X}_t[p_0-(p_0-p_k)(\frac{\dot{W}_t}{N_0k})^b]\frac{\dot{W}_t}{\dot{W}_t+a}).\]</span>
+Given default parameters, recruitment rate is lowest <span class="math inline">\((0.5\dot{X}_t)\)</span> when <span class="math inline">\(\dot{N}_t=1\)</span>, approaches a maximum of
+<span class="math inline">\(\dot{X}_t\)</span> at intermediate
+population sizes, and declines to <span class="math inline">\(0.6\dot{X}_t\)</span> as the population reaches
+carrying capacity of <span class="math inline">\(k=100\)</span> times
+the initial population size. The post-juvenile female population in the
+next year includes both survivors and new recruits: <span class="math inline">\(\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)\)</span>.</p>
+<p>Interannual variation in survival and recruitment is modelled using
+truncated beta distributions (rtrunc function; Novomestky and Nadarajah
+(2016)): <span class="math inline">\(\dot{R}_t \sim
+\text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim
+\text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)\)</span>. Coefficients of
+variation among years <span class="math inline">\((\nu_R,\nu_S)\)</span>
+and maximum/minimum values <span class="math inline">\(l_R,h_R,l_S,h_S\)</span> for recruitment and
+survival have default values set in <code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code>.
+Expected recruitment (<span class="math inline">\(\bar{R}_t\)</span>)
+and survival (<span class="math inline">\(\bar{S}_t\)</span>) vary with
+disturbance according the beta regression models estimated by Johnson et
+al. (2020: <span class="math display">\[ \bar{R}_t \sim
+Beta(\mu^R_t,\phi^R);log(\mu^R_t)=\dot{\beta^R_0}+\dot{\beta^R_a}A_t+\dot{\beta}^R_fF_t,\]</span>
+<span class="math display">\[\bar{S}_t \sim (46\times
+Beta(\mu^S_t,\phi^S)-0.5)/45;log(\mu^S_t)=\dot{\beta^S_0}+\dot{\beta^S_a}A_t.\]</span>
+<span class="math inline">\(\phi^R \sim
+\text{Normal}(19.862,2.229)\)</span> and <span class="math inline">\(\phi^S \sim \text{Normal}(63.733,8.311)\)</span>
+are precisions of the Beta distributed errors (Ferrari and Cribari-Neto,
+2004). At the beginning of a simulation for an example population,
+regression coefficient values are sampled from Gaussian distributions
+(see <code><a href="../reference/demographicRates.html">demographicRates()</a></code>) and the population is assigned to
+quantiles of the Beta error distributions for survival and recruitment.
+The population remains in these quantiles as disturbance changes over
+time, so there is substantial persistent variation in recruitment and
+survival among example among populations.</p>
 <div class="section level3">
-<h3 id="simulate-observed-data">Simulate observed data<a class="anchor" aria-label="anchor" href="#simulate-observed-data"></a>
+<h3 id="observed-survival-of-collared-animals">Observed survival of collared animals<a class="anchor" aria-label="anchor" href="#observed-survival-of-collared-animals"></a>
 </h3>
-<p>To create simulated observation data we first create a plausible true
-population trajectory by simulating from the the national model and a
-disturbance scenario. Then realistic observations are simulated from
-this true population based on a collaring program with the given
-parameters. See <code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code> for an explanation of
-the national model implementation.</p>
+<p>In our simulated populations, mortality risk does not vary over time
+or among individuals, so the observed state (dead or alive) of a
+collared animal <span class="math inline">\(i\)</span> in month <span class="math inline">\(m\)</span> and year <span class="math inline">\(t\)</span> depends on the true survival rate <span class="math inline">\(\dot{S}_t\)</span> as follows: <span class="math display">\[\hat{I}_{i,t,m} \sim
+\text{Bernoulli}(\dot{S}^{1/12}_t\hat{I}_{i,t,m-1}).\]</span></p>
+</div>
+<div class="section level3">
+<h3 id="observed-recruitment-from-composition-surveys">Observed recruitment from composition surveys<a class="anchor" aria-label="anchor" href="#observed-recruitment-from-composition-surveys"></a>
+</h3>
+<p>The number of cows in the composition survey <span class="math inline">\(\hat{W}_t\)</span> is given by the number of
+collared cows <span class="math inline">\(\hat{T}_t\)</span> and the
+apparent number of adult females per collared female observed in the
+composition survey <span class="math inline">\(w\)</span>: <span class="math display">\[\hat{W}_t = w\hat{T}_t.\]</span> The number of
+observed calves <span class="math inline">\(\hat{J}_t\)</span> also
+depends on the unadjusted apparent recruitment for the population <span class="math inline">\(\dot{R}_t\)</span>: <span class="math display">\[\hat{J}_t \sim
+\text{Binomial}(\hat{W}_t,\dot{R}_t).\]</span></p>
 <p>To run the simulations we need to supply parameters that determine
 the disturbance scenario, the trajectory of the true population relative
 to the national model mean, and the collaring program details. All these
@@ -458,9 +528,6 @@ see how well our monitoring program captured the true population.</p>
 <span>  <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>  Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
@@ -492,10 +559,24 @@ see how well our monitoring program captured the true population.</p>
 <p><img src="BayesianDemographicProjection_files/figure-html/many-scns-3.png" width="672"></p>
 </div>
 <div class="section level3">
+<h3 id="modifying-bayesian-model-priors">Modifying Bayesian model priors<a class="anchor" aria-label="anchor" href="#modifying-bayesian-model-priors"></a>
+</h3>
+<p>By default <code><a href="../reference/caribouBayesianIPM.html">caribouBayesianIPM()</a></code> calls
+<code><a href="../reference/getPriors.html">getPriors()</a></code> internally to set the priors for the Bayesian
+model based on the national model and default uncertainty modifiers that
+have been calibrated to fit the national model while allowing for
+deviations based on local data. The parameters to
+<code><a href="../reference/getPriors.html">getPriors()</a></code> affect the level of uncertainty around the
+coefficients from the national model. If uncertainty in the national
+model is higher then the projections can deviate more from the national
+model if the observed data does. See <code><a href="../reference/getPriors.html">getPriors()</a></code> for
+details.</p>
+</div>
+<div class="section level3">
 <h3 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a>
 </h3>
 <p>The national model results are cached if the default values are used.
-This cache can but updated by running
+This cache can be updated by running
 <code>getSimsNational(forceUpdate = TRUE)</code></p>
 </div>
 </div>
