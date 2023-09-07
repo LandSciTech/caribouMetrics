@@ -94,7 +94,7 @@ And plot the results with `plotRes()`.
 plotRes(mod_tbl, "Recruitment", labFontSize = 10)
 ```
 
-We can also compare out local observed data to what would be projected by the national model. 
+We can also compare our local observed data to what would be projected by the national model. 
 ```{r}
 simNational <- getSimsNational()
 
@@ -208,10 +208,11 @@ plotRes(scResults,
 
 ```
 
-
+### Modifying Bayesian model priors
+By default `caribouBayesianIPM()` calls `getPriors()` internally to set the priors for the Bayesian model based on the national model and default uncertainty modifiers that have been calibrated to fit the national model while allowing for deviations based on local data. The parameters to `getPriors()` affect the level of uncertainty around the coefficients from the national model. If uncertainty in the national model is higher then the projections can deviate more from the national model if the observed data does. See `getPriors()` for details.  
 
 ### Troubleshooting
-The national model results are cached if the default values are used. This cache can but updated by running `getSimsNational(forceUpdate = TRUE)`
+The national model results are cached if the default values are used. This cache can be updated by running `getSimsNational(forceUpdate = TRUE)`
 
 
 

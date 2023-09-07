@@ -1,35 +1,58 @@
 #' Get model priors from national models
 #'
-#'
-#'
+#' Model priors are determined by extracting the appropriate coefficients from
+#' the table `popGrowthTableJohnsonECCC` and multiplying the uncertainty around
+#' the coefficients by the modifiers included in this function. The default
+#' values of modifiers and interannual variation for this function have been
+#' calibrated such that without additional data the prior distribution is
+#' similar to simulated outcomes from the national model given no anthropogenic
+#' disturbance and that priors are vague enough that given sufficient local data
+#' the posteriors represent the local data and not the national model, for both
+#' survival and recruitment. Priors for the composition survey bias correction
+#' term are set for the apparent number of adult females per collared animal
+#' (`cowMult`) by setting expert informed minimum and maximum values for each of 
+#' the ratio of bulls to cows (\eqn{q}), the probability of misidentifying young
+#' bulls as adult females and vice versa (\eqn{u}), and the probability of missing
+#' calves (\eqn{z}) in composition surveys. 
+#' 
 #' @param modList a named list of modifiers to use to change the priors. If a
 #'   modifier is supplied here the corresponding argument below is ignored.
 #' @param returnValues logical. Default is TRUE. If FALSE returns strings for
 #'   some values showing the initial values and the modifier ie "0.9 * 1.05"
-#' @param sAnthroSlopeSEMod anthropogenic disturbance slope survival uncertainty multiplier. 
-#'   1 - 10
-#' @param rAnthroSlopeSEMod anthropogenic disturbance slope recruitment uncertainty
+#' @param sAnthroSlopeSEMod anthropogenic disturbance slope survival uncertainty
 #'   multiplier. 1 - 10
+#' @param rAnthroSlopeSEMod anthropogenic disturbance slope recruitment
+#'   uncertainty multiplier. 1 - 10
 #' @param sIntSEMod survival intercept uncertainty multiplier. 1 - 10
 #' @param rIntSEMod recruitment intercept uncertainty multiplier. 1 - 10
-#' @param sInterannualVar interannual coefficient of variation for survival. 0-1. See
-#'   [caribouPopGrowth()] and functions therein for details
-#' @param sInterannualVarSE uncertainty about interannual variation in survival. 0-1
-#' @param rInterannualVar interannual coefficient of variation for recruitment. 0-1
-#' @param rInterannualVarSE uncertainty about interannual variation in recruitment. 0-1.
-#' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.
-#' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.
-#' @param uMin number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.
-#' @param uMax number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.
-#' @param zMin number in 0, 1. Minimum probability of missing calves in composition survey.
-#' @param zMax number in 0, 1. Maximum probability of missing calves in composition survey.
-#' @param cowMult number. The apparent number of adult females per collared animal in composition survey.
+#' @param sInterannualVar interannual coefficient of variation for survival.
+#'   0-1. See [caribouPopGrowth()] and functions therein for details
+#' @param sInterannualVarSE uncertainty about interannual variation in survival.
+#'   0-1
+#' @param rInterannualVar interannual coefficient of variation for recruitment.
+#'   0-1
+#' @param rInterannualVarSE uncertainty about interannual variation in
+#'   recruitment. 0-1.
+#' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition
+#'   survey groups.
+#' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition
+#'   survey groups.
+#' @param uMin number in 0, 1. Minimum probability of misidentifying young bulls
+#'   as adult females and vice versa in composition survey.
+#' @param uMax number in 0, 1. Maximum probability of misidentifying young bulls
+#'   as adult females and vice versa in composition survey.
+#' @param zMin number in 0, 1. Minimum probability of missing calves in
+#'   composition survey.
+#' @param zMax number in 0, 1. Maximum probability of missing calves in
+#'   composition survey.
+#' @param cowMult number. The apparent number of adult females per collared
+#'   animal in composition survey.
 #' @inheritParams getCoefs
 #' @inheritParams demographicCoefficients
 #'
 #' @return a list with values:
-#' 
-#' * l.R.Prior1: Recruitment intercept  
+#'
+#' * l.R.Prior1: Recruitment intercept
 #' * l.R.Prior2: Recruitment intercept standard error times modifier,
 #' * beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,
 #' * beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard
@@ -49,10 +72,10 @@
 #' * sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival,
 #' * bias.Prior1: Mean composition survey bias correction term,
 #' * bias.Prior2: Standard deviation of composition survey bias correction term
-#' 
+#'
 #' @examples
 #' getPriors()
-#' 
+#'
 #' @family demography
 #' @export
 getPriors <- function(modList = NULL,
