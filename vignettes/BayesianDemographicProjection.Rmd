@@ -52,7 +52,7 @@ The composition survey bias correction term $c$ depends on the apparent number
 of adult females per collared animal $w$, the ratio of young bulls to adult
 females $q$, the probability of misidentifying young bulls as adult females and
 vice versa $u$, and the probability of missing a calf $z$ (see
-compositionBiasCorrection()). To maintain consistency with Johnson et al.
+`compositionBiasCorrection()`). To maintain consistency with Johnson et al.
 (2020) we also provide an option (`adjustR = FALSE`) to only
 adjust for sex ratio and misidentification biases $X_t=cR_t/2$.
 
@@ -64,7 +64,7 @@ is calculated with the default being to assume the ratio of young
 bulls to adult females $q$ varies uniformly between 0 and 0.6, the adult
 misidentification probability $u$ varies uniformly between 0 and 0.2,
 and the probability of missing a calf $z$ varies uniformly between 0 and
-0.2 (see getPriors).
+0.2 (see `getPriors()`).
 
 Also following Eacker et al. (2019), Kaplan-Meier estimates of observed adult
 female survival probability $\hat{S}_t$ and associated precisions $\tau_t$ are
@@ -157,7 +157,7 @@ plotRes(mod_nat_tbl,
 
 ```
 
-From these graphs we can see that this local population seems to have slightly higher demographic rates than would have been predicted by the national model alone and that the uncertainty around the predictions is lower when the local observations are included. Note that the population's response to anthropogenic disturbance in completely determined by the national model since there was 0% disturbance during the observation period.  
+From these graphs we can see that this local population seems to have slightly higher demographic rates than would have been predicted by the national model alone and that the uncertainty around the predictions is lower when the local observations are included. Note that the population's response to anthropogenic disturbance is completely determined by the national model since there was 0% disturbance during the observation period.  
 
 ## Simulation of local population dynamics and monitoring
 
@@ -211,7 +211,7 @@ sampled from Gaussian distributions (see `demographicRates()`) and
 the population is assigned to quantiles of the Beta error distributions
 for survival and recruitment. The population remains in these quantiles
 as disturbance changes over time, so there is substantial persistent
-variation in recruitment and survival among example among populations.
+variation in recruitment and survival among example populations.
 
 ### Observed survival of collared animals
 
@@ -230,6 +230,7 @@ $$\hat{W}_t = w\hat{T}_t.$$ The number of observed calves $\hat{J}_t$
 also depends on the unadjusted apparent recruitment for the population
 $\dot{R}_t$: $$\hat{J}_t \sim \text{Binomial}(\hat{W}_t,\dot{R}_t).$$
 
+### Using simulated observed data
 
 To run the simulations we need to supply parameters that determine the disturbance scenario, the trajectory of the true population relative to the national model mean, and the collaring program details. All these parameters are set with `getScenarioDefaults()` which will create a table with the default values of all parameters and override the defaults for any values that are supplied. Below we define a scenario where we have 20 years of observations and 20 years of projection, increasing anthropogenic disturbance over time, and 30 collars deployed every year. We assume that 2 cows will be observed in aerial surveys for every collared cow. The default values are set for our simulated true population meaning that we assume the population has the same response to disturbance as the national model and that the population demographic rates are close to the national average.
 See `getScenarioDefaults()` for a detailed description of each parameter.
