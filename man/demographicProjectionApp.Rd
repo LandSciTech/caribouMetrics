@@ -10,7 +10,9 @@ demographicProjectionApp()
 launches a shiny app in the browser
 }
 \description{
-This requires the "BayesianCaribouDemographicProjection" to be is installed.
+This requires the BayesianCaribouDemographicProjection package to be
+installed from GitHub:
+\code{remotes::install_github("LandSciTech/BayesianCaribouDemographicProjection")}
 }
 \examples{
 if(FALSE){

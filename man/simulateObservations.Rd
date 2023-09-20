@@ -85,7 +85,14 @@ a list with elements:
 Simulate caribou survival data. First a true population trajectory is
 simulated following the national model and a disturbance scenario. Then
 realistic observations are simulated from this true population based on a
-collaring program with the given parameters.
+caribou monitoring program with the given parameters. Parameters for the
+caribou monitoring program, disturbance scenario and the true population
+trajectory can be specified with \code{getScenarioDefaults()}.
+}
+\details{
+For a detailed description of the process for simulating data see the
+\href{https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#simulation-of-local-population-dynamics-and-monitoring}{vignette}
+(\code{vignette("BayesianDemographicProjection", package = "caribouMetrics")}).
 }
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,

@@ -1,8 +1,10 @@
 
 #' Run the Bayesian caribou demographic projection app
 #'
-#' This requires the "BayesianCaribouDemographicProjection" to be is installed.
-#' 
+#' This requires the BayesianCaribouDemographicProjection package to be
+#' installed from GitHub: 
+#' `remotes::install_github("LandSciTech/BayesianCaribouDemographicProjection")`
+#'
 #' @return launches a shiny app in the browser
 #' @export
 #' @family demography
@@ -11,7 +13,7 @@
 #' if(FALSE){
 #'  demographicProjectionApp()
 #' }
-#'
+#' 
 demographicProjectionApp <- function() {
   if(rlang::is_installed("BayesianCaribouDemographicProjection")){
     BayesianCaribouDemographicProjection::demographicProjectionApp()
