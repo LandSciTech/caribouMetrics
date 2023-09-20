@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1</span>
       </span>
     </div>
 
@@ -150,9 +150,10 @@ apparent number of adult females per collared animal <span class="math inline">\
 females <span class="math inline">\(q\)</span>, the probability of
 misidentifying young bulls as adult females and vice versa <span class="math inline">\(u\)</span>, and the probability of missing a calf
 <span class="math inline">\(z\)</span> (see
-compositionBiasCorrection()). To maintain consistency with Johnson et
-al. (2020) we also provide an option (<code>adjustR = FALSE</code>) to
-only adjust for sex ratio and misidentification biases <span class="math inline">\(X_t=cR_t/2\)</span>.</p>
+<code><a href="../reference/compositionBiasCorrection.html">compositionBiasCorrection()</a></code>). To maintain consistency with
+Johnson et al. (2020) we also provide an option
+(<code>adjustR = FALSE</code>) to only adjust for sex ratio and
+misidentification biases <span class="math inline">\(X_t=cR_t/2\)</span>.</p>
 <p>In the Bayesian model, prior uncertainty about the value of the bias
 correction term <span class="math inline">\(c\)</span> is approximated
 with a Log-normal distribution. Given the apparent number of adult
@@ -161,7 +162,7 @@ mean and standard deviation of 10,000 samples of <span class="math inline">\(\lo
 being to assume the ratio of young bulls to adult females <span class="math inline">\(q\)</span> varies uniformly between 0 and 0.6, the
 adult misidentification probability <span class="math inline">\(u\)</span> varies uniformly between 0 and 0.2, and
 the probability of missing a calf <span class="math inline">\(z\)</span>
-varies uniformly between 0 and 0.2 (see getPriors).</p>
+varies uniformly between 0 and 0.2 (see <code><a href="../reference/getPriors.html">getPriors()</a></code>).</p>
 <p>Also following Eacker et al. (2019), Kaplan-Meier estimates of
 observed adult female survival probability <span class="math inline">\(\hat{S}_t\)</span> and associated precisions <span class="math inline">\(\tau_t\)</span> are estimated from known-fate
 radio collar data using the <a href="https://CRAN.R-project.org/package=survival" class="external-link">survival</a> package,
@@ -246,7 +247,7 @@ population as disturbance increases over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:12] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpGQlhdQ/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpyqmuU2/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -264,11 +265,11 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;  $ rr.summary.all:'data.frame':  175 obs. of  13 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year            : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
 <span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adjusted recruitment" "Adult female survival" "Recruitment" "Female population size" ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.218 0.873 0.416 1000 1.061 ...</span></span>
-<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.02 0.026 0.029 0 0.041 ...</span></span>
-<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.184 0.815 0.369 1000 0.98 0.846 0.155 980 0.302 0.995 ...</span></span>
-<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.255 0.916 0.467 1000 1.13 ...</span></span>
-<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.95 NA NA NA NA 0.98 ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.217 0.877 0.41 1000 1.065 ...</span></span>
+<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.021 0.026 0.024 0 0.046 ...</span></span>
+<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.183 0.817 0.378 1000 0.974 ...</span></span>
+<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.267 0.923 0.457 1000 1.15 ...</span></span>
+<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.93 NA NA NA NA 0.98 ...</span></span>
 <span><span class="co">#&gt;   ..$ X               : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ Anthro          : int [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;   ..$ fire_excl_anthro: num [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
@@ -323,7 +324,7 @@ specific data.</p>
 slightly higher demographic rates than would have been predicted by the
 national model alone and that the uncertainty around the predictions is
 lower when the local observations are included. Note that the
-population’s response to anthropogenic disturbance in completely
+population’s response to anthropogenic disturbance is completely
 determined by the national model since there was 0% disturbance during
 the observation period.</p>
 </div>
@@ -382,7 +383,7 @@ regression coefficient values are sampled from Gaussian distributions
 quantiles of the Beta error distributions for survival and recruitment.
 The population remains in these quantiles as disturbance changes over
 time, so there is substantial persistent variation in recruitment and
-survival among example among populations.</p>
+survival among example populations.</p>
 <div class="section level3">
 <h3 id="observed-survival-of-collared-animals">Observed survival of collared animals<a class="anchor" aria-label="anchor" href="#observed-survival-of-collared-animals"></a>
 </h3>
@@ -401,6 +402,10 @@ composition survey <span class="math inline">\(w\)</span>: <span class="math dis
 observed calves <span class="math inline">\(\hat{J}_t\)</span> also
 depends on the unadjusted apparent recruitment for the population <span class="math inline">\(\dot{R}_t\)</span>: <span class="math display">\[\hat{J}_t \sim
 \text{Binomial}(\hat{W}_t,\dot{R}_t).\]</span></p>
+</div>
+<div class="section level3">
+<h3 id="using-simulated-observed-data">Using simulated observed data<a class="anchor" aria-label="anchor" href="#using-simulated-observed-data"></a>
+</h3>
 <p>To run the simulations we need to supply parameters that determine
 the disturbance scenario, the trajectory of the true population relative
 to the national model mean, and the collaring program details. All these
@@ -534,6 +539,9 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
+<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
+<span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
