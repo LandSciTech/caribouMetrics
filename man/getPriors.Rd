@@ -11,11 +11,11 @@ getPriors(
   rAnthroSlopeSEMod = 4,
   sAnthroSlopeSEMod = 3,
   sIntSEMod = 5,
-  sInterannualVar = 0.08696 * 0.4,
-  sInterannualVarSE = 0.03,
+  sSigmaMean = 0.08696 * 0.4,
+  sSigmaSD = 0.03,
   rIntSEMod = 3,
-  rInterannualVar = 0.46 * 0.5,
-  rInterannualVarSE = 0.22,
+  rSigmaMean = 0.46 * 0.5,
+  rSigmaSD = 0.22,
   qMin = 0,
   qMax = 0.6,
   uMin = 0,
@@ -35,38 +35,42 @@ modifier is supplied here the corresponding argument below is ignored.}
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
 number to use see \link{popGrowthTableJohnsonECCC} for options.}
 
-\item{rAnthroSlopeSEMod}{anthropogenic disturbance slope recruitment uncertainty
-multiplier. 1 - 10}
+\item{rAnthroSlopeSEMod}{anthropogenic disturbance slope recruitment
+uncertainty multiplier. 1 - 10}
 
-\item{sAnthroSlopeSEMod}{anthropogenic disturbance slope survival uncertainty multiplier.
-1 - 10}
+\item{sAnthroSlopeSEMod}{anthropogenic disturbance slope survival uncertainty
+multiplier. 1 - 10}
 
 \item{sIntSEMod}{survival intercept uncertainty multiplier. 1 - 10}
 
-\item{sInterannualVar}{interannual coefficient of variation for survival. 0-1. See
-\code{\link[=caribouPopGrowth]{caribouPopGrowth()}} and functions therein for details}
-
-\item{sInterannualVarSE}{uncertainty about interannual variation in survival. 0-1}
+\item{sSigmaMean, sSigmaSD}{the mean and standard deviation of the prior
+distribution of the random effect of year on survival. 0-1.}
 
 \item{rIntSEMod}{recruitment intercept uncertainty multiplier. 1 - 10}
 
-\item{rInterannualVar}{interannual coefficient of variation for recruitment. 0-1}
+\item{rSigmaMean, rSigmaSD}{the mean and standard deviation of the prior
+distribution of the random effect of year on recruitment. 0-1.}
 
-\item{rInterannualVarSE}{uncertainty about interannual variation in recruitment. 0-1.}
+\item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition
+survey groups.}
 
-\item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
+\item{qMax}{number in 0, 1. Maximum ratio of bulls to cows in composition
+survey groups.}
 
-\item{qMax}{number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.}
+\item{uMin}{number in 0, 1. Minimum probability of misidentifying young bulls
+as adult females and vice versa in composition survey.}
 
-\item{uMin}{number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.}
+\item{uMax}{number in 0, 1. Maximum probability of misidentifying young bulls
+as adult females and vice versa in composition survey.}
 
-\item{uMax}{number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.}
+\item{zMin}{number in 0, 1. Minimum probability of missing calves in
+composition survey.}
 
-\item{zMin}{number in 0, 1. Minimum probability of missing calves in composition survey.}
+\item{zMax}{number in 0, 1. Maximum probability of missing calves in
+composition survey.}
 
-\item{zMax}{number in 0, 1. Maximum probability of missing calves in composition survey.}
-
-\item{cowMult}{number. The apparent number of adult females per collared animal in composition survey.}
+\item{cowMult}{number. The apparent number of adult females per collared
+animal in composition survey.}
 
 \item{populationGrowthTable}{data.frame.\link{popGrowthTableJohnsonECCC} is
 included in the package and should be used in most cases. A custom table of
@@ -94,21 +98,38 @@ error times modifier,
 slope,
 \item beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance
 standard error,
-\item sig.R.Prior1: Interannual coefficient of variation for recruitment,
-\item sig.R.Prior2: uncertainty about interannual variation in recruitment,
+\item sig.R.Prior1: Mean of the prior distribution of the random effect of year
+on recruitment,
+\item sig.R.Prior2: Standard deviation of the prior distribution of the random
+effect of year on recruitment,
 \item l.Saf.Prior1: Adult female survival intercept,
 \item l.Saf.Prior2: Adult female survival intercept standard error times modifier,
 \item beta.Saf.Prior1: Adult female survival anthropogenic disturbance slope,
 \item beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
 error times modifier,
-\item sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,
-\item sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival,
+\item sig.Saf.Prior1: Mean of the prior distribution of the random effect of year
+on adult female survival,
+\item sig.Saf.Prior2: Standard deviation of the prior distribution of the random
+effect of year on adult female survival,
 \item bias.Prior1: Mean composition survey bias correction term,
 \item bias.Prior2: Standard deviation of composition survey bias correction term
 }
 }
 \description{
-Get model priors from national models
+Model priors are determined by extracting the appropriate coefficients from
+the table \code{popGrowthTableJohnsonECCC} and multiplying the uncertainty around
+the coefficients by the modifiers included in this function. The default
+values of modifiers and the random effect of year for this function have been
+calibrated such that without additional data the prior distribution is
+similar to simulated outcomes from the national model given no anthropogenic
+disturbance and that priors are vague enough that given sufficient local data
+the posteriors represent the local data and not the national model, for both
+survival and recruitment. Priors for the composition survey bias correction
+term are set for the apparent number of adult females per collared animal
+(\code{cowMult}) by setting expert informed minimum and maximum values for each of
+the ratio of bulls to cows (\eqn{q}), the probability of misidentifying young
+bulls as adult females and vice versa (\eqn{u}), and the probability of missing
+calves (\eqn{z}) in composition surveys.
 }
 \examples{
 getPriors()

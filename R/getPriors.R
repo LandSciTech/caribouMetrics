@@ -3,7 +3,7 @@
 #' Model priors are determined by extracting the appropriate coefficients from
 #' the table `popGrowthTableJohnsonECCC` and multiplying the uncertainty around
 #' the coefficients by the modifiers included in this function. The default
-#' values of modifiers and interannual variation for this function have been
+#' values of modifiers and the random effect of year for this function have been
 #' calibrated such that without additional data the prior distribution is
 #' similar to simulated outcomes from the national model given no anthropogenic
 #' disturbance and that priors are vague enough that given sufficient local data
@@ -25,14 +25,10 @@
 #'   uncertainty multiplier. 1 - 10
 #' @param sIntSEMod survival intercept uncertainty multiplier. 1 - 10
 #' @param rIntSEMod recruitment intercept uncertainty multiplier. 1 - 10
-#' @param sInterannualVar interannual coefficient of variation for survival.
-#'   0-1. See [caribouPopGrowth()] and functions therein for details
-#' @param sInterannualVarSE uncertainty about interannual variation in survival.
-#'   0-1
-#' @param rInterannualVar interannual coefficient of variation for recruitment.
-#'   0-1
-#' @param rInterannualVarSE uncertainty about interannual variation in
-#'   recruitment. 0-1.
+#' @param sSigmaMean,sSigmaSD the mean and standard deviation of the prior
+#'   distribution of the random effect of year on survival. 0-1. 
+#' @param rSigmaMean,rSigmaSD the mean and standard deviation of the prior
+#'   distribution of the random effect of year on recruitment. 0-1. 
 #' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition
 #'   survey groups.
 #' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition
@@ -61,15 +57,19 @@
 #'   slope,
 #' * beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance
 #'   standard error,
-#' * sig.R.Prior1: Interannual coefficient of variation for recruitment,
-#' * sig.R.Prior2: uncertainty about interannual variation in recruitment,
+#' * sig.R.Prior1: Mean of the prior distribution of the random effect of year
+#'   on recruitment,
+#' * sig.R.Prior2: Standard deviation of the prior distribution of the random
+#'   effect of year on recruitment,
 #' * l.Saf.Prior1: Adult female survival intercept,
 #' * l.Saf.Prior2: Adult female survival intercept standard error times modifier,
 #' * beta.Saf.Prior1: Adult female survival anthropogenic disturbance slope,
 #' * beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
 #'   error times modifier,
-#' * sig.Saf.Prior1: Interannual coefficient of variation for adult female survival,
-#' * sig.Saf.Prior2: Uncertainty about interannual variation in adult female survival,
+#' * sig.Saf.Prior1: Mean of the prior distribution of the random effect of year
+#'   on adult female survival,
+#' * sig.Saf.Prior2: Standard deviation of the prior distribution of the random
+#'   effect of year on adult female survival,
 #' * bias.Prior1: Mean composition survey bias correction term,
 #' * bias.Prior2: Standard deviation of composition survey bias correction term
 #'
@@ -84,11 +84,11 @@ getPriors <- function(modList = NULL,
                       rAnthroSlopeSEMod = 4,
                       sAnthroSlopeSEMod = 3,
                       sIntSEMod = 5,
-                      sInterannualVar = 0.08696 * 0.4,
-                      sInterannualVarSE = 0.03,
+                      sSigmaMean = 0.08696 * 0.4,
+                      sSigmaSD = 0.03,
                       rIntSEMod = 3,
-                      rInterannualVar = 0.46 * 0.5,
-                      rInterannualVarSE = 0.22,
+                      rSigmaMean = 0.46 * 0.5,
+                      rSigmaSD = 0.22,
                       qMin=0, qMax =0.6, 
                       uMin = 0, uMax = 0.2, 
                       zMin = 0, zMax = 0.2, 
@@ -162,14 +162,14 @@ getPriors <- function(modList = NULL,
       beta.Rec.anthro.Prior2 = rPriorStdErrs$Anthro * modList$rAnthroSlopeSEMod,
       beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
       beta.Rec.fire.Prior2 = rPriorStdErrs$fire_excl_anthro,
-      sig.R.Prior1 = modList$rInterannualVar,
-      sig.R.Prior2 = modList$rInterannualVarSE,
+      sig.R.Prior1 = modList$rSigmaMean,
+      sig.R.Prior2 = modList$rSigmaSD,
       l.Saf.Prior1 = sPriorCoefs$Intercept,
       l.Saf.Prior2 = sPriorStdErrs$Intercept * modList$sIntSEMod,
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = sPriorStdErrs$Anthro * modList$sAnthroSlopeSEMod,
-      sig.Saf.Prior1 = modList$sInterannualVar,
-      sig.Saf.Prior2 = modList$sInterannualVarSE,
+      sig.Saf.Prior1 = modList$sSigmaMean,
+      sig.Saf.Prior2 = modList$sSigmaSD,
       bias.Prior1 = bias.Prior1,
       bias.Prior2 = bias.Prior2
     )
@@ -191,14 +191,14 @@ getPriors <- function(modList = NULL,
                                       modList$rAnthroSlopeSEMod),
       beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
       beta.Rec.fire.Prior2 = rPriorStdErrs$fire_excl_anthro,
-      sig.R.Prior1 = modList$rInterannualVar,
-      sig.R.Prior2 = modList$rInterannualVarSE,
+      sig.R.Prior1 = modList$rSigmaMean,
+      sig.R.Prior2 = modList$rSigmaSD,
       l.Saf.Prior1 = sPriorCoefs$Intercept,
       l.Saf.Prior2 = paste0(round(sPriorStdErrs$Intercept, 4), "*", modList$sIntSEMod),
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = paste0(round(sPriorStdErrs$Anthro, 4), "*", modList$sAnthroSlopeSEMod),
-      sig.Saf.Prior1 = modList$sInterannualVar,
-      sig.Saf.Prior2 = modList$sInterannualVarSE,
+      sig.Saf.Prior1 = modList$sSigmaMean,
+      sig.Saf.Prior2 = modList$sSigmaSD,
       bias.Prior1 = bias.Prior1,
       bias.Prior2 = bias.Prior2
     )
