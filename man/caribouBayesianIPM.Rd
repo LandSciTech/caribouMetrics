@@ -88,14 +88,44 @@ demographic-disturbance relationships with local demographic data to project
 population growth.
 }
 \details{
-Note that if \code{survData} contains values for enter that are > 0 these rows
+The model is built from local observations of survival (\code{survData}),
+recruitment based on calf:cow ratios (\code{ageRatio}) and anthropogenic
+disturbance (\code{disturbance}). This data is combined with prior information on
+the relationship between disturbance and survival and recruitment from the
+Johnson et al. (2020) national model (\code{getPriors()}).
+
+For a detailed description of the Bayesian model see the
+\href{https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model}{vignette}
+(\code{vignette("BayesianDemographicProjection", package = "caribouMetrics")}).
+
+Note: if \code{survData} contains values for enter that are > 0 these rows
 will be dropped to avoid errors when collars are added in the middle of the
 year. This will reduce the sample size in years when new collars are added.
 }
 \examples{
-# this uses example data shipped with the package
-mod <- caribouBayesianIPM(Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2)
+# Using observed survival, recruitment and disturbance data
+mod <- caribouBayesianIPM(
+  survData = system.file("extdata/simSurvData.csv",
+                         package = "caribouMetrics"),
+  ageRatio = system.file("extdata/simAgeRatio.csv",
+                         package = "caribouMetrics"),
+  disturbance = system.file("extdata/simDisturbance.csv",
+                            package = "caribouMetrics"),
+  Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2
+)
 str(mod, max.level = 2)
+
+# Using simulated observation data
+scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
+                            obsAnthroSlope = 1, projAnthroSlope = 5,
+                            collarCount = 20, cowMult = 5)
+
+simO <- simulateObservations(scns)
+
+out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+                          disturbance = simO$simDisturbance,
+                          startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
+                          Nthin = 2)
 }
 \seealso{
 Caribou demography functions:
