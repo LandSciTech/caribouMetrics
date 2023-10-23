@@ -183,7 +183,7 @@ test_that("results match expected", {
       sQuantile = sQuantile, rQuantile = rQuantile, N0 = 3000
     )
     scResults <- suppressWarnings(runScnSet(scns, eParsIn, simBig, getKSDists = KSDists,
-                                            Niter = 100, Nburn = 10))
+                                            Niter = 3000, Nburn = 1500))
   }
   
   doPlot <- function(scResults, var = "Recruitment", title = ""){
