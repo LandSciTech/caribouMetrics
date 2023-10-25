@@ -2,7 +2,7 @@
 % Please edit documentation in R/caribouBayesianIPM.R
 \name{caribouBayesianIPM}
 \alias{caribouBayesianIPM}
-\title{Bayesian integrated population model for caribou}
+\title{Bayesian population model for caribou}
 \usage{
 caribouBayesianIPM(
   survData = system.file("extdata/simSurvData.csv", package = "caribouMetrics"),
@@ -82,7 +82,7 @@ a list with elements:
 }
 }
 \description{
-Build a Bayesian integrated population model that integrates prior
+Build a Bayesian population model that integrates prior
 information from Johnson et al.'s (2020) national analysis of
 demographic-disturbance relationships with local demographic data to project
 population growth.

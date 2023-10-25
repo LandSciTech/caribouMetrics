@@ -26,7 +26,7 @@ library(dplyr)
 theme_set(theme_bw())
 ```
 
-caribouMetrics provides a simple Bayesian integrated population model that integrates prior information from Johnson et al.'s (2020) national analysis of demographic-disturbance relationships with available local demographic data to project population growth. In addition, methods are provided for simulating local population dynamics and monitoring programs. 
+caribouMetrics provides a simple Bayesian population model that integrates prior information from Johnson et al.'s (2020) national analysis of demographic-disturbance relationships with available local demographic data to project population growth. In addition, methods are provided for simulating local population dynamics and monitoring programs. 
 
 Boreal caribou monitoring programs typically involve marking caribou with  telemetry GPS/VHF collars which are used to monitor caribou over time and detect the death of marked animals. This data is then used to estimate survival, while recruitment is estimated by locating collared individuals using aircraft and then surveying the entire group of caribou to estimate the ratio of cows:calves in the group. Because this estimate is based on more than just the sample of collared cows, the sample size for recruitment estimates is typically larger than for survival. 
 

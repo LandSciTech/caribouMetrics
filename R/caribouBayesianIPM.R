@@ -2,9 +2,9 @@
 # License GPL-3
 #NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
-#' Bayesian integrated population model for caribou
+#' Bayesian population model for caribou
 #'
-#' Build a Bayesian integrated population model that integrates prior
+#' Build a Bayesian population model that integrates prior
 #' information from Johnson et al.'s (2020) national analysis of
 #' demographic-disturbance relationships with local demographic data to project
 #' population growth.

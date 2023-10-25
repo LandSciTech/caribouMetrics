@@ -48,7 +48,7 @@ simulated based on the collaring program parameters.
 }
 }
 \description{
-Produces summary tables for Bayesian caribou integrated population model
+Produces summary tables for Bayesian caribou population model
 results. Optionally calculates Kolmogorov–Smirnov distances between Bayesian
 model results and national model results.
 }

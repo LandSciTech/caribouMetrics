@@ -12,7 +12,7 @@ sInterannualVarSE -> sSigmaSD
 # caribouMetrics 0.2.0
 
 * Added a `NEWS.md` file to track changes to the package.
-* Added functions for Bayesian integrated population model
+* Added functions for Bayesian population model
 
 **Breaking Changes**
 * Changed functions names:
