@@ -200,11 +200,16 @@ simCalfCowRatios <- function(cowCounts, minYr, exData) {
   ageRatioOut <- tidyr::pivot_wider(ageRatioOut, id_cols = c("Year"),
                                     names_from = "Class", values_from = "Count")
   ageRatioOut <- merge(ageRatioOut,
-                       subset(exData, select = c("Year", "recruitment")))
+                       subset(exData, select = c("Year", "recruitment","N")))
+  
+  if(sum(ageRatioOut$cow>ageRatioOut$N)){
+    warning("The expected number of cows in composition survey exceeds population size. Adjusting cows in survey for consistency.")
+  }
+  
   #apparent number of calves (M+F) from apparent number of cows using apparent recruitment rate
   ageRatioOut$calf <- ifelse(ageRatioOut$cow == 0, 0,
                              rbinom(
-                               n = nrow(ageRatioOut), size = ageRatioOut$cow,
+                               n = nrow(ageRatioOut), size = pmin(ageRatioOut$cow,ageRatioOut$N),
                                prob = ageRatioOut$recruitment
                              )
   )
@@ -271,7 +276,10 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
     #ensure number of collars does not exceed population size
     cPop = exData$N[exData$Year==startYear]
     
-    if(cPop<(nstarts+collarsExisting)){nstarts=0}
+    if(cPop<(nstarts+collarsExisting)){
+      warning("Target number of collars exceeds population size. Adjusting number of collars for consistency.")
+      nstarts=cPop-collarsExisting
+    }
     
     if (nstarts == 0) {
       next

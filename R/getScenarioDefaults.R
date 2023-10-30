@@ -83,6 +83,15 @@ getScenarioDefaults <- function(paramTable = NULL,
          " multiplier of number of collared cows in recruitment survey (cowMult),",
          " but not both.")
   }
+  
+  if(sum(paramTable$collarCount>paramTable$N0)>0){
+    warning("Target number of collars collarCount should not exceed initial population size N0.")
+  }
+
+  if(sum(paramTable$collarCount*paramTable$cowMult>paramTable$N0)>0){
+    warning("Set cowMult, collarCount and N0 so the expected number of cows in composition surveys does not exceed initial population size N0.")
+  }
+  
   paramTable$ID <- seq(1:nrow(paramTable))
   paramTable$label <- ""
   for (n in names(paramTable)[(length(names(paramTable)) - 1):1]) {
@@ -92,5 +101,6 @@ getScenarioDefaults <- function(paramTable = NULL,
   if (!is.element("startYear", names(paramTable))) {
     paramTable$startYear <- paramTable$curYear - paramTable$obsYears + 1
   }
+  
   return(paramTable)
 }
