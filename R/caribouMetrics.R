@@ -15,10 +15,9 @@
 #' [Eacker et al. (2019)](https://doi.org/10.1002/wsb.950). The national model can be used to simulate 
 #' example population trajectories, and combined with a simple observation model and the Bayesian population model
 #' to show how monitoring requirements depend on landscape condition. Finally,
-#' caribouMetrics contains a set of functions which implement [Hornseth and Rempel's
+#' caribouMetrics contains an implementation of [Hornseth and Rempel's
 #' (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource selection model
-#' as described in  for Ontario boreal caribou
-#' ranges described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Model implementation
+#' as described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Model implementation
 #' is intended to be modular and flexible, allowing reuse of components in a variety of contexts including
 #' projections of the cumulative effects of disturbance and climate change [(e.g. Stewart et al. 2023)](https://doi.org/10.1002/eap.2816)
 #' and a [Shiny app](https://landscitech.github.io/BayesianCaribouDemographicProjection/) designed to allow allow exploration of user-specified monitoring and disturbance scenarios.

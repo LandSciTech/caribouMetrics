@@ -2,8 +2,8 @@ Package: caribouMetrics
 Type: Package
 Title: Models and Metrics of Boreal Caribou Responses to Forest Landscapes
 Version: 0.3.1
-Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@canada.ca"),
-    person("Sarah", "Endicott", email = "sarah.endicott@canada.ca", 
+Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec.gc.ca"),
+    person("Sarah", "Endicott", email = "sarah.endicott@ec.gc.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
     person("Craig", "Simpkins", email = "simpkinscraig063@gmail.com", role = "aut"),
     person("Tati", "Michelleti", email = "tati.micheletti@gmail.com", 
@@ -14,25 +14,25 @@ Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ca
     person("Frederick", "Novomestky", role = "cph", comment = c("Author of truncdist package, which function rtrunc and qtrunc were modified from")),
     person(given="Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change",
            role = "cph"))
-Description: caribouMetrics provides implementations of several different models.
-    Firstly, it implements the population and demographic models in "Science to inform
-    policy: linking population dynamics to habitat for a threatened species in Canada"
-    by Johnson et. al. (2020) <doi:10.1111/1365-2664.13637>.
-    These functions allow users to calculate metrics of disturbance, predict
-    demographic rates for a given level of disturbance and simulate population
-    growth over time. In addition to these national scale models, we provide a
-    simple Bayesian population model that integrates prior information 
-    from national analysis of demographic-disturbance relationships with
-    available local demographic data to reduce uncertainty in population 
-    viability projections. Our model is an extension of work by
-    Eacker et al. (2019) <doi:10.1002/wsb.950> with some modifications and an
-    added ability to simulate observation data given parameters that define a
-    common caribou monitoring program. The package also includes an implementation 
-    of the caribou resource selection probability functions described in Hornseth and
-    Rempel (2016) <doi:10.1139/cjz-2015-0101> "Seasonal 
-    resource selection of woodland  caribou (Rangifer tarandus caribou) across a 
-    gradient of anthropogenic disturbance". This allows for a spatial prediction of
-    caribou habitat use across 13 caribou ranges in Ontario.
+Description: caribouMetrics provides implementations of several different different models of Boreal woodland 
+    caribou demography and habitat use. A national two-stage demographic model with density 
+    dependence and interannual variability follows [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) 
+    with modifications described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). 
+    Demographic rates vary with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637).
+    The package also includes a Bayesian population model designed to integrate prior information 
+    from Johnson et al's national analysis of demographic-disturbance relationships with available 
+    local demographic data to reduce uncertainty in population viability projections. The Bayesian 
+    population model is an extension of work by [Eacker et al. (2019)](https://doi.org/10.1002/wsb.950). 
+    The national model can be used to simulate example population trajectories, and combined with a 
+    simple observation model and the Bayesian population model to show how monitoring requirements 
+    depend on landscape condition. Finally, caribouMetrics contains an implementation of 
+    [Hornseth and Rempel's (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource
+    selection model described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). 
+    Model implementation is intended to be modular and flexible, allowing reuse of components in a 
+    variety of contexts including projections of the cumulative effects of disturbance and 
+    climate change [(e.g. Stewart et al. 2023)](https://doi.org/10.1002/eap.2816) and a 
+    [Shiny app](https://landscitech.github.io/BayesianCaribouDemographicProjection/) designed to 
+    allow allow exploration of user-specified monitoring and disturbance scenarios.
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true

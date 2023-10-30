@@ -17,9 +17,8 @@ The Bayesian population model is an extension of work by
 \href{https://doi.org/10.1002/wsb.950}{Eacker et al. (2019)}. The national model can be used to simulate
 example population trajectories, and combined with a simple observation model and the Bayesian population model
 to show how monitoring requirements depend on landscape condition. Finally,
-caribouMetrics contains a set of functions which implement \href{https://doi.org/10.1139/cjz-2015-0101}{Hornseth and Rempel's (2016)} Ontario boreal caribou resource selection model
-as described in  for Ontario boreal caribou
-ranges described in \href{https://doi.org/10.1101/2022.06.01.494350}{Dyson et al. (2022)}. Model implementation
+caribouMetrics contains an implementation of \href{https://doi.org/10.1139/cjz-2015-0101}{Hornseth and Rempel's (2016)} Ontario boreal caribou resource selection model
+as described in \href{https://doi.org/10.1101/2022.06.01.494350}{Dyson et al. (2022)}. Model implementation
 is intended to be modular and flexible, allowing reuse of components in a variety of contexts including
 projections of the cumulative effects of disturbance and climate change \href{https://doi.org/10.1002/eap.2816}{(e.g. Stewart et al. 2023)}
 and a \href{https://landscitech.github.io/BayesianCaribouDemographicProjection/}{Shiny app} designed to allow allow exploration of user-specified monitoring and disturbance scenarios.
