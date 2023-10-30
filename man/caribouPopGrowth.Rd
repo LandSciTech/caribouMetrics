@@ -2,7 +2,7 @@
 % Please edit documentation in R/caribouPopGrowth.R
 \name{caribouPopGrowth}
 \alias{caribouPopGrowth}
-\title{Caribou population growth model}
+\title{National caribou demographic model}
 \usage{
 caribouPopGrowth(
   N0,
@@ -77,29 +77,32 @@ reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 \item{progress}{Logical. Should progress updates be shown?}
 }
 \value{
-A data.frame of population size (\code{N}) and average growth rate
-(\code{lambda}) projections for each sample population.
+A data.frame of population size (\code{N}), average growth rate
+(\code{lambda}), apparent annual reproduction rate (\code{R_t}), adjusted reproduction (\code{X_t}),
+survival (\code{S_t}), number of recruits (\code{n_recruits}), and surviving females (\code{surviving_adFemales})
+for each sample population projected for numSteps years.
 }
 \description{
-Estimate population growth given estimated demographic rates based on the
-amount of disturbance in the landscape. This is accomplished with an
-implementation of the 2-stage population growth model used in Johnson et al.
-(2020) but with some differences described in Dyson et al. (2022). Given
-default parameter values, this is an implementation of the 2-stage population
-growth model described in Dyson et al. (in Prep). Set \code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson et al. 2020. Set
+A national two-stage demographic model with density dependence and interannual variability
+following \href{doi:10.1111/1365-2664.13637}{Johnson et. al. (2020)} with modifications described
+in \href{https://doi.org/10.1101/2022.06.01.494350}{Dyson et al. (2022)}. Demographic rates vary
+with disturbance as estimated by \href{doi:10.1111/1365-2664.13637}{Johnson et. al. (2020)}.
+Given default parameter values, this is an implementation of the 2-stage population
+growth model described in Dyson et al. (2022). Set \code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson et al. 2020. Set
 \code{probOption = "continuous"}, \code{interannualVar = FALSE}, and \code{K = FALSE} to
 reproduce the simpler 2-stage demographic model without interannual
 variability, density dependence, or discrete numbers of animals used by
-Stewart et al. (in prep). See \code{vignette("caribouDemography")} for additional
+\href{https://doi.org/10.1002/eap.2816}{Stewart et al. (2023)}. See \code{vignette("caribouDemography")} for additional
 details and examples.
 }
 \details{
-The number of post-juvenile females that survive from year \eqn{t} to the
+Given a population of post-juvenile females at the beginning of year \eqn{t}, \eqn{\dot{N}_t},
+the number of post-juvenile females that survive from year \eqn{t} to the
 census \eqn{\dot{W}_t} is binomially distributed with survival probability
 \eqn{\dot{S}_t}: \eqn{\dot{W}_{t} \sim \text{Binomial}(\dot{N}_t,\dot{S}_t)}.
-Maximum potential recruitment rate is adjusted for sex ratio and (optionally)
+Maximum potential recruitment rate is adjusted for sex ratio, misidentification biases, and (optionally)
 delayed age at first reproduction
-\deqn{\dot{X}_t=\frac{\dot{R}_t/2}{1+\dot{R}_t/2}.} Realized recruitment rate
+\deqn{\dot{X}_t=\frac{\dot{c}\dot{R}_t/2}{1+\dot{c}\dot{R}_t/2}.} Realized recruitment rate
 varies with population density, and the number of juveniles recruiting to the
 post-juvenile class at the census is a binomially distributed function of the
 number of surviving post-juvenile females and the adjusted recruitment rate:
@@ -116,10 +119,8 @@ includes both survivors and new recruits:
 Interannual variation in survival and recruitment is modelled using truncated
 beta distributions: \eqn{\dot{R}_t
 \sim \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim
-\text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)}. Coefficients of variation
-among years \eqn{(\nu_R,\nu_S)} and maximum/minimum values
-\eqn{l_R,h_R,l_S,h_S} for recruitment and survival are set to default
-parameters in the function.
+\text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)}. \eqn{(\nu_R,\nu_S)} are coefficients of variation
+among years and \eqn{l_R,h_R,l_S,h_S} are maximum/minimum values for recruitment and survival.
 }
 \examples{
 caribouPopGrowth(100, 2, 0.5, 0.7)
@@ -128,7 +129,7 @@ caribouPopGrowth(100, 2, 0.5, 0.7)
 \references{
 Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
 Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
-Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Existing
+Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (2022). Existing
 caribou habitat and demographic models need improvement for Ring of Fire
 impact assessment: A roadmap for improving the usefulness, transparency,
 and availability of models for conservation.
@@ -144,7 +145,7 @@ Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty, A.M.,
 Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and Hughes, J.,
 2023. Climate‐informed forecasts reveal dramatic local habitat shifts and
 population uncertainty for northern boreal caribou. Ecological
-Applications, 33(3), p.e2816.
+Applications, 33(3), p.e2816. \url{https://doi.org/10.1002/eap.2816}
 }
 \seealso{
 Caribou demography functions:

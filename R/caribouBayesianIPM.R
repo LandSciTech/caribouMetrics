@@ -2,20 +2,20 @@
 # License GPL-3
 #NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
-#' Bayesian population model for caribou
+#' Bayesian population model for boreal caribou
 #'
-#' Build a Bayesian population model that integrates prior
+#' A Bayesian population model that integrates prior
 #' information from Johnson et al.'s (2020) national analysis of
 #' demographic-disturbance relationships with local demographic data to project
 #' population growth.
 #'
-#' The model is built from local observations of survival (`survData`),
+#' The model combines local observations of survival (`survData`),
 #' recruitment based on calf:cow ratios (`ageRatio`) and anthropogenic
-#' disturbance (`disturbance`). This data is combined with prior information on
+#' disturbance (`disturbance`) with prior information on
 #' the relationship between disturbance and survival and recruitment from the
-#' Johnson et al. (2020) national model (`getPriors()`).
+#' Johnson et al. (2020) national model (`getPriors()`) to reduce uncertainty and refine parameter estimates.
 #'
-#' For a detailed description of the Bayesian model see the
+#' For a detailed description see the
 #' [vignette](https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model)
 #' (`vignette("BayesianDemographicProjection", package = "caribouMetrics")`).
 #'
@@ -29,27 +29,26 @@
 #'   (December) or 0 (See Details). Event is 0 or 1 where 0 means the animal
 #'   lived and 1 died. See [survival::Surv()] for more details.
 #' @param ageRatio either a path to a csv file or a dataframe containing the
-#'   columns "Year","Count", and "Class". Where class can be either calf or cow
+#'   columns "Year","Count", and "Class". Where class can be either "calf" or "cow"
 #' @param disturbance either a path to a csv file or a dataframe containing the
-#'   columns "Anthro","fire_excl_anthro", and "Year"
-#' @param betaPriors a list of model priors see [getPriors()]
+#'   columns "Anthro","fire_excl_anthro", and "Year".
+#' @param betaPriors a list of model priors. See [getPriors()].
 #' @param startYear,endYear year defining the beginning of the observation
 #'   period and the end of the projection period.
-#' @param Nchains Number of chains for the Bayesian model
-#' @param Niter Number of iterations for the Bayesian model
-#' @param Nburn Length of burn-in for the Bayesian model
-#' @param Nthin Thinning rate for the Bayesian model
-#' @param N0 Initial population size
+#' @param Nchains Number of chains for the MCMC algorithm.
+#' @param Niter Number of iterations for the MCMC algorithm.
+#' @param Nburn Length of burn-in for the MCMC algorithm.
+#' @param Nthin Thinning rate for the MCMC algorithm. 
+#' @param N0 Initial population size.
 #' @param survAnalysisMethod Survival analysis method either "KaplanMeier" or
-#'   "Exponential". Exponential is only recommended for small sample sizes
+#'   "Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.
 #' @inheritParams caribouPopGrowth
-#' @param assessmentYrs Number of years over which to assess lambda (growth
-#'   rate)
-#' @param inputList an optional list of inputs with names matching the above, if
-#'   an argument is included in this list it will override the named argument
+#' @param assessmentYrs Number of years over which to assess population growth rate lambda.
+#' @param inputList an optional list of inputs with names matching the above. If
+#'   an argument is included in this list it will override the named argument.
 #' @param saveJAGStxt file path. Directory where the JAGS model txt files will
-#'   be saved. Default is `tempdir()`
-#' @param quiet logical. Should jags be run quietly?
+#'   be saved. Default is `tempdir()`.
+#' @param quiet logical. Should jags run quietly?
 #'
 #' @return a list with elements:
 #'   * result: an `rjags` model object see [R2jags::jags()].

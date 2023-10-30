@@ -65,8 +65,7 @@ more sample populations.}
 \item{adjustR}{Logical. Adjust R to account for delayed age at first
 reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
-\item{assessmentYrs}{Number of years over which to assess lambda (growth
-rate)}
+\item{assessmentYrs}{Number of years over which to assess population growth rate lambda.}
 
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
 

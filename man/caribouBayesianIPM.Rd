@@ -2,7 +2,7 @@
 % Please edit documentation in R/caribouBayesianIPM.R
 \name{caribouBayesianIPM}
 \alias{caribouBayesianIPM}
-\title{Bayesian population model for caribou}
+\title{Bayesian population model for boreal caribou}
 \usage{
 caribouBayesianIPM(
   survData = system.file("extdata/simSurvData.csv", package = "caribouMetrics"),
@@ -32,42 +32,41 @@ beginning and end of the time interval and should be a number from 1 to 12
 lived and 1 died. See \code{\link[survival:Surv]{survival::Surv()}} for more details.}
 
 \item{ageRatio}{either a path to a csv file or a dataframe containing the
-columns "Year","Count", and "Class". Where class can be either calf or cow}
+columns "Year","Count", and "Class". Where class can be either "calf" or "cow"}
 
 \item{disturbance}{either a path to a csv file or a dataframe containing the
-columns "Anthro","fire_excl_anthro", and "Year"}
+columns "Anthro","fire_excl_anthro", and "Year".}
 
-\item{betaPriors}{a list of model priors see \code{\link[=getPriors]{getPriors()}}}
+\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}.}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
 
-\item{Nchains}{Number of chains for the Bayesian model}
+\item{Nchains}{Number of chains for the MCMC algorithm.}
 
-\item{Niter}{Number of iterations for the Bayesian model}
+\item{Niter}{Number of iterations for the MCMC algorithm.}
 
-\item{Nburn}{Length of burn-in for the Bayesian model}
+\item{Nburn}{Length of burn-in for the MCMC algorithm.}
 
-\item{Nthin}{Thinning rate for the Bayesian model}
+\item{Nthin}{Thinning rate for the MCMC algorithm.}
 
-\item{N0}{Initial population size}
+\item{N0}{Initial population size.}
 
 \item{survAnalysisMethod}{Survival analysis method either "KaplanMeier" or
-"Exponential". Exponential is only recommended for small sample sizes}
+"Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.}
 
 \item{adjustR}{Logical. Adjust R to account for delayed age at first
 reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
-\item{assessmentYrs}{Number of years over which to assess lambda (growth
-rate)}
+\item{assessmentYrs}{Number of years over which to assess population growth rate lambda.}
 
-\item{inputList}{an optional list of inputs with names matching the above, if
-an argument is included in this list it will override the named argument}
+\item{inputList}{an optional list of inputs with names matching the above. If
+an argument is included in this list it will override the named argument.}
 
 \item{saveJAGStxt}{file path. Directory where the JAGS model txt files will
-be saved. Default is \code{tempdir()}}
+be saved. Default is \code{tempdir()}.}
 
-\item{quiet}{logical. Should jags be run quietly?}
+\item{quiet}{logical. Should jags run quietly?}
 }
 \value{
 a list with elements:
@@ -82,19 +81,19 @@ a list with elements:
 }
 }
 \description{
-Build a Bayesian population model that integrates prior
+A Bayesian population model that integrates prior
 information from Johnson et al.'s (2020) national analysis of
 demographic-disturbance relationships with local demographic data to project
 population growth.
 }
 \details{
-The model is built from local observations of survival (\code{survData}),
+The model combines local observations of survival (\code{survData}),
 recruitment based on calf:cow ratios (\code{ageRatio}) and anthropogenic
-disturbance (\code{disturbance}). This data is combined with prior information on
+disturbance (\code{disturbance}) with prior information on
 the relationship between disturbance and survival and recruitment from the
-Johnson et al. (2020) national model (\code{getPriors()}).
+Johnson et al. (2020) national model (\code{getPriors()}) to reduce uncertainty and refine parameter estimates.
 
-For a detailed description of the Bayesian model see the
+For a detailed description see the
 \href{https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model}{vignette}
 (\code{vignette("BayesianDemographicProjection", package = "caribouMetrics")}).
 

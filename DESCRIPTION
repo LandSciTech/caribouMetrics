@@ -1,8 +1,8 @@
 Package: caribouMetrics
 Type: Package
-Title: Models and Metrics of Boreal Caribou Responses to Forest Landscapes
+Title: Models and Metrics of Boreal Caribou Demography and Habitat Selection
 Version: 0.3.1
-Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec.gc.ca"),
+Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec.gc.ca", comment = c(ORCID = "0000-0001-7875-9015")),
     person("Sarah", "Endicott", email = "sarah.endicott@ec.gc.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
     person("Craig", "Simpkins", email = "simpkinscraig063@gmail.com", role = "aut"),
@@ -15,7 +15,7 @@ Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec
     person(given="Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change",
            role = "cph"))
 Description: caribouMetrics provides implementations of several different different models of Boreal woodland 
-    caribou demography and habitat use. A national two-stage demographic model with density 
+    caribou demography and habitat selection. A national two-stage demographic model with density 
     dependence and interannual variability follows [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) 
     with modifications described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). 
     Demographic rates vary with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637).

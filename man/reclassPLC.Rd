@@ -11,7 +11,7 @@ anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 
 Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
 Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
-Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Existing caribou
+Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (2022). Existing caribou
 habitat and demographic models need improvement for Ring of Fire impact
 assessment: A roadmap for improving the usefulness, transparency, and
 availability of models for conservation.

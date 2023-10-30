@@ -26,16 +26,16 @@ runScnSet(
 \code{\link[=getSimsNational]{getSimsNational()}}}
 
 \item{survAnalysisMethod}{Survival analysis method either "KaplanMeier" or
-"Exponential". Exponential is only recommended for small sample sizes}
+"Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.}
 
 \item{getKSDists}{logical. Should Kolmogorov–Smirnov distances be calculated?}
 
 \item{printProgress}{logical. Should the scenario number and parameters be
 printed at each step?}
 
-\item{Niter}{Number of iterations for the Bayesian model}
+\item{Niter}{Number of iterations for the MCMC algorithm.}
 
-\item{Nburn}{Length of burn-in for the Bayesian model}
+\item{Nburn}{Length of burn-in for the MCMC algorithm.}
 }
 \value{
 A list similar to \code{\link[=getOutputTables]{getOutputTables()}} where tables for each scenario
