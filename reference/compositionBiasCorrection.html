@@ -114,8 +114,8 @@ composition bias correction value (c) is returned for each value of <code>q</cod
 
 <p>number or tibble. If <code>approx = FALSE</code> a vector of composition bias
 correction values (c) of the same length as <code>q</code>, <code>u</code>, and <code>z</code>. If <code>approx = TRUE</code> a tibble with on row per unique value of <code>w</code> and columns <code>w</code>, <code>m</code>,
-<code>v</code>, <code>sig2</code>, <code>mu</code> representing <code>w</code>, mean c, variance of c, and variance and
-mean of the approximated log-normal distribution of c.</p>
+<code>v</code>, <code>sig2</code>, <code>mu</code> representing <code>w</code>, mean <code>c</code>, variance of <code>c</code>, and parameters for a
+log-normal approximation of the distribution of <code>c</code>.</p>
     </div>
     <div id="model-of-bias-in-recruitment-estimates-from-calf-cow-surveys">
     <h2>Model of bias in recruitment estimates from calf:cow surveys</h2>
@@ -185,8 +185,8 @@ of \(q\), \(u\) and \(z\).</p>
 <span class="r-in"><span>                          u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          approx <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.1236240 0.9761901 1.2250826 1.0496614 1.1984252 0.9034548 1.0181459</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.0114384 1.1279648 1.0728143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.0140219 0.9222686 1.1251393 0.9619203 1.0959560 1.1597667 1.1848578</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.9888012 1.0705824 1.1074649</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">compositionBiasCorrection</span><span class="op">(</span>w <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>                          q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.6</span><span class="op">)</span>,</span></span>
@@ -196,7 +196,7 @@ of \(q\), \(u\) and \(z\).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       w     m       v    sig2     mu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.06 0.007<span style="text-decoration: underline;">66</span> 0.006<span style="text-decoration: underline;">79</span> 0.055<span style="text-decoration: underline;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.07 0.003<span style="text-decoration: underline;">95</span> 0.003<span style="text-decoration: underline;">43</span> 0.068<span style="text-decoration: underline;">7</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
