@@ -2,7 +2,7 @@
 % Please edit documentation in R/getSimsNational.R
 \name{getSimsNational}
 \alias{getSimsNational}
-\title{Get a set of simulation results from the national model}
+\title{Get a set of simulation results from the national demographic model}
 \usage{
 getSimsNational(
   replicates = 1000,
@@ -60,7 +60,7 @@ Column names are Anthro, Mean, lower, upper, Parameter.
 }
 }
 \description{
-Get a set of simulation results from the national model
+Get a set of simulation results from the national demographic model
 }
 \examples{
 getSimsNational()

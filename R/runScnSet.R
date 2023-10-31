@@ -1,4 +1,4 @@
-#' Run the caribou Bayesian model for multiple parameter sets
+#' Run the Bayesian population model for multiple parameter sets
 #'
 #' Define scenarios in a table and [simulateObservations()], run the
 #' [caribouBayesianIPM()] model and [getOutputTables()] for each scenario.

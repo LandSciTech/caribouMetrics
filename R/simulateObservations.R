@@ -1,10 +1,8 @@
-#' Simulate survival data
+#' Simulate observations
 #'
-#' Simulate caribou survival data. First a true population trajectory is
-#' simulated following the national model and a disturbance scenario. Then
-#' realistic observations are simulated from this true population based on a
-#' caribou monitoring program with the given parameters. Parameters for the
-#' caribou monitoring program, disturbance scenario and the true population
+#' First, a example population trajectory is simulated from the national model and a disturbance scenario. 
+#' Parameters specify a monitoring program that is applied to simulate observations from the example trajectory. 
+#' Parameters for the caribou monitoring program, disturbance scenario and the true population
 #' trajectory can be specified with `getScenarioDefaults()`.
 #' 
 #' For a detailed description of the process for simulating data see the

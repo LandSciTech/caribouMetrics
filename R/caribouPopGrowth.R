@@ -1,11 +1,10 @@
 #' National caribou demographic model
 #'
-#' A national two-stage demographic model with density dependence and interannual variability
+#' A two-stage demographic model with density dependence and interannual variability
 #' following [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with modifications described 
 #' in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates vary 
 #' with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637).
-#' Given default parameter values, this is an implementation of the 2-stage population
-#' growth model described in Dyson et al. (2022). Set `probOption =
+#' Default parameter values give the model in Dyson et al. (2022). Set `probOption =
 #' "matchJohnson2020"` to reproduce the model used in Johnson et al. 2020. Set
 #' `probOption = "continuous"`, `interannualVar = FALSE`, and `K = FALSE` to
 #' reproduce the simpler 2-stage demographic model without interannual

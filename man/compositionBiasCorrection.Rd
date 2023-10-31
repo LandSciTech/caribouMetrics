@@ -27,8 +27,8 @@ composition bias correction value (c) is returned for each value of \code{q},
 \value{
 number or tibble. If \code{approx = FALSE} a vector of composition bias
 correction values (c) of the same length as \code{q}, \code{u}, and \code{z}. If \code{approx = TRUE} a tibble with on row per unique value of \code{w} and columns \code{w}, \code{m},
-\code{v}, \code{sig2}, \code{mu} representing \code{w}, mean c, variance of c, and variance and
-mean of the approximated log-normal distribution of c.
+\code{v}, \code{sig2}, \code{mu} representing \code{w}, mean \code{c}, variance of \code{c}, and parameters for a
+log-normal approximation of the distribution of \code{c}.
 }
 \description{
 When composition surveys are conducted there is a possibility of bias in calf

@@ -2,7 +2,7 @@
 % Please edit documentation in R/runScnSet.R
 \name{runScnSet}
 \alias{runScnSet}
-\title{Run the caribou Bayesian model for multiple parameter sets}
+\title{Run the Bayesian population model for multiple parameter sets}
 \usage{
 runScnSet(
   scns,

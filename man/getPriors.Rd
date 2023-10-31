@@ -2,7 +2,7 @@
 % Please edit documentation in R/getPriors.R
 \name{getPriors}
 \alias{getPriors}
-\title{Get model priors from national models}
+\title{Get prior parameters for Bayesian population model}
 \usage{
 getPriors(
   modList = NULL,
@@ -35,21 +35,19 @@ modifier is supplied here the corresponding argument below is ignored.}
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
 number to use see \link{popGrowthTableJohnsonECCC} for options.}
 
-\item{rAnthroSlopeSEMod}{anthropogenic disturbance slope recruitment
-uncertainty multiplier. 1 - 10}
+\item{rAnthroSlopeSEMod}{Multiplier for uncertainty about effect of disturbance on recruitment. 1 - 10}
 
-\item{sAnthroSlopeSEMod}{anthropogenic disturbance slope survival uncertainty
-multiplier. 1 - 10}
+\item{sAnthroSlopeSEMod}{Multiplier for uncertainty about effect of disturbance on survival. 1 - 10}
 
-\item{sIntSEMod}{survival intercept uncertainty multiplier. 1 - 10}
+\item{sIntSEMod}{Multiplier for uncertainty about survival intercept. 1 - 10}
 
-\item{sSigmaMean, sSigmaSD}{the mean and standard deviation of the prior
-distribution of the random effect of year on survival. 0-1.}
+\item{sSigmaMean, sSigmaSD}{The mean and standard deviation of the interannual
+coefficient of variation for survival. 0-1.}
 
-\item{rIntSEMod}{recruitment intercept uncertainty multiplier. 1 - 10}
+\item{rIntSEMod}{Multiplier for uncertainty about recruitment intercept. 1 - 10}
 
-\item{rSigmaMean, rSigmaSD}{the mean and standard deviation of the prior
-distribution of the random effect of year on recruitment. 0-1.}
+\item{rSigmaMean, rSigmaSD}{The mean and standard deviation of the interannual
+coefficient of variation for recruitment. 0-1.}
 
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition
 survey groups.}
@@ -111,25 +109,24 @@ error times modifier,
 on adult female survival,
 \item sig.Saf.Prior2: Standard deviation of the prior distribution of the random
 effect of year on adult female survival,
-\item bias.Prior1: Mean composition survey bias correction term,
-\item bias.Prior2: Standard deviation of composition survey bias correction term
+\item bias.Prior1: Log-normal mean composition survey bias correction term,
+\item bias.Prior2: Log-normal standard deviation of composition survey bias correction term
 }
 }
 \description{
-Model priors are determined by extracting the appropriate coefficients from
-the table \code{popGrowthTableJohnsonECCC} and multiplying the uncertainty around
-the coefficients by the modifiers included in this function. The default
-values of modifiers and the random effect of year for this function have been
-calibrated such that without additional data the prior distribution is
-similar to simulated outcomes from the national model given no anthropogenic
-disturbance and that priors are vague enough that given sufficient local data
-the posteriors represent the local data and not the national model, for both
-survival and recruitment. Priors for the composition survey bias correction
-term are set for the apparent number of adult females per collared animal
-(\code{cowMult}) by setting expert informed minimum and maximum values for each of
-the ratio of bulls to cows (\eqn{q}), the probability of misidentifying young
+Returns prior parameter values for the Bayesian population model. The starting point
+is estimated coefficients from national demographic-disturbance relationships in the table \code{popGrowthTableJohnsonECCC}.
+Standard errors are multiplied by modifier arguments in this function increase
+the vagueness of the priors. Default values of the modifiers and random effects of year
+have been calibrated so that the 95\% prior prediction intervals for survival and recruitment
+from the Bayesian model match the range between the 2.5\% and 97.5\% quantiles of 1000
+survival and recruitment trajectories from the national demographic model \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}.
+Default priors are vague enough to allow local data to alter parameter estimates and projections.
+A log-normal prior for the unknown composition survey bias correction term \code{c} is set by specifying
+an apparent number of adult females per collared animal(\code{cowMult}) and minimum and maximum values
+for each of the ratio of bulls to cows (\eqn{q}), the probability of misidentifying young
 bulls as adult females and vice versa (\eqn{u}), and the probability of missing
-calves (\eqn{z}) in composition surveys.
+calves (\eqn{z}) in composition surveys. See \code{\link[=compositionBiasCorrection]{compositionBiasCorrection()}} for additional details.
 }
 \examples{
 getPriors()

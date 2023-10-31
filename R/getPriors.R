@@ -1,34 +1,31 @@
-#' Get model priors from national models
+#' Get prior parameters for Bayesian population model
 #'
-#' Model priors are determined by extracting the appropriate coefficients from
-#' the table `popGrowthTableJohnsonECCC` and multiplying the uncertainty around
-#' the coefficients by the modifiers included in this function. The default
-#' values of modifiers and the random effect of year for this function have been
-#' calibrated such that without additional data the prior distribution is
-#' similar to simulated outcomes from the national model given no anthropogenic
-#' disturbance and that priors are vague enough that given sufficient local data
-#' the posteriors represent the local data and not the national model, for both
-#' survival and recruitment. Priors for the composition survey bias correction
-#' term are set for the apparent number of adult females per collared animal
-#' (`cowMult`) by setting expert informed minimum and maximum values for each of 
-#' the ratio of bulls to cows (\eqn{q}), the probability of misidentifying young
+#' Returns prior parameter values for the Bayesian population model. The starting point
+#' is estimated coefficients from national demographic-disturbance relationships in the table `popGrowthTableJohnsonECCC`.
+#' Standard errors are multiplied by modifier arguments in this function increase 
+#' the vagueness of the priors. Default values of the modifiers and random effects of year 
+#' have been calibrated so that the 95% prior prediction intervals for survival and recruitment
+#' from the Bayesian model match the range between the 2.5% and 97.5% quantiles of 1000
+#' survival and recruitment trajectories from the national demographic model [caribouPopGrowth()].
+#' Default priors are vague enough to allow local data to alter parameter estimates and projections.
+#' A log-normal prior for the unknown composition survey bias correction term `c` is set by specifying
+#' an apparent number of adult females per collared animal(`cowMult`) and minimum and maximum values 
+#' for each of the ratio of bulls to cows (\eqn{q}), the probability of misidentifying young
 #' bulls as adult females and vice versa (\eqn{u}), and the probability of missing
-#' calves (\eqn{z}) in composition surveys. 
+#' calves (\eqn{z}) in composition surveys. See [compositionBiasCorrection()] for additional details.
 #' 
 #' @param modList a named list of modifiers to use to change the priors. If a
 #'   modifier is supplied here the corresponding argument below is ignored.
 #' @param returnValues logical. Default is TRUE. If FALSE returns strings for
 #'   some values showing the initial values and the modifier ie "0.9 * 1.05"
-#' @param sAnthroSlopeSEMod anthropogenic disturbance slope survival uncertainty
-#'   multiplier. 1 - 10
-#' @param rAnthroSlopeSEMod anthropogenic disturbance slope recruitment
-#'   uncertainty multiplier. 1 - 10
-#' @param sIntSEMod survival intercept uncertainty multiplier. 1 - 10
-#' @param rIntSEMod recruitment intercept uncertainty multiplier. 1 - 10
-#' @param sSigmaMean,sSigmaSD the mean and standard deviation of the prior
-#'   distribution of the random effect of year on survival. 0-1. 
-#' @param rSigmaMean,rSigmaSD the mean and standard deviation of the prior
-#'   distribution of the random effect of year on recruitment. 0-1. 
+#' @param sAnthroSlopeSEMod Multiplier for uncertainty about effect of disturbance on survival. 1 - 10
+#' @param rAnthroSlopeSEMod Multiplier for uncertainty about effect of disturbance on recruitment. 1 - 10
+#' @param sIntSEMod Multiplier for uncertainty about survival intercept. 1 - 10
+#' @param rIntSEMod Multiplier for uncertainty about recruitment intercept. 1 - 10
+#' @param sSigmaMean,sSigmaSD The mean and standard deviation of the interannual 
+#' coefficient of variation for survival. 0-1. 
+#' @param rSigmaMean,rSigmaSD The mean and standard deviation of the interannual 
+#' coefficient of variation for recruitment. 0-1. 
 #' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition
 #'   survey groups.
 #' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition
@@ -70,8 +67,8 @@
 #'   on adult female survival,
 #' * sig.Saf.Prior2: Standard deviation of the prior distribution of the random
 #'   effect of year on adult female survival,
-#' * bias.Prior1: Mean composition survey bias correction term,
-#' * bias.Prior2: Standard deviation of composition survey bias correction term
+#' * bias.Prior1: Log-normal mean composition survey bias correction term,
+#' * bias.Prior2: Log-normal standard deviation of composition survey bias correction term
 #'
 #' @examples
 #' getPriors()

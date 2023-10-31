@@ -2,7 +2,7 @@
 % Please edit documentation in R/getScenarioDefaults.R
 \name{getScenarioDefaults}
 \alias{getScenarioDefaults}
-\title{Generate default scenario parameters}
+\title{Default parameters for simulation of example demographic trajectories.}
 \usage{
 getScenarioDefaults(
   paramTable = NULL,
@@ -100,8 +100,8 @@ a data.frame of parameter values including a label that combines all
 the parameter names and values into a string
 }
 \description{
-This function can be used to generate default parameter values used in
-\code{\link[=simulateObservations]{simulateObservations()}}
+Returns default parameter values for simulations of example
+demographic trajectories. See \code{\link[=simulateObservations]{simulateObservations()}} for additional details.
 }
 \examples{
 getScenarioDefaults()
@@ -109,16 +109,6 @@ getScenarioDefaults()
 # paramTable list takes precedence over argument values
 getScenarioDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears = 1), obsYears = 5)
 
-}
-\references{
-DeCesare, N.J., Hebblewhite, M., Bradley, M., Smith, K.G.,
-Hervieux, D. and Neufeld, L., 2012. Estimating ungulate recruitment and
-growth rates using age ratios. The Journal of Wildlife Management, 76(1),
-pp.144-153.
-
-Eacker, D.R., Hebblewhite, M., Steenweg, R., Russell, M., Flasko, A. and
-Hervieux, D., 2019. Web‐based application for threatened woodland caribou
-population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.
 }
 \seealso{
 Caribou demography functions:

@@ -16,8 +16,7 @@ if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
   assign("simsNationalRunadjusted", simsNationalRunadjusted, envir = cacheEnv)
 }
 
-#' Get a set of simulation results from the national model
-#'
+#' Get a set of simulation results from the national demographic model
 #'
 #' @param Anthro,fire_excl_anthro numeric. A vector of numbers between 0 and 100
 #'   representing the percentage of the landscape covered by anthropogenic

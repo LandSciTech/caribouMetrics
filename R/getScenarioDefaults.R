@@ -1,7 +1,7 @@
-#' Generate default scenario parameters
+#' Default parameters for simulation of example demographic trajectories.
 #'
-#' This function can be used to generate default parameter values used in
-#' [simulateObservations()]
+#' Returns default parameter values for simulations of example 
+#' demographic trajectories. See [simulateObservations()] for additional details.
 #'
 #' @param paramTable a data.frame with column names matching the arguments below. Any
 #'   columns that are missing will be filled with the default values.
@@ -35,15 +35,6 @@
 #'   observation period and years after are part of the projection period.
 #' @param startYear year. First year in observation period. Optional, if not provided
 #'   it will be calculated from `curYear` and `obsYears`
-#'
-#' @references DeCesare, N.J., Hebblewhite, M., Bradley, M., Smith, K.G.,
-#'   Hervieux, D. and Neufeld, L., 2012. Estimating ungulate recruitment and
-#'   growth rates using age ratios. The Journal of Wildlife Management, 76(1),
-#'   pp.144-153.
-#'
-#'   Eacker, D.R., Hebblewhite, M., Steenweg, R., Russell, M., Flasko, A. and
-#'   Hervieux, D., 2019. Web‐based application for threatened woodland caribou
-#'   population modeling. Wildlife Society Bulletin, 43(1), pp.167-177.
 #'
 #' @return a data.frame of parameter values including a label that combines all
 #'   the parameter names and values into a string

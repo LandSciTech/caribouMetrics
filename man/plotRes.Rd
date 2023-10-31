@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotRes.R
 \name{plotRes}
 \alias{plotRes}
-\title{Plot caribou Bayesian model results}
+\title{Plot Bayesian population model results}
 \usage{
 plotRes(
   modTables,
@@ -42,8 +42,8 @@ a ggplot object or list of ggplot objects if a vector of parameters
 was given.
 }
 \description{
-Plot results of the caribou Bayesian model with the option to include the
-national model and observed data
+Plot Bayesian population model results, with (optionally) the
+distribution of outcomes from the national model, local observations, and true local state for comparison.
 }
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,

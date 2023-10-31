@@ -62,8 +62,8 @@
 #' @return number or tibble. If `approx = FALSE` a vector of composition bias
 #'   correction values (c) of the same length as `q`, `u`, and `z`. If `approx =
 #'   TRUE` a tibble with on row per unique value of `w` and columns `w`, `m`,
-#'   `v`, `sig2`, `mu` representing `w`, mean c, variance of c, and variance and
-#'   mean of the approximated log-normal distribution of c.
+#'   `v`, `sig2`, `mu` representing `w`, mean `c`, variance of `c`, and parameters for a
+#'   log-normal approximation of the distribution of `c`.
 #' @export
 #' @family demography
 #' @examples

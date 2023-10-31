@@ -83,12 +83,11 @@ survival (\code{S_t}), number of recruits (\code{n_recruits}), and surviving fem
 for each sample population projected for numSteps years.
 }
 \description{
-A national two-stage demographic model with density dependence and interannual variability
+A two-stage demographic model with density dependence and interannual variability
 following \href{doi:10.1111/1365-2664.13637}{Johnson et. al. (2020)} with modifications described
 in \href{https://doi.org/10.1101/2022.06.01.494350}{Dyson et al. (2022)}. Demographic rates vary
 with disturbance as estimated by \href{doi:10.1111/1365-2664.13637}{Johnson et. al. (2020)}.
-Given default parameter values, this is an implementation of the 2-stage population
-growth model described in Dyson et al. (2022). Set \code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson et al. 2020. Set
+Default parameter values give the model in Dyson et al. (2022). Set \code{probOption = "matchJohnson2020"} to reproduce the model used in Johnson et al. 2020. Set
 \code{probOption = "continuous"}, \code{interannualVar = FALSE}, and \code{K = FALSE} to
 reproduce the simpler 2-stage demographic model without interannual
 variability, density dependence, or discrete numbers of animals used by

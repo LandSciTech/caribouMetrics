@@ -3,10 +3,10 @@
 # License GPL-3
 #NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
-#' Plot caribou Bayesian model results
+#' Plot Bayesian population model results
 #'
-#' Plot results of the caribou Bayesian model with the option to include the
-#' national model and observed data
+#' Plot Bayesian population model results, with (optionally) the 
+#' distribution of outcomes from the national model, local observations, and true local state for comparison. 
 #'
 #' @param modTables list. A list of model results tables created using
 #'   `[getOutputTables()]`.
