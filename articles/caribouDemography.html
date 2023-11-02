@@ -100,21 +100,18 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>caribouMetrics includes a population and demographic model that
-allows users to predict demographic rates for a given level of
-disturbance and project population growth over time. Demographic rates
-are predicted using model coefficients published in <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>.
-Population growth is projected using a two-stage demographic model with
-density dependence and interannual variability based on Johnson et.
-al. (2020) but with some modifications as described in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et
-al. (2022)</a>.</p>
+<p>Here we describe a two-stage demographic model with density
+dependence and interannual variability following <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a> with
+modifications noted in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et
+al. (2022)</a>. Demographic rates vary with disturbance as estimated by
+<a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>.</p>
 <p><code><a href="../reference/demographicCoefficients.html">demographicCoefficients()</a></code> selects the regression
 coefficient values and standard errors for the desired model version
 (see <code>popGrowthTableJohnsonECCC</code> for options) and then
 samples coefficients from these Gaussian distributions for each
 replicate population.</p>
 <p>Next <code><a href="../reference/demographicRates.html">demographicRates()</a></code> is used to apply the sampled
-coefficients to the disturbance covariates to calculate the expected
+coefficients to the disturbance covariates to calculate expected
 recruitment (<span class="math inline">\(\bar{R}_t\)</span>) and
 survival (<span class="math inline">\(\bar{S}_t\)</span>) according to
 the beta regression models estimated by Johnson et al. (2020): :<span class="math display">\[\bar{R}_t \sim
@@ -127,35 +124,32 @@ of the Beta error distributions for survival and recruitment. Using
 quantiles means that the population will stay in these quantiles as
 disturbance changes over time, so there is persistent variation in
 recruitment and survival among example populations.</p>
-<p>Finally, we can use the estimated demographic rates given the amount
-of disturbance to project the population growth rate under these
-conditions. This is accomplished with an implementation of the 2-stage
-population growth model used in Johnson et al. (2020) but with some
-differences described in Dyson et al. (2022). The number of
-post-juvenile females that survive from year <span class="math inline">\(t\)</span> to the census <span class="math inline">\(\dot{W}_t\)</span> is binomially distributed with
+<p>Finally, we can use the estimated demographic rates to project
+population dynamics using a simple model with two age classes. The
+number of post-juvenile females that survive from year <span class="math inline">\(t\)</span> to the census <span class="math inline">\(\dot{W}_t\)</span> is binomially distributed with
 survival probability <span class="math inline">\(\dot{S}_t\)</span>:
 <span class="math inline">\(\dot{W}_{t} \sim
 \text{Binomial}(\dot{N}_t,\dot{S}_t)\)</span>. Maximum potential
-recruitment rate is adjusted for sex ratio and (optionally) delayed age
-at first reproduction <span class="math display">\[\dot{X}_t=\frac{\dot{R}_t/2}{1+\dot{R}_t/2}.\]</span>
+recruitment rate is adjusted for sex ratio, misidentification biases,
+and (optionally) delayed age at first reproduction <span class="math display">\[\dot{X}_t=\frac{\dot{c}\dot{R}_t/2}{1+\dot{c}\dot{R}_t/2}.\]</span>
 Realized recruitment rate varies with population density, and the number
 of juveniles recruiting to the post-juvenile class at the census is a
 binomially distributed function of the number of surviving post-juvenile
 females and the adjusted recruitment rate: <span class="math display">\[\dot{J}_{t} \sim
 \text{Binomial}(\dot{W}_t,\dot{X}_t[p_0-(p_0-p_k)(\frac{\dot{W}_t}{N_0k})^b]\frac{\dot{W}_t}{\dot{W}_t+a}).\]</span>
-Given defalut parameters, recruitment rate is lowest <span class="math inline">\((0.5\dot{X}_t)\)</span> when <span class="math inline">\(\dot{N}_t=1\)</span>, approaches a maximum of
+Given default parameters, recruitment rate is lowest <span class="math inline">\((0.5\dot{X}_t)\)</span> when <span class="math inline">\(\dot{N}_t=1\)</span>, approaches a maximum of
 <span class="math inline">\(\dot{X}_t\)</span> at intermediate
 population sizes, and declines to <span class="math inline">\(0.6\dot{X}_t\)</span> as the population reaches
 carrying capacity of <span class="math inline">\(K=100\)</span> times
 the initial population size. The post-juvenile female population in the
 next year includes both survivors and new recruits: <span class="math inline">\(\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)\)</span>.</p>
 <p>Interannual variation in survival and recruitment is modelled using
-truncated beta distributions [rtrunc function; <span class="citation">@novomestky_package_2016</span>]: <span class="math inline">\(\dot{R}_t \sim
+truncated beta distributions <a href="https://CRAN.R-project.org/package=truncdist" class="external-link">rtrunc function;
+Novometsky et al. 2016</a>: <span class="math inline">\(\dot{R}_t \sim
 \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim
-\text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)\)</span>. Coefficients of
-variation among years <span class="math inline">\((\nu_R,\nu_S)\)</span>
-and maximum/minimum values <span class="math inline">\(l_R,h_R,l_S,h_S\)</span> for recruitment and
-survival are set to default parameters in the function.</p>
+\text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)\)</span>. <span class="math inline">\(\nu_R\)</span> and <span class="math inline">\(\nu_S\)</span> are coefficients of variation among
+years and <span class="math inline">\(l_R,h_R,l_S\)</span>, and <span class="math inline">\(h_S\)</span> are maximum/minimum values for
+recruitment and survival.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -168,8 +162,8 @@ survival are set to default parameters in the function.</p>
 <h2 id="simple-demographic-projection-for-a-single-example-landscape">Simple demographic projection for a single example landscape<a class="anchor" aria-label="anchor" href="#simple-demographic-projection-for-a-single-example-landscape"></a>
 </h2>
 <p>A simple case for demographic projection is multiple stochastic
-projections from a single landscape that does not change over time.</p>
-<p>First we define a disturbance scenario with 40% anthropogenic
+projections from a single landscape that does not change over time.
+First we define a disturbance scenario with 40% anthropogenic
 disturbance and 2% fire disturbance. If we had spatial data for the
 disturbance in our area of interest we could use
 <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> to directly calculate the disturbance.
@@ -187,12 +181,12 @@ that they have been assigned to.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefSamples</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       Intercept        Anthro Precision</span></span>
-<span><span class="co">#&gt; [1,] -0.1316933 -0.0010029217  59.29576</span></span>
-<span><span class="co">#&gt; [2,] -0.1464594 -0.0006760993  54.16567</span></span>
-<span><span class="co">#&gt; [3,] -0.1422289 -0.0009692480  58.81158</span></span>
-<span><span class="co">#&gt; [4,] -0.1350343 -0.0005062285  69.55609</span></span>
-<span><span class="co">#&gt; [5,] -0.1513581 -0.0009131527  64.21094</span></span>
-<span><span class="co">#&gt; [6,] -0.1486798 -0.0006377140  55.82069</span></span>
+<span><span class="co">#&gt; [1,] -0.1250359 -0.0008265777  61.81964</span></span>
+<span><span class="co">#&gt; [2,] -0.1361792 -0.0009217985  70.36175</span></span>
+<span><span class="co">#&gt; [3,] -0.1404411 -0.0006471894  53.63107</span></span>
+<span><span class="co">#&gt; [4,] -0.1356364 -0.0007488987  68.96310</span></span>
+<span><span class="co">#&gt; [5,] -0.1296833 -0.0006742052  59.37754</span></span>
+<span><span class="co">#&gt; [6,] -0.1465041 -0.0008136746  66.68810</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefValues</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Intercept Anthro Precision</span></span>
 <span><span class="co">#&gt; 1:    -0.142 -8e-04  63.43724</span></span>
@@ -200,7 +194,7 @@ that they have been assigned to.</p>
 <span><span class="co">#&gt;      Intercept      Anthro Precision</span></span>
 <span><span class="co">#&gt; 1: 0.007908163 0.000127551  8.272731</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">quantiles</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.39433868 0.64944890 0.53522044 0.14493988 0.02690381 0.74844689</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.9255010 0.2877255 0.4723948 0.3181864 0.8055611 0.3581663</span></span></code></pre></div>
 <p>Next we calculate sample demographic rates given sampled model
 coefficients and disturbance metrics for our example landscape, setting
 <code>returnSample = TRUE</code> so that the results returned contain a
@@ -308,30 +302,33 @@ addition to the uncertainty about the coefficient estimates.</p>
 <span>  useQuantiles <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="no-precision">No precision<a class="anchor" aria-label="anchor" href="#no-precision"></a>
+<h3 id="parameter-uncertainty">Parameter uncertainty<a class="anchor" aria-label="anchor" href="#parameter-uncertainty"></a>
 </h3>
-<p>The Johnson et al. (2020) model with parameter uncertainty but no
-precision. The bands are the 2.5% and 97.5% quantiles of 500 sample
-parameter values.
+<p>Variation in demographic rates from model that includes uncertainty
+about the regression coefficients, and does not include additional
+variation captured by the precision parameter of the Beta regression
+model <a href="https://doi.org/10.1080/0266476042000214501" class="external-link">Ferrari and
+Cribari-Neto 2004</a>. The bands are the 2.5% and 97.5% quantiles of 500
+sample parameter values.
 <img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-1.png" width="768"><img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-2.png" width="768"></p>
 </div>
 <div class="section level3">
-<h3 id="with-precision">With precision<a class="anchor" aria-label="anchor" href="#with-precision"></a>
+<h3 id="parameter-uncertainty-and-precision">Parameter uncertainty and precision<a class="anchor" aria-label="anchor" href="#parameter-uncertainty-and-precision"></a>
 </h3>
-<p>The Johnson et al. (2020) model with parameter uncertainty and
-precision. Faint coloured lines show example trajectories of expected
-demographic rates in sample populations, assuming each sample population
-is randomly distributed among quantiles of the beta distribution, and
-each population remains in the same quantile of the beta distribution as
-disturbance changes.</p>
+<p>Variation in demographic rates from model that includes uncertainty
+about the regression coefficients and additional variation captured by
+the precision parameter of the Beta regression model <a href="https://doi.org/10.1080/0266476042000214501" class="external-link">Ferrari and
+Cribari-Neto 2004</a>. Faint coloured lines show example trajectories of
+expected demographic rates in sample populations, assuming each sample
+population is randomly distributed among quantiles of the beta
+distribution, and each population remains in the same quantile of the
+beta distribution as disturbance changes.</p>
 <pre><code><span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre>
-<p><img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"></p>
-<pre><code><span><span class="co">#&gt; Warning: Removed 1 row containing missing values (`geom_line()`).</span></span></code></pre>
-<p><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
+<p><img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
 </div>
 </div>
 <div class="section level2">
@@ -342,10 +339,9 @@ landscape<a class="anchor" aria-label="anchor" href="#projection-of-population-g
 landscape where the anthropogenic disturbance footprint is increasing by
 5% per decade. We set <code>interannualVar = FALSE</code>,
 <code>K = FALSE</code>, and <code>probOption = "continuous"</code> to
-use a simpler 2-stage demographic model without interannual variability,
-density dependence, or discrete numbers of animals, as in Stewart et
-al. in prep.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+use a simpler model without interannual variability, density dependence,
+or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816" class="external-link">Stewart et al. 2023</a>.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">numTimesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">stepLength</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
@@ -402,15 +398,19 @@ Baltzer, J. L., Stewart, F. E. C., &amp; Hughes, J. (2022). Existing
 caribou habitat and demographic models need improvement for Ring of Fire
 impact assessment: A roadmap for improving the usefulness, transparency,
 and availability of models for conservation. <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link uri">https://doi.org/10.1101/2022.06.01.494350</a></p>
+<p>Ferrari S, Cribari-Neto F (2004) Beta Regression for Modelling Rates
+and Proportions. Journal of Applied Statistics 31:799–815. <a href="https://doi.org/10.1080/0266476042000214501" class="external-link uri">https://doi.org/10.1080/0266476042000214501</a></p>
 <p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
 Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
 linking population dynamics to habitat for a threatened species in
 Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link uri">https://doi.org/10.1111/1365-2664.13637</a></p>
+<p>Novomestky F, Nadarajah S (2016) Package ‘truncdist.’ Version
+1.0-2URL <a href="https://CRAN.R-project.org/package=truncdist" class="external-link uri">https://CRAN.R-project.org/package=truncdist</a></p>
 <p>Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty,
 A.M., Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and
 Hughes, J., 2023. Climate‐informed forecasts reveal dramatic local
 habitat shifts and population uncertainty for northern boreal caribou.
-Ecological Applications, 33(3), p.e2816.</p>
+Ecological Applications 33:e2816.<br><a href="https://doi.org/10.1002/eap.2816" class="external-link uri">https://doi.org/10.1002/eap.2816</a></p>
 </div>
   </div>
 

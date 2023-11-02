@@ -110,7 +110,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The caribouMetrics R package provides reproducible and open source implementations of several models of Boreal woodland caribou (<em>Rangifer tarandus caribou</em>) demography and habitat use. These include a population and demographic model that allows users to predict demographic rates for a given level of disturbance and project population growth over time. Demographic rates are predicted using model coefficients published in <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>. Population growth is projected using a two-stage demographic model with density dependence and interannual variability based on Johnson et. al. (2020) but with some modifications as described in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (2022)</a>. In addition to these national scale models, we provide a simple Bayesian integrated population model that integrates prior information from national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections. Our model is an extension of work by <a href="https://doi.org/10.1002/wsb.950" class="external-link">Eacker et al. (2019)</a> with some modifications and an added ability to simulate observation data given parameters that define a common caribou monitoring program. Finally, caribouMetrics contains a set of functions which implement the caribou resource selection probability functions (RSPF) for Ontario boreal caribou ranges described in <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel (2016)</a>.</p>
+<p>The caribouMetrics R package provides reproducible open source implementations of several models of Boreal woodland caribou (<em>Rangifer tarandus caribou</em>) demography and habitat use. A national two-stage demographic model with density dependence and interannual variability follows <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a> with modifications described in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (2022)</a>. Demographic rates vary with disturbance as estimated by <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>. The package also includes a Bayesian population model designed to integrate prior information from Johnson et al’s national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections. The Bayesian population model builds on work by <a href="https://doi.org/10.1002/wsb.950" class="external-link">Eacker et al. (2019)</a>. The national model can be used to simulate example population trajectories, and combined with a simple observation model and the Bayesian population model to show how monitoring requirements depend on landscape condition. Finally, caribouMetrics contains an implementation of <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel’s (2016)</a> Ontario boreal caribou resource selection model described in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (2022)</a>. Model implementation is intended to be modular and flexible, allowing reuse of components in a variety of contexts including projections of the cumulative effects of disturbance and climate change <a href="https://doi.org/10.1002/eap.2816" class="external-link">(e.g. Stewart et al. 2023)</a> and a <a href="https://landscitech.github.io/BayesianCaribouDemographicProjection/" class="external-link">Shiny app</a> designed to allow allow exploration of user-specified monitoring and disturbance scenarios.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -125,14 +125,6 @@
 <p>This is a basic example demonstrating all the primary functions of the package.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,</span></span>
-<span><span class="co">#&gt; which was just loaded, will retire in October 2023.</span></span>
-<span><span class="co">#&gt; Please refer to R-spatial evolution reports for details, especially</span></span>
-<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html.</span></span>
-<span><span class="co">#&gt; It may be desirable to make the sf package available;</span></span>
-<span><span class="co">#&gt; package maintainers should consider adding sf to Suggests:.</span></span>
-<span><span class="co">#&gt; The sp package is now running under evolution status 2</span></span>
-<span><span class="co">#&gt;      (status 2 uses the sf package in place of rgdal)</span></span>
 <span></span>
 <span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span>
 <span></span>
@@ -169,17 +161,19 @@
 <span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaults</span></span>
 <span><span class="va">demRates</span></span>
 <span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr</span></span>
-<span><span class="co">#&gt; 1    1 39.86675 1.732936   40.45363        0.5868729   0 0.8479506 0.05405621</span></span>
+<span><span class="co">#&gt; 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05848277</span></span>
 <span><span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh</span></span>
-<span><span class="co">#&gt; 1 0.7487979 0.9302797 0.1816836 0.09490028 0.06382286 0.3828127</span></span>
+<span><span class="co">#&gt; 1 0.7382298 0.9355214 0.1813372 0.08566332 0.05688173 0.3502751</span></span>
 <span></span>
 <span><span class="co"># Simulate population growth</span></span>
 <span><span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouPopGrowth.html">caribouPopGrowth</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2000</span>, numSteps <span class="op">=</span> <span class="fl">20</span>, R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, </span>
 <span>                            S_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">popGrow</span></span>
-<span><span class="co">#&gt;     N0    lambda   N       R_t       S_t n_recruits surviving_adFemales</span></span>
-<span><span class="co">#&gt; 1 2000 0.9200186 376 0.1803221 0.8396411         22                 354</span></span>
+<span><span class="co">#&gt;     N0    lambda   N       R_t        X_t       S_t n_recruits</span></span>
+<span><span class="co">#&gt; 1 2000 0.9273454 440 0.1822609 0.09113044 0.8359903         27</span></span>
+<span><span class="co">#&gt;   surviving_adFemales</span></span>
+<span><span class="co">#&gt; 1                 413</span></span>
 <span></span>
 <span><span class="co"># simulate caribou collar observations</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span></span>
@@ -205,12 +199,10 @@
 <span>                            simNational <span class="op">=</span> <span class="va">natSim</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">ipmTbls</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $Recruitment</span></span>
-<span><span class="co">#&gt; Warning: Removed 10 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; $Recruitment</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-2.png" width="100%"></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $`Adult female survival`</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Removed 11 rows containing missing values (`geom_point()`).</span></span></code></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $`Adult female survival`</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-3.png" width="100%"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -234,7 +226,15 @@
 <span><span class="co">#&gt; Applying moving window.</span></span>
 <span></span>
 <span><span class="co"># plot the results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,</span></span>
+<span><span class="co">#&gt; which was just loaded, will retire in October 2023.</span></span>
+<span><span class="co">#&gt; Please refer to R-spatial evolution reports for details, especially</span></span>
+<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html.</span></span>
+<span><span class="co">#&gt; It may be desirable to make the sf package available;</span></span>
+<span><span class="co">#&gt; package maintainers should consider adding sf to Suggests:.</span></span>
+<span><span class="co">#&gt; The sp package is now running under evolution status 2</span></span>
+<span><span class="co">#&gt;      (status 2 uses the sf package in place of rgdal)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-4.png" width="100%"></p>
 </div>
 <div class="section level2">
@@ -268,6 +268,7 @@
 <p>ECCC. 2011. Scientific assessment to inform the identification of critical habitat for woodland caribou (<em>Rangifer tarandus caribou</em>), boreal population, in Canada. Canadian Wildlife Service, Ottawa. <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="external-link uri">http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf</a>. Accessed 26 Mar 2021.</p>
 <p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93. <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link uri">https://doi.org/10.1139/cjz-2015-0101</a></p>
 <p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking population dynamics to habitat for a threatened species in Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link uri">https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637</a></p>
+<p>Stewart F.E.C., Micheletti T., Cumming S.G., Barros, C., Chubaty, A. M., Dookie, A. L., Duclos, I., Eddy, I., Haché, S., Hodson, J., Hughes, J., Johnson, C. A., Leblond, M., Schmiegelow, F.K.A., Tremblay, J. A.. McIntire, E.J.B. (2023) Climate-informed forecasts reveal dramatic local habitat shifts and population uncertainty for northern boreal caribou. Ecological Applications 33:e2816. <a href="https://doi.org/10.1002/eap.2816" class="external-link uri">https://doi.org/10.1002/eap.2816</a></p>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
