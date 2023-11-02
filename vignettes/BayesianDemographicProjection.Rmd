@@ -119,7 +119,7 @@ distObs %>% ggplot(aes(Year, Anthro))+
   geom_line()
 
 ```
-Plotting the data shows that the collaring program included 60 individuals with collars being replenished every 4 years over a monitoring period of 15 years. Calf cow surveys typically counted ~150 cows and ~50 calves. There is no disturbance in the years of the observation data but disturbance is expected to increase quickly in the future.
+Plotting the data shows that the collaring program included 60 individuals with collars being replenished every 3 years over a monitoring period of 15 years. Calf cow surveys typically counted ~150 cows and ~50 calves. There is no disturbance in the years of the observation data but disturbance is expected to increase quickly in the future.
 
 These data sets can be supplied to `caribouBayesianIPM()`to project the impact on the caribou population as disturbance increases over the next 20 years. 
 

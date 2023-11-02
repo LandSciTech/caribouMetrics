@@ -8,30 +8,35 @@
 [![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The caribouMetrics R package provides reproducible and open source
+The caribouMetrics R package provides reproducible open source
 implementations of several models of Boreal woodland caribou (*Rangifer
-tarandus caribou*) demography and habitat use. These include a
-population and demographic model that allows users to predict
-demographic rates for a given level of disturbance and project
-population growth over time. Demographic rates are predicted using model
-coefficients published in [Johnson et.
-al. (2020)](doi:10.1111/1365-2664.13637). Population growth is projected
-using a two-stage demographic model with density dependence and
-interannual variability based on Johnson et. al. (2020) but with some
-modifications as described in [Dyson et
-al. (2022)](https://doi.org/10.1101/2022.06.01.494350). In addition to
-these national scale models, we provide a simple Bayesian integrated
-population model that integrates prior information from national
-analysis of demographic-disturbance relationships with available local
-demographic data to reduce uncertainty in population viability
-projections. Our model is an extension of work by [Eacker et
-al. (2019)](https://doi.org/10.1002/wsb.950) with some modifications and
-an added ability to simulate observation data given parameters that
-define a common caribou monitoring program. Finally, caribouMetrics
-contains a set of functions which implement the caribou resource
-selection probability functions (RSPF) for Ontario boreal caribou ranges
-described in [Hornseth and Rempel
-(2016)](https://doi.org/10.1139/cjz-2015-0101).
+tarandus caribou*) demography and habitat use. A national two-stage
+demographic model with density dependence and interannual variability
+follows [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with
+modifications described in [Dyson et
+al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic
+rates vary with disturbance as estimated by [Johnson et.
+al. (2020)](doi:10.1111/1365-2664.13637). The package also includes a
+Bayesian population model designed to integrate prior information from
+Johnson et al’s national analysis of demographic-disturbance
+relationships with available local demographic data to reduce
+uncertainty in population viability projections. The Bayesian population
+model builds on work by [Eacker et
+al. (2019)](https://doi.org/10.1002/wsb.950). The national model can be
+used to simulate example population trajectories, and combined with a
+simple observation model and the Bayesian population model to show how
+monitoring requirements depend on landscape condition. Finally,
+caribouMetrics contains an implementation of [Hornseth and Rempel’s
+(2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou
+resource selection model described in [Dyson et
+al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Model
+implementation is intended to be modular and flexible, allowing reuse of
+components in a variety of contexts including projections of the
+cumulative effects of disturbance and climate change [(e.g. Stewart et
+al. 2023)](https://doi.org/10.1002/eap.2816) and a [Shiny
+app](https://landscitech.github.io/BayesianCaribouDemographicProjection/)
+designed to allow allow exploration of user-specified monitoring and
+disturbance scenarios.
 
 ## Installation
 
@@ -50,14 +55,6 @@ package.
 
 ``` r
 library(caribouMetrics)
-#> The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
-#> which was just loaded, will retire in October 2023.
-#> Please refer to R-spatial evolution reports for details, especially
-#> https://r-spatial.org/r/2023/05/15/evolution4.html.
-#> It may be desirable to make the sf package available;
-#> package maintainers should consider adding sf to Suggests:.
-#> The sp package is now running under evolution status 2
-#>      (status 2 uses the sf package in place of rgdal)
 
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
@@ -94,17 +91,19 @@ demRates <- demographicRates(covTable = disturb_tbl,
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.86675 1.732936   40.45363        0.5868729   0 0.8479506 0.05405621
+#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05848277
 #>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7487979 0.9302797 0.1816836 0.09490028 0.06382286 0.3828127
+#> 1 0.7382298 0.9355214 0.1813372 0.08566332 0.05688173 0.3502751
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
 popGrow
-#>     N0    lambda   N       R_t       S_t n_recruits surviving_adFemales
-#> 1 2000 0.9200186 376 0.1803221 0.8396411         22                 354
+#>     N0    lambda   N       R_t        X_t       S_t n_recruits
+#> 1 2000 0.9273454 440 0.1822609 0.09113044 0.8359903         27
+#>   surviving_adFemales
+#> 1                 413
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(
@@ -134,14 +133,12 @@ ipmTbls <- getOutputTables(ipm, paramTable = simObs$paramTable,
 
 plotRes(ipmTbls, c("Recruitment", "Adult female survival"))
 #> $Recruitment
-#> Warning: Removed 10 rows containing missing values (`geom_point()`).
 ```
 
 <img src="man/figures/README-example-2.png" width="100%" />
 
     #> 
     #> $`Adult female survival`
-    #> Warning: Removed 11 rows containing missing values (`geom_point()`).
 
 <img src="man/figures/README-example-3.png" width="100%" />
 
@@ -168,6 +165,14 @@ carHab1 <- caribouHabitat(
 
 # plot the results
 plot(carHab1)
+#> The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
+#> which was just loaded, will retire in October 2023.
+#> Please refer to R-spatial evolution reports for details, especially
+#> https://r-spatial.org/r/2023/05/15/evolution4.html.
+#> It may be desirable to make the sf package available;
+#> package maintainers should consider adding sf to Suggests:.
+#> The sp package is now running under evolution status 2
+#>      (status 2 uses the sf package in place of rgdal)
 ```
 
 <img src="man/figures/README-example-4.png" width="100%" />
@@ -238,6 +243,13 @@ Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
 linking population dynamics to habitat for a threatened species in
 Canada. Journal of Applied Ecology, 57(7), pp.1314-1327.
 <https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637>
+
+Stewart F.E.C., Micheletti T., Cumming S.G., Barros, C., Chubaty, A. M.,
+Dookie, A. L., Duclos, I., Eddy, I., Haché, S., Hodson, J., Hughes, J.,
+Johnson, C. A., Leblond, M., Schmiegelow, F.K.A., Tremblay, J. A..
+McIntire, E.J.B. (2023) Climate-informed forecasts reveal dramatic local
+habitat shifts and population uncertainty for northern boreal caribou.
+Ecological Applications 33:e2816. <https://doi.org/10.1002/eap.2816>
 
 ## License
 
