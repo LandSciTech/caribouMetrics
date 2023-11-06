@@ -34,19 +34,19 @@ or missing calves."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aj
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
+    </li>
+    <li>
       <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
-    </li>
-    <li>
-      <a href="../articles/UI_help.html">User Interface Help</a>
-    </li>
-    <li>
-      <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
       <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Caribou Demography</a>
+      <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
+    </li>
+    <li>
+      <a href="../articles/UI_help.html">User Interface Help</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -185,8 +185,8 @@ of \(q\), \(u\) and \(z\).</p>
 <span class="r-in"><span>                          u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          approx <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.1323961 1.0283988 1.0864462 1.0566886 1.2341601 1.1212384 0.8806159</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.0019941 1.1521105 1.0212760</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.1042649 1.2121248 1.0735274 1.1110401 1.0088271 1.0723157 0.9679683</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.2104903 0.9421506 0.9700961</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">compositionBiasCorrection</span><span class="op">(</span>w <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>                          q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.6</span><span class="op">)</span>,</span></span>
@@ -196,7 +196,7 @@ of \(q\), \(u\) and \(z\).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       w     m       v    sig2     mu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.04 0.007<span style="text-decoration: underline;">19</span> 0.006<span style="text-decoration: underline;">57</span> 0.040<span style="text-decoration: underline;">7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.06 0.001<span style="text-decoration: underline;">84</span> 0.001<span style="text-decoration: underline;">65</span> 0.052<span style="text-decoration: underline;">9</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

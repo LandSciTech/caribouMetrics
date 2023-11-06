@@ -50,19 +50,19 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/caribouDemography.html">Caribou Demography</a>
+    </li>
+    <li>
       <a href="../articles/BayesianDemographicProjection.html">Bayesian Demographic Projection</a>
-    </li>
-    <li>
-      <a href="../articles/UI_help.html">User Interface Help</a>
-    </li>
-    <li>
-      <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
       <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
     </li>
     <li>
-      <a href="../articles/caribouDemography.html">Caribou Demography</a>
+      <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
+    </li>
+    <li>
+      <a href="../articles/UI_help.html">User Interface Help</a>
     </li>
   </ul>
 </li>
@@ -181,12 +181,12 @@ that they have been assigned to.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefSamples</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       Intercept        Anthro Precision</span></span>
-<span><span class="co">#&gt; [1,] -0.1250359 -0.0008265777  61.81964</span></span>
-<span><span class="co">#&gt; [2,] -0.1361792 -0.0009217985  70.36175</span></span>
-<span><span class="co">#&gt; [3,] -0.1404411 -0.0006471894  53.63107</span></span>
-<span><span class="co">#&gt; [4,] -0.1356364 -0.0007488987  68.96310</span></span>
-<span><span class="co">#&gt; [5,] -0.1296833 -0.0006742052  59.37754</span></span>
-<span><span class="co">#&gt; [6,] -0.1465041 -0.0008136746  66.68810</span></span>
+<span><span class="co">#&gt; [1,] -0.1374443 -0.0008065327  70.89321</span></span>
+<span><span class="co">#&gt; [2,] -0.1441391 -0.0008426321  70.44987</span></span>
+<span><span class="co">#&gt; [3,] -0.1405606 -0.0008891475  54.69013</span></span>
+<span><span class="co">#&gt; [4,] -0.1372666 -0.0005890433  75.78092</span></span>
+<span><span class="co">#&gt; [5,] -0.1421725 -0.0007850893  65.63737</span></span>
+<span><span class="co">#&gt; [6,] -0.1404141 -0.0008960110  61.14956</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefValues</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Intercept Anthro Precision</span></span>
 <span><span class="co">#&gt; 1:    -0.142 -8e-04  63.43724</span></span>
@@ -194,7 +194,7 @@ that they have been assigned to.</p>
 <span><span class="co">#&gt;      Intercept      Anthro Precision</span></span>
 <span><span class="co">#&gt; 1: 0.007908163 0.000127551  8.272731</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">quantiles</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9255010 0.2877255 0.4723948 0.3181864 0.8055611 0.3581663</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.6323146 0.7160822 0.3258016 0.6113727 0.9274048 0.9159820</span></span></code></pre></div>
 <p>Next we calculate sample demographic rates given sampled model
 coefficients and disturbance metrics for our example landscape, setting
 <code>returnSample = TRUE</code> so that the results returned contain a
