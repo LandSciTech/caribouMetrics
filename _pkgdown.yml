@@ -27,3 +27,14 @@ reference:
       - has_concept("habitat")
       - plot,CaribouHabitat,ANY-method
 
+articles:
+  - title: Articles
+    navbar: ~
+    contents:
+      - caribouDemography
+      - BayesianDemographicProjection
+      - Using_disturbanceMetric
+      - Using_caribouHabitat
+      - UI_help
+      
+
