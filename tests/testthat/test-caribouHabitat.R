@@ -144,6 +144,31 @@ data_list_linF <- caribouHabitat(
   winArea = 500
 )
 
+test_that("saveOutput works",{
+  f <- file.path(tempdir(), "test.tif")
+  caribouHabitat(landCover = landCoverD, esker = eskerDshp, natDist = natDistD, 
+                 anthroDist = anthroDistD, 
+                 linFeat = linFeatDras, 
+                 projectPoly = projectPolyD,
+                 caribouRange = "Churchill", 
+                 winArea = 500, 
+                 saveOutput = f) %>% 
+    expect_s4_class("CaribouHabitat")
+  unlink(f)
+  
+  f <- file.path(tempdir(), "test.asc")
+  caribouHabitat(landCover = landCoverD, esker = eskerDshp, natDist = natDistD, 
+                 anthroDist = anthroDistD, 
+                 linFeat = linFeatDras, 
+                 projectPoly = projectPolyD,
+                 caribouRange = "Churchill", 
+                 winArea = 500, 
+                 saveOutput = f) %>% 
+    expect_s4_class("CaribouHabitat")
+  unlink(f)
+  
+})
+
 
 test_that("raster road input works as expected", {
   data_list_linFrdRast1 <- caribouHabitat(

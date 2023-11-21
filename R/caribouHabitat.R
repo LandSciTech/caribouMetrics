@@ -287,16 +287,23 @@ caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL,
   
   if(!is.null(dots$saveOutput)){
     
-    byLayer <- grepl("\\.asc$|\\.sdat$|\\.rst$", dots$saveOutput)
-    if(!byLayer && !grepl("\\.grd", dots$saveOutput)){
-      warning("Saving output to ", dots$saveOutput, 
-              ". Layernames will not be preserved.",
-              " Use .grd format to preserve names")
+    lyrPats <- "\\.asc$|\\.sdat$|\\.rst$"
+    byLayer <- grepl(lyrPats, dots$saveOutput)
+    if(byLayer){
+      ext_save <- regmatches(dots$saveOutput,
+                             regexpr(lyrPats, dots$saveOutput))
+      for (i in 1:terra::nlyr(x@habitatUse)) {
+        terra::writeRaster(x@habitatUse[[i]], 
+                           filename = paste0(gsub(lyrPats, "", dots$saveOutput),
+                                             "_",
+                                             names(x@habitatUse[[i]]), ext_save
+                                             ), 
+                           overwrite = TRUE)
+      }
+    } else {
+      terra::writeRaster(x@habitatUse, filename = dots$saveOutput, 
+                         overwrite = TRUE)
     }
-    
-    terra::writeRaster(x@habitatUse, filename = dots$saveOutput, 
-                        overwrite = TRUE, bylayer = byLayer, 
-                        suffix = "names")
   }
   
   return(x)

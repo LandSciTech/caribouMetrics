@@ -158,16 +158,23 @@ disturbanceMetrics <- function(landCover = NULL, linFeat = NULL,
 
     if(!is.null(dots$saveOutput)){
       
-      byLayer <- grepl("\\.asc$|\\.sdat$|\\.rst$", dots$saveOutput)
-      if(!byLayer && !grepl("\\.grd", dots$saveOutput)){
-        warning("Saving output to ", dots$saveOutput, 
-                ". Layernames will not be preserved.",
-                " Use .grd format to preserve names")
+      lyrPats <- "\\.asc$|\\.sdat$|\\.rst$"
+      byLayer <- grepl(lyrPats, dots$saveOutput)
+      if(byLayer){
+        ext_save <- regmatches(dots$saveOutput,
+                               regexpr(lyrPats, dots$saveOutput))
+        for (i in 1:terra::nlyr(x@processedData)) {
+          terra::writeRaster(x@processedData[[i]], 
+                             filename = paste0(gsub(lyrPats, "", dots$saveOutput),
+                                               "_",
+                                               names(x@processedData[[i]]), ext_save
+                             ), 
+                             overwrite = TRUE)
+        }
+      } else {
+        terra::writeRaster(x@processedData, filename = dots$saveOutput, 
+                           overwrite = TRUE)
       }
- 
-      terra::writeRaster(x@processedData, filename = dots$saveOutput, 
-                          overwrite = TRUE, bylayer = byLayer, 
-                          suffix = "names")
     }
     
     return(x)
