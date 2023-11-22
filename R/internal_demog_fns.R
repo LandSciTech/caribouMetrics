@@ -225,7 +225,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   # topUp=T
   # for simplicity, ignore variation in survival probability among months
   
-  zeroPartIn = subset(freqStartsByYear,numStarts==0)
+  zeroPartIn = subset(freqStartsByYear, freqStartsByYear$numStarts==0)
   if(nrow(zeroPartIn)>0){
     zeroPart = data.frame(id=1,Year=zeroPartIn$Year,event=NA,enter=NA,exit=NA)
   }
