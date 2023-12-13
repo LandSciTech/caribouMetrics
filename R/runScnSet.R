@@ -58,7 +58,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
       survData = oo$simSurvObs, ageRatio = oo$ageRatioOut,
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = minYr, endYear = maxYr,
-      N0 = oo$exData$N[1], survAnalysisMethod = survAnalysisMethod,
+      N0 = cs$N0, survAnalysisMethod = survAnalysisMethod,
       adjustR = cs$adjustR, assessmentYrs = cs$assessmentYrs, Niter = Niter, 
       Nburn = Nburn
     ))
