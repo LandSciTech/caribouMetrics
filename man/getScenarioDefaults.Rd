@@ -16,6 +16,7 @@ getScenarioDefaults(
   sQuantile = 0.5,
   projYears = 35,
   obsYears = 15,
+  preYears = 0,
   N0 = 1000,
   adjustR = TRUE,
   assessmentYrs = 3,
@@ -58,6 +59,8 @@ the projection period}
 \item{projYears}{Number of years of projections}
 
 \item{obsYears}{Number of years of observations}
+
+\item{preYears}{Number of years before monitoring begins}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
 more sample populations.}

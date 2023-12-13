@@ -17,6 +17,7 @@
 #' @param sQuantile number in 0, 1. Survival quantile
 #' @param projYears Number of years of projections
 #' @param obsYears Number of years of observations
+#' @param preYears Number of years before monitoring begins
 #' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.
 #' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.
 #' @param uMin number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.
@@ -49,7 +50,8 @@
 getScenarioDefaults <- function(paramTable = NULL,
                          iFire = 0, iAnthro = 0, obsAnthroSlope = 2, projAnthroSlope = 2,
                          rSlopeMod = 1, sSlopeMod = 1,
-                         rQuantile = 0.5, sQuantile = 0.5, projYears = 35, obsYears = 15, N0 = 1000,
+                         rQuantile = 0.5, sQuantile = 0.5, projYears = 35, 
+                         obsYears = 15, preYears=0, N0 = 1000,
                          adjustR = TRUE, assessmentYrs = 3,qMin=0,qMax =0.6, 
                          uMin = 0, uMax = 0.2, zMin = 0, zMax = 0.2, cowMult = 6,
                          collarInterval = NA, cowCount = NA, 
@@ -90,7 +92,7 @@ getScenarioDefaults <- function(paramTable = NULL,
   }
 
   if (!is.element("startYear", names(paramTable))) {
-    paramTable$startYear <- paramTable$curYear - paramTable$obsYears + 1
+    paramTable$startYear <- paramTable$curYear - paramTable$obsYears - paramTable$preYears + 1
   }
   
   return(paramTable)

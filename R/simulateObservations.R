@@ -90,11 +90,11 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   
   if(!is.null(cowCounts)){
     testTable(cowCounts, c("Year", "Count", "Class"),
-              req_vals = list(Year = paramTable$startYear:(paramTable$startYear+paramTable$obsYears-1)),
+              req_vals = list(Year = (paramTable$startYear+paramTable$preYears):(paramTable$startYear+paramTable$preYears+paramTable$obsYears-1)),
               acc_vals = list(Class = "cow"))
   } else if(!is.null(paramTable$cowCount)){
-    cowCounts <- data.frame(Year = paramTable$startYear:
-                              (paramTable$startYear+paramTable$obsYears-1),
+    cowCounts <- data.frame(Year = (paramTable$startYear+paramTable$preYears):
+                              (paramTable$startYear+paramTable$preYears+paramTable$obsYears-1),
                             Count = paramTable$cowCount,
                             Class = "cow")
   } else if(is.null(paramTable$cowCount) & is.null(paramTable$cowMult)){
@@ -104,10 +104,10 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   
   if(!is.null(freqStartsByYear)){
     testTable(freqStartsByYear, c("Year", "numStarts"),
-              acc_vals = list(Year = paramTable$startYear:(paramTable$startYear+paramTable$obsYears-1)))
+              acc_vals = list(Year = (paramTable$startYear+paramTable$preYears):(paramTable$startYear+paramTable$preYears+paramTable$obsYears-1)))
   } else if(!is.null(paramTable$collarCount)){
-    freqStartsByYear <- data.frame(Year = paramTable$startYear:
-                                     (paramTable$startYear+paramTable$obsYears-1),
+    freqStartsByYear <- data.frame(Year = (paramTable$startYear+paramTable$preYears):
+                                     (paramTable$startYear+paramTable$preYears+paramTable$obsYears-1),
                                    numStarts = paramTable$collarCount)
   }else {
     stop("One of freqStartsByYear or paramTable$collarCount must be provided",
@@ -117,9 +117,9 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   # Simulate covariate table
   if (is.null(distScen)) {
     covariates <- simCovariates(paramTable$iAnthro, paramTable$iFire, 
-                                paramTable$obsYears + paramTable$projYears, 
+                                paramTable$preYears+paramTable$obsYears + paramTable$projYears, 
                                 paramTable$obsAnthroSlope, paramTable$projAnthroSlope, 
-                                paramTable$obsYears + 1)
+                                paramTable$obsYears + paramTable$preYears + 1)
     simDisturbance <- covariates
     simDisturbance$Year <- paramTable$startYear + simDisturbance$time - 1
 
@@ -132,14 +132,14 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   } else {
     simDisturbance <- distScen
     simDisturbance$time <- simDisturbance$Year - paramTable$startYear + 1
-    simDisturbance <- filter(simDisturbance, .data$Year <= (paramTable$startYear + paramTable$obsYears - 1 + paramTable$projYears) &
+    simDisturbance <- filter(simDisturbance, .data$Year <= (paramTable$startYear + paramTable$preYears + paramTable$obsYears - 1 + paramTable$projYears) &
                                .data$Year >= paramTable$startYear)
   }
 
   # simulate true population trajectory
   suppressMessages(
     popMetrics <- simTrajectory(
-      numYears = paramTable$obsYears + paramTable$projYears, 
+      numYears = paramTable$preYears + paramTable$obsYears + paramTable$projYears, 
       covariates = simDisturbance,
       popGrowthTable = populationGrowthTable,
       survivalModelNumber = survivalModelNumber,
@@ -171,15 +171,17 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
                                        names_from = "MetricTypeID",
                                        values_from = "Amount")
   popMetricsWide$Year <- paramTable$startYear + popMetricsWide$Timestep - 1
+  
+  popMetricsWide <- subset(popMetricsWide,popMetricsWide$Timestep > paramTable$preYears)
 
-  exData <- subset(popMetricsWide, (popMetricsWide$Timestep <= paramTable$obsYears))
+  exData <- subset(popMetricsWide, popMetricsWide$Timestep <= (paramTable$obsYears+paramTable$preYears))
 
   # Now apply observation process model to get simulated calf:cow and survival data.
   # Use sample sizes in example input data e.g. Eaker
 
   # reduce sim data tables to length of observations prior to max year
-  minYr <- paramTable$startYear
-  maxYr <- paramTable$startYear + paramTable$obsYears + paramTable$projYears - 1
+  minYr <- paramTable$startYear+paramTable$preYears
+  maxYr <- paramTable$startYear + paramTable$preYears + paramTable$obsYears + paramTable$projYears - 1
 
   # simulate survival data from survival probability.
   if (is.element("collarInterval", names(paramTable)) & is.null(freqStartsByYearIn)) {
@@ -230,6 +232,10 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
               file.path(writeFilesDir, paste0("simSurvData", paramTable$label, ".csv")),
               row.names = FALSE)
   }
+  
+  #cut simDisturbance table to start at first obs year
+  simDisturbance = subset(simDisturbance,Year>=minYr)
+  
   return(list(minYr = minYr, maxYr = maxYr, simDisturbance = simDisturbance,
               simSurvObs = simSurvObs, ageRatioOut = ageRatioOut,
               exData = popMetricsWide, paramTable = paramTable))
