@@ -247,7 +247,7 @@ population as disturbance increases over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:12] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpK4qrkk/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpdDfSpv/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -265,11 +265,11 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;  $ rr.summary.all:'data.frame':  175 obs. of  13 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year            : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
 <span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adjusted recruitment" "Adult female survival" "Recruitment" "Female population size" ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.22 0.881 0.414 1000 1.073 ...</span></span>
-<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.021 0.021 0.029 0 0.035 ...</span></span>
-<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.177 0.828 0.367 1000 0.992 0.835 0.148 992 0.313 0.975 ...</span></span>
-<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.253 0.908 0.478 1000 1.122 ...</span></span>
-<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.98 NA NA NA NA 0.95 ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.221 0.889 0.42 1000 1.086 ...</span></span>
+<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.022 0.021 0.03 0 0.038 ...</span></span>
+<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.183 0.849 0.366 1000 1.003 ...</span></span>
+<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.273 0.917 0.492 1000 1.152 ...</span></span>
+<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.99 NA NA NA NA 0.99 ...</span></span>
 <span><span class="co">#&gt;   ..$ X               : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ Anthro          : int [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;   ..$ fire_excl_anthro: num [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
@@ -439,12 +439,12 @@ parameter.</p>
 <span><span class="va">scn_params</span></span>
 <span><span class="co">#&gt;   iFire iAnthro obsAnthroSlope projAnthroSlope rSlopeMod sSlopeMod rQuantile</span></span>
 <span><span class="co">#&gt; 1     0       0              2               3         1         1       0.5</span></span>
-<span><span class="co">#&gt;   sQuantile projYears obsYears   N0 adjustR assessmentYrs qMin qMax uMin uMax</span></span>
-<span><span class="co">#&gt; 1       0.5        20       20 1000    TRUE             3    0  0.6    0  0.2</span></span>
-<span><span class="co">#&gt;   zMin zMax cowMult collarInterval collarCount curYear ID</span></span>
-<span><span class="co">#&gt; 1    0  0.2       2              1          30    2023  1</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                                                                                                         label</span></span>
-<span><span class="co">#&gt; 1 ID1_curYear2023_collarCount30_collarInterval1_cowMult2_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_obsYears20_projYears20_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope3_obsAnthroSlope2_iAnthro0_iFire0_</span></span>
+<span><span class="co">#&gt;   sQuantile projYears obsYears preYears   N0 adjustR assessmentYrs qMin qMax</span></span>
+<span><span class="co">#&gt; 1       0.5        20       20        0 1000    TRUE             3    0  0.6</span></span>
+<span><span class="co">#&gt;   uMin uMax zMin zMax cowMult collarInterval collarCount curYear ID</span></span>
+<span><span class="co">#&gt; 1    0  0.2    0  0.2       2              1          30    2023  1</span></span>
+<span><span class="co">#&gt;                                                                                                                                                                                                                                                                   label</span></span>
+<span><span class="co">#&gt; 1 ID1_curYear2023_collarCount30_collarInterval1_cowMult2_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_preYears0_obsYears20_projYears20_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope3_obsAnthroSlope2_iAnthro0_iFire0_</span></span>
 <span><span class="co">#&gt;   startYear</span></span>
 <span><span class="co">#&gt; 1      2004</span></span>
 <span></span>
@@ -532,18 +532,13 @@ see how well our monitoring program captured the true population.</p>
 <span>  <span class="va">scns</span>, <span class="va">eParsIn</span>, <span class="va">simBig</span>, getKSDists <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>  Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
@@ -553,7 +548,9 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
+<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
+<span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>

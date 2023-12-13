@@ -181,12 +181,12 @@ that they have been assigned to.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefSamples</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       Intercept        Anthro Precision</span></span>
-<span><span class="co">#&gt; [1,] -0.1582325 -0.0006600998  54.61709</span></span>
-<span><span class="co">#&gt; [2,] -0.1474327 -0.0006742173  65.84130</span></span>
-<span><span class="co">#&gt; [3,] -0.1393426 -0.0007142922  73.37673</span></span>
-<span><span class="co">#&gt; [4,] -0.1448895 -0.0008602149  50.29193</span></span>
-<span><span class="co">#&gt; [5,] -0.1544041 -0.0008672853  59.56113</span></span>
-<span><span class="co">#&gt; [6,] -0.1386220 -0.0007328248  65.23710</span></span>
+<span><span class="co">#&gt; [1,] -0.1490161 -0.0006936105  51.36374</span></span>
+<span><span class="co">#&gt; [2,] -0.1365586 -0.0008398312  68.73176</span></span>
+<span><span class="co">#&gt; [3,] -0.1392874 -0.0007546888  38.52053</span></span>
+<span><span class="co">#&gt; [4,] -0.1490781 -0.0007665565  65.92679</span></span>
+<span><span class="co">#&gt; [5,] -0.1327326 -0.0006393248  63.19673</span></span>
+<span><span class="co">#&gt; [6,] -0.1483749 -0.0009481206  52.70709</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefValues</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    Intercept Anthro Precision</span></span>
 <span><span class="co">#&gt; 1:    -0.142 -8e-04  63.43724</span></span>
@@ -194,7 +194,7 @@ that they have been assigned to.</p>
 <span><span class="co">#&gt;      Intercept      Anthro Precision</span></span>
 <span><span class="co">#&gt; 1: 0.007908163 0.000127551  8.272731</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">quantiles</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.1696894 0.1316132 0.6342184 0.9426353 0.5047595 0.6551603</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.89884770 0.91978958 0.46477956 0.07640281 0.05165331 0.82840681</span></span></code></pre></div>
 <p>Next we calculate sample demographic rates given sampled model
 coefficients and disturbance metrics for our example landscape, setting
 <code>returnSample = TRUE</code> so that the results returned contain a
@@ -328,7 +328,9 @@ beta distribution as disturbance changes.</p>
 <span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre>
-<p><img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
+<p><img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"></p>
+<pre><code><span><span class="co">#&gt; Warning: Removed 2 rows containing missing values (`geom_line()`).</span></span></code></pre>
+<p><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
 </div>
 </div>
 <div class="section level2">
@@ -341,7 +343,7 @@ landscape where the anthropogenic disturbance footprint is increasing by
 <code>K = FALSE</code>, and <code>probOption = "continuous"</code> to
 use a simpler model without interannual variability, density dependence,
 or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816" class="external-link">Stewart et al. 2023</a>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">numTimesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">stepLength</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
