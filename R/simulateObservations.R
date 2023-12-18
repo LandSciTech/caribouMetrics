@@ -211,8 +211,8 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
       cowCounts$Class <- "cow"
       cowCounts$Count <- paramTable$cowMult * cowCounts$Count
     } else {
-      cowCounts <- data.frame(Year = unique(simSurvObs$Year), 
-                              Count = NA, 
+      cowCounts <- data.frame(Year = unique(freqStartsByYear$Year), 
+                              Count = 0, 
                               Class = "cow")
     }
   }
