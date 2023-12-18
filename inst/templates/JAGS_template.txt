@@ -51,7 +51,6 @@ for(k in 2:nYears){
 	
 	#NOTE truncate distribution to ensure intercept between 0 and 0.99. See thinkingAboutPriors.R
 	l.Saf ~ dnorm(l.Saf.Prior1,pow(l.Saf.Prior2,-2)) T(-10,-0.01)
-	#NOTE: see addInterannualVar fn in caribouMetrics for logic. But note shape of interannual variation distribution is different because using normally distributed random effect.
 	sig.Saf~dnorm(exp(l.Saf.Prior1)*sig.Saf.Prior1,pow(sig.Saf.Prior2,-2))
 	tau.Saf<-pow(sig.Saf, -2)
 	var.Saf<-1/tau.Saf

@@ -202,7 +202,7 @@ simCalfCowRatios <- function(cowCounts, minYr, exData) {
   ageRatioOut <- merge(ageRatioOut,
                        subset(exData, select = c("Year", "recruitment","N")))
   
-  if(sum(ageRatioOut$cow>ageRatioOut$N)){
+  if(sum(ageRatioOut$cow>ageRatioOut$N,na.rm=T)){
     warning("The expected number of cows in composition survey exceeds population size. Adjusting cows in survey for consistency.")
   }
   
