@@ -1,13 +1,13 @@
 #' Run the Bayesian population model for multiple parameter sets
 #'
 #' Define scenarios in a table and [simulateObservations()], run the
-#' [caribouBayesianIPM()] model and [getOutputTables()] for each scenario.
+#' [caribouBayesianPM()] model and [getOutputTables()] for each scenario.
 #'
 #' @param scns data.frame. Parameters for the simulations. See
 #'   [getScenarioDefaults()] for details.
 #' @param ePars list. Additional parameters passed on to
 #'   [simulateObservations()]
-#' @inheritParams caribouBayesianIPM
+#' @inheritParams caribouBayesianPM
 #' @inheritParams getOutputTables
 #' @param printProgress logical. Should the scenario number and parameters be
 #'   printed at each step?
@@ -35,9 +35,9 @@
 
 runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeier",
                       getKSDists = TRUE, printProgress = FALSE, 
-                      Niter = formals(caribouBayesianIPM)$Niter,
-                      Nburn = formals(caribouBayesianIPM)$Nburn) {
-  # ePars=eParsIn;survAnalysisMethod="Exponential";simNational=simBig;getKSDists=T;printProgress=F;Niter = formals(caribouBayesianIPM)$Niter;Nburn = formals(caribouBayesianIPM)$Nburn
+                      Niter = formals(caribouBayesianPM)$Niter,
+                      Nburn = formals(caribouBayesianPM)$Nburn) {
+  # ePars=eParsIn;survAnalysisMethod="Exponential";simNational=simBig;getKSDists=T;printProgress=F;Niter = formals(caribouBayesianPM)$Niter;Nburn = formals(caribouBayesianPM)$Nburn
   scns <- getScenarioDefaults(scns)
   errorLog <- list()
   for (p in 1:nrow(scns)) {
@@ -54,7 +54,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
     betaPriors <- getPriors(cs)
     minYr <- min(oo$exData$Year)
     maxYr <- max(oo$simDisturbance$Year)
-    out <- try(caribouBayesianIPM(
+    out <- try(caribouBayesianPM(
       survData = oo$simSurvObs, ageRatio = oo$ageRatioOut,
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = minYr, endYear = maxYr,

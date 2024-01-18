@@ -1,5 +1,5 @@
 # default input data
-mod <- caribouBayesianIPM(Nchains = 1, Niter = 100, Nburn = 10,
+mod <- caribouBayesianPM(Nchains = 1, Niter = 100, Nburn = 10,
                           Nthin = 2)
 
 

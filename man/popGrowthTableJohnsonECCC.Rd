@@ -23,7 +23,7 @@ of Applied Ecology, 57(7), pp.1314-1327.
 }
 \seealso{
 Caribou demography functions:
-\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},

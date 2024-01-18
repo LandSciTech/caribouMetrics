@@ -33,7 +33,7 @@
 #'
 #' simO <- simulateObservations(scns)
 #'
-#' out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+#' out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
 #'                           disturbance = simO$simDisturbance,
 #'                           startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
 #'                           Nthin = 2)

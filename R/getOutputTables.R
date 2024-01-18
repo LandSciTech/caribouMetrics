@@ -5,8 +5,8 @@
 #' model results and national model results.
 #'
 #' @param caribouBayesDemogMod caribou Bayesian demographic model results
-#'   produced by calling [caribouBayesianIPM()]
-#' @inheritParams caribouBayesianIPM
+#'   produced by calling [caribouBayesianPM()]
+#' @inheritParams caribouBayesianPM
 #' @param paramTable data.frame. Optional. Scenario parameters see
 #'   [simulateObservations()]
 #' @param exData data.frame. Optional. Output of [simulateObservations()] that
@@ -37,7 +37,7 @@
 #'
 #' simO <- simulateObservations(scns)
 #'
-#' out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+#' out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
 #'                           disturbance = simO$simDisturbance,
 #'                           Nchains = 1, Niter = 100, Nburn = 10,
 #'                           Nthin = 2)

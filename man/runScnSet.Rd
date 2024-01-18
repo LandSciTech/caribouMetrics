@@ -11,8 +11,8 @@ runScnSet(
   survAnalysisMethod = "KaplanMeier",
   getKSDists = TRUE,
   printProgress = FALSE,
-  Niter = formals(caribouBayesianIPM)$Niter,
-  Nburn = formals(caribouBayesianIPM)$Nburn
+  Niter = formals(caribouBayesianPM)$Niter,
+  Nburn = formals(caribouBayesianPM)$Nburn
 )
 }
 \arguments{
@@ -44,7 +44,7 @@ failed to run.
 }
 \description{
 Define scenarios in a table and \code{\link[=simulateObservations]{simulateObservations()}}, run the
-\code{\link[=caribouBayesianIPM]{caribouBayesianIPM()}} model and \code{\link[=getOutputTables]{getOutputTables()}} for each scenario.
+\code{\link[=caribouBayesianPM]{caribouBayesianPM()}} model and \code{\link[=getOutputTables]{getOutputTables()}} for each scenario.
 }
 \examples{
 scns <- expand.grid(
@@ -61,7 +61,7 @@ scResults <- runScnSet(scns, eParsIn, getSimsNational(), getKSDists = FALSE,
 }
 \seealso{
 Caribou demography functions:
-\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},

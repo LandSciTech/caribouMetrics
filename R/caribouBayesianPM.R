@@ -61,7 +61,7 @@
 #'
 #' @examples
 #' # Using observed survival, recruitment and disturbance data
-#' mod <- caribouBayesianIPM(
+#' mod <- caribouBayesianPM(
 #'   survData = system.file("extdata/simSurvData.csv",
 #'                          package = "caribouMetrics"),
 #'   ageRatio = system.file("extdata/simAgeRatio.csv",
@@ -79,12 +79,12 @@
 #'
 #' simO <- simulateObservations(scns)
 #'
-#' out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+#' out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
 #'                           disturbance = simO$simDisturbance,
 #'                           startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
 #'                           Nthin = 2)
 
-caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
+caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
                                               package = "caribouMetrics"),
                        ageRatio = system.file("extdata/simAgeRatio.csv",
                                                    package = "caribouMetrics"),

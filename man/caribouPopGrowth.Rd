@@ -148,7 +148,7 @@ Applications, 33(3), p.e2816. \url{https://doi.org/10.1002/eap.2816}
 }
 \seealso{
 Caribou demography functions:
-\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouBayesianPM}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},

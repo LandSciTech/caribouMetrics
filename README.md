@@ -118,7 +118,7 @@ simObs <- simulateObservations(params, printPlot = TRUE)
 
 ``` r
 
-ipm <- caribouBayesianIPM(simObs$simSurvObs, simObs$ageRatioOut, 
+ipm <- caribouBayesianPM(simObs$simSurvObs, simObs$ageRatioOut, 
                           simObs$simDisturbance,
                           # only set to speed up vignette. Normally keep defaults.
                           Niter = 150, Nburn = 100)

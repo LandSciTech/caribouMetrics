@@ -97,7 +97,7 @@ compositionBiasCorrection(w = 6,
 }
 \seealso{
 Caribou demography functions:
-\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},

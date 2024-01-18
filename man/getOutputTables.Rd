@@ -16,7 +16,7 @@ getOutputTables(
 }
 \arguments{
 \item{caribouBayesDemogMod}{caribou Bayesian demographic model results
-produced by calling \code{\link[=caribouBayesianIPM]{caribouBayesianIPM()}}}
+produced by calling \code{\link[=caribouBayesianPM]{caribouBayesianPM()}}}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
@@ -59,7 +59,7 @@ scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 
 simO <- simulateObservations(scns)
 
-out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
                           disturbance = simO$simDisturbance,
                           Nchains = 1, Niter = 100, Nburn = 10,
                           Nthin = 2)
@@ -69,7 +69,7 @@ getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
 }
 \seealso{
 Caribou demography functions:
-\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},

@@ -101,7 +101,7 @@ simO <- simulateObservations(scns)
 }
 \seealso{
 Caribou demography functions:
-\code{\link{caribouBayesianIPM}()},
+\code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},

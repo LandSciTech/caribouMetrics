@@ -1,11 +1,11 @@
 #' Tabulate results from caribou Bayesian model
 #'
 #' Create a summary table for each population parameter modelled by
-#' [caribouBayesianIPM()]
+#' [caribouBayesianPM()]
 #'
 #'
 #' @param rrSurvMod rjags model object. Produced by
-#'   [caribouBayesianIPM()$result]
+#'   [caribouBayesianPM()$result]
 #' @param startYear integer. Start year of the simulation
 #' @param endYear integer. Start year of the simulation
 #' @param doSummary logical. Should the results be summarized by year (TRUE) or
