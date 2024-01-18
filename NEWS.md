@@ -1,3 +1,13 @@
+# caribouMetrics 0.3.2
+**Breaking changes**
+* Changed function name:
+  - caribouBayesianIPM -> caribouBayesianPM
+
+* Added composition bias
+* allow simulated trajectory to start before monitoring to allow fair comparisons. 
+* Fix some edge case errors
+* Fix saving in caribouHabitat using terra
+
 # caribouMetrics 0.3.1
 **Breaking changes**
 Changed argument names in `getPriors()`:
