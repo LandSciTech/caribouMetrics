@@ -116,7 +116,8 @@ integrates prior information from Johnson et al.’s (2020) national
 analysis of demographic-disturbance relationships with available local
 demographic data to project population growth. In addition, methods are
 provided for simulating local population dynamics and monitoring
-programs.</p>
+programs. These tools are also available through a shiny app described
+<a href="#Use-the-Bayesian-demographic-projection-app">below</a>.</p>
 <p>Boreal caribou monitoring programs typically involve marking caribou
 with telemetry GPS/VHF collars which are used to monitor caribou over
 time and detect the death of marked animals. This data is then used to
@@ -126,11 +127,11 @@ caribou to estimate the ratio of cows:calves in the group. Because this
 estimate is based on more than just the sample of collared cows, the
 sample size for recruitment estimates is typically larger than for
 survival.</p>
-<div class="section level2">
-<h2 id="integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model">Integration of local demographic data and national
+<div class="section level3">
+<h3 id="integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model">Integration of local demographic data and national
 disturbance-demographic relationships in a Bayesian population
 model<a class="anchor" aria-label="anchor" href="#integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model"></a>
-</h2>
+</h3>
 <p>Following Eacker et al. (2019), the observed number of calves <span class="math inline">\(\hat{J}_t\)</span> is a binomially distributed
 function of the observed number of adult female caribou <span class="math inline">\(\hat{W}_t\)</span> and the estimated recruitment
 rate <span class="math inline">\(R_t\)</span>: <span class="math display">\[\hat{J}_t \sim
@@ -193,9 +194,9 @@ distributions so that the 95% prior prediction intervals for survival
 and recruitment from the Bayesian model match the range between the 2.5%
 and 97.5% quantiles of 1000 simulated survival and recruitment
 trajectories (see <code><a href="../reference/getPriors.html">getPriors()</a></code>).</p>
-<div class="section level3">
-<h3 id="using-real-observed-data">Using real observed data<a class="anchor" aria-label="anchor" href="#using-real-observed-data"></a>
-</h3>
+<div class="section level4">
+<h4 id="using-real-observed-data">Using real observed data<a class="anchor" aria-label="anchor" href="#using-real-observed-data"></a>
+</h4>
 <p>caribouMetrics includes example csv files of collar survival and calf
 cow count data as well as disturbance data that can be used as templates
 for the format for observed data.</p>
@@ -247,7 +248,7 @@ population as disturbance increases over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:13] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/Rtmp0v17TR/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/Rtmpmo37Hu/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -265,11 +266,11 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;  $ rr.summary.all:'data.frame':  175 obs. of  13 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year            : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
 <span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adjusted recruitment" "Adult female survival" "Recruitment" "Female population size" ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.217 0.881 0.416 1000 1.07 ...</span></span>
-<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.028 0.027 0.035 0 0.045 ...</span></span>
-<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.172 0.827 0.358 1000 0.988 ...</span></span>
-<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.273 0.924 0.485 1000 1.152 ...</span></span>
-<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.96 NA NA NA NA 0.96 ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.211 0.878 0.406 1000 1.063 ...</span></span>
+<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.021 0.026 0.028 0 0.04 ...</span></span>
+<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.171 0.82 0.361 1000 0.999 ...</span></span>
+<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.25 0.913 0.467 1000 1.136 ...</span></span>
+<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.98 NA NA NA NA 0.94 ...</span></span>
 <span><span class="co">#&gt;   ..$ X               : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ Anthro          : int [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;   ..$ fire_excl_anthro: num [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
@@ -329,9 +330,9 @@ determined by the national model since there was 0% disturbance during
 the observation period.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="simulation-of-local-population-dynamics-and-monitoring">Simulation of local population dynamics and monitoring<a class="anchor" aria-label="anchor" href="#simulation-of-local-population-dynamics-and-monitoring"></a>
-</h2>
+<div class="section level3">
+<h3 id="simulation-of-local-population-dynamics-and-monitoring">Simulation of local population dynamics and monitoring<a class="anchor" aria-label="anchor" href="#simulation-of-local-population-dynamics-and-monitoring"></a>
+</h3>
 <p>To simulate plausible demographic trajectories for example
 populations we used a modified version of Johnson et al’s (2020)
 two-stage demographic model described by Dyson et al. (2022). The true
@@ -384,17 +385,17 @@ quantiles of the Beta error distributions for survival and recruitment.
 The population remains in these quantiles as disturbance changes over
 time, so there is substantial persistent variation in recruitment and
 survival among example populations.</p>
-<div class="section level3">
-<h3 id="observed-survival-of-collared-animals">Observed survival of collared animals<a class="anchor" aria-label="anchor" href="#observed-survival-of-collared-animals"></a>
-</h3>
+<div class="section level4">
+<h4 id="observed-survival-of-collared-animals">Observed survival of collared animals<a class="anchor" aria-label="anchor" href="#observed-survival-of-collared-animals"></a>
+</h4>
 <p>In our simulated populations, mortality risk does not vary over time
 or among individuals, so the observed state (dead or alive) of a
 collared animal <span class="math inline">\(i\)</span> in month <span class="math inline">\(m\)</span> and year <span class="math inline">\(t\)</span> depends on the true survival rate <span class="math inline">\(\dot{S}_t\)</span> as follows: <span class="math display">\[\hat{I}_{i,t,m} \sim
 \text{Bernoulli}(\dot{S}^{1/12}_t\hat{I}_{i,t,m-1}).\]</span></p>
 </div>
-<div class="section level3">
-<h3 id="observed-recruitment-from-composition-surveys">Observed recruitment from composition surveys<a class="anchor" aria-label="anchor" href="#observed-recruitment-from-composition-surveys"></a>
-</h3>
+<div class="section level4">
+<h4 id="observed-recruitment-from-composition-surveys">Observed recruitment from composition surveys<a class="anchor" aria-label="anchor" href="#observed-recruitment-from-composition-surveys"></a>
+</h4>
 <p>The number of cows in the composition survey <span class="math inline">\(\hat{W}_t\)</span> is given by the number of
 collared cows <span class="math inline">\(\hat{T}_t\)</span> and the
 apparent number of adult females per collared female observed in the
@@ -403,9 +404,9 @@ observed calves <span class="math inline">\(\hat{J}_t\)</span> also
 depends on the unadjusted apparent recruitment for the population <span class="math inline">\(\dot{R}_t\)</span>: <span class="math display">\[\hat{J}_t \sim
 \text{Binomial}(\hat{W}_t,\dot{R}_t).\]</span></p>
 </div>
-<div class="section level3">
-<h3 id="using-simulated-observed-data">Using simulated observed data<a class="anchor" aria-label="anchor" href="#using-simulated-observed-data"></a>
-</h3>
+<div class="section level4">
+<h4 id="using-simulated-observed-data">Using simulated observed data<a class="anchor" aria-label="anchor" href="#using-simulated-observed-data"></a>
+</h4>
 <p>To run the simulations we need to supply parameters that determine
 the disturbance scenario, the trajectory of the true population relative
 to the national model mean, and the collaring program details. All these
@@ -508,9 +509,9 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="co">#&gt; $`Population growth rate`</span></span></code></pre>
 <p><img src="BayesianDemographicProjection_files/figure-html/mod-sim-obs-3.png" width="672"></p>
 </div>
-<div class="section level3">
-<h3 id="comparing-many-scenarios">Comparing many scenarios<a class="anchor" aria-label="anchor" href="#comparing-many-scenarios"></a>
-</h3>
+<div class="section level4">
+<h4 id="comparing-many-scenarios">Comparing many scenarios<a class="anchor" aria-label="anchor" href="#comparing-many-scenarios"></a>
+</h4>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eParsIn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">eParsIn</span><span class="op">$</span><span class="va">collarOnTime</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
@@ -533,18 +534,12 @@ see how well our monitoring program captured the true population.</p>
 <span>  <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>  Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
@@ -572,9 +567,9 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="co">#&gt; $`Population growth rate`</span></span></code></pre>
 <p><img src="BayesianDemographicProjection_files/figure-html/many-scns-3.png" width="672"></p>
 </div>
-<div class="section level3">
-<h3 id="modifying-bayesian-model-priors">Modifying Bayesian model priors<a class="anchor" aria-label="anchor" href="#modifying-bayesian-model-priors"></a>
-</h3>
+<div class="section level4">
+<h4 id="modifying-bayesian-model-priors">Modifying Bayesian model priors<a class="anchor" aria-label="anchor" href="#modifying-bayesian-model-priors"></a>
+</h4>
 <p>By default <code><a href="../reference/caribouBayesianIPM.html">caribouBayesianIPM()</a></code> calls
 <code><a href="../reference/getPriors.html">getPriors()</a></code> internally to set the priors for the Bayesian
 model based on the national model and default uncertainty modifiers that
@@ -586,6 +581,7 @@ model is higher then the projections can deviate more from the national
 model if the observed data does. See <code><a href="../reference/getPriors.html">getPriors()</a></code> for
 details.</p>
 </div>
+</div>
 <div class="section level3">
 <h3 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a>
 </h3>
@@ -593,6 +589,21 @@ details.</p>
 This cache can be updated by running
 <code>getSimsNational(forceUpdate = TRUE)</code></p>
 </div>
+<div class="section level2">
+<h2 id="use-the-bayesian-demographic-projection-app">Use the Bayesian demographic projection app<a class="anchor" aria-label="anchor" href="#use-the-bayesian-demographic-projection-app"></a>
+</h2>
+<p>In addition to performing Bayesian demographic projections in R you
+can also use our shiny app to run similar analyses from a Graphical User
+Interface. To launch the app you will first need to install the package
+from GitHub.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"LandSciTech/BayesianCaribouDemographicProjection"</span><span class="op">)</span></span></code></pre></div>
+<p>Then you can call <code><a href="../reference/demographicProjectionApp.html">demographicProjectionApp()</a></code> to launch
+the app in your default browser. The app includes options to modify the
+disturbance scenario, the simulated observations and the model priors
+similar to those described above. Detailed instructions are included on
+the first page.</p>
 </div>
   </div>
 
