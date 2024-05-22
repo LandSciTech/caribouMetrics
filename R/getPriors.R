@@ -182,7 +182,7 @@ getPriors <- function(modList = NULL,
   } else {
     betaPriors <- list(
       l.R.Prior1 = rPriorCoefs$Intercept,
-      l.R.Prior2 = paste0(rPriorStdErrs$Intercept*modList$rIntSEMod, 4),
+      l.R.Prior2 = rount(rPriorStdErrs$Intercept*modList$rIntSEMod, 4),
       beta.Rec.anthro.Prior1 = rPriorCoefs$Anthro,
       beta.Rec.anthro.Prior2 = round(rPriorStdErrs$Anthro*modList$rAnthroSlopeSEMod, 4),
       beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
