@@ -2,6 +2,7 @@
 % Please edit documentation in R/caribouMetrics.R
 \docType{package}
 \name{caribouMetrics}
+\alias{caribouMetrics-package}
 \alias{caribouMetrics}
 \title{caribouMetrics: Models and metrics of boreal caribou responses to forest
 landscapes}
@@ -22,4 +23,32 @@ as described in \href{https://doi.org/10.1101/2022.06.01.494350}{Dyson et al. (2
 is intended to be modular and flexible, allowing reuse of components in a variety of contexts including
 projections of the cumulative effects of disturbance and climate change \href{https://doi.org/10.1002/eap.2816}{(e.g. Stewart et al. 2023)}
 and a \href{https://landscitech.github.io/BayesianCaribouDemographicProjection/}{Shiny app} designed to allow allow exploration of user-specified monitoring and disturbance scenarios.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://landscitech.github.io/caribouMetrics}
+  \item \url{https://github.com/LandSciTech/caribouMetrics}
+}
+
+}
+\author{
+\strong{Maintainer}: Sarah Endicott \email{sarah.endicott@ec.gc.ca} (\href{https://orcid.org/0000-0001-9644-5343}{ORCID})
+
+Authors:
+\itemize{
+  \item Josie Hughes \email{josie.hughes@ec.gc.ca} (\href{https://orcid.org/0000-0001-7875-9015}{ORCID})
+  \item Craig Simpkins \email{simpkinscraig063@gmail.com}
+  \item Tati Michelleti \email{tati.micheletti@gmail.com} (Functions getCoefs and sampleRates are derived from code written by Tati Micheletti) [copyright holder]
+  \item Eliot McIntire \email{eliot.mcintire@canada.ca}
+}
+
+Other contributors:
+\itemize{
+  \item Daniel Eacker (Lead author of paper where code modified in caribouBayesianIPM, plotRes, getKMSurvivalEstimates, and getSumStats was published) [copyright holder]
+  \item Saralees Nadarajah (Author of truncdist package, which function rtrunc and qtrunc were modified from) [copyright holder]
+  \item Frederick Novomestky (Author of truncdist package, which function rtrunc and qtrunc were modified from) [copyright holder]
+  \item Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change [copyright holder]
+}
+
 }
