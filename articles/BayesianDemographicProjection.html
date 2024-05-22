@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bayesian Demographic Projection • caribouMetrics</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -108,8 +108,9 @@
 <span><span class="co">#&gt;     filter, lag</span></span>
 <span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span></span>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>caribouMetrics provides a simple Bayesian population model that
 integrates prior information from Johnson et al.’s (2020) national
@@ -200,7 +201,7 @@ trajectories (see <code><a href="../reference/getPriors.html">getPriors()</a></c
 <p>caribouMetrics includes example csv files of collar survival and calf
 cow count data as well as disturbance data that can be used as templates
 for the format for observed data.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">survObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/simSurvData.csv"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">ageRatioObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/simAgeRatio.csv"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">distObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/simDisturbance.csv"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span><span class="op">)</span></span>
@@ -213,13 +214,13 @@ for the format for observed data.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">n_die</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Number of Collars (line) and deaths (bars)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/load-obs-1.png" width="672"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">ageRatioObs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Year</span>, <span class="va">Count</span>, fill <span class="op">=</span> <span class="va">Class</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/load-obs-2.png" width="672"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">distObs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Year</span>, <span class="va">Anthro</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -233,13 +234,14 @@ future.</p>
 <p>These data sets can be supplied to
 <code><a href="../reference/caribouBayesianIPM.html">caribouBayesianIPM()</a></code>to project the impact on the caribou
 population as disturbance increases over the next 20 years.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod_real</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouBayesianIPM.html">caribouBayesianIPM</a></span><span class="op">(</span>survData <span class="op">=</span> <span class="va">survObs</span>, ageRatio <span class="op">=</span> <span class="va">ageRatioObs</span>, </span>
 <span>                              disturbance <span class="op">=</span> <span class="va">distObs</span>, </span>
 <span>                              <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>                              Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mod_real</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 2</span></span>
 <span><span class="co">#&gt;  $ result:List of 6</span></span>
@@ -248,7 +250,7 @@ population as disturbance increases over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:13] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/Rtmpmo37Hu/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpRxNBLG/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -259,18 +261,18 @@ population as disturbance increases over the next 20 years.</p>
 <p>The returned object contains an <code>rjags</code> object and a list
 with the modified input data. We can get tables summarizing the results
 using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">mod_real</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mod_tbl</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 4</span></span>
 <span><span class="co">#&gt;  $ rr.summary.all:'data.frame':  175 obs. of  13 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year            : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
 <span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adjusted recruitment" "Adult female survival" "Recruitment" "Female population size" ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.211 0.878 0.406 1000 1.063 ...</span></span>
-<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.021 0.026 0.028 0 0.04 ...</span></span>
-<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.171 0.82 0.361 1000 0.999 ...</span></span>
-<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.25 0.913 0.467 1000 1.136 ...</span></span>
-<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.98 NA NA NA NA 0.94 ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.218 0.883 0.415 1000 1.077 ...</span></span>
+<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.023 0.022 0.028 0 0.036 ...</span></span>
+<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.17 0.836 0.36 1000 1.003 ...</span></span>
+<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.258 0.918 0.47 1000 1.138 ...</span></span>
+<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.99 NA NA NA NA 0.97 ...</span></span>
 <span><span class="co">#&gt;   ..$ X               : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ Anthro          : int [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;   ..$ fire_excl_anthro: num [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
@@ -295,17 +297,18 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;   ..$ KSDistance: logi [1:175] NA NA NA NA NA NA ...</span></span>
 <span><span class="co">#&gt;   ..$ KSpvalue  : logi [1:175] NA NA NA NA NA NA ...</span></span></code></pre></div>
 <p>And plot the results with <code><a href="../reference/plotRes.html">plotRes()</a></code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">mod_tbl</span>, <span class="st">"Recruitment"</span>, labFontSize <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
 <p>We can also compare our local observed data to what would be
 projected by the national model with out considering local population
 specific data.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simNational</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSimsNational.html">getSimsNational</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Setting expected survival S_bar to be between l_S and h_S.</span></span>
-<span><span class="co">#&gt; Updating cached national simulations.</span></span>
-<span></span>
+<span><span class="co">#&gt; Updating cached national simulations.</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="va">mod_nat_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">mod_real</span>, </span>
 <span>                               simNational <span class="op">=</span> <span class="va">simNational</span>,</span>
 <span>                               getKSDists <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -422,7 +425,7 @@ the same response to disturbance as the national model and that the
 population demographic rates are close to the national average. See
 <code><a href="../reference/getScenarioDefaults.html">getScenarioDefaults()</a></code> for a detailed description of each
 parameter.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scn_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span></span>
 <span>  <span class="co"># Anthropogenic disturbance increases by 2% per year in observation period and</span></span>
 <span>  <span class="co"># 3% per year in projection period</span></span>
@@ -447,15 +450,16 @@ parameter.</p>
 <span><span class="co">#&gt;                                                                                                                                                                                                                                                                   label</span></span>
 <span><span class="co">#&gt; 1 ID1_curYear2023_collarCount30_collarInterval1_cowMult2_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_preYears0_obsYears20_projYears20_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope3_obsAnthroSlope2_iAnthro0_iFire0_</span></span>
 <span><span class="co">#&gt;   startYear</span></span>
-<span><span class="co">#&gt; 1      2004</span></span>
-<span></span>
+<span><span class="co">#&gt; 1      2004</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="va">sim_obs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulateObservations.html">simulateObservations</a></span><span class="op">(</span></span>
 <span>  <span class="va">scn_params</span>, </span>
 <span>  <span class="co"># collars fall off after 4 years and are deployed in May and fall off in August</span></span>
 <span>  collarNumYears <span class="op">=</span> <span class="fl">4</span>, collarOffTime <span class="op">=</span> <span class="fl">8</span>, collarOnTime <span class="op">=</span> <span class="fl">5</span>, </span>
 <span>  printPlot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/sim-obs-1.png" width="672"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span></span>
 <span><span class="va">sim_obs</span><span class="op">$</span><span class="va">simSurvObs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Year</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -468,13 +472,13 @@ parameter.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">ndeaths</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Number of Collars (line) and deaths (bars)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/sim-obs-2.png" width="672"></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">sim_obs</span><span class="op">$</span><span class="va">ageRatioOut</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Year</span>, <span class="va">Count</span>, fill <span class="op">=</span> <span class="va">Class</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="BayesianDemographicProjection_files/figure-html/sim-obs-3.png" width="672"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">sim_obs</span><span class="op">$</span><span class="va">simDisturbance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Year</span>, <span class="va">Anthro</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -484,14 +488,15 @@ parameter.</p>
 time. This time we supply the expected true population metrics as well
 as the model results to <code><a href="../reference/getOutputTables.html">getOutputTables()</a></code> so that we can
 see how well our monitoring program captured the true population.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouBayesianIPM.html">caribouBayesianIPM</a></span><span class="op">(</span>survData <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">simSurvObs</span>,</span>
 <span>                              ageRatio <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">ageRatioOut</span>, </span>
 <span>                              disturbance <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">simDisturbance</span>, </span>
 <span>                              <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>                              Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="va">mod_sim_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">mod_sim</span>, exData <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">exData</span>, </span>
 <span>                               paramTable <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">paramTable</span>,</span>
 <span>                               simNational <span class="op">=</span> <span class="va">simNational</span>,</span>
@@ -512,7 +517,7 @@ see how well our monitoring program captured the true population.</p>
 <div class="section level4">
 <h4 id="comparing-many-scenarios">Comparing many scenarios<a class="anchor" aria-label="anchor" href="#comparing-many-scenarios"></a>
 </h4>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">eParsIn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">eParsIn</span><span class="op">$</span><span class="va">collarOnTime</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span><span class="va">eParsIn</span><span class="op">$</span><span class="va">collarOffTime</span> <span class="op">&lt;-</span> <span class="fl">12</span></span>
@@ -522,8 +527,9 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="va">adjustR</span> <span class="op">&lt;-</span> <span class="cn">T</span> </span>
 <span></span>
 <span><span class="va">simBig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSimsNational.html">getSimsNational</a></span><span class="op">(</span>adjustR <span class="op">=</span> <span class="va">adjustR</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using saved object</span></span>
-<span></span>
+<span><span class="co">#&gt; Using saved object</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="va">scns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span>
 <span>  obsYears <span class="op">=</span> <span class="fl">10</span>, projYears <span class="op">=</span> <span class="fl">10</span>, collarCount <span class="op">=</span> <span class="fl">100</span>, cowMult <span class="op">=</span> <span class="fl">2</span>, collarInterval <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  assessmentYrs <span class="op">=</span> <span class="fl">1</span>, iAnthro <span class="op">=</span> <span class="fl">0</span>, obsAnthroSlope <span class="op">=</span> <span class="fl">0</span>, projAnthroSlope <span class="op">=</span> <span class="fl">0</span>, </span>
@@ -540,12 +546,6 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
@@ -554,7 +554,17 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
+<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
+<span><span class="co">#&gt; year</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; Warning in caribouBayesianIPM(survData = oo$simSurvObs, ageRatio =</span></span>
+<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
+<span><span class="co">#&gt; year</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">scResults</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span>, <span class="st">"Population growth rate"</span><span class="op">)</span>, </span>
 <span>        facetVars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rQuantile"</span>, <span class="st">"sQuantile"</span><span class="op">)</span><span class="op">)</span></span>
@@ -596,7 +606,7 @@ This cache can be updated by running
 can also use our shiny app to run similar analyses from a Graphical User
 Interface. To launch the app you will first need to install the package
 from GitHub.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"LandSciTech/BayesianCaribouDemographicProjection"</span><span class="op">)</span></span></code></pre></div>
 <p>Then you can call <code><a href="../reference/demographicProjectionApp.html">demographicProjectionApp()</a></code> to launch
@@ -624,7 +634,7 @@ the first page.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

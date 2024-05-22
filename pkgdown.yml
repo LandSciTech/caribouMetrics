@@ -1,13 +1,13 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   BayesianDemographicProjection: BayesianDemographicProjection.html
+  caribouDemography: caribouDemography.html
   UI_help: UI_help.html
   Using_caribouHabitat: Using_caribouHabitat.html
   Using_disturbanceMetric: Using_disturbanceMetric.html
-  caribouDemography: caribouDemography.html
-last_built: 2024-01-18T18:38Z
+last_built: 2024-05-22T20:20Z
 urls:
   reference: https://landscitech.github.io/caribouMetrics/reference
   article: https://landscitech.github.io/caribouMetrics/articles
