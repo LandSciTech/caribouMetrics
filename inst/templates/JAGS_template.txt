@@ -56,7 +56,7 @@ for(k in 2:nYears){
 	var.Saf<-1/tau.Saf
 	var.Saf.real<-(var.Saf * meanAFsurv^2 * (1-meanAFsurv)^2)
 
-	l.R ~ dnorm(beta.Saf.Prior1,pow(beta.Saf.Prior2, -2))
+	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))
 	sig.R~dnorm(exp(l.R.Prior1)*sig.R.Prior1,pow(sig.R.Prior2,-2))
 	tau.R<-pow(sig.R, -2)
 	var.R<-1/tau.R
