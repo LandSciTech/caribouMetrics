@@ -152,16 +152,11 @@ getPriors <- function(modList = NULL,
                                 z=runif(nr,modList$zMin,modList$zMax),approx=T)
   bias.Prior1 = cs$mu
   bias.Prior2 = cs$sig2^0.5
-  
-  #l.R beta distributed. So convert mean and sd to beta parameters
-  mu = rPriorCoefs$Intercept; v = modList$rIntSE^2
-  a = mu*v
-  b = (1-mu)*v
-      
+
   if (returnValues) {
     betaPriors <- list(
-      l.R.Prior1 = a,
-      l.R.Prior2 = b,
+      l.R.Prior1 = rPriorCoefs$Intercept,
+      l.R.Prior2 = modList$rIntSE,
       beta.Rec.anthro.Prior1 = rPriorCoefs$Anthro,
       beta.Rec.anthro.Prior2 = modList$rAnthroSlopeSE,
       beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
