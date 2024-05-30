@@ -19,7 +19,7 @@ for(k in 1:nYears){
 
 #Recruitment
 for(k in 1:nYears){
-		epsilon.R[k]~dnorm(0,tau.R)T(-15,1) #NOTE: by definition, exp(epsilon) can't be bigger than 1
+		epsilon.R[k]~dnorm(0,tau.R)T(-15,0.3) #NOTE: by definition, exp(epsilon) can't be bigger than 1
 		log(R[k]) <- l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire + epsilon.R[k]
 }
 
@@ -54,7 +54,7 @@ for(k in 2:nYears){
 	sig.Saf~dunif(sig.Saf.Prior1,sig.Saf.Prior2)
 	tau.Saf<-pow(sig.Saf, -2)
 
-	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))
+	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))T(-10,-0.01)
 	sig.R~dunif(sig.R.Prior1,sig.R.Prior2)
 	tau.R<-pow(sig.R, -2)
 
