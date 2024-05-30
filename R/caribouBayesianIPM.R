@@ -472,7 +472,7 @@ caribouBayesianIPM <- function(survData = system.file("extdata/simSurvData.csv",
   }
 
   sp.params <- c("S.annual.KM", "R", "Rfemale", "pop.growth",
-                 "fpop.size", "var.R.real", "l.R", "l.Saf",
+                 "fpop.size", "l.R", "l.Saf",
                  "beta.Rec.anthro", "beta.Rec.fire", "beta.Saf","composition.bias")
 
   

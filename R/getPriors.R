@@ -23,10 +23,8 @@
 #' @param rFireSlopeSE Standard deviation of effect of fire on recruitment.
 #' @param sIntSE Standard deviation of survival intercept.
 #' @param rIntSE Standard deviation of recruitment intercept.
-#' @param sSigmaMean,sSigmaSD The mean and standard deviation of the interannual 
-#' coefficient of variation for survival. 0-1. 
-#' @param rSigmaMean,rSigmaSD The mean and standard deviation of the interannual 
-#' coefficient of variation for recruitment. 0-1. 
+#' @param sSigmaMin,sSigmaMax Uniform prior for random effect of year. 
+#' @param rSigmaMin,rSigmaMax Uniform prior for random effect of year. 
 #' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition
 #'   survey groups.
 #' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition
@@ -83,11 +81,11 @@ getPriors <- function(modList = NULL,
                       rFireSlopeSE = 0.002,
                       sAnthroSlopeSE = 0.0005,
                       sIntSE = 0.06,
-                      sSigmaMean = 0.08696 * 0.4,
-                      sSigmaSD = 0.03,
+                      sSigmaMin = 0,
+                      sSigmaMax = 5,
                       rIntSE = 0.4,
-                      rSigmaMean = 0.46 * 0.5,
-                      rSigmaSD = 0.22,
+                      rSigmaMin =0,
+                      rSigmaMax = 2,
                       qMin=0, qMax =0.6, 
                       uMin = 0, uMax = 0.2, 
                       zMin = 0, zMax = 0.2, 
@@ -161,14 +159,14 @@ getPriors <- function(modList = NULL,
       beta.Rec.anthro.Prior2 = modList$rAnthroSlopeSE,
       beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
       beta.Rec.fire.Prior2 = modList$rFireSlopeSE,
-      sig.R.Prior1 = modList$rSigmaMean,
-      sig.R.Prior2 = modList$rSigmaSD,
+      sig.R.Prior1 = modList$rSigmaMin,
+      sig.R.Prior2 = modList$rSigmaMax,
       l.Saf.Prior1 = sPriorCoefs$Intercept,
       l.Saf.Prior2 = modList$sIntSE,
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = modList$sAnthroSlopeSE,
-      sig.Saf.Prior1 = modList$sSigmaMean,
-      sig.Saf.Prior2 = modList$sSigmaSD,
+      sig.Saf.Prior1 = modList$sSigmaMin,
+      sig.Saf.Prior2 = modList$sSigmaMax,
       bias.Prior1 = bias.Prior1,
       bias.Prior2 = bias.Prior2
     )
