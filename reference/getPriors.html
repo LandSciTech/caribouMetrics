@@ -104,11 +104,11 @@ calves (\(z\)) in composition surveys. See <code><a href="compositionBiasCorrect
 <span>  rFireSlopeSE <span class="op">=</span> <span class="fl">0.002</span>,</span>
 <span>  sAnthroSlopeSE <span class="op">=</span> <span class="fl">5e-04</span>,</span>
 <span>  sIntSE <span class="op">=</span> <span class="fl">0.06</span>,</span>
-<span>  sSigmaMin <span class="op">=</span> <span class="fl">1e-06</span>,</span>
-<span>  sSigmaMax <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  sSigmaMin <span class="op">=</span> <span class="fl">1e-05</span>,</span>
+<span>  sSigmaMax <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  rIntSE <span class="op">=</span> <span class="fl">0.4</span>,</span>
-<span>  rSigmaMin <span class="op">=</span> <span class="fl">1e-06</span>,</span>
-<span>  rSigmaMax <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  rSigmaMin <span class="op">=</span> <span class="fl">1e-05</span>,</span>
+<span>  rSigmaMax <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  qMin <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  qMax <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>  uMin <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -151,7 +151,7 @@ number to use see <a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnson
 
 
 <dt>sSigmaMin, sSigmaMax</dt>
-<dd><p>Uniform prior for random effect of year.</p></dd>
+<dd><p>Uniform hyperprior for random effect of year.</p></dd>
 
 
 <dt>rIntSE</dt>
@@ -159,7 +159,7 @@ number to use see <a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnson
 
 
 <dt>rSigmaMin, rSigmaMax</dt>
-<dd><p>Uniform prior for random effect of year.</p></dd>
+<dd><p>Uniform hyperprior for random effect of year.</p></dd>
 
 
 <dt>qMin</dt>
@@ -286,10 +286,10 @@ effect of year on adult female survival,</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.002</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sig.R.Prior1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sig.R.Prior2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $l.Saf.Prior1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.142</span>
@@ -304,10 +304,10 @@ effect of year on adult female survival,</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5e-04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sig.Saf.Prior1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sig.Saf.Prior2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bias.Prior1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04497328</span>
