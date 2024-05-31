@@ -54,7 +54,7 @@ for(k in 2:nYears){
 	sig.Saf~dunif(sig.Saf.Prior1,sig.Saf.Prior2)
 	tau.Saf<-pow(sig.Saf, -2)
 
-	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))
+	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))T(-10,0)
 	sig.R~dunif(sig.R.Prior1,sig.R.Prior2)
 	tau.R<-pow(sig.R, -2)
 
