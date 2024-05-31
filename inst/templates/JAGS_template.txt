@@ -50,8 +50,8 @@ for(k in 2:nYears){
 	beta.Rec.fire~dnorm(beta.Rec.fire.Prior1,pow( beta.Rec.fire.Prior2, -2))
 	_biasString_
 	
-	#NOTE truncate distribution to ensure intercept between 0 and 1/((46-0.5)/45).
-	l.Saf ~ dnorm(l.Saf.Prior1,pow(l.Saf.Prior2,-2)) T(-10,-0.01104984)
+	#NOTE truncate distribution to ensure intercept between 0 and (45+0.5)/46.
+	l.Saf ~ dnorm(l.Saf.Prior1,pow(l.Saf.Prior2,-2)) T(-10,-0.01092911)
 	sig.Saf~dunif(sig.Saf.Prior1,sig.Saf.Prior2)
 	tau.Saf<-pow(sig.Saf, -2)
 
