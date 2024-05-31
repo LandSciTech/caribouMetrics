@@ -19,7 +19,7 @@ for(k in 1:nYears){
 
 #Recruitment
 for(k in 1:nYears){
-		epsilon.R[k]~dnorm(0,tau.R)T(-15,3) 
+		epsilon.R[k]~dnorm(0,tau.R) 
 		log(R[k]) <- l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire + epsilon.R[k]
 }
 
