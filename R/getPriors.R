@@ -23,8 +23,8 @@
 #' @param rFireSlopeSE Standard deviation of effect of fire on recruitment.
 #' @param sIntSE Standard deviation of survival intercept.
 #' @param rIntSE Standard deviation of recruitment intercept.
-#' @param sSigmaMin,sSigmaMax Uniform prior for random effect of year. 
-#' @param rSigmaMin,rSigmaMax Uniform prior for random effect of year. 
+#' @param sSigmaMin,sSigmaMax Uniform hyperprior for random effect of year. 
+#' @param rSigmaMin,rSigmaMax Uniform hyperprior for random effect of year. 
 #' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition
 #'   survey groups.
 #' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition
@@ -81,11 +81,11 @@ getPriors <- function(modList = NULL,
                       rFireSlopeSE = 0.002,
                       sAnthroSlopeSE = 0.0005,
                       sIntSE = 0.06,
-                      sSigmaMin = 0.000001,
-                      sSigmaMax = 1,
+                      sSigmaMin = 0.00001,
+                      sSigmaMax = 0.1,
                       rIntSE = 0.4,
-                      rSigmaMin =0.000001,
-                      rSigmaMax = 1,
+                      rSigmaMin =0.00001,
+                      rSigmaMax = 0.3,
                       qMin=0, qMax =0.6, 
                       uMin = 0, uMax = 0.2, 
                       zMin = 0, zMax = 0.2, 
