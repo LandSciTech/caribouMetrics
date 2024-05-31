@@ -11,7 +11,7 @@ for(k in 1:nCounts){
 #Survival
 for(k in 1:nYears){
 	#Adult female survival - process variance
-	epsilon.Saf[k]~dnorm(0,tau.Saf)T(-15,0) #NOTE: exp(epsilon) should not be bigger than 1
+	epsilon.Saf[k]~dnorm(0,tau.Saf)
 	log(Saf2[k]) <- l.Saf + anthro[k]*beta.Saf + epsilon.Saf[k]
 	#S.annual.KM should not be bigger than 1. Note adjustment as in Johnson et al 2020.
 	S.annual.KM[k] <- min((Saf2[k]*46-0.5)/45,1)
