@@ -11,10 +11,10 @@
 # caribouMetrics 0.3.1
 **Breaking changes**
 Changed argument names in `getPriors()`:
-rInterannualVar -> rSigmaMean
-rInterannualVarSE -> rSigmaSD
-sInterannualVar -> sSigmaMean
-sInterannualVarSE -> sSigmaSD
+rInterannualVar -> rSigmaMin
+rInterannualVarSE -> rSigmaMax
+sInterannualVar -> sSigmaMin
+sInterannualVarSE -> sSigmaMax
 
 # caribouMetrics 0.3.0
 * Changed to use terra for all spatial processing. Still accepts RasterLayer inputs but outputs SpatRasters.

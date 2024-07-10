@@ -401,7 +401,7 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
   }
 
   if (inp$survAnalysisMethod == "KaplanMeier") {
-    survString <- "Surv[surv_id[k]] ~ dnorm(S.annual.KM[surv_id[k]], tau[surv_id[k]])"
+    survString <- "Surv[surv_id[k]] ~ dnorm(S.annual.KM[surv_id[k]], tau[surv_id[k]])T(0,1)"
   } else {
     survString <- paste(c("for(t in 1:12){", "surv[surv_id[k],t+1] ~ dbern(S.annual.KM[survYr[surv_id[k]]]^(1/12)*surv[surv_id[k],t])", "}"), collapse = "\n")
   }
@@ -472,7 +472,7 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
   }
 
   sp.params <- c("S.annual.KM", "R", "Rfemale", "pop.growth",
-                 "fpop.size", "var.R.real", "l.R", "l.Saf",
+                 "fpop.size", "l.R", "l.Saf",
                  "beta.Rec.anthro", "beta.Rec.fire", "beta.Saf","composition.bias")
 
   

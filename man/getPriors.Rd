@@ -8,14 +8,15 @@ getPriors(
   modList = NULL,
   survivalModelNumber = "M1",
   recruitmentModelNumber = "M4",
-  rAnthroSlopeSEMod = 4,
-  sAnthroSlopeSEMod = 3,
-  sIntSEMod = 5,
-  sSigmaMean = 0.08696 * 0.4,
-  sSigmaSD = 0.03,
-  rIntSEMod = 3,
-  rSigmaMean = 0.46 * 0.5,
-  rSigmaSD = 0.22,
+  rAnthroSlopeSE = 0.006,
+  rFireSlopeSE = 0.002,
+  sAnthroSlopeSE = 5e-04,
+  sIntSE = 0.04,
+  sSigmaMin = 1e-05,
+  sSigmaMax = 0.06,
+  rIntSE = 0.25,
+  rSigmaMin = 1e-05,
+  rSigmaMax = 0.2,
   qMin = 0,
   qMax = 0.6,
   uMin = 0,
@@ -35,19 +36,19 @@ modifier is supplied here the corresponding argument below is ignored.}
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
 number to use see \link{popGrowthTableJohnsonECCC} for options.}
 
-\item{rAnthroSlopeSEMod}{Multiplier for uncertainty about effect of disturbance on recruitment. 1 - 10}
+\item{rAnthroSlopeSE}{Standard deviation of effect of disturbance on recruitment.}
 
-\item{sAnthroSlopeSEMod}{Multiplier for uncertainty about effect of disturbance on survival. 1 - 10}
+\item{rFireSlopeSE}{Standard deviation of effect of fire on recruitment.}
 
-\item{sIntSEMod}{Multiplier for uncertainty about survival intercept. 1 - 10}
+\item{sAnthroSlopeSE}{Standard deviation of effect of disturbance on survival.}
 
-\item{sSigmaMean, sSigmaSD}{The mean and standard deviation of the interannual
-coefficient of variation for survival. 0-1.}
+\item{sIntSE}{Standard deviation of survival intercept.}
 
-\item{rIntSEMod}{Multiplier for uncertainty about recruitment intercept. 1 - 10}
+\item{sSigmaMin, sSigmaMax}{Uniform hyperprior for random effect of year.}
 
-\item{rSigmaMean, rSigmaSD}{The mean and standard deviation of the interannual
-coefficient of variation for recruitment. 0-1.}
+\item{rIntSE}{Standard deviation of recruitment intercept.}
+
+\item{rSigmaMin, rSigmaMax}{Uniform hyperprior for random effect of year.}
 
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition
 survey groups.}
