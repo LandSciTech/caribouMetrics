@@ -332,7 +332,7 @@ By default `caribouBayesianPM()` calls `getPriors()` internally to set the prior
 ## Troubleshooting
 The national model results are cached if the default values are used. This cache can be updated by running `getSimsNational(forceUpdate = TRUE)`
 
-# Use the Bayesian demographic projection app
+## Use the Bayesian demographic projection app
 
 In addition to performing Bayesian demographic projections in R you can also use our shiny app to run similar analyses from a Graphical User Interface. To launch the app you will first need to install the package from GitHub.
 
