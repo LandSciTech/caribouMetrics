@@ -15,7 +15,7 @@ calves (\(z\)) in composition surveys. See compositionBiasCorrection() for addit
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -29,7 +29,7 @@ calves (\(z\)) in composition surveys. See compositionBiasCorrection() for addit
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2</span>
       </span>
     </div>
 
@@ -40,7 +40,7 @@ calves (\(z\)) in composition surveys. See compositionBiasCorrection() for addit
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -62,20 +62,20 @@ calves (\(z\)) in composition surveys. See compositionBiasCorrection() for addit
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get prior parameters for Bayesian population model</h1>
-    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/getPriors.R" class="external-link"><code>R/getPriors.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/R/getPriors.R" class="external-link"><code>R/getPriors.R</code></a></small>
     <div class="hidden name"><code>getPriors.Rd</code></div>
     </div>
 
@@ -124,80 +124,82 @@ calves (\(z\)) in composition surveys. See <code><a href="compositionBiasCorrect
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>modList</dt>
+
+
+<dl><dt id="arg-modlist">modList<a class="anchor" aria-label="anchor" href="#arg-modlist"></a></dt>
 <dd><p>a named list of modifiers to use to change the priors. If a
 modifier is supplied here the corresponding argument below is ignored.</p></dd>
 
 
-<dt>survivalModelNumber, recruitmentModelNumber</dt>
+<dt id="arg-survivalmodelnumber-recruitmentmodelnumber">survivalModelNumber, recruitmentModelNumber<a class="anchor" aria-label="anchor" href="#arg-survivalmodelnumber-recruitmentmodelnumber"></a></dt>
 <dd><p>character. Which model
 number to use see <a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a> for options.</p></dd>
 
 
-<dt>rAnthroSlopeSE</dt>
+<dt id="arg-ranthroslopese">rAnthroSlopeSE<a class="anchor" aria-label="anchor" href="#arg-ranthroslopese"></a></dt>
 <dd><p>Standard deviation of effect of disturbance on recruitment.</p></dd>
 
 
-<dt>rFireSlopeSE</dt>
+<dt id="arg-rfireslopese">rFireSlopeSE<a class="anchor" aria-label="anchor" href="#arg-rfireslopese"></a></dt>
 <dd><p>Standard deviation of effect of fire on recruitment.</p></dd>
 
 
-<dt>sAnthroSlopeSE</dt>
+<dt id="arg-santhroslopese">sAnthroSlopeSE<a class="anchor" aria-label="anchor" href="#arg-santhroslopese"></a></dt>
 <dd><p>Standard deviation of effect of disturbance on survival.</p></dd>
 
 
-<dt>sIntSE</dt>
+<dt id="arg-sintse">sIntSE<a class="anchor" aria-label="anchor" href="#arg-sintse"></a></dt>
 <dd><p>Standard deviation of survival intercept.</p></dd>
 
 
-<dt>sSigmaMin, sSigmaMax</dt>
+<dt id="arg-ssigmamin-ssigmamax">sSigmaMin, sSigmaMax<a class="anchor" aria-label="anchor" href="#arg-ssigmamin-ssigmamax"></a></dt>
 <dd><p>Uniform hyperprior for random effect of year.</p></dd>
 
 
-<dt>rIntSE</dt>
+<dt id="arg-rintse">rIntSE<a class="anchor" aria-label="anchor" href="#arg-rintse"></a></dt>
 <dd><p>Standard deviation of recruitment intercept.</p></dd>
 
 
-<dt>rSigmaMin, rSigmaMax</dt>
+<dt id="arg-rsigmamin-rsigmamax">rSigmaMin, rSigmaMax<a class="anchor" aria-label="anchor" href="#arg-rsigmamin-rsigmamax"></a></dt>
 <dd><p>Uniform hyperprior for random effect of year.</p></dd>
 
 
-<dt>qMin</dt>
+<dt id="arg-qmin">qMin<a class="anchor" aria-label="anchor" href="#arg-qmin"></a></dt>
 <dd><p>number in 0, 1. Minimum ratio of bulls to cows in composition
 survey groups.</p></dd>
 
 
-<dt>qMax</dt>
+<dt id="arg-qmax">qMax<a class="anchor" aria-label="anchor" href="#arg-qmax"></a></dt>
 <dd><p>number in 0, 1. Maximum ratio of bulls to cows in composition
 survey groups.</p></dd>
 
 
-<dt>uMin</dt>
+<dt id="arg-umin">uMin<a class="anchor" aria-label="anchor" href="#arg-umin"></a></dt>
 <dd><p>number in 0, 1. Minimum probability of misidentifying young bulls
 as adult females and vice versa in composition survey.</p></dd>
 
 
-<dt>uMax</dt>
+<dt id="arg-umax">uMax<a class="anchor" aria-label="anchor" href="#arg-umax"></a></dt>
 <dd><p>number in 0, 1. Maximum probability of misidentifying young bulls
 as adult females and vice versa in composition survey.</p></dd>
 
 
-<dt>zMin</dt>
+<dt id="arg-zmin">zMin<a class="anchor" aria-label="anchor" href="#arg-zmin"></a></dt>
 <dd><p>number in 0, 1. Minimum probability of missing calves in
 composition survey.</p></dd>
 
 
-<dt>zMax</dt>
+<dt id="arg-zmax">zMax<a class="anchor" aria-label="anchor" href="#arg-zmax"></a></dt>
 <dd><p>number in 0, 1. Maximum probability of missing calves in
 composition survey.</p></dd>
 
 
-<dt>cowMult</dt>
+<dt id="arg-cowmult">cowMult<a class="anchor" aria-label="anchor" href="#arg-cowmult"></a></dt>
 <dd><p>number. The apparent number of adult females per collared
 animal in composition survey.</p></dd>
 
 
-<dt>populationGrowthTable</dt>
+<dt id="arg-populationgrowthtable">populationGrowthTable<a class="anchor" aria-label="anchor" href="#arg-populationgrowthtable"></a></dt>
 <dd><p>data.frame.<a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a> is
 included in the package and should be used in most cases. A custom table of
 model coefficients and standard errors or confidence intervals can be
@@ -206,22 +208,20 @@ If the table does not contain the standard error it is calculated from the
 confidence interval.</p></dd>
 
 
-<dt>modelVersion</dt>
+<dt id="arg-modelversion">modelVersion<a class="anchor" aria-label="anchor" href="#arg-modelversion"></a></dt>
 <dd><p>character. Which model version to use. Currently the only
 option is "Johnson" for the model used in Johnson et. al. (2020), but
 additional options may be added in the future.</p></dd>
 
 
-<dt>returnValues</dt>
+<dt id="arg-returnvalues">returnValues<a class="anchor" aria-label="anchor" href="#arg-returnvalues"></a></dt>
 <dd><p>logical. Default is TRUE. If FALSE returns strings for
 some values showing the initial values and the modifier ie "0.9 * 1.05"</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>a list with values:</p><ul><li><p>l.R.Prior1: Recruitment intercept</p></li>
+    <p>a list with values:</p><ul><li><p>l.R.Prior1: Recruitment intercept</p></li>
 <li><p>l.R.Prior2: Recruitment intercept standard error times modifier,</p></li>
 <li><p>beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,</p></li>
 <li><p>beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard
@@ -249,7 +249,7 @@ effect of year on adult female survival,</p></li>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p>Caribou demography functions:
-<code><a href="caribouBayesianIPM.html">caribouBayesianIPM</a>()</code>,
+<code><a href="caribouBayesianPM.html">caribouBayesianPM</a>()</code>,
 <code><a href="caribouPopGrowth.html">caribouPopGrowth</a>()</code>,
 <code><a href="compositionBiasCorrection.html">compositionBiasCorrection</a>()</code>,
 <code><a href="demographicCoefficients.html">demographicCoefficients</a>()</code>,
@@ -330,15 +330,15 @@ effect of year on adult female survival,</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

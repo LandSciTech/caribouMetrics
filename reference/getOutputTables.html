@@ -5,7 +5,7 @@ model results and national model results."><!-- mathjax --><script src="https://
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -19,7 +19,7 @@ model results and national model results."><!-- mathjax --><script src="https://
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2</span>
       </span>
     </div>
 
@@ -30,7 +30,7 @@ model results and national model results."><!-- mathjax --><script src="https://
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -52,20 +52,20 @@ model results and national model results."><!-- mathjax --><script src="https://
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Summarize results of Bayesian demographic model in tables</h1>
-    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/getOutputTables.R" class="external-link"><code>R/getOutputTables.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/R/getOutputTables.R" class="external-link"><code>R/getOutputTables.R</code></a></small>
     <div class="hidden name"><code>getOutputTables.Rd</code></div>
     </div>
 
@@ -89,41 +89,41 @@ model results and national model results.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>caribouBayesDemogMod</dt>
+
+
+<dl><dt id="arg-cariboubayesdemogmod">caribouBayesDemogMod<a class="anchor" aria-label="anchor" href="#arg-cariboubayesdemogmod"></a></dt>
 <dd><p>caribou Bayesian demographic model results
-produced by calling <code><a href="caribouBayesianIPM.html">caribouBayesianIPM()</a></code></p></dd>
+produced by calling <code><a href="caribouBayesianPM.html">caribouBayesianPM()</a></code></p></dd>
 
 
-<dt>startYear, endYear</dt>
+<dt id="arg-startyear-endyear">startYear, endYear<a class="anchor" aria-label="anchor" href="#arg-startyear-endyear"></a></dt>
 <dd><p>year defining the beginning of the observation
 period and the end of the projection period.</p></dd>
 
 
-<dt>paramTable</dt>
+<dt id="arg-paramtable">paramTable<a class="anchor" aria-label="anchor" href="#arg-paramtable"></a></dt>
 <dd><p>data.frame. Optional. Scenario parameters see
 <code><a href="simulateObservations.html">simulateObservations()</a></code></p></dd>
 
 
-<dt>exData</dt>
+<dt id="arg-exdata">exData<a class="anchor" aria-label="anchor" href="#arg-exdata"></a></dt>
 <dd><p>data.frame. Optional. Output of <code><a href="simulateObservations.html">simulateObservations()</a></code> that
 records the true population metrics of the population that observations
 were simulated from.</p></dd>
 
 
-<dt>simNational</dt>
+<dt id="arg-simnational">simNational<a class="anchor" aria-label="anchor" href="#arg-simnational"></a></dt>
 <dd><p>National simulation results, produced by calling
 <code><a href="getSimsNational.html">getSimsNational()</a></code></p></dd>
 
 
-<dt>getKSDists</dt>
+<dt id="arg-getksdists">getKSDists<a class="anchor" aria-label="anchor" href="#arg-getksdists"></a></dt>
 <dd><p>logical. Should Kolmogorov–Smirnov distances be calculated?</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>a list of tables:</p><ul><li><p>rr.summary.all: Mean parameter values for each year and standard deviation,
+    <p>a list of tables:</p><ul><li><p>rr.summary.all: Mean parameter values for each year and standard deviation,
 upper and lower credible intervals projected by the Bayesian model, as well
 as scenario input parameters.</p></li>
 <li><p>sim.all: Mean parameter values and upper and lower credible intervals from
@@ -136,7 +136,7 @@ simulated based on the collaring program parameters.</p></li>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p>Caribou demography functions:
-<code><a href="caribouBayesianIPM.html">caribouBayesianIPM</a>()</code>,
+<code><a href="caribouBayesianPM.html">caribouBayesianPM</a>()</code>,
 <code><a href="caribouPopGrowth.html">caribouPopGrowth</a>()</code>,
 <code><a href="compositionBiasCorrection.html">compositionBiasCorrection</a>()</code>,
 <code><a href="demographicCoefficients.html">demographicCoefficients</a>()</code>,
@@ -159,7 +159,7 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">simO</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulateObservations.html">simulateObservations</a></span><span class="op">(</span><span class="va">scns</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="caribouBayesianIPM.html">caribouBayesianIPM</a></span><span class="op">(</span>survData <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simSurvObs</span>, ageRatio <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">ageRatioOut</span>,</span></span>
+<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="caribouBayesianPM.html">caribouBayesianPM</a></span><span class="op">(</span>survData <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simSurvObs</span>, ageRatio <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">ageRatioOut</span>,</span></span>
 <span class="r-in"><span>                          disturbance <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simDisturbance</span>,</span></span>
 <span class="r-in"><span>                          Nchains <span class="op">=</span> <span class="fl">1</span>, Niter <span class="op">=</span> <span class="fl">100</span>, Nburn <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>                          Nthin <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
@@ -2546,15 +2546,15 @@ simulated based on the collaring program parameters.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

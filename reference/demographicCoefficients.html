@@ -8,7 +8,7 @@ survival and recruitment models."><!-- mathjax --><script src="https://cdnjs.clo
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -22,7 +22,7 @@ survival and recruitment models."><!-- mathjax --><script src="https://cdnjs.clo
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">caribouMetrics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.2</span>
       </span>
     </div>
 
@@ -33,7 +33,7 @@ survival and recruitment models."><!-- mathjax --><script src="https://cdnjs.clo
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
@@ -55,20 +55,20 @@ survival and recruitment models."><!-- mathjax --><script src="https://cdnjs.clo
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/LandSciTech/caribouMetrics/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Sample demographic regression model coefficients</h1>
-    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/demographicCoefficients.R" class="external-link"><code>R/demographicCoefficients.R</code></a>, <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/getCoefs.R" class="external-link"><code>R/getCoefs.R</code></a>, <a href="https://github.com/LandSciTech/caribouMetrics/blob/HEAD/R/sampleCoefs.R" class="external-link"><code>R/sampleCoefs.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/R/demographicCoefficients.R" class="external-link"><code>R/demographicCoefficients.R</code></a>, <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/R/getCoefs.R" class="external-link"><code>R/getCoefs.R</code></a>, <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/R/sampleCoefs.R" class="external-link"><code>R/sampleCoefs.R</code></a></small>
     <div class="hidden name"><code>demographicCoefficients.Rd</code></div>
     </div>
 
@@ -98,22 +98,24 @@ survival and recruitment models.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>replicates</dt>
+
+
+<dl><dt id="arg-replicates">replicates<a class="anchor" aria-label="anchor" href="#arg-replicates"></a></dt>
 <dd><p>integer. Number of replicate populations.</p></dd>
 
 
-<dt>modelVersion</dt>
+<dt id="arg-modelversion">modelVersion<a class="anchor" aria-label="anchor" href="#arg-modelversion"></a></dt>
 <dd><p>character. Which model version to use. Currently the only
 option is "Johnson" for the model used in Johnson et. al. (2020), but
 additional options may be added in the future.</p></dd>
 
 
-<dt>survivalModelNumber, recruitmentModelNumber</dt>
+<dt id="arg-survivalmodelnumber-recruitmentmodelnumber">survivalModelNumber, recruitmentModelNumber<a class="anchor" aria-label="anchor" href="#arg-survivalmodelnumber-recruitmentmodelnumber"></a></dt>
 <dd><p>character. Which model
 number to use see <a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a> for options.</p></dd>
 
 
-<dt>useQuantiles</dt>
+<dt id="arg-usequantiles">useQuantiles<a class="anchor" aria-label="anchor" href="#arg-usequantiles"></a></dt>
 <dd><p>logical or numeric. If it is a numeric vector it must be
 length 2 and give the low and high limits of the quantiles to use. If
 <code>useQuantiles != FALSE</code>, each replicate population is assigned to a
@@ -123,7 +125,7 @@ replicate populations will be assigned to quantiles in the default range of
 0.025 and 0.975.</p></dd>
 
 
-<dt>populationGrowthTable</dt>
+<dt id="arg-populationgrowthtable">populationGrowthTable<a class="anchor" aria-label="anchor" href="#arg-populationgrowthtable"></a></dt>
 <dd><p>data.frame.<a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a> is
 included in the package and should be used in most cases. A custom table of
 model coefficients and standard errors or confidence intervals can be
@@ -132,17 +134,17 @@ If the table does not contain the standard error it is calculated from the
 confidence interval.</p></dd>
 
 
-<dt>resVar</dt>
+<dt id="arg-resvar">resVar<a class="anchor" aria-label="anchor" href="#arg-resvar"></a></dt>
 <dd><p>character. Response variable, typically "femaleSurvival" or
 "recruitment"</p></dd>
 
 
-<dt>modNum</dt>
+<dt id="arg-modnum">modNum<a class="anchor" aria-label="anchor" href="#arg-modnum"></a></dt>
 <dd><p>character vector. Which model number(s) to use see
 <a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a> for typical options.</p></dd>
 
 
-<dt>coefTable</dt>
+<dt id="arg-coeftable">coefTable<a class="anchor" aria-label="anchor" href="#arg-coeftable"></a></dt>
 <dd><p>data.table. Table must have columns "Coefficient" for the
 name of the coefficient, "Value" for the value of the coefficient and
 "StdErr" for the standard error of coefficients. Typically created with
@@ -151,9 +153,7 @@ name of the coefficient, "Value" for the value of the coefficient and
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>For <code>demographicCoefficients</code> a list with elements:</p><ul><li><p>"modelVersion": The name of the model version</p></li>
+    <p>For <code>demographicCoefficients</code> a list with elements:</p><ul><li><p>"modelVersion": The name of the model version</p></li>
 <li><p>"coefSamples_Survival" and"coefSamples_Recruitment":
 lists with elements:</p><ul><li><p>"coefSamples": Bootstrapped coefficients with <code>replicates</code> rows</p></li>
 <li><p>"coefValues": Coefficient values taken from <code>populationGrowthTable</code></p></li>
@@ -163,8 +163,6 @@ lists with elements:</p><ul><li><p>"coefSamples": Bootstrapped coefficients with
 </ul><p>For <code>getCoefs</code>: a named list with one element per model version. The names are
 <code>modelVersion_modNum_Type</code>. Each element contains a data.frame that is a subset
 of <code>populationGrowthTable</code> for the selected model</p>
-
-
 <p>For <code>sampleCoefs</code> a list with elements:</p><ul><li><p>"coefSamples": Bootstrapped coefficients with <code>replicates</code> rows</p></li>
 <li><p>"coefValues": Coefficient values taken from <code>populationGrowthTable</code></p></li>
 </ul></div>
@@ -187,7 +185,7 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p>Caribou demography functions:
-<code><a href="caribouBayesianIPM.html">caribouBayesianIPM</a>()</code>,
+<code><a href="caribouBayesianPM.html">caribouBayesianPM</a>()</code>,
 <code><a href="caribouPopGrowth.html">caribouPopGrowth</a>()</code>,
 <code><a href="compositionBiasCorrection.html">compositionBiasCorrection</a>()</code>,
 <code><a href="demographicProjectionApp.html">demographicProjectionApp</a>()</code>,
@@ -388,15 +386,15 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 
