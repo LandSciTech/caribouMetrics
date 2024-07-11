@@ -254,6 +254,40 @@ test_that("results are different when disturbance is missing", {
 
 })
 
+test_that("different coefTable works", {
+  w_coefHR <- caribouHabitat(
+    landCover = file.path(pthBase, "landCover.tif"),
+    esker = file.path(pthBase, "esker.shp"),
+    natDist = file.path(pthBase, "natDist.tif"),
+    anthroDist = file.path(pthBase, "anthroDist.tif"),
+    linFeat = file.path(pthBase, "roads.shp"),
+    projectPoly = file.path(pthBase, "projectPoly.shp"),
+    linFeatSave = file.path(pthBase, "linFeatTif400.tif"),
+    eskerSave = file.path(pthBase, "eskerTif400.tif"), 
+    caribouRange = "Churchill", 
+    winArea = 500
+  )
+  
+  coefMod <- coefTableHR %>%
+    mutate(Coefficient = ifelse(Variable %in% c("ST", "CON"), -5, Coefficient))
+  
+  w_coefMod <- caribouHabitat(
+    landCover = file.path(pthBase, "landCover.tif"),
+    esker = file.path(pthBase, "esker.shp"),
+    natDist = file.path(pthBase, "natDist.tif"),
+    anthroDist = file.path(pthBase, "anthroDist.tif"),
+    linFeat = file.path(pthBase, "roads.shp"),
+    projectPoly = file.path(pthBase, "projectPoly.shp"),
+    linFeatSave = file.path(pthBase, "linFeatTif400.tif"),
+    eskerSave = file.path(pthBase, "eskerTif400.tif"), 
+    caribouRange = "Churchill", 
+    coefTable = coefMod,
+    winArea = 500
+  )
+  
+  expect_false(isTRUE(all.equal(w_coefMod@habitatUse, w_coefHR@habitatUse)))
+})
+
 # Compare output raster to previous run. Use raster and not whole object in case
 # we want to change the object in future
 # Do to changes in CRS order we simply check that the two rasters are
