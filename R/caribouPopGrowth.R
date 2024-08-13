@@ -172,8 +172,8 @@ caribouPopGrowth <- function(N0,
     rK <- K * N0
   }
 
-  if(a<=0){
-    stop("a should be greater than 0")
+  if(a<0){
+    stop("a should be greater than or equal to 0")
   }
 
   for(t in 1:numSteps){
