@@ -3,7 +3,7 @@
 export(CaribouHabitat)
 export(DisturbanceMetrics)
 export(calcBinaryUse)
-export(caribouBayesianIPM)
+export(caribouBayesianPM)
 export(caribouHabitat)
 export(caribouPopGrowth)
 export(compositionBiasCorrection)

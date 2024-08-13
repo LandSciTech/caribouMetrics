@@ -1,7 +1,7 @@
 Package: caribouMetrics
 Type: Package
 Title: Models and Metrics of Boreal Caribou Demography and Habitat Selection
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec.gc.ca", comment = c(ORCID = "0000-0001-7875-9015")),
     person("Sarah", "Endicott", email = "sarah.endicott@ec.gc.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
@@ -9,7 +9,7 @@ Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec
     person("Tati", "Michelleti", email = "tati.micheletti@gmail.com", 
            role = c("aut", "cph"), comment = c("Functions getCoefs and sampleRates are derived from code written by Tati Micheletti")),
     person("Eliot", "McIntire", email = "eliot.mcintire@canada.ca", role = "aut"),
-    person("Daniel", "Eacker", role = "cph", comment = c("Lead author of paper where code modified in caribouBayesianIPM, plotRes, getKMSurvivalEstimates, and getSumStats was published")),
+    person("Daniel", "Eacker", role = "cph", comment = c("Lead author of paper where code modified in caribouBayesianPM, plotRes, getKMSurvivalEstimates, and getSumStats was published")),
     person("Saralees", "Nadarajah", role = "cph", comment = c("Author of truncdist package, which function rtrunc and qtrunc were modified from")),
     person("Frederick", "Novomestky", role = "cph", comment = c("Author of truncdist package, which function rtrunc and qtrunc were modified from")),
     person(given="Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change",
@@ -57,7 +57,7 @@ Collate:
     'betaSample.R'
     'calcBinaryUse.R'
     'calcRSP.R'
-    'caribouBayesianIPM.R'
+    'caribouBayesianPM.R'
     'caribouHabitat.R'
     'caribouMetrics.R'
     'caribouPopGrowth.R'

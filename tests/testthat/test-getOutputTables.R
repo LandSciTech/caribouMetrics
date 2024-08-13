@@ -4,7 +4,7 @@ test_that("works with defaults", {
                               cowMult = 3)
   simO <- simulateObservations(scns)
   
-  out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+  out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
                     disturbance = simO$simDisturbance,
                     Nchains = 1, Niter = 100, Nburn = 10,
                     Nthin = 2)
@@ -24,7 +24,7 @@ test_that("decimals in observed disturbance work", {
                               collarCount = 20, cowMult = 3)
   simO <- simulateObservations(scns)
   
-  out <- caribouBayesianIPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+  out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
                             disturbance = simO$simDisturbance,
                             Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2)
@@ -38,7 +38,7 @@ test_that("decimals in observed disturbance work", {
 })
 
 test_that("works with out sim obs",{
-  mod_real <- caribouBayesianIPM(Niter = 100, Nburn = 10)
+  mod_real <- caribouBayesianPM(Niter = 100, Nburn = 10)
   
   
   mod_tbl <- getOutputTables(mod_real,
@@ -50,7 +50,7 @@ test_that("works with out sim obs",{
 })
 
 test_that("works with out simNational", {
-  mod_real <- caribouBayesianIPM(Niter = 100, Nburn = 10)
+  mod_real <- caribouBayesianPM(Niter = 100, Nburn = 10)
   
   
   mod_tbl <- getOutputTables(mod_real)

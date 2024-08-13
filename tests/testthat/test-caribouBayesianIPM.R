@@ -2,7 +2,7 @@
 test_that("Runs with defaults", {
   # reduce some defaults to make fast
   # note that the default csv does not match the default startYear
-  expect_s3_class(caribouBayesianIPM(Nchains = 1, Niter = 100, Nburn = 10,
+  expect_s3_class(caribouBayesianPM(Nchains = 1, Niter = 100, Nburn = 10,
                        Nthin = 2)$result,
             "rjags")
 })
@@ -21,7 +21,7 @@ test_that("input tables are as expected",{
 
   # start year is outside range of data but still runs
   res1 <- expect_warning(
-    caribouBayesianIPM(startYear = 1998, Nchains = 1, Niter = 100, Nburn = 10, 
+    caribouBayesianPM(startYear = 1998, Nchains = 1, Niter = 100, Nburn = 10, 
                        Nthin = 2))
 
   expect_true(is.na(res1$inData$survDataIn$surv[1]))
@@ -29,14 +29,14 @@ test_that("input tables are as expected",{
 
   # end year is outside range of data but still runs
   res2 <- expect_warning(
-    caribouBayesianIPM(startYear = 2009, endYear = 2050, Nchains = 1, 
+    caribouBayesianPM(startYear = 2009, endYear = 2050, Nchains = 1, 
                        Niter = 100, Nburn = 10, Nthin = 2))
 
   expect_true(is.na(last(res2$inData$survDataIn$surv)))
   expect_s3_class(res2$result, "rjags")
 
   # ageRatio is outside year range warning but still runs
-  res3 <- expect_warning(caribouBayesianIPM(ageRatio = mutate(ageRatioIn, Year = Year - 30),
+  res3 <- expect_warning(caribouBayesianPM(ageRatio = mutate(ageRatioIn, Year = Year - 30),
              startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
              Nthin = 2), "composition")
 
@@ -44,7 +44,7 @@ test_that("input tables are as expected",{
 
   # all survival data is outside year range
   expect_error(
-    caribouBayesianIPM(survData = mutate(survDataIn, Year = Year - 30),
+    caribouBayesianPM(survData = mutate(survDataIn, Year = Year - 30),
                startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
                Nthin = 2),
     "None of the survival data")
@@ -52,7 +52,7 @@ test_that("input tables are as expected",{
   # survival should go to curYear but disturbance data should go to endYear
   # no warnings when survData is shorter
   expect_s3_class(
-    caribouBayesianIPM(survData = survDataIn,
+    caribouBayesianPM(survData = survDataIn,
                startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
                Nthin = 2)$result,
     "rjags"
@@ -61,7 +61,7 @@ test_that("input tables are as expected",{
   # warning when survData is missing a year in the middle
   expect_warning(
     expect_s3_class(
-      caribouBayesianIPM(survData = filter(survDataIn, Year != 2010),
+      caribouBayesianPM(survData = filter(survDataIn, Year != 2010),
                  startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
                  Nthin = 2)$result,
       "rjags"
@@ -71,7 +71,7 @@ test_that("input tables are as expected",{
   # all disturbance data is outside year range
   expect_warning(
     expect_error(
-      caribouBayesianIPM(disturbance = mutate(disturbanceIn, Year = Year - 50),
+      caribouBayesianPM(disturbance = mutate(disturbanceIn, Year = Year - 50),
                  startYear = 2009, endYear = 2040, Nchains = 1, Niter = 100, Nburn = 10,
                  Nthin = 2),
       "None of the disturbance data")
@@ -79,44 +79,44 @@ test_that("input tables are as expected",{
 
   # wrong column names
   expect_error(
-    caribouBayesianIPM(disturbance = rename(disturbanceIn, year = Year),
+    caribouBayesianPM(disturbance = rename(disturbanceIn, year = Year),
                startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                Nthin = 2),
     "missing expected columns")
 
   expect_error(
-    caribouBayesianIPM(ageRatio =  rename(ageRatioIn, cls = Class),
+    caribouBayesianPM(ageRatio =  rename(ageRatioIn, cls = Class),
                startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                Nthin = 2),
     "missing expected columns")
 
   expect_error(
-    caribouBayesianIPM(survData = rename(survDataIn, events = enter),
+    caribouBayesianPM(survData = rename(survDataIn, events = enter),
                startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                Nthin = 2),
     "missing expected columns")
 
   # check haven't added need for Total_dist
   expect_s3_class(
-    caribouBayesianIPM(disturbance = select(disturbanceIn, -Total_dist),
+    caribouBayesianPM(disturbance = select(disturbanceIn, -Total_dist),
                startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                Nthin = 2)$result,
     "rjags")
 })
 
 test_that("survAnalysisMethod works", {
-  expect_message(out1 <- caribouBayesianIPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+  expect_message(out1 <- caribouBayesianPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2),
                  "using Kaplan-Meier survival model")
   expect_s3_class(out1$result, "rjags")
 
-  expect_message(out2 <- caribouBayesianIPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+  expect_message(out2 <- caribouBayesianPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2, survAnalysisMethod = "Exponential"),
                  "expanding survival record")
 
   expect_s3_class(out2$result, "rjags")
 
-  expect_message(out3 <- caribouBayesianIPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
+  expect_message(out3 <- caribouBayesianPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2, survAnalysisMethod = "other"),
                  "expanding survival record")
 
@@ -144,7 +144,7 @@ test_that("works when 1 collared animal",{
   oo$simSurvObs$event[3] <- 1
 
   expect_warning(
-    out <- caribouBayesianIPM(
+    out <- caribouBayesianPM(
       survData = oo$simSurvObs, ageRatio = oo$ageRatioOut,
       disturbance = oo$simDisturbance,
       startYear = 2012, endYear = 2043,
@@ -293,7 +293,7 @@ test_that("results match expected", {
     collarOffTime = 12, collarOnTime = 1
   )
   
-  mod12_1 <- caribouBayesianIPM(obs12_1$simSurvObs, obs12_1$ageRatioOut, obs12_1$simDisturbance,
+  mod12_1 <- caribouBayesianPM(obs12_1$simSurvObs, obs12_1$ageRatioOut, obs12_1$simDisturbance,
                                 startYear = 2012, endYear = 2023,
                                 Niter = 100, Nburn = 10)
   set.seed(1234)
@@ -303,7 +303,7 @@ test_that("results match expected", {
     collarOffTime = 9, collarOnTime = 3
   )
   
-  mod9_3 <- caribouBayesianIPM(obs9_3$simSurvObs, obs9_3$ageRatioOut, obs9_3$simDisturbance,
+  mod9_3 <- caribouBayesianPM(obs9_3$simSurvObs, obs9_3$ageRatioOut, obs9_3$simDisturbance,
                                 startYear = 2012, endYear = 2023,
                                Niter = 100, Nburn = 10)
   
@@ -316,7 +316,7 @@ test_that("results match expected", {
   # collarOffTime = 12, collarOnTime = 1
   # )
   # 
-  # mod12_1_2 <- caribouBayesianIPM(obs12_1_2$simSurvObs, obs12_1_2$ageRatioOut, obs12_1_2$simDisturbance,
+  # mod12_1_2 <- caribouBayesianPM(obs12_1_2$simSurvObs, obs12_1_2$ageRatioOut, obs12_1_2$simDisturbance,
   #                               startYear = 2012, endYear = 2023)
   # 
   # dif2 <- mod12_1_2$inData$survDataIn$surv - mod12_1$inData$survDataIn$surv

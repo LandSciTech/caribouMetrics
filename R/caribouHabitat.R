@@ -278,11 +278,11 @@ caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL,
     
     x <- processData(x)
     
-    updateArgs <- dots[c("coefTable", "doScale")]
+    updateArgs <- dots[c("doScale")]
     
     updateArgs <- updateArgs[which(lapply(updateArgs, length) > 0)]
     
-    x <- do.call(updateCaribou, c(list(CarHab = x), updateArgs))
+    x <- do.call(updateCaribou, c(list(CarHab = x, coefTable = coefTable), updateArgs))
   }
   
   if(!is.null(dots$saveOutput)){

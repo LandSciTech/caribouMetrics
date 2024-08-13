@@ -27,7 +27,7 @@
 #' @param cowMult number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use `cowCount`.
 #' @param collarCount number >= 1. The target number of collars active each year. Set to NA to use `freqStartsPerYear` in `simulateObservations(`
 #' @inheritParams caribouPopGrowth
-#' @inheritParams caribouBayesianIPM
+#' @inheritParams caribouBayesianPM
 #' @param collarInterval number. Optional. Number of years between collar deployments. If
 #'   missing assumed to be every year
 #' @param cowCount Optional. Only used in `runScnSet()` to set the number of cows per

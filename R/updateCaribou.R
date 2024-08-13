@@ -96,7 +96,6 @@ setMethod(
       
       CarHab <- processData(CarHab)
     }
-    
 
     # which coefficients to use for which range
     rangeCoefLst <- CarHab@projectPoly %>% 

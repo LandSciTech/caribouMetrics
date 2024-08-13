@@ -121,10 +121,10 @@ distObs %>% ggplot(aes(Year, Anthro))+
 ```
 Plotting the data shows that the collaring program included 60 individuals with collars being replenished every 3 years over a monitoring period of 15 years. Calf cow surveys typically counted ~150 cows and ~50 calves. There is no disturbance in the years of the observation data but disturbance is expected to increase quickly in the future.
 
-These data sets can be supplied to `caribouBayesianIPM()`to project the impact on the caribou population as disturbance increases over the next 20 years. 
+These data sets can be supplied to `caribouBayesianPM()`to project the impact on the caribou population as disturbance increases over the next 20 years. 
 
 ```{r mod-real}
-mod_real <- caribouBayesianIPM(survData = survObs, ageRatio = ageRatioObs, 
+mod_real <- caribouBayesianPM(survData = survObs, ageRatio = ageRatioObs, 
                               disturbance = distObs, 
                               # only set to speed up vignette. Normally keep defaults.
                               Niter = 150, Nburn = 100)
@@ -277,10 +277,10 @@ sim_obs$simDisturbance %>% ggplot(aes(Year, Anthro))+
   geom_line()
 ```
 
-We can provide the simulated observations to `caribouBayesianIPM()` to project the population growth over time. This time we supply the expected true population metrics as well as the model results to `getOutputTables()` so that we can see how well our monitoring program captured the true population. 
+We can provide the simulated observations to `caribouBayesianPM()` to project the population growth over time. This time we supply the expected true population metrics as well as the model results to `getOutputTables()` so that we can see how well our monitoring program captured the true population. 
 
 ```{r mod-sim-obs}
-mod_sim <- caribouBayesianIPM(survData = sim_obs$simSurvObs,
+mod_sim <- caribouBayesianPM(survData = sim_obs$simSurvObs,
                               ageRatio = sim_obs$ageRatioOut, 
                               disturbance = sim_obs$simDisturbance, 
                               # only set to speed up vignette. Normally keep defaults.
@@ -327,12 +327,12 @@ plotRes(scResults,
 ```
 
 ### Modifying Bayesian model priors
-By default `caribouBayesianIPM()` calls `getPriors()` internally to set the priors for the Bayesian model based on the national model and default uncertainty modifiers that have been calibrated to fit the national model while allowing for deviations based on local data. The parameters to `getPriors()` affect the level of uncertainty around the coefficients from the national model. If uncertainty in the national model is higher then the projections can deviate more from the national model if the observed data does. See `getPriors()` for details.  
+By default `caribouBayesianPM()` calls `getPriors()` internally to set the priors for the Bayesian model based on the national model and default uncertainty modifiers that have been calibrated to fit the national model while allowing for deviations based on local data. The parameters to `getPriors()` affect the level of uncertainty around the coefficients from the national model. If uncertainty in the national model is higher then the projections can deviate more from the national model if the observed data does. See `getPriors()` for details.  
 
 ## Troubleshooting
 The national model results are cached if the default values are used. This cache can be updated by running `getSimsNational(forceUpdate = TRUE)`
 
-# Use the Bayesian demographic projection app
+## Use the Bayesian demographic projection app
 
 In addition to performing Bayesian demographic projections in R you can also use our shiny app to run similar analyses from a Graphical User Interface. To launch the app you will first need to install the package from GitHub.
 

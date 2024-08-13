@@ -1,5 +1,5 @@
 test_that("default works", {
-  mod <- caribouBayesianIPM(Nchains = 1, Niter = 100, Nburn = 10,
+  mod <- caribouBayesianPM(Nchains = 1, Niter = 100, Nburn = 10,
                      Nthin = 2)
   
   expect_is(tabAllRes(mod$result, 2009, 2043), "data.frame")
