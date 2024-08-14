@@ -74,7 +74,7 @@ fillNAsWithMean <- function(vector) {
 addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
   if(is.element(paste0(type,"_CV"),names(interannualVar))){
     #reproducing ECCC_CaribouPopnProjection - see line 143 etc of functions.R
-    ProcVar <- (bar * interannualVar[[paste0(type,"_CV")]])^2
+    ProcVar <- (bar * interannualVar[[paste0(type,"_CV")]])
     ProcVar=fillNAsWithMean(ProcVar)
     BetaPars  <- estBetaParams(bar, ProcVar)
     BetaPars$alpha[BetaPars$alpha < 0] <- 0.01
