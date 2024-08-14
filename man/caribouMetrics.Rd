@@ -45,7 +45,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Daniel Eacker (Lead author of paper where code modified in caribouBayesianIPM, plotRes, getKMSurvivalEstimates, and getSumStats was published) [copyright holder]
+  \item Daniel Eacker (Lead author of paper where code modified in caribouBayesianPM, plotRes, getKMSurvivalEstimates, and getSumStats was published) [copyright holder]
   \item Saralees Nadarajah (Author of truncdist package, which function rtrunc and qtrunc were modified from) [copyright holder]
   \item Frederick Novomestky (Author of truncdist package, which function rtrunc and qtrunc were modified from) [copyright holder]
   \item Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change [copyright holder]

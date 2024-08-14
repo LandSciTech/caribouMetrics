@@ -184,6 +184,8 @@ caribouPopGrowth <- function(N0,
       R_t= R_bar
       S_t = S_bar
     }else{
+      if(length(N0)>length(R_bar)){R_bar=rep(R_bar,length(N0))}
+      if(length(N0)>length(S_bar)){S_bar=rep(S_bar,length(N0))}
       R_t = addInterannualVar(R_bar,interannualVar,type="R",minV =l_R,maxV=h_R)
       S_t = addInterannualVar(S_bar,interannualVar,type="S",minV =l_S,maxV=h_S)
     }
