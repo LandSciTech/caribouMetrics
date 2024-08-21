@@ -2,80 +2,41 @@
 
 
 # Helpers for caribouBayesianPM --------------------------------------------------
-# Copyright 2023 Daniel Eacker & Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
-# License GPL-3
-#NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
-getKMSurvivalEstimates <- function(dSubset) {
-  sModel <- survival::survfit(survival::Surv(enter, exit, event) ~ as.factor(Year),
-                              conf.type = "log-log", data = dSubset)
-  reg.out <- summary(sModel)
-  # TODO: Josie can this be deleted?
-  if (0) {
-    # check <- data.frame(strata = reg.out$strata, survival = reg.out$surv,
-    #                     time = reg.out$time)
-    # check$type <- "est"
-    # check$Year <- as.numeric(gsub("as.factor(Year)=", "", as.character(check$strata),
-    #                               fixed = T))
-    # check$strata <- NULL
-    # tt <- subset(oo$exData, select = c(Year, survival))
-    # tt$time <- 12
-    # tt$type <- "truth"
-    # check <- rbind(check, tt)
-    # base <- ggplot2::ggplot(check,
-    #                         ggplot2::aes(x = time, y = survival, colour = type,
-    #                                      shape = type)) +
-    #   ggplot2::geom_point() +
-    #   ggplot2::facet_wrap(~Year)
-    # print(base)
-  }
-
-  if (is.null(reg.out$strata)) {
-    reg.out$strata <- as.character(dSubset$Year[1])
-  }
-  data5 <- data.frame(reg.out$strata, reg.out$surv)
-  data.se <- data.frame(reg.out$strata, reg.out$std.err)
-  data.l <- data.frame(reg.out$strata, reg.out$lower)
-  data.u <- data.frame(reg.out$strata, reg.out$upper)
-  data6 <- data.frame(table(data5$reg.out.strata))
-  num <- data6$Freq
-  if (inherits(data5$reg.out.strata, "character")) {
-    data5$reg.out.strata <- as.factor(data5$reg.out.strata)
-  }
-  levs <- data.frame(levels(data5$reg.out.strata))
-  names(levs) <- c("reg.out.strata")
-  data7 <- subset(data6, data6$Freq > 0)
-  survs <- numeric(length(data7$Freq))
-  se <- numeric(length(data7$Freq))
-  lower <- numeric(length(data7$Freq))
-  upper <- numeric(length(data7$Freq))
-  index <- cumsum(data7$Freq)
-
-  for (i in 1:length(survs)) {
-    survs[i] <- data5$reg.out.surv[index[i]]
-    se[i] <- data.se$reg.out.std.err[index[i]]
-    lower[i] <- data.l$reg.out.lower[index[i]]
-    upper[i] <- data.u$reg.out.upper[index[i]]
-  }
-
-  indexS <- which(data6$Freq != 0)
-  data6$surv <- numeric(length(data6$Freq))
-  data6$se <- numeric(length(data6$Freq))
-  data6$lower <- numeric(length(data6$Freq))
-  data6$upper <- numeric(length(data6$Freq))
-  data6$surv <- ifelse(data6$Freq < 1, 1, NA)
-  data6$lower <- ifelse(data6$Freq < 1, NA, 0)
-  data6$upper <- ifelse(data6$Freq < 1, NA, 0)
-
-  for (i in 1:length(data6$Freq)) {
-    data6$surv[indexS[i]] <- survs[i]
-    data6$se[indexS[i]] <- se[i]
-    data6$lower[indexS[i]] <- lower[i]
-    data6$upper[indexS[i]] <- upper[i]
-  }
-
-  survData <- data6
-
+getKMSurvivalEstimates <- function(ss) {
+  #The KM estimator gives a biased answers in cases of left censoring or
+  #when there are no animals at risk in some months.
+  #Address by removing left censored animals, and then only calculating in years
+  #where at least some animals remain at risk by month 12.
+  ss = subset(ss,enter==0)
+  
+  surv.yr = ss
+  ## extract survival estimates from each surv.fit model
+  survData <- data.frame()
+  out <- summary(
+    survfit(
+      Surv(enter, exit, event) ~ Year,
+      conf.type = "log-log",
+      data = surv.yr %>% dplyr::mutate(Year = as.factor(Year))
+    ),
+    times = 12,
+    extend = TRUE
+  )
+  
+  survData <- rbind(
+    survData,
+    data.frame(
+      Year = str_sub(out$strata, start = 6, end = -1),
+      surv = out$surv,
+      se = out$std.err,
+      lower = out$surv - (1.96 * out$std.err),
+      upper = out$surv + (1.96 * out$std.err),
+      n = out$n,
+      n.risk = out$n.risk
+    )
+  )
+  survData=subset(survData,n.risk>0)
+  
   return(survData)
 }
 
@@ -236,7 +197,6 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   
   initYear <- min(exData$Year)
   
-  
   freqStartsByYear <- subset(freqStartsByYear, 
                              (freqStartsByYear$Year >= initYear) & 
                                (freqStartsByYear$numStarts > 0))
@@ -244,21 +204,11 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   freqStartsByYear <- freqStartsByYear[order(freqStartsByYear$Year), ]
   survivalSeries <- subset(exData, select = c("survival", "Year"))
   
-  # freqStartsByYear$numStarts=10000;collarNumYears=2
-  
-  # if(initYear<min(survivalSeries$Year)){
-  #  missingYrs = seq(initYear,min(survivalSeries$Year)-1)
-  #  addBit = subset(survivalSeries,Year==min(survivalSeries$Year))
-  #  addBit$Year=NULL;addBit = merge(addBit, data.frame(Year=missingYrs))
-  #  survivalSeries=rbind(survivalSeries,addBit)
-  # }
-  
   animalID <- 1
   simSurvObs <- data.frame(id = NA, Year = NA, event = NA, enter = NA, exit = NA)
   simSurvObs <- subset(simSurvObs, !is.na(id))
   # collarNumYears=4
   
-
   for (k in 1:nrow(freqStartsByYear)) {
     # k =1
     if (is.na(freqStartsByYear$numStarts[k]) | (freqStartsByYear$numStarts[k] <= 0)) {

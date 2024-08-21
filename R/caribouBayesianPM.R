@@ -98,7 +98,7 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
                        inputList = list(), saveJAGStxt = tempdir(),
                        quiet = TRUE) {
   # survData=oo$simSurvObs;ageRatio=oo$ageRatioOut;disturbance=oo$simDisturbance;
-  # betaPriors=betaPriors;startYear = minYr;endYear=maxYr;N0=cs$N0;survAnalysisMethod = "KaplanMeier"; adjustR=F
+  # betaPriors="default";startYear = NULL;endYear=NULL;N0=1000;survAnalysisMethod = "KaplanMeier"; adjustR=F
   # Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inputList=list();saveJAGStxt=tempdir();quiet=F
 
   # combine defaults in function with inputs from input list
@@ -182,8 +182,6 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
 
   # check that year range is within data - model will run either way
   data$Year <- as.numeric(data$Year)
-
-  # check that year range is within data - model will run either way
   if (inp$endYear < max(data$Year) | inp$startYear < min(data$Year)) {
     warning(c("requested year range does not match survival data",
               c(" year range:", "  ", min(data$Year), " - ", max(data$Year))))
@@ -209,30 +207,10 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
                      list(sort(unique(data$Year))))))
   }
 
-  data <- data[order(data$exit), ]
-  list_data1 <- split(data, data$Year)
-  nYears <- length(levels(as.factor(data$Year)))
-  n.ind <- numeric(nYears)
-
-  for (i in 1:nYears) {
-    n.ind[i] <- length(list_data1[[i]]$exit)
-  }
-
-  # check for low sample size - model will run either way
-  if (any(n.ind < 20)) {
-    warning(c("warning, low sample size of adult females in at least one year"))
-  }
-
   # get KM estimates to use for adult female survival
-
-  # Note: biased results from years with <12 months of observations.
-  # And problems with adding animals part way through the year, so omitting those
-  #data = data.frame(id=1,Year=2023,event=NA,enter=NA,exit=NA)
-  dSubset <- subset(data, data$enter == 0) # ;dSubset=subset(dSubset,!((exit<12)&(event==0)))
+  # Note: remove left censored animals as they give biased results
+  dSubset <- subset(data, data$enter == 0) 
   if (nrow(dSubset) == 0) {
-    #stop("Collars not present at the start of a year are omitted from survival ",
-    #     "analysis in that year. Please ensure there is at least one year with",
-    #     " a collar in the first month.")
     warning("Collars not present at the start of a year are omitted from survival ",
          "analysis in that year. There are no years with collars in the first month.")
     inp$survAnalysisMethod <- "Exponential"
@@ -251,14 +229,11 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
     
     if (inp$survAnalysisMethod == "KaplanMeier") {
       survData <- getKMSurvivalEstimates(dSubset)
-      # omitting years with less than 12 months of observations of collared animals
-      sumDat <- dSubset %>%
-        group_by(.data$Year) %>%
-        summarise(minEnter = min(.data$enter), maxExit = max(.data$exit))
-      includeYrs <- subset(sumDat, sumDat$minEnter == 0 & sumDat$maxExit == 12)
-      survData$Year <- as.numeric(gsub("as.factor(Year)=", "",
-                                       as.character(survData$Var1), fixed = T))
-      survData <- merge(survData, includeYrs)
+      if (any(survData$n < 20)) {
+        warning(c("warning, low sample size of adult females in at least one year"))
+      }
+      
+      # note that results only returned for years where there at least some as risk animals by month 12
       if (nrow(survData) == 0) {
         warning("Years with less than 12 months of collar data are omitted from",
                 " survival analysis. Please ensure there is 12 months of collar ",
@@ -312,9 +287,6 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
         survData$tau <- 1 / (survData$se^2)
       }
       
-      surv_id <- which(survData$surv != 1)
-      nSurv <- length(surv_id)
-      survData$Var1 <- as.character(survData$Var1)
     } else {
       message("expanding survival record")
       dExpand <- apply(subset(dSubset, select = c("id", "Year", "event", "enter", "exit")),
@@ -323,9 +295,7 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
     }
   }
 
-
   # split data into calf and cow recruitment data
-
   calf.cnt <- subset(ageRatio, ageRatio$Class == "calf")
   calf.cnt$Class <- factor(calf.cnt$Class)
   cow.cnt <- subset(ageRatio, ageRatio$Class == "cow")
@@ -363,10 +333,8 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
     survAddBit <- survData[1, ]
     if (inp$survAnalysisMethod == "KaplanMeier") {
       survAddBit[1, ] <- NA
-      survAddBit$Var1 <- NULL
       survAddBit$Year <- NULL
-      survAddBit <- merge(survAddBit, data.frame(Var1 = missingSurvYrs,
-                                                 Year = missingSurvYrs))
+      survAddBit <- merge(survAddBit, data.frame(Year = missingSurvYrs))
     } else {
       survAddBit[1:ncol(survAddBit)] <- NA
       survAddBit$Year <- NULL

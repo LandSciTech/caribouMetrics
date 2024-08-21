@@ -74,14 +74,13 @@ getOutputTables <- function(caribouBayesDemogMod,
                                select = c("Year")))
       
       obsSurv$surv <- NA
-      obsSurv$Var1 <- obsSurv$Year
     }
   } else {
     obsSurv <- survInput
   }
   
   obsSurv$Mean <- obsSurv$surv
-  obsSurv$Year <- as.numeric(gsub("as.factor(Year)=", "", obsSurv$Var1, fixed = T))
+  obsSurv$Year <- as.numeric(obsSurv$Year)
   obsSurv <- subset(obsSurv, obsSurv$Year > 1000)
   
   obsSurv$parameter <- "Adult female survival"

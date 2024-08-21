@@ -171,6 +171,9 @@ test_that("results match expected", {
                     iAnthro = 0, obsAnthroSlope = 0, projAnthroSlope = 0, 
                     sQuantile = 0.5,  rQuantile = 0.5, rSlopeMod = 1, sSlopeMod = 1, 
                     KSDists = FALSE){
+    #nCollar = 2000; nobsYears = 10; collarOn = 1; collarOff = 12; 
+    #iAnthro = 0; obsAnthroSlope = 0; projAnthroSlope = 0; 
+    #sQuantile = 0.5;  rQuantile = 0.5; rSlopeMod = 1; sSlopeMod = 1; KSDists = FALSE
     eParsIn <- list()
     eParsIn$collarOnTime <- collarOn
     eParsIn$collarOffTime <- collarOff
