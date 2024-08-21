@@ -277,12 +277,12 @@ over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:12] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpXix11h/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpiQ26v0/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
 <span><span class="co">#&gt;  $ inData:List of 3</span></span>
-<span><span class="co">#&gt;   ..$ survDataIn   :'data.frame':    35 obs. of  10 variables:</span></span>
+<span><span class="co">#&gt;   ..$ survDataIn   :'data.frame':    35 obs. of  8 variables:</span></span>
 <span><span class="co">#&gt;   ..$ disturbanceIn:'data.frame':    35 obs. of  6 variables:</span></span>
 <span><span class="co">#&gt;   ..$ ageRatioIn   :'data.frame':    70 obs. of  4 variables:</span></span></code></pre></div>
 <p>The returned object contains an <code>rjags</code> object and a list
@@ -550,6 +550,9 @@ see how well our monitoring program captured the true population.</p>
 <span>                              disturbance <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">simDisturbance</span>, </span>
 <span>                              <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>                              Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in caribouBayesianPM(survData = sim_obs$simSurvObs, ageRatio =</span></span>
+<span><span class="co">#&gt; sim_obs$ageRatioOut, : warning, low sample size of adult females in at least</span></span>
+<span><span class="co">#&gt; one year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span></span>
 <span><span class="va">mod_sim_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">mod_sim</span>, exData <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">exData</span>, </span>
