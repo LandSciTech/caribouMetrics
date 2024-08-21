@@ -14,8 +14,8 @@ getKMSurvivalEstimates <- function(ss) {
   ## extract survival estimates from each surv.fit model
   survData <- data.frame()
   out <- summary(
-    survfit(
-      Surv(enter, exit, event) ~ Year,
+    survival::survfit(
+      survival::Surv(enter, exit, event) ~ Year,
       conf.type = "log-log",
       data = surv.yr %>% dplyr::mutate(Year = as.factor(Year))
     ),
