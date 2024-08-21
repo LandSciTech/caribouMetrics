@@ -26,7 +26,7 @@ getKMSurvivalEstimates <- function(ss) {
   survData <- rbind(
     survData,
     data.frame(
-      Year = str_sub(out$strata, start = 6, end = -1),
+      Year = stringr::str_sub(out$strata, start = 6, end = -1),
       surv = out$surv,
       se = out$std.err,
       lower = out$surv - (1.96 * out$std.err),
