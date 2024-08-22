@@ -229,8 +229,8 @@ test_that("results match expected", {
   calcDifNat <- function(mod, min_year = 0){
     mod$rr.summary.all %>% select(Parameter, Mean, Year) %>% 
       right_join(mod$sim.all %>% select(parameter, Mean, Year),
-                 by = c(Parameter = "parameter", "Year"), suffix = c("_IPM", "_nat")) %>% 
-      mutate(dif = Mean_IPM - Mean_nat) %>% 
+                 by = c(Parameter = "parameter", "Year"), suffix = c("_PM", "_nat")) %>% 
+      mutate(dif = Mean_PM - Mean_nat) %>% 
       filter(Year >= min_year) %>% 
       group_by(Parameter) %>% 
       summarise(mean_dif = mean(dif)) %>% 
