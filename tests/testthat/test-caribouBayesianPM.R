@@ -163,7 +163,7 @@ test_that("works when 1 collared animal",{
 
 test_that("results match expected", {
   # save to speed up tests
-  # simBig <- suppressWarnings(getSimsNational(N0 = 3000))
+  # simBig <- suppressWarnings(getSimsNational(N0 = 3000,forceUpdate=T))
   # saveRDS(simBig, "tests/testthat/data/simBig3000.rds", version = 2)
   
   simBig <- readRDS( file.path(test_path(), "data/simBig3000.rds"))
@@ -247,7 +247,7 @@ test_that("results match expected", {
   doPlot(manyObs, title = "2000 collars")
     
   fewCollarObs <- doScn(nCollar = 5, rQuantile = 0.9, sQuantile = 0.9)
-  doPlot(fewCollarObs, title = "10 collars")
+  doPlot(fewCollarObs, title = "5 collars")
   
   difMany <- calcDif(manyObs$obs.all)
   difFew <- calcDif(fewCollarObs$obs.all)

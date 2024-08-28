@@ -5,7 +5,7 @@ for(k in 1:nSurvs){
 	_survString_
 }
 for(k in 1:nCounts){
-	calves[count_id[k]] ~ dpois( R[count_id[k]]* CountAntlerless[count_id[k]] )
+	calves[count_id[k]] ~ dbinom( R[count_id[k]], CountAntlerless[count_id[k]] )
 }
 
 #Survival
@@ -58,7 +58,7 @@ for(k in 2:nYears){
 	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))T(-10,0)
 	sig.R~dunif(sig.R.Prior1,sig.R.Prior2)
 	tau.R<-pow(sig.R, -2)
-
+	
 	meanAFsurv <-  exp(l.Saf)/(1+ exp(l.Saf)) #(prod(R))^(1/(nYears))
 	meanR <-  exp(l.R)/(1+ exp(l.R)) #(prod(R))^(1/(nYears))
 	meanRfemale <-  (prod(Rfemale))^(1/(nYears))
