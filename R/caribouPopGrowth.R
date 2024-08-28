@@ -113,7 +113,7 @@ caribouPopGrowth <- function(N0,
                              l_S=0.61,
                              h_S=1,
                              c=1,
-                             interannualVar = list(R_CV=0.46^2,S_CV=0.08696^2),
+                             interannualVar = list(R_CV=0.46,S_CV=0.08696),
                              probOption="binomial",
                              adjustR=FALSE,
                              progress = interactive()){
