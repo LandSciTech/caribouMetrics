@@ -20,8 +20,11 @@ for(k in 1:nYears){
 
 #Recruitment
 for(k in 1:nYears){
-		epsilon.R[k]~dnorm(0,tau.R)
-		log(R[k]) <- l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire + epsilon.R[k]
+    fixedEffect[k] <- l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire
+	  sig.R[k]<-cv.R*exp(fixedEffect[k])
+	  tau.R[k]<-pow(sig.R[k], -2)
+		epsilon.R[k]~dnorm(0,tau.R[k])
+		log(R[k]) <-  fixedEffect[k]+ epsilon.R[k]
 }
 
 #Growth
@@ -56,8 +59,7 @@ for(k in 2:nYears){
 	tau.Saf<-pow(sig.Saf, -2)
 
 	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))T(-10,0)
-	sig.R~dunif(sig.R.Prior1,sig.R.Prior2)
-	tau.R<-pow(sig.R, -2)
+	cv.R~dunif(sig.R.Prior1,sig.R.Prior2)
 	
 	meanAFsurv <-  exp(l.Saf)/(1+ exp(l.Saf)) #(prod(R))^(1/(nYears))
 	meanR <-  exp(l.R)/(1+ exp(l.R)) #(prod(R))^(1/(nYears))
