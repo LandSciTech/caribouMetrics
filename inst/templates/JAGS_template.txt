@@ -21,7 +21,7 @@ for(k in 1:nYears){
 #Recruitment
 for(k in 1:nYears){
     fixedEffect[k] <- l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire
-	  sig.R[k]<-cv.R*fixedEffect[k]
+	  sig.R[k]<-cv.R*fixedEffect[k]^2
 	  tau.R[k]<-pow(sig.R[k], -2)
 		epsilon.R[k]~dnorm(0,tau.R[k])
 		log(R[k]) <-  fixedEffect[k]+ epsilon.R[k]

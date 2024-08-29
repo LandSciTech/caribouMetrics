@@ -16,7 +16,7 @@ getPriors(
   sSigmaMax = 0.18,
   rIntSE = 0.25,
   rSigmaMin = 1e-05,
-  rSigmaMax = 0.45,
+  rSigmaMax = 0.79,
   qMin = 0,
   qMax = 0.6,
   uMin = 0,
