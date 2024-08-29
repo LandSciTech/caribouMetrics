@@ -13,7 +13,7 @@ getPriors(
   sAnthroSlopeSE = 5e-04,
   sIntSE = 0.04,
   sSigmaMin = 1e-05,
-  sSigmaMax = 0.18,
+  sSigmaMax = 0.16,
   rIntSE = 0.25,
   rSigmaMin = 1e-05,
   rSigmaMax = 0.7,
