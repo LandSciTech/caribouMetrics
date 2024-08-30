@@ -384,9 +384,19 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
     }
   }
 
-  jagsTemplate <- paste(readLines(system.file("templates/JAGS_template.txt",
+  if(min(betaPriors$sig.R.Prior2,betaPriors$sig.Saf.Prior2)==0){
+    if(max(betaPriors$sig.R.Prior2,betaPriors$sig.Saf.Prior2)>0){
+      warning("Ignoring all interannual variation because one of the interannual variation priors is set to 0")
+    }
+    jagsTemplate <- paste(readLines(system.file("templates/JAGS_template2.txt",
+                                                package = "caribouMetrics"
+    )), collapse = "\n")
+    
+  }else{
+    jagsTemplate <- paste(readLines(system.file("templates/JAGS_template.txt",
                                               package = "caribouMetrics"
   )), collapse = "\n")
+  }
   jagsTemplate <- gsub("_survString_", survString, jagsTemplate, fixed = T)
   jagsTemplate <- gsub("_adjustString_", adjustString, jagsTemplate, fixed = T)
   jagsTemplate <- gsub("_biasString_", biasString, jagsTemplate, fixed = T)

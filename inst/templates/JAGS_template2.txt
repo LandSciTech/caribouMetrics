@@ -1,0 +1,58 @@
+#No interannual variability
+model{
+
+#Observation models
+for(k in 1:nSurvs){
+	_survString_
+}
+for(k in 1:nCounts){
+	calves[count_id[k]] ~ dbinom( R[count_id[k]], CountAntlerless[count_id[k]] )
+}
+
+#Survival
+for(k in 1:nYears){
+  S.annual.KM[k]~max(0.01,min(0.99,(exp(l.Saf + anthro[k]*beta.Saf)*46-0.5)/45))
+}
+
+#Recruitment
+for(k in 1:nYears){
+    R[k] <- max(0.01,min(0.99,exp(l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire)))
+}
+
+#Growth
+for(k in 1:nYears){
+		_adjustString_
+		survivors[k] ~ dbin( S.annual.KM[k], fpop.size[k] )
+    recruits[k] ~ dpois(Rfemale[k]*survivors[k])
+    #small minimum in demoninator to give 0 when fpop.size=0
+    pop.growthr[k] <- (survivors[k]+recruits[k])/max(fpop.size[k],0.0000001)
+}
+for(k in 2:assessmentYrs){
+    pop.growth[k-1] <- pop.growthr[k-1]
+}
+for(k in assessmentYrs:nYears){
+    pop.growth[k] <- mean(pop.growthr[(k-assessmentYrs+1):k])
+}
+
+fpop.size[1] <- Ninit
+for(k in 2:nYears){
+   fpop.size[k] <- survivors[k-1]+recruits[k-1]
+}
+
+# priors
+	beta.Saf~dnorm(beta.Saf.Prior1,pow(beta.Saf.Prior2, -2))
+	beta.Rec.anthro~dnorm(beta.Rec.anthro.Prior1,pow(beta.Rec.anthro.Prior2, -2))
+	beta.Rec.fire~dnorm(beta.Rec.fire.Prior1,pow( beta.Rec.fire.Prior2, -2))
+	_biasString_
+	
+	#NOTE truncate distribution to ensure intercept between 0 and (45+0.5)/46.
+	l.Saf ~ dnorm(l.Saf.Prior1,pow(l.Saf.Prior2,-2)) T(-10,-0.01092911)
+
+	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))T(-10,0)
+
+	meanAFsurv <-  exp(l.Saf)/(1+ exp(l.Saf)) #(prod(R))^(1/(nYears))
+	meanR <-  exp(l.R)/(1+ exp(l.R)) #(prod(R))^(1/(nYears))
+	meanRfemale <-  (prod(Rfemale))^(1/(nYears))
+	medianLambda <- (prod(pop.growthr))^(1/(nYears))
+	meanLambda <- mean(pop.growthr)
+}
