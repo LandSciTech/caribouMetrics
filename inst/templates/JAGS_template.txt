@@ -11,35 +11,25 @@ for(k in 1:nCounts){
 #Survival
 for(k in 1:nYears){
 	#Note adjustment as in Johnson et al 2020.
-  #mu.S[k] <- min(1,exp(l.Saf + anthro[k]*beta.Saf))
-  #sig.S[k] <- cv.S*mu.S[k]
+  mu.S[k] <- max(0.01,min(0.99,(exp(l.Saf + anthro[k]*beta.Saf)*46-0.5)/45))
+  #Constrain sd of beta distribution to what is theoretically possible, given mu
+  sig.S[k] <- min(cv.S*mu.S[k],0.99*(mu.S[k]*(1-mu.S[k]))^0.5)
   #Get beta distribution parameters from mean and sd
-  #alpha.S[k] <- max(0.01,((1-mu.S[k])/sig.S[k]^2 - 1/mu.S[k]) * mu.S[k]^2)
-  #beta.S[k] <- max(0.01,alpha.S[k] * (1/mu.S[k] - 1))
-  #Saf2[k]~dbeta(alpha.S[k],beta.S[k])
-  #S.annual.KM[k] <- min((Saf2[k]*46-0.5)/45,1)
-
-	#Adult female survival - process variance
-	epsilon.Saf[k]~dnorm(0,tau.Saf)
-	log(Saf2[k]) <- l.Saf + anthro[k]*beta.Saf + epsilon.Saf[k]
-	#S.annual.KM should not be bigger than 1. 
-	#Note adjustment as in Johnson et al 2020.
-	S.annual.KM[k] <- min((Saf2[k]*46-0.5)/45,1)
+  alpha.S[k] <- ((1-mu.S[k])/sig.S[k]^2 - 1/mu.S[k]) * mu.S[k]^2
+  beta.S[k] <- alpha.S[k] * (1/mu.S[k] - 1)
+  S.annual.KM[k]~dbeta(alpha.S[k],beta.S[k])
+  
 }
 
 #Recruitment
 for(k in 1:nYears){
-    mu.R[k] <- min(1,exp(l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire))
-    sig.R[k] <- cv.R*mu.R[k]
+    mu.R[k] <- max(0.01,min(0.99,exp(l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire)))
+    #Constrain sd of beta distribution to what is theoretically possible, given mu
+    sig.R[k] <- min(cv.R*mu.R[k],0.99*(mu.R[k]*(1-mu.R[k]))^0.5)
     #Get beta distribution parameters from mean and sd
-    alpha.R[k] <- max(0.01,((1-mu.R[k])/sig.R[k]^2 - 1/mu.R[k]) * mu.R[k]^2)
-    beta.R[k] <- max(0.01,alpha.R[k] * (1/mu.R[k] - 1))
+    alpha.R[k] <- ((1-mu.R[k])/sig.R[k]^2 - 1/mu.R[k]) * mu.R[k]^2
+    beta.R[k] <- alpha.R[k] * (1/mu.R[k] - 1)
     R[k]~dbeta(alpha.R[k],beta.R[k])
-
-	  #sig.R[k]<-cv.R*exp(fixedEffect[k])
-	  #tau.R[k]<-pow(sig.R[k], -2)
-		#epsilon.R[k]~dnorm(0,tau.R[k])
-		#log(R[k]) <-  fixedEffect[k]+ epsilon.R[k]
 }
 
 #Growth
@@ -70,13 +60,11 @@ for(k in 2:nYears){
 	
 	#NOTE truncate distribution to ensure intercept between 0 and (45+0.5)/46.
 	l.Saf ~ dnorm(l.Saf.Prior1,pow(l.Saf.Prior2,-2)) T(-10,-0.01092911)
-	#cv.S~dunif(sig.Saf.Prior1,sig.Saf.Prior2)
-	sig.Saf~dunif(sig.Saf.Prior1,sig.Saf.Prior2)
-	tau.Saf<-pow(sig.Saf, -2)
+	cv.S~dunif(sig.Saf.Prior1,sig.Saf.Prior2) #note theoretical max cv for beta distn is 1.
 
 	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))T(-10,0)
-	cv.R~dunif(sig.R.Prior1,sig.R.Prior2)
-	
+	cv.R~dunif(sig.R.Prior1,sig.R.Prior2) #note theoretical max cv for beta distn is 1.
+
 	meanAFsurv <-  exp(l.Saf)/(1+ exp(l.Saf)) #(prod(R))^(1/(nYears))
 	meanR <-  exp(l.R)/(1+ exp(l.R)) #(prod(R))^(1/(nYears))
 	meanRfemale <-  (prod(Rfemale))^(1/(nYears))

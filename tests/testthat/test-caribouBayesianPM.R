@@ -246,8 +246,8 @@ test_that("results match expected", {
   manyObs <- doScn(nCollar = 2000, rQuantile = 0.9, sQuantile = 0.9)
   doPlot(manyObs, title = "2000 collars")
     
-  fewCollarObs <- doScn(nCollar = 5, rQuantile = 0.9, sQuantile = 0.9)
-  doPlot(fewCollarObs, title = "5 collars")#,var="Adult female survival")
+  fewCollarObs <- doScn(nCollar = 0, rQuantile = 0.9, sQuantile = 0.9)
+  doPlot(fewCollarObs, title = "5 collars",var="Adult female survival")
   
   difMany <- calcDif(manyObs$obs.all)
   difFew <- calcDif(fewCollarObs$obs.all)
