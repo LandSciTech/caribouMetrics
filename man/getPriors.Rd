@@ -12,11 +12,11 @@ getPriors(
   rFireSlopeSE = 0.002,
   sAnthroSlopeSE = 5e-04,
   sIntSE = 0.04,
-  sSigmaMin = 0.001,
-  sSigmaMax = 0.13,
+  sNuMin = 0.001,
+  sNuMax = 0.13,
   rIntSE = 0.25,
-  rSigmaMin = 0.001,
-  rSigmaMax = 0.7,
+  rNuMin = 0.001,
+  rNuMax = 0.7,
   qMin = 0,
   qMax = 0.6,
   uMin = 0,
@@ -44,11 +44,11 @@ number to use see \link{popGrowthTableJohnsonECCC} for options.}
 
 \item{sIntSE}{Standard deviation of survival intercept.}
 
-\item{sSigmaMin, sSigmaMax}{Uniform hyperprior for random effect of year.}
+\item{sNuMin, sNuMax}{Uniform prior for coefficient of variation among years.}
 
 \item{rIntSE}{Standard deviation of recruitment intercept.}
 
-\item{rSigmaMin, rSigmaMax}{Uniform hyperprior for random effect of year.}
+\item{rNuMin, rNuMax}{Uniform prior for coefficient of variation among years.}
 
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition
 survey groups.}

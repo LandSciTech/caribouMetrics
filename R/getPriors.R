@@ -23,8 +23,8 @@
 #' @param rFireSlopeSE Standard deviation of effect of fire on recruitment.
 #' @param sIntSE Standard deviation of survival intercept.
 #' @param rIntSE Standard deviation of recruitment intercept.
-#' @param sSigmaMin,sSigmaMax Uniform hyperprior for random effect of year. 
-#' @param rSigmaMin,rSigmaMax Uniform hyperprior for random effect of year. 
+#' @param sNuMin,sNuMax Uniform prior for coefficient of variation among years. 
+#' @param rNuMin,rNuMax Uniform prior for coefficient of variation among years. 
 #' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition
 #'   survey groups.
 #' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition
@@ -81,11 +81,11 @@ getPriors <- function(modList = NULL,
                       rFireSlopeSE = 0.002,
                       sAnthroSlopeSE = 0.0005,
                       sIntSE = 0.04,
-                      sSigmaMin = 0.001,
-                      sSigmaMax = 0.13,
+                      sNuMin = 0.001,
+                      sNuMax = 0.13,
                       rIntSE = 0.25,
-                      rSigmaMin =0.001,
-                      rSigmaMax =0.7,
+                      rNuMin =0.001,
+                      rNuMax =0.7,
                       qMin=0, qMax =0.6, 
                       uMin = 0, uMax = 0.2, 
                       zMin = 0, zMax = 0.2, 
@@ -159,14 +159,14 @@ getPriors <- function(modList = NULL,
       beta.Rec.anthro.Prior2 = modList$rAnthroSlopeSE,
       beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
       beta.Rec.fire.Prior2 = modList$rFireSlopeSE,
-      sig.R.Prior1 = modList$rSigmaMin,
-      sig.R.Prior2 = modList$rSigmaMax,
+      sig.R.Prior1 = modList$rNuMin,
+      sig.R.Prior2 = modList$rNuMax,
       l.Saf.Prior1 = sPriorCoefs$Intercept,
       l.Saf.Prior2 = modList$sIntSE,
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = modList$sAnthroSlopeSE,
-      sig.Saf.Prior1 = modList$sSigmaMin,
-      sig.Saf.Prior2 = modList$sSigmaMax,
+      sig.Saf.Prior1 = modList$sNuMin,
+      sig.Saf.Prior2 = modList$sNuMax,
       bias.Prior1 = bias.Prior1,
       bias.Prior2 = bias.Prior2
     )
@@ -187,14 +187,14 @@ getPriors <- function(modList = NULL,
       beta.Rec.anthro.Prior2 = round(modList$rAnthroSlopeSE, 4),
       beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
       beta.Rec.fire.Prior2 = round(modList$rFireSlopeSE,4),
-      sig.R.Prior1 = modList$rSigmaMin,
-      sig.R.Prior2 = modList$rSigmaMax,
+      sig.R.Prior1 = modList$rNuMin,
+      sig.R.Prior2 = modList$rNuMax,
       l.Saf.Prior1 = sPriorCoefs$Intercept,
       l.Saf.Prior2 = round(modList$sIntSE, 4),
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = round(modList$sAnthroSlopeSE, 4),
-      sig.Saf.Prior1 = modList$sSigmaMin,
-      sig.Saf.Prior2 = modList$sSigmaMax,
+      sig.Saf.Prior1 = modList$sNuMin,
+      sig.Saf.Prior2 = modList$sNuMax,
       bias.Prior1 = bias.Prior1,
       bias.Prior2 = bias.Prior2
     )
