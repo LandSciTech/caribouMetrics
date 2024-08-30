@@ -46,7 +46,7 @@ lnormSample<-function(x,sd,quantilesToUse=NULL){
 
 estBetaParams <- function(mu, sigma,minMu = 0.000001,maxMu=0.99999,minSd=0.000001){
   
-  if(any(mu=0)){
+  if(any(mu==0)){
     print("ERROR (estBetaParam): mu must not be less than 0. Returning NULL.")
     return()
   } 
@@ -61,27 +61,17 @@ estBetaParams <- function(mu, sigma,minMu = 0.000001,maxMu=0.99999,minSd=0.00000
     return()
   } 
   
-  mu= max(mu,minMu);mu=min(mu,maxMu)
-  sigma= max(sigma,minSd)
+  mu= pmax(mu,minMu);mu=pmin(mu,maxMu)
+  sigma= pmax(sigma,minSd)
   maxSd = 0.99999*(mu*(1-mu))^0.5 #maximum possible sd given mu
   sigmaIn= sigma
-  sigma = min(sigma,maxSd)
+  sigma = pmin(sigma,maxSd)
   
   alpha <- ((1-mu)/sigma^2 - 1/mu) * mu^2
   
-  #reduce to max sigma empirically
-  if(0&alpha<0){
-    #reduce sd to get valid parameter values
-    step=0.99
-    while(alpha<0){
-      sigma=step*sigma
-      alpha <- ((1-mu)/sigma^2 - 1/mu) * mu^2
-    }
-  }  
-  
   beta <- alpha * (1/mu - 1)
   
-  if(sigmaIn>sigma){
+  if(any(sigmaIn>sigma)){
     warning(paste0("It isn't possible to have a beta distribution with mean ",mu," and sd ",sigmaIn,
                    ". Standard deviation has been reduced to ",sigma,"."))
   }

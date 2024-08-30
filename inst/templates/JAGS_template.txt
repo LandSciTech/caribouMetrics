@@ -17,8 +17,7 @@ for(k in 1:nYears){
   #Get beta distribution parameters from mean and sd
   alpha.S[k] <- ((1-mu.S[k])/sig.S[k]^2 - 1/mu.S[k]) * mu.S[k]^2
   beta.S[k] <- alpha.S[k] * (1/mu.S[k] - 1)
-  S.annual.KM[k]~dbeta(alpha.S[k],beta.S[k])
-  
+  S.annual.KM[k]~dbeta(alpha.S[k],beta.S[k]) T(0.01,0.99)
 }
 
 #Recruitment
@@ -29,7 +28,7 @@ for(k in 1:nYears){
     #Get beta distribution parameters from mean and sd
     alpha.R[k] <- ((1-mu.R[k])/sig.R[k]^2 - 1/mu.R[k]) * mu.R[k]^2
     beta.R[k] <- alpha.R[k] * (1/mu.R[k] - 1)
-    R[k]~dbeta(alpha.R[k],beta.R[k])
+    R[k]~dbeta(alpha.R[k],beta.R[k]) T(0.01,0.99)
 }
 
 #Growth
