@@ -11,7 +11,7 @@ for(k in 1:nCounts){
 
 #Survival
 for(k in 1:nYears){
-  S.annual.KM[k]~max(0.01,min(0.99,(exp(l.Saf + anthro[k]*beta.Saf)*46-0.5)/45))
+  S.annual.KM[k] <- max(0.01,min(0.99,(exp(l.Saf + anthro[k]*beta.Saf)*46-0.5)/45))
 }
 
 #Recruitment

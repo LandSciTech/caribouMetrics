@@ -2,6 +2,9 @@
 test_that("Runs with defaults", {
   # reduce some defaults to make fast
   # note that the default csv does not match the default startYear
+  
+  #betaPriors =getPriors()
+  #betaPriors$sig.Saf.Prior2=0
   expect_s3_class(caribouBayesianPM(Nchains = 1, Niter = 100, Nburn = 10,
                        Nthin = 2)$result,
             "rjags")
