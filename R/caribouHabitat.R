@@ -298,7 +298,7 @@ caribouHabitat <- function(landCover = NULL, esker = NULL, linFeat = NULL,
                                              "_",
                                              names(x@habitatUse[[i]]), ext_save
                                              ), 
-                           overwrite = TRUE)
+                           overwrite = TRUE, NAflag = -9999)
       }
     } else {
       terra::writeRaster(x@habitatUse, filename = dots$saveOutput, 
