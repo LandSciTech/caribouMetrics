@@ -234,7 +234,7 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
   }
   
   #cut simDisturbance table to start at first obs year
-  simDisturbance = subset(simDisturbance,Year>=minYr)
+  simDisturbance = subset(simDisturbance,simDisturbance$Year>=minYr)
   
   return(list(minYr = minYr, maxYr = maxYr, simDisturbance = simDisturbance,
               simSurvObs = simSurvObs, ageRatioOut = ageRatioOut,
