@@ -8,7 +8,7 @@ getKMSurvivalEstimates <- function(ss) {
   #when there are no animals at risk in some months.
   #Address by removing left censored animals, and then only calculating in years
   #where at least some animals remain at risk by month 12.
-  ss = subset(ss,enter==0)
+  ss = subset(ss, ss$enter==0)
   
   surv.yr = ss
   ## extract survival estimates from each surv.fit model
@@ -17,7 +17,7 @@ getKMSurvivalEstimates <- function(ss) {
     survival::survfit(
       survival::Surv(enter, exit, event) ~ Year,
       conf.type = "log-log",
-      data = surv.yr %>% dplyr::mutate(Year = as.factor(Year))
+      data = surv.yr %>% dplyr::mutate(Year = as.factor(.data$Year))
     ),
     times = 12,
     extend = TRUE
@@ -35,7 +35,7 @@ getKMSurvivalEstimates <- function(ss) {
       n.risk = out$n.risk
     )
   )
-  survData=subset(survData,n.risk>0)
+  survData=subset(survData, survData$n.risk>0)
   
   return(survData)
 }

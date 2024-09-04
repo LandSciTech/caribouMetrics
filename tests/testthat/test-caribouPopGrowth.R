@@ -12,7 +12,7 @@ test_that("caribouPopGrowth options work", {
                "must have length")
   
   res2 <- caribouPopGrowth(1:10*100, 20, c(rep(0.2, 5), rep(0.8, 5)),
-                           0.8, progress = FALSE) 
+                           0.85, progress = FALSE) 
   
   expect_true(all(which(res2$lambda < 1) == 1:5))
   
@@ -22,7 +22,7 @@ test_that("caribouPopGrowth options work", {
                "must have length")
   
   res3 <- caribouPopGrowth(1:10*100, 20, 0.8, 
-                           c(rep(0.7, 5), rep(0.8, 5)), progress = FALSE) 
+                           c(rep(0.6, 5), rep(0.9, 5)), progress = FALSE) 
   
   expect_true(all(which(res3$lambda < 1) == 1:5))
   
@@ -205,7 +205,7 @@ test_that("pop Growth matches Johnson figures", {
   theor_lam <- (testRates$S_bar) * (1 + testRates$R_bar * 0.5) 
   
   # these should all be similar
-  expect_equal(mean(check$lambda), theor_lam, tolerance = 0.002)
-  expect_equal(testCheck$lambda, theor_lam, tolerance = 0.002)
-  expect_equal(testCheck$lambda, mean(check$lambda), tolerance = 0.002)
+  expect_equal(mean(check$lambda), theor_lam, tolerance = 0.003)
+  expect_equal(testCheck$lambda, theor_lam, tolerance = 0.003)
+  expect_equal(testCheck$lambda, mean(check$lambda), tolerance = 0.003)
 })

@@ -60,7 +60,7 @@ Collate:
     'calcRSP.R'
     'caribouBayesianPM.R'
     'caribouHabitat.R'
-    'caribouMetrics.R'
+    'caribouMetrics-package.R'
     'caribouPopGrowth.R'
     'checkInputs.R'
     'combineLinFeat.R'
