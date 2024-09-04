@@ -22,6 +22,9 @@ getKMSurvivalEstimates <- function(ss) {
     times = 12,
     extend = TRUE
   )
+  if(!is.element("strata",names(out))){
+    out$strata=paste0("chars",unique(surv.yr$Year))
+  }
   
   survData <- rbind(
     survData,
