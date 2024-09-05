@@ -65,14 +65,17 @@ getOutputTables <- function(caribouBayesDemogMod,
   if (!is.element("surv", names(survInput))) {
     if (sum(survInput$event, na.rm = T) > 0) {
       obsSurv <- getKMSurvivalEstimates(survInput)
-    } else {
+
+    }else{obsSurv=data.frame()} 
+    
+    
+    if(nrow(obsSurv)==0) {
       if(!is.element("id",names(survInput))){
         survInput$id=NA
         survInput$id[!is.na(survInput$enter)]=1
       }
       obsSurv <- unique(subset(survInput, !is.na(survInput$id),
                                select = c("Year")))
-      
       obsSurv$surv <- NA
     }
   } else {

@@ -27,8 +27,7 @@
 #' Given default parameters, recruitment rate is lowest \eqn{(0.5\dot{X}_t)}
 #' when \eqn{\dot{N}_t=1}, approaches a maximum of \eqn{\dot{X}_t} at
 #' intermediate population sizes, and declines to \eqn{0.6\dot{X}_t} as the
-#' population reaches carrying capacity of \eqn{k=100} times the initial
-#' population size. The post-juvenile female population in the next year
+#' population reaches carrying capacity of \eqn{K=50000}. The post-juvenile female population in the next year
 #' includes both survivors and new recruits:
 #' \eqn{\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)}.
 #'
@@ -49,7 +48,7 @@
 #' @param P_K Number. Recruitment multiplier at carrying capacity.
 #' @param a Number. Density dependence shape parameter.
 #' @param b Number. Allee effect parameter.
-#' @param K Number. Carrying capacity multiplier.
+#' @param K Number. Carrying capacity.
 #' @param r_max Number. Maximum population growth rate.
 #' @param s Number. Sex ratio.
 #' @param l_R Number. Minimum recruitment.
@@ -105,7 +104,7 @@ caribouPopGrowth <- function(N0,
                              P_K = 0.6,
                              a = 1,
                              b = 4,
-                             K = 100,
+                             K = 50000,
                              r_max = 1.3,
                              s=0.5,
                              l_R=0,
@@ -169,7 +168,7 @@ caribouPopGrowth <- function(N0,
       roundDigits=0
       doBinomial=T
     }
-    rK <- K * N0
+    rK <- K #* N0
   }
 
   if(a<0){
