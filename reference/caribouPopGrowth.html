@@ -99,7 +99,7 @@ details and examples.</p>
 <span>  P_K <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>  a <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  b <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  K <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  K <span class="op">=</span> <span class="fl">50000</span>,</span>
 <span>  r_max <span class="op">=</span> <span class="fl">1.3</span>,</span>
 <span>  s <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  l_R <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -154,7 +154,7 @@ one or more sample populations.</p></dd>
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>Number. Carrying capacity multiplier.</p></dd>
+<dd><p>Number. Carrying capacity.</p></dd>
 
 
 <dt id="arg-r-max">r_max<a class="anchor" aria-label="anchor" href="#arg-r-max"></a></dt>
@@ -230,8 +230,7 @@ $$\dot{J}_{t} \sim
 Given default parameters, recruitment rate is lowest \((0.5\dot{X}_t)\)
 when \(\dot{N}_t=1\), approaches a maximum of \(\dot{X}_t\) at
 intermediate population sizes, and declines to \(0.6\dot{X}_t\) as the
-population reaches carrying capacity of \(k=100\) times the initial
-population size. The post-juvenile female population in the next year
+population reaches carrying capacity of \(K=50000\). The post-juvenile female population in the next year
 includes both survivors and new recruits:
 \(\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)\).</p>
 <p>Interannual variation in survival and recruitment is modelled using truncated
