@@ -263,7 +263,10 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   } else if (nrow(addBit) > 0) {
     simSurvObs <- merge(simSurvObs, addBit)
   }
-  
+
+  if(nrow(simSurvObs)==0){
+    simSurvObs = data.frame(id=1,Year=freqStartsByYear$Year,event=NA,enter=NA,exit=NA)
+  }
   return(simSurvObs)
 }
 
