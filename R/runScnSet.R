@@ -54,7 +54,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
     betaPriors <- getPriors(cs)
     minYr <- min(oo$exData$Year)
     maxYr <- max(oo$simDisturbance$Year)
-    out <- (caribouBayesianPM(
+    out <- try(caribouBayesianPM(
       survData = oo$simSurvObs, ageRatio = oo$ageRatioOut,
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = minYr, endYear = maxYr,
