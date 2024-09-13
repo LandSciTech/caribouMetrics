@@ -56,6 +56,7 @@ getScenarioDefaults <- function(paramTable = NULL,
                          uMin = 0, uMax = 0.2, zMin = 0, zMax = 0.2, cowMult = 6,
                          collarInterval = NA, cowCount = NA, 
                          collarCount = NA, startYear = NA,
+                         interannualVar = formals(caribouPopGrowth)$interannualVar,
                          curYear = 2023) {
   defList <- c(as.list(environment()))
   defList$paramTable <- NULL

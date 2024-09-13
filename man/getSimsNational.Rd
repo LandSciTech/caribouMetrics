@@ -13,7 +13,8 @@ getSimsNational(
   populationGrowthTable = NULL,
   adjustR = TRUE,
   cPars = getScenarioDefaults(),
-  forceUpdate = F
+  forceUpdate = F,
+  interannualVar = formals(caribouPopGrowth)$interannualVar
 )
 }
 \arguments{
@@ -49,6 +50,11 @@ reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{forceUpdate}{logical. If the default inputs are used the result is
 cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
+
+\item{interannualVar}{list or logical. List containing interannual
+variability parameters. These can be either coefficients of variation
+(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to \code{FALSE} to
+ignore interannual variability.}
 }
 \value{
 a list with two elements:

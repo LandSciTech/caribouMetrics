@@ -150,7 +150,8 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
       N0 = paramTable$N0, adjustR = paramTable$adjustR,
       cowMult = ifelse(is.null(paramTable$cowMult), 1, paramTable$cowMult),
       qMin = paramTable$qMin, qMax = paramTable$qMax, uMin = paramTable$uMin,
-      uMax = paramTable$uMax, zMin = paramTable$zMin, zMax = paramTable$zMax
+      uMax = paramTable$uMax, zMin = paramTable$zMin, zMax = paramTable$zMax,
+      interannualVar=paramTable$interannualVar
     )
   )
 

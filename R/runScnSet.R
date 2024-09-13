@@ -46,7 +46,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
     if (printProgress) {
       print(paste0(c(p, scns[p, ]), collapse = " "))
     }
-
+    
     oo <- simulateObservations(cs, collarNumYears = ePars$collarNumYears,
                                collarOffTime = ePars$collarOffTime,
                                collarOnTime = ePars$collarOnTime)

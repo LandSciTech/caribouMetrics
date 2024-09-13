@@ -116,6 +116,9 @@ caribouPopGrowth <- function(N0,
                              probOption="binomial",
                              adjustR=FALSE,
                              progress = interactive()){
+  if(is.character(interannualVar)){
+    interannualVar = eval(parse(text=interannualVar))
+  }
   rr=data.frame(N0=N0)
   
   N <- N0

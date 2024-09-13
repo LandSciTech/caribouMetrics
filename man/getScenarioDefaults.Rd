@@ -31,6 +31,7 @@ getScenarioDefaults(
   cowCount = NA,
   collarCount = NA,
   startYear = NA,
+  interannualVar = formals(caribouPopGrowth)$interannualVar,
   curYear = 2023
 )
 }
@@ -94,6 +95,11 @@ year in recruitment survey}
 
 \item{startYear}{year. First year in observation period. Optional, if not provided
 it will be calculated from \code{curYear} and \code{obsYears}}
+
+\item{interannualVar}{list or logical. List containing interannual
+variability parameters. These can be either coefficients of variation
+(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to \code{FALSE} to
+ignore interannual variability.}
 
 \item{curYear}{year. The current year. All years before are part of the
 observation period and years after are part of the projection period.}
