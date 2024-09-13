@@ -34,11 +34,16 @@ test_that("caribouPopGrowth options work", {
                "expected recruitment R_bar")
   
   res4 <- caribouPopGrowth(1000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE)
-  # lower carrying capacity
+  # lower recruitment at carrying capacity
   res5 <- caribouPopGrowth(1000, 200, R_bar = 0.7, S_bar = 0.9, P_K = 0.4,
                            progress = FALSE)
   
   expect_lt(res5$N, res4$N)
+  
+  res4_2 <- caribouPopGrowth(1000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE, K = 50000)
+  # lower actual carrying capacity
+  res5_2 <- caribouPopGrowth(1000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE, K = 10000)
+  expect_lt(res5_2$N, res4_2$N)
   
   # population gets larger over longer time with high R and S
   res6 <- caribouPopGrowth(1000, 2, R_bar = 0.7, S_bar = 0.99, progress = FALSE)
