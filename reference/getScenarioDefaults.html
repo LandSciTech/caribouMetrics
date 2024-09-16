@@ -101,7 +101,7 @@ demographic trajectories. See <code><a href="simulateObservations.html">simulate
 <span>  cowCount <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  collarCount <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  startYear <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  interannualVar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="va">caribouPopGrowth</span><span class="op">)</span><span class="op">$</span><span class="va">interannualVar</span>,</span>
+<span>  interannualVar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="va">caribouPopGrowth</span><span class="op">)</span><span class="op">$</span><span class="va">interannualVar</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  curYear <span class="op">=</span> <span class="fl">2023</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -214,7 +214,7 @@ year in recruitment survey</p></dd>
 
 
 <dt id="arg-collarcount">collarCount<a class="anchor" aria-label="anchor" href="#arg-collarcount"></a></dt>
-<dd><p>number &gt;= 1. The target number of collars active each year. Set to NA to use <code>freqStartsPerYear</code> in <code>simulateObservations(</code></p></dd>
+<dd><p>number &gt;= 1. The target number of collars active each year. Set to NA to use <code>freqStartsPerYear</code> in <code><a href="simulateObservations.html">simulateObservations()</a></code></p></dd>
 
 
 <dt id="arg-startyear">startYear<a class="anchor" aria-label="anchor" href="#arg-startyear"></a></dt>
