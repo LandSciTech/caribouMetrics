@@ -25,7 +25,7 @@
 #' @param zMin number in 0, 1. Minimum probability of missing calves in composition survey.
 #' @param zMax number in 0, <1. Maximum probability of missing calves in composition survey.
 #' @param cowMult number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use `cowCount`.
-#' @param collarCount number >= 1. The target number of collars active each year. Set to NA to use `freqStartsPerYear` in `simulateObservations(`
+#' @param collarCount number >= 1. The target number of collars active each year. Set to NA to use `freqStartsPerYear` in `simulateObservations()`
 #' @inheritParams caribouPopGrowth
 #' @inheritParams caribouBayesianPM
 #' @param collarInterval number. Optional. Number of years between collar deployments. If
@@ -56,16 +56,16 @@ getScenarioDefaults <- function(paramTable = NULL,
                          uMin = 0, uMax = 0.2, zMin = 0, zMax = 0.2, cowMult = 6,
                          collarInterval = NA, cowCount = NA, 
                          collarCount = NA, startYear = NA,
-                         interannualVar = formals(caribouPopGrowth)$interannualVar,
+                         interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
                          curYear = 2023) {
   defList <- c(as.list(environment()))
   defList$paramTable <- NULL
   if (is.null(paramTable)) {
-    paramTable <- as.data.frame(defList)
+    paramTable <- as_tibble(defList)
   } else {
     # keep all values in paramTable and add any that are missing using values in
     # defList
-    paramTable <- cbind(paramTable, defList[which(!names(defList) %in% names(paramTable))])
+    paramTable <- bind_cols(paramTable, as_tibble(defList[which(!names(defList) %in% names(paramTable))]))
   }
 
   # remove columns that are all NA because they should be missing and order like
@@ -78,11 +78,13 @@ getScenarioDefaults <- function(paramTable = NULL,
          " but not both.")
   }
   
-  if(sum(paramTable$collarCount>paramTable$N0)>0){
+  if(is.element("cowCount", names(paramTable)) && sum(paramTable$collarCount>paramTable$N0)>0){
     warning("Target number of collars collarCount should not exceed initial population size N0.")
   }
 
-  if(sum(paramTable$collarCount*paramTable$cowMult>paramTable$N0)>0){
+  if(hasName(paramTable, "collarCount") && 
+     hasName(paramTable, "cowMult") && 
+     sum(paramTable$collarCount*paramTable$cowMult>paramTable$N0)>0){
     warning("Set cowMult, collarCount and N0 so the expected number of cows in composition surveys does not exceed initial population size N0.")
   }
   

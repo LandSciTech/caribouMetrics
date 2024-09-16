@@ -92,12 +92,12 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
     testTable(cowCounts, c("Year", "Count", "Class"),
               req_vals = list(Year = (paramTable$startYear+paramTable$preYears):(paramTable$startYear+paramTable$preYears+paramTable$obsYears-1)),
               acc_vals = list(Class = "cow"))
-  } else if(!is.null(paramTable$cowCount)){
+  } else if(hasName(paramTable, "cowCount")){
     cowCounts <- data.frame(Year = (paramTable$startYear+paramTable$preYears):
                               (paramTable$startYear+paramTable$preYears+paramTable$obsYears-1),
                             Count = paramTable$cowCount,
                             Class = "cow")
-  } else if(is.null(paramTable$cowCount) & is.null(paramTable$cowMult)){
+  } else if(!hasName(paramTable, "cowCount") & !hasName(paramTable, "cowMult")){
     stop("One of cowCounts or paramTable$cowCount must be provided", 
          call. = FALSE)
   }
@@ -148,10 +148,10 @@ simulateObservations <- function(paramTable, cowCounts = NULL,
       sefSlopeMultiplier = paramTable$sSlopeMod, recQuantile = paramTable$rQuantile,
       sefQuantile = paramTable$sQuantile,
       N0 = paramTable$N0, adjustR = paramTable$adjustR,
-      cowMult = ifelse(is.null(paramTable$cowMult), 1, paramTable$cowMult),
+      cowMult = ifelse(!is.element("cowMult", names(paramTable)), 1, paramTable$cowMult),
       qMin = paramTable$qMin, qMax = paramTable$qMax, uMin = paramTable$uMin,
       uMax = paramTable$uMax, zMin = paramTable$zMin, zMax = paramTable$zMax,
-      interannualVar=paramTable$interannualVar
+      interannualVar=paramTable$interannualVar[[1]]
     )
   )
 
