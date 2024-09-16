@@ -31,7 +31,7 @@ getScenarioDefaults(
   cowCount = NA,
   collarCount = NA,
   startYear = NA,
-  interannualVar = formals(caribouPopGrowth)$interannualVar,
+  interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
   curYear = 2023
 )
 }
@@ -91,7 +91,7 @@ missing assumed to be every year}
 \item{cowCount}{Optional. Only used in \code{runScnSet()} to set the number of cows per
 year in recruitment survey}
 
-\item{collarCount}{number >= 1. The target number of collars active each year. Set to NA to use \code{freqStartsPerYear} in \verb{simulateObservations(}}
+\item{collarCount}{number >= 1. The target number of collars active each year. Set to NA to use \code{freqStartsPerYear} in \code{simulateObservations()}}
 
 \item{startYear}{year. First year in observation period. Optional, if not provided
 it will be calculated from \code{curYear} and \code{obsYears}}

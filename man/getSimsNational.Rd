@@ -14,7 +14,7 @@ getSimsNational(
   adjustR = TRUE,
   cPars = getScenarioDefaults(),
   forceUpdate = F,
-  interannualVar = formals(caribouPopGrowth)$interannualVar
+  interannualVar = eval(formals(caribouPopGrowth)$interannualVar)
 )
 }
 \arguments{
