@@ -101,6 +101,7 @@ demographic trajectories. See <code><a href="simulateObservations.html">simulate
 <span>  cowCount <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  collarCount <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  startYear <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  interannualVar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="va">caribouPopGrowth</span><span class="op">)</span><span class="op">$</span><span class="va">interannualVar</span>,</span>
 <span>  curYear <span class="op">=</span> <span class="fl">2023</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -221,6 +222,13 @@ year in recruitment survey</p></dd>
 it will be calculated from <code>curYear</code> and <code>obsYears</code></p></dd>
 
 
+<dt id="arg-interannualvar">interannualVar<a class="anchor" aria-label="anchor" href="#arg-interannualvar"></a></dt>
+<dd><p>list or logical. List containing interannual
+variability parameters. These can be either coefficients of variation
+(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to <code>FALSE</code> to
+ignore interannual variability.</p></dd>
+
+
 <dt id="arg-curyear">curYear<a class="anchor" aria-label="anchor" href="#arg-curyear"></a></dt>
 <dd><p>year. The current year. All years before are part of the
 observation period and years after are part of the projection period.</p></dd>
@@ -252,16 +260,15 @@ the parameter names and values into a string</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">getScenarioDefaults</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 26</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   iFire iAnthro obsAnthroSlope projAnthroSlope rSlopeMod sSlopeMod rQuantile</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     0       0              2               2         1         1       0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sQuantile projYears obsYears preYears   N0 adjustR assessmentYrs qMin qMax</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       0.5        35       15        0 1000    TRUE             3    0  0.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   uMin uMax zMin zMax cowMult curYear ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0  0.2    0  0.2       6    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                     label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_cowMult6_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_preYears0_obsYears15_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro0_iFire0_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   startYear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      2009</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     0       0              2               2         1         1       0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 19 more variables: sQuantile &lt;dbl&gt;, projYears &lt;dbl&gt;, obsYears &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   preYears &lt;dbl&gt;, N0 &lt;dbl&gt;, adjustR &lt;lgl&gt;, assessmentYrs &lt;dbl&gt;, qMin &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   qMax &lt;dbl&gt;, uMin &lt;dbl&gt;, uMax &lt;dbl&gt;, zMin &lt;dbl&gt;, zMax &lt;dbl&gt;, cowMult &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   interannualVar &lt;list&gt;, curYear &lt;dbl&gt;, ID &lt;int&gt;, label &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   startYear &lt;dbl&gt;</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># paramTable list takes precedence over argument values</span></span></span>
 <span class="r-in"><span><span class="fu">getScenarioDefaults</span><span class="op">(</span>paramTable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>iFire <span class="op">=</span> <span class="fl">10</span>, iAnthro <span class="op">=</span> <span class="fl">20</span>, obsYears <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, obsYears <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
@@ -269,10 +276,10 @@ the parameter names and values into a string</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    10      20              2               2         1         1       0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sQuantile projYears obsYears preYears   N0 adjustR assessmentYrs qMin qMax</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       0.5        35        1        0 1000    TRUE             3    0  0.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   uMin uMax zMin zMax cowMult curYear ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0  0.2    0  0.2       6    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                      label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_cowMult6_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_preYears0_obsYears1_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro20_iFire10_</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   uMin uMax zMin zMax cowMult   interannualVar curYear ID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0  0.2    0  0.2       6 0.46000, 0.08696    2023  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                      label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_cowMult6_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_preYears0_obsYears1_projYears35_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope2_obsAnthroSlope2_iAnthro20_iFire10_</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   startYear</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      2023</span>
 <span class="r-in"><span></span></span>

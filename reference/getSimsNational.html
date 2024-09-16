@@ -81,7 +81,8 @@
 <span>  populationGrowthTable <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  adjustR <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  cPars <span class="op">=</span> <span class="fu"><a href="getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  forceUpdate <span class="op">=</span> <span class="cn">F</span></span>
+<span>  forceUpdate <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  interannualVar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="va">caribouPopGrowth</span><span class="op">)</span><span class="op">$</span><span class="va">interannualVar</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -136,6 +137,13 @@ reproduction (DeCesare et al. 2012; Eacker et al. 2019).</p></dd>
 <dt id="arg-forceupdate">forceUpdate<a class="anchor" aria-label="anchor" href="#arg-forceupdate"></a></dt>
 <dd><p>logical. If the default inputs are used the result is
 cached. Set <code>forceUpdate</code> to TRUE to ensure the simulations are re-run.</p></dd>
+
+
+<dt id="arg-interannualvar">interannualVar<a class="anchor" aria-label="anchor" href="#arg-interannualvar"></a></dt>
+<dd><p>list or logical. List containing interannual
+variability parameters. These can be either coefficients of variation
+(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to <code>FALSE</code> to
+ignore interannual variability.</p></dd>
 
 </dl></div>
     <div id="value">

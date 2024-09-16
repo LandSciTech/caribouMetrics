@@ -277,7 +277,7 @@ over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:12] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/Rtmpo4iVqI/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpjOCEEJ/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -498,16 +498,15 @@ parameter.</p>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">scn_params</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 28</span></span></span>
 <span><span class="co">#&gt;   iFire iAnthro obsAnthroSlope projAnthroSlope rSlopeMod sSlopeMod rQuantile</span></span>
-<span><span class="co">#&gt; 1     0       0              2               3         1         1       0.5</span></span>
-<span><span class="co">#&gt;   sQuantile projYears obsYears preYears   N0 adjustR assessmentYrs qMin qMax</span></span>
-<span><span class="co">#&gt; 1       0.5        20       20        0 1000    TRUE             3    0  0.6</span></span>
-<span><span class="co">#&gt;   uMin uMax zMin zMax cowMult collarInterval collarCount curYear ID</span></span>
-<span><span class="co">#&gt; 1    0  0.2    0  0.2       2              1          30    2023  1</span></span>
-<span><span class="co">#&gt;                                                                                                                                                                                                                                                                   label</span></span>
-<span><span class="co">#&gt; 1 ID1_curYear2023_collarCount30_collarInterval1_cowMult2_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_adjustRTRUE_N01000_preYears0_obsYears20_projYears20_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope3_obsAnthroSlope2_iAnthro0_iFire0_</span></span>
-<span><span class="co">#&gt;   startYear</span></span>
-<span><span class="co">#&gt; 1      2004</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     0       0              2               3         1         1       0.5</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 21 more variables: sQuantile &lt;dbl&gt;, projYears &lt;dbl&gt;, obsYears &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   preYears &lt;dbl&gt;, N0 &lt;dbl&gt;, adjustR &lt;lgl&gt;, assessmentYrs &lt;dbl&gt;, qMin &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   qMax &lt;dbl&gt;, uMin &lt;dbl&gt;, uMax &lt;dbl&gt;, zMin &lt;dbl&gt;, zMax &lt;dbl&gt;, cowMult &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   collarInterval &lt;dbl&gt;, collarCount &lt;dbl&gt;, interannualVar &lt;list&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   curYear &lt;dbl&gt;, ID &lt;int&gt;, label &lt;chr&gt;, startYear &lt;dbl&gt;</span></span></span>
 <span></span>
 <span><span class="va">sim_obs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulateObservations.html">simulateObservations</a></span><span class="op">(</span></span>
 <span>  <span class="va">scn_params</span>, </span>
