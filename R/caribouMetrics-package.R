@@ -12,5 +12,6 @@
 #' @importFrom utils read.csv write.csv packageVersion
 #' @importFrom terra plot
 #' @importFrom rlang .data
+#' @importFrom utils hasName
 ## usethis namespace: end
 NULL
