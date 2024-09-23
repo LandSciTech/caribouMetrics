@@ -64,6 +64,6 @@ for(k in 2:nYears){
 	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))T(-10,0)
 	cv.R~dunif(sig.R.Prior1,sig.R.Prior2) #note theoretical max cv for beta distn is 1.
 
-	geomLambda <- (prod(pop.growthr))^(1/(nYears)) #geometric mean
+	geomLambda <- prod(pop.growthr)^(1/nYears) #geometric mean
 	meanLambda <- mean(pop.growthr)
 }
