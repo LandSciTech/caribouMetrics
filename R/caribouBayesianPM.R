@@ -449,11 +449,9 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
     ))
   }
 
-  sp.params <- c("S.annual.KM", "R", "Rfemale", "pop.growth",
+  sp.params <- c("S.annual.KM", "R", "Rfemale", "pop.growth","geomLambda",
                  "fpop.size", "l.R", "l.Saf",
                  "beta.Rec.anthro", "beta.Rec.fire", "beta.Saf","composition.bias")
-
-  
   
   rr.surv <- try(R2jags::jags(
     data = sp.data, parameters.to.save = sp.params,

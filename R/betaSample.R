@@ -84,6 +84,12 @@ fillNAsWithMean <- function(vector) {
 }
 
 addInterannualVar<-function(bar,interannualVar,type,minV,maxV){
+  if(is.element(paste0(type,"_annual"),names(interannualVar))){
+    bar_t = inv.logit(logit(bar)+rnorm(length(bar),0,interannualVar[[paste0(type,"_annual")]]))
+    #note - not a truncated distribution in this case.
+    return(bar_t)
+  }
+  
   if(is.element(paste0(type,"_CV"),names(interannualVar))){
     #reproducing ECCC_CaribouPopnProjection - see line 143 etc of functions.R
     sigma <- (bar * interannualVar[[paste0(type,"_CV")]])

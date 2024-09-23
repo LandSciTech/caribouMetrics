@@ -326,15 +326,12 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
   paramNames <- data.frame(
     parameter = c(
       "S.annual.KM", "R", "Rfemale", "pop.growth", "fpop.size",
-      "meanAFsurv", "meanR", "meanRfemale",
-      "medianLambda", "meanLambda"
+      "geomLambda", "meanLambda"
     ),
     name = c(
       "Adult female survival", "Recruitment",
       "Adjusted recruitment", "Population growth rate", "Female population size",
-      "Mean adult female survival",
-      "Mean recruitment", "Mean female recruitment",
-      "Median population growth rate",
+      "Geometric mean population growth rate",
       "Mean population growth rate"
     )
   )
@@ -417,7 +414,7 @@ movingAveGrowthRate <- function(obs, assessmentYrs) {
   assessmentYrs = min(assessmentYrs,nrow(obsOut))
   for (k in assessmentYrs:nrow(obsOut)) {
     # k=3
-    obsOut$Mean[k] <- mean(obs$Mean[(k - assessmentYrs + 1):k])
+    obsOut$Mean[k] <- prod(obs$Mean[(k - assessmentYrs + 1):k])^(1/assessmentYrs) #geometric mean
   }
   obsOut
 }

@@ -53,8 +53,9 @@ cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
 
 \item{interannualVar}{list or logical. List containing interannual
 variability parameters. These can be either coefficients of variation
-(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to \code{FALSE} to
-ignore interannual variability.}
+(R_CV, S_CV), beta precision parameters (R_phi, S_phi),
+or random effects parameters from a logistic glmm (R_annual, S_annual).
+Set to \code{FALSE} to ignore interannual variability.}
 }
 \value{
 a list with two elements:

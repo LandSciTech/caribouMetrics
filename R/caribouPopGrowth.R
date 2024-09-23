@@ -31,12 +31,15 @@
 #' includes both survivors and new recruits:
 #' \eqn{\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)}.
 #'
-#' Interannual variation in survival and recruitment is modelled using truncated
+#' If coefficients of variation are provided, interannual variation in survival and recruitment is modelled using truncated
 #' beta distributions: \eqn{\dot{R}_t
 #' \sim \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim
 #' \text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)}. \eqn{(\nu_R,\nu_S)} are coefficients of variation
 #' among years and \eqn{l_R,h_R,l_S,h_S} are maximum/minimum values for recruitment and survival.
-#'
+#' 
+#' If R_annual and S_annual are provided, interannual variation in survival and recruitment is modelled
+#' as in a logistic glmm with random effect of year.
+#' 
 #' @param N0 Number or vector of numbers. Initial population size for one or
 #'   more sample populations.
 #' @param numSteps Number. Number of years to project.
@@ -58,8 +61,9 @@
 #' @param c Number. Bias correction term.
 #' @param interannualVar list or logical. List containing interannual
 #'   variability parameters. These can be either coefficients of variation
-#'   (R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to `FALSE` to
-#'   ignore interannual variability.
+#'   (R_CV, S_CV), beta precision parameters (R_phi, S_phi), 
+#'   or random effects parameters from a logistic glmm (R_annual, S_annual). 
+#'   Set to `FALSE` to ignore interannual variability.
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
 #' @param adjustR Logical. Adjust R to account for delayed age at first
@@ -151,7 +155,7 @@ caribouPopGrowth <- function(N0,
     stop("S_bar  must have length = 1 or the same length as N0", call. = FALSE)
   }
 
-  if(!is.element("R_phi",names(interannualVar))){
+  if(is.element("R_CV",names(interannualVar))){
     R_bar=s*R_bar
   }else{
     #Phi is precision of calf cow ratio, not recruitment.
@@ -191,7 +195,7 @@ caribouPopGrowth <- function(N0,
       R_t = addInterannualVar(R_bar,interannualVar,type="R",minV =l_R,maxV=h_R)
       S_t = addInterannualVar(S_bar,interannualVar,type="S",minV =l_S,maxV=h_S)
     }
-    if(is.element("R_phi",names(interannualVar))){
+    if(!is.element("R_CV",names(interannualVar))){
       R_t=s*R_t
     }
     

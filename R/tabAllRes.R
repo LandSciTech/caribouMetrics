@@ -24,8 +24,7 @@ tabAllRes <- function(rrSurvMod, startYear, endYear, doSummary = T) {
   
   allParams <- c(
     "S.annual.KM", "R", "Rfemale", "pop.growth", "fpop.size",
-    "meanAFsurv", "meanR", "meanRfemale",
-    "medianLambda", "meanLambda"
+    "geomLambda", "meanLambda"
   )
   allParams <- allParams[is.element(allParams, rrSurvMod$parameters.to.save)]
   

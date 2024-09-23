@@ -65,8 +65,9 @@ one or more sample populations.}
 
 \item{interannualVar}{list or logical. List containing interannual
 variability parameters. These can be either coefficients of variation
-(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to \code{FALSE} to
-ignore interannual variability.}
+(R_CV, S_CV), beta precision parameters (R_phi, S_phi),
+or random effects parameters from a logistic glmm (R_annual, S_annual).
+Set to \code{FALSE} to ignore interannual variability.}
 
 \item{probOption}{Character. Choices are "binomial","continuous" or
 "matchJohnson2020". See description for details.}
@@ -114,11 +115,14 @@ population reaches carrying capacity of \eqn{K=50000}. The post-juvenile female 
 includes both survivors and new recruits:
 \eqn{\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)}.
 
-Interannual variation in survival and recruitment is modelled using truncated
+If coefficients of variation are provided, interannual variation in survival and recruitment is modelled using truncated
 beta distributions: \eqn{\dot{R}_t
 \sim \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim
 \text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)}. \eqn{(\nu_R,\nu_S)} are coefficients of variation
 among years and \eqn{l_R,h_R,l_S,h_S} are maximum/minimum values for recruitment and survival.
+
+If R_annual and S_annual are provided, interannual variation in survival and recruitment is modelled
+as in a logistic glmm with random effect of year.
 }
 \examples{
 caribouPopGrowth(100, 2, 0.5, 0.7)
