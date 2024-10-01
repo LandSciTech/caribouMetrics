@@ -279,7 +279,6 @@ test_that("results match expected", {
   doPlot(collOff12On4)
   doPlot(collOff12On4, "Adult female survival")
   
-
   collOff6On4 <- doScn(collarOn = 4, collarOff = 6)
   doPlot(collOff6On4)
   
@@ -394,14 +393,14 @@ test_that("results match expected", {
     filter(Parameter != "Female population size") %>% 
     summarise(meanKS = mean(KSDistance))
   
-  expect_true(all(noDatKS$meanKS < 0.16))
+  expect_true(all(noDatKS$meanKS < 0.223))
   
-  # Values on Sept 3 2024 commit c97b3f9
+  # Values on Oct 1 2024 commit
   # Parameter              meanKS
   # <chr>                   <dbl>
-  #   1 Adjusted recruitment   0.156 
-  # 2 Adult female survival  0.0978
-  # 3 Population growth rate 0.0967
-  # 4 Recruitment            0.149 
+  #   1 Adjusted recruitment   0.2221204
+  # 2 Adult female survival  0.1472315
+  # 3 Population growth rate 0.1798704
+  # 4 Recruitment            0.1033333
 
 })

@@ -66,9 +66,6 @@ rate \eqn{X=\frac{J+K}{2(T+U+V)}} as a function of \eqn{w,u,z} and \eqn{R}:
 \deqn{X=R\frac{w(1+qu-u)}{2(w+qu-u)(1-z)}.} For simplicity, we write \eqn{X} as a
 function of a bias correction term \eqn{c}: \deqn{c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)};
 X=cR/2.}
-If we also adjust for delayed age at first reproduction (DeCesare et al.
-2012; Eacker et al. 2019), the adjusted recruitment rate becomes
-\deqn{X=\frac{cR/2}{1+cR/2}.}
 
 Uncertainty about the value of the bias correction term \eqn{c} can be
 approximated with a Log-normal distribution. Given the apparent number of

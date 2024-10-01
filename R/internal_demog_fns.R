@@ -66,7 +66,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                           recSlopeMultiplier = 1, sefSlopeMultiplier = 1,
                           recQuantile = 0.5, sefQuantile = 0.5,
-                          stepLength = 1, N0 = 1000, adjustR = T,cowMult=1,
+                          stepLength = 1, N0 = 1000,cowMult=1,
                           qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,interannualVar = formals(caribouPopGrowth)$interannualVar) {
   # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
   # recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
@@ -130,7 +130,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
       pars,
       caribouPopGrowth(pars$N0,
                        R_bar = pars$R_bar, S_bar = pars$S_bar,
-                       numSteps = stepLength, K = FALSE, l_R = 1e-06, adjustR = adjustR, c=pars$c,
+                       numSteps = stepLength, K = FALSE, l_R = 1e-06, c=pars$c,
                        interannualVar=interannualVar,
                        progress = FALSE
       )
@@ -338,7 +338,7 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
 
   paramNames <- subset(paramNames, is.element(paramNames$parameter, rrSurvMod$parameters.to.save))
 
-  if (grepl("mean|median", param)) {
+  if (grepl("mean|median|geom", param)) {
     yr <- NA_integer_
   } else {
     yr <- startYear:endYear
@@ -388,13 +388,19 @@ getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
     }
   } else {
     # rrSurvMod= result
-    wideRes <- data.frame(rrSurvMod$BUGSoutput$sims.list[[param]])
-    names(wideRes) <- yr
-
-    results <- wideRes %>%
-      tidyr::pivot_longer(cols = names(wideRes), names_to = "Year",
-                          values_to = "Value")
-    results$Year <- as.numeric(results$Year)
+    if((length(yr)==1)&&(is.na(yr))){
+      results = data.frame(Value=rrSurvMod$BUGSoutput$sims.list[[param]][],Year=NA)
+    }else{
+      wideRes <- data.frame(rrSurvMod$BUGSoutput$sims.list[[param]])
+      
+      names(wideRes) <- yr
+      
+      results <- wideRes %>%
+        tidyr::pivot_longer(cols = names(wideRes), names_to = "Year",
+                            values_to = "Value")
+      results$Year <- as.numeric(results$Year)
+      
+    }
     results$Parameter <- subset(paramNames, paramNames$parameter == param,
                                 select = "name", drop = T
     )

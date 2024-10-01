@@ -23,7 +23,6 @@ caribouPopGrowth(
   c = 1,
   interannualVar = list(R_CV = 0.46, S_CV = 0.08696),
   probOption = "binomial",
-  adjustR = FALSE,
   progress = interactive()
 )
 }
@@ -71,9 +70,6 @@ Set to \code{FALSE} to ignore interannual variability.}
 
 \item{probOption}{Character. Choices are "binomial","continuous" or
 "matchJohnson2020". See description for details.}
-
-\item{adjustR}{Logical. Adjust R to account for delayed age at first
-reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{progress}{Logical. Should progress updates be shown?}
 }

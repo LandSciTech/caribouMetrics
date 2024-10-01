@@ -42,7 +42,6 @@
 #' @param N0 Initial population size.
 #' @param survAnalysisMethod Survival analysis method either "KaplanMeier" or
 #'   "Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.
-#' @inheritParams caribouPopGrowth
 #' @param assessmentYrs Number of years over which to assess population growth rate lambda.
 #' @param inputList an optional list of inputs with names matching the above. If
 #'   an argument is included in this list it will override the named argument.
@@ -93,18 +92,18 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
                        betaPriors = "default",
                        startYear = NULL, endYear = NULL, Nchains = 4,
                        Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
-                       survAnalysisMethod = "KaplanMeier", adjustR = FALSE,
+                       survAnalysisMethod = "KaplanMeier",
                        assessmentYrs = 1,
                        inputList = list(), saveJAGStxt = tempdir(),
                        quiet = TRUE) {
   # survData=oo$simSurvObs;ageRatio=oo$ageRatioOut;disturbance=oo$simDisturbance;
-  # betaPriors="default";startYear = NULL;endYear=NULL;N0=1000;survAnalysisMethod = "KaplanMeier"; adjustR=F
+  # betaPriors="default";startYear = NULL;endYear=NULL;N0=1000;survAnalysisMethod = "KaplanMeier"
   # Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inputList=list();saveJAGStxt=tempdir();quiet=F
 
   # combine defaults in function with inputs from input list
   inputArgs <- c(
     "survData", "ageRatio", "disturbance", "startYear", "endYear",
-    "Nchains", "Niter", "Nburn", "Nthin", "N0", "survAnalysisMethod", "adjustR",
+    "Nchains", "Niter", "Nburn", "Nthin", "N0", "survAnalysisMethod",
     "assessmentYrs"
   )
   addArgs <- inputArgs # setdiff(inputArgs,names(inp))
@@ -362,12 +361,6 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
     data4t <- data4
   }
 
-  if (inp$adjustR) {
-    adjustString <- "Rfemale[k] <- (composition.bias*R[k]/2)/(1+(composition.bias*R[k]/2))"
-  } else {
-    adjustString <- "Rfemale[k] <- composition.bias*R[k]/2"
-  }
-
   if (inp$survAnalysisMethod == "KaplanMeier") {
     survString <- "Surv[surv_id[k]] ~ dnorm(S.annual.KM[surv_id[k]], tau[surv_id[k]])T(0,1)"
   } else {
@@ -398,7 +391,6 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
   )), collapse = "\n")
   }
   jagsTemplate <- gsub("_survString_", survString, jagsTemplate, fixed = T)
-  jagsTemplate <- gsub("_adjustString_", adjustString, jagsTemplate, fixed = T)
   jagsTemplate <- gsub("_biasString_", biasString, jagsTemplate, fixed = T)
   
   jagsFile <- file.path(saveJAGStxt, "JAGS_run.txt")

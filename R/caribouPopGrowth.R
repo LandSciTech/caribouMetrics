@@ -66,8 +66,6 @@
 #'   Set to `FALSE` to ignore interannual variability.
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
-#' @param adjustR Logical. Adjust R to account for delayed age at first
-#'   reproduction (DeCesare et al. 2012; Eacker et al. 2019). 
 #' @param progress Logical. Should progress updates be shown?
 #'
 #' @return A data.frame of population size (`N`), average growth rate
@@ -118,7 +116,6 @@ caribouPopGrowth <- function(N0,
                              c=1,
                              interannualVar = list(R_CV=0.46,S_CV=0.08696),
                              probOption="binomial",
-                             adjustR=FALSE,
                              progress = interactive()){
   if(is.character(interannualVar)){
     interannualVar = eval(parse(text=interannualVar))
@@ -200,9 +197,7 @@ caribouPopGrowth <- function(N0,
     }
     
     #adjusting for bias and delayed reproduction
-    if(adjustR){
-      R_tadj=c*R_t/(1+c*R_t)
-    }else{R_tadj=c*R_t}
+    R_tadj=c*R_t/(1+c*R_t)
 
     Ntm1=N
 

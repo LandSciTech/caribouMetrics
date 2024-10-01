@@ -18,7 +18,6 @@ getScenarioDefaults(
   obsYears = 15,
   preYears = 0,
   N0 = 1000,
-  adjustR = TRUE,
   assessmentYrs = 3,
   qMin = 0,
   qMax = 0.6,
@@ -65,9 +64,6 @@ the projection period}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
 more sample populations.}
-
-\item{adjustR}{Logical. Adjust R to account for delayed age at first
-reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{assessmentYrs}{Number of years over which to assess population growth rate lambda.}
 

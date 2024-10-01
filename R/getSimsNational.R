@@ -8,12 +8,10 @@ cacheEnv <- new.env(parent = emptyenv())
 # only preserved within a session but for dev I have added this "persistent
 # cache" use savePersistentCache function to update/create it after having run
 # getSimsNational
-if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
-  simsNationalRadjusted <- readRDS( "inst/extdata/simsNationalRadjusted.rds")
-  simsNationalRunadjusted <- readRDS( "inst/extdata/simsNationalRunadjusted.rds")
+if(file.exists("inst/extdata/simsNationald.rds")){
+  simsNational <- readRDS( "inst/extdata/simsNational.rds")
 
-  assign("simsNationalRadjusted", simsNationalRadjusted, envir = cacheEnv)
-  assign("simsNationalRunadjusted", simsNationalRunadjusted, envir = cacheEnv)
+  assign("simsNational", simsNational, envir = cacheEnv)
 }
 
 #' Get a set of simulation results from the national demographic model
@@ -43,18 +41,16 @@ if(file.exists("inst/extdata/simsNationalRadjusted.rds")){
 #' getSimsNational()
 getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, by = 1),
                             fire_excl_anthro = 0, useQuantiles  = NULL,
-                            populationGrowthTable  = NULL, adjustR = TRUE, 
+                            populationGrowthTable  = NULL,
                             cPars=getScenarioDefaults(), forceUpdate = F,
                             interannualVar = eval(formals(caribouPopGrowth)$interannualVar)) {
   # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;
-  # useQuantiles =NULL;adjustR=F;forceUpdate=F
+  # useQuantiles =NULL;forceUpdate=F
   doSave <- FALSE
 
-  # check that everything other than adjustR is default
   check <- as.list(match.call())
-  check$adjustR <- NULL
 
-  saveName <- ifelse(adjustR, "simsNationalRadjusted", "simsNationalRunadjusted")
+  saveName <- "simsNational"
 
   if (length(check) == 1) {
     if (exists(saveName, envir=cacheEnv)) {
@@ -105,7 +101,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000, Anthro = seq(0, 100, b
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
   pars <- cbind(pars, caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
                                        S_bar = pars$S_bar, numSteps = cPars$assessmentYrs,
-                                       K = FALSE, adjustR = adjustR, c = pars$c, 
+                                       K = FALSE, c = pars$c, 
                                        interannualVar=interannualVar, progress = FALSE))
   simSurvBig <- pars %>%
     select("Anthro", "S_t") %>%

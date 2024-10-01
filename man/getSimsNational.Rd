@@ -11,7 +11,6 @@ getSimsNational(
   fire_excl_anthro = 0,
   useQuantiles = NULL,
   populationGrowthTable = NULL,
-  adjustR = TRUE,
   cPars = getScenarioDefaults(),
   forceUpdate = F,
   interannualVar = eval(formals(caribouPopGrowth)$interannualVar)
@@ -42,9 +41,6 @@ model coefficients and standard errors or confidence intervals can be
 provided but it must match the column names of \link{popGrowthTableJohnsonECCC}.
 If the table does not contain the standard error it is calculated from the
 confidence interval.}
-
-\item{adjustR}{Logical. Adjust R to account for delayed age at first
-reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{cPars}{optional. Parameters for calculating composition survey bias term.}
 
