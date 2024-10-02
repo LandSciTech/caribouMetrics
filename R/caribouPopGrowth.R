@@ -241,11 +241,11 @@ caribouPopGrowth <- function(N0,
     if(sum(is.na(ad$N))>0){stop()}
 
     N=ad$N
-    rr[paste0("lam",t)]=ad$Lambda
+    rr[paste0("lam",t)]= ad$Lambda
   }
-
+    
   lamBits = names(rr)[grepl("lam",names(rr))]
-  rr$lambda=matrixStats::rowMeans2(as.matrix(subset(rr,select=lamBits)),na.rm=T)
+  rr$lambda=matrixStats::rowCumprods(as.matrix(subset(rr,select=lamBits)),na.rm=T)^(1/length(lamBits)) #geometric mean
   rr=subset(rr,select=setdiff(names(rr),lamBits))
   rr$N=N
   rr$R_t=R_t/s #apparent reproduction
