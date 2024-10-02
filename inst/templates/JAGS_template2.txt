@@ -16,12 +16,12 @@ for(k in 1:nYears){
 
 #Recruitment
 for(k in 1:nYears){
-    R[k] <- composition.bias*max(0.01,min(0.99,exp(l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire)))
+    R[k] <- max(0.01,min(0.99,exp(l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire)))
 }
 
 #Growth
 for(k in 1:nYears){
-		Rfemale[k] <- R[k]/2
+		Rfemale[k] <- composition.bias*R[k]/2
 		survivors[k] ~ dbin( S.annual.KM[k], fpop.size[k] )
     recruits[k] ~ dbin(Rfemale[k],survivors[k])
     pop.growthr[k] <- S.annual.KM[k]*(1+Rfemale[k]) #without demographic stochasticity

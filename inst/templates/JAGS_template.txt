@@ -22,7 +22,7 @@ for(k in 1:nYears){
 
 #Recruitment
 for(k in 1:nYears){
-    mu.R[k] <- composition.bias*max(0.01,min(0.99,exp(l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire)))
+    mu.R[k] <- max(0.01,min(0.99,exp(l.R + anthro[k]*beta.Rec.anthro + fire[k]*beta.Rec.fire)))
     #Constrain sd of beta distribution to what is theoretically possible, given mu
     sig.R[k] <- min(cv.R*mu.R[k],0.99*(mu.R[k]*(1-mu.R[k]))^0.5)
     #Get beta distribution parameters from mean and sd
@@ -33,7 +33,7 @@ for(k in 1:nYears){
 
 #Growth
 for(k in 1:nYears){
-		Rfemale[k] <- R[k]/2
+		Rfemale[k] <- composition.bias*R[k]/2
 		survivors[k] ~ dbin( S.annual.KM[k], fpop.size[k] )
     recruits[k] ~ dbin(Rfemale[k],survivors[k])
     pop.growthr[k] <- S.annual.KM[k]*(1+Rfemale[k]) #without demographic stochasticity
