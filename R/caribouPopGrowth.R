@@ -196,8 +196,8 @@ caribouPopGrowth <- function(N0,
       R_t=s*R_t
     }
     
-    #adjusting for bias and delayed reproduction
-    R_tadj=c*R_t/(1+c*R_t)
+    #adjusting for composition survey bias
+    R_tadj=c*R_t
 
     Ntm1=N
 
