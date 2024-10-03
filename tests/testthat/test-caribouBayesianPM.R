@@ -393,14 +393,14 @@ test_that("results match expected", {
     filter(Parameter != "Female population size") %>% 
     summarise(meanKS = mean(KSDistance))
   
-  expect_true(all(noDatKS$meanKS < 0.24))
+  expect_true(all(noDatKS$meanKS < 0.13))
   
-  # Values on Oct 1 2024 commit
-  # Parameter              meanKS
-  # <chr>                   <dbl>
-  #   1 Adjusted recruitment   0.2344444
-  # 2 Adult female survival  0.1496296
-  # 3 Population growth rate 0.1890463
-  # 4 Recruitment            0.1104074
+  # Values on Oct 3 2024 commit
+  #Parameter              meanKS
+  #<chr>                   <dbl>
+  #1 Adjusted recruitment   0.128 
+  #2 Adult female survival  0.0868
+  #3 Population growth rate 0.0757
+  #4 Recruitment            0.116 
 
 })
