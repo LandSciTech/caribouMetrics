@@ -36,7 +36,7 @@ for(k in 1:nYears){
 		Rfemale[k] <- composition.bias*R[k]/2
 		survivors[k] ~ dbin( S.annual.KM[k], fpop.size[k] )
     recruits[k] ~ dbin(Rfemale[k],survivors[k])
-    pop.growthr[k] <- S.annual.KM[k]*(1+Rfemale[k]) #without demographic stochasticity
+    pop.growthr[k] <- mu.S[k]*(1+composition.bias*mu.R[k]/2) #without interannual var or demographic stochasticity
 }
 for(k in 2:assessmentYrs){
     pop.growth[k-1] <- pop.growthr[k-1]

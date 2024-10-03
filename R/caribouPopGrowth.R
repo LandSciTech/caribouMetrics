@@ -123,6 +123,8 @@ caribouPopGrowth <- function(N0,
   rr=data.frame(N0=N0)
   
   N <- N0
+  
+  lambdaE = S_bar*(1+c*R_bar*s)
 
   R_bar[R_bar<0]=0.000001
   S_bar[S_bar<0]=0.000001
@@ -245,8 +247,9 @@ caribouPopGrowth <- function(N0,
   }
     
   lamBits = names(rr)[grepl("lam",names(rr))]
-  rr$lambda=matrixStats::rowCumprods(as.matrix(subset(rr,select=lamBits)),na.rm=T)^(1/length(lamBits)) #geometric mean
+  rr$lambdaTrue=matrixStats::rowCumprods(as.matrix(subset(rr,select=lamBits)),na.rm=T)^(1/length(lamBits)) #geometric mean
   rr=subset(rr,select=setdiff(names(rr),lamBits))
+  rr$lambda = lambdaE
   rr$N=N
   rr$R_t=R_t/s #apparent reproduction
   rr$X_t=R_tadj
