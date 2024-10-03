@@ -16,9 +16,8 @@
 #' the number of post-juvenile females that survive from year \eqn{t} to the
 #' census \eqn{\dot{W}_t} is binomially distributed with survival probability
 #' \eqn{\dot{S}_t}: \eqn{\dot{W}_{t} \sim \text{Binomial}(\dot{N}_t,\dot{S}_t)}.
-#' Maximum potential recruitment rate is adjusted for sex ratio, misidentification biases, and (optionally)
-#' delayed age at first reproduction
-#' \deqn{\dot{X}_t=\frac{\dot{c}\dot{R}_t/2}{1+\dot{c}\dot{R}_t/2}.} Realized recruitment rate
+#' Maximum potential recruitment rate is adjusted for sex ratio and misidentification biases
+#' \deqn{\dot{X}_t=\dot{c}\dot{R}_t/2.} Realized recruitment rate
 #' varies with population density, and the number of juveniles recruiting to the
 #' post-juvenile class at the census is a binomially distributed function of the
 #' number of surviving post-juvenile females and the adjusted recruitment rate:
@@ -27,7 +26,7 @@
 #' Given default parameters, recruitment rate is lowest \eqn{(0.5\dot{X}_t)}
 #' when \eqn{\dot{N}_t=1}, approaches a maximum of \eqn{\dot{X}_t} at
 #' intermediate population sizes, and declines to \eqn{0.6\dot{X}_t} as the
-#' population reaches carrying capacity of \eqn{K=50000}. The post-juvenile female population in the next year
+#' population reaches carrying capacity of \eqn{K=10000}. The post-juvenile female population in the next year
 #' includes both survivors and new recruits:
 #' \eqn{\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)}.
 #'
@@ -106,7 +105,7 @@ caribouPopGrowth <- function(N0,
                              P_K = 0.6,
                              a = 1,
                              b = 4,
-                             K = 50000,
+                             K = 10000,
                              r_max = 1.3,
                              s=0.5,
                              l_R=0,
