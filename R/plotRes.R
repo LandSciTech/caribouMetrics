@@ -192,7 +192,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     }
   }
   if (!ksDists & (parameter == "Population growth rate")) {
-    x2 <- x2 + ggplot2::geom_hline(yintercept = 1, color = "black")
+    x2 <- x2 + ggplot2::geom_hline(yintercept = 1, color = "black")+ylab("Expected population growth rate")
   }
   
   x2
