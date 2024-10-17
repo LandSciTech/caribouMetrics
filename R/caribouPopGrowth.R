@@ -246,7 +246,7 @@ caribouPopGrowth <- function(N0,
   }
     
   lamBits = names(rr)[grepl("lam",names(rr))]
-  rr$lambdaTrue=matrixStats::rowCumprods(as.matrix(subset(rr,select=lamBits)),na.rm=T)^(1/length(lamBits)) #geometric mean
+  rr$lambdaTrue=matrixStats::rowProds(as.matrix(subset(rr,select=lamBits)),na.rm=T)^(1/length(lamBits)) #geometric mean
   rr=subset(rr,select=setdiff(names(rr),lamBits))
   rr$lambda = lambdaE
   rr$N=N
