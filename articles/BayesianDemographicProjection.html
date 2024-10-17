@@ -145,10 +145,9 @@ al., 2020; Stewart et al., 2023) and Gaussian distributed random year
 effect (Eacker et al., 2019):
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>R</mi><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msubsup><mi>β</mi><mn>0</mn><mi>R</mi></msubsup><mo>+</mo><msubsup><mi>β</mi><mi>a</mi><mi>R</mi></msubsup><msub><mi>A</mi><mi>t</mi></msub><mo>+</mo><msubsup><mi>β</mi><mi>f</mi><mi>R</mi></msubsup><msub><mi>F</mi><mi>t</mi></msub><mo>+</mo><msubsup><mi>ϵ</mi><mi>t</mi><mi>R</mi></msubsup><mo>;</mo><msubsup><mi>ϵ</mi><mi>t</mi><mi>R</mi></msubsup><mo>∼</mo><mtext mathvariant="normal">Normal</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><msubsup><mi>σ</mi><mi>R</mi><mn>2</mn></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t
 \sim \text{Normal}(0,\sigma^2_{R}).</annotation></semantics></math>
-Estimated recruitment probability is adjusted for sex ratio,
-misidentification biases, and age of first reproduction (DeCesare et
-al., 2012; Eacker et al., 2019) to get expected recruits per female:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mi>t</mi></msub><mo>=</mo><mfrac><mrow><mi>c</mi><msub><mi>R</mi><mi>t</mi></msub><mi>/</mi><mn>2</mn></mrow><mrow><mn>1</mn><mo>+</mo><mi>c</mi><msub><mi>R</mi><mi>t</mi></msub><mi>/</mi><mn>2</mn></mrow></mfrac><mo>;</mo><mi>c</mi><mo>=</mo><mfrac><mrow><mi>w</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>q</mi><mi>u</mi><mo>−</mo><mi>u</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>+</mo><mi>q</mi><mi>u</mi><mo>−</mo><mi>u</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>z</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">X_t=\frac{cR_t/2}{1+cR_t/2}; c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)}.</annotation></semantics></math>
+Estimated recruitment probability is adjusted for sex ratio and
+misidentification biases to get expected recruits per female:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mi>t</mi></msub><mo>=</mo><mrow><mi>c</mi><msub><mi>R</mi><mi>t</mi></msub><mi>/</mi><mn>2</mn></mrow><mo>;</mo><mi>c</mi><mo>=</mo><mfrac><mrow><mi>w</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>q</mi><mi>u</mi><mo>−</mo><mi>u</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>+</mo><mi>q</mi><mi>u</mi><mo>−</mo><mi>u</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>z</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">X_t={cR_t/2}; c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)}.</annotation></semantics></math>
 The composition survey bias correction term
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
 depends on the apparent number of adult females per collared animal
@@ -160,11 +159,7 @@ versa
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>,
 and the probability of missing a calf
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
-(see <code><a href="../reference/compositionBiasCorrection.html">compositionBiasCorrection()</a></code>). To maintain consistency
-with Johnson et al. (2020) we also provide an option
-(<code>adjustR = FALSE</code>) to only adjust for sex ratio and
-misidentification biases
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mi>t</mi></msub><mo>=</mo><mi>c</mi><msub><mi>R</mi><mi>t</mi></msub><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">X_t=cR_t/2</annotation></semantics></math>.</p>
+(see <code><a href="../reference/compositionBiasCorrection.html">compositionBiasCorrection()</a></code>).</p>
 <p>In the Bayesian model, prior uncertainty about the value of the bias
 correction term
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
@@ -274,10 +269,10 @@ over the next 20 years.</p>
 <span><span class="co">#&gt;  $ result:List of 6</span></span>
 <span><span class="co">#&gt;   ..$ model             :List of 8</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "jags"</span></span>
-<span><span class="co">#&gt;   ..$ BUGSoutput        :List of 24</span></span>
+<span><span class="co">#&gt;   ..$ BUGSoutput        :List of 25</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
-<span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:12] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpZlZzXI/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:13] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpT2QcsA/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -294,12 +289,12 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt; List of 4</span></span>
 <span><span class="co">#&gt;  $ rr.summary.all:'data.frame':  175 obs. of  13 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year            : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
-<span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adjusted recruitment" "Adult female survival" "Recruitment" "Female population size" ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.217 0.866 0.42 1000 1.056 ...</span></span>
-<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.025 0.037 0.027 0 0.057 ...</span></span>
-<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.174 0.792 0.372 1000 0.939 ...</span></span>
-<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.282 0.93 0.48 1000 1.15 ...</span></span>
-<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA NA NA 0.84 NA NA NA NA 0.93 ...</span></span>
+<span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adult female survival" "Adjusted recruitment" "Population growth rate" "Female population size" ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.883 0.221 1.082 1000 0.421 ...</span></span>
+<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.033 0.023 0.023 0 0.03 ...</span></span>
+<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.811 0.183 1.038 1000 0.363 ...</span></span>
+<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.923 0.268 1.123 1000 0.486 ...</span></span>
+<span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA 1 NA NA NA 1 NA NA NA ...</span></span>
 <span><span class="co">#&gt;   ..$ X               : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ Anthro          : int [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;   ..$ fire_excl_anthro: num [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
@@ -320,7 +315,7 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;   ..$ param           : chr [1:70] "observed" "observed" "observed" "observed" ...</span></span>
 <span><span class="co">#&gt;  $ ksDists       :'data.frame':  175 obs. of  4 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year      : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
-<span><span class="co">#&gt;   ..$ Parameter : chr [1:175] "Adjusted recruitment" "Adult female survival" "Recruitment" "Female population size" ...</span></span>
+<span><span class="co">#&gt;   ..$ Parameter : chr [1:175] "Adult female survival" "Adjusted recruitment" "Population growth rate" "Female population size" ...</span></span>
 <span><span class="co">#&gt;   ..$ KSDistance: logi [1:175] NA NA NA NA NA NA ...</span></span>
 <span><span class="co">#&gt;   ..$ KSpvalue  : logi [1:175] NA NA NA NA NA NA ...</span></span></code></pre></div>
 <p>And plot the results with <code><a href="../reference/plotRes.html">plotRes()</a></code>.</p>
@@ -498,13 +493,13 @@ parameter.</p>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">scn_params</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 28</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 27</span></span></span>
 <span><span class="co">#&gt;   iFire iAnthro obsAnthroSlope projAnthroSlope rSlopeMod sSlopeMod rQuantile</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     0       0              2               3         1         1       0.5</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 21 more variables: sQuantile &lt;dbl&gt;, projYears &lt;dbl&gt;, obsYears &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   preYears &lt;dbl&gt;, N0 &lt;dbl&gt;, adjustR &lt;lgl&gt;, assessmentYrs &lt;dbl&gt;, qMin &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   qMax &lt;dbl&gt;, uMin &lt;dbl&gt;, uMax &lt;dbl&gt;, zMin &lt;dbl&gt;, zMax &lt;dbl&gt;, cowMult &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 20 more variables: sQuantile &lt;dbl&gt;, projYears &lt;dbl&gt;, obsYears &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   preYears &lt;dbl&gt;, N0 &lt;dbl&gt;, assessmentYrs &lt;dbl&gt;, qMin &lt;dbl&gt;, qMax &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   uMin &lt;dbl&gt;, uMax &lt;dbl&gt;, zMin &lt;dbl&gt;, zMax &lt;dbl&gt;, cowMult &lt;dbl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   collarInterval &lt;dbl&gt;, collarCount &lt;dbl&gt;, interannualVar &lt;list&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   curYear &lt;dbl&gt;, ID &lt;int&gt;, label &lt;chr&gt;, startYear &lt;dbl&gt;</span></span></span>
 <span></span>
@@ -580,10 +575,7 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="va">eParsIn</span><span class="op">$</span><span class="va">collarOffTime</span> <span class="op">&lt;-</span> <span class="fl">12</span></span>
 <span><span class="va">eParsIn</span><span class="op">$</span><span class="va">collarNumYears</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
 <span></span>
-<span><span class="co"># adjust recruitment for delayed age of first reproduction</span></span>
-<span><span class="va">adjustR</span> <span class="op">&lt;-</span> <span class="cn">T</span> </span>
-<span></span>
-<span><span class="va">simBig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSimsNational.html">getSimsNational</a></span><span class="op">(</span>adjustR <span class="op">=</span> <span class="va">adjustR</span><span class="op">)</span></span>
+<span><span class="va">simBig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getSimsNational.html">getSimsNational</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using saved object</span></span>
 <span></span>
 <span><span class="va">scns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span>
@@ -601,19 +593,13 @@ see how well our monitoring program captured the true population.</p>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
 <span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
 <span><span class="co">#&gt; Warning in caribouBayesianPM(survData = oo$simSurvObs, ageRatio =</span></span>
 <span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
@@ -687,7 +673,7 @@ the first page.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>

@@ -91,7 +91,6 @@ population growth.</p>
 <span>  Nthin <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  N0 <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  survAnalysisMethod <span class="op">=</span> <span class="st">"KaplanMeier"</span>,</span>
-<span>  adjustR <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  assessmentYrs <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  inputList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  saveJAGStxt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -153,11 +152,6 @@ period and the end of the projection period.</p></dd>
 <dt id="arg-survanalysismethod">survAnalysisMethod<a class="anchor" aria-label="anchor" href="#arg-survanalysismethod"></a></dt>
 <dd><p>Survival analysis method either "KaplanMeier" or
 "Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.</p></dd>
-
-
-<dt id="arg-adjustr">adjustR<a class="anchor" aria-label="anchor" href="#arg-adjustr"></a></dt>
-<dd><p>Logical. Adjust R to account for delayed age at first
-reproduction (DeCesare et al. 2012; Eacker et al. 2019).</p></dd>
 
 
 <dt id="arg-assessmentyrs">assessmentYrs<a class="anchor" aria-label="anchor" href="#arg-assessmentyrs"></a></dt>
@@ -236,10 +230,10 @@ year. This will reduce the sample size in years when new collars are added.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ result:List of 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ model             :List of 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr "jags"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ BUGSoutput        :List of 24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ BUGSoutput        :List of 25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr "bugs"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ parameters.to.save: chr [1:12] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ model.file        : chr "/tmp/Rtmp4e2JpX/JAGS_run.txt"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ parameters.to.save: chr [1:13] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ model.file        : chr "/tmp/Rtmpy0ce4z/JAGS_run.txt"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n.iter            : num 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ DIC               : logi TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "class")= chr "rjags"</span>
@@ -275,7 +269,7 @@ year. This will reduce the sample size in years when new collars are added.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>

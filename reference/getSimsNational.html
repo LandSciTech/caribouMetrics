@@ -79,7 +79,6 @@
 <span>  fire_excl_anthro <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  useQuantiles <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  populationGrowthTable <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  adjustR <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  cPars <span class="op">=</span> <span class="fu"><a href="getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  forceUpdate <span class="op">=</span> <span class="cn">F</span>,</span>
 <span>  interannualVar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="va">caribouPopGrowth</span><span class="op">)</span><span class="op">$</span><span class="va">interannualVar</span><span class="op">)</span></span>
@@ -125,11 +124,6 @@ If the table does not contain the standard error it is calculated from the
 confidence interval.</p></dd>
 
 
-<dt id="arg-adjustr">adjustR<a class="anchor" aria-label="anchor" href="#arg-adjustr"></a></dt>
-<dd><p>Logical. Adjust R to account for delayed age at first
-reproduction (DeCesare et al. 2012; Eacker et al. 2019).</p></dd>
-
-
 <dt id="arg-cpars">cPars<a class="anchor" aria-label="anchor" href="#arg-cpars"></a></dt>
 <dd><p>optional. Parameters for calculating composition survey bias term.</p></dd>
 
@@ -142,8 +136,9 @@ cached. Set <code>forceUpdate</code> to TRUE to ensure the simulations are re-ru
 <dt id="arg-interannualvar">interannualVar<a class="anchor" aria-label="anchor" href="#arg-interannualvar"></a></dt>
 <dd><p>list or logical. List containing interannual
 variability parameters. These can be either coefficients of variation
-(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to <code>FALSE</code> to
-ignore interannual variability.</p></dd>
+(R_CV, S_CV), beta precision parameters (R_phi, S_phi),
+or random effects parameters from a logistic glmm (R_annual, S_annual).
+Set to <code>FALSE</code> to ignore interannual variability.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -179,32 +174,32 @@ Column names are Anthro, Mean, lower, upper, Parameter.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 505 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Anthro  Mean lower upper Parameter            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>      0 0.882 0.689 0.998 Adult female survival</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>      1 0.877 0.695 0.998 Adult female survival</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>      2 0.874 0.677 0.998 Adult female survival</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>      3 0.873 0.686 0.995 Adult female survival</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>      4 0.875 0.686 0.997 Adult female survival</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>      5 0.872 0.686 0.997 Adult female survival</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>      6 0.874 0.673 0.997 Adult female survival</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>      7 0.868 0.680 0.996 Adult female survival</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>      8 0.868 0.668 0.995 Adult female survival</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>      9 0.867 0.677 0.996 Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>      0 0.875 0.686 0.999 Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>      1 0.878 0.676 0.998 Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>      2 0.873 0.693 0.997 Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>      3 0.871 0.675 0.997 Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>      4 0.871 0.691 0.997 Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>      5 0.876 0.689 0.997 Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>      6 0.875 0.701 0.995 Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>      7 0.874 0.703 0.998 Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>      8 0.869 0.682 0.997 Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>      9 0.871 0.679 0.996 Adult female survival</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 495 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $samples</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 505,000 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Anthro Parameter                 Value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>      0 Adult female survival     0.915</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>      0 Recruitment               0.328</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>      0 Adjusted recruitment      0.149</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>      0 Population growth rate    0.960</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>      0 Female population size  827    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>      1 Adult female survival     0.848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>      0 Adult female survival     0.875</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>      0 Recruitment               0.398</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>      0 Adjusted recruitment      0.211</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>      0 Population growth rate    1.04 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>      0 Female population size  946    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>      1 Adult female survival     0.944</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>      1 Recruitment               0.269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>      1 Adjusted recruitment      0.126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>      1 Population growth rate    1.01 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>      1 Female population size <span style="text-decoration: underline;">1</span>040    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>      1 Adjusted recruitment      0.143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>      1 Population growth rate    1.10 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>      1 Female population size <span style="text-decoration: underline;">1</span>244    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 504,990 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
@@ -221,7 +216,7 @@ Column names are Anthro, Mean, lower, upper, Parameter.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer></div>
