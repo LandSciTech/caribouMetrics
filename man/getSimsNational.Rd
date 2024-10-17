@@ -11,7 +11,6 @@ getSimsNational(
   fire_excl_anthro = 0,
   useQuantiles = NULL,
   populationGrowthTable = NULL,
-  adjustR = TRUE,
   cPars = getScenarioDefaults(),
   forceUpdate = F,
   interannualVar = eval(formals(caribouPopGrowth)$interannualVar)
@@ -43,9 +42,6 @@ provided but it must match the column names of \link{popGrowthTableJohnsonECCC}.
 If the table does not contain the standard error it is calculated from the
 confidence interval.}
 
-\item{adjustR}{Logical. Adjust R to account for delayed age at first
-reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
-
 \item{cPars}{optional. Parameters for calculating composition survey bias term.}
 
 \item{forceUpdate}{logical. If the default inputs are used the result is
@@ -53,8 +49,9 @@ cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
 
 \item{interannualVar}{list or logical. List containing interannual
 variability parameters. These can be either coefficients of variation
-(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to \code{FALSE} to
-ignore interannual variability.}
+(R_CV, S_CV), beta precision parameters (R_phi, S_phi),
+or random effects parameters from a logistic glmm (R_annual, S_annual).
+Set to \code{FALSE} to ignore interannual variability.}
 }
 \value{
 a list with two elements:

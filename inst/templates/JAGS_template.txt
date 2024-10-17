@@ -33,17 +33,16 @@ for(k in 1:nYears){
 
 #Growth
 for(k in 1:nYears){
-		_adjustString_
+		Rfemale[k] <- composition.bias*R[k]/2
 		survivors[k] ~ dbin( S.annual.KM[k], fpop.size[k] )
-    recruits[k] ~ dpois(Rfemale[k]*survivors[k])
-    #small minimum in demoninator to give 0 when fpop.size=0
-    pop.growthr[k] <- (survivors[k]+recruits[k])/max(fpop.size[k],0.0000001)
+    recruits[k] ~ dbin(Rfemale[k],survivors[k])
+    pop.growthr[k] <- mu.S[k]*(1+composition.bias*mu.R[k]/2) #without interannual var or demographic stochasticity
 }
 for(k in 2:assessmentYrs){
     pop.growth[k-1] <- pop.growthr[k-1]
 }
 for(k in assessmentYrs:nYears){
-    pop.growth[k] <- mean(pop.growthr[(k-assessmentYrs+1):k])
+    pop.growth[k] <- prod(pop.growthr[(k-assessmentYrs+1):k])^(1/assessmentYrs) #geometric mean
 }
 
 fpop.size[1] <- Ninit
@@ -64,9 +63,6 @@ for(k in 2:nYears){
 	l.R ~ dnorm(l.R.Prior1,pow(l.R.Prior2, -2))T(-10,0)
 	cv.R~dunif(sig.R.Prior1,sig.R.Prior2) #note theoretical max cv for beta distn is 1.
 
-	meanAFsurv <-  exp(l.Saf)/(1+ exp(l.Saf)) #(prod(R))^(1/(nYears))
-	meanR <-  exp(l.R)/(1+ exp(l.R)) #(prod(R))^(1/(nYears))
-	meanRfemale <-  (prod(Rfemale))^(1/(nYears))
-	medianLambda <- (prod(pop.growthr))^(1/(nYears))
+	geomLambda <- prod(pop.growthr)^(1/nYears) #geometric mean
 	meanLambda <- mean(pop.growthr)
 }

@@ -13,7 +13,7 @@ caribouPopGrowth(
   P_K = 0.6,
   a = 1,
   b = 4,
-  K = 50000,
+  K = 10000,
   r_max = 1.3,
   s = 0.5,
   l_R = 0,
@@ -23,7 +23,6 @@ caribouPopGrowth(
   c = 1,
   interannualVar = list(R_CV = 0.46, S_CV = 0.08696),
   probOption = "binomial",
-  adjustR = FALSE,
   progress = interactive()
 )
 }
@@ -65,14 +64,12 @@ one or more sample populations.}
 
 \item{interannualVar}{list or logical. List containing interannual
 variability parameters. These can be either coefficients of variation
-(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to \code{FALSE} to
-ignore interannual variability.}
+(R_CV, S_CV), beta precision parameters (R_phi, S_phi),
+or random effects parameters from a logistic glmm (R_annual, S_annual).
+Set to \code{FALSE} to ignore interannual variability.}
 
 \item{probOption}{Character. Choices are "binomial","continuous" or
 "matchJohnson2020". See description for details.}
-
-\item{adjustR}{Logical. Adjust R to account for delayed age at first
-reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{progress}{Logical. Should progress updates be shown?}
 }
@@ -99,9 +96,8 @@ Given a population of post-juvenile females at the beginning of year \eqn{t}, \e
 the number of post-juvenile females that survive from year \eqn{t} to the
 census \eqn{\dot{W}_t} is binomially distributed with survival probability
 \eqn{\dot{S}_t}: \eqn{\dot{W}_{t} \sim \text{Binomial}(\dot{N}_t,\dot{S}_t)}.
-Maximum potential recruitment rate is adjusted for sex ratio, misidentification biases, and (optionally)
-delayed age at first reproduction
-\deqn{\dot{X}_t=\frac{\dot{c}\dot{R}_t/2}{1+\dot{c}\dot{R}_t/2}.} Realized recruitment rate
+Maximum potential recruitment rate is adjusted for sex ratio and misidentification biases
+\deqn{\dot{X}_t=\dot{c}\dot{R}_t/2.} Realized recruitment rate
 varies with population density, and the number of juveniles recruiting to the
 post-juvenile class at the census is a binomially distributed function of the
 number of surviving post-juvenile females and the adjusted recruitment rate:
@@ -110,15 +106,18 @@ number of surviving post-juvenile females and the adjusted recruitment rate:
 Given default parameters, recruitment rate is lowest \eqn{(0.5\dot{X}_t)}
 when \eqn{\dot{N}_t=1}, approaches a maximum of \eqn{\dot{X}_t} at
 intermediate population sizes, and declines to \eqn{0.6\dot{X}_t} as the
-population reaches carrying capacity of \eqn{K=50000}. The post-juvenile female population in the next year
+population reaches carrying capacity of \eqn{K=10000}. The post-juvenile female population in the next year
 includes both survivors and new recruits:
 \eqn{\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)}.
 
-Interannual variation in survival and recruitment is modelled using truncated
+If coefficients of variation are provided, interannual variation in survival and recruitment is modelled using truncated
 beta distributions: \eqn{\dot{R}_t
 \sim \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim
 \text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)}. \eqn{(\nu_R,\nu_S)} are coefficients of variation
 among years and \eqn{l_R,h_R,l_S,h_S} are maximum/minimum values for recruitment and survival.
+
+If R_annual and S_annual are provided, interannual variation in survival and recruitment is modelled
+as in a logistic glmm with random effect of year.
 }
 \examples{
 caribouPopGrowth(100, 2, 0.5, 0.7)

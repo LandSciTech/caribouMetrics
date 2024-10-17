@@ -59,7 +59,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = minYr, endYear = maxYr,
       N0 = cs$N0, survAnalysisMethod = survAnalysisMethod,
-      adjustR = cs$adjustR, assessmentYrs = cs$assessmentYrs, Niter = Niter, 
+      assessmentYrs = cs$assessmentYrs, Niter = Niter, 
       Nburn = Nburn
     ))
     if (inherits(out, "try-error")) {

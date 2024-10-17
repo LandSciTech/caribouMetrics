@@ -17,7 +17,6 @@ caribouBayesianPM(
   Nthin = 2,
   N0 = 1000,
   survAnalysisMethod = "KaplanMeier",
-  adjustR = FALSE,
   assessmentYrs = 1,
   inputList = list(),
   saveJAGStxt = tempdir(),
@@ -54,9 +53,6 @@ period and the end of the projection period.}
 
 \item{survAnalysisMethod}{Survival analysis method either "KaplanMeier" or
 "Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.}
-
-\item{adjustR}{Logical. Adjust R to account for delayed age at first
-reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
 
 \item{assessmentYrs}{Number of years over which to assess population growth rate lambda.}
 

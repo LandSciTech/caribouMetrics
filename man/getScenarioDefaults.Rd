@@ -18,7 +18,6 @@ getScenarioDefaults(
   obsYears = 15,
   preYears = 0,
   N0 = 1000,
-  adjustR = TRUE,
   assessmentYrs = 3,
   qMin = 0,
   qMax = 0.6,
@@ -66,9 +65,6 @@ the projection period}
 \item{N0}{Number or vector of numbers. Initial population size for one or
 more sample populations.}
 
-\item{adjustR}{Logical. Adjust R to account for delayed age at first
-reproduction (DeCesare et al. 2012; Eacker et al. 2019).}
-
 \item{assessmentYrs}{Number of years over which to assess population growth rate lambda.}
 
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
@@ -98,8 +94,9 @@ it will be calculated from \code{curYear} and \code{obsYears}}
 
 \item{interannualVar}{list or logical. List containing interannual
 variability parameters. These can be either coefficients of variation
-(R_CV, S_CV) or beta precision parameters (R_phi, S_phi). Set to \code{FALSE} to
-ignore interannual variability.}
+(R_CV, S_CV), beta precision parameters (R_phi, S_phi),
+or random effects parameters from a logistic glmm (R_annual, S_annual).
+Set to \code{FALSE} to ignore interannual variability.}
 
 \item{curYear}{year. The current year. All years before are part of the
 observation period and years after are part of the projection period.}
