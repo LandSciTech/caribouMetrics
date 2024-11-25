@@ -214,3 +214,16 @@ test_that("pop Growth matches Johnson figures", {
   expect_equal(testCheck$lambda, theor_lam, tolerance = 0.003)
   expect_equal(testCheck$lambda, mean(check$lambda), tolerance = 0.003)
 })
+
+test_that("interannualVar works as expected", {
+  def_IV <- caribouPopGrowth(rep(1000, 10), 200, R_bar = 0.7, S_bar = 0.99, progress = FALSE)
+  expect_s3_class(def_IV, "data.frame")
+  
+  phi_IV <- caribouPopGrowth(rep(1000, 10), 200, R_bar = 0.7, S_bar = 0.99, progress = FALSE,
+                             interannualVar = list(R_phi = 0.5, S_phi = 0.5))
+  expect_s3_class(phi_IV, "data.frame")
+  
+  annual_IV <- caribouPopGrowth(rep(1000, 10), 200, R_bar = 0.7, S_bar = 0.99, progress = FALSE,
+                                interannualVar = list(R_annual = 0.5, S_annual = 0.5))
+  expect_s3_class(annual_IV, "data.frame")
+})

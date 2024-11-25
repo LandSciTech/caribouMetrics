@@ -152,3 +152,12 @@ rtrunc <- function (n, spec, a = -Inf, b = Inf, ...){
   x <- qtrunc(u, spec, a = a, b = b, ...)
   return(x)
 }
+
+# used for annual interannual variation
+inv.logit <-function(x){
+  exp(x)/(1+exp(x))
+}
+
+logit <-function(x){
+  log(x/(1-x))
+}

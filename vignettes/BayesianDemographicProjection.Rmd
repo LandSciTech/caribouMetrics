@@ -43,18 +43,15 @@ fire with a log link (Dyson et al., 2022; Johnson et al., 2020; Stewart et al.,
 2023) and Gaussian distributed random year effect (Eacker et al., 2019):
 $$\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t
 \sim \text{Normal}(0,\sigma^2_{R}).$$
-Estimated recruitment probability is adjusted for sex ratio,
-misidentification biases, and age of first reproduction
-(DeCesare et al., 2012; Eacker et al., 2019) to get expected
+Estimated recruitment probability is adjusted for sex ratio and
+misidentification biases to get expected
 recruits per female:
-$$X_t=\frac{cR_t/2}{1+cR_t/2}; c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)}.$$ 
+$$X_t={cR_t/2}; c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)}.$$ 
 The composition survey bias correction term $c$ depends on the apparent number
 of adult females per collared animal $w$, the ratio of young bulls to adult
 females $q$, the probability of misidentifying young bulls as adult females and
 vice versa $u$, and the probability of missing a calf $z$ (see
-`compositionBiasCorrection()`). To maintain consistency with Johnson et al.
-(2020) we also provide an option (`adjustR = FALSE`) to only
-adjust for sex ratio and misidentification biases $X_t=cR_t/2$.
+`compositionBiasCorrection()`).
 
 In the Bayesian model, prior uncertainty about the value of the bias
 correction term $c$ is approximated with a Log-normal distribution.
@@ -305,10 +302,7 @@ eParsIn$collarOnTime <- 1
 eParsIn$collarOffTime <- 12
 eParsIn$collarNumYears <- 3
 
-# adjust recruitment for delayed age of first reproduction
-adjustR <- T 
-
-simBig <- getSimsNational(adjustR = adjustR)
+simBig <- getSimsNational()
 
 scns <- expand.grid(
   obsYears = 10, projYears = 10, collarCount = 100, cowMult = 2, collarInterval = 2,

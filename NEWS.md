@@ -1,3 +1,5 @@
+# caribouMetrics 0.4.0
+
 # caribouMetrics 0.3.2
 **Breaking changes**
 * Changed function name:

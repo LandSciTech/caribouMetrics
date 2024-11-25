@@ -144,7 +144,7 @@ test_that("works when 1 collared animal",{
                              freqStartsByYear = freqStartsByYear)
 
   # ensure some deaths so it uses KM still
-  oo$simSurvObs$event[3] <- 1
+  oo$simSurvObs$event[1] <- 1
 
   expect_warning(
     out <- caribouBayesianPM(
@@ -157,10 +157,28 @@ test_that("works when 1 collared animal",{
 
   expect_s3_class(out$result, "rjags")
 
-  # FIXED: error seems to happen when there are few collars but enough data for KM.
-  # This was happening in some of the paper simulations too.
-  # Error in `$<-.data.frame`(`*tmp*`, tau, value = c(18.0902177774918, 17.7911133740675,  :
-  #                                                     replacement has 7 rows, data has 4
+  # confirm that the system properly handles cases where there there is only one
+  # year of data for one collared animal and it does not survive the year.
+  
+  # library(caribouMetrics)
+  # out <- caribouBayesianPM(
+  #   survData = data.frame(id = 1, Year = 2022, event = 1, enter = 0, exit = 9), 
+  #   ageRatio = data.frame(Year = 2022, Count = c(0,1), Class = c("calf", "cow")),
+  #   N0 = 1,
+  #   Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2,
+  #   startYear = 2022, endYear = 2025)
+  # 
+  # out
+  # 
+  # out <- caribouBayesianPM(
+  #   survData = data.frame(id = 1, Year = 2022, event = 1, enter = 0, exit = 9), 
+  #   ageRatio = data.frame(Year = 2022, Count = c(1,1), Class = c("calf", "cow")),
+  #   N0 = 1,
+  #   Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2,
+  #   startYear = 2022, endYear = 2025)
+  # 
+  # out
+ 
 
 })
 

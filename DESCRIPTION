@@ -1,7 +1,7 @@
 Package: caribouMetrics
 Type: Package
 Title: Models and Metrics of Boreal Caribou Demography and Habitat Selection
-Version: 0.3.2
+Version: 0.4.0
 Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec.gc.ca", comment = c(ORCID = "0000-0001-7875-9015")),
     person("Sarah", "Endicott", email = "sarah.endicott@ec.gc.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
