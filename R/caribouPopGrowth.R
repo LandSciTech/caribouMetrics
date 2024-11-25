@@ -67,8 +67,8 @@
 #'   "matchJohnson2020". See description for details.
 #' @param progress Logical. Should progress updates be shown?
 #'
-#' @return A data.frame of population size (`N`), average growth rate
-#'   (`lambda`), apparent annual reproduction rate (`R_t`), adjusted reproduction (`X_t`),
+#' @return A data.frame of population size (`N`), expected growth rate
+#'   (`lambda`), true growth rate (`lambdaTrue`), apparent annual reproduction rate (`R_t`), adjusted reproduction (`X_t`),
 #'   survival (`S_t`), number of recruits (`n_recruits`), and surviving females (`surviving_adFemales`)
 #'   for each sample population projected for numSteps years.
 #'
