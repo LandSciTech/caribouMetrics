@@ -13,7 +13,7 @@ test_that("works with defaults", {
   expect_error(getOutputTables(out, startYear = 2009, endYear = 2023), 
                "different length")
 
-  expect_type(getOutputTables(out, simNational = getSimsNational(),
+  expect_type(getOutputTables(out, simInitial = getSimsInitial(),
                               getKSDists = FALSE), 
               "list")
 })
@@ -32,7 +32,7 @@ test_that("decimals in observed disturbance work", {
   expect_message(
     getOutputTables(
       out, exData = simO$exData, paramTable = simO$paramTable,
-      simNational = getSimsNational(), getKSDists = FALSE),
+      simInitial = getSimsInitial(), getKSDists = FALSE),
     "recalculating")
              
 })
@@ -42,14 +42,14 @@ test_that("works with out sim obs",{
   
   
   mod_tbl <- getOutputTables(mod_real,
-                             simNational = getSimsNational(),
+                             simInitial = getSimsInitial(),
                              getKSDists = FALSE)
   
   expect_type(mod_tbl, "list")
   
 })
 
-test_that("works with out simNational", {
+test_that("works with out simInitial", {
   mod_real <- caribouBayesianPM(Niter = 100, Nburn = 10)
   
   

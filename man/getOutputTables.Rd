@@ -10,7 +10,7 @@ getOutputTables(
   endYear = max(caribouBayesDemogMod$inData$disturbanceIn$Year),
   paramTable = data.frame(param = "observed"),
   exData = NULL,
-  simNational = NULL,
+  simInitial = NULL,
   getKSDists = FALSE
 )
 }
@@ -28,8 +28,8 @@ period and the end of the projection period.}
 records the true population metrics of the population that observations
 were simulated from.}
 
-\item{simNational}{National simulation results, produced by calling
-\code{\link[=getSimsNational]{getSimsNational()}}}
+\item{simInitial}{Initial simulation results, produced by calling
+\code{\link[=getSimsInitial]{getSimsInitial()}}}
 
 \item{getKSDists}{logical. Should Kolmogorov–Smirnov distances be calculated?}
 }
@@ -40,7 +40,7 @@ a list of tables:
 upper and lower credible intervals projected by the Bayesian model, as well
 as scenario input parameters.
 \item sim.all: Mean parameter values and upper and lower credible intervals from
-the National model for each year, as well as scenario input parameters.
+the initial model for each year, as well as scenario input parameters.
 \item obs.all: Observed parameter values with column "type" identifying if it is
 the "true" value of the simulated population or the "observed" value
 simulated based on the collaring program parameters.
@@ -50,7 +50,7 @@ simulated based on the collaring program parameters.
 \description{
 Produces summary tables for Bayesian caribou population model
 results. Optionally calculates Kolmogorov–Smirnov distances between Bayesian
-model results and national model results.
+model results and initial model results.
 }
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
@@ -65,7 +65,7 @@ out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut
                           Nthin = 2)
 
 getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-                simNational = getSimsNational(), getKSDists = FALSE)
+                simInitial = getSimsInitial(), getKSDists = FALSE)
 }
 \seealso{
 Caribou demography functions:
@@ -77,7 +77,7 @@ Caribou demography functions:
 \code{\link{demographicRates}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsNational}()},
+\code{\link{getSimsInitial}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},

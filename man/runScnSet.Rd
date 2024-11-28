@@ -7,8 +7,7 @@
 runScnSet(
   scns,
   ePars,
-  simNational,
-  survAnalysisMethod = "KaplanMeier",
+  simInitial,
   getKSDists = TRUE,
   printProgress = FALSE,
   Niter = formals(caribouBayesianPM)$Niter,
@@ -22,11 +21,8 @@ runScnSet(
 \item{ePars}{list. Additional parameters passed on to
 \code{\link[=simulateObservations]{simulateObservations()}}}
 
-\item{simNational}{National simulation results, produced by calling
-\code{\link[=getSimsNational]{getSimsNational()}}}
-
-\item{survAnalysisMethod}{Survival analysis method either "KaplanMeier" or
-"Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.}
+\item{simInitial}{Initial simulation results, produced by calling
+\code{\link[=getSimsInitial]{getSimsInitial()}}}
 
 \item{getKSDists}{logical. Should Kolmogorov–Smirnov distances be calculated?}
 
@@ -55,7 +51,7 @@ scns <- expand.grid(
 )
 
 eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
-scResults <- runScnSet(scns, eParsIn, getSimsNational(), getKSDists = FALSE,
+scResults <- runScnSet(scns, eParsIn, getSimsInitial(), getKSDists = FALSE,
                        # only set to speed up example. Normally keep defaults.
                        Niter = 10, Nburn = 2)
 }
@@ -70,7 +66,7 @@ Caribou demography functions:
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsNational}()},
+\code{\link{getSimsInitial}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{simulateObservations}()}

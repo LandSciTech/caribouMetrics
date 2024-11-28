@@ -2,7 +2,7 @@
 % Please edit documentation in R/caribouPopGrowth.R
 \name{caribouPopGrowth}
 \alias{caribouPopGrowth}
-\title{National caribou demographic model}
+\title{Caribou demographic model}
 \usage{
 caribouPopGrowth(
   N0,
@@ -154,7 +154,7 @@ Caribou demography functions:
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsNational}()},
+\code{\link{getSimsInitial}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},

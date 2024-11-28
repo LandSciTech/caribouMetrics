@@ -6,7 +6,7 @@
 #' Plot Bayesian population model results
 #'
 #' Plot Bayesian population model results, with (optionally) the 
-#' distribution of outcomes from the national model, local observations, and true local state for comparison. 
+#' distribution of outcomes from the initial model, local observations, and true local state for comparison. 
 #'
 #' @param modTables list. A list of model results tables created using
 #'   `[getOutputTables()]`.
@@ -39,7 +39,7 @@
 #'                           Nthin = 2)
 #'
 #' out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-#'                            simNational = getSimsNational(), getKSDists = FALSE)
+#'                            simInitial = getSimsInitial(), getKSDists = FALSE)
 #'
 #' plotRes(out_tbl, parameter = "Recruitment")
 plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
@@ -122,7 +122,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   if (!ksDists & !is.null(simRange)) {
     
     df$Type <- "Bayesian"
-    simRange$Type <- "national"
+    simRange$Type <- "initial"
     nameSel <- c(c("Year", "Mean", "Lower 95% CRI", "Upper 95% CRI", "Type"), facetVars)
     df <- rbind(subset(df, select = nameSel), subset(simRange, select = nameSel))
     df$grp <- df$Type

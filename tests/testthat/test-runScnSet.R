@@ -6,7 +6,7 @@ test_that("testScript still works", {
 
   ##########
   # Get full set of sims for comparison
-  simBig <- suppressWarnings(getSimsNational()) # If called with default parameters, use saved object to speed things up.
+  simBig <- suppressWarnings(getSimsInitial()) # If called with default parameters, use saved object to speed things up.
 
   ###############
   # Step 1: confirm appropriate prior variability in survival intercept using minimal (2) observed data points & 0 fire/anthro covariates. Controlled by priors on l.Saf, phi and sig.Saf.

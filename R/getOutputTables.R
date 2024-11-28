@@ -2,7 +2,7 @@
 #'
 #' Produces summary tables for Bayesian caribou population model
 #' results. Optionally calculates Kolmogorov–Smirnov distances between Bayesian
-#' model results and national model results.
+#' model results and initial model results.
 #'
 #' @param caribouBayesDemogMod caribou Bayesian demographic model results
 #'   produced by calling [caribouBayesianPM()]
@@ -12,8 +12,8 @@
 #' @param exData data.frame. Optional. Output of [simulateObservations()] that
 #'   records the true population metrics of the population that observations
 #'   were simulated from.
-#' @param simNational National simulation results, produced by calling
-#'   [getSimsNational()]
+#' @param simInitial Initial simulation results, produced by calling
+#'   [getSimsInitial()]
 #' @param getKSDists logical. Should Kolmogorov–Smirnov distances be calculated?
 #'
 #' @return a list of tables:
@@ -21,7 +21,7 @@
 #'   upper and lower credible intervals projected by the Bayesian model, as well
 #'   as scenario input parameters.
 #' * sim.all: Mean parameter values and upper and lower credible intervals from
-#'   the National model for each year, as well as scenario input parameters.
+#'   the initial model for each year, as well as scenario input parameters.
 #' * obs.all: Observed parameter values with column "type" identifying if it is
 #'   the "true" value of the simulated population or the "observed" value
 #'   simulated based on the collaring program parameters.
@@ -43,17 +43,17 @@
 #'                           Nthin = 2)
 #'
 #' getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-#'                 simNational = getSimsNational(), getKSDists = FALSE)
+#'                 simInitial = getSimsInitial(), getKSDists = FALSE)
                              
 getOutputTables <- function(caribouBayesDemogMod, 
                             startYear = min(caribouBayesDemogMod$inData$disturbanceIn$Year), 
                             endYear = max(caribouBayesDemogMod$inData$disturbanceIn$Year), 
                             paramTable = data.frame(param = "observed"),
                             exData = NULL,
-                            simNational = NULL,
+                            simInitial = NULL,
                             getKSDists = FALSE) {
   # result=out$result;startYear=minYr;endYear=maxYr;survInput=out$survInput;
-  # simObsList=oo;simNational=simBig
+  # simObsList=oo;simInitial=simBig
   
   result <- caribouBayesDemogMod$result
   survInput <- caribouBayesDemogMod$inData$survDataIn
@@ -143,14 +143,14 @@ getOutputTables <- function(caribouBayesDemogMod,
   # combine paramTable and simDisturbance and add to all output tables, nest params in a list
   dist_params <- merge(simObsList$disturbanceIn, paramTable)
   
-  if(!is.null(simNational)){
-    if(!all(unique(simObsList$disturbanceIn$Anthro) %in% simNational$summary$Anthro)){
-      message("recalculating national sims to match anthropogenic distubance scenario")
+  if(!is.null(simInitial)){
+    if(!all(unique(simObsList$disturbanceIn$Anthro) %in% simInitial$summary$Anthro)){
+      message("recalculating initial sims to match anthropogenic distubance scenario")
       
-      simNational <- getSimsNational(Anthro = unique(simObsList$disturbanceIn$Anthro),cPars=paramTable)
+      simInitial <- getSimsInitial(Anthro = unique(simObsList$disturbanceIn$Anthro),cPars=paramTable)
     }
     
-    simBigO <- subset(simNational$summary, select = c("Anthro", "Mean", "lower",
+    simBigO <- subset(simInitial$summary, select = c("Anthro", "Mean", "lower",
                                                       "upper", "Parameter"))
     names(simBigO) <- c("Anthro", "Mean", "Lower 95% CRI", "Upper 95% CRI", "parameter")
     
@@ -166,21 +166,21 @@ getOutputTables <- function(caribouBayesDemogMod,
   obs.all <- obsAll
   
   if (getKSDists) {
-    if(is.null(simNational)){
-      stop("Cannot calculate KSDists without simNational.", 
-           "Set getKSDists = FALSE or provide simNational.", call. = FALSE)
+    if(is.null(simInitial)){
+      stop("Cannot calculate KSDists without simInitial.", 
+           "Set getKSDists = FALSE or provide simInitial.", call. = FALSE)
     }
     # get Kolmogorov smirnov distance between samples at each point
     
-    variables <- unique(simNational$summary$parameter)
+    variables <- unique(simInitial$summary$parameter)
     anthroPts <- unique(subset(rr.summary, select = c("Year", "Anthro")))
     # TO DO: make this step faster
     bmSamples <- tabAllRes(result, startYear, endYear, doSummary = F)
     bmSamples$type <- "local"
     
-    simSamples <- merge(anthroPts, simNational$samples)
+    simSamples <- merge(anthroPts, simInitial$samples)
     simSamples$Anthro <- NULL
-    simSamples$type <- "national"
+    simSamples$type <- "initial"
     
     allSamples <- rbind(subset(bmSamples,
                                is.element(bmSamples$Parameter, unique(simSamples$Parameter))),

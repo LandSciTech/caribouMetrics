@@ -75,7 +75,7 @@ Collate:
     'getOutputTables.R'
     'getPriors.R'
     'getScenarioDefaults.R'
-    'getSimsNational.R'
+    'getSimsInitial.R'
     'spatialAlignFns.R'
     'inputData.R'
     'inputDataDisturbance.R'

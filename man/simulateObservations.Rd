@@ -5,21 +5,20 @@
 \title{Simulate observations}
 \usage{
 simulateObservations(
+  trajectories,
   paramTable,
   cowCounts = NULL,
   freqStartsByYear = NULL,
-  printPlot = FALSE,
   collarNumYears = 4,
-  collarOffTime = 5,
-  collarOnTime = 8,
-  distScen = NULL,
-  populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
-  survivalModelNumber = "M1",
-  recruitmentModelNumber = "M4",
+  collarOffTime = 4,
+  collarOnTime = 4,
+  caribouYearStart = 4,
   writeFilesDir = NULL
 )
 }
 \arguments{
+\item{trajectories}{data.frame.}
+
 \item{paramTable}{data.frame. Parameters for the simulations. See
 \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for details.}
 
@@ -29,8 +28,7 @@ of cows that survive calving based on the collar data is multiplied by
 \code{cowMult} to determine the number of cows counted in aerial surveys. If
 \code{paramTable} does not contain \code{cowMult} \code{paramTable$cowCount} is used to
 set the number of cows counted in aerial surveys each year. If a data.frame
-is provided it must have 3 columns "Year", "Count", and "Class" where class
-is "cow" in all rows.}
+is provided it must have columns "Year"  and "Cows".}
 
 \item{freqStartsByYear}{data.frame. Optional. Number of collars deployed in
 each year. If NULL \code{paramTable$collarCount} is used as the target number of
@@ -38,8 +36,6 @@ collars and each year that collars are deployed they will be topped up to
 this number. If a data.frame is provided it must have 2 columns "Year" and
 "numStarts" and the "numStarts" is the absolute number of collars deployed
 in that year.}
-
-\item{printPlot}{logical. print a plot of the true population trajectory?}
 
 \item{collarNumYears}{integer. Number of years until collar falls off}
 
@@ -49,41 +45,24 @@ in that year.}
 \item{collarOnTime}{integer. Month that collars are deployed. A number from 1
 (January) to 12 (December)}
 
-\item{distScen}{data.frame. Disturbance scenario. Must have columns "Year",
-"Anthro", and "fire_excl_anthro" containing the year, percentage of the
-landscape covered by anthropogenic disturbance buffered by 500 m, and the
-percentage covered by fire that does not overlap anthropogenic disturbance.
-See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturbance scenario is simulated
-based on \code{paramTable}}
-
-\item{populationGrowthTable}{data.frame.\link{popGrowthTableJohnsonECCC} is
-included in the package and should be used in most cases. A custom table of
-model coefficients and standard errors or confidence intervals can be
-provided but it must match the column names of \link{popGrowthTableJohnsonECCC}.
-If the table does not contain the standard error it is calculated from the
-confidence interval.}
-
-\item{survivalModelNumber, recruitmentModelNumber}{character. Which model
-number to use see \link{popGrowthTableJohnsonECCC} for options.}
-
-\item{writeFilesDir}{characater. If not NULL \code{simSurvObs} and \code{ageRatioOut}
+\item{writeFilesDir}{character. If not NULL \code{simSurvObs} and \code{ageRatioOut}
 results will be saved to csv files in the directory provided}
+
+\item{printPlot}{logical. print a plot of the true population trajectory?}
 }
 \value{
 a list with elements:
 \itemize{
 \item minYr: first year in the simulations,
 \item maxYr: last year in the simulations,
-\item simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
-\item simSurvObs: a data frame of survival data with columns id, Year, event, enter, and exit,
-\item ageRatioOut: a data frame of calf cow counts for each year with columns Year, Count, and Class,
-\item exData: a tibble of expected population metrics based on the national model,
+\item simSurvObs: a data frame of survival data in bboutools format,
+\item ageRatioOut: a data frame of recruitment data in bboutools format,
+\item exData: a tibble of expected population metrics based on the initial model,
 \item paramTable: a data frame recording the input parameters for the simulation.
 }
 }
 \description{
-First, a example population trajectory is simulated from the national model and a disturbance scenario.
-Parameters specify a monitoring program that is applied to simulate observations from the example trajectory.
+Parameters specify a monitoring program that is applied to simulate observations from the example trajectories.
 Parameters for the caribou monitoring program, disturbance scenario and the true population
 trajectory can be specified with \code{getScenarioDefaults()}.
 }
@@ -94,10 +73,10 @@ For a detailed description of the process for simulating data see the
 }
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
-                            obsAnthroSlope = 1, projAnthroSlope = 5,
                             collarCount = 20, cowMult = 5)
 
 simO <- simulateObservations(scns)
+
 }
 \seealso{
 Caribou demography functions:
@@ -110,7 +89,7 @@ Caribou demography functions:
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsNational}()},
+\code{\link{getSimsInitial}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()}

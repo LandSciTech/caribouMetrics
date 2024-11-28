@@ -28,30 +28,33 @@
 #' )
 #' 
 #' eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
-#' scResults <- runScnSet(scns, eParsIn, getSimsNational(), getKSDists = FALSE,
+#' scResults <- runScnSet(scns, eParsIn, getSimsInitial(), getKSDists = FALSE,
 #'                        # only set to speed up example. Normally keep defaults.
 #'                        Niter = 10, Nburn = 2)
 
 
-runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeier",
+runScnSet <- function(scns, ePars, simInitial,
                       getKSDists = TRUE, printProgress = FALSE, 
                       Niter = formals(caribouBayesianPM)$Niter,
                       Nburn = formals(caribouBayesianPM)$Nburn) {
-  # ePars=eParsIn;survAnalysisMethod="Exponential";simNational=simBig;getKSDists=T;printProgress=F;Niter = formals(caribouBayesianPM)$Niter;Nburn = formals(caribouBayesianPM)$Nburn
+  # ePars=eParsIn;simInitial=simBig;getKSDists=T;printProgress=F;Niter = formals(caribouBayesianPM)$Niter;Nburn = formals(caribouBayesianPM)$Nburn
   scns <- getScenarioDefaults(scns)
   errorLog <- list()
   for (p in 1:nrow(scns)) {
-    # p=1
+    # p=2
     cs <- scns[p, ]
     if (printProgress) {
       print(paste0(c(p, scns[p, ]), collapse = " "))
     }
+
+    trajectories <- subset(simInitial$samples,Replicate==sample(unique(simInitial$samples$Replicate),1))
     
-    oo <- simulateObservations(cs, collarNumYears = ePars$collarNumYears,
+    oo <- simulateObservations(trajectories, cs, collarNumYears = ePars$collarNumYears,
                                collarOffTime = ePars$collarOffTime,
                                collarOnTime = ePars$collarOnTime)
+    #plot(plotSurvivalSeries(oo$simSurvObs))
     
-    betaPriors <- getPriors(cs)
+    #RESUME HERE  
     minYr <- min(oo$exData$Year)
     maxYr <- max(oo$simDisturbance$Year)
     out <- try(caribouBayesianPM(
@@ -79,7 +82,7 @@ runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeie
     }
 
     outTabs <- getOutputTables(caribouBayesDemogMod = out, startYear = minYr,
-                               endYear = maxYr, simNational = simNational,
+                               endYear = maxYr, simInitial = simInitial,
                                exData = oo$exData, paramTable = oo$paramTable,
                                getKSDists = getKSDists)
 

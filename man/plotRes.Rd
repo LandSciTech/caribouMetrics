@@ -43,7 +43,7 @@ was given.
 }
 \description{
 Plot Bayesian population model results, with (optionally) the
-distribution of outcomes from the national model, local observations, and true local state for comparison.
+distribution of outcomes from the initial model, local observations, and true local state for comparison.
 }
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
@@ -58,7 +58,7 @@ out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut
                           Nthin = 2)
 
 out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-                           simNational = getSimsNational(), getKSDists = FALSE)
+                           simInitial = getSimsInitial(), getKSDists = FALSE)
 
 plotRes(out_tbl, parameter = "Recruitment")
 }
@@ -73,7 +73,7 @@ Caribou demography functions:
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsNational}()},
+\code{\link{getSimsInitial}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
 \code{\link{simulateObservations}()}

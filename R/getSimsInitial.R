@@ -1,0 +1,96 @@
+# this creates an environment where we can store objects that will be available
+# to multiple functions/multiple function calls. Does not persist across
+# sessions but it only take ~ 20s so once per session is probably ok.
+# See explanation here: https://r-pkgs.org/data.html#sec-data-state
+cacheEnv <- new.env(parent = emptyenv())
+
+# Not supposed to save files to user computer on CRAN so for users the cache is
+# only preserved within a session but for dev I have added this "persistent
+# cache" use savePersistentCache function to update/create it after having run
+# getSimsInitial
+if(file.exists("inst/extdata/simsInitiald.rds")){
+  simsInitial <- readRDS( "inst/extdata/simsInitial.rds")
+  bbouResults <- readRDS( "inst/extdata/bbouResults.rds")
+
+  assign("simsInitial", simsInitial, envir = cacheEnv)
+  assign("bbouResults", bbouResults, envir = cacheEnv)
+}
+
+#' Get a set of simulation results from the initial demographic model
+#'
+#' @param bbouResults Fitted bboutools model and summary table created by bbouMakeSummaryTable(), 
+#'   or a path to those results.
+#' @param forceUpdate logical. If the default inputs are used the result is
+#'   cached. Set `forceUpdate` to TRUE to ensure the simulations are re-run.
+#' @inheritParams caribouPopGrowth
+#' @param N0 initial population size. If NULL, will use information in bbouResults.
+#' @param cPars optional. Parameters for calculating composition survey bias term.
+#'
+#' @return a list with two elements:
+#'  * summary: a tibble with a summary of parameter values for each scenario.
+#'    Column names are year, PopulationName, Mean, lower, upper, Parameter.
+#'  * samples: a tibble with parameter values for each scenario and replicate
+#'    4 rows per replicate \* scenario. Column names are year, PopulationName,  Parameter and Value
+#'    
+#' 
+#' @family demography
+#' @export
+#'
+#' @examples
+#' getSimsInitial()
+getSimsInitial <- function(bbouResults, N0=NULL,
+                            cPars=getScenarioDefaults(), forceUpdate = F,...) {
+  doSave <- FALSE
+
+  check <- as.list(match.call())
+
+  saveName <- "simsInitial"
+
+  if (length(check) == 1) {
+    if (exists(saveName, envir=cacheEnv)) {
+      message("Using saved object")
+      return(get(saveName, envir=cacheEnv))
+    } else {
+      doSave <- TRUE
+    }
+  }
+
+  check$forceUpdate <- NULL
+
+  if (forceUpdate & (length(check) == 1)) {
+    doSave <- TRUE
+  }
+  
+  #bbouResults = bbouResultFile
+  if(is.character(bbouResults) && (length(bbouResults) == 1) && file.exists(bbouResults)){
+    bbouResults <- readRDS(bbouResults)
+  }
+  
+  if(is.null(N0)){
+    N0 <- subset(bbouResults$parTab,selec=c(pop_name,N0))
+  }
+
+  surv_pred <- bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
+  rec_pred <- bb_predict_calf_cow_ratio(bbouResults$recruit_fit,year=T,conf_level=F)
+  
+  nr <- dim(surv_pred$samples)[1]*dim(surv_pred$samples)[2]
+  
+  popInfo <- merge(data.frame(id=seq(1:nr)),N0)
+  popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
+                                       z=runif(nr,cPars$zMin,cPars$zMax))
+  pars <- caribouPopSimMCMC(N0=popInfo,rec_pred,surv_pred,progress=F,...)
+  
+  pars$Anthro=NA;pars$fire_excl_anthro=NA
+  
+  popInfo$PopulationName <- popInfo$pop_name
+  pars <- merge(pars,subset(popInfo,select=c(-N0,-pop_name)))
+  
+  pars <- convertTrajectories(pars)
+  simBig <- summarizeCaribouPopSim(pars)
+
+  if (doSave) {
+    message("Updating cached initial simulations.")
+    assign(saveName, simBig, envir = cacheEnv)
+  }
+  return(simBig)
+}

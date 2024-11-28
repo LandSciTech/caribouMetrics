@@ -32,7 +32,7 @@ Caribou demography functions:
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsNational}()},
+\code{\link{getSimsInitial}()},
 \code{\link{plotRes}()},
 \code{\link{runScnSet}()},
 \code{\link{simulateObservations}()}

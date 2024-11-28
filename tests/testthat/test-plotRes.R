@@ -3,7 +3,7 @@ mod <- caribouBayesianPM(Nchains = 1, Niter = 100, Nburn = 10,
                           Nthin = 2)
 
 
-mod_tab <- suppressWarnings(getOutputTables(mod, simNational = getSimsNational(),
+mod_tab <- suppressWarnings(getOutputTables(mod, simInitial = getSimsInitial(),
                            getKSDists = TRUE))
 
 param_nms <- c(

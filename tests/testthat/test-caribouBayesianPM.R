@@ -184,7 +184,7 @@ test_that("works when 1 collared animal",{
 
 test_that("results match expected", {
   # save to speed up tests
-  # simBig <- suppressWarnings(getSimsNational(N0 = 3000,forceUpdate=T))
+  # simBig <- suppressWarnings(getSimsInitial(N0 = 3000,forceUpdate=T))
   # saveRDS(simBig, "tests/testthat/data/simBig3000.rds", version = 2)
   
   simBig <- readRDS( file.path(test_path(), "data/simBig3000.rds"))
@@ -246,7 +246,7 @@ test_that("results match expected", {
       filter(parameter != "Female population size")
   }
   
-  # difference between national model and Bayesian model
+  # difference between inital model and Bayesian model
   calcDifNat <- function(mod, min_year = 0){
     mod$rr.summary.all %>% select(Parameter, Mean, Year) %>% 
       right_join(mod$sim.all %>% select(parameter, Mean, Year),
@@ -357,7 +357,7 @@ test_that("results match expected", {
   dif1_se <- mod9_3$inData$survDataIn$se - mod12_1$inData$survDataIn$se
   expect_true(mean(dif1_se, na.rm = TRUE) > 0)
   
-  # A pop with quantile >> 0.5 will be above the national model projection
+  # A pop with quantile >> 0.5 will be above the initial model projection
   highQ <- doScn(rQuantile = 0.95, sQuantile = 0.95)
   doPlot(highQ, "Adult female survival")
   
@@ -366,7 +366,7 @@ test_that("results match expected", {
   expect_true(all(difHighQ$mean_dif > 0))
   
   # a pop that is less sensitive to anthro dist ie r/sSlopeMod < 1 will show a
-  # line that diverges from the national model. But only if there was some
+  # line that diverges from the initial model. But only if there was some
   # disturbance in training data?
   lowSens <- doScn(rSlopeMod = 0.1, sSlopeMod = 0.1, iAnthro = 80, nobsYears = 20,
                    obsAnthroSlope = 1, projAnthroSlope = 1)
@@ -389,13 +389,13 @@ test_that("results match expected", {
   # expect differences to be small
   expect_true(all(difLowSensNtrain$mean_dif < difLowSens$mean_dif))
   
-  # KS distances JH added to characterize deviation from national model bands
+  # KS distances JH added to characterize deviation from initial model bands
   # not just the mean. So should test what happens when there is no sample info
-  # provided. distribution of means from national model vs Bayesian model. Set standards
+  # provided. distribution of means from initial model vs Bayesian model. Set standards
   # that when no obs the differences don't get much worse than they are now. See
   # the doc JH will send to show what we are looking for
   
-  # scenario with no information is very similar to national model
+  # scenario with no information is very similar to initial model
   noDat <- doScn(nCollar = 0, nobsYears = 1, KSDists = TRUE)
   doPlot(noDat)
   doPlot(noDat, "Adult female survival")

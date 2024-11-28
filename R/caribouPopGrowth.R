@@ -1,4 +1,4 @@
-#' National caribou demographic model
+#' Caribou demographic model
 #'
 #' A two-stage demographic model with density dependence and interannual variability
 #' following [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with modifications described 
