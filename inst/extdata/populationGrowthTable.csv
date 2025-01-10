@@ -1,5 +1,5 @@
 modelVersion,responseVariable,ModelNumber,Type,Coefficient,Value,StdErr,lowerCI,upperCI
-Johnson,recruitment,M0,National,Intercept,0,NA,NA,NA
+Johnson,recruitment,M0,National,Intercept,-0.368913148,NA,NA,NA
 Johnson,recruitment,M0,National,Anthro,0,NA,NA,NA
 Johnson,recruitment,M0,National,fire_excl_anthro,0,NA,NA,NA
 Johnson,recruitment,M1,National,Intercept,-1.193,NA,-1.283,-1.103
@@ -15,7 +15,7 @@ Johnson,recruitment,M4,National,Precision,19.86188658,2.22865544,NA,NA
 Johnson,recruitment,M5,National,Intercept,-1.012,NA,-1.222,-0.011
 Johnson,recruitment,M5,National,Total_dist,-0.014,NA,-0.018,-0.011
 Johnson,recruitment,M5,National,fire_prop_dist,0.072,NA,-0.16,0.304
-Johnson,femaleSurvival,M0,National,Intercept,0,NA,NA,NA
+Johnson,femaleSurvival,M0,National,Intercept,-0.212677558,NA,NA,NA
 Johnson,femaleSurvival,M0,National,Anthro,0,NA,NA,NA
 Johnson,femaleSurvival,M1,National,Intercept,-0.142,NA,-0.158,-0.127
 Johnson,femaleSurvival,M1,National,Anthro,-0.0008,NA,-0.001,-0.0005
