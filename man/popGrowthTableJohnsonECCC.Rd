@@ -5,7 +5,7 @@
 \alias{popGrowthTableJohnsonECCC}
 \title{Population growth model table for Johnson models}
 \format{
-An object of class \code{data.frame} with 27 rows and 9 columns.
+An object of class \code{data.frame} with 32 rows and 9 columns.
 }
 \usage{
 popGrowthTableJohnsonECCC

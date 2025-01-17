@@ -169,12 +169,13 @@ simCalfCowRatios <- function(cowCounts, minYr, exData) {
   
   if(sum(ageRatioOut$cow>ageRatioOut$N,na.rm=T)){
     warning("The expected number of cows in composition survey exceeds population size. Adjusting cows in survey for consistency.")
+    ageRatioOut$cow = pmin(ageRatioOut$cow,ageRatioOut$N)
   }
   
   #apparent number of calves (M+F) from apparent number of cows using apparent recruitment rate
   ageRatioOut$calf <- ifelse(ageRatioOut$cow == 0, 0,
                              rbinom(
-                               n = nrow(ageRatioOut), size = pmin(ageRatioOut$cow,ageRatioOut$N),
+                               n = nrow(ageRatioOut), size = ageRatioOut$cow,
                                prob = ageRatioOut$recruitment
                              )
   )
