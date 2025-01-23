@@ -11,7 +11,7 @@ getPriors(
   rAnthroSlopeSE = 0.006,
   rFireSlopeSE = 0.002,
   sAnthroSlopeSE = 5e-04,
-  sIntSE = 0.04,
+  sIntSE = 0.06,
   sNuMin = 0.01,
   sNuMax = 0.13,
   rIntSE = 0.25,
