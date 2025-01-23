@@ -14,7 +14,7 @@ getPriors(
   sIntSE = 0.06,
   sNuMin = 0.01,
   sNuMax = 0.13,
-  rIntSE = 0.25,
+  rIntSE = 0.35,
   rNuMin = 0.01,
   rNuMax = 0.7,
   qMin = 0,
