@@ -33,7 +33,7 @@
 #'                        Niter = 10, Nburn = 2)
 
 
-runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "KaplanMeier",
+runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "Exponential",
                       getKSDists = TRUE, printProgress = FALSE, 
                       Niter = formals(caribouBayesianPM)$Niter,
                       Nburn = formals(caribouBayesianPM)$Nburn) {

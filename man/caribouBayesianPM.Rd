@@ -16,7 +16,7 @@ caribouBayesianPM(
   Nburn = 10000,
   Nthin = 2,
   N0 = 1000,
-  survAnalysisMethod = "KaplanMeier",
+  survAnalysisMethod = "Exponential",
   assessmentYrs = 1,
   inputList = list(),
   saveJAGStxt = tempdir(),

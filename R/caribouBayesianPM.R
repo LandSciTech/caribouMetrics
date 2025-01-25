@@ -92,7 +92,7 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
                        betaPriors = "default",
                        startYear = NULL, endYear = NULL, Nchains = 4,
                        Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
-                       survAnalysisMethod = "KaplanMeier",
+                       survAnalysisMethod = "Exponential",
                        assessmentYrs = 1,
                        inputList = list(), saveJAGStxt = tempdir(),
                        quiet = TRUE) {
@@ -291,6 +291,9 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
       dExpand <- apply(subset(dSubset, select = c("id", "Year", "event", "enter", "exit")),
                        1, expandSurvivalRecord)
       survData <- do.call(rbind, dExpand)
+      survData <- survData %>% group_by(Year) %>%
+        summarise(X1=sum(X1),X2=sum(X2),X3=sum(X3),X4=sum(X4),X5=sum(X5),X6=sum(X6),X7=sum(X7),X8=sum(X8),
+                  X9=sum(X9),X10=sum(X10),X11=sum(X11),X12=sum(X12),X13=sum(X13)) %>% relocate(Year,.after=X13)
     }
   }
 
@@ -364,7 +367,8 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
   if (inp$survAnalysisMethod == "KaplanMeier") {
     survString <- "Surv[surv_id[k]] ~ dnorm(S.annual.KM[surv_id[k]], tau[surv_id[k]])T(0,1)"
   } else {
-    survString <- paste(c("for(t in 1:12){", "surv[surv_id[k],t+1] ~ dbern(S.annual.KM[survYr[surv_id[k]]]^(1/12)*surv[surv_id[k],t])", "}"), collapse = "\n")
+    #survString <- paste(c("for(t in 1:12){", "surv[surv_id[k],t+1] ~ dbinom(S.annual.KM[survYr[surv_id[k]]]^(1/12),surv[surv_id[k],t])", "}"), collapse = "\n")
+    survString <- "surv[surv_id[k],13] ~ dbinom(S.annual.KM[survYr[surv_id[k]]],surv[surv_id[k],1])"
   }
   
   if(is.na(betaPriors$bias.Prior1)){

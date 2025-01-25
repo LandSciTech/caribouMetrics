@@ -8,7 +8,7 @@ runScnSet(
   scns,
   ePars,
   simNational,
-  survAnalysisMethod = "KaplanMeier",
+  survAnalysisMethod = "Exponential",
   getKSDists = TRUE,
   printProgress = FALSE,
   Niter = formals(caribouBayesianPM)$Niter,
