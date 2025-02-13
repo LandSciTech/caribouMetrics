@@ -96,10 +96,13 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
                        assessmentYrs = 1,
                        inputList = list(), saveJAGStxt = tempdir(),
                        quiet = TRUE) {
-  # survData=oo$simSurvObs;ageRatio=oo$ageRatioOut;disturbance=oo$simDisturbance;
-  # betaPriors="default";startYear = NULL;endYear=NULL;N0=1000;survAnalysisMethod = "Binomial"
-  # Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inputList=list();saveJAGStxt=tempdir();quiet=F
-
+  #survData = system.file("extdata/simSurvData.csv",package = "caribouMetrics");ageRatio = system.file("extdata/simAgeRatio.csv",package = "caribouMetrics")
+  #disturbance = system.file("extdata/simDisturbance.csv",package = "caribouMetrics");betaPriors = "default";startYear = NULL
+  #endYear = NULL; Nchains = 4;Niter = 15000; Nburn = 10000; Nthin = 2; N0 = 1000;survAnalysisMethod = "Binomial"
+  #assessmentYrs = 1;inputList = list(); saveJAGStxt = tempdir();quiet = TRUE
+  
+  #startYear = 1998; Nchains = 1; Niter = 100; Nburn = 10; Nthin = 2
+  
   # combine defaults in function with inputs from input list
   inputArgs <- c(
     "survData", "ageRatio", "disturbance", "startYear", "endYear",
@@ -340,7 +343,7 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
       survAddBit$Year <- NULL
       survAddBit <- merge(survAddBit, data.frame(Year = missingSurvYrs))
     } else {
-      survAddBit[1:ncol(survAddBit)] <- NA
+      survAddBit[1:ncol(survAddBit)] <- 0
       survAddBit$Year <- NULL
       survAddBit <- merge(survAddBit, data.frame(Year = missingSurvYrs))
     }
