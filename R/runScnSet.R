@@ -33,11 +33,11 @@
 #'                        Niter = 10, Nburn = 2)
 
 
-runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "Exponential",
+runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "Binomial",
                       getKSDists = TRUE, printProgress = FALSE, 
                       Niter = formals(caribouBayesianPM)$Niter,
                       Nburn = formals(caribouBayesianPM)$Nburn) {
-  # ePars=eParsIn;survAnalysisMethod="Exponential";simNational=simBig;getKSDists=T;printProgress=F;Niter = formals(caribouBayesianPM)$Niter;Nburn = formals(caribouBayesianPM)$Nburn
+  # ePars=eParsIn;survAnalysisMethod="Binomial";simNational=simBig;getKSDists=T;printProgress=F;Niter = formals(caribouBayesianPM)$Niter;Nburn = formals(caribouBayesianPM)$Nburn
   scns <- getScenarioDefaults(scns)
   errorLog <- list()
   for (p in 1:nrow(scns)) {

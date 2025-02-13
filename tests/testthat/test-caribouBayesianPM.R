@@ -110,18 +110,18 @@ test_that("input tables are as expected",{
 test_that("survAnalysisMethod works", {
   expect_message(out1 <- caribouBayesianPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2),
-                 "using Kaplan-Meier survival model")
+                 "using Binomial survival model")
   expect_s3_class(out1$result, "rjags")
 
   expect_message(out2 <- caribouBayesianPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
-                            Nthin = 2, survAnalysisMethod = "Exponential"),
-                 "expanding survival record")
+                            Nthin = 2, survAnalysisMethod = "KaplanMeier"),
+                 "using Kaplan-Meier survival model")
 
   expect_s3_class(out2$result, "rjags")
 
   expect_message(out3 <- caribouBayesianPM(startYear = 2009, Nchains = 1, Niter = 100, Nburn = 10,
                             Nthin = 2, survAnalysisMethod = "other"),
-                 "expanding survival record")
+                 "using Binomial survival model")
 
   expect_s3_class(out3$result, "rjags")
 })

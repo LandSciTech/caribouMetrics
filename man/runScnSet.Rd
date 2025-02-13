@@ -8,7 +8,7 @@ runScnSet(
   scns,
   ePars,
   simNational,
-  survAnalysisMethod = "Exponential",
+  survAnalysisMethod = "Binomial",
   getKSDists = TRUE,
   printProgress = FALSE,
   Niter = formals(caribouBayesianPM)$Niter,
@@ -26,7 +26,7 @@ runScnSet(
 \code{\link[=getSimsNational]{getSimsNational()}}}
 
 \item{survAnalysisMethod}{Survival analysis method either "KaplanMeier" or
-"Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.}
+"Binomial". The KaplanMeier method yields slightly biased survival estimates.}
 
 \item{getKSDists}{logical. Should Kolmogorov–Smirnov distances be calculated?}
 

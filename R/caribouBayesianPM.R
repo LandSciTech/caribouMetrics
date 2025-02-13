@@ -41,7 +41,7 @@
 #' @param Nthin Thinning rate for the MCMC algorithm. 
 #' @param N0 Initial population size.
 #' @param survAnalysisMethod Survival analysis method either "KaplanMeier" or
-#'   "Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.
+#'   "Binomial". The KaplanMeier method yields slightly biased survival estimates.
 #' @param assessmentYrs Number of years over which to assess population growth rate lambda.
 #' @param inputList an optional list of inputs with names matching the above. If
 #'   an argument is included in this list it will override the named argument.
@@ -92,12 +92,12 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
                        betaPriors = "default",
                        startYear = NULL, endYear = NULL, Nchains = 4,
                        Niter = 15000, Nburn = 10000, Nthin = 2, N0 = 1000,
-                       survAnalysisMethod = "Exponential",
+                       survAnalysisMethod = "Binomial",
                        assessmentYrs = 1,
                        inputList = list(), saveJAGStxt = tempdir(),
                        quiet = TRUE) {
   # survData=oo$simSurvObs;ageRatio=oo$ageRatioOut;disturbance=oo$simDisturbance;
-  # betaPriors="default";startYear = NULL;endYear=NULL;N0=1000;survAnalysisMethod = "KaplanMeier"
+  # betaPriors="default";startYear = NULL;endYear=NULL;N0=1000;survAnalysisMethod = "Binomial"
   # Nchains = 2;Niter = 20000;Nburn = 10000;Nthin = 1;assessmentYrs = 3;inputList=list();saveJAGStxt=tempdir();quiet=F
 
   # combine defaults in function with inputs from input list
@@ -212,18 +212,19 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
   if (nrow(dSubset) == 0) {
     warning("Collars not present at the start of a year are omitted from survival ",
          "analysis in that year. There are no years with collars in the first month.")
-    inp$survAnalysisMethod <- "Exponential"
-    survData = merge(data.frame(X1=0,X2=0,X3=0,X4=0,X5=0,X6=0,X7=0,X8=0,X9=0,X10=0,X11=0,X12=0,X13=0),data)
+    inp$survAnalysisMethod <- "Binomial"
+    survData = merge(data.frame(X1=0,X2=0,X3=0,X4=0,X5=0,X6=0,X7=0,X8=0,X9=0,X10=0,X11=0,X12=0,X13=0),data) %>% relocate(Year,.after=X13)
+    survData$event=NA;survData$enter=NA
   }else{
     if (nrow(dSubset) == 1) {
-      warning("Switching to exponential survival analysis method because there is",
+      warning("Switching to binomial survival analysis method because there is",
               " only one collared animal.")
-      inp$survAnalysisMethod <- "Exponential"
+      inp$survAnalysisMethod <- "Binomial"
     }
     if (sum(dSubset$event, na.rm = T) == 0) {
-      warning("Switching to exponential survival analysis method because there ",
+      warning("Switching to binomial survival analysis method because there ",
               "are no recorded deaths.")
-      inp$survAnalysisMethod <- "Exponential"
+      inp$survAnalysisMethod <- "Binomial"
     }
     
     if (inp$survAnalysisMethod == "KaplanMeier") {
@@ -237,9 +238,9 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
         warning("Years with less than 12 months of collar data are omitted from",
                 " survival analysis. Please ensure there is 12 months of collar ",
                 "data in at least one year.")
-        warning("Switching to exponential survival analysis method because there ",
+        warning("Switching to binomial survival analysis method because there ",
                 "are no years with 12 months of collar data.")
-        inp$survAnalysisMethod <- "Exponential"
+        inp$survAnalysisMethod <- "Binomial"
       }
     }
     if (inp$survAnalysisMethod == "KaplanMeier") {
@@ -287,13 +288,14 @@ caribouBayesianPM <- function(survData = system.file("extdata/simSurvData.csv",
       }
       
     } else {
-      message("expanding survival record")
+      message("using Binomial survival model")
       dExpand <- apply(subset(dSubset, select = c("id", "Year", "event", "enter", "exit")),
                        1, expandSurvivalRecord)
       survData <- do.call(rbind, dExpand)
       survData <- survData %>% group_by(Year) %>%
         summarise(X1=sum(X1),X2=sum(X2),X3=sum(X3),X4=sum(X4),X5=sum(X5),X6=sum(X6),X7=sum(X7),X8=sum(X8),
                   X9=sum(X9),X10=sum(X10),X11=sum(X11),X12=sum(X12),X13=sum(X13)) %>% relocate(Year,.after=X13)
+      survData$event=NA;survData$enter=NA
     }
   }
 
