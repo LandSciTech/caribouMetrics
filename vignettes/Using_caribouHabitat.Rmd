@@ -129,6 +129,8 @@ results(MultRange)
 plot(MultRange, season = c("Winter", "Spring"))
 ```
 
+<!--
+
 ## Example with padding
 
 In most cases you will have a project area that is smaller than the environmental data sets available. For our example we will create this project area by selecting a rectangle inside our example data set. 
@@ -397,7 +399,7 @@ names(resDM) <- gsub("linFeatLine", "linFeat", names(resDM))
 distMets <- disturbanceMetrics(preppedData = resDM)
 
 ```
-
+--> 
 
 ## References
 Rempel, R.S., Carlson, M., Rodgers, A.R., Shuter, J.L., Farrell,
