@@ -67,8 +67,8 @@
 #'   "matchJohnson2020". See description for details.
 #' @param progress Logical. Should progress updates be shown?
 #'
-#' @return A data.frame of population size (`N`), average growth rate
-#'   (`lambda`), apparent annual reproduction rate (`R_t`), adjusted reproduction (`X_t`),
+#' @return A data.frame of population size (`N`), expected growth rate
+#'   (`lambda`), true growth rate (`lambdaTrue`), apparent annual reproduction rate (`R_t`), adjusted reproduction (`X_t`),
 #'   survival (`S_t`), number of recruits (`n_recruits`), and surviving females (`surviving_adFemales`)
 #'   for each sample population projected for numSteps years.
 #'
@@ -123,8 +123,6 @@ caribouPopGrowth <- function(N0,
   
   N <- N0
   
-  lambdaE = S_bar*(1+c*R_bar*s)
-
   R_bar[R_bar<0]=0.000001
   S_bar[S_bar<0]=0.000001
 
@@ -142,6 +140,8 @@ caribouPopGrowth <- function(N0,
     R_bar = pmax(R_bar,l_R);R_bar=pmin(R_bar,h_R)
   }
 
+  lambdaE = S_bar*(1+c*R_bar*s) # To do - integrate adjDDRtProportion into expected mean
+  
   h_R = s*h_R
   l_R = s*l_R
 
@@ -197,6 +197,7 @@ caribouPopGrowth <- function(N0,
       R_t=s*R_t
     }
     
+    
     #adjusting for composition survey bias
     R_tadj=c*R_t
 
@@ -227,6 +228,7 @@ caribouPopGrowth <- function(N0,
     }else{
       adjDDRtProportion=1
     }
+    
     if(doBinomial){
       n_recruits <- rbinom(length(N),surviving_adFemales,R_tadj*adjDDRtProportion)
     }else{

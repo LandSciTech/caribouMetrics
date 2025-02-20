@@ -26,72 +26,9 @@ library(dplyr)
 theme_set(theme_bw())
 ```
 
-caribouMetrics provides a simple Bayesian population model that integrates prior information from Johnson et al.'s (2020) national analysis of demographic-disturbance relationships with available local demographic data to project population growth. In addition, methods are provided for simulating local population dynamics and monitoring programs. These tools are also available through a shiny app described [below](#Use-the-Bayesian-demographic-projection-app).
+caribouMetrics provides a simple Bayesian population model that integrates prior information from Johnson et al.'s (2020) national analysis of demographic-disturbance relationships with available local demographic data to project population growth. In addition, methods are provided for simulating local population dynamics and monitoring programs. 
 
-Boreal caribou monitoring programs typically involve marking caribou with  telemetry GPS/VHF collars which are used to monitor caribou over time and detect the death of marked animals. This data is then used to estimate survival, while recruitment is estimated by locating collared individuals using aircraft and then surveying the entire group of caribou to estimate the ratio of cows:calves in the group. Because this estimate is based on more than just the sample of collared cows, the sample size for recruitment estimates is typically larger than for survival. 
-
-## Integration of local demographic data and national disturbance-demographic relationships in a Bayesian population model
-
-Following Eacker et al. (2019), the observed number
-of calves $\hat{J}_t$ is a binomially distributed function of the
-observed number of adult female caribou $\hat{W}_t$ and the estimated
-recruitment rate $R_t$:
-$$\hat{J}_t \sim \text{Binomial}(\hat{W}_t,R_t).$$
-
-We model recruitment probability as a function of anthropogenic disturbance and
-fire with a log link (Dyson et al., 2022; Johnson et al., 2020; Stewart et al.,
-2023) and Gaussian distributed random year effect (Eacker et al., 2019):
-$$\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t
-\sim \text{Normal}(0,\sigma^2_{R}).$$
-Estimated recruitment probability is adjusted for sex ratio and
-misidentification biases to get expected
-recruits per female:
-$$X_t={cR_t/2}; c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)}.$$ 
-The composition survey bias correction term $c$ depends on the apparent number
-of adult females per collared animal $w$, the ratio of young bulls to adult
-females $q$, the probability of misidentifying young bulls as adult females and
-vice versa $u$, and the probability of missing a calf $z$ (see
-`compositionBiasCorrection()`).
-
-In the Bayesian model, prior uncertainty about the value of the bias
-correction term $c$ is approximated with a Log-normal distribution.
-Given the apparent number of adult females per collared
-animal $w$, the mean and standard deviation of 10,000 samples of $\log{c}$
-is calculated with the default being to assume the ratio of young
-bulls to adult females $q$ varies uniformly between 0 and 0.6, the adult
-misidentification probability $u$ varies uniformly between 0 and 0.2,
-and the probability of missing a calf $z$ varies uniformly between 0 and
-0.2 (see `getPriors()`).
-
-Also following Eacker et al. (2019), Kaplan-Meier estimates of observed adult
-female survival probability $\hat{S}_t$ and associated precisions $\tau_t$ are
-estimated from known-fate radio collar data using the
-[survival](https://CRAN.R-project.org/package=survival) package, with precisions
-for years with no observed mortality estimated using a separate Bayesian model.
-Observed estimated survival is a Gaussian distributed function of the true
-survival probability: 
-$$\hat{S_t} \sim \text{Normal}(S_t,1/\tau_t).$$ 
-As in the national demographic model, we model survival probability as an
-adjusted function of buffered anthropogenic disturbance $A_t$ with a log link
-(Dyson et al., 2022; Johnson et al., 2020; Stewart et al., 2023) and Gaussian
-distributed random year effect (Eacker et al., 2019):
-$$S_t=\text{min}(46 \tilde{S_t}-0.5)/45,1); \log(\tilde{S_t})=\beta^S_0+\beta^S_a A_t+\epsilon^S_t; \epsilon^S_t \sim \text{Normal}(0,\sigma^2_{S}).$$
-To handle cases in which there is little or no survival data, we also
-implemented an alternative parametric exponential survival model,
-wherein the observed state (alive or dead, $\hat{I}_{i,t,m}$) of an
-individual animal $i$ in year $t$ and month $m$ is Bernoulli distributed
-(Schaub and Kery, 2021):
-$$\hat{I}_{i,t,m} \sim \text{Bernoulli}(S^{1/12}_t\hat{I}_{i,t,m-1}).$$ 
-The exponential survival method can be used in all cases instead of the
-Kaplan-Meier method by setting `survAnalysisMethod = "Exponential"`.
-
-All regression coefficients are assumed to be Gaussian distributed, with priors
-derived from the expected values and 95% confidence intervals estimated by
-Johnson et al (2020) (`popGrowthTableJohnsonECCC`). We calibrated the prior
-distributions so that the 95% prior prediction intervals for survival and
-recruitment from the Bayesian model match the range between the 2.5% and 97.5%
-quantiles of 1000 simulated survival and recruitment trajectories (see
-`getPriors()`).
+The model is described in Hughes et al. Integration of national demographic-disturbance relationships and local data can improve caribou population viability projections and inform monitoring decisions.
 
 ### Using real observed data
 caribouMetrics includes example csv files of collar survival and calf cow count data as well as disturbance data that can be used as templates for the format for observed data. 
@@ -158,77 +95,6 @@ From these graphs we can see that this local population seems to have slightly h
 
 ## Simulation of local population dynamics and monitoring
 
-To simulate plausible demographic trajectories for example populations
-we used a modified version of Johnson et al's (2020)
-two-stage demographic model described by Dyson et al.
-(2022). The true number of post-juvenile females that
-survive from year $t$ to the census, $\dot{W}_t$, is binomially
-distributed with true survival probability $\dot{S}_t$:
-$\dot{W}_{t} \sim \text{Binomial}(\dot{N}_t,\dot{S}_t)$. Maximum
-potential recruitment rate is adjusted for sex ratio, misidentification
-biases and (optionally) delayed age at first reproduction
-(DeCesare et al., 2012; Eacker et al., 2019):
-$$\dot{X}_t=\frac{c\dot{R}_t/2}{1+c\dot{R}_t/2};c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)}, $$
-where $w$ is a multiplier that defines the apparent number of adult
-females in the composition survey as a function of the number of
-collared animals, $q$ is the ratio of young bulls to adult females, $u$
-is the probability of misidentifying young bulls as adult females and
-vice versa, and $z$ is the probability of missing a calf.
-
-Realized recruitment rate varies with population density
-(Lacy et al., 2017), and the number of juveniles recruiting to the
-post-juvenile class at the census is a binomially distributed function
-of the number of surviving post-juvenile females and the adjusted
-recruitment rate:
-$$\dot{J}_{t} \sim \text{Binomial}(\dot{W}_t,\dot{X}_t[p_0-(p_0-p_k)(\frac{\dot{W}_t}{N_0k})^b]\frac{\dot{W}_t}{\dot{W}_t+a}).$$
-Given default parameters, recruitment rate is lowest
-$(0.5\dot{X}_t)$ when $\dot{N}_t=1$, approaches a maximum of $\dot{X}_t$
-at intermediate population sizes, and declines to $0.6\dot{X}_t$ as the
-population reaches carrying capacity of $k=100$ times the initial
-population size. The post-juvenile female population in the next year
-includes both survivors and new recruits:
-$\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)$.
-
-Interannual variation in survival and recruitment is modelled using
-truncated beta distributions (rtrunc function;
-Novomestky and Nadarajah (2016)):
-$\dot{R}_t \sim \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim \text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)$.
-Coefficients of variation among years $(\nu_R,\nu_S)$ and
-maximum/minimum values $l_R,h_R,l_S,h_S$ for recruitment and survival
-have default values set in `caribouPopGrowth()`. Expected recruitment ($\bar{R}_t$) and survival
-($\bar{S}_t$) vary with disturbance according the beta regression models
-estimated by Johnson et al. (2020:
-$$ \bar{R}_t \sim Beta(\mu^R_t,\phi^R);log(\mu^R_t)=\dot{\beta^R_0}+\dot{\beta^R_a}A_t+\dot{\beta}^R_fF_t,$$
-$$\bar{S}_t \sim (46\times Beta(\mu^S_t,\phi^S)-0.5)/45;log(\mu^S_t)=\dot{\beta^S_0}+\dot{\beta^S_a}A_t.$$
-$\phi^R \sim \text{Normal}(19.862,2.229)$ and
-$\phi^S \sim \text{Normal}(63.733,8.311)$ are precisions of the Beta
-distributed errors (Ferrari and Cribari-Neto, 2004). At the beginning of a
-simulation for an example population, regression coefficient values are
-sampled from Gaussian distributions (see `demographicRates()`) and
-the population is assigned to quantiles of the Beta error distributions
-for survival and recruitment. The population remains in these quantiles
-as disturbance changes over time, so there is substantial persistent
-variation in recruitment and survival among example populations.
-
-### Observed survival of collared animals
-
-In our simulated populations, mortality risk does not vary over time or
-among individuals, so the observed state (dead or alive) of a collared
-animal $i$ in month $m$ and year $t$ depends on the true survival rate
-$\dot{S}_t$ as follows:
-$$\hat{I}_{i,t,m} \sim \text{Bernoulli}(\dot{S}^{1/12}_t\hat{I}_{i,t,m-1}).$$
-
-### Observed recruitment from composition surveys
-
-The number of cows in the composition survey $\hat{W}_t$ is given by the
-number of collared cows $\hat{T}_t$ and the apparent number of adult
-females per collared female observed in the composition survey $w$:
-$$\hat{W}_t = w\hat{T}_t.$$ The number of observed calves $\hat{J}_t$
-also depends on the unadjusted apparent recruitment for the population
-$\dot{R}_t$: $$\hat{J}_t \sim \text{Binomial}(\hat{W}_t,\dot{R}_t).$$
-
-### Using simulated observed data
-
 To run the simulations we need to supply parameters that determine the disturbance scenario, the trajectory of the true population relative to the national model mean, and the collaring program details. All these parameters are set with `getScenarioDefaults()` which will create a table with the default values of all parameters and override the defaults for any values that are supplied. Below we define a scenario where we have 20 years of observations and 20 years of projection, increasing anthropogenic disturbance over time, and 30 collars deployed every year. We assume that 2 cows will be observed in aerial surveys for every collared cow. The default values are set for our simulated true population meaning that we assume the population has the same response to disturbance as the national model and that the population demographic rates are close to the national average.
 See `getScenarioDefaults()` for a detailed description of each parameter.
 
@@ -254,7 +120,6 @@ sim_obs <- simulateObservations(
   # collars fall off after 4 years and are deployed in May and fall off in August
   collarNumYears = 4, collarOffTime = 8, collarOnTime = 5, 
   printPlot = TRUE)
-
 
 sim_obs$simSurvObs %>% group_by(Year) %>% 
   summarise(ncollar = n(), ndeaths = sum(event), 
@@ -293,7 +158,6 @@ plotRes(mod_sim_tbl,
         labFontSize = 10)
 ```
 
-
 ### Comparing many scenarios
 
 ```{r many-scns, fig.height=8, fig.width=7}
@@ -321,11 +185,12 @@ plotRes(scResults,
 ```
 
 ### Modifying Bayesian model priors
-By default `caribouBayesianPM()` calls `getPriors()` internally to set the priors for the Bayesian model based on the national model and default uncertainty modifiers that have been calibrated to fit the national model while allowing for deviations based on local data. The parameters to `getPriors()` affect the level of uncertainty around the coefficients from the national model. If uncertainty in the national model is higher then the projections can deviate more from the national model if the observed data does. See `getPriors()` for details.  
+By default `caribouBayesianPM()` calls `getPriors()` internally to set the priors for the Bayesian model based on the national model and default uncertainty modifiers that have been calibrated to fit the national model while allowing for deviations based on local data. See `getPriors()` for details.  
 
 ## Troubleshooting
 The national model results are cached if the default values are used. This cache can be updated by running `getSimsNational(forceUpdate = TRUE)`
 
+<!--
 ## Use the Bayesian demographic projection app
 
 In addition to performing Bayesian demographic projections in R you can also use our shiny app to run similar analyses from a Graphical User Interface. To launch the app you will first need to install the package from GitHub.
@@ -335,6 +200,6 @@ In addition to performing Bayesian demographic projections in R you can also use
 remotes::install_github("LandSciTech/BayesianCaribouDemographicProjection")
 ```
 
-Then you can call `demographicProjectionApp()` to launch the app in your default browser. The app includes options to modify the disturbance scenario, the simulated observations and the model priors similar to those described above. Detailed instructions are included on the first page. 
+Then you can call `demographicProjectionApp()` to launch the app in your default browser. The app includes options to modify the disturbance scenario, the simulated observations and the model priors similar to those described above. Detailed instructions are included on the first page. -->
 
 

@@ -26,23 +26,19 @@ test_that("testScript still works", {
   expect_s3_class(scResults$rr.summary.all, "data.frame")
 
   if (interactive()) {
-    print(plotRes(scResults$rr.summary.all, "Population growth rate",
-      obs = scResults$obs.all,
-      lowBound = 0, simRange = scResults$sim.all, facetVars = c("obsYears", "sQuantile")
+    print(plotRes(scResults, "Population growth rate",
+      lowBound = 0, facetVars = c("obsYears", "sQuantile")
     ))
 
-    print(plotRes(scResults$rr.summary.all, "Recruitment",
-      obs = scResults$obs.all,
-      lowBound = 0, simRange = scResults$sim.all, facetVars = c("obsYears", "sQuantile")
+    print(plotRes(scResults, "Recruitment",
+      lowBound = 0, facetVars = c("obsYears", "sQuantile")
     ))
 
-    print(plotRes(scResults$rr.summary.all, "Adult female survival",
-      obs = scResults$obs.all,
-      lowBound = 0.65, simRange = scResults$sim.all, facetVars = c("obsYears", "sQuantile")
+    print(plotRes(scResults, "Adult female survival",
+      lowBound = 0.65, facetVars = c("obsYears", "sQuantile")
     ))
 
-    print(plotRes(scResults$rr.summary.all, "Female population size",
-      obs = scResults$obs.all,
+    print(plotRes(scResults, "Female population size",
       lowBound = 0, highBound = 2000, facetVars = c("obsYears", "sQuantile")
     ))
   }

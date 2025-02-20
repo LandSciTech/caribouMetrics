@@ -16,7 +16,7 @@ caribouBayesianPM(
   Nburn = 10000,
   Nthin = 2,
   N0 = 1000,
-  survAnalysisMethod = "KaplanMeier",
+  survAnalysisMethod = "Binomial",
   assessmentYrs = 1,
   inputList = list(),
   saveJAGStxt = tempdir(),
@@ -52,7 +52,7 @@ period and the end of the projection period.}
 \item{N0}{Initial population size.}
 
 \item{survAnalysisMethod}{Survival analysis method either "KaplanMeier" or
-"Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.}
+"Binomial". The KaplanMeier method yields slightly biased survival estimates.}
 
 \item{assessmentYrs}{Number of years over which to assess population growth rate lambda.}
 

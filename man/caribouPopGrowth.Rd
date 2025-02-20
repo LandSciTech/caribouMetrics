@@ -74,8 +74,8 @@ Set to \code{FALSE} to ignore interannual variability.}
 \item{progress}{Logical. Should progress updates be shown?}
 }
 \value{
-A data.frame of population size (\code{N}), average growth rate
-(\code{lambda}), apparent annual reproduction rate (\code{R_t}), adjusted reproduction (\code{X_t}),
+A data.frame of population size (\code{N}), expected growth rate
+(\code{lambda}), true growth rate (\code{lambdaTrue}), apparent annual reproduction rate (\code{R_t}), adjusted reproduction (\code{X_t}),
 survival (\code{S_t}), number of recruits (\code{n_recruits}), and surviving females (\code{surviving_adFemales})
 for each sample population projected for numSteps years.
 }

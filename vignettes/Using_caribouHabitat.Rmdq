@@ -129,6 +129,7 @@ results(MultRange)
 plot(MultRange, season = c("Winter", "Spring"))
 ```
 
+
 ## Example with padding
 
 In most cases you will have a project area that is smaller than the environmental data sets available. For our example we will create this project area by selecting a rectangle inside our example data set. 
@@ -161,6 +162,7 @@ tmap::qtm(landCoverD, raster = "black")+
               title = "PLC")+
     tmap::tm_legend(bg.color = "white", legend.outside = TRUE)+
   tmap::qtm(carHab2@projectPoly, fill = NULL, borders = "black")
+
 ```
 
 The black area on the map above shows the extent of the original `landCover` data, the raster shows the `landCover` data that has been cropped to a buffer around `projectPoly` which is the black rectangle.  

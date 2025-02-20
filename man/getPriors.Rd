@@ -11,10 +11,10 @@ getPriors(
   rAnthroSlopeSE = 0.006,
   rFireSlopeSE = 0.002,
   sAnthroSlopeSE = 5e-04,
-  sIntSE = 0.04,
+  sIntSE = 0.06,
   sNuMin = 0.01,
   sNuMax = 0.13,
-  rIntSE = 0.25,
+  rIntSE = 0.35,
   rNuMin = 0.01,
   rNuMax = 0.7,
   qMin = 0,
@@ -117,12 +117,10 @@ effect of year on adult female survival,
 \description{
 Returns prior parameter values for the Bayesian population model. The starting point
 is estimated coefficients from national demographic-disturbance relationships in the table \code{popGrowthTableJohnsonECCC}.
-Standard errors are multiplied by modifier arguments in this function increase
-the vagueness of the priors. Default values of the modifiers and random effects of year
-have been calibrated so that the 95\% prior prediction intervals for survival and recruitment
+Standard errors and random effects of year have been calibrated so that the 95\% prior
+prediction intervals for survival and recruitment
 from the Bayesian model match the range between the 2.5\% and 97.5\% quantiles of 1000
 survival and recruitment trajectories from the national demographic model \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}.
-Default priors are vague enough to allow local data to alter parameter estimates and projections.
 A log-normal prior for the unknown composition survey bias correction term \code{c} is set by specifying
 an apparent number of adult females per collared animal(\code{cowMult}) and minimum and maximum values
 for each of the ratio of bulls to cows (\eqn{q}), the probability of misidentifying young
