@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Models and Metrics of Boreal Caribou Demography and Habitat Selection">
-<meta property="og:description" content="caribouMetrics provides implementations of several different different models of Boreal woodland caribou demography and habitat selection. A national two-stage demographic model with density dependence and interannual variability follows [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with modifications described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates vary with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637). The package also includes a Bayesian population model designed to integrate prior information from Johnson et als national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections. The Bayesian population model is an extension of work by [Eacker et al. (2019)](https://doi.org/10.1002/wsb.950). The national model can be used to simulate example population trajectories, and combined with a simple observation model and the Bayesian population model to show how monitoring requirements depend on landscape condition. Finally, caribouMetrics contains an implementation of [Hornseth and Rempels (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource selection model described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Model implementation is intended to be modular and flexible, allowing reuse of components in a variety of contexts including projections of the cumulative effects of disturbance and climate change [(e.g. Stewart et al. 2023)](https://doi.org/10.1002/eap.2816) and a [Shiny app](https://landscitech.github.io/BayesianCaribouDemographicProjection/) designed to allow allow exploration of user-specified monitoring and disturbance scenarios.">
+<meta property="og:description" content="caribouMetrics provides implementations of several models of Boreal woodland caribou demography and habitat selection. A national demographic model with density dependence and interannual variability follows [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with modifications described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates vary with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637). The package also includes a Bayesian population model designed to integrate prior information from Johnson et als national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections. Some aspects of the Bayesian population model implementation were derived from [Eacker et al. (2019)](https://doi.org/10.1002/wsb.950). The national model can be used to simulate example population trajectories, and combined with a simple observation model and the Bayesian population model to show how monitoring requirements depend on landscape condition. Finally, caribouMetrics contains an implementation of [Hornseth and Rempels (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource selection model described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Model implementation is intended to be modular and flexible, allowing reuse of components in a variety of contexts including projections of the cumulative effects of disturbance and climate change [(e.g. Stewart et al. 2023)](https://doi.org/10.1002/eap.2816).">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -57,9 +57,6 @@
     </li>
     <li>
       <a href="articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
-    </li>
-    <li>
-      <a href="articles/Using_caribouHabitat.html">Using caribouHabitat</a>
     </li>
     <li>
       <a href="articles/UI_help.html">User Interface Help</a>
@@ -143,19 +140,19 @@
 <span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaults</span></span>
 <span><span class="va">demRates</span></span>
 <span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr</span></span>
-<span><span class="co">#&gt; 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05848277</span></span>
+<span><span class="co">#&gt; 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05241465</span></span>
 <span><span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh</span></span>
-<span><span class="co">#&gt; 1 0.7382298 0.9355214 0.1813372 0.08566332 0.05688173 0.3502751</span></span>
+<span><span class="co">#&gt; 1 0.7565716 0.9248297 0.1813372 0.09978929 0.04519307 0.3927806</span></span>
 <span></span>
 <span><span class="co"># Simulate population growth</span></span>
 <span><span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouPopGrowth.html">caribouPopGrowth</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2000</span>, numSteps <span class="op">=</span> <span class="fl">20</span>, R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, </span>
 <span>                            S_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">popGrow</span></span>
-<span><span class="co">#&gt;     N0    lambda   N       R_t        X_t       S_t n_recruits</span></span>
-<span><span class="co">#&gt; 1 2000 0.9273454 440 0.1822609 0.09113044 0.8359903         27</span></span>
+<span><span class="co">#&gt;     N0 lambdaTrue    lambda   N        R_t        X_t       S_t n_recruits</span></span>
+<span><span class="co">#&gt; 1 2000  0.8975009 0.9247487 230 0.06236733 0.03118367 0.9610701          3</span></span>
 <span><span class="co">#&gt;   surviving_adFemales</span></span>
-<span><span class="co">#&gt; 1                 413</span></span>
+<span><span class="co">#&gt; 1                 227</span></span>
 <span></span>
 <span><span class="co"># simulate caribou collar observations</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span></span>
@@ -171,10 +168,9 @@
 <span>                          <span class="va">simObs</span><span class="op">$</span><span class="va">simDisturbance</span>,</span>
 <span>                          <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>                          Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
 <span></span>
 <span><span class="va">natSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getSimsNational.html">getSimsNational</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">simObs</span><span class="op">$</span><span class="va">simDisturbance</span><span class="op">$</span><span class="va">Anthro</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Setting expected survival S_bar to be between l_S and h_S.</span></span>
 <span></span>
 <span><span class="va">ipmTbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">ipm</span>, paramTable <span class="op">=</span> <span class="va">simObs</span><span class="op">$</span><span class="va">paramTable</span>, </span>
 <span>                            exData <span class="op">=</span> <span class="va">simObs</span><span class="op">$</span><span class="va">exData</span>, </span>
@@ -208,15 +204,7 @@
 <span><span class="co">#&gt; Applying moving window.</span></span>
 <span></span>
 <span><span class="co"># plot the results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,</span></span>
-<span><span class="co">#&gt; which was just loaded, will retire in October 2023.</span></span>
-<span><span class="co">#&gt; Please refer to R-spatial evolution reports for details, especially</span></span>
-<span><span class="co">#&gt; https://r-spatial.org/r/2023/05/15/evolution4.html.</span></span>
-<span><span class="co">#&gt; It may be desirable to make the sf package available;</span></span>
-<span><span class="co">#&gt; package maintainers should consider adding sf to Suggests:.</span></span>
-<span><span class="co">#&gt; The sp package is now running under evolution status 2</span></span>
-<span><span class="co">#&gt;      (status 2 uses the sf package in place of rgdal)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-4.png" width="100%"></p>
 </div>
 <div class="section level2">
@@ -231,10 +219,9 @@
 <li>
 <a href="https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html"><strong>Disturbance Metrics</strong></a>: Calculate buffered anthropogenic disturbance and fire disturbance percentages for a given area.</li>
 <li>
-<a href="https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html"><strong>Ontario Habitat Model</strong></a>: Calculate caribou habitat use with Ontario RSF models.</li>
-<li>
 <a href="https://landscitech.github.io/caribouMetrics/articles/UI_help.html"><strong>User Interface Help</strong></a>: Instructions for using the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models (WIP)</li>
 </ul>
+<!-- * [**Ontario Habitat Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html): Calculate caribou habitat use with Ontario RSF models. -->
 </div>
 <div class="section level2">
 <h2 id="getting-help">Getting help<a class="anchor" aria-label="anchor" href="#getting-help"></a>

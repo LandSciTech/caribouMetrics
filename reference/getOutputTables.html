@@ -43,9 +43,6 @@ model results and national model results."><!-- mathjax --><script src="https://
       <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
     </li>
     <li>
-      <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
-    </li>
-    <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
     </li>
   </ul></li>
@@ -163,8 +160,7 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-in"><span>                          disturbance <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simDisturbance</span>,</span></span>
 <span class="r-in"><span>                          Nchains <span class="op">=</span> <span class="fl">1</span>, Niter <span class="op">=</span> <span class="fl">100</span>, Nburn <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>                          Nthin <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>warning, low sample size of adult females in at least one year</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> using Kaplan-Meier survival model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> using Binomial survival model</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">getOutputTables</span><span class="op">(</span><span class="va">out</span>, exData <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">exData</span>, paramTable <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">paramTable</span>,</span></span>
 <span class="r-in"><span>                simNational <span class="op">=</span> <span class="fu"><a href="getSimsNational.html">getSimsNational</a></span><span class="op">(</span><span class="op">)</span>, getKSDists <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
@@ -173,206 +169,206 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $rr.summary.all</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Year              Parameter     Mean       SD Lower 95% CRI Upper 95% CRI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   2014 Female population size 1000.000    0.000      1000.000      1000.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2014            Recruitment    0.191    0.042         0.131         0.291</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2014   Adjusted recruitment    0.101    0.023         0.070         0.151</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   2014 Population growth rate    1.108    0.042         1.029         1.177</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   2014  Adult female survival    0.911    0.083         0.704         0.987</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   2015 Female population size 1006.222   99.464       741.900      1114.500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   2015 Population growth rate    1.104    0.042         1.025         1.172</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   2015            Recruitment    0.390    0.054         0.294         0.491</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   2015  Adult female survival    0.972    0.015         0.945         0.989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  2015   Adjusted recruitment    0.206    0.030         0.152         0.258</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  2016 Population growth rate    1.101    0.042         1.021         1.168</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  2016 Female population size 1183.733  123.681       871.400      1338.500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  2016            Recruitment    0.546    0.063         0.446         0.654</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  2016  Adult female survival    0.770    0.039         0.688         0.843</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  2016   Adjusted recruitment    0.288    0.036         0.240         0.377</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  2017 Population growth rate    1.097    0.042         1.018         1.164</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  2017 Female population size 1173.111  135.136       884.900      1379.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  2017            Recruitment    0.149    0.051         0.069         0.241</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  2017  Adult female survival    0.946    0.037         0.862         0.989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  2017   Adjusted recruitment    0.078    0.026         0.037         0.126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21  2018            Recruitment    0.304    0.058         0.213         0.416</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22  2018 Female population size 1199.889  153.866       858.900      1439.500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23  2018  Adult female survival    0.765    0.045         0.695         0.860</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  2018 Population growth rate    1.094    0.042         1.014         1.160</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25  2018   Adjusted recruitment    0.161    0.033         0.112         0.229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  2019 Female population size 1071.489  164.558       728.200      1341.900</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27  2019 Population growth rate    1.090    0.043         1.011         1.156</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28  2019  Adult female survival    0.886    0.051         0.804         0.985</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29  2019            Recruitment    0.552    0.052         0.456         0.639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30  2019   Adjusted recruitment    0.293    0.037         0.232         0.366</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31  2020 Population growth rate    1.087    0.043         1.007         1.152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32  2020   Adjusted recruitment    0.167    0.028         0.122         0.221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33  2020 Female population size 1229.356  206.057       811.700      1578.100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34  2020  Adult female survival    0.948    0.030         0.890         0.988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35  2020            Recruitment    0.317    0.053         0.236         0.394</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36  2021            Recruitment    0.330    0.058         0.236         0.441</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37  2021 Population growth rate    1.083    0.043         1.004         1.148</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38  2021 Female population size 1360.244  236.043       884.900      1773.800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39  2021  Adult female survival    0.974    0.013         0.943         0.988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40  2021   Adjusted recruitment    0.175    0.035         0.126         0.242</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41  2022            Recruitment    0.211    0.039         0.141         0.267</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42  2022  Adult female survival    0.917    0.041         0.833         0.986</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43  2022 Population growth rate    1.080    0.043         1.001         1.145</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44  2022 Female population size 1562.000  280.915      1012.900      2022.900</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45  2022   Adjusted recruitment    0.112    0.023         0.070         0.147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46  2023 Female population size 1593.289  299.549      1068.900      2101.500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47  2023            Recruitment    0.375    0.049         0.284         0.460</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48  2023  Adult female survival    0.966    0.018         0.923         0.988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49  2023   Adjusted recruitment    0.198    0.028         0.147         0.244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50  2023 Population growth rate    1.076    0.043         0.999         1.143</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51  2024 Female population size 1843.289  348.945      1230.300      2436.700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52  2024            Recruitment    0.336    0.142         0.118         0.686</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53  2024 Population growth rate    1.060    0.044         0.987         1.134</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54  2024   Adjusted recruitment    0.179    0.081         0.059         0.372</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55  2024  Adult female survival    0.925    0.058         0.805         0.988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56  2025 Female population size 2015.822  457.942      1263.600      2854.800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57  2025            Recruitment    0.278    0.134         0.048         0.567</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58  2025 Population growth rate    1.046    0.046         0.969         1.125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59  2025  Adult female survival    0.917    0.074         0.702         0.988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60  2025   Adjusted recruitment    0.147    0.072         0.025         0.273</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61  2026            Recruitment    0.235    0.134         0.077         0.487</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62  2026 Female population size 2121.889  552.328      1278.000      3070.600</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63  2026  Adult female survival    0.891    0.088         0.665         0.988</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64  2026   Adjusted recruitment    0.124    0.074         0.038         0.249</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65  2026 Population growth rate    1.032    0.047         0.955         1.117</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66  2027 Female population size 2139.644  666.589      1064.400      3604.200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67  2027            Recruitment    0.195    0.101         0.051         0.454</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68  2027   Adjusted recruitment    0.104    0.056         0.025         0.261</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69  2027 Population growth rate    1.019    0.049         0.943         1.109</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70  2027  Adult female survival    0.897    0.078         0.702         0.986</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71  2028 Female population size 2130.133  728.107       978.700      3598.400</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72  2028 Population growth rate    1.007    0.050         0.932         1.101</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73  2028            Recruitment    0.193    0.094         0.040         0.406</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74  2028  Adult female survival    0.908    0.092         0.674         0.989</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75  2028   Adjusted recruitment    0.102    0.049         0.020         0.215</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76  2029 Population growth rate    0.996    0.052         0.921         1.093</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77  2029 Female population size 2127.333  795.570      1000.200      3955.300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78  2029            Recruitment    0.182    0.116         0.063         0.426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79  2029  Adult female survival    0.871    0.115         0.631         0.986</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80  2029   Adjusted recruitment    0.097    0.066         0.035         0.247</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81  2030 Population growth rate    0.985    0.053         0.910         1.087</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82  2030 Female population size 2082.333  968.533       718.100      4068.800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83  2030            Recruitment    0.178    0.122         0.037         0.473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84  2030  Adult female survival    0.898    0.091         0.666         0.987</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85  2030   Adjusted recruitment    0.094    0.064         0.019         0.257</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86  2031            Recruitment    0.175    0.113         0.056         0.505</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87  2031 Female population size 2076.644 1093.910       673.100      4922.800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88  2031  Adult female survival    0.890    0.083         0.696         0.984</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89  2031 Population growth rate    0.975    0.054         0.900         1.081</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90  2031   Adjusted recruitment    0.093    0.060         0.028         0.254</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91  2032 Female population size 2060.200 1253.442       685.600      5951.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92  2032 Population growth rate    0.966    0.056         0.890         1.075</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93  2032  Adult female survival    0.900    0.061         0.760         0.974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94  2032            Recruitment    0.160    0.094         0.045         0.422</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95  2032   Adjusted recruitment    0.085    0.053         0.027         0.243</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96  2033 Population growth rate    0.957    0.057         0.881         1.069</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97  2033   Adjusted recruitment    0.076    0.059         0.022         0.269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98  2033 Female population size 2041.111 1348.702       615.200      6260.600</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99  2033  Adult female survival    0.878    0.088         0.692         0.981</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100 2033            Recruitment    0.142    0.105         0.043         0.468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2014            Recruitment    0.352    0.043         0.268         0.438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2014   Adjusted recruitment    0.181    0.024         0.147         0.229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   2014 Population growth rate    1.112    0.046         1.027         1.201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   2014  Adult female survival    0.933    0.061         0.778         0.988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   2015 Female population size 1102.711   79.151       903.400      1189.700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   2015 Population growth rate    1.108    0.046         1.025         1.196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   2015            Recruitment    0.217    0.041         0.149         0.307</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   2015  Adult female survival    0.868    0.055         0.760         0.943</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  2015   Adjusted recruitment    0.112    0.022         0.073         0.165</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  2016 Population growth rate    1.105    0.046         1.021         1.190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  2016 Female population size 1068.400  121.861       826.700      1243.400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  2016            Recruitment    0.230    0.037         0.172         0.295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  2016  Adult female survival    0.954    0.034         0.853         0.987</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  2016   Adjusted recruitment    0.119    0.021         0.089         0.158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  2017 Population growth rate    1.101    0.045         1.016         1.185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  2017 Female population size 1141.533  141.581       864.300      1337.700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  2017            Recruitment    0.544    0.094         0.349         0.692</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  2017  Adult female survival    0.958    0.035         0.886         0.990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  2017   Adjusted recruitment    0.282    0.061         0.170         0.399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  2018            Recruitment    0.395    0.051         0.277         0.476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  2018 Female population size 1401.911  207.112      1046.300      1763.700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  2018  Adult female survival    0.947    0.037         0.854         0.987</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  2018 Population growth rate    1.098    0.045         1.011         1.179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  2018   Adjusted recruitment    0.204    0.031         0.135         0.256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  2019 Female population size 1602.667  263.988      1123.100      2074.900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  2019 Population growth rate    1.094    0.045         1.006         1.172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  2019  Adult female survival    0.961    0.024         0.908         0.988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  2019            Recruitment    0.153    0.034         0.089         0.210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  2019   Adjusted recruitment    0.080    0.020         0.043         0.113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  2020 Population growth rate    1.091    0.044         1.001         1.166</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  2020   Adjusted recruitment    0.176    0.024         0.138         0.223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  2020 Female population size 1661.578  274.201      1153.000      2125.900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  2020  Adult female survival    0.959    0.028         0.891         0.987</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  2020            Recruitment    0.340    0.036         0.280         0.400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  2021            Recruitment    0.170    0.073         0.067         0.323</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37  2021 Population growth rate    1.087    0.044         0.996         1.160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38  2021 Female population size 1878.089  342.442      1230.400      2520.900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39  2021  Adult female survival    0.964    0.027         0.909         0.989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40  2021   Adjusted recruitment    0.088    0.041         0.038         0.178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41  2022            Recruitment    0.339    0.046         0.258         0.417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42  2022  Adult female survival    0.938    0.053         0.822         0.989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43  2022 Population growth rate    1.084    0.044         0.991         1.154</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44  2022 Female population size 1976.644  409.300      1274.700      2891.200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45  2022   Adjusted recruitment    0.175    0.026         0.126         0.220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46  2023 Female population size 2190.600  506.357      1235.900      3182.700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47  2023            Recruitment    0.466    0.050         0.389         0.560</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48  2023  Adult female survival    0.935    0.034         0.865         0.986</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49  2023   Adjusted recruitment    0.241    0.030         0.186         0.296</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50  2023 Population growth rate    1.081    0.044         0.986         1.148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51  2024 Female population size 2542.889  615.356      1393.900      3574.900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52  2024            Recruitment    0.291    0.141         0.060         0.631</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53  2024 Population growth rate    1.066    0.043         0.962         1.127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54  2024   Adjusted recruitment    0.150    0.073         0.031         0.313</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55  2024  Adult female survival    0.929    0.044         0.831         0.985</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56  2025 Female population size 2728.356  722.422      1502.500      3984.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57  2025            Recruitment    0.265    0.106         0.073         0.469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58  2025 Population growth rate    1.051    0.044         0.948         1.117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59  2025  Adult female survival    0.939    0.043         0.807         0.989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60  2025   Adjusted recruitment    0.137    0.055         0.034         0.237</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61  2026            Recruitment    0.248    0.132         0.081         0.548</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62  2026 Female population size 2929.889  868.407      1435.600      4308.500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63  2026  Adult female survival    0.915    0.062         0.756         0.982</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64  2026   Adjusted recruitment    0.129    0.069         0.043         0.288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65  2026 Population growth rate    1.038    0.044         0.939         1.108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66  2027 Female population size 3038.267 1002.124      1441.600      4868.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67  2027            Recruitment    0.194    0.093         0.035         0.376</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68  2027   Adjusted recruitment    0.101    0.050         0.019         0.197</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69  2027 Population growth rate    1.026    0.045         0.922         1.099</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70  2027  Adult female survival    0.897    0.080         0.666         0.983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71  2028 Female population size 3035.489 1119.099      1313.800      5150.500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72  2028 Population growth rate    1.014    0.046         0.906         1.090</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73  2028            Recruitment    0.228    0.101         0.072         0.451</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74  2028  Adult female survival    0.913    0.079         0.701         0.986</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75  2028   Adjusted recruitment    0.117    0.051         0.036         0.220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76  2029 Population growth rate    1.004    0.046         0.892         1.082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77  2029 Female population size 3155.378 1323.646      1220.200      6043.600</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78  2029            Recruitment    0.185    0.101         0.030         0.399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79  2029  Adult female survival    0.925    0.050         0.774         0.987</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80  2029   Adjusted recruitment    0.095    0.052         0.016         0.170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81  2030 Population growth rate    0.994    0.047         0.878         1.072</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82  2030 Female population size 3226.089 1415.582      1048.500      6150.700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83  2030            Recruitment    0.167    0.080         0.055         0.313</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84  2030  Adult female survival    0.900    0.063         0.744         0.976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85  2030   Adjusted recruitment    0.087    0.043         0.027         0.156</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86  2031            Recruitment    0.169    0.092         0.052         0.372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87  2031 Female population size 3195.533 1491.012      1024.300      6227.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88  2031  Adult female survival    0.921    0.060         0.778         0.988</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89  2031 Population growth rate    0.984    0.048         0.865         1.063</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90  2031   Adjusted recruitment    0.087    0.049         0.028         0.199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91  2032 Female population size 3253.156 1584.030       879.800      6202.400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92  2032 Population growth rate    0.975    0.049         0.854         1.055</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93  2032  Adult female survival    0.906    0.056         0.797         0.980</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94  2032            Recruitment    0.138    0.087         0.027         0.336</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95  2032   Adjusted recruitment    0.071    0.045         0.013         0.164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96  2033 Population growth rate    0.967    0.050         0.843         1.048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97  2033   Adjusted recruitment    0.071    0.040         0.017         0.153</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98  2033 Female population size 3222.844 1708.050       794.400      6806.400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99  2033  Adult female survival    0.891    0.087         0.644         0.977</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100 2033            Recruitment    0.137    0.075         0.035         0.308</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     probViable Anthro fire_excl_anthro   Total_dist iFire iAnthro</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           NA      0     1.188866e-04 1.188866e-04     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           NA      0     1.188866e-04 1.188866e-04     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           NA      0     1.188866e-04 1.188866e-04     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        1.000      0     1.188866e-04 1.188866e-04     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           NA      0     1.188866e-04 1.188866e-04     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6           NA      1     7.031704e-05 1.000070e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        1.000      1     7.031704e-05 1.000070e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8           NA      1     7.031704e-05 1.000070e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9           NA      1     7.031704e-05 1.000070e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10          NA      1     7.031704e-05 1.000070e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       1.000      2     0.000000e+00 2.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           NA      0     2.296157e-05 2.296157e-05     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           NA      0     2.296157e-05 2.296157e-05     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           NA      0     2.296157e-05 2.296157e-05     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        0.978      0     2.296157e-05 2.296157e-05     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           NA      0     2.296157e-05 2.296157e-05     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           NA      1     1.720998e-04 1.000172e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        0.978      1     1.720998e-04 1.000172e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8           NA      1     1.720998e-04 1.000172e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9           NA      1     1.720998e-04 1.000172e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10          NA      1     1.720998e-04 1.000172e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       0.978      2     0.000000e+00 2.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12          NA      2     0.000000e+00 2.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13          NA      2     0.000000e+00 2.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14          NA      2     0.000000e+00 2.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15          NA      2     0.000000e+00 2.000000e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16       1.000      3     8.861514e-05 3.000089e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17          NA      3     8.861514e-05 3.000089e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18          NA      3     8.861514e-05 3.000089e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19          NA      3     8.861514e-05 3.000089e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20          NA      3     8.861514e-05 3.000089e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       0.978      3     0.000000e+00 3.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          NA      3     0.000000e+00 3.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18          NA      3     0.000000e+00 3.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19          NA      3     0.000000e+00 3.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20          NA      3     0.000000e+00 3.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21          NA      4     0.000000e+00 4.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22          NA      4     0.000000e+00 4.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23          NA      4     0.000000e+00 4.000000e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24       1.000      4     0.000000e+00 4.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24       0.978      4     0.000000e+00 4.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25          NA      4     0.000000e+00 4.000000e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26          NA      5     1.509949e-04 5.000151e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27       1.000      5     1.509949e-04 5.000151e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28          NA      5     1.509949e-04 5.000151e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29          NA      5     1.509949e-04 5.000151e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30          NA      5     1.509949e-04 5.000151e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31       1.000      6     0.000000e+00 6.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26          NA      5     0.000000e+00 5.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27       0.978      5     0.000000e+00 5.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28          NA      5     0.000000e+00 5.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29          NA      5     0.000000e+00 5.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30          NA      5     0.000000e+00 5.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31       0.978      6     0.000000e+00 6.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 32          NA      6     0.000000e+00 6.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 33          NA      6     0.000000e+00 6.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 34          NA      6     0.000000e+00 6.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 35          NA      6     0.000000e+00 6.000000e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36          NA      7     1.529326e-05 7.000015e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37       1.000      7     1.529326e-05 7.000015e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38          NA      7     1.529326e-05 7.000015e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39          NA      7     1.529326e-05 7.000015e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40          NA      7     1.529326e-05 7.000015e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41          NA      8     3.939196e-05 8.000039e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42          NA      8     3.939196e-05 8.000039e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43       1.000      8     3.939196e-05 8.000039e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44          NA      8     3.939196e-05 8.000039e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45          NA      8     3.939196e-05 8.000039e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36          NA      7     0.000000e+00 7.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37       0.978      7     0.000000e+00 7.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38          NA      7     0.000000e+00 7.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39          NA      7     0.000000e+00 7.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40          NA      7     0.000000e+00 7.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41          NA      8     5.647801e-05 8.000056e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42          NA      8     5.647801e-05 8.000056e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43       0.956      8     5.647801e-05 8.000056e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44          NA      8     5.647801e-05 8.000056e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45          NA      8     5.647801e-05 8.000056e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 46          NA      9     0.000000e+00 9.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 47          NA      9     0.000000e+00 9.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 48          NA      9     0.000000e+00 9.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 49          NA      9     0.000000e+00 9.000000e+00     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50       1.000      9     0.000000e+00 9.000000e+00     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50       0.956      9     0.000000e+00 9.000000e+00     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 51          NA     14     0.000000e+00 1.400000e+01     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 52          NA     14     0.000000e+00 1.400000e+01     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 53       0.933     14     0.000000e+00 1.400000e+01     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 54          NA     14     0.000000e+00 1.400000e+01     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 55          NA     14     0.000000e+00 1.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56          NA     19     6.207464e-06 1.900001e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57          NA     19     6.207464e-06 1.900001e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58       0.889     19     6.207464e-06 1.900001e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59          NA     19     6.207464e-06 1.900001e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60          NA     19     6.207464e-06 1.900001e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61          NA     24     0.000000e+00 2.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62          NA     24     0.000000e+00 2.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63          NA     24     0.000000e+00 2.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64          NA     24     0.000000e+00 2.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65       0.844     24     0.000000e+00 2.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66          NA     29     0.000000e+00 2.900000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67          NA     29     0.000000e+00 2.900000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68          NA     29     0.000000e+00 2.900000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69       0.644     29     0.000000e+00 2.900000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70          NA     29     0.000000e+00 2.900000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71          NA     34     1.369812e-04 3.400014e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72       0.600     34     1.369812e-04 3.400014e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73          NA     34     1.369812e-04 3.400014e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74          NA     34     1.369812e-04 3.400014e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75          NA     34     1.369812e-04 3.400014e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76       0.489     39     3.567506e-05 3.900004e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77          NA     39     3.567506e-05 3.900004e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78          NA     39     3.567506e-05 3.900004e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79          NA     39     3.567506e-05 3.900004e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80          NA     39     3.567506e-05 3.900004e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81       0.400     44     0.000000e+00 4.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82          NA     44     0.000000e+00 4.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83          NA     44     0.000000e+00 4.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84          NA     44     0.000000e+00 4.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85          NA     44     0.000000e+00 4.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86          NA     49     1.312139e-04 4.900013e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87          NA     49     1.312139e-04 4.900013e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88          NA     49     1.312139e-04 4.900013e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89       0.333     49     1.312139e-04 4.900013e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90          NA     49     1.312139e-04 4.900013e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56          NA     19     0.000000e+00 1.900000e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57          NA     19     0.000000e+00 1.900000e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58       0.911     19     0.000000e+00 1.900000e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59          NA     19     0.000000e+00 1.900000e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60          NA     19     0.000000e+00 1.900000e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61          NA     24     1.819017e-04 2.400018e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62          NA     24     1.819017e-04 2.400018e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63          NA     24     1.819017e-04 2.400018e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64          NA     24     1.819017e-04 2.400018e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65       0.889     24     1.819017e-04 2.400018e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66          NA     29     2.514517e-05 2.900003e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67          NA     29     2.514517e-05 2.900003e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68          NA     29     2.514517e-05 2.900003e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69       0.822     29     2.514517e-05 2.900003e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70          NA     29     2.514517e-05 2.900003e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71          NA     34     1.916458e-05 3.400002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72       0.733     34     1.916458e-05 3.400002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73          NA     34     1.916458e-05 3.400002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74          NA     34     1.916458e-05 3.400002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75          NA     34     1.916458e-05 3.400002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76       0.689     39     1.598716e-05 3.900002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77          NA     39     1.598716e-05 3.900002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78          NA     39     1.598716e-05 3.900002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79          NA     39     1.598716e-05 3.900002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80          NA     39     1.598716e-05 3.900002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81       0.578     44     2.175980e-05 4.400002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82          NA     44     2.175980e-05 4.400002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83          NA     44     2.175980e-05 4.400002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84          NA     44     2.175980e-05 4.400002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85          NA     44     2.175980e-05 4.400002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86          NA     49     0.000000e+00 4.900000e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87          NA     49     0.000000e+00 4.900000e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88          NA     49     0.000000e+00 4.900000e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89       0.533     49     0.000000e+00 4.900000e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90          NA     49     0.000000e+00 4.900000e+01     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 91          NA     54     0.000000e+00 5.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92       0.311     54     0.000000e+00 5.400000e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92       0.444     54     0.000000e+00 5.400000e+01     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 93          NA     54     0.000000e+00 5.400000e+01     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 94          NA     54     0.000000e+00 5.400000e+01     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 95          NA     54     0.000000e+00 5.400000e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96       0.289     59     2.350460e-05 5.900002e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97          NA     59     2.350460e-05 5.900002e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98          NA     59     2.350460e-05 5.900002e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99          NA     59     2.350460e-05 5.900002e+01     0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100         NA     59     2.350460e-05 5.900002e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96       0.333     59     9.451098e-05 5.900009e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97          NA     59     9.451098e-05 5.900009e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98          NA     59     9.451098e-05 5.900009e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99          NA     59     9.451098e-05 5.900009e+01     0       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100         NA     59     9.451098e-05 5.900009e+01     0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     obsAnthroSlope projAnthroSlope rSlopeMod sSlopeMod rQuantile sQuantile</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                1               5         1         1       0.5       0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                1               5         1         1       0.5       0.5</span>
@@ -881,152 +877,152 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sim.all</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Anthro         Mean Lower 95% CRI Upper 95% CRI              parameter Year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        0 1.793107e-01  4.019004e-02     0.3907768   Adjusted recruitment 2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0 3.411666e-01  7.961552e-02     0.7458458            Recruitment 2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        0 1.116078e+03  6.479750e+02  1762.1250000 Female population size 2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        0 1.039657e+00  8.918469e-01     1.1926713 Population growth rate 2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        0 8.752528e-01  6.862692e-01     0.9985114  Adult female survival 2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        1 1.118658e+03  6.318000e+02  1738.0500000 Female population size 2015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        1 8.777720e-01  6.763599e-01     0.9975369  Adult female survival 2015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8        1 1.039469e+00  8.983655e-01     1.1837667 Population growth rate 2015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        1 1.803262e-01  4.632790e-02     0.3879727   Adjusted recruitment 2015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       1 3.426672e-01  8.795771e-02     0.7256336            Recruitment 2015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       2 8.731468e-01  6.930402e-01     0.9969784  Adult female survival 2016</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       2 1.033650e+00  8.934683e-01     1.1689487 Population growth rate 2016</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13       2 3.400831e-01  8.108514e-02     0.7331555            Recruitment 2016</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14       2 1.788863e-01  4.326995e-02     0.3864220   Adjusted recruitment 2016</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15       2 1.103059e+03  6.290000e+02  1710.2000000 Female population size 2016</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16       3 1.738684e-01  4.556234e-02     0.3660976   Adjusted recruitment 2017</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17       3 3.307885e-01  8.305529e-02     0.7064957            Recruitment 2017</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18       3 1.030618e+00  8.954765e-01     1.1671970 Population growth rate 2017</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19       3 8.709938e-01  6.750284e-01     0.9972625  Adult female survival 2017</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20       3 1.083479e+03  6.159000e+02  1711.3000000 Female population size 2017</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21       4 1.024574e+00  8.799739e-01     1.1736867 Population growth rate 2018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22       4 1.650127e-01  3.912960e-02     0.3724567   Adjusted recruitment 2018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23       4 1.069261e+03  6.096250e+02  1650.0250000 Female population size 2018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24       4 3.128574e-01  7.470780e-02     0.7092193            Recruitment 2018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25       4 8.710805e-01  6.914336e-01     0.9967729  Adult female survival 2018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26       5 1.021905e+00  8.915984e-01     1.1602360 Population growth rate 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27       5 8.763880e-01  6.894900e-01     0.9968446  Adult female survival 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28       5 1.062748e+03  6.009500e+02  1641.3500000 Female population size 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29       5 1.602431e-01  3.961050e-02     0.3781047   Adjusted recruitment 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30       5 3.042773e-01  7.235871e-02     0.7141452            Recruitment 2019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31       6 3.146683e-01  7.505006e-02     0.7065397            Recruitment 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32       6 1.073177e+03  6.149500e+02  1701.3500000 Female population size 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33       6 8.749662e-01  7.014073e-01     0.9951983  Adult female survival 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34       6 1.022173e+00  8.907153e-01     1.1541242 Population growth rate 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35       6 1.655731e-01  3.885557e-02     0.3778824   Adjusted recruitment 2020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36       7 8.738624e-01  7.034226e-01     0.9984884  Adult female survival 2021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37       7 1.063048e+03  6.069750e+02  1656.2000000 Female population size 2021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38       7 3.128834e-01  7.669009e-02     0.6995533            Recruitment 2021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39       7 1.016433e+00  8.828645e-01     1.1527237 Population growth rate 2021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40       7 1.646848e-01  3.964683e-02     0.3728333   Adjusted recruitment 2021</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41       8 1.631344e-01  3.217207e-02     0.3623778   Adjusted recruitment 2022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42       8 3.103685e-01  6.481186e-02     0.6861146            Recruitment 2022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43       8 8.686224e-01  6.817755e-01     0.9968080  Adult female survival 2022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44       8 1.014412e+00  8.807854e-01     1.1510617 Population growth rate 2022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45       8 1.049269e+03  5.809750e+02  1636.1250000 Female population size 2022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46       9 1.035876e+03  6.018500e+02  1641.2000000 Female population size 2023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47       9 1.011953e+00  8.781726e-01     1.1520458 Population growth rate 2023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48       9 3.012972e-01  6.832807e-02     0.6801797            Recruitment 2023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49       9 8.712789e-01  6.787376e-01     0.9964863  Adult female survival 2023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50       9 1.585965e-01  3.588128e-02     0.3572100   Adjusted recruitment 2023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51      14 2.762455e-01  6.059837e-02     0.6281874            Recruitment 2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52      14 9.939974e-01  8.605870e-01     1.1363401 Population growth rate 2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53      14 9.910810e+02  5.650000e+02  1600.1250000 Female population size 2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54      14 8.617241e-01  6.768205e-01     0.9945853  Adult female survival 2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55      14 1.455754e-01  3.157901e-02     0.3424196   Adjusted recruitment 2024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56      19 8.651733e-01  6.832575e-01     0.9904215  Adult female survival 2025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57      19 9.802897e-01  8.461744e-01     1.1142427 Population growth rate 2025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58      19 2.487437e-01  5.183732e-02     0.6291037            Recruitment 2025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59      19 1.305276e-01  2.718566e-02     0.3361847   Adjusted recruitment 2025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60      19 9.558520e+02  5.359250e+02  1536.1500000 Female population size 2025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61      24 9.659338e-01  8.407623e-01     1.0936211 Population growth rate 2026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62      24 9.177670e+02  5.259000e+02  1493.2000000 Female population size 2026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63      24 1.232405e-01  2.711857e-02     0.3118960   Adjusted recruitment 2026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64      24 8.626245e-01  6.803477e-01     0.9921417  Adult female survival 2026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65      24 2.344242e-01  5.058897e-02     0.5876992            Recruitment 2026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66      29 9.581732e-01  8.327777e-01     1.0949322 Population growth rate 2027</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67      29 8.943710e+02  5.029500e+02  1439.1750000 Female population size 2027</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68      29 8.577148e-01  6.754052e-01     0.9939144  Adult female survival 2027</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69      29 2.335148e-01  4.438199e-02     0.6041639            Recruitment 2027</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70      29 1.226167e-01  2.389333e-02     0.3175459   Adjusted recruitment 2027</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71      34 8.512990e-01  6.755953e-01     0.9870567  Adult female survival 2028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72      34 9.399701e-01  8.134422e-01     1.0675915 Population growth rate 2028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73      34 8.399980e+02  4.809250e+02  1321.1000000 Female population size 2028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74      34 1.032403e-01  1.807012e-02     0.2830502   Adjusted recruitment 2028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75      34 1.962597e-01  3.503622e-02     0.5278525            Recruitment 2028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76      39 9.463267e-02  1.564644e-02     0.2674092   Adjusted recruitment 2029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77      39 1.798273e-01  3.207042e-02     0.4914924            Recruitment 2029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78      39 8.515901e-01  6.750092e-01     0.9890065  Adult female survival 2029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79      39 9.302475e-01  8.009542e-01     1.0590577 Population growth rate 2029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80      39 8.156730e+02  4.739750e+02  1344.0500000 Female population size 2029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81      44 1.761218e-01  2.696192e-02     0.4967163            Recruitment 2030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82      44 9.247437e-02  1.438491e-02     0.2580290   Adjusted recruitment 2030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83      44 7.960130e+02  4.579750e+02  1246.0250000 Female population size 2030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84      44 8.497960e-01  6.849186e-01     0.9915047  Adult female survival 2030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85      44 9.210306e-01  7.958538e-01     1.0466680 Population growth rate 2030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86      49 1.521593e-01  2.090460e-02     0.4269697            Recruitment 2031</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87      49 7.617720e+02  4.368750e+02  1198.2500000 Female population size 2031</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88      49 8.435979e-01  6.769418e-01     0.9855731  Adult female survival 2031</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89      49 8.006066e-02  1.095326e-02     0.2272553   Adjusted recruitment 2031</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90      49 9.082415e-01  7.783200e-01     1.0353637 Population growth rate 2031</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91      54 1.487358e-01  1.853346e-02     0.4504588            Recruitment 2032</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92      54 7.635510e+02  4.519750e+02  1225.4750000 Female population size 2032</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93      54 8.419615e-01  6.617258e-01     0.9834129  Adult female survival 2032</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94      54 7.829277e-02  9.914140e-03     0.2387209   Adjusted recruitment 2032</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95      54 9.056994e-01  7.867226e-01     1.0284086 Population growth rate 2032</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96      59 1.341797e-01  1.834093e-02     0.3963548            Recruitment 2033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97      59 7.228770e+02  4.290000e+02  1124.0000000 Female population size 2033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98      59 8.369274e-01  6.702538e-01     0.9765201  Adult female survival 2033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99      59 7.064629e-02  9.954171e-03     0.2106769   Adjusted recruitment 2033</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100     59 8.914497e-01  7.648669e-01     1.0161925 Population growth rate 2033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        0 1.743094e-01  3.885190e-02     0.3813958   Adjusted recruitment 2014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0 3.334361e-01  7.377497e-02     0.7148982            Recruitment 2014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        0 1.112821e+03  6.220000e+02  1770.0750000 Female population size 2014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        0 1.041583e+00  8.983290e-01     1.1827229 Population growth rate 2014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        0 8.786372e-01  6.889635e-01     0.9985682  Adult female survival 2014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        1 1.078848e+03  6.088750e+02  1720.0250000 Female population size 2015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        1 8.720348e-01  6.835895e-01     0.9973537  Adult female survival 2015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        1 1.032049e+00  8.911790e-01     1.1661226 Population growth rate 2015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        1 1.735931e-01  3.989744e-02     0.3779063   Adjusted recruitment 2015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       1 3.320840e-01  7.728448e-02     0.7163261            Recruitment 2015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       2 8.805660e-01  7.058910e-01     0.9971025  Adult female survival 2016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       2 1.033315e+00  8.916421e-01     1.1649392 Population growth rate 2016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       2 3.317469e-01  8.135694e-02     0.7155669            Recruitment 2016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14       2 1.734066e-01  4.203119e-02     0.3763173   Adjusted recruitment 2016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       2 1.115649e+03  6.238750e+02  1720.0250000 Female population size 2016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       3 1.757131e-01  4.497160e-02     0.3674891   Adjusted recruitment 2017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17       3 3.366524e-01  8.467014e-02     0.7079192            Recruitment 2017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18       3 1.028573e+00  8.872017e-01     1.1681934 Population growth rate 2017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19       3 8.696619e-01  6.745197e-01     0.9982928  Adult female survival 2017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       3 1.077817e+03  6.079750e+02  1707.1500000 Female population size 2017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       4 1.026011e+00  8.861442e-01     1.1723386 Population growth rate 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22       4 1.675844e-01  3.768328e-02     0.3716275   Adjusted recruitment 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23       4 1.077642e+03  6.148000e+02  1720.1000000 Female population size 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24       4 3.211293e-01  7.321784e-02     0.7181086            Recruitment 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25       4 8.760442e-01  6.915087e-01     0.9980617  Adult female survival 2018</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26       5 1.024501e+00  8.847996e-01     1.1575093 Population growth rate 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27       5 8.775779e-01  6.989739e-01     0.9979098  Adult female survival 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28       5 1.084331e+03  5.989250e+02  1678.0250000 Female population size 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29       5 1.708053e-01  4.034211e-02     0.3888902   Adjusted recruitment 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30       5 3.265667e-01  7.752725e-02     0.7342048            Recruitment 2019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31       6 3.184602e-01  8.209751e-02     0.7112919            Recruitment 2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32       6 1.067071e+03  5.860000e+02  1699.0250000 Female population size 2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33       6 8.736179e-01  6.937594e-01     0.9971576  Adult female survival 2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34       6 1.019802e+00  8.791000e-01     1.1580492 Population growth rate 2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35       6 1.668807e-01  4.262869e-02     0.3738386   Adjusted recruitment 2020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36       7 8.724047e-01  6.805218e-01     0.9956412  Adult female survival 2021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37       7 1.050377e+03  5.980000e+02  1676.0750000 Female population size 2021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38       7 3.073813e-01  7.192730e-02     0.7126205            Recruitment 2021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39       7 1.015336e+00  8.751292e-01     1.1642969 Population growth rate 2021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40       7 1.606341e-01  3.703390e-02     0.3801762   Adjusted recruitment 2021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41       8 1.604818e-01  4.115747e-02     0.3588380   Adjusted recruitment 2022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42       8 3.069965e-01  7.687168e-02     0.6680396            Recruitment 2022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43       8 8.687817e-01  6.904989e-01     0.9947596  Adult female survival 2022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44       8 1.011468e+00  8.730246e-01     1.1406927 Population growth rate 2022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45       8 1.040272e+03  6.019750e+02  1639.1000000 Female population size 2022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46       9 1.030837e+03  5.808750e+02  1639.2000000 Female population size 2023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47       9 1.008412e+00  8.779555e-01     1.1469266 Population growth rate 2023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48       9 2.902949e-01  6.244932e-02     0.6659247            Recruitment 2023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49       9 8.724781e-01  6.951172e-01     0.9970643  Adult female survival 2023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50       9 1.516854e-01  3.238597e-02     0.3410482   Adjusted recruitment 2023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51      14 2.783357e-01  6.287177e-02     0.6784782            Recruitment 2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52      14 9.906227e-01  8.595523e-01     1.1335502 Population growth rate 2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53      14 9.808460e+02  5.679750e+02  1581.0250000 Female population size 2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54      14 8.642577e-01  6.858534e-01     0.9930807  Adult female survival 2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55      14 1.456077e-01  3.092010e-02     0.3515147   Adjusted recruitment 2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56      19 8.656529e-01  6.794466e-01     0.9939518  Adult female survival 2025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57      19 9.801778e-01  8.508041e-01     1.1204408 Population growth rate 2025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58      19 2.579599e-01  5.529495e-02     0.6313745            Recruitment 2025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59      19 1.345574e-01  2.830314e-02     0.3272470   Adjusted recruitment 2025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60      19 9.483620e+02  5.498000e+02  1501.0250000 Female population size 2025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61      24 9.662367e-01  8.309730e-01     1.0964464 Population growth rate 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62      24 9.235460e+02  5.039250e+02  1456.2750000 Female population size 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63      24 1.289859e-01  2.572631e-02     0.3417910   Adjusted recruitment 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64      24 8.604931e-01  6.915139e-01     0.9912891  Adult female survival 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65      24 2.463947e-01  4.955042e-02     0.6252876            Recruitment 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66      29 9.517307e-01  8.197234e-01     1.0920678 Population growth rate 2027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67      29 8.749880e+02  4.939750e+02  1433.1250000 Female population size 2027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68      29 8.547600e-01  6.776409e-01     0.9892888  Adult female survival 2027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69      29 2.209650e-01  3.770979e-02     0.6083467            Recruitment 2027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70      29 1.158241e-01  1.954079e-02     0.3185341   Adjusted recruitment 2027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71      34 8.542858e-01  6.709187e-01     0.9860305  Adult female survival 2028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72      34 9.400666e-01  8.151604e-01     1.0721838 Population growth rate 2028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73      34 8.443800e+02  4.850000e+02  1368.1250000 Female population size 2028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74      34 1.029151e-01  1.907914e-02     0.2744702   Adjusted recruitment 2028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75      34 1.966417e-01  3.644038e-02     0.5060302            Recruitment 2028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76      39 9.755071e-02  1.751930e-02     0.2650793   Adjusted recruitment 2029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77      39 1.868429e-01  3.515296e-02     0.5021942            Recruitment 2029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78      39 8.523867e-01  6.748539e-01     0.9910495  Adult female survival 2029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79      39 9.347270e-01  8.006243e-01     1.0581228 Population growth rate 2029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80      39 8.299070e+02  4.800000e+02  1312.1250000 Female population size 2029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81      44 1.689402e-01  2.911178e-02     0.4838792            Recruitment 2030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82      44 8.840755e-02  1.488238e-02     0.2585046   Adjusted recruitment 2030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83      44 7.826530e+02  4.489750e+02  1261.0250000 Female population size 2030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84      44 8.434617e-01  6.711401e-01     0.9837122  Adult female survival 2030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85      44 9.171144e-01  7.915424e-01     1.0355576 Population growth rate 2030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86      49 1.541404e-01  2.211641e-02     0.4513118            Recruitment 2031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87      49 7.657110e+02  4.419750e+02  1172.0250000 Female population size 2031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88      49 8.452339e-01  6.653769e-01     0.9813091  Adult female survival 2031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89      49 8.065199e-02  1.196906e-02     0.2311277   Adjusted recruitment 2031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90      49 9.086228e-01  7.835313e-01     1.0253390 Population growth rate 2031</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91      54 1.494663e-01  1.788802e-02     0.4236465            Recruitment 2032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92      54 7.529590e+02  4.289750e+02  1162.1000000 Female population size 2032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93      54 8.396158e-01  6.727614e-01     0.9806159  Adult female survival 2032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94      54 7.825439e-02  9.614117e-03     0.2297265   Adjusted recruitment 2032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95      54 9.016269e-01  7.776342e-01     1.0203731 Population growth rate 2032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96      59 1.307072e-01  1.686717e-02     0.3827848            Recruitment 2033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97      59 7.204050e+02  4.169750e+02  1112.1000000 Female population size 2033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98      59 8.337855e-01  6.576607e-01     0.9810610  Adult female survival 2033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99      59 6.814467e-02  8.929287e-03     0.1968732   Adjusted recruitment 2033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100     59 8.912540e-01  7.723435e-01     1.0093421 Population growth rate 2033</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     fire_excl_anthro   Total_dist iFire iAnthro obsAnthroSlope projAnthroSlope</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       1.188866e-04 1.188866e-04     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       1.188866e-04 1.188866e-04     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       1.188866e-04 1.188866e-04     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       1.188866e-04 1.188866e-04     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       1.188866e-04 1.188866e-04     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       7.031704e-05 1.000070e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7       7.031704e-05 1.000070e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8       7.031704e-05 1.000070e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9       7.031704e-05 1.000070e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10      7.031704e-05 1.000070e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       2.296157e-05 2.296157e-05     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       2.296157e-05 2.296157e-05     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       2.296157e-05 2.296157e-05     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       2.296157e-05 2.296157e-05     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       2.296157e-05 2.296157e-05     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       1.720998e-04 1.000172e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       1.720998e-04 1.000172e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       1.720998e-04 1.000172e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       1.720998e-04 1.000172e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      1.720998e-04 1.000172e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11      0.000000e+00 2.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12      0.000000e+00 2.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13      0.000000e+00 2.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14      0.000000e+00 2.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15      0.000000e+00 2.000000e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16      8.861514e-05 3.000089e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17      8.861514e-05 3.000089e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18      8.861514e-05 3.000089e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19      8.861514e-05 3.000089e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20      8.861514e-05 3.000089e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16      0.000000e+00 3.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17      0.000000e+00 3.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18      0.000000e+00 3.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19      0.000000e+00 3.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20      0.000000e+00 3.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21      0.000000e+00 4.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 22      0.000000e+00 4.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23      0.000000e+00 4.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24      0.000000e+00 4.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25      0.000000e+00 4.000000e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26      1.509949e-04 5.000151e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27      1.509949e-04 5.000151e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28      1.509949e-04 5.000151e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29      1.509949e-04 5.000151e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30      1.509949e-04 5.000151e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26      0.000000e+00 5.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27      0.000000e+00 5.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28      0.000000e+00 5.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29      0.000000e+00 5.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30      0.000000e+00 5.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 31      0.000000e+00 6.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 32      0.000000e+00 6.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 33      0.000000e+00 6.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 34      0.000000e+00 6.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 35      0.000000e+00 6.000000e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36      1.529326e-05 7.000015e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37      1.529326e-05 7.000015e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38      1.529326e-05 7.000015e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39      1.529326e-05 7.000015e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40      1.529326e-05 7.000015e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41      3.939196e-05 8.000039e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42      3.939196e-05 8.000039e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43      3.939196e-05 8.000039e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44      3.939196e-05 8.000039e+00     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45      3.939196e-05 8.000039e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36      0.000000e+00 7.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37      0.000000e+00 7.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38      0.000000e+00 7.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39      0.000000e+00 7.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40      0.000000e+00 7.000000e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41      5.647801e-05 8.000056e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42      5.647801e-05 8.000056e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43      5.647801e-05 8.000056e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44      5.647801e-05 8.000056e+00     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45      5.647801e-05 8.000056e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 46      0.000000e+00 9.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 47      0.000000e+00 9.000000e+00     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 48      0.000000e+00 9.000000e+00     0       0              1               5</span>
@@ -1037,51 +1033,51 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 53      0.000000e+00 1.400000e+01     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 54      0.000000e+00 1.400000e+01     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 55      0.000000e+00 1.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56      6.207464e-06 1.900001e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57      6.207464e-06 1.900001e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58      6.207464e-06 1.900001e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59      6.207464e-06 1.900001e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60      6.207464e-06 1.900001e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61      0.000000e+00 2.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62      0.000000e+00 2.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63      0.000000e+00 2.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64      0.000000e+00 2.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65      0.000000e+00 2.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66      0.000000e+00 2.900000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67      0.000000e+00 2.900000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68      0.000000e+00 2.900000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69      0.000000e+00 2.900000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70      0.000000e+00 2.900000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71      1.369812e-04 3.400014e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72      1.369812e-04 3.400014e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73      1.369812e-04 3.400014e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74      1.369812e-04 3.400014e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75      1.369812e-04 3.400014e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76      3.567506e-05 3.900004e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77      3.567506e-05 3.900004e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78      3.567506e-05 3.900004e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79      3.567506e-05 3.900004e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80      3.567506e-05 3.900004e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81      0.000000e+00 4.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82      0.000000e+00 4.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83      0.000000e+00 4.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84      0.000000e+00 4.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85      0.000000e+00 4.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86      1.312139e-04 4.900013e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87      1.312139e-04 4.900013e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88      1.312139e-04 4.900013e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89      1.312139e-04 4.900013e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90      1.312139e-04 4.900013e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56      0.000000e+00 1.900000e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57      0.000000e+00 1.900000e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58      0.000000e+00 1.900000e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59      0.000000e+00 1.900000e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60      0.000000e+00 1.900000e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61      1.819017e-04 2.400018e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62      1.819017e-04 2.400018e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63      1.819017e-04 2.400018e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64      1.819017e-04 2.400018e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65      1.819017e-04 2.400018e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66      2.514517e-05 2.900003e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67      2.514517e-05 2.900003e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68      2.514517e-05 2.900003e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69      2.514517e-05 2.900003e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70      2.514517e-05 2.900003e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71      1.916458e-05 3.400002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72      1.916458e-05 3.400002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73      1.916458e-05 3.400002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74      1.916458e-05 3.400002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75      1.916458e-05 3.400002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76      1.598716e-05 3.900002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77      1.598716e-05 3.900002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78      1.598716e-05 3.900002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79      1.598716e-05 3.900002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80      1.598716e-05 3.900002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81      2.175980e-05 4.400002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82      2.175980e-05 4.400002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83      2.175980e-05 4.400002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84      2.175980e-05 4.400002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85      2.175980e-05 4.400002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86      0.000000e+00 4.900000e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87      0.000000e+00 4.900000e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88      0.000000e+00 4.900000e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89      0.000000e+00 4.900000e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90      0.000000e+00 4.900000e+01     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 91      0.000000e+00 5.400000e+01     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 92      0.000000e+00 5.400000e+01     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 93      0.000000e+00 5.400000e+01     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 94      0.000000e+00 5.400000e+01     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 95      0.000000e+00 5.400000e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96      2.350460e-05 5.900002e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97      2.350460e-05 5.900002e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98      2.350460e-05 5.900002e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99      2.350460e-05 5.900002e+01     0       0              1               5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100     2.350460e-05 5.900002e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96      9.451098e-05 5.900009e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97      9.451098e-05 5.900009e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98      9.451098e-05 5.900009e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99      9.451098e-05 5.900009e+01     0       0              1               5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100     9.451098e-05 5.900009e+01     0       0              1               5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     rSlopeMod sSlopeMod rQuantile sQuantile projYears obsYears preYears   N0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1           1         1       0.5       0.5        10       10        0 1000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2           1         1       0.5       0.5        10       10        0 1000</span>
@@ -1590,285 +1586,267 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $obs.all</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Year         Mean              parameter     type Anthro fire_excl_anthro</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   2014 1.700000e-01            Recruitment observed      0     1.188866e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2014 1.130247e-01   Adjusted recruitment     true      0     1.188866e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2014 7.598857e-01  Adult female survival     true      0     1.188866e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   2014           NA  Adult female survival observed      0     1.188866e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   2014 1.054417e+00 Population growth rate     true      0     1.188866e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   2014 2.043853e-01            Recruitment     true      0     1.188866e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   2015 1.050637e+00 Population growth rate     true      1     7.031704e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   2015 9.522774e-01  Adult female survival     true      1     7.031704e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   2015 1.000000e+00  Adult female survival observed      1     7.031704e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  2015 8.460000e+02 Female population size     true      1     7.031704e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  2015 3.800000e-01            Recruitment observed      1     7.031704e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  2015 2.030851e-01   Adjusted recruitment     true      1     7.031704e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  2015 3.672437e-01            Recruitment     true      1     7.031704e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  2016 7.500000e-01  Adult female survival observed      2     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  2016 9.670000e+02 Female population size     true      2     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  2016 1.050647e+00 Population growth rate     true      2     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  2016 7.352687e-01  Adult female survival     true      2     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  2016 5.221889e-01            Recruitment     true      2     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  2016 2.887695e-01   Adjusted recruitment     true      2     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  2016 5.625000e-01            Recruitment observed      2     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21  2017 7.768921e-01  Adult female survival     true      3     8.861514e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22  2017 9.140000e+02 Female population size     true      3     8.861514e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23  2017 7.854196e-02   Adjusted recruitment     true      3     8.861514e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  2017 9.333333e-01  Adult female survival observed      3     8.861514e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25  2017 1.420293e-01            Recruitment     true      3     8.861514e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  2017 1.250000e-01            Recruitment observed      3     8.861514e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27  2017 1.046910e+00 Population growth rate     true      3     8.861514e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28  2018 1.825969e-01   Adjusted recruitment     true      4     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29  2018 7.500000e-01  Adult female survival observed      4     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30  2018 7.740000e+02 Female population size     true      4     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31  2018 3.000000e-01            Recruitment observed      4     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32  2018 7.873938e-01  Adult female survival     true      4     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33  2018 3.301944e-01            Recruitment     true      4     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34  2018 1.043217e+00 Population growth rate     true      4     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35  2019 8.750000e-01  Adult female survival observed      5     1.509949e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36  2019 5.789474e-01            Recruitment observed      5     1.509949e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37  2019 3.409082e-01   Adjusted recruitment     true      5     1.509949e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38  2019 9.279353e-01  Adult female survival     true      5     1.509949e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39  2019 7.310000e+02 Female population size     true      5     1.509949e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40  2019 1.039566e+00 Population growth rate     true      5     1.509949e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41  2019 6.164725e-01            Recruitment     true      5     1.509949e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42  2020 1.035956e+00 Population growth rate     true      6     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43  2020 9.285714e-01  Adult female survival observed      6     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44  2020 9.250000e+02 Female population size     true      6     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45  2020 3.250000e-01            Recruitment observed      6     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46  2020 1.504953e-01   Adjusted recruitment     true      6     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47  2020 9.660478e-01  Adult female survival     true      6     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48  2020 2.721444e-01            Recruitment     true      6     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49  2021 1.000000e+00  Adult female survival observed      7     1.529326e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50  2021 7.967326e-01  Adult female survival     true      7     1.529326e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51  2021 1.024000e+03 Female population size     true      7     1.529326e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52  2021 1.032388e+00 Population growth rate     true      7     1.529326e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53  2021 2.967394e-01            Recruitment     true      7     1.529326e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54  2021 3.272727e-01            Recruitment observed      7     1.529326e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55  2021 1.640963e-01   Adjusted recruitment     true      7     1.529326e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56  2022 7.544246e-01  Adult female survival     true      8     3.939196e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57  2022 9.000000e-01  Adult female survival observed      8     3.939196e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58  2022 1.103329e-01   Adjusted recruitment     true      8     3.939196e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59  2022 1.995177e-01            Recruitment     true      8     3.939196e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60  2022 9.830000e+02 Female population size     true      8     3.939196e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61  2022 1.028860e+00 Population growth rate     true      8     3.939196e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62  2022 1.875000e-01            Recruitment observed      8     3.939196e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63  2023 9.909125e-01  Adult female survival     true      9     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64  2023 1.000000e+00  Adult female survival observed      9     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65  2023 8.300000e+02 Female population size     true      9     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66  2023 2.012801e-01   Adjusted recruitment     true      9     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67  2023 3.639798e-01            Recruitment     true      9     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68  2023 3.777778e-01            Recruitment observed      9     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69  2023 1.025372e+00 Population growth rate     true      9     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70  2024 9.910000e+02 Female population size     true     14     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71  2024 4.243021e-02   Adjusted recruitment     true     14     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72  2024 7.672759e-02            Recruitment     true     14     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73  2024           NA            Recruitment observed     14     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74  2024           NA  Adult female survival observed     14     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75  2024 1.017468e+00 Population growth rate     true     14     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76  2024 8.688356e-01  Adult female survival     true     14     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77  2025           NA  Adult female survival observed     19     6.207464e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78  2025 9.232161e-01  Adult female survival     true     19     6.207464e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79  2025 8.760000e+02 Female population size     true     19     6.207464e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80  2025           NA            Recruitment observed     19     6.207464e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81  2025 2.624014e-01   Adjusted recruitment     true     19     6.207464e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82  2025 4.745068e-01            Recruitment     true     19     6.207464e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83  2025 1.005455e+00 Population growth rate     true     19     6.207464e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84  2026           NA  Adult female survival observed     24     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85  2026 7.086720e-01  Adult female survival     true     24     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86  2026 9.896693e-01 Population growth rate     true     24     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87  2026 8.748678e-02   Adjusted recruitment     true     24     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88  2026 1.582045e-01            Recruitment     true     24     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89  2026 1.043000e+03 Female population size     true     24     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90  2026           NA            Recruitment observed     24     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91  2027           NA  Adult female survival observed     29     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92  2027           NA            Recruitment observed     29     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93  2027 1.848542e-01   Adjusted recruitment     true     29     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94  2027 9.003199e-01  Adult female survival     true     29     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95  2027 8.330000e+02 Female population size     true     29     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96  2027 9.747213e-01 Population growth rate     true     29     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97  2027 3.342764e-01            Recruitment     true     29     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98  2028 9.605514e-01 Population growth rate     true     34     1.369812e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99  2028 9.404735e-01  Adult female survival     true     34     1.369812e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100 2028           NA  Adult female survival observed     34     1.369812e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101 2028 8.830000e+02 Female population size     true     34     1.369812e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102 2028           NA            Recruitment observed     34     1.369812e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103 2028 1.496679e-01   Adjusted recruitment     true     34     1.369812e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104 2028 2.706481e-01            Recruitment     true     34     1.369812e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105 2029           NA  Adult female survival observed     39     3.567506e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106 2029 9.300000e+02 Female population size     true     39     3.567506e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107 2029 9.471048e-01 Population growth rate     true     39     3.567506e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108 2029 8.371760e-01  Adult female survival     true     39     3.567506e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109 2029 2.794222e-01            Recruitment     true     39     3.567506e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110 2029 1.545199e-01   Adjusted recruitment     true     39     3.567506e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111 2029           NA            Recruitment observed     39     3.567506e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112 2030 8.469342e-01  Adult female survival     true     44     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113 2030 8.930000e+02 Female population size     true     44     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114 2030 2.711218e-01   Adjusted recruitment     true     44     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 115 2030           NA  Adult female survival observed     44     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 116 2030 4.902761e-01            Recruitment     true     44     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 117 2030           NA            Recruitment observed     44     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 118 2030 9.343306e-01 Population growth rate     true     44     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119 2031 7.711488e-02   Adjusted recruitment     true     49     1.312139e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 120 2031           NA  Adult female survival observed     49     1.312139e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121 2031 9.680000e+02 Female population size     true     49     1.312139e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122 2031           NA            Recruitment observed     49     1.312139e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123 2031 7.534904e-01  Adult female survival     true     49     1.312139e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124 2031 1.394487e-01            Recruitment     true     49     1.312139e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125 2031 9.221816e-01 Population growth rate     true     49     1.312139e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126 2032           NA  Adult female survival observed     54     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127 2032           NA            Recruitment observed     54     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128 2032 7.215276e-02   Adjusted recruitment     true     54     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 129 2032 8.015838e-01  Adult female survival     true     54     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 130 2032 8.030000e+02 Female population size     true     54     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131 2032 9.106141e-01 Population growth rate     true     54     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132 2032 1.304756e-01            Recruitment     true     54     0.000000e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133 2033           NA  Adult female survival observed     59     2.350460e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134 2033 7.906127e-02            Recruitment     true     59     2.350460e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135 2033 7.100000e+02 Female population size     true     59     2.350460e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136 2033 8.995874e-01 Population growth rate     true     59     2.350460e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137 2033           NA            Recruitment observed     59     2.350460e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138 2033 4.372074e-02   Adjusted recruitment     true     59     2.350460e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139 2033 7.351697e-01  Adult female survival     true     59     2.350460e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   2014 3.400000e-01            Recruitment observed      0     2.296157e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2014 1.333604e-01   Adjusted recruitment     true      0     2.296157e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2014 2.711748e-01            Recruitment     true      0     2.296157e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   2014           NA  Adult female survival observed      0     2.296157e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   2014 7.259139e-01  Adult female survival     true      0     2.296157e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   2014 1.030065e+00 Population growth rate     true      0     2.296157e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   2015 7.231185e-01  Adult female survival     true      1     1.720998e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   2015 8.333880e-02   Adjusted recruitment     true      1     1.720998e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   2015 1.026183e+00 Population growth rate     true      1     1.720998e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  2015 1.882353e-01            Recruitment observed      1     1.720998e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  2015 7.950000e+02 Female population size     true      1     1.720998e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  2015 1.694609e-01            Recruitment     true      1     1.720998e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  2016 8.762772e-02   Adjusted recruitment     true      2     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  2016 2.100000e-01            Recruitment observed      2     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  2016 1.781820e-01            Recruitment     true      2     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  2016 6.360000e+02 Female population size     true      2     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  2016 9.675744e-01  Adult female survival     true      2     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  2016 1.026197e+00 Population growth rate     true      2     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  2017 6.056463e-01            Recruitment     true      3     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  2017 6.700000e+02 Female population size     true      3     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  2017 6.400000e-01            Recruitment observed      3     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  2017 2.978495e-01   Adjusted recruitment     true      3     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  2017 1.022371e+00 Population growth rate     true      3     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  2017 9.339170e-01  Adult female survival     true      3     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  2018 3.563121e-01            Recruitment     true      4     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  2018 8.290000e+02 Female population size     true      4     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  2018 1.752300e-01   Adjusted recruitment     true      4     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  2018 9.225990e-01  Adult female survival     true      4     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  2018 1.018602e+00 Population growth rate     true      4     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  2018 4.000000e-01            Recruitment observed      4     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  2019 8.910000e+02 Female population size     true      5     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  2019 1.329880e-01            Recruitment     true      5     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  2019 6.540187e-02   Adjusted recruitment     true      5     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  2019 1.250000e-01            Recruitment observed      5     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  2019 9.130667e-01  Adult female survival     true      5     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  2019 1.014886e+00 Population growth rate     true      5     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37  2020 3.644309e-01            Recruitment     true      6     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38  2020 8.870000e+02 Female population size     true      6     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39  2020 9.755819e-01  Adult female survival     true      6     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40  2020 3.500000e-01            Recruitment observed      6     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41  2020 1.792227e-01   Adjusted recruitment     true      6     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42  2020 1.011224e+00 Population growth rate     true      6     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43  2021 9.779599e-01  Adult female survival     true      7     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44  2021 1.348389e-01            Recruitment     true      7     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45  2021 6.631212e-02   Adjusted recruitment     true      7     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46  2021 1.007615e+00 Population growth rate     true      7     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47  2021 1.034000e+03 Female population size     true      7     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48  2021 1.200000e-01            Recruitment observed      7     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49  2022 1.087000e+03 Female population size     true      8     5.647801e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50  2022 3.934888e-01            Recruitment     true      8     5.647801e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51  2022 3.473684e-01            Recruitment observed      8     5.647801e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52  2022 1.935130e-01   Adjusted recruitment     true      8     5.647801e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53  2022 9.092406e-01  Adult female survival     true      8     5.647801e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54  2022 1.004057e+00 Population growth rate     true      8     5.647801e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55  2023 1.204000e+03 Female population size     true      9     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56  2023 5.151162e-01            Recruitment     true      9     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57  2023 1.000550e+00 Population growth rate     true      9     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58  2023 9.137712e-01  Adult female survival     true      9     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59  2023 2.533279e-01   Adjusted recruitment     true      9     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60  2023 4.875000e-01            Recruitment observed      9     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61  2024 2.295791e-01            Recruitment     true     14     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62  2024 1.364000e+03 Female population size     true     14     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63  2024 1.129042e-01   Adjusted recruitment     true     14     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64  2024           NA  Adult female survival observed     14     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65  2024 7.643918e-01  Adult female survival     true     14     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66  2024           NA            Recruitment observed     14     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67  2024 9.926706e-01 Population growth rate     true     14     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68  2025 2.817585e-01            Recruitment     true     19     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69  2025 1.385654e-01   Adjusted recruitment     true     19     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70  2025 1.147000e+03 Female population size     true     19     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71  2025 7.426066e-01  Adult female survival     true     19     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72  2025           NA            Recruitment observed     19     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73  2025           NA  Adult female survival observed     19     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74  2025 9.807961e-01 Population growth rate     true     19     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75  2026 1.416154e-01   Adjusted recruitment     true     24     1.819017e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76  2026 9.336429e-01  Adult female survival     true     24     1.819017e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77  2026           NA            Recruitment observed     24     1.819017e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78  2026           NA  Adult female survival observed     24     1.819017e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79  2026 2.879603e-01            Recruitment     true     24     1.819017e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80  2026 9.653221e-01 Population growth rate     true     24     1.819017e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81  2026 9.830000e+02 Female population size     true     24     1.819017e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82  2027 5.842677e-02   Adjusted recruitment     true     29     2.514517e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83  2027 9.508711e-01 Population growth rate     true     29     2.514517e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84  2027           NA            Recruitment observed     29     2.514517e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85  2027 1.188048e-01            Recruitment     true     29     2.514517e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86  2027           NA  Adult female survival observed     29     2.514517e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87  2027 8.855826e-01  Adult female survival     true     29     2.514517e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88  2027 1.036000e+03 Female population size     true     29     2.514517e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89  2028           NA            Recruitment observed     34     1.916458e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90  2028 9.373551e-01 Population growth rate     true     34     1.916458e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91  2028 2.091236e-01   Adjusted recruitment     true     34     1.916458e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92  2028 4.252313e-01            Recruitment     true     34     1.916458e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93  2028           NA  Adult female survival observed     34     1.916458e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94  2028 9.005209e-01  Adult female survival     true     34     1.916458e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95  2028 9.780000e+02 Female population size     true     34     1.916458e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96  2029 7.319633e-02   Adjusted recruitment     true     39     1.598716e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97  2029           NA            Recruitment observed     39     1.598716e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98  2029 9.246940e-01 Population growth rate     true     39     1.598716e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99  2029           NA  Adult female survival observed     39     1.598716e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100 2029 1.488372e-01            Recruitment     true     39     1.598716e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101 2029 1.074000e+03 Female population size     true     39     1.598716e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102 2029 9.156299e-01  Adult female survival     true     39     1.598716e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103 2030 6.010894e-02   Adjusted recruitment     true     44     2.175980e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104 2030           NA            Recruitment observed     44     2.175980e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105 2030           NA  Adult female survival observed     44     2.175980e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106 2030 9.128143e-01 Population growth rate     true     44     2.175980e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107 2030 1.052000e+03 Female population size     true     44     2.175980e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108 2030 8.502260e-01  Adult female survival     true     44     2.175980e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109 2030 1.222254e-01            Recruitment     true     44     2.175980e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110 2031 6.693175e-02   Adjusted recruitment     true     49     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111 2031           NA            Recruitment observed     49     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112 2031           NA  Adult female survival observed     49     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113 2031 9.016495e-01 Population growth rate     true     49     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114 2031 1.360988e-01            Recruitment     true     49     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115 2031 9.320000e+02 Female population size     true     49     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116 2031 8.175179e-01  Adult female survival     true     49     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117 2032           NA            Recruitment observed     54     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118 2032 8.911386e-01 Population growth rate     true     54     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119 2032           NA  Adult female survival observed     54     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120 2032 8.447827e-02   Adjusted recruitment     true     54     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121 2032 8.230000e+02 Female population size     true     54     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122 2032 1.717779e-01            Recruitment     true     54     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123 2032 7.542376e-01  Adult female survival     true     54     0.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124 2033 8.812262e-01 Population growth rate     true     59     9.451098e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125 2033 1.600148e-01            Recruitment     true     59     9.451098e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126 2033 6.680000e+02 Female population size     true     59     9.451098e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127 2033           NA  Adult female survival observed     59     9.451098e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128 2033           NA            Recruitment observed     59     9.451098e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 129 2033 7.869335e-02   Adjusted recruitment     true     59     9.451098e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 130 2033 8.174081e-01  Adult female survival     true     59     9.451098e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Total_dist iFire iAnthro obsAnthroSlope projAnthroSlope rSlopeMod</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1.188866e-04     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1.188866e-04     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   1.188866e-04     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   1.188866e-04     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   1.188866e-04     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   1.188866e-04     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   1.000070e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   1.000070e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   1.000070e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  1.000070e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  1.000070e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  1.000070e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  1.000070e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   2.296157e-05     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2.296157e-05     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2.296157e-05     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   2.296157e-05     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   2.296157e-05     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   2.296157e-05     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   1.000172e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   1.000172e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   1.000172e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  1.000172e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  1.000172e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  1.000172e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  2.000000e+00     0       0              1               5         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14  2.000000e+00     0       0              1               5         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15  2.000000e+00     0       0              1               5         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 16  2.000000e+00     0       0              1               5         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 17  2.000000e+00     0       0              1               5         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18  2.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  2.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  2.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21  3.000089e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22  3.000089e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23  3.000089e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  3.000089e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25  3.000089e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  3.000089e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27  3.000089e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  3.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  3.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  3.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  3.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  3.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  3.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  4.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  4.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  4.000000e+00     0       0              1               5         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 28  4.000000e+00     0       0              1               5         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 29  4.000000e+00     0       0              1               5         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 30  4.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31  4.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32  4.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33  4.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34  4.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35  5.000151e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36  5.000151e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37  5.000151e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38  5.000151e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39  5.000151e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40  5.000151e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41  5.000151e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  5.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  5.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  5.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  5.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  5.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  5.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37  6.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38  6.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39  6.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40  6.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41  6.000000e+00     0       0              1               5         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 42  6.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43  6.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44  6.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45  6.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46  6.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47  6.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48  6.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49  7.000015e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50  7.000015e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51  7.000015e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52  7.000015e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53  7.000015e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54  7.000015e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55  7.000015e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56  8.000039e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57  8.000039e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58  8.000039e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59  8.000039e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60  8.000039e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61  8.000039e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62  8.000039e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63  9.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64  9.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65  9.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66  9.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67  9.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68  9.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69  9.000000e+00     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70  1.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71  1.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72  1.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73  1.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74  1.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75  1.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76  1.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77  1.900001e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78  1.900001e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79  1.900001e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80  1.900001e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81  1.900001e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82  1.900001e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83  1.900001e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84  2.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85  2.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86  2.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87  2.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88  2.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89  2.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90  2.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91  2.900000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92  2.900000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93  2.900000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94  2.900000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95  2.900000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96  2.900000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97  2.900000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98  3.400014e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99  3.400014e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100 3.400014e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101 3.400014e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102 3.400014e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103 3.400014e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104 3.400014e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105 3.900004e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106 3.900004e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107 3.900004e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108 3.900004e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109 3.900004e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110 3.900004e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111 3.900004e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112 4.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113 4.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114 4.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 115 4.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 116 4.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 117 4.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 118 4.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119 4.900013e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 120 4.900013e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121 4.900013e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122 4.900013e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123 4.900013e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124 4.900013e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125 4.900013e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126 5.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127 5.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128 5.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 129 5.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 130 5.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131 5.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132 5.400000e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133 5.900002e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134 5.900002e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135 5.900002e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136 5.900002e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137 5.900002e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138 5.900002e+01     0       0              1               5         1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139 5.900002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43  7.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44  7.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45  7.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46  7.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47  7.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48  7.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49  8.000056e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50  8.000056e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51  8.000056e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52  8.000056e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53  8.000056e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54  8.000056e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55  9.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56  9.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57  9.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58  9.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59  9.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60  9.000000e+00     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61  1.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62  1.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63  1.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64  1.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65  1.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66  1.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67  1.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68  1.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69  1.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70  1.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71  1.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72  1.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73  1.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74  1.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75  2.400018e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76  2.400018e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77  2.400018e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78  2.400018e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79  2.400018e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80  2.400018e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81  2.400018e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82  2.900003e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83  2.900003e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84  2.900003e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85  2.900003e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86  2.900003e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87  2.900003e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88  2.900003e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89  3.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90  3.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91  3.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92  3.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93  3.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94  3.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95  3.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96  3.900002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97  3.900002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98  3.900002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99  3.900002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100 3.900002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101 3.900002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102 3.900002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103 4.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104 4.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105 4.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106 4.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107 4.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108 4.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109 4.400002e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110 4.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111 4.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112 4.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113 4.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114 4.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115 4.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116 4.900000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117 5.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118 5.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119 5.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120 5.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121 5.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122 5.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123 5.400000e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124 5.900009e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125 5.900009e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126 5.900009e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127 5.900009e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128 5.900009e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 129 5.900009e+01     0       0              1               5         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 130 5.900009e+01     0       0              1               5         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sSlopeMod rQuantile sQuantile projYears obsYears preYears   N0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1           1       0.5       0.5        10       10        0 1000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2           1       0.5       0.5        10       10        0 1000</span>
@@ -2000,15 +1978,6 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128         1       0.5       0.5        10       10        0 1000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 129         1       0.5       0.5        10       10        0 1000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 130         1       0.5       0.5        10       10        0 1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131         1       0.5       0.5        10       10        0 1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132         1       0.5       0.5        10       10        0 1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133         1       0.5       0.5        10       10        0 1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134         1       0.5       0.5        10       10        0 1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135         1       0.5       0.5        10       10        0 1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136         1       0.5       0.5        10       10        0 1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137         1       0.5       0.5        10       10        0 1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138         1       0.5       0.5        10       10        0 1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139         1       0.5       0.5        10       10        0 1000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     assessmentYrs qMin qMax uMin uMax zMin zMax cowMult collarCount</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1               3    0  0.6    0  0.2    0  0.2       5          20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2               3    0  0.6    0  0.2    0  0.2       5          20</span>
@@ -2140,15 +2109,6 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128             3    0  0.6    0  0.2    0  0.2       5          20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 129             3    0  0.6    0  0.2    0  0.2       5          20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 130             3    0  0.6    0  0.2    0  0.2       5          20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131             3    0  0.6    0  0.2    0  0.2       5          20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132             3    0  0.6    0  0.2    0  0.2       5          20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133             3    0  0.6    0  0.2    0  0.2       5          20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134             3    0  0.6    0  0.2    0  0.2       5          20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135             3    0  0.6    0  0.2    0  0.2       5          20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136             3    0  0.6    0  0.2    0  0.2       5          20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137             3    0  0.6    0  0.2    0  0.2       5          20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138             3    0  0.6    0  0.2    0  0.2       5          20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139             3    0  0.6    0  0.2    0  0.2       5          20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       interannualVar curYear ID</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.46000, 0.08696    2023  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.46000, 0.08696    2023  1</span>
@@ -2280,15 +2240,6 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128 0.46000, 0.08696    2023  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 129 0.46000, 0.08696    2023  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 130 0.46000, 0.08696    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131 0.46000, 0.08696    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132 0.46000, 0.08696    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133 0.46000, 0.08696    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134 0.46000, 0.08696    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135 0.46000, 0.08696    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136 0.46000, 0.08696    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137 0.46000, 0.08696    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138 0.46000, 0.08696    2023  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139 0.46000, 0.08696    2023  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                         label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
@@ -2420,15 +2371,6 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 129 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 130 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139 ID1_curYear2023_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_collarCount20_cowMult5_zMax0.2_zMin0_uMax0.2_uMin0_qMax0.6_qMin0_assessmentYrs3_N01000_preYears0_obsYears10_projYears10_sQuantile0.5_rQuantile0.5_sSlopeMod1_rSlopeMod1_projAnthroSlope5_obsAnthroSlope1_iAnthro0_iFire0_</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     startYear</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        2014</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2        2014</span>
@@ -2560,15 +2502,6 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 128      2014</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 129      2014</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 130      2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131      2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132      2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133      2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134      2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135      2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136      2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137      2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138      2014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139      2014</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ksDists</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Year              Parameter KSDistance KSpvalue</span>

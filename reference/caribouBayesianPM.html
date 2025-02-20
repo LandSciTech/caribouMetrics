@@ -44,9 +44,6 @@ population growth."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aj
       <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
     </li>
     <li>
-      <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
-    </li>
-    <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
     </li>
   </ul></li>
@@ -90,7 +87,7 @@ population growth.</p>
 <span>  Nburn <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>  Nthin <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  N0 <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  survAnalysisMethod <span class="op">=</span> <span class="st">"KaplanMeier"</span>,</span>
+<span>  survAnalysisMethod <span class="op">=</span> <span class="st">"Binomial"</span>,</span>
 <span>  assessmentYrs <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  inputList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  saveJAGStxt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -151,7 +148,7 @@ period and the end of the projection period.</p></dd>
 
 <dt id="arg-survanalysismethod">survAnalysisMethod<a class="anchor" aria-label="anchor" href="#arg-survanalysismethod"></a></dt>
 <dd><p>Survival analysis method either "KaplanMeier" or
-"Exponential". The exponential method is only recommended when the number of collared animals (in survData) is small.</p></dd>
+"Binomial". The KaplanMeier method yields slightly biased survival estimates.</p></dd>
 
 
 <dt id="arg-assessmentyrs">assessmentYrs<a class="anchor" aria-label="anchor" href="#arg-assessmentyrs"></a></dt>
@@ -224,7 +221,7 @@ year. This will reduce the sample size in years when new collars are added.</p>
 <span class="r-in"><span>                            package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  Nchains <span class="op">=</span> <span class="fl">1</span>, Niter <span class="op">=</span> <span class="fl">100</span>, Nburn <span class="op">=</span> <span class="fl">10</span>, Nthin <span class="op">=</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> using Kaplan-Meier survival model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> using Binomial survival model</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mod</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ result:List of 6</span>
@@ -233,12 +230,12 @@ year. This will reduce the sample size in years when new collars are added.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ BUGSoutput        :List of 25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr "bugs"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ parameters.to.save: chr [1:13] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ model.file        : chr "/tmp/Rtmp3EHMmQ/JAGS_run.txt"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ model.file        : chr "/tmp/Rtmp7ENfIw/JAGS_run.txt"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n.iter            : num 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ DIC               : logi TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "class")= chr "rjags"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ inData:List of 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ survDataIn   :'data.frame':	35 obs. of  8 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ survDataIn   : tibble [35 × 16] (S3: tbl_df/tbl/data.frame)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ disturbanceIn:'data.frame':	35 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ageRatioIn   :'data.frame':	70 obs. of  3 variables:</span>
 <span class="r-in"><span></span></span>
@@ -253,8 +250,7 @@ year. This will reduce the sample size in years when new collars are added.</p>
 <span class="r-in"><span>                          disturbance <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simDisturbance</span>,</span></span>
 <span class="r-in"><span>                          startYear <span class="op">=</span> <span class="fl">2014</span>, Nchains <span class="op">=</span> <span class="fl">1</span>, Niter <span class="op">=</span> <span class="fl">100</span>, Nburn <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>                          Nthin <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>warning, low sample size of adult females in at least one year</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> using Kaplan-Meier survival model</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> using Binomial survival model</span>
 </code></pre></div>
     </div>
   </div>

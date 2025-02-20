@@ -58,9 +58,6 @@
       <a href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a>
     </li>
     <li>
-      <a href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a>
-    </li>
-    <li>
       <a href="../articles/UI_help.html">User Interface Help</a>
     </li>
   </ul>
@@ -115,109 +112,10 @@ integrates prior information from Johnson et al.’s (2020) national
 analysis of demographic-disturbance relationships with available local
 demographic data to project population growth. In addition, methods are
 provided for simulating local population dynamics and monitoring
-programs. These tools are also available through a shiny app described
-<a href="#Use-the-Bayesian-demographic-projection-app">below</a>.</p>
-<p>Boreal caribou monitoring programs typically involve marking caribou
-with telemetry GPS/VHF collars which are used to monitor caribou over
-time and detect the death of marked animals. This data is then used to
-estimate survival, while recruitment is estimated by locating collared
-individuals using aircraft and then surveying the entire group of
-caribou to estimate the ratio of cows:calves in the group. Because this
-estimate is based on more than just the sample of collared cows, the
-sample size for recruitment estimates is typically larger than for
-survival.</p>
-<div class="section level2">
-<h2 id="integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model">Integration of local demographic data and national
-disturbance-demographic relationships in a Bayesian population
-model<a class="anchor" aria-label="anchor" href="#integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model"></a>
-</h2>
-<p>Following Eacker et al. (2019), the observed number of calves
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>J</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\hat{J}_t</annotation></semantics></math>
-is a binomially distributed function of the observed number of adult
-female caribou
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>W</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\hat{W}_t</annotation></semantics></math>
-and the estimated recruitment rate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>t</mi></msub><annotation encoding="application/x-tex">R_t</annotation></semantics></math>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>J</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>∼</mo><mtext mathvariant="normal">Binomial</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>W</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mi>R</mi><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{J}_t \sim \text{Binomial}(\hat{W}_t,R_t).</annotation></semantics></math></p>
-<p>We model recruitment probability as a function of anthropogenic
-disturbance and fire with a log link (Dyson et al., 2022; Johnson et
-al., 2020; Stewart et al., 2023) and Gaussian distributed random year
-effect (Eacker et al., 2019):
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>R</mi><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msubsup><mi>β</mi><mn>0</mn><mi>R</mi></msubsup><mo>+</mo><msubsup><mi>β</mi><mi>a</mi><mi>R</mi></msubsup><msub><mi>A</mi><mi>t</mi></msub><mo>+</mo><msubsup><mi>β</mi><mi>f</mi><mi>R</mi></msubsup><msub><mi>F</mi><mi>t</mi></msub><mo>+</mo><msubsup><mi>ϵ</mi><mi>t</mi><mi>R</mi></msubsup><mo>;</mo><msubsup><mi>ϵ</mi><mi>t</mi><mi>R</mi></msubsup><mo>∼</mo><mtext mathvariant="normal">Normal</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><msubsup><mi>σ</mi><mi>R</mi><mn>2</mn></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log(R_t)=\beta^R_0+\beta^R_a A_t+\beta^R_f F_t+\epsilon^R_t; \epsilon^R_t
-\sim \text{Normal}(0,\sigma^2_{R}).</annotation></semantics></math>
-Estimated recruitment probability is adjusted for sex ratio and
-misidentification biases to get expected recruits per female:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mi>t</mi></msub><mo>=</mo><mrow><mi>c</mi><msub><mi>R</mi><mi>t</mi></msub><mi>/</mi><mn>2</mn></mrow><mo>;</mo><mi>c</mi><mo>=</mo><mfrac><mrow><mi>w</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>q</mi><mi>u</mi><mo>−</mo><mi>u</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>+</mo><mi>q</mi><mi>u</mi><mo>−</mo><mi>u</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>z</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">X_t={cR_t/2}; c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)}.</annotation></semantics></math>
-The composition survey bias correction term
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
-depends on the apparent number of adult females per collared animal
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>,
-the ratio of young bulls to adult females
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>,
-the probability of misidentifying young bulls as adult females and vice
-versa
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>,
-and the probability of missing a calf
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
-(see <code><a href="../reference/compositionBiasCorrection.html">compositionBiasCorrection()</a></code>).</p>
-<p>In the Bayesian model, prior uncertainty about the value of the bias
-correction term
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
-is approximated with a Log-normal distribution. Given the apparent
-number of adult females per collared animal
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>,
-the mean and standard deviation of 10,000 samples of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">\log{c}</annotation></semantics></math>
-is calculated with the default being to assume the ratio of young bulls
-to adult females
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>
-varies uniformly between 0 and 0.6, the adult misidentification
-probability
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
-varies uniformly between 0 and 0.2, and the probability of missing a
-calf
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
-varies uniformly between 0 and 0.2 (see <code><a href="../reference/getPriors.html">getPriors()</a></code>).</p>
-<p>Also following Eacker et al. (2019), Kaplan-Meier estimates of
-observed adult female survival probability
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>S</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\hat{S}_t</annotation></semantics></math>
-and associated precisions
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>τ</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\tau_t</annotation></semantics></math>
-are estimated from known-fate radio collar data using the <a href="https://CRAN.R-project.org/package=survival" class="external-link">survival</a> package,
-with precisions for years with no observed mortality estimated using a
-separate Bayesian model. Observed estimated survival is a Gaussian
-distributed function of the true survival probability:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><msub><mi>S</mi><mi>t</mi></msub><mo accent="true">̂</mo></mover><mo>∼</mo><mtext mathvariant="normal">Normal</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo>,</mo><mn>1</mn><mi>/</mi><msub><mi>τ</mi><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{S_t} \sim \text{Normal}(S_t,1/\tau_t).</annotation></semantics></math>
-As in the national demographic model, we model survival probability as
-an adjusted function of buffered anthropogenic disturbance
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>A</mi><mi>t</mi></msub><annotation encoding="application/x-tex">A_t</annotation></semantics></math>
-with a log link (Dyson et al., 2022; Johnson et al., 2020; Stewart et
-al., 2023) and Gaussian distributed random year effect (Eacker et al.,
-2019):
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><mtext mathvariant="normal">min</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mn>46</mn><mover><msub><mi>S</mi><mi>t</mi></msub><mo accent="true">̃</mo></mover><mo>−</mo><mn>0.5</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>45</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>;</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mover><msub><mi>S</mi><mi>t</mi></msub><mo accent="true">̃</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msubsup><mi>β</mi><mn>0</mn><mi>S</mi></msubsup><mo>+</mo><msubsup><mi>β</mi><mi>a</mi><mi>S</mi></msubsup><msub><mi>A</mi><mi>t</mi></msub><mo>+</mo><msubsup><mi>ϵ</mi><mi>t</mi><mi>S</mi></msubsup><mo>;</mo><msubsup><mi>ϵ</mi><mi>t</mi><mi>S</mi></msubsup><mo>∼</mo><mtext mathvariant="normal">Normal</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><msubsup><mi>σ</mi><mi>S</mi><mn>2</mn></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">S_t=\text{min}(46 \tilde{S_t}-0.5)/45,1); \log(\tilde{S_t})=\beta^S_0+\beta^S_a A_t+\epsilon^S_t; \epsilon^S_t \sim \text{Normal}(0,\sigma^2_{S}).</annotation></semantics></math>
-To handle cases in which there is little or no survival data, we also
-implemented an alternative parametric exponential survival model,
-wherein the observed state (alive or dead,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>I</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>,</mo><mi>m</mi></mrow></msub><annotation encoding="application/x-tex">\hat{I}_{i,t,m}</annotation></semantics></math>)
-of an individual animal
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-in year
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
-and month
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
-is Bernoulli distributed (Schaub and Kery, 2021):
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>I</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>,</mo><mi>m</mi></mrow></msub><mo>∼</mo><mtext mathvariant="normal">Bernoulli</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>S</mi><mi>t</mi><mrow><mn>1</mn><mi>/</mi><mn>12</mn></mrow></msubsup><msub><mover><mi>I</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>,</mo><mi>m</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{I}_{i,t,m} \sim \text{Bernoulli}(S^{1/12}_t\hat{I}_{i,t,m-1}).</annotation></semantics></math>
-The exponential survival method can be used in all cases instead of the
-Kaplan-Meier method by setting
-<code>survAnalysisMethod = "Exponential"</code>.</p>
-<p>All regression coefficients are assumed to be Gaussian distributed,
-with priors derived from the expected values and 95% confidence
-intervals estimated by Johnson et al (2020)
-(<code>popGrowthTableJohnsonECCC</code>). We calibrated the prior
-distributions so that the 95% prior prediction intervals for survival
-and recruitment from the Bayesian model match the range between the 2.5%
-and 97.5% quantiles of 1000 simulated survival and recruitment
-trajectories (see <code><a href="../reference/getPriors.html">getPriors()</a></code>).</p>
+programs.</p>
+<p>The model is described in Hughes et al. Integration of national
+demographic-disturbance relationships and local data can improve caribou
+population viability projections and inform monitoring decisions.</p>
 <div class="section level3">
 <h3 id="using-real-observed-data">Using real observed data<a class="anchor" aria-label="anchor" href="#using-real-observed-data"></a>
 </h3>
@@ -262,7 +160,7 @@ over the next 20 years.</p>
 <span>                              disturbance <span class="op">=</span> <span class="va">distObs</span>, </span>
 <span>                              <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>                              Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mod_real</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 2</span></span>
@@ -272,12 +170,12 @@ over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 25</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:13] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpImwLKJ/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpLyoCc9/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
 <span><span class="co">#&gt;  $ inData:List of 3</span></span>
-<span><span class="co">#&gt;   ..$ survDataIn   :'data.frame':    35 obs. of  8 variables:</span></span>
+<span><span class="co">#&gt;   ..$ survDataIn   : tibble [35 × 16] (S3: tbl_df/tbl/data.frame)</span></span>
 <span><span class="co">#&gt;   ..$ disturbanceIn:'data.frame':    35 obs. of  6 variables:</span></span>
 <span><span class="co">#&gt;   ..$ ageRatioIn   :'data.frame':    70 obs. of  4 variables:</span></span></code></pre></div>
 <p>The returned object contains an <code>rjags</code> object and a list
@@ -290,10 +188,10 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;  $ rr.summary.all:'data.frame':  175 obs. of  13 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year            : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
 <span><span class="co">#&gt;   ..$ Parameter       : chr [1:175] "Adult female survival" "Adjusted recruitment" "Population growth rate" "Female population size" ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.876 0.215 1.075 1000 0.414 ...</span></span>
-<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.038 0.023 0.022 0 0.027 ...</span></span>
-<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.787 0.176 1.03 1000 0.366 ...</span></span>
-<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.93 0.26 1.112 1000 0.465 ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:175] 0.857 0.215 1.047 1000 0.409 ...</span></span>
+<span><span class="co">#&gt;   ..$ SD              : num [1:175] 0.027 0.026 0.019 0 0.037 ...</span></span>
+<span><span class="co">#&gt;   ..$ Lower 95% CRI   : num [1:175] 0.791 0.17 1.011 1000 0.347 ...</span></span>
+<span><span class="co">#&gt;   ..$ Upper 95% CRI   : num [1:175] 0.902 0.265 1.082 1000 0.485 ...</span></span>
 <span><span class="co">#&gt;   ..$ probViable      : num [1:175] NA NA 1 NA NA NA 1 NA NA NA ...</span></span>
 <span><span class="co">#&gt;   ..$ X               : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ Anthro          : int [1:175] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
@@ -302,17 +200,17 @@ using <code><a href="../reference/getOutputTables.html">getOutputTables()</a></c
 <span><span class="co">#&gt;   ..$ time            : int [1:175] 1 1 1 1 1 2 2 2 2 2 ...</span></span>
 <span><span class="co">#&gt;   ..$ param           : chr [1:175] "observed" "observed" "observed" "observed" ...</span></span>
 <span><span class="co">#&gt;  $ sim.all       : NULL</span></span>
-<span><span class="co">#&gt;  $ obs.all       :'data.frame':  70 obs. of  10 variables:</span></span>
-<span><span class="co">#&gt;   ..$ Year            : num [1:70] 2009 2009 2010 2010 2011 ...</span></span>
-<span><span class="co">#&gt;   ..$ Mean            : num [1:70] 0.446 0.817 0.857 0.319 0.833 ...</span></span>
-<span><span class="co">#&gt;   ..$ parameter       : chr [1:70] "Recruitment" "Adult female survival" "Adult female survival" "Recruitment" ...</span></span>
-<span><span class="co">#&gt;   ..$ type            : chr [1:70] "observed" "observed" "observed" "observed" ...</span></span>
-<span><span class="co">#&gt;   ..$ X               : int [1:70] 1 1 2 2 3 3 4 4 5 5 ...</span></span>
-<span><span class="co">#&gt;   ..$ Anthro          : int [1:70] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
-<span><span class="co">#&gt;   ..$ fire_excl_anthro: num [1:70] 0 0 0 0 0 ...</span></span>
-<span><span class="co">#&gt;   ..$ Total_dist      : num [1:70] 0 0 0 0 0 ...</span></span>
-<span><span class="co">#&gt;   ..$ time            : int [1:70] 1 1 2 2 3 3 4 4 5 5 ...</span></span>
-<span><span class="co">#&gt;   ..$ param           : chr [1:70] "observed" "observed" "observed" "observed" ...</span></span>
+<span><span class="co">#&gt;  $ obs.all       :'data.frame':  55 obs. of  10 variables:</span></span>
+<span><span class="co">#&gt;   ..$ Year            : num [1:55] 2009 2010 2011 2012 2013 ...</span></span>
+<span><span class="co">#&gt;   ..$ Mean            : num [1:55] 0.446 0.319 0.375 0.452 0.333 ...</span></span>
+<span><span class="co">#&gt;   ..$ parameter       : chr [1:55] "Recruitment" "Recruitment" "Recruitment" "Recruitment" ...</span></span>
+<span><span class="co">#&gt;   ..$ type            : chr [1:55] "observed" "observed" "observed" "observed" ...</span></span>
+<span><span class="co">#&gt;   ..$ X               : int [1:55] 1 2 3 4 5 6 7 8 9 10 ...</span></span>
+<span><span class="co">#&gt;   ..$ Anthro          : int [1:55] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ fire_excl_anthro: num [1:55] 0.00 0.00 0.00 0.00 2.91e-05 ...</span></span>
+<span><span class="co">#&gt;   ..$ Total_dist      : num [1:55] 0.00 0.00 0.00 0.00 2.91e-05 ...</span></span>
+<span><span class="co">#&gt;   ..$ time            : int [1:55] 1 2 3 4 5 6 7 8 9 10 ...</span></span>
+<span><span class="co">#&gt;   ..$ param           : chr [1:55] "observed" "observed" "observed" "observed" ...</span></span>
 <span><span class="co">#&gt;  $ ksDists       :'data.frame':  175 obs. of  4 variables:</span></span>
 <span><span class="co">#&gt;   ..$ Year      : int [1:175] 2009 2009 2009 2009 2009 2010 2010 2010 2010 2010 ...</span></span>
 <span><span class="co">#&gt;   ..$ Parameter : chr [1:175] "Adult female survival" "Adjusted recruitment" "Population growth rate" "Female population size" ...</span></span>
@@ -353,115 +251,9 @@ population’s response to anthropogenic disturbance is completely
 determined by the national model since there was 0% disturbance during
 the observation period.</p>
 </div>
-</div>
 <div class="section level2">
 <h2 id="simulation-of-local-population-dynamics-and-monitoring">Simulation of local population dynamics and monitoring<a class="anchor" aria-label="anchor" href="#simulation-of-local-population-dynamics-and-monitoring"></a>
 </h2>
-<p>To simulate plausible demographic trajectories for example
-populations we used a modified version of Johnson et al’s (2020)
-two-stage demographic model described by Dyson et al. (2022). The true
-number of post-juvenile females that survive from year
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
-to the census,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\dot{W}_t</annotation></semantics></math>,
-is binomially distributed with true survival probability
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>S</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\dot{S}_t</annotation></semantics></math>:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>∼</mo><mtext mathvariant="normal">Binomial</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>N</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mover><mi>S</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\dot{W}_{t} \sim \text{Binomial}(\dot{N}_t,\dot{S}_t)</annotation></semantics></math>.
-Maximum potential recruitment rate is adjusted for sex ratio,
-misidentification biases and (optionally) delayed age at first
-reproduction (DeCesare et al., 2012; Eacker et al., 2019):
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>X</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>=</mo><mfrac><mrow><mi>c</mi><msub><mover><mi>R</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mi>/</mi><mn>2</mn></mrow><mrow><mn>1</mn><mo>+</mo><mi>c</mi><msub><mover><mi>R</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mi>/</mi><mn>2</mn></mrow></mfrac><mo>;</mo><mi>c</mi><mo>=</mo><mfrac><mrow><mi>w</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>q</mi><mi>u</mi><mo>−</mo><mi>u</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>w</mi><mo>+</mo><mi>q</mi><mi>u</mi><mo>−</mo><mi>u</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>z</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">\dot{X}_t=\frac{c\dot{R}_t/2}{1+c\dot{R}_t/2};c=\frac{w(1+qu-u)}{(w+qu-u)(1-z)}, </annotation></semantics></math>
-where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>
-is a multiplier that defines the apparent number of adult females in the
-composition survey as a function of the number of collared animals,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>
-is the ratio of young bulls to adult females,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
-is the probability of misidentifying young bulls as adult females and
-vice versa, and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
-is the probability of missing a calf.</p>
-<p>Realized recruitment rate varies with population density (Lacy et
-al., 2017), and the number of juveniles recruiting to the post-juvenile
-class at the census is a binomially distributed function of the number
-of surviving post-juvenile females and the adjusted recruitment rate:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>J</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>∼</mo><mtext mathvariant="normal">Binomial</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mover><mi>X</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>p</mi><mn>0</mn></msub><mo>−</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>0</mn></msub><mo>−</mo><msub><mi>p</mi><mi>k</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mrow><msub><mi>N</mi><mn>0</mn></msub><mi>k</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>b</mi></msup><mo stretchy="true" form="postfix">]</mo></mrow><mfrac><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mrow><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>+</mo><mi>a</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\dot{J}_{t} \sim \text{Binomial}(\dot{W}_t,\dot{X}_t[p_0-(p_0-p_k)(\frac{\dot{W}_t}{N_0k})^b]\frac{\dot{W}_t}{\dot{W}_t+a}).</annotation></semantics></math>
-Given default parameters, recruitment rate is lowest
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.5</mn><msub><mover><mi>X</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0.5\dot{X}_t)</annotation></semantics></math>
-when
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>N</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\dot{N}_t=1</annotation></semantics></math>,
-approaches a maximum of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>X</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\dot{X}_t</annotation></semantics></math>
-at intermediate population sizes, and declines to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.6</mn><msub><mover><mi>X</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">0.6\dot{X}_t</annotation></semantics></math>
-as the population reaches carrying capacity of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">k=100</annotation></semantics></math>
-times the initial population size. The post-juvenile female population
-in the next year includes both survivors and new recruits:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>N</mi><mo accent="true">̇</mo></mover><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mtext mathvariant="normal">min</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>+</mo><msub><mover><mi>J</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mi>r</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><msub><mover><mi>N</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)</annotation></semantics></math>.</p>
-<p>Interannual variation in survival and recruitment is modelled using
-truncated beta distributions (rtrunc function; Novomestky and Nadarajah
-(2016)):
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>R</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>∼</mo><mtext mathvariant="normal">TruncatedBeta</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>R</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mi>ν</mi><mi>R</mi></msub><mo>,</mo><msub><mi>l</mi><mi>R</mi></msub><mo>,</mo><msub><mi>h</mi><mi>R</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>;</mo><msub><mover><mi>S</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>∼</mo><mtext mathvariant="normal">TruncatedBeta</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>S</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mi>ν</mi><mi>S</mi></msub><mo>,</mo><msub><mi>l</mi><mi>S</mi></msub><mo>,</mo><msub><mi>h</mi><mi>S</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\dot{R}_t \sim \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim \text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)</annotation></semantics></math>.
-Coefficients of variation among years
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>ν</mi><mi>R</mi></msub><mo>,</mo><msub><mi>ν</mi><mi>S</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(\nu_R,\nu_S)</annotation></semantics></math>
-and maximum/minimum values
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mi>R</mi></msub><mo>,</mo><msub><mi>h</mi><mi>R</mi></msub><mo>,</mo><msub><mi>l</mi><mi>S</mi></msub><mo>,</mo><msub><mi>h</mi><mi>S</mi></msub></mrow><annotation encoding="application/x-tex">l_R,h_R,l_S,h_S</annotation></semantics></math>
-for recruitment and survival have default values set in
-<code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code>. Expected recruitment
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>R</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\bar{R}_t</annotation></semantics></math>)
-and survival
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>S</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\bar{S}_t</annotation></semantics></math>)
-vary with disturbance according the beta regression models estimated by
-Johnson et al. (2020:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>R</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>∼</mo><mi>B</mi><mi>e</mi><mi>t</mi><mi>a</mi><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>μ</mi><mi>t</mi><mi>R</mi></msubsup><mo>,</mo><msup><mi>ϕ</mi><mi>R</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>μ</mi><mi>t</mi><mi>R</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mover><msubsup><mi>β</mi><mn>0</mn><mi>R</mi></msubsup><mo accent="true">̇</mo></mover><mo>+</mo><mover><msubsup><mi>β</mi><mi>a</mi><mi>R</mi></msubsup><mo accent="true">̇</mo></mover><msub><mi>A</mi><mi>t</mi></msub><mo>+</mo><msubsup><mover><mi>β</mi><mo accent="true">̇</mo></mover><mi>f</mi><mi>R</mi></msubsup><msub><mi>F</mi><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex"> \bar{R}_t \sim Beta(\mu^R_t,\phi^R);log(\mu^R_t)=\dot{\beta^R_0}+\dot{\beta^R_a}A_t+\dot{\beta}^R_fF_t,</annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>S</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>∼</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>46</mn><mo>×</mo><mi>B</mi><mi>e</mi><mi>t</mi><mi>a</mi><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>μ</mi><mi>t</mi><mi>S</mi></msubsup><mo>,</mo><msup><mi>ϕ</mi><mi>S</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mn>0.5</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>45</mn><mo>;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>μ</mi><mi>t</mi><mi>S</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mover><msubsup><mi>β</mi><mn>0</mn><mi>S</mi></msubsup><mo accent="true">̇</mo></mover><mo>+</mo><mover><msubsup><mi>β</mi><mi>a</mi><mi>S</mi></msubsup><mo accent="true">̇</mo></mover><msub><mi>A</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar{S}_t \sim (46\times Beta(\mu^S_t,\phi^S)-0.5)/45;log(\mu^S_t)=\dot{\beta^S_0}+\dot{\beta^S_a}A_t.</annotation></semantics></math><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>ϕ</mi><mi>R</mi></msup><mo>∼</mo><mtext mathvariant="normal">Normal</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mn>19.862</mn><mo>,</mo><mn>2.229</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\phi^R \sim \text{Normal}(19.862,2.229)</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>ϕ</mi><mi>S</mi></msup><mo>∼</mo><mtext mathvariant="normal">Normal</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mn>63.733</mn><mo>,</mo><mn>8.311</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\phi^S \sim \text{Normal}(63.733,8.311)</annotation></semantics></math>
-are precisions of the Beta distributed errors (Ferrari and Cribari-Neto,
-2004). At the beginning of a simulation for an example population,
-regression coefficient values are sampled from Gaussian distributions
-(see <code><a href="../reference/demographicRates.html">demographicRates()</a></code>) and the population is assigned to
-quantiles of the Beta error distributions for survival and recruitment.
-The population remains in these quantiles as disturbance changes over
-time, so there is substantial persistent variation in recruitment and
-survival among example populations.</p>
-<div class="section level3">
-<h3 id="observed-survival-of-collared-animals">Observed survival of collared animals<a class="anchor" aria-label="anchor" href="#observed-survival-of-collared-animals"></a>
-</h3>
-<p>In our simulated populations, mortality risk does not vary over time
-or among individuals, so the observed state (dead or alive) of a
-collared animal
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-in month
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
-and year
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
-depends on the true survival rate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>S</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\dot{S}_t</annotation></semantics></math>
-as follows:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>I</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>,</mo><mi>m</mi></mrow></msub><mo>∼</mo><mtext mathvariant="normal">Bernoulli</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mover><mi>S</mi><mo accent="true">̇</mo></mover><mi>t</mi><mrow><mn>1</mn><mi>/</mi><mn>12</mn></mrow></msubsup><msub><mover><mi>I</mi><mo accent="true">̂</mo></mover><mrow><mi>i</mi><mo>,</mo><mi>t</mi><mo>,</mo><mi>m</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{I}_{i,t,m} \sim \text{Bernoulli}(\dot{S}^{1/12}_t\hat{I}_{i,t,m-1}).</annotation></semantics></math></p>
-</div>
-<div class="section level3">
-<h3 id="observed-recruitment-from-composition-surveys">Observed recruitment from composition surveys<a class="anchor" aria-label="anchor" href="#observed-recruitment-from-composition-surveys"></a>
-</h3>
-<p>The number of cows in the composition survey
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>W</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\hat{W}_t</annotation></semantics></math>
-is given by the number of collared cows
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>T</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\hat{T}_t</annotation></semantics></math>
-and the apparent number of adult females per collared female observed in
-the composition survey
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>W</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>=</mo><mi>w</mi><msub><mover><mi>T</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{W}_t = w\hat{T}_t.</annotation></semantics></math>
-The number of observed calves
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>J</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\hat{J}_t</annotation></semantics></math>
-also depends on the unadjusted apparent recruitment for the population
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>R</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\dot{R}_t</annotation></semantics></math>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>J</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>∼</mo><mtext mathvariant="normal">Binomial</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>W</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mover><mi>R</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{J}_t \sim \text{Binomial}(\hat{W}_t,\dot{R}_t).</annotation></semantics></math></p>
-</div>
-<div class="section level3">
-<h3 id="using-simulated-observed-data">Using simulated observed data<a class="anchor" aria-label="anchor" href="#using-simulated-observed-data"></a>
-</h3>
 <p>To run the simulations we need to supply parameters that determine
 the disturbance scenario, the trajectory of the true population relative
 to the national model mean, and the collaring program details. All these
@@ -511,7 +303,6 @@ parameter.</p>
 <p><img src="BayesianDemographicProjection_files/figure-html/sim-obs-1.png" width="672"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span></span>
 <span><span class="va">sim_obs</span><span class="op">$</span><span class="va">simSurvObs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Year</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>ncollar <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, ndeaths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">event</span><span class="op">)</span>, </span>
 <span>            ndropped <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">exit</span> <span class="op">==</span> <span class="fl">5</span> <span class="op">&amp;</span> <span class="va">event</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span>,</span>
@@ -544,10 +335,7 @@ see how well our monitoring program captured the true population.</p>
 <span>                              disturbance <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">simDisturbance</span>, </span>
 <span>                              <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>                              Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianPM(survData = sim_obs$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; sim_obs$ageRatioOut, : warning, low sample size of adult females in at least</span></span>
-<span><span class="co">#&gt; one year</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
 <span></span>
 <span><span class="va">mod_sim_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">mod_sim</span>, exData <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">exData</span>, </span>
 <span>                               paramTable <span class="op">=</span> <span class="va">sim_obs</span><span class="op">$</span><span class="va">paramTable</span>,</span>
@@ -565,7 +353,6 @@ see how well our monitoring program captured the true population.</p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $`Population growth rate`</span></span></code></pre>
 <p><img src="BayesianDemographicProjection_files/figure-html/mod-sim-obs-3.png" width="672"></p>
-</div>
 <div class="section level3">
 <h3 id="comparing-many-scenarios">Comparing many scenarios<a class="anchor" aria-label="anchor" href="#comparing-many-scenarios"></a>
 </h3>
@@ -587,24 +374,15 @@ see how well our monitoring program captured the true population.</p>
 <span>  <span class="va">scns</span>, <span class="va">eParsIn</span>, <span class="va">simBig</span>, getKSDists <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
 <span>  Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
-<span><span class="co">#&gt; Warning in caribouBayesianPM(survData = oo$simSurvObs, ageRatio =</span></span>
-<span><span class="co">#&gt; oo$ageRatioOut, : warning, low sample size of adult females in at least one</span></span>
-<span><span class="co">#&gt; year</span></span>
-<span><span class="co">#&gt; using Kaplan-Meier survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
+<span><span class="co">#&gt; using Binomial survival model</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">scResults</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span>, <span class="st">"Population growth rate"</span><span class="op">)</span>, </span>
@@ -639,22 +417,18 @@ details.</p>
 <p>The national model results are cached if the default values are used.
 This cache can be updated by running
 <code>getSimsNational(forceUpdate = TRUE)</code></p>
-</div>
-<div class="section level2">
-<h2 id="use-the-bayesian-demographic-projection-app">Use the Bayesian demographic projection app<a class="anchor" aria-label="anchor" href="#use-the-bayesian-demographic-projection-app"></a>
-</h2>
-<p>In addition to performing Bayesian demographic projections in R you
-can also use our shiny app to run similar analyses from a Graphical User
-Interface. To launch the app you will first need to install the package
-from GitHub.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"LandSciTech/BayesianCaribouDemographicProjection"</span><span class="op">)</span></span></code></pre></div>
-<p>Then you can call <code><a href="../reference/demographicProjectionApp.html">demographicProjectionApp()</a></code> to launch
-the app in your default browser. The app includes options to modify the
-disturbance scenario, the simulated observations and the model priors
-similar to those described above. Detailed instructions are included on
-the first page.</p>
+<!--
+## Use the Bayesian demographic projection app
+
+In addition to performing Bayesian demographic projections in R you can also use our shiny app to run similar analyses from a Graphical User Interface. To launch the app you will first need to install the package from GitHub.
+
+
+``` r
+#install.packages("remotes")
+remotes::install_github("LandSciTech/BayesianCaribouDemographicProjection")
+```
+
+Then you can call `demographicProjectionApp()` to launch the app in your default browser. The app includes options to modify the disturbance scenario, the simulated observations and the model priors similar to those described above. Detailed instructions are included on the first page. -->
 </div>
   </div>
 
