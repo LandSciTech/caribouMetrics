@@ -91,19 +91,19 @@ demRates <- demographicRates(covTable = disturb_tbl,
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05848277
+#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05241465
 #>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7382298 0.9355214 0.1813372 0.08566332 0.05688173 0.3502751
+#> 1 0.7565716 0.9248297 0.1813372 0.09978929 0.04519307 0.3927806
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
 popGrow
-#>     N0    lambda   N       R_t        X_t       S_t n_recruits
-#> 1 2000 0.9273454 440 0.1822609 0.09113044 0.8359903         27
+#>     N0 lambdaTrue    lambda   N        R_t        X_t       S_t n_recruits
+#> 1 2000  0.8975009 0.9247487 230 0.06236733 0.03118367 0.9610701          3
 #>   surviving_adFemales
-#> 1                 413
+#> 1                 227
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(
@@ -122,10 +122,9 @@ ipm <- caribouBayesianPM(simObs$simSurvObs, simObs$ageRatioOut,
                           simObs$simDisturbance,
                           # only set to speed up vignette. Normally keep defaults.
                           Niter = 150, Nburn = 100)
-#> using Kaplan-Meier survival model
+#> using Binomial survival model
 
 natSim <- getSimsNational(Anthro = unique(simObs$simDisturbance$Anthro))
-#> Warning: Setting expected survival S_bar to be between l_S and h_S.
 
 ipmTbls <- getOutputTables(ipm, paramTable = simObs$paramTable, 
                             exData = simObs$exData, 
@@ -165,14 +164,6 @@ carHab1 <- caribouHabitat(
 
 # plot the results
 plot(carHab1)
-#> The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
-#> which was just loaded, will retire in October 2023.
-#> Please refer to R-spatial evolution reports for details, especially
-#> https://r-spatial.org/r/2023/05/15/evolution4.html.
-#> It may be desirable to make the sf package available;
-#> package maintainers should consider adding sf to Suggests:.
-#> The sp package is now running under evolution status 2
-#>      (status 2 uses the sf package in place of rgdal)
 ```
 
 <img src="man/figures/README-example-4.png" width="100%" />
@@ -197,14 +188,13 @@ and the following articles/vignettes/tutorials:
   Metrics**](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html):
   Calculate buffered anthropogenic disturbance and fire disturbance
   percentages for a given area.
-- [**Ontario Habitat
-  Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html):
-  Calculate caribou habitat use with Ontario RSF models.
 - [**User Interface
   Help**](https://landscitech.github.io/caribouMetrics/articles/UI_help.html):
   Instructions for using the SyncroSim user interface for integrating
   SpaDES, LandR and FireSense projections with caribou habitat and
   demographic models (WIP)
+
+<!-- * [**Ontario Habitat Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html): Calculate caribou habitat use with Ontario RSF models. -->
 
 ## Getting help
 
