@@ -185,7 +185,7 @@ plotRes(scResults,
 ```
 
 ### Modifying Bayesian model priors
-By default `caribouBayesianPM()` calls `getPriors()` internally to set the priors for the Bayesian model based on the national model and default uncertainty modifiers that have been calibrated to fit the national model while allowing for deviations based on local data. The parameters to `getPriors()` affect the level of uncertainty around the coefficients from the national model. If uncertainty in the national model is higher then the projections can deviate more from the national model if the observed data does. See `getPriors()` for details.  
+By default `caribouBayesianPM()` calls `getPriors()` internally to set the priors for the Bayesian model based on the national model and default uncertainty modifiers that have been calibrated to fit the national model while allowing for deviations based on local data. See `getPriors()` for details.  
 
 ## Troubleshooting
 The national model results are cached if the default values are used. This cache can be updated by running `getSimsNational(forceUpdate = TRUE)`
