@@ -4,17 +4,15 @@ test_that("works with defaults", {
                               cowMult = 3)
   simO <- simulateObservations(scns)
   
-  out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+  out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
                     disturbance = simO$simDisturbance,
-                    Nchains = 1, Niter = 100, Nburn = 10,
-                    Nthin = 2)
+                    niters=100)
   
   # error when result has different startYear from argument
   expect_error(getOutputTables(out, startYear = 2009, endYear = 2023), 
                "different length")
 
-  expect_type(getOutputTables(out, simInitial = getSimsInitial(),
-                              getKSDists = FALSE), 
+  expect_type(getOutputTables(out, simInitial = getSimsInitial()), 
               "list")
 })
 
@@ -24,33 +22,31 @@ test_that("decimals in observed disturbance work", {
                               collarCount = 20, cowMult = 3)
   simO <- simulateObservations(scns)
   
-  out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+  out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
                             disturbance = simO$simDisturbance,
-                            Nchains = 1, Niter = 100, Nburn = 10,
-                            Nthin = 2)
+                            niters=100)
   
   expect_message(
     getOutputTables(
       out, exData = simO$exData, paramTable = simO$paramTable,
-      simInitial = getSimsInitial(), getKSDists = FALSE),
+      simInitial = getSimsInitial()),
     "recalculating")
              
 })
 
 test_that("works with out sim obs",{
-  mod_real <- caribouBayesianPM(Niter = 100, Nburn = 10)
+  mod_real <- caribouBayesianPM(niters=100)
   
   
   mod_tbl <- getOutputTables(mod_real,
-                             simInitial = getSimsInitial(),
-                             getKSDists = FALSE)
+                             simInitial = getSimsInitial())
   
   expect_type(mod_tbl, "list")
   
 })
 
 test_that("works with out simInitial", {
-  mod_real <- caribouBayesianPM(Niter = 100, Nburn = 10)
+  mod_real <- caribouBayesianPM(niters=100)
   
   
   mod_tbl <- getOutputTables(mod_real)

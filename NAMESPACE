@@ -2,10 +2,12 @@
 
 export(CaribouHabitat)
 export(DisturbanceMetrics)
+export(bbouMakeSummaryTable)
 export(calcBinaryUse)
 export(caribouBayesianPM)
 export(caribouHabitat)
 export(caribouPopGrowth)
+export(caribouPopSimMCMC)
 export(compositionBiasCorrection)
 export(demographicCoefficients)
 export(demographicProjectionApp)

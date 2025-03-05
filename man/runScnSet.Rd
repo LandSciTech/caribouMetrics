@@ -8,10 +8,10 @@ runScnSet(
   scns,
   ePars,
   simInitial,
-  getKSDists = TRUE,
   printProgress = FALSE,
-  Niter = formals(caribouBayesianPM)$Niter,
-  Nburn = formals(caribouBayesianPM)$Nburn
+  betaPriors = "default",
+  niters = formals(bboutools::bb_fit_survival)$niters,
+  ...
 )
 }
 \arguments{
@@ -24,14 +24,12 @@ runScnSet(
 \item{simInitial}{Initial simulation results, produced by calling
 \code{\link[=getSimsInitial]{getSimsInitial()}}}
 
-\item{getKSDists}{logical. Should Kolmogorov–Smirnov distances be calculated?}
-
 \item{printProgress}{logical. Should the scenario number and parameters be
 printed at each step?}
 
-\item{Niter}{Number of iterations for the MCMC algorithm.}
+\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}.}
 
-\item{Nburn}{Length of burn-in for the MCMC algorithm.}
+\item{niters}{A whole number of the number of iterations per chain after thinning and burn-in.}
 }
 \value{
 A list similar to \code{\link[=getOutputTables]{getOutputTables()}} where tables for each scenario
@@ -51,14 +49,14 @@ scns <- expand.grid(
 )
 
 eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
-scResults <- runScnSet(scns, eParsIn, getSimsInitial(), getKSDists = FALSE,
-                       # only set to speed up example. Normally keep defaults.
-                       Niter = 10, Nburn = 2)
+scResults <- runScnSet(scns, eParsIn, getSimsInitial(),
+                       niters = 10)# only set to speed up example. Normally keep defaults.
 }
 \seealso{
 Caribou demography functions:
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},

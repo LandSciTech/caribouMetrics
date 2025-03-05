@@ -24,6 +24,7 @@ if(FALSE){
 Caribou demography functions:
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicRates}()},

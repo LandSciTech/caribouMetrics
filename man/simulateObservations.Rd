@@ -13,6 +13,9 @@ simulateObservations(
   collarOffTime = 4,
   collarOnTime = 4,
   caribouYearStart = 4,
+  recSurveyDay = 15,
+  recSurveyMonth = 3,
+  distScen = NULL,
   writeFilesDir = NULL
 )
 }
@@ -45,7 +48,16 @@ in that year.}
 \item{collarOnTime}{integer. Month that collars are deployed. A number from 1
 (January) to 12 (December)}
 
-\item{writeFilesDir}{character. If not NULL \code{simSurvObs} and \code{ageRatioOut}
+\item{caribouYearStart}{integer. The first month of the year for caribou.}
+
+\item{distScen}{data.frame. Disturbance scenario. Must have columns "Year",
+"Anthro", and "fire_excl_anthro" containing the year, percentage of the
+landscape covered by anthropogenic disturbance buffered by 500 m, and the
+percentage covered by fire that does not overlap anthropogenic disturbance.
+See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturbance scenario is simulated
+based on \code{paramTable}}
+
+\item{writeFilesDir}{character. If not NULL \code{simSurvObs} and \code{simRecruitObs}
 results will be saved to csv files in the directory provided}
 
 \item{printPlot}{logical. print a plot of the true population trajectory?}
@@ -55,8 +67,9 @@ a list with elements:
 \itemize{
 \item minYr: first year in the simulations,
 \item maxYr: last year in the simulations,
+\item simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
 \item simSurvObs: a data frame of survival data in bboutools format,
-\item ageRatioOut: a data frame of recruitment data in bboutools format,
+\item simRecruitObs: a data frame of recruitment data in bboutools format,
 \item exData: a tibble of expected population metrics based on the initial model,
 \item paramTable: a data frame recording the input parameters for the simulation.
 }
@@ -82,6 +95,7 @@ simO <- simulateObservations(scns)
 Caribou demography functions:
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},

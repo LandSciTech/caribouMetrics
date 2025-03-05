@@ -16,15 +16,17 @@ if(file.exists("inst/extdata/simsInitiald.rds")){
   assign("bbouResults", bbouResults, envir = cacheEnv)
 }
 
-#' Get a set of simulation results from the initial demographic model
+#' Get a set of simulation results from fitted demographic models
 #'
 #' @param bbouResults Fitted bboutools model and summary table created by bbouMakeSummaryTable(), 
 #'   or a path to those results.
+#' @param N0 initial population size. If NULL, will use information in bbouResults.
+#' @param cPars ptional. Parameters for calculating composition survey bias term.
 #' @param forceUpdate logical. If the default inputs are used the result is
 #'   cached. Set `forceUpdate` to TRUE to ensure the simulations are re-run.
+#' @param skipSave logical. If F default consider saved results. Set T to ignore the saved file.
+#' @param returnSamples logical. If T default return example trajectories. Set F to return only summaries.
 #' @inheritParams caribouPopGrowth
-#' @param N0 initial population size. If NULL, will use information in bbouResults.
-#' @param cPars optional. Parameters for calculating composition survey bias term.
 #'
 #' @return a list with two elements:
 #'  * summary: a tibble with a summary of parameter values for each scenario.
@@ -39,26 +41,27 @@ if(file.exists("inst/extdata/simsInitiald.rds")){
 #' @examples
 #' getSimsInitial()
 getSimsInitial <- function(bbouResults, N0=NULL,
-                            cPars=getScenarioDefaults(), forceUpdate = F,...) {
+                            cPars=getScenarioDefaults(), forceUpdate = F,skipSave=F,returnSamples=T,...) {
   doSave <- FALSE
 
-  check <- as.list(match.call())
+  if(!skipSave){
+    check <- as.list(match.call())
+    
+    saveName <- "simsInitial"
+    
+    if (length(check) == 1) {
+      if (exists(saveName, envir=cacheEnv)) {
+        message("Using saved object")
+        return(get(saveName, envir=cacheEnv))
+      } else {
+        doSave <- TRUE
+      }
+    }
+    check$forceUpdate <- NULL
 
-  saveName <- "simsInitial"
-
-  if (length(check) == 1) {
-    if (exists(saveName, envir=cacheEnv)) {
-      message("Using saved object")
-      return(get(saveName, envir=cacheEnv))
-    } else {
+    if (forceUpdate & (length(check) == 1)) {
       doSave <- TRUE
     }
-  }
-
-  check$forceUpdate <- NULL
-
-  if (forceUpdate & (length(check) == 1)) {
-    doSave <- TRUE
   }
   
   #bbouResults = bbouResultFile
@@ -67,9 +70,13 @@ getSimsInitial <- function(bbouResults, N0=NULL,
   }
   
   if(is.null(N0)){
-    N0 <- subset(bbouResults$parTab,selec=c(pop_name,N0))
+    N0 <- subset(bbouResults$parTab,select=c(pop_name,N0))
   }
-
+  if(length(N0)==1){
+    N0 = data.frame(N0=N0)
+    N0 = merge(N0,subset(bbouResults$parTab,select=c(pop_name)))
+  }
+  
   surv_pred <- bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
   rec_pred <- bb_predict_calf_cow_ratio(bbouResults$recruit_fit,year=T,conf_level=F)
   
@@ -78,7 +85,7 @@ getSimsInitial <- function(bbouResults, N0=NULL,
   popInfo <- merge(data.frame(id=seq(1:nr)),N0)
   popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
                                        z=runif(nr,cPars$zMin,cPars$zMax))
-  pars <- caribouPopSimMCMC(N0=popInfo,rec_pred,surv_pred,progress=F,...)
+  pars <- caribouPopSimMCMC(popInfo,rec_pred,surv_pred,progress=F,...)
   
   pars$Anthro=NA;pars$fire_excl_anthro=NA
   
@@ -86,7 +93,7 @@ getSimsInitial <- function(bbouResults, N0=NULL,
   pars <- merge(pars,subset(popInfo,select=c(-N0,-pop_name)))
   
   pars <- convertTrajectories(pars)
-  simBig <- summarizeCaribouPopSim(pars)
+  simBig <- summarizeCaribouPopSim(pars,returnSamples=returnSamples)
 
   if (doSave) {
     message("Updating cached initial simulations.")

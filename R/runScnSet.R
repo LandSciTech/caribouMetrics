@@ -28,16 +28,14 @@
 #' )
 #' 
 #' eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
-#' scResults <- runScnSet(scns, eParsIn, getSimsInitial(), getKSDists = FALSE,
-#'                        # only set to speed up example. Normally keep defaults.
-#'                        Niter = 10, Nburn = 2)
+#' scResults <- runScnSet(scns, eParsIn, getSimsInitial(),
+#'                        niters = 10)# only set to speed up example. Normally keep defaults.
 
 
 runScnSet <- function(scns, ePars, simInitial,
-                      getKSDists = TRUE, printProgress = FALSE, 
-                      Niter = formals(caribouBayesianPM)$Niter,
-                      Nburn = formals(caribouBayesianPM)$Nburn) {
-  # ePars=eParsIn;simInitial=simBig;getKSDists=T;printProgress=F;Niter = formals(caribouBayesianPM)$Niter;Nburn = formals(caribouBayesianPM)$Nburn
+                      printProgress = FALSE,betaPriors="default",niters=formals(bboutools::bb_fit_survival)$niters,...) {
+  
+  # ePars=eParsIn;simInitial=simBig;printProgress=F;niters = formals(bboutools::bb_fit_survival)$niters)
   scns <- getScenarioDefaults(scns)
   errorLog <- list()
   for (p in 1:nrow(scns)) {
@@ -48,27 +46,21 @@ runScnSet <- function(scns, ePars, simInitial,
     }
 
     trajectories <- subset(simInitial$samples,Replicate==sample(unique(simInitial$samples$Replicate),1))
-    
+
     oo <- simulateObservations(trajectories, cs, collarNumYears = ePars$collarNumYears,
                                collarOffTime = ePars$collarOffTime,
                                collarOnTime = ePars$collarOnTime)
     #plot(plotSurvivalSeries(oo$simSurvObs))
     
-    #RESUME HERE  
-    minYr <- min(oo$exData$Year)
-    maxYr <- max(oo$simDisturbance$Year)
-    out <- try(caribouBayesianPM(
-      survData = oo$simSurvObs, ageRatio = oo$ageRatioOut,
+    out <- (caribouBayesianPM(
+      survData = oo$simSurvObs, recruitData = oo$simRecruitObs,
       disturbance = oo$simDisturbance,
-      betaPriors = betaPriors, startYear = minYr, endYear = maxYr,
-      N0 = cs$N0, survAnalysisMethod = survAnalysisMethod,
-      assessmentYrs = cs$assessmentYrs, Niter = Niter, 
-      Nburn = Nburn
-    ))
+      betaPriors = betaPriors, startYear = oo$minYr, endYear = oo$maxYr,
+      N0 = cs$N0,niters=niters,...))
     if (inherits(out, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
-                   obs.all = obs.all, ksDists = ksDists, errorLog = errorLog),
+                   obs.all = obs.all, errorLog = errorLog),
               "results/temp.Rds")
       next
     }
@@ -76,31 +68,29 @@ runScnSet <- function(scns, ePars, simInitial,
     if (inherits(out$result, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out$result)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
-                   obs.all = obs.all, ksDists = ksDists, errorLog = errorLog),
+                   obs.all = obs.all, errorLog = errorLog),
               "results/temp.Rds")
       next
     }
 
     outTabs <- getOutputTables(caribouBayesDemogMod = out, startYear = minYr,
                                endYear = maxYr, simInitial = simInitial,
-                               exData = oo$exData, paramTable = oo$paramTable,
-                               getKSDists = getKSDists)
+                               exData = oo$exData, paramTable = oo$paramTable)
+    
 
     if (p == 1) {
       rr.summary.all <- outTabs$rr.summary.all
       sim.all <- outTabs$sim.all
       obs.all <- outTabs$obs.all
-      ksDists <- merge(outTabs$ksDists, cs)
     } else {
       rr.summary.all <- rbind(rr.summary.all, outTabs$rr.summary.all)
       sim.all <- rbind(sim.all, outTabs$sim.all)
       obs.all <- rbind(obs.all, outTabs$obs.all)
-      ksDists <- rbind(ksDists, merge(outTabs$ksDists, cs))
     }
   }
   if (length(errorLog) > 0) {
     print(errorLog)
   }
   return(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
-              obs.all = obs.all, ksDists = ksDists, errorLog = errorLog))
+              obs.all = obs.all, errorLog = errorLog))
 }

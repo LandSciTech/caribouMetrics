@@ -19,7 +19,7 @@ convertTrajectories<-function(pars){
   
 }
 
-summarizeCaribouPopSim <- function(pars){
+summarizeCaribouPopSim <- function(pars,returnSamples=T){
   simSum <- pars  %>%
     group_by(Year,PopulationName,MetricTypeID) %>%
     summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
@@ -187,118 +187,25 @@ simCalfCowRatios <- function(cowCounts, exData) {
   recruitmentSeries <- subset(exData, select = c("recruitment", "N","Year","PopulationName","Replicate"))
   
   
-  ageRatioOut <- merge(cowCounts,recruitmentSeries,all.x=T)
+  simRecruitObs <- merge(cowCounts,recruitmentSeries,all.x=T)
   
-  if(any(ageRatioOut$Cows>ageRatioOut$N,na.rm=T)){
+  if(any(simRecruitObs$Cows>simRecruitObs$N,na.rm=T)){
     warning("The expected number of cows in composition survey exceeds population size. Adjusting cows in survey for consistency.")
-    ageRatioOut$Cows = pmin(ageRatioOut$Cows,ageRatioOut$N)
+    simRecruitObs$Cows = pmin(simRecruitObs$Cows,simRecruitObs$N)
   }
   
   #apparent number of calves (M+F) from apparent number of cows using apparent recruitment rate
-  ageRatioOut$Calves <- ifelse(ageRatioOut$Cows == 0, 0,
+  simRecruitObs$Calves <- ifelse(simRecruitObs$Cows == 0, 0,
                                rbinom(
-                                 n = nrow(ageRatioOut), size = ageRatioOut$Cows,
-                                 prob = ageRatioOut$recruitment
+                                 n = nrow(simRecruitObs), size = simRecruitObs$Cows,
+                                 prob = simRecruitObs$recruitment
                                )
   )
-  ageRatioOut$recruitment = NULL;ageRatioOut$N=NULL;ageRatioOut$StartTotal=NULL
-  return(ageRatioOut)
+  simRecruitObs$recruitment = NULL;simRecruitObs$N=NULL;simRecruitObs$StartTotal=NULL
+  return(simRecruitObs)
 }
 
 # Helpers for runScnSet and App -------------------------------------------
-# Copyright 2023 Daniel Eacker & Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
-# License GPL-3
-#NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
-
-getSumStats <- function(param, rrSurvMod, startYear, endYear, doSummary = T) {
-  # param = "pop.growth";doSummary=T
-  paramNames <- data.frame(
-    parameter = c(
-      "S.annual.KM", "R", "Rfemale", "pop.growth", "fpop.size",
-      "geomLambda", "meanLambda"
-    ),
-    name = c(
-      "Adult female survival", "Recruitment",
-      "Adjusted recruitment", "Population growth rate", "Female population size",
-      "Geometric mean population growth rate",
-      "Mean population growth rate"
-    )
-  )
-
-  paramNames <- subset(paramNames, is.element(paramNames$parameter, rrSurvMod$parameters.to.save))
-
-  if (grepl("mean|median|geom", param)) {
-    yr <- NA_integer_
-  } else {
-    yr <- startYear:endYear
-  }
-
-  if (!param %in% paramNames$parameter) {
-    stop(
-      "param ", param, "is not recognized\n",
-      "accepted params are: ", paramNames$parameter
-    )
-  }
-
-  if (doSummary) {
-    lower.cri <- apply(
-      rrSurvMod$BUGSoutput$sims.list[[param]], 2,
-      function(x) {
-        quantile(x, 0.025)
-      }
-    )
-    upper.cri <- apply(
-      rrSurvMod$BUGSoutput$sims.list[[param]], 2,
-      function(x) {
-        quantile(x, 0.975)
-      }
-    )
-    probViable <- apply(
-      rrSurvMod$BUGSoutput$sims.list[[param]], 2,
-      function(x) {
-        mean(x > 0.99)
-      }
-    )
-
-    results <- data.frame(
-      Year = yr,
-      Parameter = subset(paramNames, paramNames$parameter == param,
-                         select = "name", drop = T
-      ),
-      Mean = round(rrSurvMod$BUGSoutput$mean[[param]], digits = 3),
-      SD = round(rrSurvMod$BUGSoutput$sd[[param]], digits = 3),
-      `Lower 95% CRI` = round(lower.cri, digits = 3),
-      `Upper 95% CRI` = round(upper.cri, digits = 3),
-      probViable = round(probViable, digits = 3),
-      check.names = FALSE
-    )
-    if(!grepl("growth rate", results$Parameter[1])){
-      results$probViable <- NA
-    }
-  } else {
-    # rrSurvMod= result
-    if((length(yr)==1)&&(is.na(yr))){
-      results = data.frame(Value=rrSurvMod$BUGSoutput$sims.list[[param]][],Year=NA)
-    }else{
-      wideRes <- data.frame(rrSurvMod$BUGSoutput$sims.list[[param]])
-      
-      names(wideRes) <- yr
-      
-      results <- wideRes %>%
-        tidyr::pivot_longer(cols = names(wideRes), names_to = "Year",
-                            values_to = "Value")
-      results$Year <- as.numeric(results$Year)
-      
-    }
-    results$Parameter <- subset(paramNames, paramNames$parameter == param,
-                                select = "name", drop = T
-    )
-    results <- as.data.frame(results)
-  }
-  return(results)
-}
-
-
 
 movingAveGrowthRate <- function(obs, assessmentYrs) {
   # obs=obsLam
@@ -313,21 +220,6 @@ movingAveGrowthRate <- function(obs, assessmentYrs) {
   }
   obsOut
 }
-
-getKSDist <- function(Value, type) {
-  # sampleBit=subset(allSamples,(Year==2017)&(Parameter==allSamples$Parameter[1]))
-  # Value=sampleBit$Value;type=sampleBit$type
-
-  if (length(Value[type == "initial"]) == 0) {
-    out <- data.frame(KSDistance = NA, KSpvalue = NA)
-    return(out)
-  }
-  res <- ks.test(Value[type == "local"], Value[type == "initial"])
-
-  out <- data.frame(KSDistance = res$statistic, KSpvalue = res$p.value)
-  return(out)
-}
-
 
 # General helpers ---------------------------------------------------------
 

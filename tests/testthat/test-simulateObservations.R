@@ -54,7 +54,7 @@ test_that("collarCount and cowCount behave", {
     {pull(., ncollar) == 30} %>% all() %>% 
     expect_true()
   
-  simObs$ageRatioOut %>% filter(Class == "cow", Count != 100) %>% nrow() %>% 
+  simObs$simRecruitObs %>% filter(Class == "cow", Count != 100) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
   # cowMult
@@ -72,7 +72,7 @@ test_that("collarCount and cowCount behave", {
               survsCalving = sum(exit >= 6))
     
   expect_true(all(
-  simObs2$ageRatioOut %>% filter(Class == "cow") %>% pull(Count) ==
+  simObs2$simRecruitObs %>% filter(Class == "cow") %>% pull(Count) ==
     collarSum$survsCalving*2))
   
   # if tables are supplied they should not be modified by cowCount or collarCount
@@ -83,7 +83,7 @@ test_that("collarCount and cowCount behave", {
                                               Count = 10,
                                               Class = "cow"))
   
-  simObs3$ageRatioOut %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
+  simObs3$simRecruitObs %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
   # number added remains constant rather than number collars
@@ -102,7 +102,7 @@ test_that("collarCount and cowCount behave", {
                                                          Count = 10,
                                                          Class = "cow"))
   
-  simObs4$ageRatioOut %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
+  simObs4$simRecruitObs %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
   # number added remains constant rather than number collars
@@ -126,7 +126,7 @@ test_that("collarCount and cowCount behave", {
   
   # cowCounts is created from freqStartsByYear and cowMult 
   expect_true(all(
-    simObs4b$ageRatioOut %>% filter(Class == "cow") %>% pull(Count) ==
+    simObs4b$simRecruitObs %>% filter(Class == "cow") %>% pull(Count) ==
       collarSum2$survsCalving*2)) 
   
   # number added remains constant rather than number collars
@@ -150,7 +150,7 @@ test_that("collarCount and cowCount behave", {
     {. == 30} %>% all() %>% 
     expect_true()
   
-  simObs5$ageRatioOut %>% filter(Class == "cow", Count != 100) %>% nrow() %>% 
+  simObs5$simRecruitObs %>% filter(Class == "cow", Count != 100) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
   # collarInterval doesn't affect tables
@@ -161,7 +161,7 @@ test_that("collarCount and cowCount behave", {
                                                          Count = 10,
                                                          Class = "cow"))
   
-  simObs6$ageRatioOut %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
+  simObs6$simRecruitObs %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
   # number added remains constant rather than number collars
@@ -180,7 +180,7 @@ test_that("collarCount and cowCount behave", {
                                                          Count = 10,
                                                          Class = "cow"))
   
-  simObs7$ageRatioOut %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
+  simObs7$simRecruitObs %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
   # number added remains constant rather than number collars

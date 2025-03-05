@@ -10,8 +10,7 @@ getOutputTables(
   endYear = max(caribouBayesDemogMod$inData$disturbanceIn$Year),
   paramTable = data.frame(param = "observed"),
   exData = NULL,
-  simInitial = NULL,
-  getKSDists = FALSE
+  simInitial = NULL
 )
 }
 \arguments{
@@ -30,8 +29,6 @@ were simulated from.}
 
 \item{simInitial}{Initial simulation results, produced by calling
 \code{\link[=getSimsInitial]{getSimsInitial()}}}
-
-\item{getKSDists}{logical. Should Kolmogorov–Smirnov distances be calculated?}
 }
 \value{
 a list of tables:
@@ -41,16 +38,14 @@ upper and lower credible intervals projected by the Bayesian model, as well
 as scenario input parameters.
 \item sim.all: Mean parameter values and upper and lower credible intervals from
 the initial model for each year, as well as scenario input parameters.
-\item obs.all: Observed parameter values with column "type" identifying if it is
+\item obs.all: Observed parameter values with column "Type" identifying if it is
 the "true" value of the simulated population or the "observed" value
 simulated based on the collaring program parameters.
-\item kdDists: Kolmogorov–Smirnov distances and p-values, NA if getKSDists is false
 }
 }
 \description{
 Produces summary tables for Bayesian caribou population model
-results. Optionally calculates Kolmogorov–Smirnov distances between Bayesian
-model results and initial model results.
+results.
 }
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
@@ -59,18 +54,18 @@ scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 
 simO <- simulateObservations(scns)
 
-out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
                           disturbance = simO$simDisturbance,
-                          Nchains = 1, Niter = 100, Nburn = 10,
-                          Nthin = 2)
+                          niters=4)
 
 getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-                simInitial = getSimsInitial(), getKSDists = FALSE)
+                simInitial = getSimsInitial())
 }
 \seealso{
 Caribou demography functions:
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},

@@ -2,13 +2,15 @@
 % Please edit documentation in R/getSimsInitial.R
 \name{getSimsInitial}
 \alias{getSimsInitial}
-\title{Get a set of simulation results from the initial demographic model}
+\title{Get a set of simulation results from fitted demographic models}
 \usage{
 getSimsInitial(
   bbouResults,
   N0 = NULL,
   cPars = getScenarioDefaults(),
   forceUpdate = F,
+  skipSave = F,
+  returnSamples = T,
   ...
 )
 }
@@ -18,10 +20,14 @@ or a path to those results.}
 
 \item{N0}{initial population size. If NULL, will use information in bbouResults.}
 
-\item{cPars}{optional. Parameters for calculating composition survey bias term.}
+\item{cPars}{ptional. Parameters for calculating composition survey bias term.}
 
 \item{forceUpdate}{logical. If the default inputs are used the result is
 cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
+
+\item{skipSave}{logical. If F default consider saved results. Set T to ignore the saved file.}
+
+\item{returnSamples}{logical. If T default return example trajectories. Set F to return only summaries.}
 }
 \value{
 a list with two elements:
@@ -33,7 +39,7 @@ Column names are year, PopulationName, Mean, lower, upper, Parameter.
 }
 }
 \description{
-Get a set of simulation results from the initial demographic model
+Get a set of simulation results from fitted demographic models
 }
 \examples{
 getSimsInitial()
@@ -42,6 +48,7 @@ getSimsInitial()
 Caribou demography functions:
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},

@@ -30,15 +30,23 @@
 #'   (January) to 12 (December)
 #' @param collarOnTime integer. Month that collars are deployed. A number from 1
 #'   (January) to 12 (December)
+#' @param caribouYearStart integer. The first month of the year for caribou.
+#' @param distScen data.frame. Disturbance scenario. Must have columns "Year",
+#'   "Anthro", and "fire_excl_anthro" containing the year, percentage of the
+#'   landscape covered by anthropogenic disturbance buffered by 500 m, and the
+#'   percentage covered by fire that does not overlap anthropogenic disturbance.
+#'   See [disturbanceMetrics()]. If NULL the disturbance scenario is simulated
+#'   based on `paramTable`
 #' @inheritParams demographicCoefficients
-#' @param writeFilesDir character. If not NULL `simSurvObs` and `ageRatioOut`
+#' @param writeFilesDir character. If not NULL `simSurvObs` and `simRecruitObs`
 #'   results will be saved to csv files in the directory provided
 #'
 #' @return a list with elements:
 #'   * minYr: first year in the simulations,
 #'   * maxYr: last year in the simulations,
+#'   * simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
 #'   * simSurvObs: a data frame of survival data in bboutools format,
-#'   * ageRatioOut: a data frame of recruitment data in bboutools format,
+#'   * simRecruitObs: a data frame of recruitment data in bboutools format,
 #'   * exData: a tibble of expected population metrics based on the initial model,
 #'   * paramTable: a data frame recording the input parameters for the simulation.
 #'
@@ -57,14 +65,17 @@ simulateObservations <- function(trajectories, paramTable,
          collarNumYears = 4, collarOffTime = 4,
          collarOnTime = 4,
          caribouYearStart = 4,
+         recSurveyDay = 15,
+         recSurveyMonth = 3,
+         distScen = NULL,
          writeFilesDir = NULL) {
   #paramTable=cs;cowCounts=NULL;freqStartByYear=NULL; collarNumYears = ePars$collarNumYears
   #collarOffTime = ePars$collarOffTime; collarOnTime = ePars$collarOnTime;caribouYearStart=4; writeFileDir=NULL
 
   includeTimes = seq((paramTable$startYear+paramTable$preYears):
                        (paramTable$startYear+paramTable$preYears+paramTable$obsYears-1))
-  includeYears = unique(trajectories$Year)[includeTimes]
-  
+  includeYears = sort(unique(trajectories$Year))[includeTimes]
+
   popMetrics = subset(trajectories,is.element(Year,includeYears))
   
   includeYears = unique(popMetrics$Year)
@@ -103,6 +114,29 @@ simulateObservations <- function(trajectories, paramTable,
     freqStartsByYear=merge(freqStartsByYear,data.frame(PopulationName=unique(exData$PopulationName)))
   }
   
+  # Simulate covariate table
+  if (is.null(distScen)) {
+    covariates <- simCovariates(paramTable$iAnthro, paramTable$iFire, 
+                                paramTable$preYears+paramTable$obsYears + paramTable$projYears, 
+                                paramTable$obsAnthroSlope, paramTable$projAnthroSlope, 
+                                paramTable$obsYears + paramTable$preYears + 1)
+    simDisturbance <- covariates
+    simDisturbance$Year <- paramTable$startYear + simDisturbance$time - 1
+    
+    if (!is.null(writeFilesDir)) {
+      write.csv(simDisturbance,
+                file.path(writeFilesDir,
+                          paste0("simDisturbance", paramTable$label, ".csv")),
+                row.names = FALSE)
+    }
+  } else {
+    simDisturbance <- distScen
+    simDisturbance$time <- simDisturbance$Year - paramTable$startYear + 1
+    simDisturbance <- filter(simDisturbance, .data$Year <= (paramTable$startYear + paramTable$preYears + paramTable$obsYears - 1 + paramTable$projYears) &
+                               .data$Year >= paramTable$startYear)
+  }
+  #simDisturbance = subset(simDisturbance,is.element(simDisturbance$Year,includeYears))
+  
   # simulate survival data from survival probability.
   if (is.element("collarInterval", names(paramTable)) & is.null(freqStartsByYearIn)) {
     renewYrs <- intersect(min(exData$Year) + seq(0, 100) * paramTable$collarInterval,
@@ -118,10 +152,7 @@ simulateObservations <- function(trajectories, paramTable,
     simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears,
                                   collarOffTime, collarOnTime,caribouYearStart)
   }
-  
-  #plot(plotSurvivalSeries(subset(simSurvObs,Replicate==simSurvObs$Replicate[1])))
-  
-  
+
   # if cowMult is provided, set cows as a function of number of surviving cows at
   # year start month
   if (is.element("cowMult", names(paramTable)) & is.null(cowCountsIn)) {
@@ -140,16 +171,18 @@ simulateObservations <- function(trajectories, paramTable,
   
   # given observed total animals & proportion calfs/cows from simulation - get
   # calf/cow ratio
-  ageRatioOut <- simCalfCowRatios(cowCounts, exData)
+  simRecruitObs <- simCalfCowRatios(cowCounts, exData)
+  simRecruitObs$Day = recSurveyDay;simRecruitObs$Month = recSurveyMonth
   if (!is.null(writeFilesDir)) {
-    write.csv(ageRatioOut,
-              file.path(writeFilesDir, paste0("simAgeRatio", paramTable$label, ".csv")),
+    write.csv(simRecruitObs,
+              file.path(writeFilesDir, paste0("simRecruitData", paramTable$label, ".csv")),
               row.names = FALSE)
     write.csv(simSurvObs,
               file.path(writeFilesDir, paste0("simSurvData", paramTable$label, ".csv")),
               row.names = FALSE)
   }
   
-  return(list(simSurvObs = simSurvObs, ageRatioOut = ageRatioOut,
+  
+  return(list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),simDisturbance = simDisturbance, simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
               exData = trajectories, paramTable = paramTable))
 }

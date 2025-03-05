@@ -1,7 +1,5 @@
-
-# Copyright 2023 Daniel Eacker & Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
+# Copyright 2025 Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
 # License GPL-3
-#NOTICE: This function has been modified from code provided in https://doi.org/10.1002/wsb.950
 
 #' Plot Bayesian population model results
 #'
@@ -16,8 +14,6 @@
 #' @param facetVars character. Optional. Vector of column names to facet by
 #' @param labFontSize numeric. Optional. Label font size if there are not
 #'   facets. Font size is 10 pt if facets are used.
-#' @param ksDists logical. If true the `modTables$ksDists` table is used to
-#'   create plots for each parameter.
 #' @param legendPosition "bottom", "right", "left","top", or "none". Legend position.
 #' @param breakInterval number. How many years between x tick marks?
 #'
@@ -33,23 +29,23 @@
 #'
 #' simO <- simulateObservations(scns)
 #'
-#' out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+#' out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
 #'                           disturbance = simO$simDisturbance,
-#'                           startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
-#'                           Nthin = 2)
+#'                           startYear = 2014, niters=5)
 #'
 #' out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-#'                            simInitial = getSimsInitial(), getKSDists = FALSE)
+#'                            simInitial = getSimsInitial())
 #'
 #' plotRes(out_tbl, parameter = "Recruitment")
 plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
-                   facetVars = NULL, labFontSize = 14, ksDists = FALSE,legendPosition="right",breakInterval=1) {
-  # allRes=scResults$ksDists; parameter="Recruitment";obs=scResults$obs.all;
-  # lowBound=0; highBound=1;simRange=scResults$sim.all;facetVars=c("obsYears","sQuantile")
+                   facetVars = NULL, labFontSize = 14, legendPosition="right",breakInterval=1) {
+  # modTables= posteriorResult; parameter = "Recruitment"; lowBound=0; highBound = 0.85
+  # legendPosition="none";breakInterval=breakInterval;labFontSize=labFontSize
+  # facetVars = NULL
   
   if(length(parameter) > 1){
     allPlots <- lapply(parameter, function(x) {
-      plotRes(modTables, x,  lowBound, highBound, facetVars, labFontSize, ksDists)
+      plotRes(modTables, x,  lowBound, highBound, facetVars, labFontSize)
     })
     
     names(allPlots) <- parameter
@@ -59,6 +55,10 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   allRes <- modTables$rr.summary.all
   obs <- modTables$obs.all
   simRange <- modTables$sim.all
+  
+  if(is.null(facetVars)&&length(unique(allRes$PopulationName))>1){
+    facetVars = "PopulationName"
+  }
   
   pal2 = c("#EF8A62","#67A9CF")#brewer.pal(7,"RdBu")[c(2,6)]
   
@@ -79,9 +79,9 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     stop("parameter ", parameter, " is not one of the expected values: '",
          paste0(exp_param_nms, collapse = "', '"), call. = FALSE)
   }
-  
+
   testTable(allRes, req_col_names = c("Year", "Parameter", "Mean", 
-                                      "Lower 95% CRI", "Upper 95% CRI"),
+                                      "lower", "upper"),
             acc_vals = list(Parameter = exp_param_nms))
   
   if (is.null(facetVars)) {
@@ -94,12 +94,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
       breakInterval <- 2
     }
   }
-  if (ksDists) {
-    # plot Kolmogorov Smirnov distances
-    allRes <- modTables$ksDists
-    allRes$Mean <- allRes$KSDistance
-  } 
-  
+
   df <- subset(allRes, allRes$Parameter == parameter)
   
   if (nrow(df) < 1) {
@@ -108,22 +103,22 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   
   if (!is.null(obs)) {
     pr <- parameter
-    obs <- subset(obs, parameter == pr)
+    obs <- subset(obs, Parameter == pr)
   }
   
   if(!is.null(simRange)){
     pr <- parameter
-    simRange <- subset(simRange, parameter == pr)
+    simRange <- subset(simRange, Parameter == pr)
     if(nrow(simRange) == 0){
      simRange <- NULL  
     }
   }
   
-  if (!ksDists & !is.null(simRange)) {
+  if (!is.null(simRange)) {
     
     df$Type <- "Bayesian"
     simRange$Type <- "initial"
-    nameSel <- c(c("Year", "Mean", "Lower 95% CRI", "Upper 95% CRI", "Type"), facetVars)
+    nameSel <- c(c("Year", "Mean", "lower", "upper", "Type"), facetVars)
     df <- rbind(subset(df, select = nameSel), subset(simRange, select = nameSel))
     df$grp <- df$Type
     if (!is.null(facetVars)) {
@@ -153,22 +148,19 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
       max(df$Year, na.rm = TRUE), breakInterval
     ))
   
-  if (!ksDists) {
-    x2 <- x2 + ggplot2::geom_ribbon(ggplot2::aes(ymin = .data[["Lower 95% CRI"]],
-                                                 ymax = .data[["Upper 95% CRI"]]),
-                                    show.legend = FALSE, alpha = 0.25, colour = NA
-    ) +ggplot2::scale_fill_discrete(type=pal2, name = NULL)+
-      ggplot2::scale_y_continuous(limits = c(
-        ifelse(any(df$`Lower 95% CRI` < lowBound), NA, lowBound),
-        ifelse(any(df$`Upper 95% CRI` > 1), NA, highBound)
-      ))
-  }
+  x2 <- x2 + ggplot2::geom_ribbon(ggplot2::aes(ymin = lower,
+                                               ymax = upper),
+                                  show.legend = FALSE, alpha = 0.25, colour = NA
+  ) +ggplot2::scale_fill_discrete(type=pal2, name = NULL)+
+    ggplot2::scale_y_continuous(limits = c(
+      ifelse(any(df$`Lower 95% CRI` < lowBound), NA, lowBound),
+      ifelse(any(df$`Upper 95% CRI` > 1), NA, highBound)
+    ))
   
-  if (!ksDists & !is.null(obs)) {
+  if (!is.null(obs)) {
     if(nrow(obs) > 0){
-      obs$Type <- "Bayesian"
       obs$obsError <- FALSE
-      obs$obsError[obs$type == "observed"] <- TRUE
+      obs$obsError[obs$Type == "observed"] <- TRUE
       obs <- filter(obs, !is.na(.data$Mean))
       x2 <- x2 + ggplot2::geom_point(data = obs,
                                      ggplot2::aes(x = .data[["Year"]], y = .data[["Mean"]],
@@ -191,7 +183,7 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
                                      labeller = "label_both")
     }
   }
-  if (!ksDists & (parameter == "Population growth rate")) {
+  if ((parameter == "Population growth rate")) {
     x2 <- x2 + ggplot2::geom_hline(yintercept = 1, color = "black")+ggplot2::ylab("Expected population growth rate")
   }
   

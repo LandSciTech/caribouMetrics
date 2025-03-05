@@ -65,8 +65,6 @@ the projection period}
 \item{N0}{Number or vector of numbers. Initial population size for one or
 more sample populations.}
 
-\item{assessmentYrs}{Number of years over which to assess population growth rate lambda.}
-
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
 
 \item{qMax}{number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.}
@@ -120,6 +118,7 @@ getScenarioDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears =
 Caribou demography functions:
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},

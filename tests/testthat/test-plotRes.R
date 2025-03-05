@@ -1,10 +1,8 @@
 # default input data
-mod <- caribouBayesianPM(Nchains = 1, Niter = 100, Nburn = 10,
-                          Nthin = 2)
+mod <- caribouBayesianPM(niters=100)
 
 
-mod_tab <- suppressWarnings(getOutputTables(mod, simInitial = getSimsInitial(),
-                           getKSDists = TRUE))
+mod_tab <- suppressWarnings(getOutputTables(mod, simInitial = getSimsInitial()))
 
 param_nms <- c(
   "Adult female survival", "Recruitment", "Population growth rate", 
@@ -27,9 +25,5 @@ test_that("simplest plot works", {
 
 test_that("all parameters work",{
   plotRes(mod_tab, param_nms) %>% expect_type("list")
-})
-
-test_that("KS distances work",{
-  plotRes(mod_tab, ksDists = TRUE, parameter = param_nms[1:4]) %>% expect_type("list")
 })
 

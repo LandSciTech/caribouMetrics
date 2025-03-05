@@ -121,6 +121,7 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 Caribou demography functions:
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
