@@ -27,6 +27,7 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
   years = years[as.numeric(as.character(years))>=initYear]
 
   if(length(popInfo)>1){
+    if(!is.element("id",names(popInfo))){popInfo=merge(popInfo,data.frame(id=1:dim(rec)[2]))}
     popInfo = popInfo[order(popInfo$id,popInfo$pop_name),]
     for(nn in setdiff(names(popInfo),c("pop_name","id"))){
       txt  = paste0(nn," = popInfo[['",nn,"']]")
