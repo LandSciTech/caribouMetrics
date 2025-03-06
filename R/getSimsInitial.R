@@ -99,5 +99,7 @@ getSimsInitial <- function(bbouResults, N0=NULL,
     message("Updating cached initial simulations.")
     assign(saveName, simBig, envir = cacheEnv)
   }
+  simBig$surv_data = bbouResults$surv_fit$data
+  simBig$recruit_data = bbouResults$recruit_fit$data
   return(simBig)
 }

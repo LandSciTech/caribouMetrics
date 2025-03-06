@@ -49,7 +49,8 @@ runScnSet <- function(scns, ePars, simInitial,
 
     oo <- simulateObservations(trajectories, cs, collarNumYears = ePars$collarNumYears,
                                collarOffTime = ePars$collarOffTime,
-                               collarOnTime = ePars$collarOnTime)
+                               collarOnTime = ePars$collarOnTime,
+                               surv_data = simInitial$surv_data, recruit_data=simInitial$recruit_data)
     #plot(plotSurvivalSeries(oo$simSurvObs))
     
     out <- (caribouBayesianPM(

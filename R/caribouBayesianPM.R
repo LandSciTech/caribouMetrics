@@ -160,9 +160,12 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   }
 
   #add missing surv yrs
-  surv_data_add = expand.grid(Year=setdiff(disturbance$Year,surv_data$Year),Month=unique(surv_data$Month),PopulationName=unique(surv_data$PopulationName))
+  surv_data_add = expand.grid(Year=union(disturbance$Year,surv_data$Year),Month=unique(surv_data$Month),PopulationName=unique(surv_data$PopulationName))
   surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
-  surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
+  surv_data$StartTotal[is.na(surv_data$StartTotal)]=0
+  
+  #dups = table(subset(surv_data,select=c(Year,Month,PopulationName)))
+  
 
   ###################
   # Recruitment data checking and fill missing yrs
@@ -192,12 +195,10 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   }
   
   #add missing recruit yrs
-  recruit_data_add = expand.grid(Year=setdiff(disturbance$Year,recruit_data$Year),PopulationName=unique(recruit_data$PopulationName))
-  if(nrow(recruit_data_add)>0){
-    recruit_data_add$Month=3;recruit_data_add$Day=15
-    recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
-  }
-  
+  recruit_data_add = expand.grid(Year=union(disturbance$Year,recruit_data$Year),PopulationName=unique(recruit_data$PopulationName))
+  recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
+  recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
+
   ##################
   #fit models
   bbouResults = bbouMakeSummaryTable(surv_data, recruit_data,N0,return_mcmc=T,shiny_progress=F,niters=niters)

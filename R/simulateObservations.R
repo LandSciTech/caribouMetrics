@@ -40,6 +40,8 @@
 #' @inheritParams demographicCoefficients
 #' @param writeFilesDir character. If not NULL `simSurvObs` and `simRecruitObs`
 #'   results will be saved to csv files in the directory provided
+#' @param surv_data data.frame. Optional existing survival data in bboudata format
+#' @param recruit_data data.frame. Optional existing recruitment data in bboudata format
 #'
 #' @return a list with elements:
 #'   * minYr: first year in the simulations,
@@ -68,14 +70,16 @@ simulateObservations <- function(trajectories, paramTable,
          recSurveyDay = 15,
          recSurveyMonth = 3,
          distScen = NULL,
-         writeFilesDir = NULL) {
+         writeFilesDir = NULL,
+         surv_data=NULL,
+         recruit_data=NULL) {
   #paramTable=cs;cowCounts=NULL;freqStartByYear=NULL; collarNumYears = ePars$collarNumYears
   #collarOffTime = ePars$collarOffTime; collarOnTime = ePars$collarOnTime;caribouYearStart=4; writeFileDir=NULL
 
   includeTimes = seq((paramTable$startYear+paramTable$preYears):
                        (paramTable$startYear+paramTable$preYears+paramTable$obsYears-1))
   includeYears = sort(unique(trajectories$Year))[includeTimes]
-
+  
   popMetrics = subset(trajectories,is.element(Year,includeYears))
   
   includeYears = unique(popMetrics$Year)
@@ -89,22 +93,29 @@ simulateObservations <- function(trajectories, paramTable,
   cowCountsIn <- cowCounts
   freqStartsByYearIn <- freqStartsByYear
   
+  if(!is.null(recruit_data)){
+    recruitYrs = sort(setdiff(includeYears,subset(recruit_data,!is.na(Calves))$Annual))
+  }
   if(!is.null(cowCounts)){
     testTable(cowCounts, c("Year", "Cows"),
-              req_vals = list(Year = includeYears))
+              req_vals = list(Year = recruitYrs))
   } else if(hasName(paramTable, "cowCount")){
-    cowCounts <- expand.grid(Year = includeYears,
+    cowCounts <- expand.grid(Year = recruitYrs,
                              Cows = paramTable$cowCount)
   } else if(!hasName(paramTable, "cowCount") & !hasName(paramTable, "cowMult")){
     stop("One of cowCounts or paramTable$cowMult must be provided",
          call. = FALSE)
   }
+
+  if(!is.null(surv_data)){
+    survYrs = sort(setdiff(includeYears,subset(surv_data,!is.na(MortalitiesCertain))$Annual))
+  }
   
   if(!is.null(freqStartsByYear)){
     testTable(freqStartsByYear, c("Year","numStarts"),
-              acc_vals = list(Year = includeYears))
+              acc_vals = list(Year = survYrs))
   } else if(!is.null(paramTable$collarCount)){
-    freqStartsByYear <- expand.grid(Year = includeYears,numStarts = paramTable$collarCount)
+    freqStartsByYear <- expand.grid(Year = survYrs,numStarts = paramTable$collarCount)
   }else {
     stop("One of freqStartsByYear or paramTable$collarCount must be provided",
          call. = FALSE)
@@ -112,8 +123,11 @@ simulateObservations <- function(trajectories, paramTable,
   
   if(!is.element("PopulationName",names(freqStartsByYear))){
     freqStartsByYear=merge(freqStartsByYear,data.frame(PopulationName=unique(exData$PopulationName)))
+    if(!is.null(cowCounts)){
+      cowCounts=merge(cowCounts,data.frame(PopulationName=unique(exData$PopulationName)))
+    }
   }
-  
+
   # Simulate covariate table
   if (is.null(distScen)) {
     covariates <- simCovariates(paramTable$iAnthro, paramTable$iFire, 
@@ -144,14 +158,19 @@ simulateObservations <- function(trajectories, paramTable,
     freqStartsByYear$numStarts[!is.element(freqStartsByYear$Year, renewYrs)] <- 0
   }
   
+  if(!is.null(surv_data)&&(length(unique(surv_data$Month))>1)){
+    forceMonths = T
+  }else{forceMonths=F}
+    
   if (is.null(freqStartsByYearIn)) {
     #freqStartsByYear$numStarts=0
     simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime,
-                                  collarOnTime, caribouYearStart,topUp = T)
+                                  collarOnTime, caribouYearStart,topUp = T,forceMonths=forceMonths)
   } else {
     simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears,
-                                  collarOffTime, collarOnTime,caribouYearStart)
+                                  collarOffTime, collarOnTime,caribouYearStart,forceMonths=forceMonths)
   }
+  simSurvObs$survival=NULL
 
   # if cowMult is provided, set cows as a function of number of surviving cows at
   # year start month
@@ -182,6 +201,36 @@ simulateObservations <- function(trajectories, paramTable,
               row.names = FALSE)
   }
   
+  if(!is.null(recruit_data)){
+    missing = setdiff(names(simRecruitObs),names(recruit_data))
+    add= unique(subset(simRecruitObs,select=missing))
+    if(nrow(add)>1){
+      stop("Error in simulateObservations: not clear how to combine simulated and existing recruitment data.")
+    }
+    recruit_data = merge(subset(recruit_data,select=intersect(names(recruit_data),names(simRecruitObs))),add)
+    simRecruitObs = rbind(recruit_data,simRecruitObs)
+    simRecruitObs = simRecruitObs[order(simRecruitObs$Year),]
+  }
+
+  if(!is.null(surv_data)){
+    surv_data$Month=as.numeric(as.character(surv_data$Month))
+    missing = setdiff(names(simSurvObs),names(surv_data))
+    add= unique(subset(simSurvObs,select=missing))
+    if(nrow(add)>1){
+      stop("Error in simulateObservations: not clear how to combine simulated and existing survival data.")
+    }
+    #id month/year combos that are in the existing data and remove from 
+    #dups = merge(simSurvObs,subset(surv_data,!is.na(MortalitiesCertain),select=c(Year,Month)))
+    
+    surv_data = merge(subset(surv_data,select=intersect(names(surv_data),names(simSurvObs))),add)
+    simSurvObs = rbind(subset(surv_data,!is.na(MortalitiesCertain)),simSurvObs)
+    simSurvObs = simSurvObs[order(simSurvObs$Year),]
+
+    dups = table(subset(simSurvObs,select=c(Year,Month,PopulationName)))
+    if(max(dups)>1){
+      stop("Error in simulateObservations: duplication in simulated and existing survival data.")
+    }
+  }
   
   return(list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),simDisturbance = simDisturbance, simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
               exData = trajectories, paramTable = paramTable))

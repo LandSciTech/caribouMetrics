@@ -16,7 +16,9 @@ simulateObservations(
   recSurveyDay = 15,
   recSurveyMonth = 3,
   distScen = NULL,
-  writeFilesDir = NULL
+  writeFilesDir = NULL,
+  surv_data = NULL,
+  recruit_data = NULL
 )
 }
 \arguments{
@@ -59,6 +61,10 @@ based on \code{paramTable}}
 
 \item{writeFilesDir}{character. If not NULL \code{simSurvObs} and \code{simRecruitObs}
 results will be saved to csv files in the directory provided}
+
+\item{surv_data}{data.frame. Optional existing survival data in bboudata format}
+
+\item{recruit_data}{data.frame. Optional existing recruitment data in bboudata format}
 
 \item{printPlot}{logical. print a plot of the true population trajectory?}
 }

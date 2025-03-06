@@ -42,7 +42,7 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, shiny_progress = FA
   if(shiny_progress) shiny::setProgress(0.2, message = i18n$t("Fitting survival"))
   
   surv_fit <- bboutools::bb_fit_survival(surv_data, multi_pops = TRUE, allow_missing = TRUE, quiet = TRUE, ...)
-  
+
   if(shiny_progress) shiny::setProgress(0.4, message = i18n$t("Fitting recruitment"))
   
   recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, ...)

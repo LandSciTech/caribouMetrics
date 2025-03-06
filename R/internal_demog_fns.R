@@ -37,14 +37,14 @@ summarizeCaribouPopSim <- function(pars,returnSamples=T){
 # Helpers for simulateObservations -----------------------------------------
 
 simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffTime,
-                            collarOnTime, caribouYearStart,topUp = FALSE) {
+                            collarOnTime, caribouYearStart,topUp = FALSE,forceMonths=FALSE) {
   #Note: If collarOffTime and collarOnTime both equal caribouYearStart simulation will be faster because we can ignore variation in number of collars at the start of each month.
   # topUp=T;caribouYearStart=4
   # for simplicity, ignore variation in survival probability among months
   
   options(dplyr.summarise.inform = FALSE)
   
-  if((collarOnTime==caribouYearStart)&(collarOffTime==caribouYearStart)){
+  if(!forceMonths&&(collarOnTime==caribouYearStart)&&(collarOffTime==caribouYearStart)){
     nMonths = 1
   }else{
     nMonths = 12
@@ -158,6 +158,8 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
     stop("TO DO: deal with no sampling case")
   }
   
+  simSurvs$MortalitiesCertain[simSurvs$StartTotal==0]=NA
+  
   return(simSurvs)
 }
 
@@ -202,6 +204,8 @@ simCalfCowRatios <- function(cowCounts, exData) {
                                )
   )
   simRecruitObs$recruitment = NULL;simRecruitObs$N=NULL;simRecruitObs$StartTotal=NULL
+  
+  simRecruitObs$Calves[simRecruitObs$Cows==0]=NA
   return(simRecruitObs)
 }
 
