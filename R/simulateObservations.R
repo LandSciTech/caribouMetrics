@@ -67,8 +67,8 @@ simulateObservations <- function(trajectories, paramTable,
          collarNumYears = 4, collarOffTime = 4,
          collarOnTime = 4,
          caribouYearStart = 4,
-         recSurveyDay = 15,
          recSurveyMonth = 3,
+         recSurveyDay = 15,
          distScen = NULL,
          writeFilesDir = NULL,
          surv_data=NULL,
@@ -171,6 +171,7 @@ simulateObservations <- function(trajectories, paramTable,
                                   collarOffTime, collarOnTime,caribouYearStart,forceMonths=forceMonths)
   }
   simSurvObs$survival=NULL
+  simSurvObs=subset(simSurvObs,is.element(Year,survYrs))
 
   # if cowMult is provided, set cows as a function of number of surviving cows at
   # year start month
@@ -186,6 +187,7 @@ simulateObservations <- function(trajectories, paramTable,
       cowCounts$Cows <- 0
     }
     cowCounts$Bulls=0;cowCounts$UnknownAdults=0;cowCounts$Yearlings=0
+    cowCounts= subset(cowCounts,is.element(Year,recruitYrs))
   }
   
   # given observed total animals & proportion calfs/cows from simulation - get
@@ -207,9 +209,22 @@ simulateObservations <- function(trajectories, paramTable,
     if(nrow(add)>1){
       stop("Error in simulateObservations: not clear how to combine simulated and existing recruitment data.")
     }
-    recruit_data = merge(subset(recruit_data,select=intersect(names(recruit_data),names(simRecruitObs))),add)
+    
+    if(is.element("Month",missing)){
+      if(recSurveyMonth<caribouYearStart){
+        recruit_data$Year = recruit_data$Year+1
+      }
+    }
+
+    recruit_data = merge(subset(recruit_data,!is.na(Calves),select=intersect(names(recruit_data),names(simRecruitObs))),add)
     simRecruitObs = rbind(recruit_data,simRecruitObs)
     simRecruitObs = simRecruitObs[order(simRecruitObs$Year),]
+    
+    dups = table(subset(simRecruitObs,select=c(Year,Month,PopulationName)))
+    if(max(dups)>1){
+      stop("Error in simulateObservations: duplication in simulated and existing recruitment data.")
+    }
+    
   }
 
   if(!is.null(surv_data)){

@@ -51,19 +51,23 @@ getOutputTables <- function(caribouBayesDemogMod,
   # exData = oo$exData; paramTable = oo$paramTable
   
   result <- caribouBayesDemogMod$result
-  survInput <- caribouBayesDemogMod$inData$survDataIn
-  simObsList <- caribouBayesDemogMod$inData
+  survInput <- caribouBayesDemogMod$result$surv_data
+  recInput <- caribouBayesDemogMod$result$recruit_data
+  distInput <- caribouBayesDemogMod$inData
   
   # get summary info for plots
   rr.summary <- caribouBayesDemogMod$result$summary
 
-  obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(Mortalities = sum(MortalitiesCertain),StartTotal = max(StartTotal)) 
+  survInput$Year=as.numeric(as.character(survInput$Annual))
+  recInput$Year=as.numeric(as.character(recInput$Annual))
+  
+  obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(Mortalities = sum(MortalitiesCertain,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
   obsSurv$Mean <- 1-obsSurv$Mortalities/obsSurv$StartTotal
   obsSurv$Parameter <- "Adult female survival"
   obsSurv$MetricTypeID <- "survival"
   obsSurv$Type <- "observed"
 
-  obsRec <- subset(simObsList$recruitDataIn, 
+  obsRec <- subset(recInput, 
                 select = c("PopulationName","Year", "Cows", "Calves"))
   obsRec$Mean <- obsRec$Calves / obsRec$Cows
   obsRec$Parameter <- "Recruitment"
@@ -84,13 +88,13 @@ getOutputTables <- function(caribouBayesDemogMod,
                                              "Type")))
   
   # combine paramTable and simDisturbance and add to all output tables, nest params in a list
-  dist_params <- merge(simObsList$disturbanceIn, paramTable)
+  dist_params <- merge(distInput, paramTable)
   
   if(!is.null(simInitial)){
-    if(F&&!all(unique(simObsList$disturbanceIn$Anthro) %in% simInitial$summary$Anthro)){
+    if(F&&!all(unique(distInput$Anthro) %in% simInitial$summary$Anthro)){
       message("recalculating initial sims to match anthropogenic distubance scenario")
       
-      simInitial <- getSimsInitial(Anthro = unique(simObsList$disturbanceIn$Anthro),cPars=paramTable)
+      simInitial <- getSimsInitial(Anthro = unique(distInput$Anthro),cPars=paramTable)
     }
     
     simBigO <- merge(simInitial$summary, dist_params)

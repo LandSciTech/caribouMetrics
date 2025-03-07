@@ -193,7 +193,7 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
               " ", c("Years of recruitment data:", "  ",
                      list(sort(unique(recruit_data$Year))))))
   }
-  
+
   #add missing recruit yrs
   recruit_data_add = expand.grid(Year=union(disturbance$Year,recruit_data$Year),PopulationName=unique(recruit_data$PopulationName))
   recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
@@ -207,7 +207,5 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   rr = getSimsInitial(bbouResults,cPars=cPars,skipSave=T,returnSamples=returnSamples,...)  
   
   return(list(result = rr, 
-              inData = list(survDataIn = survData, 
-                            disturbanceIn = disturbance, 
-                            recruitDataIn = recruitData)))
+              inData = list(disturbanceIn = disturbance)))
 }
