@@ -45,7 +45,12 @@ runScnSet <- function(scns, ePars, simInitial,
       print(paste0(c(p, scns[p, ]), collapse = " "))
     }
 
-    trajectories <- subset(simInitial$samples,Replicate==sample(unique(simInitial$samples$Replicate),1))
+    if(is.element("lQuantile",names(cs))&&!is.na(cs$lQuantile)){
+      trajectories <- subset(simInitial$samples,LambdaPercentile == round(cs$lQuantile*100))
+    }else{
+      trajectories <- simInitial$samples
+    }
+    trajectories <- subset(trajectories,Replicate==sample(unique(trajectories$Replicate),1))
 
     oo <- simulateObservations(trajectories, cs, collarNumYears = ePars$collarNumYears,
                                collarOffTime = ePars$collarOffTime,

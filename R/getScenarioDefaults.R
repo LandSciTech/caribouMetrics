@@ -13,8 +13,7 @@
 #'   the projection period
 #' @param rSlopeMod number. Disturbance-recruitment slope multiplier
 #' @param sSlopeMod number. Disturbance-survival slope multiplier
-#' @param rQuantile number in 0, 1. Recruitment quantile
-#' @param sQuantile number in 0, 1. Survival quantile
+#' @param lQuantile number in 0, 1. Lambda quantile
 #' @param projYears Number of years of projections
 #' @param obsYears Number of years of observations
 #' @param preYears Number of years before monitoring begins
@@ -50,7 +49,7 @@
 getScenarioDefaults <- function(paramTable = NULL,
                          iFire = 0, iAnthro = 0, obsAnthroSlope = 2, projAnthroSlope = 2,
                          rSlopeMod = 1, sSlopeMod = 1,
-                         rQuantile = 0.5, sQuantile = 0.5, projYears = 35, 
+                         lQuantile = 0.5, projYears = 35, 
                          obsYears = 15, preYears=0, N0 = 1000,
                          assessmentYrs = 3,qMin=0,qMax =0, 
                          uMin = 0, uMax = 0, zMin = 0, zMax = 0, cowMult = 6,

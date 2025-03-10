@@ -90,8 +90,18 @@ getSimsInitial <- function(bbouResults, N0=NULL,
   pars$Anthro=NA;pars$fire_excl_anthro=NA
   
   popInfo$PopulationName <- popInfo$pop_name
+  
   pars <- merge(pars,subset(popInfo,select=c(-N0,-pop_name)))
   
+  #get the lambda percentile for each id - to allow users to select extreme examples
+  simSum <- pars  %>%
+    group_by(id) %>%
+    summarize(MeanLam = mean(lambdaTrue,na.rm=T))
+  simSum <-simSum[order(simSum$MeanLam),]
+  simSum$lamPercentile <- round(100*seq(1:nrow(simSum))/nrow(simSum))
+  simSum$MeanLam=NULL
+  pars <- merge(pars,simSum)
+
   pars <- convertTrajectories(pars)
   simBig <- summarizeCaribouPopSim(pars,returnSamples=returnSamples)
 

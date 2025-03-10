@@ -12,8 +12,7 @@ getScenarioDefaults(
   projAnthroSlope = 2,
   rSlopeMod = 1,
   sSlopeMod = 1,
-  rQuantile = 0.5,
-  sQuantile = 0.5,
+  lQuantile = NA,
   projYears = 35,
   obsYears = 15,
   preYears = 0,
@@ -52,9 +51,7 @@ the projection period}
 
 \item{sSlopeMod}{number. Disturbance-survival slope multiplier}
 
-\item{rQuantile}{number in 0, 1. Recruitment quantile}
-
-\item{sQuantile}{number in 0, 1. Survival quantile}
+\item{lQuantile}{number in 0, 1. Lambda quantile}
 
 \item{projYears}{Number of years of projections}
 
