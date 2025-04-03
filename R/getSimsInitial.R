@@ -76,9 +76,19 @@ getSimsInitial <- function(bbouResults, N0=NULL,
     N0 = data.frame(N0=N0)
     N0 = merge(N0,subset(bbouResults$parTab,select=c(pop_name)))
   }
+  N0$PopulationName = N0$pop_name
   
-  surv_pred <- bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
-  rec_pred <- bb_predict_calf_cow_ratio(bbouResults$recruit_fit,year=T,conf_level=F)
+  if(is.element("bboufit",class(bbouResults$surv_fit))){
+    surv_pred <- bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
+  }else{
+    surv_pred <- bbouResults$surv_fit
+  }
+
+  if(is.element("bboufit",class(bbouResults$recruit_fit))){
+    rec_pred <- bb_predict_calf_cow_ratio(bbouResults$recruit_fit,year=T,conf_level=F)
+  }else{
+    rec_pred <- bbouResults$recruit_fit
+  }
   
   nr <- dim(surv_pred$samples)[1]*dim(surv_pred$samples)[2]
   

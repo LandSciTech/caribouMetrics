@@ -201,7 +201,7 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
 
   ##################
   #fit models
-  bbouResults = bbouMakeSummaryTable(surv_data, recruit_data,N0,return_mcmc=T,shiny_progress=F,niters=niters)
+  bbouResults = bbouMakeSummaryTable(surv_data, recruit_data,N0,disturbance,return_mcmc=T,shiny_progress=F,niters=niters)
   
   #get output trajectories
   rr = getSimsInitial(bbouResults,cPars=cPars,skipSave=T,returnSamples=returnSamples,...)  

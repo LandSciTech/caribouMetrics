@@ -4,6 +4,7 @@
 #' @param recruit_data dataframe. Recruitment data in bboudata format
 #' @param N0 dataframe. Initial population estimates, required columns are
 #'   PopulationName and N0
+#' @param disturbance dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.
 #' @param shiny_progress logical. Should shiny progress bar be updated. Only set
 #'   to TRUE if using in an app.
 #' @param return_mcmc boolean. If TRUE return fitted survival and recruitment
@@ -20,7 +21,7 @@
 #' r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 #' bbouMakeSummaryTable(s_data, r_data, 500, FALSE)
 
-bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, shiny_progress = FALSE,
+bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL, shiny_progress = FALSE,
                                 return_mcmc=FALSE,i18n = NULL, ...){
   #shiny_progress = FALSE;return_mcmc=FALSE;i18n = NULL
   
@@ -38,11 +39,20 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, shiny_progress = FA
   if(length(unique(recruit_data$Year))<5){
     stop("At least 5 years of survival data are needed to estimate interannual variation using bboutools")
   }
-  
+
+  if(!is.null(disturbance)){
+    parTab = N0
+    if(is.element("PopulationName",names(parTab))){
+      names(parTab)[names(parTab)=="PopulationName"]= "pop_name"  
+    }
+    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, ...) 
+    ret$parTab <- parTab
+    return(ret)
+  }
   if(shiny_progress) shiny::setProgress(0.2, message = i18n$t("Fitting survival"))
   
   surv_fit <- bboutools::bb_fit_survival(surv_data, multi_pops = TRUE, allow_missing = TRUE, quiet = TRUE, ...)
-
+  
   if(shiny_progress) shiny::setProgress(0.4, message = i18n$t("Fitting recruitment"))
   
   recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, ...)
@@ -98,7 +108,6 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, shiny_progress = FA
       ))
     }
   }
-  
   # dplyr version, not using but might want to some day...
   # R_samp %>% as_tibble(rownames = "id") %>%
   #   # move pop_name from column name to value

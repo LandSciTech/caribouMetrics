@@ -47,6 +47,7 @@ Imports:
     rlang,
     terra,
     R2jags,
+    rjags,
     survival
 Collate: 
     'AAAClassDefinitions.R'
