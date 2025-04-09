@@ -49,6 +49,10 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL,
     ret$parTab <- parTab
     return(ret)
   }
+  if(shiny_progress && !rlang::is_installed("shiny")){
+    warning("Package shiny is not installed. Setting shiny_progress to FALSE")
+    shiny_progress <- FALSE
+  }
   if(shiny_progress) shiny::setProgress(0.2, message = i18n$t("Fitting survival"))
   
   surv_fit <- bboutools::bb_fit_survival(surv_data, multi_pops = TRUE, allow_missing = TRUE, quiet = TRUE, ...)

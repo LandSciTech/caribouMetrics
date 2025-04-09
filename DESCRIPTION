@@ -48,7 +48,9 @@ Imports:
     terra,
     R2jags,
     rjags,
-    survival
+    survival,
+    bboutools,
+    mcmcr
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
@@ -107,7 +109,9 @@ Suggests:
     rsyncrosim,
     pfocal,
     BayesianCaribouDemographicProjection,
-    raster
+    raster,
+    shiny,
+    bboudata
 Remotes: LandSciTech/pfocal,
     LandSciTech/BayesianCaribouDemographicProjection
 Additional_repositories: https://landscitech.github.io/drat
