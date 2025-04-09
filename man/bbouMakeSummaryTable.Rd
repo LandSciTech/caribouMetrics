@@ -8,6 +8,7 @@ bbouMakeSummaryTable(
   surv_data,
   recruit_data,
   N0,
+  disturbance = NULL,
   shiny_progress = FALSE,
   return_mcmc = FALSE,
   i18n = NULL,
@@ -21,6 +22,8 @@ bbouMakeSummaryTable(
 
 \item{N0}{dataframe. Initial population estimates, required columns are
 PopulationName and N0}
+
+\item{disturbance}{dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.}
 
 \item{shiny_progress}{logical. Should shiny progress bar be updated. Only set
 to TRUE if using in an app.}

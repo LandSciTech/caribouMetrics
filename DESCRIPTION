@@ -53,6 +53,7 @@ Collate:
     'AAAClassDefinitions.R'
     'applyDist.R'
     'bbouMakeSummaryTable.R'
+    'betaMakeSummaryTable.R'
     'betaSample.R'
     'calcBinaryUse.R'
     'calcRSP.R'

@@ -12,7 +12,7 @@ getScenarioDefaults(
   projAnthroSlope = 2,
   rSlopeMod = 1,
   sSlopeMod = 1,
-  lQuantile = NA,
+  lQuantile = 0.5,
   projYears = 35,
   obsYears = 15,
   preYears = 0,
