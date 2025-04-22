@@ -7,7 +7,8 @@
 #' 
 #' For a detailed description of the process for simulating data see the
 #' [vignette](https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#simulation-of-local-population-dynamics-and-monitoring)
-#' (`vignette("BayesianDemographicProjection", package = "caribouMetrics")`).
+#' (`vignette("BayesianDemographicProjection", package = "caribouMetrics")`) and
+#'  [Hughes et al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095).
 #'
 #' @param paramTable data.frame. Parameters for the simulations. See
 #'   [getScenarioDefaults()] for details.
@@ -52,7 +53,14 @@
 #'
 #' @family demography
 #' @export
-#'
+#' 
+#' @references    
+#'   Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
+#'   Integration of national demographic-disturbance relationships and local
+#'   data can improve caribou population viability projections and inform
+#'   monitoring decisions. Ecological Informatics, 87, p.103095.
+#'   <https://doi.org/10.1016/j.ecoinf.2025.103095>
+#'   
 #' @examples
 #' scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 #'                             obsAnthroSlope = 1, projAnthroSlope = 5,

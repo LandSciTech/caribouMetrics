@@ -123,17 +123,17 @@ out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut
                           Nthin = 2)
 }
 \references{
-Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
-P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
-linking population dynamics to habitat for a threatened species in Canada.
-Journal of Applied Ecology, 57(7), pp.1314-1327.
-\url{https://doi.org/10.1111/1365-2664.13637}
-
 Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
 Integration of national demographic-disturbance relationships and local
 data can improve caribou population viability projections and inform
 monitoring decisions. Ecological Informatics, 87, p.103095.
 \url{https://doi.org/10.1016/j.ecoinf.2025.103095}
+
+Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
+P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+linking population dynamics to habitat for a threatened species in Canada.
+Journal of Applied Ecology, 57(7), pp.1314-1327.
+\url{https://doi.org/10.1111/1365-2664.13637}
 }
 \seealso{
 Caribou demography functions:
