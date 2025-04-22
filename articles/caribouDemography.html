@@ -98,9 +98,12 @@
 </h2>
 <p>Here we describe a two-stage demographic model with density
 dependence and interannual variability following <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a> with
-modifications noted in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et
+modifications noted in <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et
+al. (2025)</a> and <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et
 al. (2022)</a>. Demographic rates vary with disturbance as estimated by
-<a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>.</p>
+<a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>. A
+detailed description of the model is provided in <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. (2025)
+Section 2.4</a>.</p>
 <p><code><a href="../reference/demographicCoefficients.html">demographicCoefficients()</a></code> selects the regression
 coefficient values and standard errors for the desired model version
 (see <code>popGrowthTableJohnsonECCC</code> for options) and then
@@ -108,65 +111,16 @@ samples coefficients from these Gaussian distributions for each
 replicate population.</p>
 <p>Next <code><a href="../reference/demographicRates.html">demographicRates()</a></code> is used to apply the sampled
 coefficients to the disturbance covariates to calculate expected
-recruitment
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>R</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\bar{R}_t</annotation></semantics></math>)
-and survival
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>S</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\bar{S}_t</annotation></semantics></math>)
-according to the beta regression models estimated by Johnson et
-al. (2020):
-:<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>R</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>∼</mo><mi>B</mi><mi>e</mi><mi>t</mi><mi>a</mi><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>μ</mi><mi>t</mi><mi>R</mi></msubsup><mo>,</mo><msup><mi>ϕ</mi><mi>R</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>μ</mi><mi>t</mi><mi>R</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mover><msubsup><mi>β</mi><mn>0</mn><mi>R</mi></msubsup><mo accent="true">̇</mo></mover><mo>+</mo><mover><msubsup><mi>β</mi><mi>a</mi><mi>R</mi></msubsup><mo accent="true">̇</mo></mover><msub><mi>A</mi><mi>t</mi></msub><mo>+</mo><msubsup><mover><mi>β</mi><mo accent="true">̇</mo></mover><mi>f</mi><mi>R</mi></msubsup><msub><mi>F</mi><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\bar{R}_t \sim Beta(\mu^R_t,\phi^R);log(\mu^R_t)=\dot{\beta^R_0}+\dot{\beta^R_a}A_t+\dot{\beta}^R_fF_t,</annotation></semantics></math></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>S</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>∼</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>46</mn><mo>×</mo><mi>B</mi><mi>e</mi><mi>t</mi><mi>a</mi><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>μ</mi><mi>t</mi><mi>S</mi></msubsup><mo>,</mo><msup><mi>ϕ</mi><mi>S</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mn>0.5</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>45</mn><mo>;</mo><mi>l</mi><mi>o</mi><mi>g</mi><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>μ</mi><mi>t</mi><mi>S</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mover><msubsup><mi>β</mi><mn>0</mn><mi>S</mi></msubsup><mo accent="true">̇</mo></mover><mo>+</mo><mover><msubsup><mi>β</mi><mi>a</mi><mi>S</mi></msubsup><mo accent="true">̇</mo></mover><msub><mi>A</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar{S}_t \sim (46\times Beta(\mu^S_t,\phi^S)-0.5)/45;log(\mu^S_t)=\dot{\beta^S_0}+\dot{\beta^S_a}A_t.</annotation></semantics></math><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>ϕ</mi><mi>R</mi></msup><annotation encoding="application/x-tex">\phi^R</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>ϕ</mi><mi>S</mi></msup><annotation encoding="application/x-tex">\phi^S</annotation></semantics></math>
-are the precisions of the Beta distributed errors. Each population is
-optionally assigned to quantiles of the Beta error distributions for
-survival and recruitment. Using quantiles means that the population will
-stay in these quantiles as disturbance changes over time, so there is
-persistent variation in recruitment and survival among example
-populations.</p>
+recruitment and survival according to the beta regression models
+estimated by Johnson et al. (2020). Each population is optionally
+assigned to quantiles of the Beta error distributions for survival and
+recruitment. Using quantiles means that the population will stay in
+these quantiles as disturbance changes over time, so there is persistent
+variation in recruitment and survival among example populations.</p>
 <p>Finally, we can use the estimated demographic rates to project
-population dynamics using a simple model with two age classes. The
-number of post-juvenile females that survive from year
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
-to the census
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\dot{W}_t</annotation></semantics></math>
-is binomially distributed with survival probability
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>S</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\dot{S}_t</annotation></semantics></math>:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>∼</mo><mtext mathvariant="normal">Binomial</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>N</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mover><mi>S</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\dot{W}_{t} \sim \text{Binomial}(\dot{N}_t,\dot{S}_t)</annotation></semantics></math>.
-Maximum potential recruitment rate is adjusted for sex ratio,
-misidentification biases, and (optionally) delayed age at first
-reproduction
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>X</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>=</mo><mfrac><mrow><mover><mi>c</mi><mo accent="true">̇</mo></mover><msub><mover><mi>R</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mi>/</mi><mn>2</mn></mrow><mrow><mn>1</mn><mo>+</mo><mover><mi>c</mi><mo accent="true">̇</mo></mover><msub><mover><mi>R</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mi>/</mi><mn>2</mn></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\dot{X}_t=\frac{\dot{c}\dot{R}_t/2}{1+\dot{c}\dot{R}_t/2}.</annotation></semantics></math>
-Realized recruitment rate varies with population density, and the number
-of juveniles recruiting to the post-juvenile class at the census is a
-binomially distributed function of the number of surviving post-juvenile
-females and the adjusted recruitment rate:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>J</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>∼</mo><mtext mathvariant="normal">Binomial</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mover><mi>X</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>p</mi><mn>0</mn></msub><mo>−</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>p</mi><mn>0</mn></msub><mo>−</mo><msub><mi>p</mi><mi>k</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mrow><msub><mi>N</mi><mn>0</mn></msub><mi>k</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>b</mi></msup><mo stretchy="true" form="postfix">]</mo></mrow><mfrac><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mrow><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>+</mo><mi>a</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\dot{J}_{t} \sim \text{Binomial}(\dot{W}_t,\dot{X}_t[p_0-(p_0-p_k)(\frac{\dot{W}_t}{N_0k})^b]\frac{\dot{W}_t}{\dot{W}_t+a}).</annotation></semantics></math>
-Given default parameters, recruitment rate is lowest
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mn>0.5</mn><msub><mover><mi>X</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0.5\dot{X}_t)</annotation></semantics></math>
-when
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>N</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\dot{N}_t=1</annotation></semantics></math>,
-approaches a maximum of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>X</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\dot{X}_t</annotation></semantics></math>
-at intermediate population sizes, and declines to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.6</mn><msub><mover><mi>X</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">0.6\dot{X}_t</annotation></semantics></math>
-as the population reaches carrying capacity of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">K=100</annotation></semantics></math>
-times the initial population size. The post-juvenile female population
-in the next year includes both survivors and new recruits:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>N</mi><mo accent="true">̇</mo></mover><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mtext mathvariant="normal">min</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>W</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>+</mo><msub><mover><mi>J</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mi>r</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><msub><mover><mi>N</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)</annotation></semantics></math>.</p>
-<p>Interannual variation in survival and recruitment is modelled using
-truncated beta distributions <a href="https://CRAN.R-project.org/package=truncdist" class="external-link">rtrunc function;
-Novometsky et al. 2016</a>:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>R</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>∼</mo><mtext mathvariant="normal">TruncatedBeta</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>R</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mi>ν</mi><mi>R</mi></msub><mo>,</mo><msub><mi>l</mi><mi>R</mi></msub><mo>,</mo><msub><mi>h</mi><mi>R</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>;</mo><msub><mover><mi>S</mi><mo accent="true">̇</mo></mover><mi>t</mi></msub><mo>∼</mo><mtext mathvariant="normal">TruncatedBeta</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mover><mi>S</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>,</mo><msub><mi>ν</mi><mi>S</mi></msub><mo>,</mo><msub><mi>l</mi><mi>S</mi></msub><mo>,</mo><msub><mi>h</mi><mi>S</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\dot{R}_t \sim \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim \text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)</annotation></semantics></math>.
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ν</mi><mi>R</mi></msub><annotation encoding="application/x-tex">\nu_R</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ν</mi><mi>S</mi></msub><annotation encoding="application/x-tex">\nu_S</annotation></semantics></math>
-are coefficients of variation among years and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mi>R</mi></msub><mo>,</mo><msub><mi>h</mi><mi>R</mi></msub><mo>,</mo><msub><mi>l</mi><mi>S</mi></msub></mrow><annotation encoding="application/x-tex">l_R,h_R,l_S</annotation></semantics></math>,
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mi>S</mi></msub><annotation encoding="application/x-tex">h_S</annotation></semantics></math>
-are maximum/minimum values for recruitment and survival.</p>
+population dynamics using a simple model with two age classes.
+Interannual variation in survival and recruitment is modelled using
+truncated beta distributions.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -419,6 +373,10 @@ impact assessment: A roadmap for improving the usefulness, transparency,
 and availability of models for conservation. <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link uri">https://doi.org/10.1101/2022.06.01.494350</a></p>
 <p>Ferrari S, Cribari-Neto F (2004) Beta Regression for Modelling Rates
 and Proportions. Journal of Applied Statistics 31:799–815. <a href="https://doi.org/10.1080/0266476042000214501" class="external-link uri">https://doi.org/10.1080/0266476042000214501</a></p>
+<p>Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
+Integration of national demographic-disturbance relationships and local
+data can improve caribou population viability projections and inform
+monitoring decisions. Ecological Informatics, 87, p.103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link uri">https://doi.org/10.1016/j.ecoinf.2025.103095</a></p>
 <p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
 Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
 linking population dynamics to habitat for a threatened species in

@@ -113,9 +113,8 @@ analysis of demographic-disturbance relationships with available local
 demographic data to project population growth. In addition, methods are
 provided for simulating local population dynamics and monitoring
 programs.</p>
-<p>The model is described in Hughes et al. Integration of national
-demographic-disturbance relationships and local data can improve caribou
-population viability projections and inform monitoring decisions.</p>
+<p>The model is described in <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. (2025)
+Section 2.5</a>.</p>
 <div class="section level3">
 <h3 id="using-real-observed-data">Using real observed data<a class="anchor" aria-label="anchor" href="#using-real-observed-data"></a>
 </h3>
@@ -170,7 +169,7 @@ over the next 20 years.</p>
 <span><span class="co">#&gt;   ..$ BUGSoutput        :List of 25</span></span>
 <span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "bugs"</span></span>
 <span><span class="co">#&gt;   ..$ parameters.to.save: chr [1:13] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span></span>
-<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpIIZ3n8/JAGS_run.txt"</span></span>
+<span><span class="co">#&gt;   ..$ model.file        : chr "/tmp/RtmpTW4aWW/JAGS_run.txt"</span></span>
 <span><span class="co">#&gt;   ..$ n.iter            : num 150</span></span>
 <span><span class="co">#&gt;   ..$ DIC               : logi TRUE</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "class")= chr "rjags"</span></span>
@@ -425,6 +424,18 @@ remotes::install_github("LandSciTech/BayesianCaribouDemographicProjection")
 ```
 
 Then you can call `demographicProjectionApp()` to launch the app in your default browser. The app includes options to modify the disturbance scenario, the simulated observations and the model priors similar to those described above. Detailed instructions are included on the first page. -->
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
+Integration of national demographic-disturbance relationships and local
+data can improve caribou population viability projections and inform
+monitoring decisions. Ecological Informatics, 87, p.103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link uri">https://doi.org/10.1016/j.ecoinf.2025.103095</a></p>
+<p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
+Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+linking population dynamics to habitat for a threatened species in
+Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link uri">https://doi.org/10.1111/1365-2664.13637</a></p>
 </div>
   </div>
 
