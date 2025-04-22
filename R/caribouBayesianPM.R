@@ -15,7 +15,7 @@
 #' the relationship between disturbance and survival and recruitment from the
 #' Johnson et al. (2020) national model (`getPriors()`) to reduce uncertainty and refine parameter estimates.
 #'
-#' For a detailed description see the
+#' For a detailed description see [Hughes et al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095) and the
 #' [vignette](https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model)
 #' (`vignette("BayesianDemographicProjection", package = "caribouMetrics")`).
 #'
@@ -57,6 +57,20 @@
 #'     * ageRatioIn: composition data
 #' @family demography
 #' @export
+#'
+#' @references 
+#'   Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
+#'   Integration of national demographic-disturbance relationships and local
+#'   data can improve caribou population viability projections and inform
+#'   monitoring decisions. Ecological Informatics, 87, p.103095.
+#'   <https://doi.org/10.1016/j.ecoinf.2025.103095>
+#'   
+#'   Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
+#'   P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+#'   linking population dynamics to habitat for a threatened species in Canada.
+#'   Journal of Applied Ecology, 57(7), pp.1314-1327.
+#'   <https://doi.org/10.1111/1365-2664.13637>
+#'   
 #'
 #' @examples
 #' # Using observed survival, recruitment and disturbance data
