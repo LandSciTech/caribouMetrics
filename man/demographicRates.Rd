@@ -120,32 +120,23 @@ recruitment (calves per cow)
 For \code{sampleRates} a similar data frame for one response variable
 }
 \description{
-Apply sampled coefficients to disturbance covariates to
-calculate expected recruitment and survival.\code{demographicRates} is a wrapper
+Apply the sampled coefficients to the disturbance covariates
+to calculate expected recruitment and survival according to the beta
+regression models estimated by Johnson et al. (2020).\code{demographicRates} is a wrapper
 around \code{sampleRates} to sample both survival and recruitment rates based on
 the result of \code{\link[=demographicCoefficients]{demographicCoefficients()}} and using recommended defaults.
 }
 \details{
-First the mean recruitment (\eqn{\mu^R_t}) and survival
-(\eqn{\mu^S_t}) are calculated from the sampled coefficients and provided
-disturbance covariates according to the beta regression models estimated by
-Johnson et al. (2020):
-\deqn{log(\mu^R_t)=\dot{\beta^R_0}+\dot{\beta^R_a}A_t+\dot{\beta}^R_fF_t}
+Each population is optionally assigned to quantiles of the Beta
+error distributions for survival and recruitment. Using quantiles means
+that the population will stay in these quantiles as disturbance changes
+over time, so there is persistent variation in recruitment and survival
+among example populations.
 
-\deqn{log(\mu^S_t)=\dot{\beta^S_0}+\dot{\beta^S_a}A_t}
+A transformation function is also applied to survival to avoid survival
+probabilities of 1.
 
-Then each replicate population is assigned to a quantile (if \code{useQuantiles = TRUE}) of the Beta distributed expected recruitment \eqn{\bar{R}_t} and
-survival \eqn{\bar{S}_t} where \eqn{\phi^R} and \eqn{\phi^S} are the
-precisions of the Beta distributed errors:
-
-\deqn{\bar{R}_t \sim \text{Beta}(\mu^R_t,\phi^R)}
-
-\deqn{\bar{S}_t \sim (46\times \text{Beta}(\mu^S_t,\phi^S)-0.5)/45)}
-
-Using quantiles means that the population will stay in these quantiles as
-disturbance changes over time, so there is persistent variation in
-recruitment and survival among example populations. A transformation
-function is also applied to survival to avoid survival probabilities of 1.
+A detailed description of the model is available in \href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. (2025)}
 }
 \examples{
 # get coefficient samples
@@ -183,6 +174,19 @@ sampleRates(distScen, cfSamps$coefSamples, cfSamps$coefValues,
                                       probs = seq(0.025, 0.975, length.out = 10)))
 
 
+}
+\references{
+Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
+Integration of national demographic-disturbance relationships and local
+data can improve caribou population viability projections and inform
+monitoring decisions. Ecological Informatics, 87, p.103095.
+\url{https://doi.org/10.1016/j.ecoinf.2025.103095}
+
+Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
+P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+linking population dynamics to habitat for a threatened species in Canada.
+Journal of Applied Ecology, 57(7), pp.1314-1327.
+\url{https://doi.org/10.1111/1365-2664.13637}
 }
 \seealso{
 Caribou demography functions:

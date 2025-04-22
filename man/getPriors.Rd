@@ -115,21 +115,34 @@ effect of year on adult female survival,
 }
 }
 \description{
-Returns prior parameter values for the Bayesian population model. The starting point
-is estimated coefficients from national demographic-disturbance relationships in the table \code{popGrowthTableJohnsonECCC}.
-Standard errors and random effects of year have been calibrated so that the 95\% prior
-prediction intervals for survival and recruitment
-from the Bayesian model match the range between the 2.5\% and 97.5\% quantiles of 1000
-survival and recruitment trajectories from the national demographic model \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}.
-A log-normal prior for the unknown composition survey bias correction term \code{c} is set by specifying
-an apparent number of adult females per collared animal(\code{cowMult}) and minimum and maximum values
-for each of the ratio of bulls to cows (\eqn{q}), the probability of misidentifying young
-bulls as adult females and vice versa (\eqn{u}), and the probability of missing
-calves (\eqn{z}) in composition surveys. See \code{\link[=compositionBiasCorrection]{compositionBiasCorrection()}} for additional details.
+Returns prior parameter values for the Bayesian population model. The
+starting point is estimated coefficients from national
+demographic-disturbance relationships in the table
+\code{popGrowthTableJohnsonECCC}.
+}
+\details{
+Standard errors and random effects of year have
+been calibrated so that the 95\% prior prediction intervals for survival and
+recruitment from the Bayesian model match the range between the 2.5\% and
+97.5\% quantiles of 1000 survival and recruitment trajectories from the
+national demographic model \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}. A log-normal prior for the
+unknown composition survey bias correction term \code{c} is set by specifying an
+apparent number of adult females per collared animal(\code{cowMult}) and minimum
+and maximum values for each of the ratio of bulls to cows (\eqn{q}), the
+probability of misidentifying young bulls as adult females and vice versa
+(\eqn{u}), and the probability of missing calves (\eqn{z}) in composition
+surveys. See \code{\link[=compositionBiasCorrection]{compositionBiasCorrection()}} and \href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. (2025)} for additional details.
 }
 \examples{
 getPriors()
 
+}
+\references{
+Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
+Integration of national demographic-disturbance relationships and local
+data can improve caribou population viability projections and inform
+monitoring decisions. Ecological Informatics, 87, p.103095.
+\url{https://doi.org/10.1016/j.ecoinf.2025.103095}
 }
 \seealso{
 Caribou demography functions:
