@@ -74,7 +74,7 @@ setMethod("plot", "CaribouHabitat",
   if (season[1] == "all"){
     season <- c("Spring", "Summer", "Fall", "Winter")
   }
-  if(F&tmap){
+  if(tmap){
     tmap::qtm(x@habitatUse[[season]], raster.title = raster.title, ...)+
       tmap::qtm(x@projectPoly, fill = NULL)
   }else {
