@@ -146,7 +146,14 @@ test_that("works when 1 collared animal",{
   # ensure some deaths
   oo$simSurvObs$event[1] <- 1
   
-  #expect_s3_class(out$result, "rjags")
+  out <- caribouBayesianPM(
+      survData = oo$simSurvObs, ageRatio = oo$ageRatioOut,
+      disturbance = oo$simDisturbance,
+      startYear = 2012, endYear = 2043,
+      Nchains = 1, Niter = 100, Nburn = 10,
+      Nthin = 2)
+  
+  expect_s3_class(out$result, "rjags")
 
   # confirm that the system properly handles cases where there there is only one
   # year of data for one collared animal and it does not survive the year.
@@ -182,7 +189,8 @@ test_that("results match expected", {
   doScn <- function(nCollar = 2000, nobsYears = 10, collarOn = 1, collarOff = 12, 
                     iAnthro = 0, obsAnthroSlope = 0, projAnthroSlope = 0, 
                     sQuantile = 0.5,  rQuantile = 0.5, rSlopeMod = 1, sSlopeMod = 1, 
-                    KSDists = FALSE){
+                    KSDists = FALSE, 
+                    interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar))){
     #nCollar = 2000; nobsYears = 10; collarOn = 1; collarOff = 12; 
     #iAnthro = 0; obsAnthroSlope = 0; projAnthroSlope = 0; 
     #sQuantile = 0.5;  rQuantile = 0.5; rSlopeMod = 1; sSlopeMod = 1; KSDists = FALSE
@@ -195,7 +203,7 @@ test_that("results match expected", {
       obsYears = nobsYears, collarCount = nCollar, cowMult = 2, collarInterval = 1,
       assessmentYrs = 1, iAnthro = iAnthro, rSlopeMod = rSlopeMod, sSlopeMod = sSlopeMod,
       tA = 0, obsAnthroSlope = obsAnthroSlope, projAnthroSlope = projAnthroSlope,
-      sQuantile = sQuantile, rQuantile = rQuantile, N0 = 3000
+      sQuantile = sQuantile, rQuantile = rQuantile, N0 = 3000, interannualVar = interannualVar
     )
     scResults <- suppressWarnings(runScnSet(scns, eParsIn, simBig, getKSDists = KSDists,
                                             Niter = 3000, Nburn = 1500))
@@ -221,8 +229,8 @@ test_that("results match expected", {
       summarise(mean_dif = mean(dif))
   }
   
-  # difference between observed and true simulated observations
-  calcDifMod <- function(mod, var){
+  # difference between projected and true simulated observations
+  calcDifMod <- function(mod){
     obs_true <- mod$obs.all %>% filter(type == "true") %>% 
       select(Year, Mean, type, parameter) 
     mod_proj <- mod$rr.summary.all %>% 
@@ -252,13 +260,17 @@ test_that("results match expected", {
   
   # expectations that make sense based on what we know and ensure results
   # are similar to expected
-  
+  set.seed(1234)
   # when we have a lot of collars the distance between observations and "true"
   # pop is smaller than when we have few.
-  manyObs <- doScn(nCollar = 2000, rQuantile = 0.9, sQuantile = 0.9)
+  # Reduce IV so can see differences more clearly
+  manyObs <- doScn(nCollar = 2000, rQuantile = 0.9, sQuantile = 0.9,
+                   interannualVar = list(list(R_CV = 0.01, S_CV = 0.01)))
   doPlot(manyObs, title = "2000 collars")
-    
-  fewCollarObs <- doScn(nCollar = 5, rQuantile = 0.9, sQuantile = 0.9)
+  
+  set.seed(1234)  
+  fewCollarObs <- doScn(nCollar = 5, rQuantile = 0.9, sQuantile = 0.9, 
+                        interannualVar = list(list(R_CV = 0.01, S_CV = 0.01)))
   doPlot(fewCollarObs, title = "5 collars")#,var="Adult female survival")
   
   difMany <- calcDif(manyObs$obs.all)
@@ -269,12 +281,12 @@ test_that("results match expected", {
   modDifMany <- calcDifMod(manyObs)
   modDifFew <- calcDifMod(fewCollarObs)
 
-  #expect_true(all(modDifFew$mean_dif > modDifMany$mean_dif))
-  #TO DO: fix this test. Looks like model is ok so logic of test must be off.
+  expect_true(all(modDifFew$mean_dif > modDifMany$mean_dif))
   
   # difference between modeled and true does not change much if collar on/off times
   # are different but still a year apart
-  collOff3On4 <- doScn(collarOn = 4, collarOff = 3)
+  collOff3On4 <- doScn(collarOn = 4, collarOff = 3, 
+                       interannualVar = list(list(R_CV = 0.01, S_CV = 0.01)))
   doPlot(collOff3On4)
 
   modDifcollOff3On4 <- calcDifMod(collOff3On4)
