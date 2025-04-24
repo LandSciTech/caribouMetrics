@@ -89,7 +89,7 @@ disturbance (\code{disturbance}) with prior information on
 the relationship between disturbance and survival and recruitment from the
 Johnson et al. (2020) national model (\code{getPriors()}) to reduce uncertainty and refine parameter estimates.
 
-For a detailed description see \href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. 2025} and the
+For a detailed description see the
 \href{https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model}{vignette}
 (\code{vignette("BayesianDemographicProjection", package = "caribouMetrics")}).
 
@@ -121,19 +121,6 @@ out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut
                           disturbance = simO$simDisturbance,
                           startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
                           Nthin = 2)
-}
-\references{
-Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
-Integration of national demographic-disturbance relationships and local
-data can improve caribou population viability projections and inform
-monitoring decisions. Ecological Informatics, 87, p.103095.
-\url{https://doi.org/10.1016/j.ecoinf.2025.103095}
-
-Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
-P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
-linking population dynamics to habitat for a threatened species in Canada.
-Journal of Applied Ecology, 57(7), pp.1314-1327.
-\url{https://doi.org/10.1111/1365-2664.13637}
 }
 \seealso{
 Caribou demography functions:

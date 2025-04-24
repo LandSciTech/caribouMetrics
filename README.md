@@ -20,14 +20,12 @@ al. (2020)](doi:10.1111/1365-2664.13637). The package also includes a
 Bayesian population model designed to integrate prior information from
 Johnson et al’s national analysis of demographic-disturbance
 relationships with available local demographic data to reduce
-uncertainty in population viability projections ([Hughes et
-al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095)). The Bayesian
-population model builds on work by [Eacker et
+uncertainty in population viability projections. The Bayesian population
+model builds on work by [Eacker et
 al. (2019)](https://doi.org/10.1002/wsb.950). The national model can be
-used to simulate example population trajectories, and combine with a
+used to simulate example population trajectories, and combined with a
 simple observation model and the Bayesian population model to show how
-monitoring requirements depend on landscape condition ([Hughes et
-al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095)). Finally,
+monitoring requirements depend on landscape condition. Finally,
 caribouMetrics contains an implementation of [Hornseth and Rempel’s
 (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou
 resource selection model described in [Dyson et
@@ -93,9 +91,9 @@ demRates <- demographicRates(covTable = disturb_tbl,
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05597148
-#>     S_PIlow S_PIhigh     R_bar   R_stdErr    R_PIlow R_PIhigh
-#> 1 0.7258836 0.928071 0.1813372 0.09559564 0.04283882 0.358291
+#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05241465
+#>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
+#> 1 0.7565716 0.9248297 0.1813372 0.09978929 0.04519307 0.3927806
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
@@ -103,9 +101,9 @@ popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar,
 
 popGrow
 #>     N0 lambdaTrue    lambda   N        R_t        X_t       S_t n_recruits
-#> 1 2000  0.9431225 0.9247487 620 0.09318726 0.04659363 0.9282239         23
+#> 1 2000  0.8975009 0.9247487 230 0.06236733 0.03118367 0.9610701          3
 #>   surviving_adFemales
-#> 1                 597
+#> 1                 227
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(
@@ -127,7 +125,6 @@ ipm <- caribouBayesianPM(simObs$simSurvObs, simObs$ageRatioOut,
 #> using Binomial survival model
 
 natSim <- getSimsNational(Anthro = unique(simObs$simDisturbance$Anthro))
-#> Warning: Setting expected survival S_bar to be between l_S and h_S.
 
 ipmTbls <- getOutputTables(ipm, paramTable = simObs$paramTable, 
                             exData = simObs$exData, 
@@ -230,12 +227,6 @@ Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
 woodland caribou (Rangifer tarandus caribou) across a gradient of
 anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
 <https://doi.org/10.1139/cjz-2015-0101>
-
-Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
-Integration of national demographic-disturbance relationships and local
-data can improve caribou population viability projections and inform
-monitoring decisions. Ecological Informatics, 87, p.103095.
-<https://doi.org/10.1016/j.ecoinf.2025.103095>
 
 Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
 Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
