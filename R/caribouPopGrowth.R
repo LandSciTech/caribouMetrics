@@ -1,43 +1,26 @@
 #' Caribou demographic model
 #'
-#' A two-stage demographic model with density dependence and interannual variability
-#' following [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with modifications described 
-#' in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates vary 
-#' with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637).
-#' Default parameter values give the model in Dyson et al. (2022). Set `probOption =
-#' "matchJohnson2020"` to reproduce the model used in Johnson et al. 2020. Set
-#' `probOption = "continuous"`, `interannualVar = FALSE`, and `K = FALSE` to
-#' reproduce the simpler 2-stage demographic model without interannual
-#' variability, density dependence, or discrete numbers of animals used by
-#' [Stewart et al. (2023)](https://doi.org/10.1002/eap.2816). See `vignette("caribouDemography")` for additional
-#' details and examples.
-#'
-#' Given a population of post-juvenile females at the beginning of year \eqn{t}, \eqn{\dot{N}_t},
-#' the number of post-juvenile females that survive from year \eqn{t} to the
-#' census \eqn{\dot{W}_t} is binomially distributed with survival probability
-#' \eqn{\dot{S}_t}: \eqn{\dot{W}_{t} \sim \text{Binomial}(\dot{N}_t,\dot{S}_t)}.
-#' Maximum potential recruitment rate is adjusted for sex ratio and misidentification biases
-#' \deqn{\dot{X}_t=\dot{c}\dot{R}_t/2.} Realized recruitment rate
-#' varies with population density, and the number of juveniles recruiting to the
-#' post-juvenile class at the census is a binomially distributed function of the
-#' number of surviving post-juvenile females and the adjusted recruitment rate:
-#' \deqn{\dot{J}_{t} \sim
-#' \text{Binomial}(\dot{W}_t,\dot{X}_t[p_0-(p_0-p_k)(\frac{\dot{W}_t}{N_0k})^b]\frac{\dot{W}_t}{\dot{W}_t+a}).}
-#' Given default parameters, recruitment rate is lowest \eqn{(0.5\dot{X}_t)}
-#' when \eqn{\dot{N}_t=1}, approaches a maximum of \eqn{\dot{X}_t} at
-#' intermediate population sizes, and declines to \eqn{0.6\dot{X}_t} as the
-#' population reaches carrying capacity of \eqn{K=10000}. The post-juvenile female population in the next year
-#' includes both survivors and new recruits:
-#' \eqn{\dot{N}_{t+1}=\text{min}(\dot{W}_t+\dot{J}_t,r_{max}\dot{N}_t)}.
-#'
-#' If coefficients of variation are provided, interannual variation in survival and recruitment is modelled using truncated
-#' beta distributions: \eqn{\dot{R}_t
-#' \sim \text{TruncatedBeta}(\bar{R}_t,\nu_R,l_R,h_R); \dot{S}_t \sim
-#' \text{TruncatedBeta}(\bar{S}_t,\nu_S,l_S,h_S)}. \eqn{(\nu_R,\nu_S)} are coefficients of variation
-#' among years and \eqn{l_R,h_R,l_S,h_S} are maximum/minimum values for recruitment and survival.
+#' A two-stage demographic model with density dependence and interannual
+#' variability following [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637)
+#' with modifications described in 
+#' [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095) and 
+#' [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350).
+#' Demographic rates vary with disturbance as estimated by [Johnson et. al.
+#' (2020)](doi:10.1111/1365-2664.13637). Default parameter values give the model
+#' in Dyson et al. (2022). Set `probOption = "matchJohnson2020"` to reproduce
+#' the model used in Johnson et al. 2020. Set `probOption = "continuous"`,
+#' `interannualVar = FALSE`, and `K = FALSE` to reproduce the simpler 2-stage
+#' demographic model without interannual variability, density dependence, or
+#' discrete numbers of animals used by [Stewart et al.
+#' (2023)](https://doi.org/10.1002/eap.2816). 
 #' 
-#' If R_annual and S_annual are provided, interannual variation in survival and recruitment is modelled
-#' as in a logistic glmm with random effect of year.
+#' 
+#' If R_annual and S_annual are provided, interannual variation in survival and
+#' recruitment is modelled as in a logistic glmm with random effect of year.
+#' 
+#' See `vignette("caribouDemography")` 
+#' and [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095) for 
+#' additional details and examples.
 #' 
 #' @param N0 Number or vector of numbers. Initial population size for one or
 #'   more sample populations.
@@ -80,6 +63,12 @@
 #'   impact assessment: A roadmap for improving the usefulness, transparency,
 #'   and availability of models for conservation.
 #'   <https://doi.org/10.1101/2022.06.01.494350>
+#'   
+#'   Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
+#'   Integration of national demographic-disturbance relationships and local
+#'   data can improve caribou population viability projections and inform
+#'   monitoring decisions. Ecological Informatics, 87, p.103095.
+#'   <https://doi.org/10.1016/j.ecoinf.2025.103095>
 #'   
 #'   Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
 #'   P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:

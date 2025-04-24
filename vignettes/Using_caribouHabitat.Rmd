@@ -154,14 +154,17 @@ carHab2 <- caribouHabitat(
 ```
 
 ```{r inspect padded, fig.width=8, fig.height=5}
-tmap::qtm(landCoverD, raster = "black")+
-    tmap::tm_shape(carHab2@landCover)+
-    tmap::tm_raster(style = "cat", 
-              palette = tmaptools::get_brewer_pal("Accent", n = 9, plot = FALSE), 
-              labels = resTypeCode$ResourceType,
-              title = "PLC")+
-    tmap::tm_legend(bg.color = "white", legend.outside = TRUE)+
-  tmap::qtm(carHab2@projectPoly, fill = NULL, borders = "black")
+tmap::tm_shape(landCoverD)+
+  tmap::tm_raster(col = "black")+
+  tmap::tm_shape(carHab2@landCover)+
+  tmap::tm_raster(col.scale = tmap::tm_scale_categorical(
+    values = cols4all::c4a("Accent", 8), 
+    labels = resTypeCode %>% filter(ResourceType != "DTN") %>%
+      pull(ResourceType)), 
+    col.legend = tmap::tm_legend(title = "PLC", bg.color = "white", 
+                                 legend.outside = TRUE))+
+  tmap::tm_shape(carHab2@projectPoly)+
+  tmap::tm_borders(col = "black")
 
 ```
 
@@ -169,6 +172,8 @@ The black area on the map above shows the extent of the original `landCover` dat
 Next we will demonstrate the importance of setting `padProjPoly = TRUE`, if the data is available, by showing the difference in the results for padding using the data outside the project area, no padding, and using the value from the edge to pad the area outside the project using `padFocal = TRUE` 
 
 ```{r compare pad, fig.width=8, fig.height=5}
+library(tmap)
+
 carHab3 <- caribouHabitat(
   landCover = landCoverD, 
   esker = eskerDshp, 
@@ -192,19 +197,19 @@ st_area(projectPolyD2)
 plot(carHab2, season = "Fall", title = "Pad with data outside project", 
      raster.breaks = c(0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 1), 
      layout.legend.outside = TRUE)+
-  tmap::qtm(carHab3@projectPoly, fill = NULL, borders = "red", 
+  tmap::qtm(carHab3@projectPoly, fill = NULL, col = "red", 
             shape.is.master = TRUE)
 
 plot(carHab3, season = "Fall", title = "No padding", 
      raster.breaks = c(0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 1),
      layout.legend.outside = TRUE)+
-  tmap::qtm(carHab3@projectPoly, fill = NULL, borders = "red", 
+  tmap::qtm(carHab3@projectPoly, fill = NULL, col = "red", 
             shape.is.master = TRUE)
 
 plot(carHab4, season = "Fall", title = "Pad with same value as edge", 
      raster.breaks = c(0, 0.025, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 1),
      layout.legend.outside = TRUE)+
-  tmap::qtm(carHab3@projectPoly, fill = NULL, borders = "red", 
+  tmap::qtm(carHab3@projectPoly, fill = NULL, col = "red", 
             shape.is.master = TRUE)
 
 ```
@@ -244,12 +249,14 @@ linFeatDras2 <- linFeatDras[1:(height*2), , drop = FALSE] %>%
 linFeatDras3 <- linFeatDras[1:(height*3), , drop = FALSE] %>%
   extend(linFeatDras, fill = 0)
 
-par(mfrow = c(2, 2))
+oldpar <- par(mfrow = c(2, 2))
+
 plot(linFeatDras1)
 plot(linFeatDras2)
 plot(linFeatDras3)
 plot(linFeatDras)
 
+par(oldpar)
 # Run caribouHabitat to process all the data once
 # Use Missisa range because roads have a larger effect in that model
 carHabLF1 <- caribouHabitat(
@@ -267,10 +274,8 @@ carHabLF1 <- caribouHabitat(
 carHabLF2 <- updateCaribou(carHabLF1, newData = list(linFeat = linFeatDras2))
 
 # compare results
-plot(carHabLF1, season = "Spring", title = "linFeat 1", raster.breaks = 0:10/10, 
-     legend.outside = TRUE)
-plot(carHabLF2, season = "Spring", title = "linFeat 2", raster.breaks = 0:10/10, 
-     legend.outside = TRUE)
+plot(carHabLF1, season = "Spring", tmap = FALSE, main = "linFeat1")
+plot(carHabLF2, season = "Spring", tmap = FALSE, main = "linFeat2")
 
 
 ```
@@ -294,8 +299,7 @@ linFeatResults <- purrr::map(
 
 purrr::walk2(c(carHabLF1, linFeatResults), 
              c("linFeatDras1", names(linFeatResults)), 
-             ~plot(.x, season = "Spring", title = .y, raster.breaks = 0:10/10,
-                   legend.outside = TRUE) %>% print())
+             ~plot(.x, season = "Spring", tmap = FALSE, main = .y))
 
 
 ```
@@ -307,7 +311,7 @@ carHab1@attributes$caribouRange$coefRange <- "Missisa"
 
 misCoef <- updateCaribou(carHab1)
 
-plot(misCoef)
+plot(misCoef, tmap = FALSE)
 ```
 
 ## Example with different coefficients
