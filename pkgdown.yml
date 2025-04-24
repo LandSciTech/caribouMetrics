@@ -5,8 +5,9 @@ articles:
   BayesianDemographicProjection: BayesianDemographicProjection.html
   caribouDemography: caribouDemography.html
   UI_help: UI_help.html
+  Using_caribouHabitat: Using_caribouHabitat.html
   Using_disturbanceMetric: Using_disturbanceMetric.html
-last_built: 2025-04-22T19:58Z
+last_built: 2025-04-24T12:48Z
 urls:
   reference: https://landscitech.github.io/caribouMetrics/reference
   article: https://landscitech.github.io/caribouMetrics/articles

@@ -116,7 +116,7 @@ package is to make them more accessible to a wider range of users.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; terra 1.8.10</span></span>
+<span><span class="co">#&gt; terra 1.8.42</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
 <span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span></code></pre></div>
@@ -263,7 +263,8 @@ used. You can provide the season(s) you wish to display and additional
 arguments that will be passed on to either <code>qtm</code> or
 <code><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">terra::plot</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fall"</span>, <span class="st">"Summer"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fall"</span>, <span class="st">"Summer"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; tmap must be attached with library(tmap) to be used. Using terra instead.</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/plot1-1.png" width="768"></p>
 </div>
 <div class="section level2">
@@ -353,7 +354,8 @@ allowing the same type of interrogation of the results.</p>
 <span><span class="co">#&gt; min values  : 3.525592e-72, 1.316286e-289, 0.000000, 6.201063e-202, 0.0000000, 0.0000000, ... </span></span>
 <span><span class="co">#&gt; max values  : 7.933179e-01,  7.739030e-01, 0.973895,  9.940220e-01, 0.6456833, 0.1807492, ...</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">MultRange</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Winter"</span>, <span class="st">"Spring"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">MultRange</span>, season <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Winter"</span>, <span class="st">"Spring"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; tmap must be attached with library(tmap) to be used. Using terra instead.</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/results2-1.png" width="768"></p>
 </div>
 <div class="section level2">
@@ -385,15 +387,17 @@ moving window used to scale variables for that range.</p>
 <span><span class="co">#&gt; cropping esker to extent of projectPoly</span></span>
 <span><span class="co">#&gt; Applying moving window.</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">landCoverD</span>, raster <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">carHab2</span><span class="op">@</span><span class="va">landCover</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_raster.html" class="external-link">tm_raster</a></span><span class="op">(</span>style <span class="op">=</span> <span class="st">"cat"</span>, </span>
-<span>              palette <span class="op">=</span> <span class="fu">tmaptools</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmaptools/reference/get_brewer_pal.html" class="external-link">get_brewer_pal</a></span><span class="op">(</span><span class="st">"Accent"</span>, n <span class="op">=</span> <span class="fl">9</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, </span>
-<span>              labels <span class="op">=</span> <span class="va">resTypeCode</span><span class="op">$</span><span class="va">ResourceType</span>,</span>
-<span>              title <span class="op">=</span> <span class="st">"PLC"</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html" class="external-link">tm_legend</a></span><span class="op">(</span>bg.color <span class="op">=</span> <span class="st">"white"</span>, legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab2</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, borders <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; This function is deprecated; please use cols4all::c4a() instead</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_raster.html" class="external-link">tm_raster</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">carHab2</span><span class="op">@</span><span class="va">landCover</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_raster.html" class="external-link">tm_raster</a></span><span class="op">(</span>col.scale <span class="op">=</span> <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_scale_categorical.html" class="external-link">tm_scale_categorical</a></span><span class="op">(</span></span>
+<span>    values <span class="op">=</span> <span class="fu">cols4all</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/cols4all/man/c4a.html" class="external-link">c4a</a></span><span class="op">(</span><span class="st">"Accent"</span>, <span class="fl">8</span><span class="op">)</span>, </span>
+<span>    labels <span class="op">=</span> <span class="va">resTypeCode</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ResourceType</span> <span class="op">!=</span> <span class="st">"DTN"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">ResourceType</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>    col.legend <span class="op">=</span> <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_legend.html" class="external-link">tm_legend</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"PLC"</span>, bg.color <span class="op">=</span> <span class="st">"white"</span>, </span>
+<span>                                 legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">carHab2</span><span class="op">@</span><span class="va">projectPoly</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html" class="external-link">tm_borders</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/inspect%20padded-1.png" width="768"></p>
 <p>The black area on the map above shows the extent of the original
 <code>landCover</code> data, the raster shows the <code>landCover</code>
@@ -405,7 +409,9 @@ the difference in the results for padding using the data outside the
 project area, no padding, and using the value from the edge to pad the
 area outside the project using <code>padFocal = TRUE</code></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">carHab3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmap" class="external-link">tmap</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">carHab3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>, </span>
 <span>  esker <span class="op">=</span> <span class="va">eskerDshp</span>, </span>
 <span>  linFeat <span class="op">=</span> <span class="va">linFeatDshp</span>, </span>
@@ -437,24 +443,40 @@ area outside the project using <code>padFocal = TRUE</code></p>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab2</span>, season <span class="op">=</span> <span class="st">"Fall"</span>, title <span class="op">=</span> <span class="st">"Pad with data outside project"</span>, </span>
 <span>     raster.breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.025</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span>, </span>
 <span>     layout.legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab3</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, borders <span class="op">=</span> <span class="st">"red"</span>, </span>
-<span>            shape.is.master <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab3</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, col <span class="op">=</span> <span class="st">"red"</span>, </span>
+<span>            shape.is.master <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">tmap v3 code detected</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">[v3-&gt;v4]</span> `tm_tm_raster()`: migrate the argument(s) related to the scale of the</span></span>
+<span><span class="co">#&gt; visual variable `col` namely 'breaks' to col.scale = tm_scale(&lt;HERE&gt;).</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">[v3-&gt;v4]</span> `tm_raster()`: migrate the argument(s) related to the legend of the</span></span>
+<span><span class="co">#&gt; visual variable `col` namely 'title' to 'col.legend = tm_legend(&lt;HERE&gt;)'</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/compare%20pad-1.png" width="768"></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab3</span>, season <span class="op">=</span> <span class="st">"Fall"</span>, title <span class="op">=</span> <span class="st">"No padding"</span>, </span>
 <span>     raster.breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.025</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>     layout.legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab3</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, borders <span class="op">=</span> <span class="st">"red"</span>, </span>
-<span>            shape.is.master <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab3</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, col <span class="op">=</span> <span class="st">"red"</span>, </span>
+<span>            shape.is.master <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">tmap v3 code detected</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">[v3-&gt;v4]</span> `tm_tm_raster()`: migrate the argument(s) related to the scale of the</span></span>
+<span><span class="co">#&gt; visual variable `col` namely 'breaks' to col.scale = tm_scale(&lt;HERE&gt;).<span style="color: #00BB00;">[v3-&gt;v4]</span> `tm_raster()`: migrate the argument(s) related to the legend of the</span></span>
+<span><span class="co">#&gt; visual variable `col` namely 'title' to 'col.legend = tm_legend(&lt;HERE&gt;)'</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/compare%20pad-2.png" width="768"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab4</span>, season <span class="op">=</span> <span class="st">"Fall"</span>, title <span class="op">=</span> <span class="st">"Pad with same value as edge"</span>, </span>
 <span>     raster.breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.025</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.15</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>     layout.legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab3</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, borders <span class="op">=</span> <span class="st">"red"</span>, </span>
-<span>            shape.is.master <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab3</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, col <span class="op">=</span> <span class="st">"red"</span>, </span>
+<span>            shape.is.master <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">tmap v3 code detected</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">[v3-&gt;v4]</span> `tm_tm_raster()`: migrate the argument(s) related to the scale of the</span></span>
+<span><span class="co">#&gt; visual variable `col` namely 'breaks' to col.scale = tm_scale(&lt;HERE&gt;).<span style="color: #00BB00;">[v3-&gt;v4]</span> `tm_raster()`: migrate the argument(s) related to the legend of the</span></span>
+<span><span class="co">#&gt; visual variable `col` namely 'title' to 'col.legend = tm_legend(&lt;HERE&gt;)'</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/compare%20pad-3.png" width="768"></p>
 <p>The difference is large in this example because the project area is
 very small compared to the window size. The example with no padding is
@@ -521,7 +543,8 @@ be faster to use <code>updateCaribou</code> rather than
 <span><span class="va">linFeatDras3</span> <span class="op">&lt;-</span> <span class="va">linFeatDras</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">height</span><span class="op">*</span><span class="fl">3</span><span class="op">)</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/extend.html" class="external-link">extend</a></span><span class="op">(</span><span class="va">linFeatDras</span>, fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">oldpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">linFeatDras1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">linFeatDras2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">linFeatDras3</span><span class="op">)</span></span>
@@ -529,6 +552,7 @@ be faster to use <code>updateCaribou</code> rather than
 <p><img src="Using_caribouHabitat_files/figure-html/updateCaribou-1.png" width="576"></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">oldpar</span><span class="op">)</span></span>
 <span><span class="co"># Run caribouHabitat to process all the data once</span></span>
 <span><span class="co"># Use Missisa range because roads have a larger effect in that model</span></span>
 <span><span class="va">carHabLF1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
@@ -557,12 +581,10 @@ be faster to use <code>updateCaribou</code> rather than
 <span><span class="co">#&gt; Applying moving window.</span></span>
 <span></span>
 <span><span class="co"># compare results</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHabLF1</span>, season <span class="op">=</span> <span class="st">"Spring"</span>, title <span class="op">=</span> <span class="st">"linFeat 1"</span>, raster.breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">/</span><span class="fl">10</span>, </span>
-<span>     legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHabLF1</span>, season <span class="op">=</span> <span class="st">"Spring"</span>, tmap <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"linFeat1"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/updateCaribou-2.png" width="576"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHabLF2</span>, season <span class="op">=</span> <span class="st">"Spring"</span>, title <span class="op">=</span> <span class="st">"linFeat 2"</span>, raster.breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">/</span><span class="fl">10</span>, </span>
-<span>     legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHabLF2</span>, season <span class="op">=</span> <span class="st">"Spring"</span>, tmap <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"linFeat2"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/updateCaribou-3.png" width="576"></p>
 <p>You can see that there is a lower probability of caribou habitat use
 when there are more roads (linFeat 2).</p>
@@ -594,8 +616,7 @@ when there are more roads (linFeat 2).</p>
 <span></span>
 <span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">walk2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">carHabLF1</span>, <span class="va">linFeatResults</span><span class="op">)</span>, </span>
 <span>             <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"linFeatDras1"</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">linFeatResults</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>             <span class="op">~</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">.x</span>, season <span class="op">=</span> <span class="st">"Spring"</span>, title <span class="op">=</span> <span class="va">.y</span>, raster.breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">/</span><span class="fl">10</span>,</span>
-<span>                   legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>             <span class="op">~</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">.x</span>, season <span class="op">=</span> <span class="st">"Spring"</span>, tmap <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="va">.y</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/unnamed-chunk-2-1.png" width="768"><img src="Using_caribouHabitat_files/figure-html/unnamed-chunk-2-2.png" width="768"><img src="Using_caribouHabitat_files/figure-html/unnamed-chunk-2-3.png" width="768"><img src="Using_caribouHabitat_files/figure-html/unnamed-chunk-2-4.png" width="768"></p>
 <p>It is also possible to change just the <code>caribouRange</code>
 attribute without recomputing the entire function using the
@@ -607,7 +628,7 @@ using the coefficients from the Missisa model</p>
 <span></span>
 <span><span class="va">misCoef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/updateCaribou.html">updateCaribou</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">misCoef</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">misCoef</span>, tmap <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/update-1.png" width="768"></p>
 </div>
 <div class="section level2">
@@ -676,9 +697,21 @@ data for both but interpreted the codes differently.</p>
 <span>                  palette <span class="op">=</span> <span class="fu">tmaptools</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmaptools/reference/get_brewer_pal.html" class="external-link">get_brewer_pal</a></span><span class="op">(</span><span class="st">"Accent"</span>, n <span class="op">=</span> <span class="fl">9</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, </span>
 <span>                  labels <span class="op">=</span> <span class="va">resTypeCode</span><span class="op">$</span><span class="va">ResourceType</span>,</span>
 <span>                  title <span class="op">=</span> <span class="st">"FNLC"</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html" class="external-link">tm_legend</a></span><span class="op">(</span>bg.color <span class="op">=</span> <span class="st">"white"</span>, legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_legend.html" class="external-link">tm_legend</a></span><span class="op">(</span>bg.color <span class="op">=</span> <span class="st">"white"</span>, legend.outside <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu">tmap</span><span class="fu">::</span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">carHab2</span><span class="op">@</span><span class="va">projectPoly</span>, fill <span class="op">=</span> <span class="cn">NULL</span>, borders <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; This function is deprecated; please use cols4all::c4a() instead</span></span></code></pre></div>
+<span><span class="co">#&gt; This function is deprecated; please use cols4all::c4a() instead</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">tmap v3 code detected</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">[v3-&gt;v4]</span> `tm_raster()`: instead of `style = "cat"`, use col.scale =</span></span>
+<span><span class="co">#&gt; `tm_scale_categorical()`.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Migrate the argument(s) 'palette' (rename to 'values'), 'labels' to</span></span>
+<span><span class="co">#&gt;   'tm_scale_categorical(&lt;HERE&gt;)'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">[v3-&gt;v4]</span> `tm_raster()`: migrate the argument(s) related to the legend of the</span></span>
+<span><span class="co">#&gt; visual variable `col` namely 'title' to 'col.legend = tm_legend(&lt;HERE&gt;)'</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">[v3-&gt;v4]</span> `qtm()`: use `col` instead of `borders`.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">[v3-&gt;v4]</span> `tm_legend()`: use 'tm_legend()' inside a layer function, e.g.</span></span>
+<span><span class="co">#&gt; 'tm_polygons(..., fill.legend = tm_legend())'</span></span>
+<span><span class="co">#&gt; Warning: labels do not have the same length as levels, so they are repeated</span></span></code></pre></div>
 <p><img src="Using_caribouHabitat_files/figure-html/fnlc-1.png" width="700"></p>
 </div>
 <div class="section level2">
