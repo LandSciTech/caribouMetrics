@@ -74,10 +74,13 @@ setMethod("plot", "CaribouHabitat",
   if (season[1] == "all"){
     season <- c("Spring", "Summer", "Fall", "Winter")
   }
-  if(F&tmap){
+  if(tmap && "tmap" %in% .packages()){
     tmap::qtm(x@habitatUse[[season]], raster.title = raster.title, ...)+
       tmap::qtm(x@projectPoly, fill = NULL)
   }else {
+    if(tmap){
+      message("tmap must be attached with library(tmap) to be used. Using terra instead.")
+    }
     terra::plot(x@habitatUse[[season]], ...)
   }
   

@@ -28,7 +28,7 @@ theme_set(theme_bw())
 
 caribouMetrics provides a simple Bayesian population model that integrates prior information from Johnson et al.'s (2020) national analysis of demographic-disturbance relationships with available local demographic data to project population growth. In addition, methods are provided for simulating local population dynamics and monitoring programs. 
 
-The model is described in Hughes et al. Integration of national demographic-disturbance relationships and local data can improve caribou population viability projections and inform monitoring decisions.
+The model is described in [Hughes et al. (2025) Section 2.5](https://doi.org/10.1016/j.ecoinf.2025.103095).
 
 ### Using real observed data
 caribouMetrics includes example csv files of collar survival and calf cow count data as well as disturbance data that can be used as templates for the format for observed data. 
@@ -201,5 +201,20 @@ remotes::install_github("LandSciTech/BayesianCaribouDemographicProjection")
 ```
 
 Then you can call `demographicProjectionApp()` to launch the app in your default browser. The app includes options to modify the disturbance scenario, the simulated observations and the model priors similar to those described above. Detailed instructions are included on the first page. -->
+
+## References
+  Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
+  Integration of national demographic-disturbance relationships and local
+  data can improve caribou population viability projections and inform
+  monitoring decisions. Ecological Informatics, 87, p.103095.
+  <https://doi.org/10.1016/j.ecoinf.2025.103095>
+
+  Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
+  P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+  linking population dynamics to habitat for a threatened species in Canada.
+  Journal of Applied Ecology, 57(7), pp.1314-1327.
+  <https://doi.org/10.1111/1365-2664.13637>
+  
+
 
 
