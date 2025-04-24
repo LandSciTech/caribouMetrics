@@ -187,12 +187,25 @@ recruitment based on calf:cow ratios (<code>ageRatio</code>) and anthropogenic
 disturbance (<code>disturbance</code>) with prior information on
 the relationship between disturbance and survival and recruitment from the
 Johnson et al. (2020) national model (<code><a href="getPriors.html">getPriors()</a></code>) to reduce uncertainty and refine parameter estimates.</p>
-<p>For a detailed description see the
+<p>For a detailed description see <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. 2025</a> and the
 <a href="https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model">vignette</a>
 (<code><a href="../articles/BayesianDemographicProjection.html">vignette("BayesianDemographicProjection", package = "caribouMetrics")</a></code>).</p>
 <p>Note: if <code>survData</code> contains values for enter that are &gt; 0 these rows
 will be dropped to avoid errors when collars are added in the middle of the
 year. This will reduce the sample size in years when new collars are added.</p>
+    </div>
+    <div id="references">
+    <h2>References</h2>
+    <p>Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
+Integration of national demographic-disturbance relationships and local
+data can improve caribou population viability projections and inform
+monitoring decisions. Ecological Informatics, 87, p.103095.
+<a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">https://doi.org/10.1016/j.ecoinf.2025.103095</a></p>
+<p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
+P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+linking population dynamics to habitat for a threatened species in Canada.
+Journal of Applied Ecology, 57(7), pp.1314-1327.
+<a href="https://doi.org/10.1111/1365-2664.13637" class="external-link">https://doi.org/10.1111/1365-2664.13637</a></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -233,7 +246,7 @@ year. This will reduce the sample size in years when new collars are added.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ BUGSoutput        :List of 25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "class")= chr "bugs"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ parameters.to.save: chr [1:13] "S.annual.KM" "R" "Rfemale" "pop.growth" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ model.file        : chr "/tmp/Rtmpl1TkTF/JAGS_run.txt"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ model.file        : chr "/tmp/RtmpIrSodK/JAGS_run.txt"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n.iter            : num 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ DIC               : logi TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, "class")= chr "rjags"</span>
