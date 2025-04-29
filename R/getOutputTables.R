@@ -68,12 +68,15 @@ getOutputTables <- function(caribouBayesDemogMod,
   obsSurv$Type <- "observed"
 
   obsRec <- subset(recInput, 
-                select = c("PopulationName","Year", "Cows", "Calves"))
-  obsRec$Mean <- obsRec$Calves / obsRec$Cows
+                select = intersect(names(recInput), c("PopulationName","Year", "CowsBulls", "Calves","UnknownAdults","Yearlings")))
+  adult_female_proportion = 0.65; sex_ratio=0.5 #TO DO: get from model object
+  obsRec$Mean <- obsRec$Calves / ((obsRec$CowsBulls+obsRec$UnknownAdults)*adult_female_proportion+obsRec$Yearlings*sex_ratio)
   obsRec$Parameter <- "Recruitment"
   obsRec$MetricTypeID <- "recruitment"
   obsRec$Type <- "observed"
 
+  #hist(subset(rr.summary,Parameter=="Recruitment")$Mean)
+  
   if(!is.null(exData)){
     
     exData <- merge(exData,unique(subset(rr.summary,select=c(MetricTypeID,Parameter))),all.x=T)

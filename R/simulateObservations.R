@@ -282,7 +282,6 @@ simulateObservations <- function(trajectories, paramTable,
     }
   }
   
-
   return(list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),simDisturbance = simDisturbance, simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
               exData = trajectories, paramTable = paramTable))
 }
