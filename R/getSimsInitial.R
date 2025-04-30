@@ -80,8 +80,10 @@ getSimsInitial <- function(bbouResults, N0=NULL,
   
   if(is.element("bboufit",class(bbouResults$surv_fit))){
     surv_pred <- bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
+    nr <- dim(surv_pred$samples)[1]*dim(surv_pred$samples)[2]
   }else{
     surv_pred <- bbouResults$surv_fit
+    nr <- dim(surv_pred$samples[[1]])[1]*dim(surv_pred$samples[[1]])[2]*length(surv_pred$samples)
   }
 
   if(is.element("bboufit",class(bbouResults$recruit_fit))){
@@ -90,14 +92,13 @@ getSimsInitial <- function(bbouResults, N0=NULL,
     rec_pred <- bbouResults$recruit_fit
   }
   
-  nr <- dim(surv_pred$samples)[1]*dim(surv_pred$samples)[2]
-  
   popInfo <- merge(data.frame(id=seq(1:nr)),N0)
   popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
                                        z=runif(nr,cPars$zMin,cPars$zMax))
   pars <- caribouPopSimMCMC(popInfo,rec_pred,surv_pred,progress=F,...)
   
-  pars$Anthro=NA;pars$fire_excl_anthro=NA
+  if(!is.element("Anthro",names(pars))){pars$Anthro=NA}
+  if(!is.element("fire_excl_anthro",names(pars))){pars$fire_excl_anthro=NA}
   
   popInfo$PopulationName <- popInfo$pop_name
   
@@ -113,6 +114,7 @@ getSimsInitial <- function(bbouResults, N0=NULL,
   pars <- merge(pars,simSum)
 
   pars <- convertTrajectories(pars)
+  
   simBig <- summarizeCaribouPopSim(pars,returnSamples=returnSamples)
 
   if (doSave) {
@@ -121,5 +123,6 @@ getSimsInitial <- function(bbouResults, N0=NULL,
   }
   simBig$surv_data = bbouResults$surv_fit$data
   simBig$recruit_data = bbouResults$recruit_fit$data
+  simBig$popInfo = popInfo
   return(simBig)
 }

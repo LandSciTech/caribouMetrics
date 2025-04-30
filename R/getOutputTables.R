@@ -53,7 +53,7 @@ getOutputTables <- function(caribouBayesDemogMod,
   result <- caribouBayesDemogMod$result
   survInput <- caribouBayesDemogMod$result$surv_data
   recInput <- caribouBayesDemogMod$result$recruit_data
-  distInput <- caribouBayesDemogMod$inData
+  distInput <- caribouBayesDemogMod$inData$disturbanceIn
   
   # get summary info for plots
   rr.summary <- caribouBayesDemogMod$result$summary
@@ -68,9 +68,9 @@ getOutputTables <- function(caribouBayesDemogMod,
   obsSurv$Type <- "observed"
 
   obsRec <- subset(recInput, 
-                select = intersect(names(recInput), c("PopulationName","Year", "CowsBulls", "Calves","UnknownAdults","Yearlings")))
+                select = intersect(names(recInput), c("PopulationName","Year", "Cows", "Calves","UnknownAdults","Yearlings")))
   adult_female_proportion = 0.65; sex_ratio=0.5 #TO DO: get from model object
-  obsRec$Mean <- obsRec$Calves / ((obsRec$CowsBulls+obsRec$UnknownAdults)*adult_female_proportion+obsRec$Yearlings*sex_ratio)
+  obsRec$Mean <- obsRec$Calves / (obsRec$Cows + obsRec$UnknownAdults*adult_female_proportion+obsRec$Yearlings*sex_ratio)
   obsRec$Parameter <- "Recruitment"
   obsRec$MetricTypeID <- "recruitment"
   obsRec$Type <- "observed"
@@ -99,7 +99,6 @@ getOutputTables <- function(caribouBayesDemogMod,
       
       simInitial <- getSimsInitial(Anthro = unique(distInput$Anthro),cPars=paramTable)
     }
-    
     simBigO <- merge(simInitial$summary, dist_params)
   } else {
     simBigO <- NULL

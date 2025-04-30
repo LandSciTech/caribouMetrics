@@ -85,7 +85,8 @@ simulateObservations <- function(trajectories, paramTable,
   #collarOffTime = ePars$collarOffTime; collarOnTime = ePars$collarOnTime;caribouYearStart=4; writeFileDir=NULL
 
   includeTimes = seq((paramTable$startYear+paramTable$preYears),
-                       (paramTable$startYear+paramTable$preYears+paramTable$obsYears-1))
+                       (paramTable$startYear+paramTable$preYears+paramTable$obsYears))
+  
   
   if(!is.null(surv_data)){
     surv_data <- subset(surv_data,as.numeric(as.character(Annual))<=max(includeTimes))
@@ -281,7 +282,12 @@ simulateObservations <- function(trajectories, paramTable,
        simRecruitObs$Bulls = simRecruitObs$CowsBulls-simRecruitObs$Cows
     }
   }
+  if((paramTable$obsYears+paramTable$preYears)==0){
+    simSurvObs$Mortalities[!is.na(simSurvObs$Mortalities)] = NA
+    simRecruitObs$Calves[!is.na(simRecruitObs$Calves)] = NA
+  }
   
-  return(list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),simDisturbance = simDisturbance, simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
+  return(list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
+              simDisturbance = simDisturbance, simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
               exData = trajectories, paramTable = paramTable))
 }

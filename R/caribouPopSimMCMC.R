@@ -25,7 +25,9 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
   if(class(surv_pred$samples)=="mcmcarray"){
     sur=collapse_chains(surv_pred$samples)
   }else{
-    stop("Deal with this case")
+    sur2 <- as.matrix(data.table::rbindlist(lapply(surv_pred$samples, as.data.frame)))
+    sur <- array(0,dim=c(1,dim(sur2)))
+    sur[1,1:nrow(sur2),1:ncol(sur2)]<-sur2[1:nrow(sur2),1:ncol(sur2)]
   }
   
   if(class(rec_pred$samples)=="mcmcarray"){
@@ -58,7 +60,7 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
     #ts=1
     print(ts)
     yr <- years[ts]
-    S_samp <- sur[,,data_sur$Annual %in% yr]
+    S_samp <- sur[,,sort(unique(data_sur$Annual)) %in% yr]
     R_samp <- rec[,,data_rec$Annual %in% yr]
     
     if(is.null(dim(S_samp))|is.null(dim(R_samp))){

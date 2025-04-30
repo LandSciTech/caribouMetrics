@@ -70,6 +70,7 @@ Caribou demography functions:
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
 \code{\link{getSimsInitial}()},
+\code{\link{getSimsNational}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
 \code{\link{simulateObservations}()}

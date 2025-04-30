@@ -54,6 +54,7 @@ Imports:
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
+    'bbouHelperFns.R'
     'bbouMakeSummaryTable.R'
     'betaMakeSummaryTable.R'
     'betaSample.R'
@@ -78,6 +79,7 @@ Collate:
     'getPriors.R'
     'getScenarioDefaults.R'
     'getSimsInitial.R'
+    'getSimsNational.R'
     'spatialAlignFns.R'
     'inputData.R'
     'inputDataDisturbance.R'

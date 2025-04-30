@@ -118,6 +118,10 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     
     df$Type <- "Bayesian"
     simRange$Type <- "initial"
+    
+    if(!is.element("Year",names(simRange))){
+      
+    }
     nameSel <- c(c("Year", "Mean", "lower", "upper", "Type"), facetVars)
     df <- rbind(subset(df, select = nameSel), subset(simRange, select = nameSel))
     df$grp <- df$Type

@@ -88,7 +88,8 @@ trajectory can be specified with \code{getScenarioDefaults()}.
 \details{
 For a detailed description of the process for simulating data see the
 \href{https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#simulation-of-local-population-dynamics-and-monitoring}{vignette}
-(\code{vignette("BayesianDemographicProjection", package = "caribouMetrics")}).
+(\code{vignette("BayesianDemographicProjection", package = "caribouMetrics")}) and
+\href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. 2025}.
 }
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
@@ -96,6 +97,13 @@ scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 
 simO <- simulateObservations(scns)
 
+}
+\references{
+Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
+Integration of national demographic-disturbance relationships and local
+data can improve caribou population viability projections and inform
+monitoring decisions. Ecological Informatics, 87, p.103095.
+\url{https://doi.org/10.1016/j.ecoinf.2025.103095}
 }
 \seealso{
 Caribou demography functions:
@@ -110,6 +118,7 @@ Caribou demography functions:
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
 \code{\link{getSimsInitial}()},
+\code{\link{getSimsNational}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()}
