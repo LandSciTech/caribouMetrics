@@ -214,6 +214,14 @@ getPriors <- function(modList = NULL,
 
 simCovariates <- function(initAnthro, initFire, numYears, anthroSlope,
                           anthroSlopeFuture, futureStep, fireSlope = 0) {
+  if(length(c(initAnthro,initFire,anthroSlope,anthroSlopeFuture,fireSlope))!=5){
+    covariates <- data.frame(time=NA)
+    covariates$Anthro <- NA
+    covariates$fire_excl_anthro <- NA
+    covariates$Total_dist <- NA
+    covariates <- subset(covariates,!is.na(time))
+    return(covariates)
+  }
   covInit <- data.frame(Anthro = initAnthro, fire_excl_anthro = initFire)
   for (t in 1:numYears) {
     # t=1s

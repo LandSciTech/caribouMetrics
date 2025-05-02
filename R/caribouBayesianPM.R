@@ -101,38 +101,46 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   }
 
   # if decide to error when Year ranges don't match could use testTable
-  testTable(disturbance, c("Year", "Anthro", "fire_excl_anthro"))
+  if(!is.null(disturbance)){
+    testTable(disturbance, c("Year", "Anthro", "fire_excl_anthro"))
+  }
   #TO DO: use bboutools data test functions for survival and recruitment
 
   # Get start and end years from data
   if(is.null(inp$startYear)){
     inp$startYear <- min(survData$Year)
   }
-  
-  if(is.null(inp$endYear)){
-    inp$endYear <- max(disturbance$Year)
+
+  if(is.null(inp$endYear)||is.infinite(inp$endYear)){
+    if(!is.null(disturbance)){
+      inp$endYear <- max(disturbance$Year)
+    }else{inp$endYear <- max(survData$Year);distYrs =survData$Year}
   }
 
-  disturbance <- merge(data.frame(Year = seq(inp$startYear, inp$endYear)),
-                       disturbance, by = "Year", all.x = T)
-  if (anyNA(select(disturbance, "Anthro", "fire_excl_anthro"))) {
-    warning(
-      "Years ",
-      filter(disturbance, if_any(c(Anthro, fire_excl_anthro), is.na)) %>%
-        pull(Year) %>% paste0(collapse = ", "),
-      " have missing disturbance data. ",
-      "Anthro will be filled from the next year with data and fire will be fill with 0s"
-    )
-
-    disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup") %>%
-      mutate(
-        fire_excl_anthro = tidyr::replace_na(fire_excl_anthro, 0),
-        Total_dist = fire_excl_anthro + Anthro
+  if(!is.null(disturbance)){
+    disturbance <- merge(data.frame(Year = seq(inp$startYear, inp$endYear)),
+                         disturbance, by = "Year", all.x = T)
+    if (anyNA(select(disturbance, "Anthro", "fire_excl_anthro"))) {
+      warning(
+        "Years ",
+        filter(disturbance, if_any(c(Anthro, fire_excl_anthro), is.na)) %>%
+          pull(Year) %>% paste0(collapse = ", "),
+        " have missing disturbance data. ",
+        "Anthro will be filled from the next year with data and fire will be fill with 0s"
       )
-    if(anyNA(select(disturbance, "Anthro", "fire_excl_anthro"))){
-      stop("None of the disturbance data is within the requested year range",
-           call. = FALSE)
+      
+      disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup") %>%
+        mutate(
+          fire_excl_anthro = tidyr::replace_na(fire_excl_anthro, 0),
+          Total_dist = fire_excl_anthro + Anthro
+        )
+      if(anyNA(select(disturbance, "Anthro", "fire_excl_anthro"))){
+        #stop("None of the disturbance data is within the requested year range",
+        #     call. = FALSE)
+        disturbance=NULL
+      }
     }
+    distYrs = disturbance$Year
   }
 
   ################
@@ -160,7 +168,7 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   }
 
   #add missing surv yrs
-  surv_data_add = expand.grid(Year=union(disturbance$Year,surv_data$Year),Month=unique(surv_data$Month),PopulationName=unique(surv_data$PopulationName))
+  surv_data_add = expand.grid(Year=union(distYrs,surv_data$Year),Month=unique(surv_data$Month),PopulationName=unique(surv_data$PopulationName))
   surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
   surv_data$StartTotal[is.na(surv_data$StartTotal)]=0
   
@@ -195,7 +203,7 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   }
 
   #add missing recruit yrs
-  recruit_data_add = expand.grid(Year=union(disturbance$Year,recruit_data$Year),PopulationName=unique(recruit_data$PopulationName))
+  recruit_data_add = expand.grid(Year=union(distYrs,recruit_data$Year),PopulationName=unique(recruit_data$PopulationName))
   recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
   recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
 

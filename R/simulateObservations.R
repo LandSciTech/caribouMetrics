@@ -282,12 +282,15 @@ simulateObservations <- function(trajectories, paramTable,
        simRecruitObs$Bulls = simRecruitObs$CowsBulls-simRecruitObs$Cows
     }
   }
-  if((paramTable$obsYears+paramTable$preYears)==0){
+  if(paramTable$obsYears==0){
     simSurvObs$Mortalities[!is.na(simSurvObs$Mortalities)] = NA
     simRecruitObs$Calves[!is.na(simRecruitObs$Calves)] = NA
   }
   
-  return(list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
-              simDisturbance = simDisturbance, simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
-              exData = trajectories, paramTable = paramTable))
+  retList = list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
+                simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
+                 exData = trajectories, paramTable = paramTable)
+  if(nrow(simDisturbance)>0){retList$simDisturbance=simDisturbance}
+  
+  return(retList)
 }

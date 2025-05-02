@@ -21,6 +21,9 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
   rec_pred$data$Annual = as.numeric(as.character(rec_pred$data$Annual))  
   data_sur = surv_pred$data
   data_rec = rec_pred$data
+
+  S_lookup = unique(subset(data_sur,select=c(Annual,PopulationID)))
+  R_lookup =  subset(data_rec,select=c(Annual,PopulationID))
   
   if(class(surv_pred$samples)=="mcmcarray"){
     sur=collapse_chains(surv_pred$samples)
@@ -28,6 +31,7 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
     sur2 <- as.matrix(data.table::rbindlist(lapply(surv_pred$samples, as.data.frame)))
     sur <- array(0,dim=c(1,dim(sur2)))
     sur[1,1:nrow(sur2),1:ncol(sur2)]<-sur2[1:nrow(sur2),1:ncol(sur2)]
+    S_lookup = S_lookup[order(S_lookup$PopulationID,S_lookup$Annual),]
   }
   
   if(class(rec_pred$samples)=="mcmcarray"){
@@ -36,6 +40,7 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
     rec2 <- as.matrix(data.table::rbindlist(lapply(rec_pred$samples, as.data.frame)))
     rec <- array(0,dim=c(1,dim(rec2)))
     rec[1,1:nrow(rec2),1:ncol(rec2)]<-rec2[1:nrow(rec2),1:ncol(rec2)]
+    R_lookup = R_lookup[order(R_lookup$PopulationID,R_lookup$Annual),]
   }
   
   years = sort(unique(rec_pred$data$Annual))
@@ -60,8 +65,8 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
     #ts=1
     print(ts)
     yr <- years[ts]
-    S_samp <- sur[,,sort(unique(data_sur$Annual)) %in% yr]
-    R_samp <- rec[,,data_rec$Annual %in% yr]
+    S_samp <- sur[,,S_lookup$Annual %in% yr]
+    R_samp <- rec[,,R_lookup$Annual %in% yr]
     
     if(is.null(dim(S_samp))|is.null(dim(R_samp))){
       if(!is.null(dim(R_samp))&is.null(dim(S_samp))){stop("Handle this case")}
@@ -85,7 +90,7 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
       colnames(R_samp)=levels(data_rec$PopulationID)
       R_samp_long = matrix(R_samp,dimnames=list(t(outer(colnames(R_samp), rownames(R_samp), FUN=paste)), NULL))
       
-      labs <- matrix(rownames(R_samp_long),nrow(out),1)
+      labs <- matrix(rownames(R_samp_long),ncol=1)
     }
     
     if(length(N0)==1){N0=rep(N0,length(S_samp_long))}
