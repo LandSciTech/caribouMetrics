@@ -12,6 +12,8 @@
 #' @param betaPriors a list of model priors. See [getPriors()].
 #' @param startYear,endYear year defining the beginning of the observation
 #'   period and the end of the projection period.
+#' @param niters integer. The number of iterations per chain after thinning and burn-in.
+#' @param nthin integer. The number of the thinning rate.
 #' @param cPars optional. Parameters for calculating composition survey bias term.
 #' @param returnSamples logical. If F returns only summaries. If T returns example trajectories.
 #' @inheritParams caribouPopGrowth
@@ -57,14 +59,15 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
                        cPars = getScenarioDefaults(),
                        returnSamples=F,
                        inputList = list(),
-                       niters=formals(bboutools::bb_fit_survival)$niters,...) {
+                       niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,
+                       ...) {
   #survData = oo$simSurvObs; recruitData = oo$simRecruitObs; disturbance = oo$simDisturbance;
   #betaPriors = "default"; startYear = oo$minYr; endYear = oo$maxYr;N0 = cs$N0
   #inputList = list(); saveJAGStxt = tempdir();quiet = TRUE
 
   # combine defaults in function with inputs from input list
   inputArgs <- c(
-    "survData", "recruitData", "disturbance", "startYear", "endYear"
+    "survData", "recruitData", "disturbance", "startYear", "endYear", "niters", "nthin"
   )
   addArgs <- inputArgs # setdiff(inputArgs,names(inp))
   inp <- list()
@@ -209,7 +212,7 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
 
   ##################
   #fit models
-  bbouResults = bbouMakeSummaryTable(surv_data, recruit_data,N0,disturbance,return_mcmc=T,shiny_progress=F,niters=niters)
+  bbouResults = bbouMakeSummaryTable(surv_data, recruit_data,N0,disturbance,return_mcmc=T,shiny_progress=F,niters=niters,nthin=nthin)
   
   #get output trajectories
   rr = getSimsInitial(bbouResults,cPars=cPars,skipSave=T,returnSamples=returnSamples,...)  

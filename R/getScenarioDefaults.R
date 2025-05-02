@@ -14,6 +14,7 @@
 #' @param rSlopeMod number. Disturbance-recruitment slope multiplier
 #' @param sSlopeMod number. Disturbance-survival slope multiplier
 #' @param lQuantile number in 0, 1. Lambda quantile
+#' @param correlateRates logical. Set TRUE to force correlation between recruitment and survival.
 #' @param projYears Number of years of projections
 #' @param obsYears Number of years of observations
 #' @param preYears Number of years before monitoring begins
@@ -49,7 +50,7 @@
 getScenarioDefaults <- function(paramTable = NULL,
                          iFire = 0, iAnthro = 0, obsAnthroSlope = 2, projAnthroSlope = 2,
                          rSlopeMod = 1, sSlopeMod = 1,
-                         lQuantile = 0.5, projYears = 35, 
+                         lQuantile = 0.5, correlateRates = F, projYears = 35, 
                          obsYears = 15, preYears=0, N0 = 1000,
                          assessmentYrs = 3,qMin=0,qMax =0, 
                          uMin = 0, uMax = 0, zMin = 0, zMax = 0, cowMult = 6,

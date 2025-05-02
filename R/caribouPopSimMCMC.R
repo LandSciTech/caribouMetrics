@@ -5,6 +5,7 @@
 #' @param rec_pred mcmcarray returned by predict_calf_cow function of bboutools R package. 
 #' @param surv_pred mcmcarray returned by predict_survival function of bboutools R package.
 #' @param initYear numeric. Initial year.
+#' @param correlateRates logical. Set TRUE to force correlation between recruitment and survival.
 #' @inheritParams caribouPopGrowth
 #'
 #' @return a data frame with results from [caribouPopGrowth()] for each set of survival/recruitment predictions.
@@ -12,7 +13,7 @@
 #' @family demography
 #' @export
 #'
-caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
+caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,...) {
   #assumes rec_pred and surv_pred are mcmcarrays returned by predict_survival and predict_calf_cow
   #functions of bboutools R package, and that each includes the same years and populations.
   #TO DO: checks to ensure these conditions are met.
@@ -42,6 +43,16 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
     rec[1,1:nrow(rec2),1:ncol(rec2)]<-rec2[1:nrow(rec2),1:ncol(rec2)]
     R_lookup = R_lookup[order(R_lookup$PopulationID,R_lookup$Annual),]
   }
+
+  #force correlation between mean recruitment and mean survival
+  if(correlateRates){
+    recMeans = matrix(0,nrow=dim(rec)[2],ncol=length(unique(R_lookup$PopulationID)))
+    surMeans = matrix(0,nrow=dim(sur)[2],ncol=length(unique(S_lookup$PopulationID)))
+    for(j in 1:ncol(recMeans)){
+      recMeans[,j] = recMeans[,j] + rowSums(rec[,,as.numeric(R_lookup$PopulationID) %in% j])
+      surMeans[,j] = surMeans[,j] + rowSums(sur[,,as.numeric(S_lookup$PopulationID) %in% j])
+    }
+  }
   
   years = sort(unique(rec_pred$data$Annual))
 
@@ -63,10 +74,16 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,...) {
   
   for (ts in 1:length(years)) {
     #ts=1
-    print(ts)
     yr <- years[ts]
     S_samp <- sur[,,S_lookup$Annual %in% yr]
     R_samp <- rec[,,R_lookup$Annual %in% yr]
+    
+    if(correlateRates){
+      for(j in 1:ncol(recMeans)){
+        R_samp[,j] =  R_samp[,j][order(recMeans[,j])]   
+        S_samp[,j] =  S_samp[,j][order(surMeans[,j])]   
+      }
+    }
     
     if(is.null(dim(S_samp))|is.null(dim(R_samp))){
       if(!is.null(dim(R_samp))&is.null(dim(S_samp))){stop("Handle this case")}

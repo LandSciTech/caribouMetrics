@@ -44,6 +44,7 @@ getSimsInitial <- function(bbouResults, N0=NULL,
                             cPars=getScenarioDefaults(), forceUpdate = F,skipSave=F,returnSamples=T,...) {
   doSave <- FALSE
 
+  cPars <- getScenarioDefaults(cPars)
   if(!skipSave){
     check <- as.list(match.call())
     
@@ -91,11 +92,11 @@ getSimsInitial <- function(bbouResults, N0=NULL,
   }else{
     rec_pred <- bbouResults$recruit_fit
   }
-  
+
   popInfo <- merge(data.frame(id=seq(1:nr)),N0)
   popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
                                        z=runif(nr,cPars$zMin,cPars$zMax))
-  pars <- caribouPopSimMCMC(popInfo,rec_pred,surv_pred,progress=F,...)
+  pars <- caribouPopSimMCMC(popInfo,rec_pred,surv_pred,progress=F,correlateRates=cPars$correlateRates,...)
   
   if(!is.element("Anthro",names(pars))){pars$Anthro=NA}
   if(!is.element("fire_excl_anthro",names(pars))){pars$fire_excl_anthro=NA}

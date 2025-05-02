@@ -33,7 +33,7 @@
 
 
 runScnSet <- function(scns, ePars, simInitial,
-                      printProgress = FALSE,betaPriors="default",niters=formals(bboutools::bb_fit_survival)$niters,...) {
+                      printProgress = FALSE,betaPriors="default",niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,...) {
   
   # ePars=eParsIn;simInitial=simBig;printProgress=F;niters = formals(bboutools::bb_fit_survival)$niters)
   scns <- getScenarioDefaults(scns)
@@ -44,7 +44,7 @@ runScnSet <- function(scns, ePars, simInitial,
     if (printProgress) {
       print(paste0(c(p, scns[p, ]), collapse = " "))
     }
-
+    
     if(is.element("lQuantile",names(cs))&&!is.na(cs$lQuantile)){
       trajectories <- subset(simInitial$samples,LambdaPercentile == round(cs$lQuantile*100))
     }else{
@@ -62,7 +62,7 @@ runScnSet <- function(scns, ePars, simInitial,
       survData = oo$simSurvObs, recruitData = oo$simRecruitObs,
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = oo$minYr, endYear = oo$maxYr,
-      N0 = cs$N0,niters=niters,...))
+      N0 = cs$N0,cPars = cs, niters=niters,nthin=nthin,...))
     if (inherits(out, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,

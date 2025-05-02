@@ -9,6 +9,8 @@
 #'   to TRUE if using in an app.
 #' @param return_mcmc boolean. If TRUE return fitted survival and recruitment
 #'   models. Default FALSE.
+#' @param niters integer. The number of iterations per chain after thinning and burn-in.
+#' @param nthin integer. The number of the thinning rate.
 #' @param ... Other parameters passed on to `bboutools::bb_fit_survival` and
 #'   `bboutools::bb_fit_recruitment`.
 #'
@@ -22,7 +24,7 @@
 #' bbouMakeSummaryTable(s_data, r_data, 500, FALSE)
 
 bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL, shiny_progress = FALSE,
-                                return_mcmc=FALSE,i18n = NULL, ...){
+                                return_mcmc=FALSE,i18n = NULL, niters = formals(bboutools::bb_fit_survival)$niters, nthin = formals(bboutools::bb_fit_survival)$nthin,...){
   #shiny_progress = FALSE;return_mcmc=FALSE;i18n = NULL
   
   if(length(N0)==1){
@@ -40,12 +42,17 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL,
     stop("At least 5 years of survival data are needed to estimate interannual variation using bboutools")
   }
 
+  # MCMC settings - (bboutools default: 1000 MCMC samples from 3 chains, number of )
+  nc <- 3      # number of chains
+  ni <- niters * nthin * 2   # number of samples for each chain
+  nb <- ni / 2    # number of samples to discard as burnin
+  
   if(!is.null(disturbance)){
     parTab = N0
     if(is.element("PopulationName",names(parTab))){
       names(parTab)[names(parTab)=="PopulationName"]= "pop_name"  
     }
-    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, ...) 
+    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, nc,nthin,ni,nb) 
     ret$parTab <- parTab
     return(ret)
   }
@@ -55,11 +62,11 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL,
   }
   if(shiny_progress) shiny::setProgress(0.2, message = i18n$t("Fitting survival"))
   
-  surv_fit <- bboutools::bb_fit_survival(surv_data, multi_pops = TRUE, allow_missing = TRUE, quiet = TRUE, ...)
+  surv_fit <- bboutools::bb_fit_survival(surv_data, multi_pops = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
   
   if(shiny_progress) shiny::setProgress(0.4, message = i18n$t("Fitting recruitment"))
   
-  recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, ...)
+  recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
   
   if(shiny_progress) shiny::setProgress(0.6, message = i18n$t("Predicting survival"))
   surv_pred_bar <- bboutools::bb_predict_survival(surv_fit, year = FALSE, month = FALSE, conf_level = FALSE)

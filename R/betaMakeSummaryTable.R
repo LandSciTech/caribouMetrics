@@ -1,15 +1,15 @@
-betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance, ...){
+betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance, nc,nt,ni,nb){
   #Note: using bboutools to check and structure the data without fitting the models...
   recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
-  recruit_fit <- betaRecruitment(recruit_fit_in,disturbance)
+  recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,nc,nt,ni,nb)
   
   surv_fit_in <- bboutools::bb_fit_survival(surv_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
-  surv_fit <- betaSurvival(surv_fit_in,disturbance)
+  surv_fit <- betaSurvival(surv_fit_in,disturbance,nc,nt,ni,nb)
   
   return(list(parTab=NULL,surv_fit=surv_fit,recruit_fit=recruit_fit))
 }
 
-betaSurvival <-function(surv_fit,disturbance){
+betaSurvival <-function(surv_fit,disturbance,nc,nt,ni,nb){
   data <- surv_fit$data
   data <- as.data.frame(data)
   data <- subset(data,is.element(Annual,disturbance$Year))
@@ -82,12 +82,6 @@ model {
   # option2: seed setting
   # inits = parallel.seeds("base::BaseRNG", 2) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
   
-  # MCMC settings - (bboutools default: 1000 MCMC samples from 3 chains, number of )
-  nc <- 3      # number of chains
-  ni <- 1000   # number of samples for each chain
-  nb <- 500    # number of samples to discard as burnin
-  nt <- 10     # thinning rate
-  
   #################################################################################################################
   ### Running JAGS
   # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed)
@@ -100,7 +94,7 @@ model {
   return(list(data=data,samples=model.samples)) 
 }
 
-betaRecruitment <- function(rec_fit, disturbance){
+betaRecruitment <- function(rec_fit, disturbance,nc,nt,ni,nb){
   rec_data <- rec_fit$data
   data <- as.data.frame(rec_data)
   data <- merge(data,disturbance)
@@ -197,12 +191,6 @@ model {
   
   # option2: seed setting
   # inits = parallel.seeds("base::BaseRNG", 2) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
-  
-  # MCMC settings - (bboutools default: 1000 MCMC samples from 3 chains, number of )
-  nc <- 3      # number of chains
-  ni <- 1000   # number of samples for each chain
-  nb <- 500    # number of samples to discard as burnin
-  nt <- 10     # thinning rate
   
   ########################## Running JAGS ########################################################################
   ### Running JAGS
