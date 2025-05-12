@@ -133,6 +133,16 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
       out <- rbind(out, outBit)
     }
   }
+  
+  for (cc in names(out)){
+    #cc = "lambda"
+    if(is.element("matrix",class(out[[cc]]))){
+      if(dim(out[[cc]])[2]>1){
+        stop("Unexpected dimensions from caribouPopSimMCMC. Handle this error.")
+      }
+      out[[cc]] <- out[[cc]][,1]
+    }
+  }
   out[c("PopulationName", "id")] <- do.call(rbind, strsplit(out$lab, " "))
   out$id=as.numeric(out$id)
   return(out)

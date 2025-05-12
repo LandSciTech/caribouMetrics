@@ -194,22 +194,27 @@ simCalfCowRatios <- function(cowCounts, exData) {
   # assume info from only one herd
   
   recruitmentSeries <- subset(exData, select = c("recruitment", "N","Year","PopulationName","Replicate"))
-  
-  
+
   simRecruitObs <- merge(cowCounts,recruitmentSeries,all.x=T)
   
   if(any(simRecruitObs$Cows>simRecruitObs$N,na.rm=T)){
     warning("The expected number of cows in composition survey exceeds population size. Adjusting cows in survey for consistency.")
     simRecruitObs$Cows = pmin(simRecruitObs$Cows,simRecruitObs$N)
   }
+  apparentCows <- simRecruitObs$Cows
+  if(is.element("UnknownAdults",names(simRecruitObs))){
+    apparentCows = apparentCows + simRecruitObs$UnknownAdults*0.65
+  }
+  if(is.element("Yearlings",names(simRecruitObs))){
+    apparentCows = apparentCows + simRecruitObs$UnknownAdults*0.5
+  }
   
   #apparent number of calves (M+F) from apparent number of cows using apparent recruitment rate
-  simRecruitObs$Calves <- ifelse(simRecruitObs$Cows == 0, 0,
-                               rbinom(
-                                 n = nrow(simRecruitObs), size = simRecruitObs$Cows,
+  simRecruitObs$Calves <- rbinom(
+                                 n = nrow(simRecruitObs), size = round(apparentCows),
                                  prob = simRecruitObs$recruitment
                                )
-  )
+  
   simRecruitObs$recruitment = NULL;simRecruitObs$N=NULL;simRecruitObs$StartTotal=NULL
   
   simRecruitObs$Calves[simRecruitObs$Cows==0]=NA

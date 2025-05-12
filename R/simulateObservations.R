@@ -114,9 +114,10 @@ simulateObservations <- function(trajectories, paramTable,
   if(!is.null(recruit_data)){
     recruitYrs = sort(setdiff(includeYears,subset(recruit_data,!is.na(Calves))$Annual))
   }
+  
   if(!is.null(cowCounts)){
     testTable(cowCounts, c("Year", "Cows"),
-              req_vals = list(Year = recruitYrs))
+              req_vals = list(Year = intersect(recruitYrs,unique(cowCounts$Year))))
   } else if(hasName(paramTable, "cowCount")){
     cowCounts <- expand.grid(Year = recruitYrs,
                              Cows = paramTable$cowCount)
@@ -128,10 +129,10 @@ simulateObservations <- function(trajectories, paramTable,
   if(!is.null(surv_data)){
     survYrs = sort(setdiff(includeYears,subset(surv_data,!is.na(MortalitiesCertain))$Annual))
   }
-  
+
   if(!is.null(freqStartsByYear)){
     testTable(freqStartsByYear, c("Year","numStarts"),
-              acc_vals = list(Year = survYrs))
+              acc_vals = list(Year = intersect(survYrs,unique(freqStartsByYear$Year))))
   } else if(!is.null(paramTable$collarCount)){
     freqStartsByYear <- expand.grid(Year = survYrs,numStarts = paramTable$collarCount)
   }else {
@@ -277,16 +278,16 @@ simulateObservations <- function(trajectories, paramTable,
         simRecruitObs$Day = recSurveyDay
       }
     }
-
-    if(!is.element("Bulls",names(simRecruitObs))){
-       simRecruitObs$Bulls = simRecruitObs$CowsBulls-simRecruitObs$Cows
-    }
   }
   if(paramTable$obsYears==0){
     simSurvObs$Mortalities[!is.na(simSurvObs$Mortalities)] = NA
     simRecruitObs$Calves[!is.na(simRecruitObs$Calves)] = NA
   }
   
+  if(!is.element("Bulls",names(simRecruitObs))){
+    simRecruitObs$Bulls = simRecruitObs$CowsBulls-simRecruitObs$Cows
+  }
+
   retList = list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
                 simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
                  exData = trajectories, paramTable = paramTable)

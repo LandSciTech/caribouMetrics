@@ -51,8 +51,11 @@ runScnSet <- function(scns, ePars, simInitial,
       trajectories <- simInitial$samples
     }
     trajectories <- subset(trajectories,Replicate==sample(unique(trajectories$Replicate),1))
-    
-    oo <- simulateObservations(trajectories, cs, collarNumYears = ePars$collarNumYears,
+
+    oo <- simulateObservations(trajectories, cs, 
+                               cowCounts = ePars$cowCounts,
+                               freqStartsByYear = ePars$freqStartsByYear,
+                               collarNumYears = ePars$collarNumYears,
                                collarOffTime = ePars$collarOffTime,
                                collarOnTime = ePars$collarOnTime,
                                surv_data = simInitial$surv_data, recruit_data=simInitial$recruit_data)

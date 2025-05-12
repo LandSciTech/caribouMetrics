@@ -90,8 +90,12 @@ getOutputTables <- function(caribouBayesDemogMod,
                   subset(exData, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
                                              "Type")))
   
-  # combine paramTable and simDisturbance and add to all output tables, nest params in a list
-  dist_params <- merge(distInput, paramTable)
+  if(!is.null(distInput)){
+    # combine paramTable and simDisturbance and add to all output tables, nest params in a list
+    dist_params <- merge(distInput, paramTable)
+  }else{
+    dist_params <- paramTable
+  }
   
   if(!is.null(simInitial)){
     if(F&&!all(unique(distInput$Anthro) %in% simInitial$summary$Anthro)){
