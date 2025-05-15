@@ -6,7 +6,14 @@
 
 Assumes that rec_pred and surv_pred each include the same years and populations.TO DO: check this.}
 \usage{
-caribouPopSimMCMC(popInfo, rec_pred, surv_pred, initYear = NULL, ...)
+caribouPopSimMCMC(
+  popInfo,
+  rec_pred,
+  surv_pred,
+  initYear = NULL,
+  correlateRates = FALSE,
+  ...
+)
 }
 \arguments{
 \item{popInfo}{}
@@ -16,6 +23,8 @@ caribouPopSimMCMC(popInfo, rec_pred, surv_pred, initYear = NULL, ...)
 \item{surv_pred}{mcmcarray returned by predict_survival function of bboutools R package.}
 
 \item{initYear}{numeric. Initial year.}
+
+\item{correlateRates}{logical. Set TRUE to force correlation between recruitment and survival.}
 }
 \value{
 a data frame with results from \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for each set of survival/recruitment predictions.

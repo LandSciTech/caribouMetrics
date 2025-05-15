@@ -12,6 +12,8 @@ bbouMakeSummaryTable(
   shiny_progress = FALSE,
   return_mcmc = FALSE,
   i18n = NULL,
+  niters = formals(bboutools::bb_fit_survival)$niters,
+  nthin = formals(bboutools::bb_fit_survival)$nthin,
   ...
 )
 }
@@ -30,6 +32,10 @@ to TRUE if using in an app.}
 
 \item{return_mcmc}{boolean. If TRUE return fitted survival and recruitment
 models. Default FALSE.}
+
+\item{niters}{integer. The number of iterations per chain after thinning and burn-in.}
+
+\item{nthin}{integer. The number of the thinning rate.}
 
 \item{...}{Other parameters passed on to \code{bboutools::bb_fit_survival} and
 \code{bboutools::bb_fit_recruitment}.}

@@ -13,6 +13,7 @@ getScenarioDefaults(
   rSlopeMod = 1,
   sSlopeMod = 1,
   lQuantile = 0.5,
+  correlateRates = F,
   projYears = 35,
   obsYears = 15,
   preYears = 0,
@@ -52,6 +53,8 @@ the projection period}
 \item{sSlopeMod}{number. Disturbance-survival slope multiplier}
 
 \item{lQuantile}{number in 0, 1. Lambda quantile}
+
+\item{correlateRates}{logical. Set TRUE to force correlation between recruitment and survival.}
 
 \item{projYears}{Number of years of projections}
 

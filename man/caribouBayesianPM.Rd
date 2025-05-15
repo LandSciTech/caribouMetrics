@@ -16,6 +16,7 @@ caribouBayesianPM(
   returnSamples = F,
   inputList = list(),
   niters = formals(bboutools::bb_fit_survival)$niters,
+  nthin = formals(bboutools::bb_fit_survival)$nthin,
   ...
 )
 }
@@ -43,6 +44,8 @@ more sample populations.}
 an argument is included in this list it will override the named argument.}
 
 \item{niters}{A whole number of the number of iterations per chain after thinning and burn-in.}
+
+\item{nthin}{integer. The number of the thinning rate.}
 }
 \value{
 a list with elements:

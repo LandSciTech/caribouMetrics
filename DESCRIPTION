@@ -54,7 +54,6 @@ Imports:
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
-    'bbouHelperFns.R'
     'bbouMakeSummaryTable.R'
     'betaMakeSummaryTable.R'
     'betaSample.R'

@@ -7,12 +7,10 @@
 getSimsNational(
   replicates = 1000,
   N0 = 1000,
-  Anthro = seq(0, 100, by = 1),
-  fire_excl_anthro = 0,
+  covTableObs = expand.grid(Anthro = seq(0, 100, by = 1), fire_excl_anthro = 0),
   useQuantiles = NULL,
   populationGrowthTable = NULL,
   cPars = getScenarioDefaults(),
-  forceUpdate = F,
   interannualVar = eval(formals(caribouPopGrowth)$interannualVar)
 )
 }
@@ -21,11 +19,10 @@ getSimsNational(
 
 \item{N0}{initial population size}
 
-\item{Anthro, fire_excl_anthro}{numeric. A vector of numbers between 0 and 100
+\item{covTableObs}{data frame with Anthro,fire_excl_anthro numeric columns. Each is vector of numbers between 0 and 100
 representing the percentage of the landscape covered by anthropogenic
 disturbance buffered by 500 m, and the percentage covered by fire that does
-not overlap anthropogenic disturbance. The two vectors will be combined
-with \code{expand.grid()} to give the set of scenarios simulated.}
+not overlap anthropogenic disturbance.}
 
 \item{useQuantiles}{logical or numeric. If it is a numeric vector it must be
 length 2 and give the low and high limits of the quantiles to use. If
@@ -44,23 +41,17 @@ confidence interval.}
 
 \item{cPars}{optional. Parameters for calculating composition survey bias term.}
 
-\item{forceUpdate}{logical. If the default inputs are used the result is
-cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
-
 \item{interannualVar}{list or logical. List containing interannual
 variability parameters. These can be either coefficients of variation
 (R_CV, S_CV), beta precision parameters (R_phi, S_phi),
 or random effects parameters from a logistic glmm (R_annual, S_annual).
 Set to \code{FALSE} to ignore interannual variability.}
+
+\item{forceUpdate}{logical. If the default inputs are used the result is
+cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
 }
 \value{
-a list with two elements:
-\itemize{
-\item summary: a tibble with a summary of parameter values for each scenario.
-Column names are Anthro, Mean, lower, upper, Parameter.
-\item samples: a tibble with parameter values for each scenario and replicate
-4 rows per replicate \* scenario. Column names are Anthro, Parameter and Value
-}
+Output from caribouPopGrowth function.
 }
 \description{
 Get a set of simulation results from the national demographic model

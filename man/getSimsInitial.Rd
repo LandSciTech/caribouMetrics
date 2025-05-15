@@ -2,11 +2,12 @@
 % Please edit documentation in R/getSimsInitial.R
 \name{getSimsInitial}
 \alias{getSimsInitial}
-\title{Get a set of simulation results from fitted demographic models}
+\title{Get a set of simulation results from fitted demographic models (if bbouResults argument is provided) or from national demographic disturbance model.}
 \usage{
 getSimsInitial(
-  bbouResults,
+  bbouResults = NULL,
   N0 = NULL,
+  replicates = "all",
   cPars = getScenarioDefaults(),
   forceUpdate = F,
   skipSave = F,
@@ -15,12 +16,14 @@ getSimsInitial(
 )
 }
 \arguments{
-\item{bbouResults}{Fitted bboutools model and summary table created by bbouMakeSummaryTable(),
-or a path to those results.}
+\item{bbouResults}{Optional. Fitted bboutools model and summary table created by bbouMakeSummaryTable(),
+or a path to those results. If not specified trajectories will be from national demographic disturbance model.}
 
 \item{N0}{initial population size. If NULL, will use information in bbouResults.}
 
-\item{cPars}{ptional. Parameters for calculating composition survey bias term.}
+\item{replicates}{Number of replicate trajectories. Default "all"}
+
+\item{cPars}{optional. Parameters for calculating composition survey bias term.}
 
 \item{forceUpdate}{logical. If the default inputs are used the result is
 cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
@@ -39,7 +42,7 @@ Column names are year, PopulationName, Mean, lower, upper, Parameter.
 }
 }
 \description{
-Get a set of simulation results from fitted demographic models
+Get a set of simulation results from fitted demographic models (if bbouResults argument is provided) or from national demographic disturbance model.
 }
 \examples{
 getSimsInitial()

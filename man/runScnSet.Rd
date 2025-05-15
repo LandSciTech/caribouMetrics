@@ -11,6 +11,7 @@ runScnSet(
   printProgress = FALSE,
   betaPriors = "default",
   niters = formals(bboutools::bb_fit_survival)$niters,
+  nthin = formals(bboutools::bb_fit_survival)$nthin,
   ...
 )
 }
@@ -30,6 +31,8 @@ printed at each step?}
 \item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}.}
 
 \item{niters}{A whole number of the number of iterations per chain after thinning and burn-in.}
+
+\item{nthin}{integer. The number of the thinning rate.}
 }
 \value{
 A list similar to \code{\link[=getOutputTables]{getOutputTables()}} where tables for each scenario
