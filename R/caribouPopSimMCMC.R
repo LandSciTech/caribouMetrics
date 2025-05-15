@@ -13,7 +13,7 @@
 #' @family demography
 #' @export
 #'
-caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,...) {
+caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,c=formals(caribouPopGrowth)$c,...) {
   #assumes rec_pred and surv_pred are mcmcarrays returned by predict_survival and predict_calf_cow
   #functions of bboutools R package, and that each includes the same years and populations.
   #TO DO: checks to ensure these conditions are met.
