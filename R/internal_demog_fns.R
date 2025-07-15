@@ -150,6 +150,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
       }
     }
   }
+
   
   simSurvs <- cAll %>%
     group_by(PopulationName, Replicate, Year, Month) %>%

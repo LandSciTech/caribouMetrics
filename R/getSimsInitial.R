@@ -16,12 +16,13 @@ if(file.exists("inst/extdata/simsInitiald.rds")){
   assign("bbouResults", bbouResults, envir = cacheEnv)
 }
 
-#' Get a set of simulation results from fitted demographic models
+#' Get a set of simulation results from fitted demographic models (if bbouResults argument is provided) or from national demographic disturbance model.
 #'
-#' @param bbouResults Fitted bboutools model and summary table created by bbouMakeSummaryTable(), 
-#'   or a path to those results.
+#' @param bbouResults Optional. Fitted bboutools model and summary table created by bbouMakeSummaryTable(), 
+#'   or a path to those results. If not specified trajectories will be from national demographic disturbance model.
 #' @param N0 initial population size. If NULL, will use information in bbouResults.
-#' @param cPars ptional. Parameters for calculating composition survey bias term.
+#' @param replicates Number of replicate trajectories. Default "all"   
+#' @param cPars optional. Parameters for calculating composition survey bias term.
 #' @param forceUpdate logical. If the default inputs are used the result is
 #'   cached. Set `forceUpdate` to TRUE to ensure the simulations are re-run.
 #' @param skipSave logical. If F default consider saved results. Set T to ignore the saved file.
@@ -40,7 +41,7 @@ if(file.exists("inst/extdata/simsInitiald.rds")){
 #'
 #' @examples
 #' getSimsInitial()
-getSimsInitial <- function(bbouResults, N0=NULL,
+getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
                             cPars=getScenarioDefaults(), forceUpdate = F,skipSave=F,returnSamples=T,...) {
   doSave <- FALSE
 
@@ -65,13 +66,26 @@ getSimsInitial <- function(bbouResults, N0=NULL,
     }
   }
   
+  if(is.null(bbouResults)){
+    bbouResults <- list(parTab = eval(formals(getSimsNational)$covTableObs))
+    bbouResults$parTab$pop_name = NA
+  }
+  
   #bbouResults = bbouResultFile
-  if(is.character(bbouResults) && (length(bbouResults) == 1) && file.exists(bbouResults)){
-    bbouResults <- readRDS(bbouResults)
+  if(is.character(bbouResults) && (length(bbouResults) == 1) ){
+    if(file.exists(bbouResults)){
+      bbouResults <- readRDS(bbouResults)
+    }else{
+      stop(paste("bbouResults file not found,",bbouResults))
+    }
   }
   
   if(is.null(N0)){
-    N0 <- subset(bbouResults$parTab,select=c(pop_name,N0))
+    if(is.element("N0",names(bbouResults$parTab))){
+      N0 <- subset(bbouResults$parTab,select=c(pop_name,N0))
+    }else{
+      N0 <- eval(formals(getSimsNational)$N0)
+    }
   }
   if(length(N0)==1){
     N0 = data.frame(N0=N0)
@@ -79,31 +93,47 @@ getSimsInitial <- function(bbouResults, N0=NULL,
   }
   N0$PopulationName = N0$pop_name
   
-  if(is.element("bboufit",class(bbouResults$surv_fit))){
-    surv_pred <- bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
-    nr <- dim(surv_pred$samples)[1]*dim(surv_pred$samples)[2]
+  if(!is.null(bbouResults$surv_fit)){
+    if(is.element("bboufit",class(bbouResults$surv_fit))){
+      surv_pred <- bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
+      nr <- dim(surv_pred$samples)[1]*dim(surv_pred$samples)[2]
+    }else{
+      surv_pred <- bbouResults$surv_fit
+      nr <- dim(surv_pred$samples[[1]])[1]*dim(surv_pred$samples[[1]])[2]*length(surv_pred$samples)
+    }
+    
+    if(is.element("bboufit",class(bbouResults$recruit_fit))){
+      rec_pred <- bb_predict_calf_cow_ratio(bbouResults$recruit_fit,year=T,conf_level=F)
+    }else{
+      rec_pred <- bbouResults$recruit_fit
+    }
+    
+    popInfo <- merge(data.frame(id=seq(1:nr)),N0)
+    popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
+                                           z=runif(nr,cPars$zMin,cPars$zMax))
+    #print(paste("getSimsInitial",mean(popInfo$c)))
+    pars <- caribouPopSimMCMC(popInfo,rec_pred,surv_pred,progress=F,correlateRates=cPars$correlateRates,...)
+    
+    popInfo$PopulationName <- popInfo$pop_name
+    
+    pars <- merge(pars,subset(popInfo,select=c(-N0,-pop_name)))
+    
   }else{
-    surv_pred <- bbouResults$surv_fit
-    nr <- dim(surv_pred$samples[[1]])[1]*dim(surv_pred$samples[[1]])[2]*length(surv_pred$samples)
-  }
-
-  if(is.element("bboufit",class(bbouResults$recruit_fit))){
-    rec_pred <- bb_predict_calf_cow_ratio(bbouResults$recruit_fit,year=T,conf_level=F)
-  }else{
-    rec_pred <- bbouResults$recruit_fit
-  }
-
-  popInfo <- merge(data.frame(id=seq(1:nr)),N0)
-  popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
-                                       z=runif(nr,cPars$zMin,cPars$zMax))
-  pars <- caribouPopSimMCMC(popInfo,rec_pred,surv_pred,progress=F,correlateRates=cPars$correlateRates,...)
+    if(replicates == "all"){replicates = formals(getSimsNational)$replicates}
+    
+    covTableObs <- unique(subset(bbouResults$parTab, select=c(Anthro,fire_excl_anthro)))
+    N0s <- unique(N0$N0)
+    if(length(N0s)>1){
+      stop("Specify a single initial population size for trajectories from national model.")
+    }
+    pars<- getSimsNational(replicates = replicates,N0 = N0s,covTableObs = covTableObs,cPars=cPars,...)
+    
+    pars$year <- pars$Anthro
+    pars$PopulationName <- "A"
+  }  
   
   if(!is.element("Anthro",names(pars))){pars$Anthro=NA}
   if(!is.element("fire_excl_anthro",names(pars))){pars$fire_excl_anthro=NA}
-  
-  popInfo$PopulationName <- popInfo$pop_name
-  
-  pars <- merge(pars,subset(popInfo,select=c(-N0,-pop_name)))
   
   #get the lambda percentile for each id - to allow users to select extreme examples
   simSum <- pars  %>%
@@ -122,8 +152,10 @@ getSimsInitial <- function(bbouResults, N0=NULL,
     message("Updating cached initial simulations.")
     assign(saveName, simBig, envir = cacheEnv)
   }
-  simBig$surv_data = bbouResults$surv_fit$data
-  simBig$recruit_data = bbouResults$recruit_fit$data
-  simBig$popInfo = popInfo
+  if(is.element("surv_fit",names(bbouResults))){
+    simBig$surv_data = bbouResults$surv_fit$data
+    simBig$recruit_data = bbouResults$recruit_fit$data
+    simBig$popInfo = popInfo
+  }
   return(simBig)
 }

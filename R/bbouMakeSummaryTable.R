@@ -5,6 +5,9 @@
 #' @param N0 dataframe. Initial population estimates, required columns are
 #'   PopulationName and N0
 #' @param disturbance dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.
+#' @param priors list. Optional. At present these are only used if disturbance is also provided.
+#' @param omitInterannual logical. Default F. If TRUE returns expected survival/recruitment/lambda without interannual variation. 
+#'   At present these are only used if disturbance is also provided.
 #' @param shiny_progress logical. Should shiny progress bar be updated. Only set
 #'   to TRUE if using in an app.
 #' @param return_mcmc boolean. If TRUE return fitted survival and recruitment
@@ -23,7 +26,7 @@
 #' r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 #' bbouMakeSummaryTable(s_data, r_data, 500, FALSE)
 
-bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL, shiny_progress = FALSE,
+bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL, priors = NULL, omitInterannual=F, shiny_progress = FALSE,
                                 return_mcmc=FALSE,i18n = NULL, niters = formals(bboutools::bb_fit_survival)$niters, nthin = formals(bboutools::bb_fit_survival)$nthin,...){
   #shiny_progress = FALSE;return_mcmc=FALSE;i18n = NULL
   
@@ -52,7 +55,7 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL,
     if(is.element("PopulationName",names(parTab))){
       names(parTab)[names(parTab)=="PopulationName"]= "pop_name"  
     }
-    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, nc,nthin,ni,nb) 
+    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, omitInterannual, nc,nthin,ni,nb) 
     ret$parTab <- parTab
     return(ret)
   }

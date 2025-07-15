@@ -96,57 +96,6 @@ simulateObservations <- function(trajectories, paramTable,
     recruit_data <- subset(recruit_data,as.numeric(as.character(Annual))<=max(includeTimes))
   }
   
-  includeYears = sort(intersect(trajectories$Year,includeTimes))
-  
-  popMetrics = subset(trajectories,is.element(Year,includeYears))
-  
-  includeYears = unique(popMetrics$Year)
-  
-  exData <- tidyr::pivot_wider(popMetrics, id_cols = c("Replicate", "Year","Timestep","PopulationName"),
-                               names_from = "MetricTypeID",
-                               values_from = "Amount")
-  
-  
-  # if cowCounts and freqStartsByYear not provided build from cowCount and collarCount
-  cowCountsIn <- cowCounts
-  freqStartsByYearIn <- freqStartsByYear
-  
-  if(!is.null(recruit_data)){
-    recruitYrs = sort(setdiff(includeYears,subset(recruit_data,!is.na(Calves))$Annual))
-  }
-  
-  if(!is.null(cowCounts)){
-    testTable(cowCounts, c("Year", "Cows"),
-              req_vals = list(Year = intersect(recruitYrs,unique(cowCounts$Year))))
-  } else if(hasName(paramTable, "cowCount")){
-    cowCounts <- expand.grid(Year = recruitYrs,
-                             Cows = paramTable$cowCount)
-  } else if(!hasName(paramTable, "cowCount") & !hasName(paramTable, "cowMult")){
-    stop("One of cowCounts or paramTable$cowMult must be provided",
-         call. = FALSE)
-  }
-
-  if(!is.null(surv_data)){
-    survYrs = sort(setdiff(includeYears,subset(surv_data,!is.na(MortalitiesCertain))$Annual))
-  }
-
-  if(!is.null(freqStartsByYear)){
-    testTable(freqStartsByYear, c("Year","numStarts"),
-              acc_vals = list(Year = intersect(survYrs,unique(freqStartsByYear$Year))))
-  } else if(!is.null(paramTable$collarCount)){
-    freqStartsByYear <- expand.grid(Year = survYrs,numStarts = paramTable$collarCount)
-  }else {
-    stop("One of freqStartsByYear or paramTable$collarCount must be provided",
-         call. = FALSE)
-  }
-  
-  if(!is.element("PopulationName",names(freqStartsByYear))){
-    freqStartsByYear=merge(freqStartsByYear,data.frame(PopulationName=unique(exData$PopulationName)))
-    if(!is.null(cowCounts)){
-      cowCounts=merge(cowCounts,data.frame(PopulationName=unique(exData$PopulationName)))
-    }
-  }
-
   # Simulate covariate table
   if (is.null(distScen)) {
     covariates <- simCovariates(paramTable$iAnthro, paramTable$iFire, 
@@ -169,6 +118,91 @@ simulateObservations <- function(trajectories, paramTable,
                                .data$Year >= paramTable$startYear)
   }
   #simDisturbance = subset(simDisturbance,is.element(simDisturbance$Year,includeYears))
+  if(max(trajectories$Year)<=100){
+    #Year is actually anthropogenic disturbance.
+    #Need to convert.
+    distMerge <- subset(simDisturbance, select=c(Anthro,time,Year))
+    if(length(setdiff(distMerge$Anthro,trajectories$Year))>0){
+      stop("Handle this case.")
+    }
+    names(distMerge) <- c("Anthro","Timestep","Year")
+    names(trajectories)[names(trajectories)=="Year"] = "Anthro"
+    trajectories$Timestep <- NULL
+    trajectories <- merge(trajectories, distMerge)
+    trajectories$Anthro <- NULL
+  }
+  
+  # if cowCounts and freqStartsByYear not provided build from cowCount and collarCount
+  cowCountsIn <- cowCounts
+  freqStartsByYearIn <- freqStartsByYear
+  
+  
+  includeYears <- sort(intersect(trajectories$Year,includeTimes))
+  
+  iYrs <- c()
+  if(!is.null(freqStartsByYear)){iYrs <- c(iYrs,freqStartsByYear$Year)}
+  if(!is.null(surv_data)){iYrs <- c(iYrs,as.numeric(as.character(surv_data$Annual)))}
+  if(!is.null(cowCounts)){iYrs <- c(iYrs,cowCounts$Year)}
+  if(!is.null(recruit_data)){iYrs <- c(iYrs,as.numeric(as.character(recruit_data$Annual)))}
+  if(length(iYrs)>0){
+    includeYears <- sort(intersect(includeYears,iYrs))
+  }
+
+  popMetrics = subset(trajectories,is.element(Year,includeYears))
+  
+  includeYears = unique(popMetrics$Year)
+  
+  exData <- tidyr::pivot_wider(popMetrics, id_cols = c("Replicate", "Year","Timestep","PopulationName"),
+                               names_from = "MetricTypeID",
+                               values_from = "Amount")
+  
+  if(!is.null(recruit_data)){
+    recruitYrs <- sort(setdiff(includeYears,subset(recruit_data,!is.na(Calves))$Annual))
+  }else{
+    recruitYrs <- includeYears
+  }
+  
+  if(!is.null(cowCounts)){
+    recruitYrs <-intersect(recruitYrs,cowCounts$Year)
+    cowCounts <- subset(cowCounts,is.element(Year,recruitYrs))
+    
+    testTable(cowCounts, c("Year", "Cows"),
+              req_vals = list(Year = recruitYrs))
+  } else if(hasName(paramTable, "cowCount")){
+    cowCounts <- expand.grid(Year = recruitYrs,
+                             Cows = paramTable$cowCount)
+  } else if(!hasName(paramTable, "cowCount") & !hasName(paramTable, "cowMult")){
+    stop("One of cowCounts or paramTable$cowMult must be provided",
+         call. = FALSE)
+  }
+
+                       
+  if(!is.null(surv_data)){
+    survYrs <- sort(setdiff(includeYears,subset(surv_data,!is.na(MortalitiesCertain))$Annual))
+  }else{
+    survYrs <- includeYears
+  }
+
+  if(!is.null(freqStartsByYear)){
+    survYrs <- intersect(survYrs, freqStartsByYr$Year) 
+                         
+    freqStartsByYear <- subset(freqStartsByYear,is.element(Year,survYrs))
+    testTable(freqStartsByYear, c("Year","numStarts"),
+              acc_vals = list(Year = survYrs))
+  } else if(!is.null(paramTable$collarCount)){
+    freqStartsByYear <- expand.grid(Year = survYrs,numStarts = paramTable$collarCount)
+  }else {
+    stop("One of freqStartsByYear or paramTable$collarCount must be provided",
+         call. = FALSE)
+  }
+  
+  if(!is.element("PopulationName",names(freqStartsByYear))){
+    freqStartsByYear=merge(freqStartsByYear,data.frame(PopulationName=unique(exData$PopulationName)))
+    if(!is.null(cowCounts)){
+      cowCounts=merge(cowCounts,data.frame(PopulationName=unique(exData$PopulationName)))
+    }
+  }
+
   
   # simulate survival data from survival probability.
   if (is.element("collarInterval", names(paramTable)) & is.null(freqStartsByYearIn)) {
@@ -180,8 +214,8 @@ simulateObservations <- function(trajectories, paramTable,
   if(!is.null(surv_data)&&(length(unique(surv_data$Month))>1)){
     forceMonths = T
   }else{forceMonths=F}
-  
 
+  
   if(nrow(freqStartsByYear)>0){
 
     if (is.null(freqStartsByYearIn)) {
@@ -193,7 +227,10 @@ simulateObservations <- function(trajectories, paramTable,
                                     collarOffTime, collarOnTime,caribouYearStart,forceMonths=forceMonths)
     }
     simSurvObs$survival=NULL
-    simSurvObs=subset(simSurvObs,is.element(Year,survYrs))
+    simSurvObs$Annual <- simSurvObs$Year
+    simSurvObs$Annual[simSurvObs$Month<caribouYearStart] <- simSurvObs$Annual[simSurvObs$Month<caribouYearStart]-1
+    simSurvObs=subset(simSurvObs,is.element(Annual,survYrs))
+    simSurvObs$Annual <- NULL
     
     # if cowMult is provided, set cows as a function of number of surviving cows at
     # year start month
@@ -280,14 +317,20 @@ simulateObservations <- function(trajectories, paramTable,
     }
   }
   if(paramTable$obsYears==0){
-    simSurvObs$Mortalities[!is.na(simSurvObs$Mortalities)] = NA
+    simSurvObs$Mortalities[!is.na(simSurvObs$MortalitiesCertain)] = NA
     simRecruitObs$Calves[!is.na(simRecruitObs$Calves)] = NA
   }
   
-  if(!is.element("Bulls",names(simRecruitObs))){
-    simRecruitObs$Bulls = simRecruitObs$CowsBulls-simRecruitObs$Cows
+  if(!is.element("UnknownAdults",names(simRecruitObs))){simRecruitObs$UnknownAdults <- 0}
+  if(!is.element("Yearlings",names(simRecruitObs))){simRecruitObs$Yearlings <- 0}
+  
+  if(!is.element("CowsBulls",names(simRecruitObs))){
+    simRecruitObs$CowsBulls <- simRecruitObs$Cows
   }
-
+  if(!is.element("Bulls",names(simRecruitObs))){
+    simRecruitObs$Bulls <- simRecruitObs$CowsBulls-simRecruitObs$Cows
+  }
+  
   retList = list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
                 simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
                  exData = trajectories, paramTable = paramTable)

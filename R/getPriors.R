@@ -69,8 +69,7 @@
 #'   on adult female survival,
 #' * sig.Saf.Prior2: Standard deviation of the prior distribution of the random
 #'   effect of year on adult female survival,
-#' * bias.Prior1: Log-normal mean composition survey bias correction term,
-#' * bias.Prior2: Log-normal standard deviation of composition survey bias correction term
+#' * qMin,qMax,uMin,uMax,zMin,zMax,cowMult: Composition bias parameters.   
 #' 
 #' @references    
 #'   Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
@@ -154,12 +153,13 @@ getPriors <- function(modList = NULL,
   
   #####
   #get bias coefficient priors - lognormally distributed
-  nr=10000
-  cs = compositionBiasCorrection(w=modList$cowMult,q=runif(nr,modList$qMin,modList$qMax),
-                                u=runif(nr,modList$uMin,modList$uMax),
-                                z=runif(nr,modList$zMin,modList$zMax),approx=T)
-  bias.Prior1 = cs$mu
-  bias.Prior2 = cs$sig2^0.5
+  #nr=10000
+  #cs = compositionBiasCorrection(w=modList$cowMult,q=runif(nr,modList$qMin,modList$qMax),
+  #                              u=runif(nr,modList$uMin,modList$uMax),
+  #                              z=runif(nr,modList$zMin,modList$zMax),approx=T)
+  #bias.Prior1 = cs$mu
+  #bias.Prior2 = cs$sig2^0.5
+  compositionBiasPars <- modList[c("cowMult","qMin","qMax","uMin","uMax","zMin","zMax")]
 
   if (returnValues) {
     betaPriors <- list(
@@ -176,9 +176,7 @@ getPriors <- function(modList = NULL,
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = modList$sAnthroSlopeSE,
       sig.Saf.Prior1 = modList$sNuMin,
-      sig.Saf.Prior2 = modList$sNuMax,
-      bias.Prior1 = bias.Prior1,
-      bias.Prior2 = bias.Prior2
+      sig.Saf.Prior2 = modList$sNuMax
     )
 
     # replace NULL values with 0 for when anthro or fire is not included
@@ -189,6 +187,7 @@ getPriors <- function(modList = NULL,
         x
       }
     })
+    betaPriors <- c(betaPriors,compositionBiasPars)
   } else {
     betaPriors <- list(
       l.R.Prior1 = rPriorCoefs$Intercept,
@@ -204,11 +203,10 @@ getPriors <- function(modList = NULL,
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = round(modList$sAnthroSlopeSE, 4),
       sig.Saf.Prior1 = modList$sNuMin,
-      sig.Saf.Prior2 = modList$sNuMax,
-      bias.Prior1 = bias.Prior1,
-      bias.Prior2 = bias.Prior2
+      sig.Saf.Prior2 = modList$sNuMax
     )
   }
+  
   return(betaPriors)
 }
 

@@ -219,11 +219,16 @@ caribouPopGrowth <- function(N0,
     }
     
     if(doBinomial){
+      if(max(R_tadj*adjDDRtProportion)){
+        warning("Adjusted recruitment greater than 1.")
+        R_tadj[R_tadj>1]=1
+      }
       n_recruits <- rbinom(length(N),surviving_adFemales,R_tadj*adjDDRtProportion)
     }else{
       n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits)
     }
     N <- surviving_adFemales + n_recruits
+    if(sum(is.na(N))>0){stop()}
 
     if(probOption=="matchJohnson2020"){
       ad = adjustN(N,Ntm1,r_max,denominatorAdjust=1e-06,roundDigits=roundDigits)

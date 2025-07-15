@@ -7,6 +7,7 @@
 #'   [getScenarioDefaults()] for details.
 #' @param ePars list. Additional parameters passed on to
 #'   [simulateObservations()]
+#' @param Rep integer. Optional. If specified, select specified replicate trajectory.
 #' @inheritParams caribouBayesianPM
 #' @inheritParams getOutputTables
 #' @param printProgress logical. Should the scenario number and parameters be
@@ -32,7 +33,7 @@
 #'                        niters = 10)# only set to speed up example. Normally keep defaults.
 
 
-runScnSet <- function(scns, ePars, simInitial,
+runScnSet <- function(scns, ePars, simInitial,Rep=NULL,
                       printProgress = FALSE,betaPriors="default",niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,...) {
   
   # ePars=eParsIn;simInitial=simBig;printProgress=F;niters = formals(bboutools::bb_fit_survival)$niters)
@@ -50,8 +51,13 @@ runScnSet <- function(scns, ePars, simInitial,
     }else{
       trajectories <- simInitial$samples
     }
-    trajectories <- subset(trajectories,Replicate==sample(unique(trajectories$Replicate),1))
+    if(!is.null(Rep)){
+      trajectories <- subset(trajectories,Replicate==Rep)
+    }else{
+      trajectories <- subset(trajectories,Replicate==sample(unique(trajectories$Replicate),1))
+    }
 
+    cs$Replicate <- unique(trajectories$Replicate)
     oo <- simulateObservations(trajectories, cs, 
                                cowCounts = ePars$cowCounts,
                                freqStartsByYear = ePars$freqStartsByYear,
@@ -61,11 +67,15 @@ runScnSet <- function(scns, ePars, simInitial,
                                surv_data = simInitial$surv_data, recruit_data=simInitial$recruit_data)
     #plot(plotSurvivalSeries(oo$simSurvObs))
     
+    if (betaPriors[[1]] == "default") {
+      betaPriors <- getPriors(scns)
+    }
+
     out <- (caribouBayesianPM(
       survData = oo$simSurvObs, recruitData = oo$simRecruitObs,
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = oo$minYr, endYear = oo$maxYr,
-      N0 = cs$N0,cPars = cs, niters=niters,nthin=nthin,...))
+      N0 = cs$N0,niters=niters,nthin=nthin,...))
     if (inherits(out, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
