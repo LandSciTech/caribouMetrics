@@ -232,10 +232,21 @@ simulateObservations <- function(trajectories, paramTable,
     simSurvObs$Annual <- NULL
     
     # if cowMult is provided, set cows as a function of number of surviving cows at
-    # year start month
+    # year start
     if (is.element("cowMult", names(paramTable)) & is.null(cowCountsIn)) {
       
-      survsCalving <- subset(simSurvObs, simSurvObs$Month == caribouYearStart) %>% 
+      # if multiple months filter to the start of caribou year
+      # if only one subtract all the mortalities for the year
+      if(n_distinct(simSurvObs$Month) > 1){
+        surveyMonth <- caribouYearStart - 1
+        if(surveyMonth == 0){
+          surveyMonth <- 12
+        }
+        survsCalving <- subset(simSurvObs, simSurvObs$Month == surveyMonth) 
+      } else {
+        survsCalving <- simSurvObs 
+      }
+      survsCalving <- survsCalving %>% 
         mutate(surviving = StartTotal - MortalitiesCertain)
       
       if (nrow(survsCalving) > 0) {

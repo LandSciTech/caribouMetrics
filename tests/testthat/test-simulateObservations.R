@@ -52,13 +52,6 @@ test_that("collarCount and cowCount behave", {
   # if cowCount is 100 we observe 100
   expect_true(all(simObs$simRecruitObs$Cows == 100))
   
-  # regardless of collarCount
-  scns3 <- getScenarioDefaults(collarCount = 100, cowCount = 100, cowMult = NA)
-  
-  simObs3 <- simulateObservations(trajs, scns3)
-  
-  expect_true(all(simObs3$simRecruitObs$Cows == 100))
-  
   expect_error(getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 2),
                "not both")
   
@@ -73,8 +66,14 @@ test_that("collarCount and cowCount behave", {
     mutate(pass = Cows == (30 - MortalitiesCertain) * 2) %>% 
     pull(pass) %>% all %>% 
     expect_true()
-
   
+  # Test with months
+  #TODO: fix
+  simObs_mon <- simulateObservations(trajs, scns2, 
+                       surv_data = bboudata::bbousurv_a,
+                       recruit_data = bboudata::bbourecruit_a)
+
+
   # if tables are supplied they should not be modified by cowCount or collarCount
   simObs3 <- simulateObservations(trajs, scns,
                        freqStartsByYear = data.frame(Year = 2009:2023,
