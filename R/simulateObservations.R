@@ -275,6 +275,7 @@ simulateObservations <- function(trajectories, paramTable,
       }
       
       recruit_data = merge(subset(recruit_data,!is.na(Calves),select=intersect(names(recruit_data),names(simRecruitObs))),add)
+      simRecruitObs = subset(simRecruitObs,!is.na(Calves))
       simRecruitObs = rbind(recruit_data,simRecruitObs)
       simRecruitObs = simRecruitObs[order(simRecruitObs$Year),]
       
@@ -296,6 +297,7 @@ simulateObservations <- function(trajectories, paramTable,
       #dups = merge(simSurvObs,subset(surv_data,!is.na(MortalitiesCertain),select=c(Year,Month)))
       
       surv_data = merge(subset(surv_data,select=intersect(names(surv_data),names(simSurvObs))),add)
+      simSurvObs = subset(simSurvObs,!is.na(MortalitiesCertain))
       simSurvObs = rbind(subset(surv_data,!is.na(MortalitiesCertain)),simSurvObs)
       simSurvObs = simSurvObs[order(simSurvObs$Year),]
       

@@ -9,7 +9,7 @@ caribouBayesianPM(
   recruitData = bboudata::bbourecruit_a,
   disturbance = NULL,
   betaPriors = "default",
-  omitInterannual = F,
+  returnExpected = F,
   startYear = NULL,
   endYear = NULL,
   N0 = 1000,
@@ -30,7 +30,7 @@ columns "Anthro","fire_excl_anthro", and "Year".}
 
 \item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}. Not used if disturbance is NA.}
 
-\item{omitInterannual}{logical. Default F. If TRUE returns expected survival/recruitment/lambda without interannual variation. Not used if disturbance is NA.}
+\item{returnExpected}{logical. Default F. If TRUE returns expected survival/recruitment/lambda without interannual variation. Not used if disturbance is NA.}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
