@@ -223,22 +223,6 @@ simCalfCowRatios <- function(cowCounts, exData) {
   return(simRecruitObs)
 }
 
-# Helpers for runScnSet and App -------------------------------------------
-
-movingAveGrowthRate <- function(obs, assessmentYrs) {
-  # obs=obsLam
-  if (assessmentYrs == 1) {
-    return(obs)
-  }
-  obsOut <- obs
-  assessmentYrs = min(assessmentYrs,nrow(obsOut))
-  for (k in assessmentYrs:nrow(obsOut)) {
-    # k=3
-    obsOut$Mean[k] <- prod(obs$Mean[(k - assessmentYrs + 1):k])^(1/assessmentYrs) #geometric mean
-  }
-  obsOut
-}
-
 # General helpers ---------------------------------------------------------
 
 # test a popGrowthTable has the right format
