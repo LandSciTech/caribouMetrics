@@ -72,7 +72,8 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
     "Mean adult female survival",
     "Mean recruitment", "Mean female recruitment",
     "Geometric mean population growth rate",
-    "Mean population growth rate"
+    "Mean population growth rate",
+    "c"
   )
   
   if(!parameter %in% exp_param_nms){

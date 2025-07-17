@@ -68,14 +68,15 @@ runScnSet <- function(scns, ePars, simInitial,Rep=NULL,
     #plot(plotSurvivalSeries(oo$simSurvObs))
     
     if (betaPriors[[1]] == "default") {
-      betaPriors <- getPriors(scns)
+      betaPriors <- getPriors(cs)
     }
-
+    
     out <- (caribouBayesianPM(
       survData = oo$simSurvObs, recruitData = oo$simRecruitObs,
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = oo$minYr, endYear = oo$maxYr,
       N0 = cs$N0,niters=niters,nthin=nthin,...))
+
     if (inherits(out, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,

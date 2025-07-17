@@ -7,10 +7,11 @@ convertTrajectories<-function(pars){
   if(!is.element("lamPercentile",names(pars))){
     pars$lamPercentile=NA
   }
-  fds <- subset(pars, select = c("id","lamPercentile", "year","PopulationName","Anthro", "fire_excl_anthro",
+  if(!is.element("c",names(pars))){pars$c=NA}
+  fds <- subset(pars, select = c("id","lamPercentile", "year","PopulationName","Anthro", "fire_excl_anthro","c",
                                  "S_t", "R_t", "X_t", "N",
                                  "lambda"))
-  names(fds) <- c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "fire_excl_anthro", "survival",
+  names(fds) <- c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "fire_excl_anthro","c", "survival",
                   "recruitment","Rfemale", "N", "lambda")
   fds$Timestep = as.numeric(fds$Year)
   fds$Year=as.numeric(as.character(fds$Year))
@@ -30,11 +31,11 @@ summarizeCaribouPopSim <- function(pars,returnSamples=T){
   simSum <- pars  %>%
     group_by(Year,PopulationName,MetricTypeID) %>%
     summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
-              upper = quantile(Amount, 0.975,na.rm=T))
+              upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
   
-  names = data.frame(MetricTypeID = c("survival","recruitment","Rfemale", "lambda","N"),
+  names = data.frame(MetricTypeID = c("survival","recruitment","Rfemale", "lambda","N","c"),
                      Parameter = c("Adult female survival","Recruitment","Adjusted recruitment",
-                                   "Population growth rate","Female population size"))
+                                   "Population growth rate","Female population size","c"))
   simSum=merge(simSum,names)
   
   simBig <- list(summary = simSum, samples = pars)
