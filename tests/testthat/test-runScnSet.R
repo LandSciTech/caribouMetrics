@@ -16,7 +16,7 @@ test_that("testScript still works", {
 
   scns <- expand.grid(
     obsYears = 8, collarCount = 30, cowMult = 2, collarInterval = 2,
-    assessmentYrs = 1, iAnthro = 0,
+    iAnthro = 0,
     tA = 0, obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.960908218594268, 
     rQuantile = 0.744425233039074, N0 = 1000
   )

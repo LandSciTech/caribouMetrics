@@ -202,7 +202,6 @@ simulateObservations <- function(trajectories, paramTable,
       cowCounts=merge(cowCounts,data.frame(PopulationName=unique(exData$PopulationName)))
     }
   }
-
   
   # simulate survival data from survival probability.
   if (is.element("collarInterval", names(paramTable)) & is.null(freqStartsByYearIn)) {

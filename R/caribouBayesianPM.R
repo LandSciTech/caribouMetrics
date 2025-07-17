@@ -3,7 +3,6 @@
 
 #' Bayesian population model for boreal caribou
 #'
-#' So far, a wrapper around bboutools. 
 #'
 #' @param survData either a path to a csv file or a survival data table in bboutools format.
 #' @param recruitData either a path to a csv file or a recruitment data table in bboutools format.

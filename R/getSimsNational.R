@@ -58,7 +58,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000,
 
   pars <- merge(data.frame(N0 = N0), rateSamplesAll)
   pars <- cbind(subset(pars,select=-N0), caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
-                                       S_bar = pars$S_bar, numSteps = cPars$assessmentYrs,
+                                       S_bar = pars$S_bar, numSteps = 1,
                                        K = FALSE, c = pars$c, 
                                        interannualVar=interannualVar, progress = FALSE))
   names(pars)[names(pars)=="replicate"]= "id"
