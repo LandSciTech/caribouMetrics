@@ -1,14 +1,16 @@
 test_that("default works", {
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowMult = 3,
                               collarCount = 50)
-  expect_is(simulateObservations(scns),
+  trajs <- getSimsInitial()$samples
+  expect_is(simulateObservations(trajs, paramTable = scns),
             "list")
 })
 
 test_that("error messages are as expected", {
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10)
+  trajs <- getSimsInitial()$samples
   expect_error(
-    simulateObservations(scns,
+    simulateObservations(trajs, scns,
                          freqStartsByYear = data.frame(Year = 2014:2023,
                                                        numStarts = 10),
                          cowCounts = data.frame(Year = 2014:2016,
@@ -17,7 +19,7 @@ test_that("error messages are as expected", {
     "Year is missing expected values")
 
   expect_error(
-    simulateObservations(scns,
+    simulateObservations(trajs, scns,
                          freqStartsByYear = data.frame(Year = 2014:2023,
                                                        numStarts = 10),
                          cowCounts = data.frame(Year = 2014:2023,
@@ -28,7 +30,8 @@ test_that("error messages are as expected", {
 
 test_that("multiple scenarios not allowed",{
   scns <- getScenarioDefaults(data.frame(iFire = 1:2), projYears = 10, obsYears = 10)
-  expect_error(simulateObservations(scns,
+  trajs <- getSimsInitial()$samples
+  expect_error(simulateObservations(trajs, scns,
                                  freqStartsByYear = data.frame(Year = 2014:2023,
                                                                numStarts = 10),
                                  cowCounts = data.frame(Year = 2014:2023,
@@ -42,41 +45,38 @@ test_that("multiple scenarios not allowed",{
 
 test_that("collarCount and cowCount behave", {
   scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = NA)
+  trajs <- getSimsInitial()$samples
   
-  simObs <- simulateObservations(scns)
+  simObs <- simulateObservations(trajs, scns)
   
-  # number of rows in each year should be 30 next years should add n
-  # died plus n dropped in prev year
-  simObs$simSurvObs %>% group_by(Year) %>%
-    summarise(ncollar = n(), ndeaths = sum(event), 
-              ndropped = sum(exit == 5 & event == 0),
-              nadded = sum(enter == 7)) %>% 
-    {pull(., ncollar) == 30} %>% all() %>% 
-    expect_true()
+  # if cowCount is 100 we observe 100
+  expect_true(all(simObs$simRecruitObs$Cows == 100))
   
-  simObs$simRecruitObs %>% filter(Class == "cow", Count != 100) %>% nrow() %>% 
-    {expect_true(. == 0)} 
+  # regardless of collarCount
+  scns3 <- getScenarioDefaults(collarCount = 100, cowCount = 100, cowMult = NA)
   
-  # cowMult
+  simObs3 <- simulateObservations(trajs, scns3)
+  
+  expect_true(all(simObs3$simRecruitObs$Cows == 100))
+  
   expect_error(getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 2),
                "not both")
   
+  # if cowMult is 2 we observe max 2*collarCount but fewer when some deaths were observed
   scns2 <- getScenarioDefaults(collarCount = 30, cowMult = 2)
   
-  simObs2 <- simulateObservations(scns2)
+  simObs2 <- simulateObservations(trajs, scns2)
   
-  collarSum <- simObs2$simSurvObs %>% group_by(Year) %>%
-    summarise(ncollar = n(), ndeaths = sum(event), 
-              ndropped = sum(exit == 5 & event == 0),
-              nadded = sum(enter == 7), 
-              survsCalving = sum(exit >= 6))
-    
-  expect_true(all(
-  simObs2$simRecruitObs %>% filter(Class == "cow") %>% pull(Count) ==
-    collarSum$survsCalving*2))
+  simObs2$simRecruitObs %>% 
+    left_join(simObs2$simSurvObs, 
+              by = join_by(PopulationName, Replicate, Year)) %>% 
+    mutate(pass = Cows == (30 - MortalitiesCertain) * 2) %>% 
+    pull(pass) %>% all %>% 
+    expect_true()
+
   
   # if tables are supplied they should not be modified by cowCount or collarCount
-  simObs3 <- simulateObservations(scns,
+  simObs3 <- simulateObservations(trajs, scns,
                        freqStartsByYear = data.frame(Year = 2009:2023,
                                                      numStarts = 10),
                        cowCounts = data.frame(Year = 2009:2023,

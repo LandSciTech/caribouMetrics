@@ -235,11 +235,13 @@ simulateObservations <- function(trajectories, paramTable,
     # year start month
     if (is.element("cowMult", names(paramTable)) & is.null(cowCountsIn)) {
       
-      survsCalving <- subset(simSurvObs, simSurvObs$Month == caribouYearStart)
+      survsCalving <- subset(simSurvObs, simSurvObs$Month == caribouYearStart) %>% 
+        mutate(surviving = StartTotal - MortalitiesCertain)
       
       if (nrow(survsCalving) > 0) {
-        cowCounts <- subset(survsCalving, select=c("PopulationName","Replicate","Year","StartTotal"))
-        cowCounts$Cows <- paramTable$cowMult * cowCounts$StartTotal
+        cowCounts <- subset(survsCalving, select=c("PopulationName","Replicate","Year","StartTotal", "surviving"))
+        cowCounts$Cows <- paramTable$cowMult * cowCounts$surviving
+        cowCounts$surviving <- NULL
       } else {
         cowCounts <- unique(subset(trajectories,select=c("PopulationName","Replicate","Year")))
         cowCounts$Cows <- 0
