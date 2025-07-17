@@ -119,5 +119,6 @@ Remotes: LandSciTech/pfocal,
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
+    nimble,
     R (>= 3.5)
 URL: https://landscitech.github.io/caribouMetrics, https://github.com/LandSciTech/caribouMetrics
