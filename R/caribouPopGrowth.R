@@ -219,7 +219,7 @@ caribouPopGrowth <- function(N0,
     }
     
     if(doBinomial){
-      if(max(R_tadj*adjDDRtProportion)){
+      if(max(R_tadj*adjDDRtProportion) > 1){
         warning("Adjusted recruitment greater than 1.")
         R_tadj[R_tadj>1]=1
       }
