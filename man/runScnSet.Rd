@@ -8,6 +8,7 @@ runScnSet(
   scns,
   ePars,
   simInitial,
+  Rep = NULL,
   printProgress = FALSE,
   betaPriors = "default",
   niters = formals(bboutools::bb_fit_survival)$niters,
@@ -25,10 +26,12 @@ runScnSet(
 \item{simInitial}{Initial simulation results, produced by calling
 \code{\link[=getSimsInitial]{getSimsInitial()}}}
 
+\item{Rep}{integer. Optional. If specified, select specified replicate trajectory.}
+
 \item{printProgress}{logical. Should the scenario number and parameters be
 printed at each step?}
 
-\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}.}
+\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}. Not used if disturbance is NA.}
 
 \item{niters}{A whole number of the number of iterations per chain after thinning and burn-in.}
 
@@ -46,7 +49,7 @@ Define scenarios in a table and \code{\link[=simulateObservations]{simulateObser
 \examples{
 scns <- expand.grid(
   obsYears =c(10, 20), collarCount = c(30, 300), cowMult = 2, collarInterval = 2,
-  assessmentYrs = 1, iAnthro = 0,
+  iAnthro = 0,
   obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.9,
   rQuantile = 0.7, N0 = 1000
 )

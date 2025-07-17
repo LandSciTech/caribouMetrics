@@ -110,8 +110,7 @@ error times modifier,
 on adult female survival,
 \item sig.Saf.Prior2: Standard deviation of the prior distribution of the random
 effect of year on adult female survival,
-\item bias.Prior1: Log-normal mean composition survey bias correction term,
-\item bias.Prior2: Log-normal standard deviation of composition survey bias correction term
+\item qMin,qMax,uMin,uMax,zMin,zMax,cowMult: Composition bias parameters.
 }
 }
 \description{
@@ -125,7 +124,7 @@ Standard errors and random effects of year have
 been calibrated so that the 95\% prior prediction intervals for survival and
 recruitment from the Bayesian model match the range between the 2.5\% and
 97.5\% quantiles of 1000 survival and recruitment trajectories from the
-national demographic model \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}. A log-normal prior for the
+national demographic model \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}. A prior for the
 unknown composition survey bias correction term \code{c} is set by specifying an
 apparent number of adult females per collared animal(\code{cowMult}) and minimum
 and maximum values for each of the ratio of bulls to cows (\eqn{q}), the

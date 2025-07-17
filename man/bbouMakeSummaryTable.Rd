@@ -9,6 +9,8 @@ bbouMakeSummaryTable(
   recruit_data,
   N0,
   disturbance = NULL,
+  priors = NULL,
+  omitInterannual = F,
   shiny_progress = FALSE,
   return_mcmc = FALSE,
   i18n = NULL,
@@ -26,6 +28,11 @@ bbouMakeSummaryTable(
 PopulationName and N0}
 
 \item{disturbance}{dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.}
+
+\item{priors}{list. Optional. At present these are only used if disturbance is also provided.}
+
+\item{omitInterannual}{logical. Default F. If TRUE returns expected survival/recruitment/lambda without interannual variation.
+At present these are only used if disturbance is also provided.}
 
 \item{shiny_progress}{logical. Should shiny progress bar be updated. Only set
 to TRUE if using in an app.}

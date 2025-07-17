@@ -12,6 +12,7 @@ caribouPopSimMCMC(
   surv_pred,
   initYear = NULL,
   correlateRates = FALSE,
+  c = formals(caribouPopGrowth)$c,
   ...
 )
 }
@@ -25,6 +26,8 @@ caribouPopSimMCMC(
 \item{initYear}{numeric. Initial year.}
 
 \item{correlateRates}{logical. Set TRUE to force correlation between recruitment and survival.}
+
+\item{c}{Number. Bias correction term.}
 }
 \value{
 a data frame with results from \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for each set of survival/recruitment predictions.

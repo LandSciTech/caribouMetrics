@@ -9,10 +9,10 @@ caribouBayesianPM(
   recruitData = bboudata::bbourecruit_a,
   disturbance = NULL,
   betaPriors = "default",
+  omitInterannual = F,
   startYear = NULL,
   endYear = NULL,
   N0 = 1000,
-  cPars = getScenarioDefaults(),
   returnSamples = F,
   inputList = list(),
   niters = formals(bboutools::bb_fit_survival)$niters,
@@ -28,15 +28,15 @@ caribouBayesianPM(
 \item{disturbance}{either a path to a csv file or a dataframe containing the
 columns "Anthro","fire_excl_anthro", and "Year".}
 
-\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}.}
+\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}. Not used if disturbance is NA.}
+
+\item{omitInterannual}{logical. Default F. If TRUE returns expected survival/recruitment/lambda without interannual variation. Not used if disturbance is NA.}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
 more sample populations.}
-
-\item{cPars}{optional. Parameters for calculating composition survey bias term.}
 
 \item{returnSamples}{logical. If F returns only summaries. If T returns example trajectories.}
 
@@ -60,7 +60,7 @@ a list with elements:
 }
 }
 \description{
-So far, a wrapper around bboutools.
+Bayesian population model for boreal caribou
 }
 \examples{
 # Using observed survival, recruitment and disturbance data

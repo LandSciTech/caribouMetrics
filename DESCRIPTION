@@ -97,7 +97,6 @@ Collate:
     'sampleCoefs.R'
     'sampleRates.R'
     'simulateObservations.R'
-    'tabAllRes.R'
     'updateCaribou.R'
     'updateDisturbance.R'
 Suggests: 
@@ -114,7 +113,9 @@ Suggests:
     shiny,
     bboudata
 Remotes: LandSciTech/pfocal,
-    LandSciTech/BayesianCaribouDemographicProjection
+    LandSciTech/BayesianCaribouDemographicProjection,
+    LandSciTech/bboudata,
+    LandSciTech/bboutoolsMultiPop
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
