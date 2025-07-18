@@ -95,7 +95,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   
   if(!is.null(bbouResults$surv_fit)){
     if(is.element("bboufit",class(bbouResults$surv_fit))){
-      surv_pred <- bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
+      surv_pred <- bboutools::bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
       nr <- dim(surv_pred$samples)[1]*dim(surv_pred$samples)[2]
     }else{
       surv_pred <- bbouResults$surv_fit
@@ -103,7 +103,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     }
     
     if(is.element("bboufit",class(bbouResults$recruit_fit))){
-      rec_pred <- bb_predict_calf_cow_ratio(bbouResults$recruit_fit,year=T,conf_level=F)
+      rec_pred <- bboutools::bb_predict_calf_cow_ratio(bbouResults$recruit_fit,year=T,conf_level=F)
     }else{
       rec_pred <- bbouResults$recruit_fit
     }

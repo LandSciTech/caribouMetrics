@@ -2,7 +2,8 @@ test_that("works with defaults", {
   
   scns <- getScenarioDefaults(projYears = 0, obsYears = 10, collarCount = 20,
                               cowMult = 3)
-  simO <- simulateObservations(scns)
+  trajs <- getSimsInitial()$samples
+  simO <- simulateObservations(trajs, scns)
   
   out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
                     disturbance = simO$simDisturbance,
@@ -34,10 +35,11 @@ test_that("decimals in observed disturbance work", {
              
 })
 
+mod_real <- caribouBayesianPM(survData = bboudata::bbousurv_a %>% filter(Year > 2010), 
+                              recruitData = bboudata::bbourecruit_a %>% filter(Year > 2010),
+                              niters=1)
+
 test_that("works with out sim obs",{
-  mod_real <- caribouBayesianPM(niters=100)
-  
-  
   mod_tbl <- getOutputTables(mod_real,
                              simInitial = getSimsInitial())
   
@@ -46,8 +48,6 @@ test_that("works with out sim obs",{
 })
 
 test_that("works with out simInitial", {
-  mod_real <- caribouBayesianPM(niters=100)
-  
   
   mod_tbl <- getOutputTables(mod_real)
   
