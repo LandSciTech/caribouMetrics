@@ -105,14 +105,17 @@ getOutputTables <- function(caribouBayesDemogMod,
     summaries <- simInitial$summary
     
     if(!is.element("Year",names(summaries))){
-      if(F&&!all(unique(distInput$Anthro) %in% summaries$Anthro)){
+      
+      if(!is.element("Anthro",names(dist_params))){
+        stop("Set disturbance in caribouBayesianPM function call in order to compare to national model simulations.")
+      }
+      if(!all(unique(distInput$Anthro) %in% summaries$Anthro)){
         message("recalculating initial sims to match anthropogenic distubance scenario")
         simInitial <- getSimsInitial(Anthro = unique(distInput$Anthro),cPars=paramTable)
         summaries <- simInitial$summary
       }
       
-      #Year is actually anthropogenic disturbance.
-      #Need to convert.
+      #Need to convert Anthro to Year.
       distMerge <- subset(dist_params, select=c(Anthro,Year))
       if(length(setdiff(distMerge$Anthro,summaries$Anthro))>0){
         stop("Handle this case.")

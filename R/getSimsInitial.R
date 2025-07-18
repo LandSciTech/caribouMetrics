@@ -87,6 +87,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
       N0 <- eval(formals(getSimsNational)$N0)
     }
   }
+
   if(length(N0)==1){
     N0 = data.frame(N0=N0)
     N0 = merge(N0,subset(bbouResults$parTab,select=c(pop_name)))
@@ -155,11 +156,14 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     message("Updating cached initial simulations.")
     assign(saveName, simBig, envir = cacheEnv)
   }
+  
+  
   if(is.element("surv_fit",names(bbouResults))){
     simBig$surv_data = bbouResults$surv_fit$data
     simBig$recruit_data = bbouResults$recruit_fit$data
     simBig$popInfo = popInfo
   }
+  
   if(is.null(bbouResults$surv_fit)){
     names(simBig$summary)[names(simBig$summary)=="Year"]="Anthro"
     names(simBig$samples)[names(simBig$samples)=="Year"]="Anthro"
