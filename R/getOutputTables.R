@@ -77,18 +77,22 @@ getOutputTables <- function(caribouBayesDemogMod,
 
   #hist(subset(rr.summary,Parameter=="Recruitment")$Mean)
   
+  obsAll <- rbind(subset(obsRec, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                                            "Type")),
+                  subset(obsSurv, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                                             "Type")))
+  
   if(!is.null(exData)){
     
     exData <- merge(exData,unique(subset(rr.summary,select=c(MetricTypeID,Parameter))),all.x=T)
     names(exData)[names(exData)=="Amount"] = "Mean"
     exData$Type = "true"
+    
+    obsAll <- rbind(obsAll,
+                    subset(exData, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                                              "Type")))
   } 
-  obsAll <- rbind(subset(obsRec, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
-                                            "Type")),
-                  subset(obsSurv, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
-                                             "Type")), 
-                  subset(exData, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
-                                             "Type")))
+
   
   if(!is.null(distInput)){
     # combine paramTable and simDisturbance and add to all output tables, nest params in a list
