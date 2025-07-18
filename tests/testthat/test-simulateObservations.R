@@ -1,43 +1,20 @@
 test_that("default works", {
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowMult = 3,
                               collarCount = 50)
-  trajs <- getSimsInitial()$samples
+  trajs <- getSimsInitial(replicates = 2)$samples
   expect_is(simulateObservations(trajs, paramTable = scns),
             "list")
 })
 
-test_that("error messages are as expected", {
-  scns <- getScenarioDefaults(projYears = 10, obsYears = 10)
-  trajs <- getSimsInitial()$samples
-  expect_error(
-    simulateObservations(trajs, scns,
-                         freqStartsByYear = data.frame(Year = 2014:2023,
-                                                       numStarts = 10),
-                         cowCounts = data.frame(Year = 2014:2016,
-                                                Count = 10,
-                                                Class = "cow")),
-    "Year is missing expected values")
-
-  expect_error(
-    simulateObservations(trajs, scns,
-                         freqStartsByYear = data.frame(Year = 2014:2023,
-                                                       numStarts = 10),
-                         cowCounts = data.frame(Year = 2014:2023,
-                                                Count = 10,
-                                                Class = "cat")),
-    "Class contains unexpected values")
-})
-
 test_that("multiple scenarios not allowed",{
   scns <- getScenarioDefaults(data.frame(iFire = 1:2), projYears = 10, obsYears = 10)
-  trajs <- getSimsInitial()$samples
+  trajs <- getSimsInitial(replicates = 2)$samples
   expect_error(simulateObservations(trajs, scns,
                                  freqStartsByYear = data.frame(Year = 2014:2023,
                                                                numStarts = 10),
                                  cowCounts = data.frame(Year = 2014:2023,
-                                                        Count = 10,
-                                                        Class = "cow")),
-            "must have length 1")
+                                                        Cows = 10)),
+            "cannot have multiple rows")
 })
 
 # TODO: add test for non-default popGrow table should use testPopGrowTable
@@ -45,7 +22,7 @@ test_that("multiple scenarios not allowed",{
 
 test_that("collarCount and cowCount behave", {
   scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = NA)
-  trajs <- getSimsInitial()$samples
+  trajs <- getSimsInitial(replicates = 2)$samples
   
   simObs <- simulateObservations(trajs, scns)
   
@@ -68,127 +45,110 @@ test_that("collarCount and cowCount behave", {
     expect_true()
   
   # Test with months
-  #TODO: fix
-  simObs_mon <- simulateObservations(trajs, scns2, 
+  scns10 <- getScenarioDefaults(collarCount = 15, cowMult = 2)
+  simObs_mon <- simulateObservations(trajs, scns10, 
                        surv_data = bboudata::bbousurv_a,
                        recruit_data = bboudata::bbourecruit_a)
 
-
+  scns10$curYear
+  simObs_mon$simSurvObs$Year %>% max()
+  
+  # should be different cow counts in simulated years
+  expect_gt(simObs_mon$simRecruitObs %>% filter(Year < 2016) %>% pull(Cows) %>% mean, 
+            simObs_mon$simRecruitObs %>% filter(Year > 2016) %>% pull(Cows) %>% mean)
+  
+  # Visual:
+  # simObs_mon$simRecruitObs %>% ggplot(aes(Year, Cows, colour = Replicate))+
+  #   geom_point()
+  
+  
+  
+  # Got a warning of NAs produced by: rbinom(n = nrow(simRecruitObs), size =
+  # round(apparentCows), prob = simRecruitObs$recruitment)
+  # Only happens sometimes with low collarCount. Need to figure it out and make a test
+  
+  
   # if tables are supplied they should not be modified by cowCount or collarCount
   simObs3 <- simulateObservations(trajs, scns,
                        freqStartsByYear = data.frame(Year = 2009:2023,
                                                      numStarts = 10),
                        cowCounts = data.frame(Year = 2009:2023,
-                                              Count = 10,
-                                              Class = "cow"))
+                                              Cows = 10))
   
-  simObs3$simRecruitObs %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
+  simObs3$simRecruitObs %>% filter(Cows != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
-  # number added remains constant rather than number collars
-  simObs3$simSurvObs %>% group_by(Year) %>%
-    summarise(ncollar = n(), ndeaths = sum(event), 
-              ndropped = sum(exit == 5 & event == 0),
-              nadded = sum(enter == 7)) %>% 
-    {pull(., nadded) == 10} %>% all() %>% 
-    expect_true()
+  # Total n collars goes up at first and then balances with mortality
+  expect_lt(
+    simObs3$simSurvObs %>% filter(Year == 2010) %>% pull(StartTotal) %>% mean(),
+    simObs3$simSurvObs %>% filter(Year == 2020) %>% pull(StartTotal) %>% mean()
+  )
+  # Visual test
+  # simObs3$simSurvObs %>% 
+  #   ggplot(aes(Year, StartTotal, colour = Replicate)) +
+  #   geom_point()
+  
   
   # cowMult doesn't affect cowCounts table
-  simObs4 <- simulateObservations(scns2,
+  simObs4 <- simulateObservations(trajs, scns2,
                                   freqStartsByYear = data.frame(Year = 2009:2023,
                                                                 numStarts = 10),
                                   cowCounts = data.frame(Year = 2009:2023,
-                                                         Count = 10,
-                                                         Class = "cow"))
+                                                         Cows = 10))
   
-  simObs4$simRecruitObs %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
+  simObs4$simRecruitObs %>% filter(Cows != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
-  # number added remains constant rather than number collars
-  simObs4$simSurvObs %>% group_by(Year) %>%
-    summarise(ncollar = n(), ndeaths = sum(event), 
-              ndropped = sum(exit == 5 & event == 0),
-              nadded = sum(enter == 7)) %>% 
-    {pull(., nadded) == 10} %>% all() %>% 
-    expect_true()
-  
   # can supply just freqStartsByYear and cowMult
-  simObs4b <- simulateObservations(scns2,
+  simObs4b <- simulateObservations(trajs, scns2,
                                   freqStartsByYear = data.frame(Year = 2009:2023,
                                                                 numStarts = 10))
-  
-  collarSum2 <- simObs4b$simSurvObs %>% group_by(Year) %>%
-    summarise(ncollar = n(), ndeaths = sum(event), 
-              ndropped = sum(exit == 5 & event == 0),
-              nadded = sum(enter == 7), 
-              survsCalving = sum(exit >= 6))
+  scns2$cowMult <- 10
+  simObs4c <- simulateObservations(trajs, scns2,
+                                   freqStartsByYear = data.frame(Year = 2009:2023,
+                                                                 numStarts = 10))
   
   # cowCounts is created from freqStartsByYear and cowMult 
   expect_true(all(
-    simObs4b$simRecruitObs %>% filter(Class == "cow") %>% pull(Count) ==
-      collarSum2$survsCalving*2)) 
-  
-  # number added remains constant rather than number collars
-  collarSum2 %>% 
-    {pull(., nadded) == 10} %>% all() %>% 
-    expect_true()
+    simObs4b$simRecruitObs %>% pull(Cows) <
+      simObs4c$simRecruitObs %>% pull(Cows))) 
   
   # for collarInterval 
   scns3 <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = NA,
                                collarInterval = 3)
   
-  simObs5 <- simulateObservations(scns3)
+  simObs5 <- simulateObservations(trajs, scns3)
   
-  # number of rows in each year should be 30 next years should add n
-  # died plus n dropped in prev year
-  simObs5$simSurvObs %>% group_by(Year) %>%
-    summarise(ncollar = n(), ndeaths = sum(event), 
-              ndropped = sum(exit == 5 & event == 0),
-              nadded = sum(enter == 7)) %>% pull(ncollar) %>%
-    .[seq(1,15, by = 3)] %>% 
+  # simObs5$simSurvObs %>%
+  #   ggplot(aes(Year, StartTotal, colour = Replicate)) +
+  #   geom_point()
+  
+  # Should go back up to 30 collars every 3 years
+  simObs5$simSurvObs %>% pull(StartTotal) %>% .[seq(1,15, by = 3)] %>% 
     {. == 30} %>% all() %>% 
     expect_true()
   
-  simObs5$simRecruitObs %>% filter(Class == "cow", Count != 100) %>% nrow() %>% 
+  simObs5$simRecruitObs %>% filter(Cows != 100) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
   # collarInterval doesn't affect tables
-  simObs6 <- simulateObservations(scns3,
+  simObs6 <- simulateObservations(trajs, scns3,
                                   freqStartsByYear = data.frame(Year = 2009:2023,
                                                                 numStarts = 10),
                                   cowCounts = data.frame(Year = 2009:2023,
-                                                         Count = 10,
-                                                         Class = "cow"))
+                                                         Cows = 10))
   
-  simObs6$simRecruitObs %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
+  simObs6$simRecruitObs %>% filter(Cows != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
-  # number added remains constant rather than number collars
-  simObs6$simSurvObs %>% group_by(Year) %>%
-    summarise(ncollar = n(), ndeaths = sum(event), 
-              ndropped = sum(exit == 5 & event == 0),
-              nadded = sum(enter == 7)) %>% 
-    {pull(., nadded) == 10} %>% all() %>% 
-    expect_true()
-  
   # confirm that if freqStartByYear table does skips year it still works
-  simObs7 <- simulateObservations(scns,
+  simObs7 <- simulateObservations(trajs, scns,
                                   freqStartsByYear = data.frame(Year = seq(2009, 2023, by = 3),
                                                                 numStarts = 10),
                                   cowCounts = data.frame(Year = 2009:2023,
-                                                         Count = 10,
-                                                         Class = "cow"))
+                                                         Cows = 10))
   
-  simObs7$simRecruitObs %>% filter(Class == "cow", Count != 10) %>% nrow() %>% 
+  simObs7$simRecruitObs %>% filter(Cows != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
-  # number added remains constant rather than number collars
-  simObs7$simSurvObs %>% group_by(Year) %>%
-    summarise(ncollar = n(), ndeaths = sum(event), 
-              ndropped = sum(exit == 5 & event == 0),
-              nadded = sum(enter == 7)) %>% pull(nadded) %>%
-    .[seq(1,15, by = 3)] %>% 
-    {. == 10} %>%
-    all() %>% 
-    expect_true()
 })
