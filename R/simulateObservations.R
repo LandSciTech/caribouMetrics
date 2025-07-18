@@ -197,6 +197,10 @@ simulateObservations <- function(trajectories, paramTable,
     survYrs <- includeYears
   }
 
+  inclSurvYrs = survYrs
+  inclSurvYrs[survYrs==max(survYrs)]=survYrs[survYrs==max(survYrs)]-1
+  inclSurvYrs=unique(inclSurvYrs)
+  
   if(!is.null(freqStartsByYear)){
     survYrs <- intersect(survYrs, freqStartsByYear$Year) 
                          
@@ -228,7 +232,6 @@ simulateObservations <- function(trajectories, paramTable,
     forceMonths = T
   }else{forceMonths=F}
 
-  
   if(nrow(freqStartsByYear)>0){
 
     if (is.null(freqStartsByYearIn)) {
@@ -243,7 +246,6 @@ simulateObservations <- function(trajectories, paramTable,
     simSurvObs$Annual <- simSurvObs$Year
     simSurvObs$Annual[simSurvObs$Month<caribouYearStart] <- simSurvObs$Annual[simSurvObs$Month<caribouYearStart]-1
     simSurvObs=subset(simSurvObs,is.element(Annual,survYrs))
-    simSurvObs$Annual <- NULL
     
     # if cowMult is provided, set cows as a function of number of surviving cows at
     # year start
@@ -313,6 +315,9 @@ simulateObservations <- function(trajectories, paramTable,
       }
       
     }
+    
+    simSurvObs = subset(simSurvObs,is.element(Annual,inclSurvYrs))
+    simSurvObs$Annual <- NULL
     
     if(!is.null(surv_data)){
       surv_data <- merge(surv_data,data.frame(Replicate=unique(simSurvObs$Replicate)))
