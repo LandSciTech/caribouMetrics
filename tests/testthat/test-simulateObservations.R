@@ -66,7 +66,24 @@ test_that("collarCount and cowCount behave", {
   # Got a warning of NAs produced by: rbinom(n = nrow(simRecruitObs), size =
   # round(apparentCows), prob = simRecruitObs$recruitment)
   # Only happens sometimes with low collarCount. Need to figure it out and make a test
+  # Haven't been able to reproduce...
   
+  #TODO: This seems off... What is the point of exData? If we are simulating
+  # observations why does this output go beyond the simulation time period?
+  
+  trajs_low <- getSimsInitial(replicates = 2,
+                              cPars = getScenarioDefaults(lQuantile = 0.99))$samples
+
+  scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, projYears = 100, 
+                                projAnthroSlope = 0)
+
+  simObs8 <- simulateObservations(trajs_low, scns10,
+                                  surv_data = bboudata::bbousurv_a,
+                                  recruit_data = bboudata::bbourecruit_a)
+
+  ggplot(simObs8$exData %>% filter(MetricTypeID == "N"),
+         aes(Year, Amount, colour = Replicate))+
+    geom_point()
   
   # if tables are supplied they should not be modified by cowCount or collarCount
   simObs3 <- simulateObservations(trajs, scns,
