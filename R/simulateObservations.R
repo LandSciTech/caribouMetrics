@@ -194,7 +194,7 @@ simulateObservations <- function(trajectories, paramTable,
   }
 
   if(!is.null(freqStartsByYear)){
-    survYrs <- intersect(survYrs, freqStartsByYr$Year) 
+    survYrs <- intersect(survYrs, freqStartsByYear$Year) 
                          
     freqStartsByYear <- subset(freqStartsByYear,is.element(Year,survYrs))
     testTable(freqStartsByYear, c("Year","numStarts"),
