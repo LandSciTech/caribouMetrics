@@ -104,8 +104,8 @@ getOutputTables <- function(caribouBayesDemogMod,
   if(!is.null(simInitial)){
     summaries <- simInitial$summary
     
-    if(max(summaries$Year)<=100){
-      if(F&&!all(unique(distInput$Anthro) %in% summaries$Year)){
+    if(!is.element("Year",names(summaries))){
+      if(F&&!all(unique(distInput$Anthro) %in% summaries$Anthro)){
         message("recalculating initial sims to match anthropogenic distubance scenario")
         simInitial <- getSimsInitial(Anthro = unique(distInput$Anthro),cPars=paramTable)
         summaries <- simInitial$summary
@@ -114,11 +114,10 @@ getOutputTables <- function(caribouBayesDemogMod,
       #Year is actually anthropogenic disturbance.
       #Need to convert.
       distMerge <- subset(dist_params, select=c(Anthro,Year))
-      if(length(setdiff(distMerge$Anthro,summaries$Year))>0){
+      if(length(setdiff(distMerge$Anthro,summaries$Anthro))>0){
         stop("Handle this case.")
       }
       names(distMerge) <- c("Anthro","Year")
-      names(summaries)[names(summaries)=="Year"] = "Anthro"
       simBigO <- merge(summaries, distMerge)
       simBigO$Anthro <- NULL
     }else{
