@@ -84,6 +84,10 @@ simulateObservations <- function(trajectories, paramTable,
   #paramTable=cs;cowCounts=NULL;freqStartByYear=NULL; collarNumYears = ePars$collarNumYears
   #collarOffTime = ePars$collarOffTime; collarOnTime = ePars$collarOnTime;caribouYearStart=4; writeFileDir=NULL
 
+  if(nrow(paramTable) > 1){
+    stop("paramTable cannot have multiple rows", call. = FALSE)
+  }
+  
   includeTimes = seq((paramTable$startYear+paramTable$preYears),
                        (paramTable$startYear+paramTable$preYears+paramTable$obsYears))
   
