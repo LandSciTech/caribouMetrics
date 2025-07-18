@@ -126,15 +126,13 @@ simulateObservations <- function(trajectories, paramTable,
                                .data$Year >= paramTable$startYear)
   }
   #simDisturbance = subset(simDisturbance,is.element(simDisturbance$Year,includeYears))
-  if(max(trajectories$Year)<=100){
-    #Year is actually anthropogenic disturbance.
+  if(!is.element("Year",names(trajectories))){
     #Need to convert.
     distMerge <- subset(simDisturbance, select=c(Anthro,time,Year))
-    if(length(setdiff(distMerge$Anthro,trajectories$Year))>0){
+    if(length(setdiff(distMerge$Anthro,trajectories$Anthro))>0){
       stop("Handle this case.")
     }
     names(distMerge) <- c("Anthro","Timestep","Year")
-    names(trajectories)[names(trajectories)=="Year"] = "Anthro"
     trajectories$Timestep <- NULL
     trajectories <- merge(trajectories, distMerge)
     trajectories$Anthro <- NULL

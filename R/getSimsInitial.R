@@ -31,9 +31,9 @@ if(file.exists("inst/extdata/simsInitiald.rds")){
 #'
 #' @return a list with two elements:
 #'  * summary: a tibble with a summary of parameter values for each scenario.
-#'    Column names are year, PopulationName, Mean, lower, upper, Parameter.
+#'    Column names are Year or Anthro, MetricTypeID, PopulationName, Mean, lower, upper, probViable and Parameter
 #'  * samples: a tibble with parameter values for each scenario and replicate
-#'    4 rows per replicate \* scenario. Column names are year, PopulationName,  Parameter and Value
+#'    1 row per MetricTypeID per replicate \* scenario. Column names are Year or Anthro, Replicate, PopulationName, MetricTypeID and Amount
 #'    
 #' 
 #' @family demography
@@ -159,6 +159,10 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     simBig$surv_data = bbouResults$surv_fit$data
     simBig$recruit_data = bbouResults$recruit_fit$data
     simBig$popInfo = popInfo
+  }
+  if(is.null(bbouResults$surv_fit)){
+    names(simBig$summary)[names(simBig$summary)=="Year"]="Anthro"
+    names(simBig$samples)[names(simBig$samples)=="Year"]="Anthro"
   }
   return(simBig)
 }
