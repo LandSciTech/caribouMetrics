@@ -126,8 +126,11 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     if(length(N0s)>1){
       stop("Specify a single initial population size for trajectories from national model.")
     }
-    pars<- getSimsNational(replicates = replicates,N0 = N0s,covTableObs = covTableObs,cPars=cPars,...)
+    pars<- getSimsNational(replicates = max(replicates,2),N0 = N0s,covTableObs = covTableObs,cPars=cPars,...)
     
+    if(replicates==1){
+      pars=subset(pars,id==pars$id[1])
+    }
     pars$year <- pars$Anthro
     pars$PopulationName <- "A"
   }  

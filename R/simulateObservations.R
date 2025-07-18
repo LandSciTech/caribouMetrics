@@ -89,10 +89,18 @@ simulateObservations <- function(trajectories, paramTable,
   
   
   if(!is.null(surv_data)){
+    if(!is.element("Annual",names(surv_data))){
+      surv_data <- bboutools::bb_fit_survival(surv_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)$data
+    }
+    
     surv_data <- subset(surv_data,as.numeric(as.character(Annual))<=max(includeTimes))
     surv_data$Month <- as.numeric(as.character(surv_data$Month))
   }
   if(!is.null(recruit_data)){
+    if(!is.element("Annual",names(recruit_data))){
+      recruit_data <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)$data
+    }
+    
     recruit_data <- subset(recruit_data,as.numeric(as.character(Annual))<=max(includeTimes))
   }
   
@@ -136,14 +144,18 @@ simulateObservations <- function(trajectories, paramTable,
   cowCountsIn <- cowCounts
   freqStartsByYearIn <- freqStartsByYear
   
-  
   includeYears <- sort(intersect(trajectories$Year,includeTimes))
   
   iYrs <- c()
-  if(!is.null(freqStartsByYear)){iYrs <- c(iYrs,freqStartsByYear$Year)}
-  if(!is.null(surv_data)){iYrs <- c(iYrs,as.numeric(as.character(surv_data$Annual)))}
-  if(!is.null(cowCounts)){iYrs <- c(iYrs,cowCounts$Year)}
-  if(!is.null(recruit_data)){iYrs <- c(iYrs,as.numeric(as.character(recruit_data$Annual)))}
+  if(!is.null(freqStartsByYear)){
+    iYrs <- c(iYrs,freqStartsByYear$Year)
+    if(!is.null(surv_data)){iYrs <- c(iYrs,as.numeric(as.character(surv_data$Annual)))}
+  }
+  if(!is.null(cowCounts)){
+    iYrs <- c(iYrs,cowCounts$Year)
+    if(!is.null(recruit_data)){iYrs <- c(iYrs,as.numeric(as.character(recruit_data$Annual)))}
+  }
+  
   if(length(iYrs)>0){
     includeYears <- sort(intersect(includeYears,iYrs))
   }
@@ -275,6 +287,7 @@ simulateObservations <- function(trajectories, paramTable,
     }
     
     if(!is.null(recruit_data)){
+      recruit_data <- merge(recruit_data,data.frame(Replicate=unique(simRecruitObs$Replicate)))
       missing = setdiff(names(simRecruitObs),names(recruit_data))
       add= unique(subset(simRecruitObs,select=missing))
       if(nrow(add)>1){
@@ -292,7 +305,7 @@ simulateObservations <- function(trajectories, paramTable,
       simRecruitObs = rbind(recruit_data,simRecruitObs)
       simRecruitObs = simRecruitObs[order(simRecruitObs$Year),]
       
-      dups = table(subset(simRecruitObs,select=c(Year,Month,PopulationName)))
+      dups = table(subset(simRecruitObs,select=c(Year,Month,PopulationName,Replicate)))
       if(max(dups)>1){
         stop("Error in simulateObservations: duplication in simulated and existing recruitment data.")
       }
@@ -300,6 +313,7 @@ simulateObservations <- function(trajectories, paramTable,
     }
     
     if(!is.null(surv_data)){
+      surv_data <- merge(surv_data,data.frame(Replicate=unique(simSurvObs$Replicate)))
       surv_data$Month=as.numeric(as.character(surv_data$Month))
       missing = setdiff(names(simSurvObs),names(surv_data))
       add= unique(subset(simSurvObs,select=missing))
@@ -314,7 +328,7 @@ simulateObservations <- function(trajectories, paramTable,
       simSurvObs = rbind(subset(surv_data,!is.na(MortalitiesCertain)),simSurvObs)
       simSurvObs = simSurvObs[order(simSurvObs$Year),]
       
-      dups = table(subset(simSurvObs,select=c(Year,Month,PopulationName)))
+      dups = table(subset(simSurvObs,select=c(Year,Month,PopulationName,Replicate)))
       if(max(dups)>1){
         stop("Error in simulateObservations: duplication in simulated and existing survival data.")
       }
