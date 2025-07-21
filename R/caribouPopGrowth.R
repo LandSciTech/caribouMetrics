@@ -51,7 +51,7 @@
 #' @param progress Logical. Should progress updates be shown?
 #'
 #' @return A data.frame of population size (`N`), expected growth rate
-#'   (`lambda`), true growth rate (`lambdaTrue`), apparent annual reproduction rate (`R_t`), adjusted reproduction (`X_t`),
+#'   (`lambdaE`), true growth rate (`lambda`), apparent annual reproduction rate (`R_t`), adjusted reproduction (`X_t`),
 #'   survival (`S_t`), number of recruits (`n_recruits`), and surviving females (`surviving_adFemales`)
 #'   for each sample population projected for numSteps years.
 #'
@@ -242,9 +242,9 @@ caribouPopGrowth <- function(N0,
   }
     
   lamBits = names(rr)[grepl("lam",names(rr))]
-  rr$lambdaTrue=matrixStats::rowProds(as.matrix(subset(rr,select=lamBits)),na.rm=T)^(1/length(lamBits)) #geometric mean
+  rr$lambda=matrixStats::rowProds(as.matrix(subset(rr,select=lamBits)),na.rm=T)^(1/length(lamBits)) #geometric mean
   rr=subset(rr,select=setdiff(names(rr),lamBits))
-  rr$lambda = lambdaE
+  rr$lambdaE = lambdaE
   rr$N=N
   rr$R_t=R_t/s #apparent reproduction
   rr$X_t=R_tadj

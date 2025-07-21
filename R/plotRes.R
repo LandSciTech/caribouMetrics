@@ -67,13 +67,9 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   }
   
   exp_param_nms <- c(
-    "Adult female survival", "Recruitment",
-    "Adjusted recruitment", "Population growth rate", "Female population size",
-    "Mean adult female survival",
-    "Mean recruitment", "Mean female recruitment",
-    "Geometric mean population growth rate",
-    "Mean population growth rate",
-    "c"
+    "Adult female survival","Recruitment","Adjusted recruitment",
+    "Population growth rate","Female population size","c",
+    "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
   )
   
   if(!parameter %in% exp_param_nms){
@@ -188,8 +184,8 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
                                      labeller = "label_both")
     }
   }
-  if ((parameter == "Population growth rate")) {
-    x2 <- x2 + ggplot2::geom_hline(yintercept = 1, color = "black")+ggplot2::ylab("Expected population growth rate")
+  if (grepl("growth rate",parameter,fixed=T)) {
+    x2 <- x2 + ggplot2::geom_hline(yintercept = 1, color = "black")
   }
   
   x2

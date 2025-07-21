@@ -2,10 +2,11 @@
 #'  
 #' Assumes that rec_pred and surv_pred each include the same years and populations.TO DO: check this.
 #' @param popInfo 
-#' @param rec_pred mcmcarray returned by predict_calf_cow function of bboutools R package. 
-#' @param surv_pred mcmcarray returned by predict_survival function of bboutools R package.
+#' @param rec_pred results returned by [bb_fit_recruitment()] or [bb_predict_calf_cow_ratio()] functions of bboutools R package, or recruit_fit returned by [bbouMakeSummaryTable()].
+#' @param surv_pred bboufit object return by [bb_fit_survival()] or [bb_predict_survival()] functions of bboutools R package, or surv_fit returned by [bbouMakeSummaryTable()].
 #' @param initYear numeric. Initial year.
-#' @param correlateRates logical. Set TRUE to force correlation between recruitment and survival.
+#' @param correlateRates logical. Set TRUE to force correlation between recruitment and survival. Ignored 
+#' @param returnExpected logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation).
 #' @inheritParams caribouPopGrowth
 #'
 #' @return a data frame with results from [caribouPopGrowth()] for each set of survival/recruitment predictions.
@@ -13,11 +14,16 @@
 #' @family demography
 #' @export
 #'
-caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,c=formals(caribouPopGrowth)$c,...) {
-  #assumes rec_pred and surv_pred are mcmcarrays returned by predict_survival and predict_calf_cow
-  #functions of bboutools R package, and that each includes the same years and populations.
-  #TO DO: checks to ensure these conditions are met.
-  #initYear = 2024
+caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,returnExpected=FALSE,c=formals(caribouPopGrowth)$c,...) {
+  #TO DO: checks to ensure assumptions about form of rec_pred and surv_pred are correct
+
+  if(is.element("bboufit",class(rec_pred))){
+    rec_pred <- bboutools::bb_predict_calf_cow_ratio(rec_pred,year=T,conf_level=F)
+  }
+  if(is.element("bboufit",class(surv_pred))){
+    surv_pred <- bboutools::bb_predict_survival(surv_pred,year=T,conf_level=F)
+  }
+  
   surv_pred$data$Annual = as.numeric(as.character(surv_pred$data$Annual))
   rec_pred$data$Annual = as.numeric(as.character(rec_pred$data$Annual))  
   data_sur = surv_pred$data
@@ -25,6 +31,23 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
 
   S_lookup = unique(subset(data_sur,select=c(Annual,PopulationID)))
   R_lookup =  subset(data_rec,select=c(Annual,PopulationID))
+  
+  if(class(surv_pred$samples)=="mcmc.list"){
+    nns <- colnames(surv_pred$samples[[1]])
+    nni <- seq(1,length(nns))
+    if(returnExpected){nni <- nni[grepl("bar",nns,fixed=T)]}else{nni <- nni[!grepl("bar",nns,fixed=T)]}
+    for(i in 1:length(surv_pred$samples)){
+      surv_pred$samples[[i]]<-surv_pred$samples[[i]][,nni]
+    }
+  }
+  if(class(rec_pred$samples)=="mcmc.list"){
+    nns <- colnames(rec_pred$samples[[1]])
+    nni <- seq(1,length(nns))
+    if(returnExpected){nni <- nni[grepl("bar",nns,fixed=T)]}else{nni <- nni[!grepl("bar",nns,fixed=T)]}
+    for(i in 1:length(rec_pred$samples)){
+      rec_pred$samples[[i]]<-rec_pred$samples[[i]][,nni]
+    }
+  }
   
   if(class(surv_pred$samples)=="mcmcarray"){
     sur = mcmcr::collapse_chains(surv_pred$samples)

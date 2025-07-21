@@ -1,15 +1,15 @@
-betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,returnExpected, nc,nt,ni,nb){
+betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,nt,ni,nb){
   #Note: using bboutools to check and structure the data without fitting the models...
   surv_fit_in <- bboutools::bb_fit_survival(surv_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
-  surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,returnExpected,nc,nt,ni,nb)
+  surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb)
   
   recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
-  recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,returnExpected,nc,nt,ni,nb)
+  recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb)
   
   return(list(parTab=NULL,surv_fit=surv_fit,recruit_fit=recruit_fit))
 }
 
-betaSurvival <-function(surv_fit,disturbance,priors,returnExpected,nc,nt,ni,nb){
+betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
   data <- surv_fit$data
   data <- as.data.frame(data)
   data <- subset(data,is.element(Annual,disturbance$Year))
@@ -72,9 +72,7 @@ model {
   sink()
   
   # Setting parameters - setting parameters that you want to monitor
-  if(returnExpected){
-    params = c("Sbar")
-  }else{  params = c("Survival")}
+  params = c("Sbar","Survival")
   
   # Setting initial values - not assigned
   inits1 <- list(b0 = rnorm(datal$nPops, 3, 2),b1 = rnorm(datal$nPops, 0, 2)) 
@@ -94,10 +92,11 @@ model {
   update(model.fit, n.iter=ni)
   model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt)
   surv_data <- subset(data,is.element(Year,disturbance$Year))
+  
   return(list(data=data,samples=model.samples)) 
 }
 
-betaRecruitment <- function(rec_fit, disturbance,priors,returnExpected,nc,nt,ni,nb){
+betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
   rec_data <- rec_fit$data
   data <- as.data.frame(rec_data)
   data <- merge(data,disturbance)
@@ -182,9 +181,7 @@ model {
   
   ######## Define data, parameters, initials and settings #####
   # Setting parameters - setting parameters that you want to monitor
-  if(returnExpected){
-    params = c("Rbar")
-  }else{  params = c("Recruitment")}
+  params = c("Rbar","Recruitment")
 
   # Setting initial values
   inits1 <- list(b0 = rnorm(datal$nPops,-1, 2)) 

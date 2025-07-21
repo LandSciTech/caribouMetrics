@@ -64,7 +64,7 @@ getOutputTables <- function(caribouBayesDemogMod,
   obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(Mortalities = sum(MortalitiesCertain,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
   obsSurv$Mean <- 1-obsSurv$Mortalities/obsSurv$StartTotal
   obsSurv$Parameter <- "Adult female survival"
-  obsSurv$MetricTypeID <- "survival"
+  obsSurv$MetricTypeID <- "S"
   obsSurv$Type <- "observed"
 
   obsRec <- subset(recInput, 
@@ -72,7 +72,7 @@ getOutputTables <- function(caribouBayesDemogMod,
   adult_female_proportion = 0.65; sex_ratio=0.5 #TO DO: get from model object
   obsRec$Mean <- obsRec$Calves / (obsRec$Cows + obsRec$UnknownAdults*adult_female_proportion+obsRec$Yearlings*sex_ratio)
   obsRec$Parameter <- "Recruitment"
-  obsRec$MetricTypeID <- "recruitment"
+  obsRec$MetricTypeID <- "R"
   obsRec$Type <- "observed"
 
   #hist(subset(rr.summary,Parameter=="Recruitment")$Mean)

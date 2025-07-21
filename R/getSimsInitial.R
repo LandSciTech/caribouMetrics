@@ -97,23 +97,37 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   if(!is.null(bbouResults$surv_fit)){
     if(is.element("bboufit",class(bbouResults$surv_fit))){
       surv_pred <- bboutools::bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
+      stop("Figure out how to get nr without calling predict_survival")
       nr <- dim(surv_pred$samples)[1]*dim(surv_pred$samples)[2]
     }else{
-      surv_pred <- bbouResults$surv_fit
-      nr <- dim(surv_pred$samples[[1]])[1]*dim(surv_pred$samples[[1]])[2]*length(surv_pred$samples)
-    }
-    
-    if(is.element("bboufit",class(bbouResults$recruit_fit))){
-      rec_pred <- bboutools::bb_predict_calf_cow_ratio(bbouResults$recruit_fit,year=T,conf_level=F)
-    }else{
-      rec_pred <- bbouResults$recruit_fit
+      if(sum(grepl("Sbar",colnames(bbouResults$surv_fit$samples[[1]]),fixed=T))>0){
+        divBy=2
+      }else{
+        divBy=1
+      }
+      nr <- dim(bbouResults$surv_fit$samples[[1]])[1]*dim(bbouResults$surv_fit$samples[[1]])[2]*length(bbouResults$surv_fit$samples)/divBy
     }
     
     popInfo <- merge(data.frame(id=seq(1:nr)),N0)
     popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
                                            z=runif(nr,cPars$zMin,cPars$zMax))
     #print(paste("getSimsInitial",mean(popInfo$c)))
-    pars <- caribouPopSimMCMC(popInfo,rec_pred,surv_pred,progress=F,correlateRates=cPars$correlateRates,...)
+    
+    pars <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,correlateRates=cPars$correlateRates,...)
+    if(!is.element("bboufit",class(bbouResults$surv_fit))){
+      parsBar <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
+                                   correlateRates=cPars$correlateRates,returnExpected=T,...)
+      
+      changeNames <- names(parsBar)
+      
+      changeNames[!is.element(changeNames,c("time","year","lab","id","PopulationName"))] <-
+        paste0(changeNames[!is.element(changeNames,c("time","year","lab","id","PopulationName"))],"_bar")
+      
+      names(parsBar) <- changeNames  
+      nrow(pars);nrow(parsBar)
+      pars <- merge(pars,parsBar)
+      nrow(pars)
+    }
     
     popInfo$PopulationName <- popInfo$pop_name
     
@@ -142,7 +156,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   #get the lambda percentile for each id - to allow users to select extreme examples
   simSum <- pars  %>%
     group_by(id) %>%
-    summarize(MeanLam = mean(lambdaTrue,na.rm=T))
+    summarize(MeanLam = mean(lambda,na.rm=T))
   simSum <-simSum[order(simSum$MeanLam),]
   simSum$lamPercentile <- round(100*seq(1:nrow(simSum))/nrow(simSum))
   simSum$MeanLam=NULL

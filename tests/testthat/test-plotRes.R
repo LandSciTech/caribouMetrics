@@ -1,13 +1,12 @@
 # default input data
 mod <- caribouBayesianPM(niters=100)
 
-
 mod_tab <- suppressWarnings(getOutputTables(mod, simInitial = getSimsInitial()))
 
 param_nms <- c(
-  "Adult female survival", "Recruitment", "Population growth rate", 
-  "Female population size",
-  "Adjusted recruitment"
+  "Adult female survival","Recruitment","Adjusted recruitment",
+  "Population growth rate","Female population size",
+  "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
 )
 
 test_that("simplest plot works", {

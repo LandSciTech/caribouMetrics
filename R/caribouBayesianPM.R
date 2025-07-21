@@ -9,7 +9,6 @@
 #' @param disturbance either a path to a csv file or a dataframe containing the
 #'   columns "Anthro","fire_excl_anthro", and "Year".
 #' @param betaPriors a list of model priors. See [getPriors()]. Not used if disturbance is NA.
-#' @param returnExpected logical. Default F. If TRUE returns expected survival/recruitment/lambda without interannual variation. Not used if disturbance is NA.
 #' @param startYear,endYear year defining the beginning of the observation
 #'   period and the end of the projection period.
 #' @param niters integer. The number of iterations per chain after thinning and burn-in.
@@ -53,7 +52,6 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
                        recruitData = bboudata::bbourecruit_a,
                        disturbance = NULL,
                        betaPriors = "default",
-                       returnExpected = F,
                        startYear = NULL, endYear = NULL,
                        N0=1000,
                        returnSamples=F,
@@ -209,7 +207,7 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   ##################
   #fit models
   bbouResults = bbouMakeSummaryTable(surv_data, recruit_data,N0,disturbance,priors=betaPriors,
-                                     returnExpected=returnExpected,return_mcmc=T,shiny_progress=F,niters=niters,nthin=nthin)
+                                     return_mcmc=T,shiny_progress=F,niters=niters,nthin=nthin)
   
   #get output trajectories
   rr = getSimsInitial(bbouResults,cPars=betaPriors,skipSave=T,returnSamples=returnSamples,...)  

@@ -8,11 +8,15 @@ convertTrajectories<-function(pars){
     pars$lamPercentile=NA
   }
   if(!is.element("c",names(pars))){pars$c=NA}
-  fds <- subset(pars, select = c("id","lamPercentile", "year","PopulationName","Anthro", "fire_excl_anthro","c",
-                                 "S_t", "R_t", "X_t", "N",
-                                 "lambda"))
-  names(fds) <- c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "fire_excl_anthro","c", "survival",
-                  "recruitment","Rfemale", "N", "lambda")
+  
+  nameChange <- data.frame(inName=c("id","lamPercentile", "year","PopulationName","Anthro", "fire_excl_anthro","c",
+                                    "S_t", "R_t", "X_t", "N",
+                                    "lambda","S_t_bar","R_t_bar","X_t_bar","N_bar","lambdaE_bar"),
+                           outName=c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "fire_excl_anthro","c", 
+                                     "survival","recruitment","X", "N", "lambda","Sbar","Rbar","Xbar","Nbar","lambda_bar"))
+  nameChange <-subset(nameChange,is.element(inName,names(pars)))
+  fds <- subset(pars, select = nameChange$inName)
+  names(fds) <- nameChange$outName
   fds$Timestep = as.numeric(fds$Year)
   fds$Year=as.numeric(as.character(fds$Year))
   fds <- tidyr::pivot_longer(fds, !("Replicate"|"LambdaPercentile"|"Year"|"Timestep"|"PopulationName"), names_to = "MetricTypeID",
@@ -33,9 +37,12 @@ summarizeCaribouPopSim <- function(pars,returnSamples=T){
     summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
               upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
   
-  names = data.frame(MetricTypeID = c("survival","recruitment","Rfemale", "lambda","N","c"),
+  names = data.frame(MetricTypeID = c("survival","recruitment","X", "lambda","N","c",
+                                      "Sbar","Rbar","Xbar","lambda_bar"),
                      Parameter = c("Adult female survival","Recruitment","Adjusted recruitment",
-                                   "Population growth rate","Female population size","c"))
+                                   "Population growth rate","Female population size","c",
+                                   "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
+                                   ))
   simSum=merge(simSum,names)
   
   simBig <- list(summary = simSum, samples = pars)
