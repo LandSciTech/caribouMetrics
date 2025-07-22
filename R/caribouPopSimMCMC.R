@@ -141,7 +141,7 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
       out <- caribouPopGrowth(N0=N0,
                               numSteps = 1,
                               interannualVar = F,
-                              R_bar = R_samp_long, S_bar = S_samp_long,c=c, l_S = 0, h_R = 1,...
+                              R_bar = R_samp_long, S_bar = S_samp_long,c=c, l_S = 0, h_R = 1,K=FALSE,...
       )
       out$lab <- labs 
       out$year <- yr
@@ -151,7 +151,8 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
     } else {
       outBit <- caribouPopGrowth(outBit$N,
                                  numSteps = 1, interannualVar = F,
-                                 R_bar = R_samp_long, S_bar = S_samp_long,c=c, l_S = 0, h_R = 1,...)
+                                 R_bar = R_samp_long, S_bar = S_samp_long,c=c, l_S = 0, h_R = 1,K=FALSE,...)
+      
       outBit$lab <- labs
       outBit$year <- yr
       outBit$time <- ts
