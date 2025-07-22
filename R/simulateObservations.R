@@ -280,7 +280,7 @@ simulateObservations <- function(trajectories, paramTable,
     # given observed total animals & proportion calfs/cows from simulation - get
     # calf/cow ratio
     simRecruitObs <- simCalfCowRatios(cowCounts, exData)
-    simRecruitObs$Day = recSurveyDay;simRecruitObs$Month = recSurveyMonth
+    if(nrow(simRecruitObs)>0){simRecruitObs$Day = recSurveyDay;simRecruitObs$Month = recSurveyMonth}
     if (!is.null(writeFilesDir)) {
       write.csv(simRecruitObs,
                 file.path(writeFilesDir, paste0("simRecruitData", paramTable$label, ".csv")),
@@ -291,54 +291,72 @@ simulateObservations <- function(trajectories, paramTable,
     }
     
     if(!is.null(recruit_data)){
-      recruit_data <- merge(recruit_data,data.frame(Replicate=unique(simRecruitObs$Replicate)))
-      missing = setdiff(names(simRecruitObs),names(recruit_data))
-      add= unique(subset(simRecruitObs,select=missing))
-      if(nrow(add)>1){
-        stop("Error in simulateObservations: not clear how to combine simulated and existing recruitment data.")
-      }
-      
-      if(is.element("Month",missing)){
-        if(recSurveyMonth<caribouYearStart){
-          recruit_data$Year = recruit_data$Year+1
+      if(nrow(simRecruitObs)>0){
+        recruit_data <- merge(recruit_data,data.frame(Replicate=unique(simRecruitObs$Replicate)))
+        missing = setdiff(names(simRecruitObs),names(recruit_data))
+        add= unique(subset(simRecruitObs,select=missing))
+        if(nrow(add)>1){
+          stop("Error in simulateObservations: not clear how to combine simulated and existing recruitment data.")
         }
-      }
-      
-      recruit_data = merge(subset(recruit_data,!is.na(Calves),select=intersect(names(recruit_data),names(simRecruitObs))),add)
-      simRecruitObs = subset(simRecruitObs,!is.na(Calves))
-      simRecruitObs = rbind(recruit_data,simRecruitObs)
-      simRecruitObs = simRecruitObs[order(simRecruitObs$Year),]
-      
-      dups = table(subset(simRecruitObs,select=c(Year,Month,PopulationName,Replicate)))
-      if(max(dups)>1){
-        stop("Error in simulateObservations: duplication in simulated and existing recruitment data.")
-      }
-      
+        
+        if(is.element("Month",missing)){
+          if(recSurveyMonth<caribouYearStart){
+            recruit_data$Year = recruit_data$Year+1
+          }
+        }
+        
+        recruit_data = merge(subset(recruit_data,!is.na(Calves),select=intersect(names(recruit_data),names(simRecruitObs))),add)
+        simRecruitObs = subset(simRecruitObs,!is.na(Calves))
+        simRecruitObs = rbind(recruit_data,simRecruitObs)
+        simRecruitObs = simRecruitObs[order(simRecruitObs$Year),]
+        
+        dups = table(subset(simRecruitObs,select=c(Year,Month,PopulationName,Replicate)))
+        if(max(dups)>1){
+          stop("Error in simulateObservations: duplication in simulated and existing recruitment data.")
+        }
+      }else{
+        simRecruitObs <- recruit_data
+        if(!is.element("Month",names(simRecruitObs))){
+          if(recSurveyMonth<caribouYearStart){
+            simRecruitObs$Year = simRecruitObs$Year+1
+            simRecruitObs$Month = recSurveyMonth
+            simRecruitObs$Day = recSurveyDay
+          }
+        }
+      }  
     }
     
     simSurvObs = subset(simSurvObs,is.element(Annual,inclSurvYrs))
     simSurvObs$Annual <- NULL
     
     if(!is.null(surv_data)){
-      surv_data <- merge(surv_data,data.frame(Replicate=unique(simSurvObs$Replicate)))
-      surv_data$Month=as.numeric(as.character(surv_data$Month))
-      missing = setdiff(names(simSurvObs),names(surv_data))
-      add= unique(subset(simSurvObs,select=missing))
-      if(nrow(add)>1){
-        stop("Error in simulateObservations: not clear how to combine simulated and existing survival data.")
+      if(nrow(simSurvObs>0)){
+        surv_data <- merge(surv_data,data.frame(Replicate=unique(simSurvObs$Replicate)))
+        surv_data$Month=as.numeric(as.character(surv_data$Month))
+        missing = setdiff(names(simSurvObs),names(surv_data))
+        if(length(missing)>0){
+          add= unique(subset(simSurvObs,select=missing))
+          if(nrow(add)>1){
+            stop("Error in simulateObservations: not clear how to combine simulated and existing survival data.")
+          }
+          #id month/year combos that are in the existing data and remove from 
+          #dups = merge(simSurvObs,subset(surv_data,!is.na(MortalitiesCertain),select=c(Year,Month)))
+          
+          surv_data = merge(subset(surv_data,select=intersect(names(surv_data),names(simSurvObs))),add)
+        }else{
+          surv_data = subset(surv_data,select=intersect(names(surv_data),names(simSurvObs)))
+        }
+        simSurvObs = subset(simSurvObs,!is.na(MortalitiesCertain))
+        simSurvObs = rbind(subset(surv_data,!is.na(MortalitiesCertain)),simSurvObs)
+        simSurvObs = simSurvObs[order(simSurvObs$Year),]
+        
+        dups = table(subset(simSurvObs,select=c(Year,Month,PopulationName,Replicate)))
+        if(max(dups)>1){
+          stop("Error in simulateObservations: duplication in simulated and existing survival data.")
+        }
       }
-      #id month/year combos that are in the existing data and remove from 
-      #dups = merge(simSurvObs,subset(surv_data,!is.na(MortalitiesCertain),select=c(Year,Month)))
-      
-      surv_data = merge(subset(surv_data,select=intersect(names(surv_data),names(simSurvObs))),add)
-      simSurvObs = subset(simSurvObs,!is.na(MortalitiesCertain))
-      simSurvObs = rbind(subset(surv_data,!is.na(MortalitiesCertain)),simSurvObs)
-      simSurvObs = simSurvObs[order(simSurvObs$Year),]
-      
-      dups = table(subset(simSurvObs,select=c(Year,Month,PopulationName,Replicate)))
-      if(max(dups)>1){
-        stop("Error in simulateObservations: duplication in simulated and existing survival data.")
-      }
+    }else{
+      simSurvObs <- surv_data
     }
   }else{
     simSurvObs <- surv_data

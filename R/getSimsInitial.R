@@ -96,9 +96,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   
   if(!is.null(bbouResults$surv_fit)){
     if(is.element("bboufit",class(bbouResults$surv_fit))){
-      surv_pred <- bboutools::bb_predict_survival (bbouResults$surv_fit,year=T,month=F,conf_level=F)
-      stop("Figure out how to get nr without calling predict_survival")
-      nr <- dim(surv_pred$samples)[1]*dim(surv_pred$samples)[2]
+      nr <- dim(bbouResults$surv_fit$samples$b0)[1]*dim(bbouResults$surv_fit$samples$b0)[2]
     }else{
       if(sum(grepl("Sbar",colnames(bbouResults$surv_fit$samples[[1]]),fixed=T))>0){
         divBy=2
@@ -182,5 +180,6 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     names(simBig$summary)[names(simBig$summary)=="Year"]="Anthro"
     names(simBig$samples)[names(simBig$samples)=="Year"]="Anthro"
   }
+  
   return(simBig)
 }

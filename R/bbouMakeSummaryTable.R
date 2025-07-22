@@ -162,6 +162,12 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL,
   parTab = merge(parTab, data_amt, by.x = "pop_name", by.y = "PopulationName")
   
   if(return_mcmc){
+    if(length(unique(surv_fit$data$Month))>1){
+      newYr =  surv_fit$data$Year
+      newYr[(surv_fit$data$Year==surv_fit$data$Annual)&(as.numeric(as.character(surv_fit$data$Month))<formals("bb_fit_survival")$year_start)]=
+        newYr[(surv_fit$data$Year==surv_fit$data$Annual)&(as.numeric(as.character(surv_fit$data$Month))<formals("bb_fit_survival")$year_start)]+1
+      surv_fit$data$Year = newYr
+    }
     return(list(parTab=parTab,surv_fit=surv_fit,recruit_fit=recruit_fit))
   }else{
     return(parTab)

@@ -101,6 +101,8 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
     S_samp <- sur[,,S_lookup$Annual %in% yr]
     R_samp <- rec[,,R_lookup$Annual %in% yr]
     
+    if((ncol(S_samp)==0)|(ncol(R_samp)==0)){next}
+    
     if(correlateRates){
       for(j in 1:ncol(recMeans)){
         R_samp[,j] =  R_samp[,j][order(recMeans[,j])]   

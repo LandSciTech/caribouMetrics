@@ -213,6 +213,5 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   rr = getSimsInitial(bbouResults,cPars=betaPriors,skipSave=T,returnSamples=returnSamples,...)  
   
   return(list(result = rr, 
-              inData = list(disturbanceIn = disturbance),
-              bbouResults = bbouResults))
+              inData = list(disturbanceIn = disturbance)))
 }

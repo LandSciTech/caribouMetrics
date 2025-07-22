@@ -8,6 +8,7 @@
 #' @param ePars list. Additional parameters passed on to
 #'   [simulateObservations()]
 #' @param Rep integer. Optional. If specified, select specified replicate trajectory.
+#' @param returnSamples logical. Optional. If true, return full results from [caribouBayesianPM()].
 #' @inheritParams caribouBayesianPM
 #' @inheritParams getOutputTables
 #' @param printProgress logical. Should the scenario number and parameters be
@@ -34,7 +35,9 @@
 
 
 runScnSet <- function(scns, ePars, simInitial,Rep=NULL,
-                      printProgress = FALSE,betaPriors="default",niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,...) {
+                      printProgress = FALSE,betaPriors="default",
+                      niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,
+                      returnSamples=F,...) {
   
   # ePars=eParsIn;simInitial=simBig;printProgress=F;niters = formals(bboutools::bb_fit_survival)$niters)
   scns <- getScenarioDefaults(scns)
@@ -75,7 +78,7 @@ runScnSet <- function(scns, ePars, simInitial,Rep=NULL,
       survData = oo$simSurvObs, recruitData = oo$simRecruitObs,
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = oo$minYr, endYear = oo$maxYr,
-      N0 = cs$N0,niters=niters,nthin=nthin,...))
+      N0 = cs$N0,niters=niters,nthin=nthin,returnSamples=returnSamples,...))
 
     if (inherits(out, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out)
@@ -84,7 +87,7 @@ runScnSet <- function(scns, ePars, simInitial,Rep=NULL,
               "results/temp.Rds")
       next
     }
-
+    
     if (inherits(out$result, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out$result)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
@@ -111,6 +114,11 @@ runScnSet <- function(scns, ePars, simInitial,Rep=NULL,
   if (length(errorLog) > 0) {
     print(errorLog)
   }
-  return(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
-              obs.all = obs.all, errorLog = errorLog))
+  ret = list(rr.summary.all = rr.summary.all, sim.all = sim.all,
+             obs.all = obs.all, errorLog = errorLog)
+  if(returnSamples){
+    ret$out <- out
+  }
+  
+  return(ret)
 }
