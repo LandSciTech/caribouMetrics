@@ -11,7 +11,7 @@ convertTrajectories<-function(pars){
   
   nameChange <- data.frame(inName=c("id","lamPercentile", "year","PopulationName","Anthro", "fire_excl_anthro","c",
                                     "S_t", "R_t", "X_t", "N",
-                                    "lambda","S_t_bar","R_t_bar","X_t_bar","N_bar","lambdaE_bar"),
+                                    "lambda","S_bar","R_bar","X_bar","N_bar","lambdaE_bar"),
                            outName=c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "fire_excl_anthro","c", 
                                      "survival","recruitment","X", "N", "lambda","Sbar","Rbar","Xbar","Nbar","lambda_bar"))
   nameChange <-subset(nameChange,is.element(inName,names(pars)))
