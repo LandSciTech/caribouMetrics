@@ -111,22 +111,14 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
                                            z=runif(nr,cPars$zMin,cPars$zMax))
     #print(paste("getSimsInitial",mean(popInfo$c)))
     
-    pars <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,correlateRates=cPars$correlateRates,...)
-    if(!is.element("bboufit",class(bbouResults$surv_fit))){
-      parsBar <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
-                                   correlateRates=cPars$correlateRates,returnExpected=T,...)
-      
-      changeNames <- names(parsBar)
-      
-      changeNames[!is.element(changeNames,c("time","year","lab","id","PopulationName"))] <-
-        paste0(changeNames[!is.element(changeNames,c("time","year","lab","id","PopulationName"))],"_bar")
-      
-      names(parsBar) <- changeNames  
-      nrow(pars);nrow(parsBar)
-      pars <- merge(pars,parsBar)
-      nrow(pars)
-    }
-    
+    pars <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
+                              correlateRates=cPars$correlateRates,...)
+    parsBar <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
+                                 correlateRates=cPars$correlateRates,returnExpected=T,...)
+    nrow(pars);nrow(parsBar)
+    pars <- merge(pars,parsBar)
+    nrow(pars)
+
     popInfo$PopulationName <- popInfo$pop_name
     
     pars <- merge(pars,subset(popInfo,select=c(-N0,-pop_name)))

@@ -6,7 +6,7 @@
 #' @param surv_pred bboufit object return by [bb_fit_survival()] or [bb_predict_survival()] functions of bboutools R package, or surv_fit returned by [bbouMakeSummaryTable()].
 #' @param initYear numeric. Initial year.
 #' @param correlateRates logical. Set TRUE to force correlation between recruitment and survival. Ignored 
-#' @param returnExpected logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation).
+#' @param returnExpected logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are [bb_predict_calf_cow_ratio()]/[bb_predict_survival()] results.
 #' @inheritParams caribouPopGrowth
 #'
 #' @return a data frame with results from [caribouPopGrowth()] for each set of survival/recruitment predictions.
@@ -17,18 +17,42 @@
 caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,returnExpected=FALSE,c=formals(caribouPopGrowth)$c,...) {
   #TO DO: checks to ensure assumptions about form of rec_pred and surv_pred are correct
 
-  if(is.element("bboufit",class(rec_pred))){
-    rec_pred <- bboutools::bb_predict_calf_cow_ratio(rec_pred,year=T,conf_level=F)
+  inyears<-unique(c(rec_pred$data$Year,surv_pred$data$Year))
+  if(!is.null(initYear)){
+    inyears<-inyears[inyears>=initYear]
   }
+  
+  if(returnExpected&&(is.element("bboufit",class(rec_pred))!=is.element("bboufit",class(surv_pred)))){
+    stop("To get expected values rec_pred and surv_pred should be [bb_fit_recruitment()]/[bb_fit_survival()] results")
+  }
+  if(is.element("bboufit",class(rec_pred))){
+    if(returnExpected){
+      rec_pred <- bboutools::bb_predict_calf_cow_ratio(rec_pred,year=F,conf_level=F)
+    }else{
+      rec_pred <- bboutools::bb_predict_calf_cow_ratio(rec_pred,year=T,conf_level=F)
+    }
+  }else{returnExpected=F}
+  
   if(is.element("bboufit",class(surv_pred))){
-    surv_pred <- bboutools::bb_predict_survival(surv_pred,year=T,conf_level=F)
+    if(returnExpected){
+      surv_pred <- bboutools::bb_predict_survival(surv_pred,year=F,conf_level=F)
+    }else{
+      surv_pred <- bboutools::bb_predict_survival(surv_pred,year=T,conf_level=F)
+    }
+  }
+  
+  if(is.element(NA,rec_pred$data$Annual)){
+    rec_pred$data$Annual=0
+  }
+  if(is.element(NA,surv_pred$data$Annual)){
+    surv_pred$data$Annual=0
   }
   
   surv_pred$data$Annual = as.numeric(as.character(surv_pred$data$Annual))
   rec_pred$data$Annual = as.numeric(as.character(rec_pred$data$Annual))  
   data_sur = surv_pred$data
   data_rec = rec_pred$data
-
+  
   S_lookup = unique(subset(data_sur,select=c(Annual,PopulationID)))
   R_lookup =  subset(data_rec,select=c(Annual,PopulationID))
   
@@ -160,6 +184,11 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
     }
   }
   
+  if(min(out$year)==0){
+    out$year=NULL
+    out=merge(out,data.frame(year=inyears))
+  }
+  
   for (cc in names(out)){
     #cc = "lambda"
     if(is.element("matrix",class(out[[cc]]))){
@@ -171,5 +200,14 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
   }
   out[c("PopulationName", "id")] <- do.call(rbind, strsplit(out$lab, " "))
   out$id=as.numeric(out$id)
+  out$time=NULL
+  
+  if(returnExpected){
+    changeNames <- names(out)
+    changeNames[!is.element(changeNames,c("year","lab","id","PopulationName"))] <-
+      paste0(changeNames[!is.element(changeNames,c("year","lab","id","PopulationName"))],"_bar")
+    changeNames <- gsub("_t","",changeNames,fixed=T)
+    names(out) <- changeNames  
+  }    
   return(out)
 }
