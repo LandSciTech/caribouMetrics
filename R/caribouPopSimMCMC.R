@@ -91,18 +91,23 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
     R_lookup = R_lookup[order(R_lookup$PopulationID,R_lookup$Annual),]
   }
 
+  years = sort(unique(rec_pred$data$Annual))
+  
   #force correlation between mean recruitment and mean survival
   if(correlateRates){
     recMeans = matrix(0,nrow=dim(rec)[2],ncol=length(unique(R_lookup$PopulationID)))
     surMeans = matrix(0,nrow=dim(sur)[2],ncol=length(unique(S_lookup$PopulationID)))
     for(j in 1:ncol(recMeans)){
-      recMeans[,j] = recMeans[,j] + rowSums(rec[,,as.numeric(R_lookup$PopulationID) %in% j])
-      surMeans[,j] = surMeans[,j] + rowSums(sur[,,as.numeric(S_lookup$PopulationID) %in% j])
+      if(length(years)>1){
+        recMeans[,j] = recMeans[,j] + rowSums(rec[,,as.numeric(R_lookup$PopulationID) %in% j])
+        surMeans[,j] = surMeans[,j] + rowSums(sur[,,as.numeric(S_lookup$PopulationID) %in% j])
+      }else{
+        recMeans[,j] = recMeans[,j] + rec[,,as.numeric(R_lookup$PopulationID) %in% j]
+        surMeans[,j] = surMeans[,j] + sur[,,as.numeric(S_lookup$PopulationID) %in% j]
+      }
     }
   }
   
-  years = sort(unique(rec_pred$data$Annual))
-
   if(is.null(initYear)){initYear = as.numeric(as.character(years))}
   years = years[as.numeric(as.character(years))>=initYear]
   

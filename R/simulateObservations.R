@@ -289,7 +289,6 @@ simulateObservations <- function(trajectories, paramTable,
                 file.path(writeFilesDir, paste0("simSurvData", paramTable$label, ".csv")),
                 row.names = FALSE)
     }
-    
     if(!is.null(recruit_data)){
       if(nrow(simRecruitObs)>0){
         recruit_data <- merge(recruit_data,data.frame(Replicate=unique(simRecruitObs$Replicate)))
