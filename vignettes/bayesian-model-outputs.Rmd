@@ -20,33 +20,77 @@ devtools::load_all()
 library(bboudata)
 library(bboutools)
 library(tidyverse)
+
+resFile <- "../results/vignetteBbbouExample.rds"
+useSaved <- T #option to skip slow step of fitting bboutools model
 ```
 
-## Using bboutools model summaries
+## Demographic trajectories and summaries from bboutools models
 
-[bbouMakeSummaryTable()] returns fitted bboutools survival and recruitment models (assuming no trends over time) and summaries of those models. In this example, we add 2 missing years that will be predicted by the model. 
+`bbouMakeSummaryTable()` returns fitted bboutools survival and recruitment models (assuming no trends over time) and summaries of those models. In this example, we add 2 missing years that will be predicted by the model. 
 ```{r fit bbou model}
-surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
-surv_data_add = expand.grid(Year=seq(2017,2018),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
-surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
-surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
 
-recruit_data=bboudata::bbourecruit_a %>% filter(Year > 2010)
-recruit_data_add = expand.grid(Year=seq(2017,2018),PopulationName=unique(recruit_data$PopulationName))
-recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
-recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
+if(useSaved&file.exists(resFile)){
+  mod <- readRDS(resFile)
+}else{
+  surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
+  surv_data_add = expand.grid(Year=seq(2017,2018),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
+  surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
+  surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
 
-mod <- bbouMakeSummaryTable(surv_data,
-                              recruit_data,
-                              N0=NA,return_mcmc=T)
+  recruit_data=bboudata::bbourecruit_a %>% filter(Year > 2010)
+  recruit_data_add = expand.grid(Year=seq(2017,2018),PopulationName=unique(recruit_data$PopulationName))
+  recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
+  recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
+
+  mod <- bbouMakeSummaryTable(surv_data,
+                            recruit_data,
+                            N0=NA,return_mcmc=T)
+}
 
 names(mod)
 mod$parTab
 ```                              
 
-Use [caribouPopSimMCMC()] to predict demographic trajectories from the mcmc samples.
-```{r extract mcmc trajectories}
+Use `caribouPopSimMCMC()` to predict demographic trajectories from the mcmc samples. Use `summarizeCaribouPopSim()` to get 95% prediction intervals from the demographic trajectories. 
+```{r trajectories from mcmc samples}
+
 outmcmc = caribouPopSimMCMC(popInfo=NA,mod$recruit_fit,mod$surv_fit)
+names(outmcmc)
+
+#get 95% prediction intervals from demographic trajectories
+PIs <- summarizeCaribouPopSim(convertTrajectories(outmcmc))
+PIs$summary$id=NA
+
+```
+```{r plot1, fig.width=8,caption="Example trajectories and 95% prediction intervals."}
+base=ggplot(subset(outmcmc,id<=35),aes(x=Year,y=R_t,group=id))+geom_line(alpha=0.3)+theme_bw()+
+  geom_ribbon(data=subset(PIs$summary,MetricTypeID=="recruitment"),aes(x=Year,y=Mean,ymin=lower,ymax=upper),alpha=0.1)
+print(base)
+
+base=ggplot(subset(outmcmc,id<=35),aes(x=Year,y=S_t,group=id))+geom_line(alpha=0.3)+theme_bw()+
+  geom_ribbon(data=subset(PIs$summary,MetricTypeID=="survival"),aes(x=Year,y=Mean,ymin=lower,ymax=upper),alpha=0.1)
+print(base)
+
+base=ggplot(subset(outmcmc,id<=35),aes(x=Year,y=lambda,group=id))+geom_line(alpha=0.3)+theme_bw()+
+  geom_ribbon(data=subset(PIs$summary,MetricTypeID=="lambda"),aes(x=Year,y=Mean,ymin=lower,ymax=upper),alpha=0.1)
+print(base)
 ```
 
+Note that the 95% prediction intervals match the results returned by bboutools.
+```{r plot2, fig.width=8,caption="Comparison of 95% prediction intervals with results returned by bboutools."}
+bb_plot_year_calf_cow_ratio(mod$recruit_fit)+theme_bw()+
+  geom_ribbon(data=subset(PIs$summary,MetricTypeID=="recruitment"),aes(x=Year,y=Mean,ymin=lower,ymax=upper),alpha=0.1)
 
+surv_pred <- bb_predict_survival(mod$surv_fit)
+bb_plot_year_survival(surv_pred) + theme_bw() + geom_ribbon(data=subset(PIs$summary,MetricTypeID=="survival"),aes(x=Year,y=Mean,ymin=lower,ymax=upper),alpha=0.1)
+
+bbou_lambda <- bb_predict_growth(survival = mod$surv_fit, recruitment = mod$recruit_fit)
+bb_plot_year_growth(bbou_lambda)+theme_bw()+
+  geom_ribbon(data=subset(PIs$summary,MetricTypeID=="lambda"),aes(x=Year,y=Mean,ymin=lower,ymax=upper),alpha=0.1)
+```
+
+The model summary returned by `bbouMakeSummaryTable()` can also be used to simulate demographic trajectories.
+```{r trajectories from model summary}
+
+```
