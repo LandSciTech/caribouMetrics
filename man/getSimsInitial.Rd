@@ -36,9 +36,9 @@ cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
 a list with two elements:
 \itemize{
 \item summary: a tibble with a summary of parameter values for each scenario.
-Column names are year, PopulationName, Mean, lower, upper, Parameter.
+Column names are Year or Anthro, MetricTypeID, PopulationName, Mean, lower, upper, probViable and Parameter
 \item samples: a tibble with parameter values for each scenario and replicate
-4 rows per replicate \* scenario. Column names are year, PopulationName,  Parameter and Value
+1 row per MetricTypeID per replicate \* scenario. Column names are Year or Anthro, Replicate, PopulationName, MetricTypeID and Amount
 }
 }
 \description{

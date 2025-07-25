@@ -73,6 +73,7 @@ Collate:
     'demographicProjectionApp.R'
     'demographicRates.R'
     'disturbanceMetrics.R'
+    'doSim.R'
     'getCoefs.R'
     'getOutputTables.R'
     'getPriors.R'

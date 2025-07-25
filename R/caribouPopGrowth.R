@@ -1,12 +1,11 @@
 #' Caribou demographic model
 #'
-#' A two-stage demographic model with density dependence and interannual
+#' A caribou demographic model with density dependence and interannual
 #' variability following [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637)
 #' with modifications described in 
 #' [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095) and 
 #' [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350).
-#' Demographic rates vary with disturbance as estimated by [Johnson et. al.
-#' (2020)](doi:10.1111/1365-2664.13637). Default parameter values give the model
+#' Default parameter values give the model
 #' in Dyson et al. (2022). Set `probOption = "matchJohnson2020"` to reproduce
 #' the model used in Johnson et al. 2020. Set `probOption = "continuous"`,
 #' `interannualVar = FALSE`, and `K = FALSE` to reproduce the simpler 2-stage
@@ -14,16 +13,18 @@
 #' discrete numbers of animals used by [Stewart et al.
 #' (2023)](https://doi.org/10.1002/eap.2816). 
 #' 
-#' 
 #' If R_annual and S_annual are provided, interannual variation in survival and
 #' recruitment is modelled as in a logistic glmm with random effect of year.
+#' 
+#' If initial populations size N0 is NA then population growth rate is $\lambda_t=S_t*(1+cR_t/s)$. 
+#' In this case density dependence (P_0,P_K,a,b,K,r_max) and demographic stochasticity (probOption) are ignored.
 #' 
 #' See `vignette("caribouDemography")` 
 #' and [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095) for 
 #' additional details and examples.
 #' 
 #' @param N0 Number or vector of numbers. Initial population size for one or
-#'   more sample populations.
+#'   more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.
 #' @param numSteps Number. Number of years to project.
 #' @param R_bar Number or vector of numbers. Expected recruitment rate (calf:cow
 #'   ratio) for one or more sample populations.
@@ -173,6 +174,7 @@ caribouPopGrowth <- function(N0,
     if(progress){
       message(paste("projecting step ",t))
     }
+    
     if(is.null(interannualVar)||any(is.na(interannualVar))||((length(interannualVar)==1)&&!interannualVar)){
       R_t= R_bar
       S_t = S_bar
@@ -186,61 +188,70 @@ caribouPopGrowth <- function(N0,
       R_t=s*R_t
     }
     
-    
     #adjusting for composition survey bias
     R_tadj=c*R_t
-
+    
     Ntm1=N
-
-    if(doBinomial){
-      n_deaths <- rbinom(length(N),N,(1 - S_t))
-    }else{
-      n_deaths <- round(N * (1 - S_t),roundDigits)
-    }
-
-    surviving_adFemales <- N - n_deaths
-
-    if(probOption=="matchJohnson2020"){
-      rK <- K * N
-    }
-
-    n_recruitsUnadjDD <- surviving_adFemales * R_tadj
-
-    if(K){
-      adjDDRtProportion <- (P_0 -
-                              ((P_0 - P_K) *
-                                 (surviving_adFemales/rK)^b)) *
-        surviving_adFemales/(surviving_adFemales + a)
-
-      adjDDRtProportion[adjDDRtProportion<0] <- 0
-      adjDDRtProportion[adjDDRtProportion>1] <- 1
-    }else{
-      adjDDRtProportion=1
-    }
     
-    if(doBinomial){
-      if(max(R_tadj*adjDDRtProportion) > 1){
-        warning("Adjusted recruitment greater than 1.")
-        R_tadj[R_tadj>1]=1
+    if(is.element(NA,Ntm1)){
+      if(length(unique(Ntm1))>1){
+        warning("Population size is NA in at least one case so population size will be ignored.")
       }
-      n_recruits <- rbinom(length(N),surviving_adFemales,R_tadj*adjDDRtProportion)
+      N=NA
+      n_recruits=NA
+      surviving_adFemales = NA
+      rr[paste0("lam",t)]= S_t*(1+R_tadj)
     }else{
-      n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits)
+      
+      if(doBinomial){
+        n_deaths <- rbinom(length(N),N,(1 - S_t))
+      }else{
+        n_deaths <- round(N * (1 - S_t),roundDigits)
+      }
+      
+      surviving_adFemales <- N - n_deaths
+      
+      if(probOption=="matchJohnson2020"){
+        rK <- K * N
+      }
+      
+      n_recruitsUnadjDD <- surviving_adFemales * R_tadj
+      
+      if(K){
+        adjDDRtProportion <- (P_0 -
+                                ((P_0 - P_K) *
+                                   (surviving_adFemales/rK)^b)) *
+          surviving_adFemales/(surviving_adFemales + a)
+        
+        adjDDRtProportion[adjDDRtProportion<0] <- 0
+        adjDDRtProportion[adjDDRtProportion>1] <- 1
+      }else{
+        adjDDRtProportion=1
+      }
+      
+      if(doBinomial){
+        if(max(R_tadj*adjDDRtProportion) > 1){
+          warning("Adjusted recruitment greater than 1.")
+          R_tadj[R_tadj>1]=1
+        }
+        n_recruits <- rbinom(length(N),surviving_adFemales,R_tadj*adjDDRtProportion)
+      }else{
+        n_recruits <- round(n_recruitsUnadjDD * adjDDRtProportion,roundDigits)
+      }
+      N <- surviving_adFemales + n_recruits
+      if(sum(is.na(N))>0){stop()}
+      
+      if(probOption=="matchJohnson2020"){
+        ad = adjustN(N,Ntm1,r_max,denominatorAdjust=1e-06,roundDigits=roundDigits)
+      }else{
+        ad = adjustN(N,Ntm1,r_max,roundDigits=roundDigits)
+      }
+      if(sum(is.na(ad$N))>0){stop()}
+      
+      N=ad$N
+      rr[paste0("lam",t)]= ad$Lambda
     }
-    N <- surviving_adFemales + n_recruits
-    if(sum(is.na(N))>0){stop()}
-
-    if(probOption=="matchJohnson2020"){
-      ad = adjustN(N,Ntm1,r_max,denominatorAdjust=1e-06,roundDigits=roundDigits)
-    }else{
-      ad = adjustN(N,Ntm1,r_max,roundDigits=roundDigits)
-    }
-    if(sum(is.na(ad$N))>0){stop()}
-
-    N=ad$N
-    rr[paste0("lam",t)]= ad$Lambda
-  }
-    
+  }  
   lamBits = names(rr)[grepl("lam",names(rr))]
   rr$lambda=matrixStats::rowProds(as.matrix(subset(rr,select=lamBits)),na.rm=T)^(1/length(lamBits)) #geometric mean
   rr=subset(rr,select=setdiff(names(rr),lamBits))

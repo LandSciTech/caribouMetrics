@@ -13,6 +13,7 @@ runScnSet(
   betaPriors = "default",
   niters = formals(bboutools::bb_fit_survival)$niters,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
+  returnSamples = F,
   ...
 )
 }
@@ -36,6 +37,8 @@ printed at each step?}
 \item{niters}{A whole number of the number of iterations per chain after thinning and burn-in.}
 
 \item{nthin}{integer. The number of the thinning rate.}
+
+\item{returnSamples}{logical. Optional. If true, return full results from \code{\link[=caribouBayesianPM]{caribouBayesianPM()}}.}
 }
 \value{
 A list similar to \code{\link[=getOutputTables]{getOutputTables()}} where tables for each scenario

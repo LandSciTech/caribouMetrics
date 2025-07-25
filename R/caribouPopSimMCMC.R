@@ -1,7 +1,7 @@
 #' Get a set of simulation results from fitted demographic models in raw form
 #'  
 #' Assumes that rec_pred and surv_pred each include the same years and populations.TO DO: check this.
-#' @param popInfo 
+#' @param popInfo If NA (default) predictions are made without populations size, density dependence, or demographic stochasticity. See [caribouPopGrowth()] for details.
 #' @param rec_pred results returned by [bb_fit_recruitment()] or [bb_predict_calf_cow_ratio()] functions of bboutools R package, or recruit_fit returned by [bbouMakeSummaryTable()].
 #' @param surv_pred bboufit object return by [bb_fit_survival()] or [bb_predict_survival()] functions of bboutools R package, or surv_fit returned by [bbouMakeSummaryTable()].
 #' @param initYear numeric. Initial year.
@@ -14,7 +14,7 @@
 #' @family demography
 #' @export
 #'
-caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,returnExpected=FALSE,c=formals(caribouPopGrowth)$c,...) {
+caribouPopSimMCMC <- function(popInfo=NA, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,returnExpected=FALSE,c=formals(caribouPopGrowth)$c,...) {
   #TO DO: checks to ensure assumptions about form of rec_pred and surv_pred are correct
 
   inyears<-unique(c(rec_pred$data$Year,surv_pred$data$Year))
@@ -111,6 +111,7 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
   if(is.null(initYear)){initYear = as.numeric(as.character(years))}
   years = years[as.numeric(as.character(years))>=initYear]
   
+
   if(length(popInfo)>1){
     popInfo=merge(popInfo,data.frame(id=1:dim(rec)[2]))
     popInfo = popInfo[order(popInfo$id,popInfo$pop_name),]
@@ -121,14 +122,19 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
   }else{
     N0=popInfo
   }
+  
   if(is.null(c)){c<-1}
   first=T
   
   for (ts in 1:length(years)) {
     #ts=1
     yr <- years[ts]
+    
     S_samp <- sur[,,S_lookup$Annual %in% yr]
     R_samp <- rec[,,R_lookup$Annual %in% yr]
+    
+    if(class(S_samp)=="numeric"){S_samp<-as.matrix(S_samp,ncol=1)}
+    if(class(R_samp)=="numeric"){R_samp<-as.matrix(R_samp,ncol=1)}
     
     if((ncol(S_samp)==0)|(ncol(R_samp)==0)){next}
     
@@ -151,12 +157,12 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
       minDim = min(dim(R_samp)[1],dim(S_samp)[1])
       if(minDim==0){next}
 
-      S_samp <- S_samp[1:minDim,]
+      S_samp <- as.matrix(S_samp[1:minDim,],ncol=ncol(S_samp))
       rownames(S_samp)=seq(1,nrow(S_samp))
       colnames(S_samp)=levels(data_sur$PopulationID)
       S_samp_long = matrix(S_samp,dimnames=list(t(outer(colnames(S_samp), rownames(S_samp), FUN=paste)), NULL))
 
-      R_samp <- R_samp[1:minDim,]
+      R_samp <- as.matrix(R_samp[1:minDim,],ncol=ncol(R_samp))
       rownames(R_samp)=seq(1:nrow(R_samp))
       colnames(R_samp)=levels(data_rec$PopulationID)
       R_samp_long = matrix(R_samp,dimnames=list(t(outer(colnames(R_samp), rownames(R_samp), FUN=paste)), NULL))
@@ -166,6 +172,7 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
     
     if(length(N0)==1){N0=rep(N0,length(S_samp_long))}
     
+
     if (first) {
       out <- caribouPopGrowth(N0=N0,
                               numSteps = 1,
@@ -173,7 +180,7 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
                               R_bar = R_samp_long, S_bar = S_samp_long,c=c, l_S = 0, h_R = 1,K=FALSE,...
       )
       out$lab <- labs 
-      out$year <- yr
+      out$Year <- yr
       out$time <- ts
       outBit <- out
       first <- F
@@ -183,15 +190,15 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
                                  R_bar = R_samp_long, S_bar = S_samp_long,c=c, l_S = 0, h_R = 1,K=FALSE,...)
       
       outBit$lab <- labs
-      outBit$year <- yr
+      outBit$Year <- yr
       outBit$time <- ts
       out <- rbind(out, outBit)
     }
   }
   
-  if(min(out$year)==0){
-    out$year=NULL
-    out=merge(out,data.frame(year=inyears))
+  if(min(out$Year)==0){
+    out$Year=NULL
+    out=merge(out,data.frame(Year=inyears))
   }
   
   for (cc in names(out)){
@@ -209,8 +216,8 @@ caribouPopSimMCMC <- function(popInfo, rec_pred, surv_pred, initYear=NULL,correl
   
   if(returnExpected){
     changeNames <- names(out)
-    changeNames[!is.element(changeNames,c("year","lab","id","PopulationName"))] <-
-      paste0(changeNames[!is.element(changeNames,c("year","lab","id","PopulationName"))],"_bar")
+    changeNames[!is.element(changeNames,c("Year","lab","id","PopulationName"))] <-
+      paste0(changeNames[!is.element(changeNames,c("Year","lab","id","PopulationName"))],"_bar")
     changeNames <- gsub("_t","",changeNames,fixed=T)
     names(out) <- changeNames  
   }    

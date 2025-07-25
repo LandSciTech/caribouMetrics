@@ -19,11 +19,11 @@ getScenarioDefaults(
   preYears = 0,
   N0 = 1000,
   qMin = 0,
-  qMax = 0.2,
+  qMax = 0,
   uMin = 0,
-  uMax = 0.2,
+  uMax = 0,
   zMin = 0,
-  zMax = 0.6,
+  zMax = 0,
   cowMult = 6,
   collarInterval = NA,
   cowCount = NA,
@@ -62,7 +62,7 @@ the projection period}
 \item{preYears}{Number of years before monitoring begins}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations.}
+more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
 
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
 

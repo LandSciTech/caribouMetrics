@@ -1,0 +1,52 @@
+---
+title: "Options for using Bayesian model results"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Options for using Bayesian model results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+#library(caribouMetrics)
+devtools::load_all()
+library(bboudata)
+library(bboutools)
+library(tidyverse)
+```
+
+## Using bboutools model summaries
+
+[bbouMakeSummaryTable()] returns fitted bboutools survival and recruitment models (assuming no trends over time) and summaries of those models. In this example, we add 2 missing years that will be predicted by the model. 
+```{r fit bbou model}
+surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
+surv_data_add = expand.grid(Year=seq(2017,2018),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
+surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
+surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
+
+recruit_data=bboudata::bbourecruit_a %>% filter(Year > 2010)
+recruit_data_add = expand.grid(Year=seq(2017,2018),PopulationName=unique(recruit_data$PopulationName))
+recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
+recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
+
+mod <- bbouMakeSummaryTable(surv_data,
+                              recruit_data,
+                              N0=NA,return_mcmc=T)
+
+names(mod)
+mod$parTab
+```                              
+
+Use [caribouPopSimMCMC()] to predict demographic trajectories from the mcmc samples.
+```{r extract mcmc trajectories}
+outmcmc = caribouPopSimMCMC(popInfo=NA,mod$recruit_fit,mod$surv_fit)
+```
+
+

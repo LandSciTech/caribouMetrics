@@ -9,7 +9,6 @@ caribouBayesianPM(
   recruitData = bboudata::bbourecruit_a,
   disturbance = NULL,
   betaPriors = "default",
-  returnExpected = F,
   startYear = NULL,
   endYear = NULL,
   N0 = 1000,
@@ -30,13 +29,11 @@ columns "Anthro","fire_excl_anthro", and "Year".}
 
 \item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}. Not used if disturbance is NA.}
 
-\item{returnExpected}{logical. Default F. If TRUE returns expected survival/recruitment/lambda without interannual variation. Not used if disturbance is NA.}
-
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations.}
+more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
 
 \item{returnSamples}{logical. If F returns only summaries. If T returns example trajectories.}
 
