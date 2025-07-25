@@ -1,14 +1,3 @@
-#' Inverse logit
-#'
-#' @param x numeric
-#'
-#' @return numeric
-#'
-#' @export
-inv.logit <-function(x){
-  exp(x)/(1+exp(x))
-}
-
 #' Do multiple caribouPopGrowth runs
 #'
 #' @inheritParams caribouPopGrowth
