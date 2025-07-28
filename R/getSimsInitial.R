@@ -136,7 +136,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     if(replicates==1){
       pars=subset(pars,id==pars$id[1])
     }
-    pars$year <- pars$Anthro
+    pars$Year <- pars$Anthro
     pars$PopulationName <- "A"
   }  
   
