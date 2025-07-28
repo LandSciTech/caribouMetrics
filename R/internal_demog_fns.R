@@ -219,11 +219,17 @@ simCalfCowRatios <- function(cowCounts, exData) {
   }
   
   #apparent number of calves (M+F) from apparent number of cows using apparent recruitment rate
-  simRecruitObs$Calves <- rbinom(
-                                 n = nrow(simRecruitObs), size = round(apparentCows),
-                                 prob = simRecruitObs$recruitment
-                               )
+  # removing NAs and then putting them back to avoid warning in rbinom
+  na_cows <- which(is.na(apparentCows))
+  apparentCows[na_cows] <- 0
+
+  simRecruitObs$Calves <-  rbinom(
+    n = nrow(simRecruitObs), size = round(apparentCows),
+    prob = simRecruitObs$recruitment
+  )
   
+  simRecruitObs$Calves[na_cows] <- NA_integer_
+       
   simRecruitObs$recruitment = NULL;simRecruitObs$N=NULL;simRecruitObs$StartTotal=NULL
   
   simRecruitObs$Calves[simRecruitObs$Cows==0]=NA
