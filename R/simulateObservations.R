@@ -355,7 +355,7 @@ simulateObservations <- function(trajectories, paramTable,
         }
       }
     }else{
-      simSurvObs <- surv_data
+      surv_data <- simSurvObs 
     }
   }else{
     simSurvObs <- surv_data
