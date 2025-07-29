@@ -110,11 +110,10 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
                                            z=runif(nr,cPars$zMin,cPars$zMax))
     #print(paste("getSimsInitial",mean(popInfo$c)))
-    
-    pars <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
-                              correlateRates=cPars$correlateRates,...)
     parsBar <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
                                  correlateRates=cPars$correlateRates,returnExpected=T,...)
+    pars <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
+                              correlateRates=cPars$correlateRates,...)
     nrow(pars);nrow(parsBar)
     pars <- merge(pars,parsBar)
     nrow(pars)

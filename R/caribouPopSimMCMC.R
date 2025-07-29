@@ -31,7 +31,11 @@ caribouPopSimMCMC <- function(popInfo=NA, rec_pred, surv_pred, initYear=NULL,cor
     }else{
       rec_pred <- bboutools::bb_predict_calf_cow_ratio(rec_pred,year=T,conf_level=F)
     }
-  }else{returnExpected=F}
+  }else{
+    if(!is.element("list",class(rec_pred))){
+      returnExpected=F
+    }
+  }
   
   if(is.element("bboufit",class(surv_pred))){
     if(returnExpected){
