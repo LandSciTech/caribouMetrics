@@ -129,7 +129,8 @@ bb_plot_year_growth(bbou_lambda)+theme_bw()+geom_ribbon(data=subset(PIParTab$sum
 
 ## Scenarios informed by bboutools models
 
-We can explore the implications of changing demographic model parameters by modifying the model summary table. In this example, we increase the expected calf:cow ratio by 30%.
+We can explore the implications of changing demographic model parameters by modifying the model summary table. In this example, we increase the expected calf:cow ratio by 30%. The [Boreal Demographic Projection Explorer app](https://github.com/LandSciTech/CaribouDemographyBasicApp) provides an R Shiny interface for fitting bboutools models and exploring scenarios informed by those models, with more thorough explanations. 
+
 ```{r example scenario higher survival}
 parTabHighRec <- mod$parTab
 parTabHighRec$R_bar <- parTabHighRec$R_bar*1.3
