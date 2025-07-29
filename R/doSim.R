@@ -6,13 +6,13 @@
 #' @return numeric
 #'
 #' @export
-doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_cv, S_iv_cv,R_iv_sd,S_iv_sd,
+doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_mean,R_iv_shape,S_iv_mean,S_iv_shape,
                   scn_nm, type="logistic", addl_params){
   #type="logistic"
 
   if(type=="beta"){
     varSample <- do.call(caribouPopGrowth,
-                          c(list(N0 = rep(1000, numPops),
+                          c(list(N0 = rep(NA, numPops),
                                  numSteps = 1,
                                  R_bar = R_bar,
                                  S_bar = S_bar,
@@ -23,16 +23,16 @@ doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_cv, S_iv
                                  probOption = "continuous",
                                  l_S = 0, h_R = 1),
                             addl_params))
-    interannualVar = list(R_CV = R_iv_cv, S_CV = S_iv_cv)
+    interannualVar = list(R_CV = R_iv_mean, S_CV = S_iv_mean)
   }
   if(type=="logistic"){
      #convert mean
-     R_b0 = rnorm(numPops,nimble::logit(R_bar),R_sd)
-     S_b0 = rnorm(numPops,nimble::logit(S_bar),S_sd)
+     R_b0 = rnorm(numPops,logit(R_bar),R_sd)
+     S_b0 = rnorm(numPops,logit(S_bar),S_sd)
      varSample= list(R_t = inv.logit(R_b0),
                      S_t = inv.logit(S_b0))
-     interannualVar = list(R_annual=rlnorm(numPops,log(R_iv_cv),R_iv_sd),
-                           S_annual=rlnorm(numPops,log(S_iv_cv),S_iv_sd))
+     interannualVar = list(R_annual=rgamma(numPops,R_iv_shape,R_iv_mean/R_iv_shape),S_annual=rgamma(numPops,S_iv_shape,S_iv_mean/S_iv_shape))
+     
   }
 
   mod_samps <- do.call(caribouPopSim, c(
