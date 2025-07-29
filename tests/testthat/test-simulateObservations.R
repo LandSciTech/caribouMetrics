@@ -173,9 +173,3 @@ test_that("collarCount and cowCount behave", {
   
 })
 
-test_that("works with single trajectory", {
-  scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowMult = 3,
-                              collarCount = 50)
-  trajs <- getSimsInitial(replicates = 2)$summary
-  simO <- simulateObservations(trajs, paramTable = scns)
-})

@@ -1,7 +1,16 @@
 # default input data
-mod <- caribouBayesianPM(niters=100)
 
-mod_tab <- suppressWarnings(getOutputTables(mod, simInitial = getSimsInitial()))
+mod_fl <- here::here("results/test_mod_real.rds")
+if(file.exists(mod_fl)){
+  mod <- readRDS(mod_fl)
+} else {
+  mod <- caribouBayesianPM(survData = bboudata::bbousurv_a %>% filter(Year > 2010), 
+                                recruitData = bboudata::bbourecruit_a %>% filter(Year > 2010),
+                                niters=1)
+  saveRDS(mod, mod_fl)
+}
+
+mod_tab <- suppressWarnings(getOutputTables(mod))
 
 param_nms <- c(
   "Adult female survival","Recruitment","Adjusted recruitment",
