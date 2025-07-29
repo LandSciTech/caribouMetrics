@@ -10,6 +10,7 @@ scripts/profiler_script.R
 /Meta/
 docs
 inst/extdata/simsNational*
+results
 
 # History files
 .Rhistory
