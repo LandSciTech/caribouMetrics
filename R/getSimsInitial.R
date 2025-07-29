@@ -155,12 +155,6 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   
   simBig <- summarizeCaribouPopSim(pars,returnSamples=returnSamples)
 
-  if (doSave) {
-    message("Updating cached initial simulations.")
-    assign(saveName, simBig, envir = cacheEnv)
-  }
-  
-  
   if(is.element("surv_fit",names(bbouResults))){
     simBig$surv_data = bbouResults$surv_fit$data
     simBig$recruit_data = bbouResults$recruit_fit$data
@@ -170,6 +164,11 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   if(is.null(bbouResults$surv_fit)){
     names(simBig$summary)[names(simBig$summary)=="Year"]="Anthro"
     names(simBig$samples)[names(simBig$samples)=="Year"]="Anthro"
+  }
+  
+  if (doSave) {
+    message("Updating cached initial simulations.")
+    assign(saveName, simBig, envir = cacheEnv)
   }
   
   return(simBig)

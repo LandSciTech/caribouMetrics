@@ -107,7 +107,7 @@ getOutputTables <- function(caribouBayesDemogMod,
     if(!is.element("Year",names(summaries))){
       
       if(!is.element("Anthro",names(dist_params))){
-        stop("Set disturbance in caribouBayesianPM function call in order to compare to national model simulations.")
+        stop("Set disturbance in caribouBayesianPM function call in order to compare to national model simulations.", call. = FALSE)
       }
       if(!all(unique(distInput$Anthro) %in% summaries$Anthro)){
         message("recalculating initial sims to match anthropogenic distubance scenario")
@@ -124,7 +124,15 @@ getOutputTables <- function(caribouBayesDemogMod,
       simBigO <- merge(summaries, distMerge)
       simBigO$Anthro <- NULL
     }else{
-      simBigO <- merge(simInitial$summary, dist_params)
+      by_col <- intersect(names(summaries), names(dist_params))
+      if(length(by_col) == 0){
+        stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no columns shared between them", call. = FALSE)
+      }
+      matches <- intersect(summaries[[by_col]], dist_params[[by_col]])
+      if(length(matches) == 0){
+        stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no overlapping values in ", by_col, call. = FALSE)
+      }
+      simBigO <- merge(summaries, dist_params)
     }
   } else {
     simBigO <- NULL

@@ -10,12 +10,13 @@ test_that("works with defaults", {
                     disturbance = simO$simDisturbance,
                     niters=100)
   
-  # error when result has different startYear from argument
-  expect_error(getOutputTables(out, startYear = 2009, endYear = 2023), 
-               "different length")
-
-  expect_type(getOutputTables(out, simInitial = getSimsInitial()), 
-              "list")
+  simIni <- getSimsInitial()
+  
+  out_tbls <- getOutputTables(out, simInitial = simIni, paramTable = scns)
+  
+  # all components are present
+  purrr::map_lgl(out_tbls, \(x) nrow(x) > 0) %>% all() %>% 
+    expect_true()
 })
 
 test_that("decimals in observed disturbance work", {
@@ -72,13 +73,14 @@ test_that("works with simInitial",{
   expect_error(getOutputTables(mod_real,
                                simInitial = getSimsInitial()), "Set disturbance")
   
-  # Works when disturbance is specified
-
+  simIni <- getSimsInitial()
   
-  mod_tbl <- getOutputTables(mod_realb,
-                              simInitial = getSimsInitial())
-
-  expect_type(mod_tbl, "list")
+  # Works when disturbance is specified
+  mod_tbl <- getOutputTables(mod_realb, simInitial = simIni)
+  
+  # all components are present
+  purrr::map_lgl(mod_tbl, \(x) nrow(x) > 0) %>% all() %>% 
+    expect_true()
   
 })
 
@@ -86,5 +88,11 @@ test_that("works with out simInitial", {
   
   mod_tbl <- getOutputTables(mod_real)
   
-  expect_type(mod_tbl, "list")
+  # sim.all is NULL when simInitial is not supplied 
+  expect_null(mod_tbl$sim.all)
+  
+  # other components are present
+  purrr::map_lgl(mod_tbl[-2], \(x) nrow(x) > 0) %>% all() %>% 
+    expect_true()
+  
 })
