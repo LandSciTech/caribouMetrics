@@ -50,7 +50,8 @@ Imports:
     rjags,
     survival,
     bboutools,
-    mcmcr
+    mcmcr,
+    fitdistrplus
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
