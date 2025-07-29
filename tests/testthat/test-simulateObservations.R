@@ -37,21 +37,29 @@ test_that("collarCount and cowCount behave", {
   
   simObs2 <- simulateObservations(trajs, scns2)
   
-  simObs2$simRecruitObs %>% 
-    left_join(simObs2$simSurvObs, 
+  simObs2$simSurvObs %>% 
+    left_join(simObs2$simRecruitObs, 
               by = join_by(PopulationName, Replicate, Year)) %>% 
     mutate(pass = Cows == (30 - MortalitiesCertain) * 2) %>% 
     pull(pass) %>% all %>% 
     expect_true()
   
+  #When survival is annual, simulated survival data does not include months 1-3 of 2024. 
+  #But the 2023 recruitment survey occurs in March 2024.
+  expect_equal(scns2$curYear, simObs2$simSurvObs$Year %>% max())
+  expect_equal(scns2$curYear+1, simObs2$simRecruitObs$Year %>% max())
+
   # Test with months
   scns10 <- getScenarioDefaults(collarCount = 15, cowMult = 2)
   simObs_mon <- simulateObservations(trajs, scns10, 
                        surv_data = bboudata::bbousurv_a,
                        recruit_data = bboudata::bbourecruit_a)
 
-  scns10$curYear
-  simObs_mon$simSurvObs$Year %>% max()
+  #When survival data is monthly, the survival data also includes months 1-3 of
+  #2024 that will be included in the 2023 caribou year (April 2023 to March
+  #2024)
+  expect_equal(scns10$curYear+1, simObs_mon$simSurvObs$Year %>% max())
+  expect_equal(scns10$curYear+1, simObs_mon$simRecruitObs$Year %>% max())
   
   # should be different cow counts in simulated years
   expect_gt(simObs_mon$simRecruitObs %>% filter(Year < 2016) %>% pull(Cows) %>% mean, 
@@ -60,30 +68,25 @@ test_that("collarCount and cowCount behave", {
   # Visual:
   # simObs_mon$simRecruitObs %>% ggplot(aes(Year, Cows, colour = Replicate))+
   #   geom_point()
-  
-  
-  
-  # Got a warning of NAs produced by: rbinom(n = nrow(simRecruitObs), size =
-  # round(apparentCows), prob = simRecruitObs$recruitment)
-  # Only happens sometimes with low collarCount. Need to figure it out and make a test
-  # Haven't been able to reproduce...
-  
-  #TODO: This seems off... What is the point of exData? If we are simulating
+
+  #TODO:See issue 117  This seems off... What is the point of exData? If we are simulating
   # observations why does this output go beyond the simulation time period?
   
-  trajs_low <- getSimsInitial(replicates = 2,
-                              cPars = getScenarioDefaults(lQuantile = 0.99))$samples
+  scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
+                                projYears = 100)
+  
+  trajs <- getSimsInitial(replicates = 2, cPars = scns10)$samples
 
-  scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, projYears = 100, 
-                                projAnthroSlope = 0)
-
-  simObs8 <- simulateObservations(trajs_low, scns10,
+  simObs8 <- simulateObservations(trajs, scns10,
                                   surv_data = bboudata::bbousurv_a,
                                   recruit_data = bboudata::bbourecruit_a)
-
-  ggplot(simObs8$exData %>% filter(MetricTypeID == "N"),
-         aes(Year, Amount, colour = Replicate))+
-    geom_point()
+  simObs8$exData %>% 
+    pivot_wider(id_cols = c("Replicate", "Year","Timestep","PopulationName"),
+                                 names_from = "MetricTypeID",
+                                 values_from = "Amount") %>% 
+  ggplot2::ggplot(ggplot2::aes(Year, N, colour = Replicate))+
+    ggplot2::geom_point()+
+    ggplot2::geom_point(ggplot2::aes(Year, Anthro*1), colour = "black")
   
   # if tables are supplied they should not be modified by cowCount or collarCount
   simObs3 <- simulateObservations(trajs, scns,
