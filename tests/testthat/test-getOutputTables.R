@@ -5,7 +5,8 @@ test_that("works with defaults", {
   trajs <- getSimsInitial()$samples
   simO <- simulateObservations(trajs, scns)
   
-  out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
+  out <- caribouBayesianPM(survData = simO$simSurvObs %>% filter(Replicate == "xV1"), 
+                           recruitData = simO$simRecruitObs%>% filter(Replicate == "xV1"),
                     disturbance = simO$simDisturbance,
                     niters=100)
   
@@ -37,16 +38,22 @@ test_that("decimals in observed disturbance work", {
              
 })
 
-mod_real <- caribouBayesianPM(survData = bboudata::bbousurv_a %>% filter(Year > 2010), 
-                              recruitData = bboudata::bbourecruit_a %>% filter(Year > 2010),
-                              niters=1)
+# Use saved file because this takes a long time. 
+mod_fl <- here::here("results/test_mod_real.rds")
+if(file.exists(mod_fl)){
+  mod_real <- readRDS(mod_fl)
+} else {
+  mod_real <- caribouBayesianPM(survData = bboudata::bbousurv_a %>% filter(Year > 2010), 
+                                recruitData = bboudata::bbourecruit_a %>% filter(Year > 2010),
+                                niters=1)
+  saveRDS(mod_real, mod_fl)
+}
 
-test_that("works with simInitial",{
-  # Can't compare with out disturbance in the original model
-  expect_error(getOutputTables(mod_real,
-                               simInitial = getSimsInitial()), "Set disturbance")
-  
-  # Works when disturbance is specified
+
+mod_flb <- here::here("results/test_mod_realb.rds")
+if(file.exists(mod_flb)){
+  mod_realb <- readRDS(mod_flb)
+} else {
   disturbance <- unique(subset(bboudata::bbourecruit_a %>% filter(Year > 2010), 
                                select = Year))
   disturbance$Anthro <- 0
@@ -57,6 +64,16 @@ test_that("works with simInitial",{
     disturbance = disturbance,
     niters = 10
   )
+  saveRDS(mod_realb, mod_flb)
+}
+
+test_that("works with simInitial",{
+  # Can't compare with out disturbance in the original model
+  expect_error(getOutputTables(mod_real,
+                               simInitial = getSimsInitial()), "Set disturbance")
+  
+  # Works when disturbance is specified
+
   
   mod_tbl <- getOutputTables(mod_realb,
                               simInitial = getSimsInitial())
