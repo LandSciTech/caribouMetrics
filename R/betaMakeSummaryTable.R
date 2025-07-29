@@ -39,7 +39,8 @@ betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
   datal <- c(datal,surv_priors)
   
   ###### Survival Model ######
-  sink("survival_model.txt")  # assign model file name #
+  surv_mod_fl <- tempfile(pattern = "survival_model_", fileext = ".txt")
+  sink(surv_mod_fl)  # assign model file name #
   cat("
 
 model {
@@ -86,7 +87,7 @@ model {
   #################################################################################################################
   ### Running JAGS
   # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed)
-  model.fit <- rjags::jags.model(file="survival_model.txt", data=datal, n.adapt=nb, n.chains = nc)
+  model.fit <- rjags::jags.model(file=surv_mod_fl, data=datal, n.adapt=nb, n.chains = nc)
   
   # To get samples from the posterior distribution of the parameters
   update(model.fit, n.iter=ni)
@@ -144,7 +145,8 @@ betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
   # adult_female_proportion_beta=rec_priors[["adult_female_proportion_beta"]]
   
   ###### Recruitment Model ######
-  sink("recruit_model.txt")  # observation model can be connected by CaribouYear[i] 
+  rec_mod_fl <- tempfile(pattern = "recruit_model_", fileext = ".txt")
+  sink(rec_mod_fl)  # observation model can be connected by CaribouYear[i] 
   cat("
 
 model {
@@ -196,7 +198,7 @@ model {
   ### Running JAGS
   # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed)
 
-  model.fit <- rjags::jags.model(file="recruit_model.txt", data=datal, n.adapt=nb, n.chains = nc)
+  model.fit <- rjags::jags.model(file=rec_mod_fl, data=datal, n.adapt=nb, n.chains = nc)
   
   # To get samples from the posterior distribution of the parameters
   update(model.fit, n.iter=ni)
