@@ -31,7 +31,7 @@ doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_mean,R_i
      S_b0 = rnorm(numPops,logit(S_bar),S_sd)
      varSample= list(R_t = inv.logit(R_b0),
                      S_t = inv.logit(S_b0))
-     interannualVar = list(R_annual=rgamma(numPops,R_iv_shape,R_iv_mean/R_iv_shape),S_annual=rgamma(numPops,S_iv_shape,S_iv_mean/S_iv_shape))
+     interannualVar = list(R_annual=rgamma(numPops,R_iv_shape,R_iv_shape/R_iv_mean),S_annual=rgamma(numPops,S_iv_shape,S_iv_shape/S_iv_mean))
      
   }
 

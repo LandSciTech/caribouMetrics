@@ -155,4 +155,8 @@ print(base)
 
 ```
 
+## Other demographic modeling options and outputs
 
+TO DO: show & discuss expected values of parameters - without interannual variation.
+
+TO DO: show effects of other demographic modeling options & outputs i.e. changes in population size with and without carrying capacity. 
