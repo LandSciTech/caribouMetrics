@@ -22,7 +22,7 @@ library(bboutools)
 library(tidyverse)
 
 resFile <- "../results/vignetteBbbouExample.rds"
-useSaved <- T #option to skip slow step of fitting bboutools model
+useSaved <- F #option to skip slow step of fitting bboutools model
 ```
 
 ## Demographic trajectories and summaries from bboutools models
@@ -160,3 +160,5 @@ print(base)
 TO DO: show & discuss expected values of parameters - without interannual variation.
 
 TO DO: show effects of other demographic modeling options & outputs i.e. changes in population size with and without carrying capacity. 
+
+TO DO: Add lots more text and explanation of what the functions are for, what the different rates are and why you would want to calculate them one way vs another. As well as general context within the package and relative to bboutools. 
