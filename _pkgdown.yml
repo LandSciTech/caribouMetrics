@@ -32,7 +32,7 @@ articles:
     navbar: ~
     contents:
       - caribouDemography
-      - BayesianDemographicProjection
+      - bayesian-model-outputs
       - Using_disturbanceMetric
       - Using_caribouHabitat
       - UI_help
