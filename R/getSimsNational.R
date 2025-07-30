@@ -1,6 +1,6 @@
 #' Get a set of simulation results from the national demographic model
 #'
-#' @param covTableObs data frame with Anthro,fire_excl_anthro numeric columns. Each is vector of numbers between 0 and 100
+#' @param covTableObs data frame with Anthro,fire_excl_anthro and Year numeric columns. Each is vector of numbers between 0 and 100
 #'   representing the percentage of the landscape covered by anthropogenic
 #'   disturbance buffered by 500 m, and the percentage covered by fire that does
 #'   not overlap anthropogenic disturbance. 
@@ -19,7 +19,7 @@
 #' @examples
 #' getSimsNational()
 getSimsNational <- function(replicates = 1000, N0 = 1000, 
-                            covTableObs =  expand.grid(Anthro=seq(0,100,by=1),fire_excl_anthro=0), 
+                            covTableObs =  expand.grid(Anthro=seq(0,100,by=1),fire_excl_anthro=0,Year=NA), 
                             useQuantiles  = NULL,
                             populationGrowthTable  = NULL,
                             cPars=getScenarioDefaults(),

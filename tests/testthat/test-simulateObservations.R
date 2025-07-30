@@ -1,14 +1,14 @@
 test_that("default works", {
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowMult = 3,
                               collarCount = 50)
-  trajs <- getSimsInitial(replicates = 2)$samples
+  trajs <- getSimsInitial(replicates = 2, cPars=scns)$samples
   expect_is(simulateObservations(trajs, paramTable = scns),
             "list")
 })
 
 test_that("multiple scenarios not allowed",{
   scns <- getScenarioDefaults(data.frame(iFire = 1:2), projYears = 10, obsYears = 10)
-  trajs <- getSimsInitial(replicates = 2)$samples
+  trajs <- getSimsInitial(replicates = 2,cPars=scns)$samples
   expect_error(simulateObservations(trajs, scns,
                                  freqStartsByYear = data.frame(Year = 2014:2023,
                                                                numStarts = 10),
@@ -22,7 +22,7 @@ test_that("multiple scenarios not allowed",{
 
 test_that("collarCount and cowCount behave", {
   scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = NA)
-  trajs <- getSimsInitial(replicates = 2)$samples
+  trajs <- getSimsInitial(replicates = 2,cPars=scns)$samples
   
   simObs <- simulateObservations(trajs, scns)
   
@@ -69,9 +69,6 @@ test_that("collarCount and cowCount behave", {
   # simObs_mon$simRecruitObs %>% ggplot(aes(Year, Cows, colour = Replicate))+
   #   geom_point()
 
-  #TODO:See issue 117  This seems off... What is the point of exData? If we are simulating
-  # observations why does this output go beyond the simulation time period?
-  
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 100)
   

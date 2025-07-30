@@ -2,15 +2,14 @@ test_that("works with defaults", {
   
   scns <- getScenarioDefaults(projYears = 0, obsYears = 10, collarCount = 20,
                               cowMult = 3)
-  trajs <- getSimsInitial()$samples
+  simIni <-getSimsInitial(cPars=scns) 
+  trajs <- simIni$samples
   simO <- simulateObservations(trajs, scns)
   
   out <- caribouBayesianPM(survData = simO$simSurvObs %>% filter(Replicate == "xV1"), 
                            recruitData = simO$simRecruitObs%>% filter(Replicate == "xV1"),
                     disturbance = simO$simDisturbance,
                     niters=100)
-  
-  simIni <- getSimsInitial()
   
   out_tbls <- getOutputTables(out, simInitial = simIni, paramTable = scns)
   
@@ -70,10 +69,11 @@ if(file.exists(mod_flb)){
 
 test_that("works with simInitial",{
   # Can't compare with out disturbance in the original model
-  expect_error(getOutputTables(mod_real,
-                               simInitial = getSimsInitial()), "Set disturbance")
-  
   simIni <- getSimsInitial()
+  
+  expect_error(getOutputTables(mod_real,
+                               simInitial = simIni), "Set disturbance")
+  
   
   # Works when disturbance is specified
   mod_tbl <- getOutputTables(mod_realb, simInitial = simIni)
