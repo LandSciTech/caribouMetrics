@@ -2,7 +2,7 @@
 % Please edit documentation in R/internal_demog_fns.R
 \name{summarizeCaribouPopSim}
 \alias{summarizeCaribouPopSim}
-\title{Get 95\% confidence intervals from trajectories}
+\title{Get 95\% prediction intervals from trajectories}
 \usage{
 summarizeCaribouPopSim(pars, returnSamples = T)
 }
@@ -12,7 +12,7 @@ summarizeCaribouPopSim(pars, returnSamples = T)
 \item{returnSamples}{}
 }
 \description{
-Get 95\% confidence intervals from trajectories
+Get 95\% prediction intervals from trajectories
 }
 \seealso{
 Caribou demography functions:
