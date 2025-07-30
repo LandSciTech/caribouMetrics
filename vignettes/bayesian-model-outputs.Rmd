@@ -48,7 +48,9 @@ if(useSaved&file.exists(resFile)){
   mod <- bbouMakeSummaryTable(surv_data,
                             recruit_data,
                             N0=NA,return_mcmc=T)
-  saveRDS(mod,resFile)
+  if(useSaved){
+   saveRDS(mod,resFile)
+  }
 }
 
 names(mod)
