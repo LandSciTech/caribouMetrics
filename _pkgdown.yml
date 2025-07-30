@@ -1,3 +1,6 @@
+template:
+  bootstrap: 5
+
 url: https://landscitech.github.io/caribouMetrics
 
 navbar:
@@ -35,6 +38,5 @@ articles:
       - bayesian-model-outputs
       - Using_disturbanceMetric
       - Using_caribouHabitat
-      - UI_help
       
 
