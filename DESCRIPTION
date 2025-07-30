@@ -117,7 +117,7 @@ Suggests:
 Remotes: LandSciTech/pfocal,
     LandSciTech/BayesianCaribouDemographicProjection,
     LandSciTech/bboudata,
-    LandSciTech/bboutoolsMultiPop
+    bboutools=github::LandSciTech/bboutoolsMultiPop
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
