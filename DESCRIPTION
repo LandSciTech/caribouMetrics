@@ -110,12 +110,10 @@ Suggests:
     ggplot2,
     rsyncrosim,
     pfocal,
-    BayesianCaribouDemographicProjection,
     raster,
     shiny,
     bboudata
 Remotes: LandSciTech/pfocal,
-    LandSciTech/BayesianCaribouDemographicProjection,
     LandSciTech/bboudata,
     bboutools=github::LandSciTech/bboutoolsMultiPop
 Additional_repositories: https://landscitech.github.io/drat
