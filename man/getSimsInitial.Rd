@@ -8,7 +8,7 @@ getSimsInitial(
   bbouResults = NULL,
   N0 = NULL,
   replicates = "all",
-  cPars = getScenarioDefaults(),
+  cPars = subset(getScenarioDefaults(), select = -iAnthro),
   forceUpdate = F,
   skipSave = F,
   returnSamples = T,
@@ -17,13 +17,15 @@ getSimsInitial(
 }
 \arguments{
 \item{bbouResults}{Optional. Fitted bboutools model and summary table created by bbouMakeSummaryTable(),
-or a path to those results. If not specified trajectories will be from national demographic disturbance model.}
+or a path to those results. If not specified trajectories will be from national demographic disturbance model.
+To specify a disturbance table for the national model set bbouResults=disturbanceTable.
+disturbanceTable should be a data.frame with columns Anthro, fire_excl_anthro, and Year.}
 
 \item{N0}{initial population size. If NULL, will use information in bbouResults.}
 
 \item{replicates}{Number of replicate trajectories. Default "all"}
 
-\item{cPars}{optional. Parameters for calculating composition survey bias term.}
+\item{cPars}{optional. Parameters for calculating composition survey bias term and/or disturbance scenario. Note that cPars can specify multiple disturbance scenarios, but only one unique composition bias scenario.}
 
 \item{forceUpdate}{logical. If the default inputs are used the result is
 cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
@@ -49,13 +51,16 @@ getSimsInitial()
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
+\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
@@ -63,6 +68,7 @@ Caribou demography functions:
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
-\code{\link{simulateObservations}()}
+\code{\link{simulateObservations}()},
+\code{\link{summarizeCaribouPopSim}()}
 }
 \concept{demography}

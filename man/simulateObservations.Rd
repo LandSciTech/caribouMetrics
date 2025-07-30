@@ -62,9 +62,9 @@ based on \code{paramTable}}
 \item{writeFilesDir}{character. If not NULL \code{simSurvObs} and \code{simRecruitObs}
 results will be saved to csv files in the directory provided}
 
-\item{surv_data}{data.frame. Optional existing survival data in bboudata format}
+\item{surv_data}{data.frame. Optional existing survival data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.}
 
-\item{recruit_data}{data.frame. Optional existing recruitment data in bboudata format}
+\item{recruit_data}{data.frame. Optional existing recruitment data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.}
 
 \item{printPlot}{logical. print a plot of the true population trajectory?}
 }
@@ -107,13 +107,16 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
+\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
@@ -121,6 +124,7 @@ Caribou demography functions:
 \code{\link{getSimsNational}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{runScnSet}()}
+\code{\link{runScnSet}()},
+\code{\link{summarizeCaribouPopSim}()}
 }
 \concept{demography}

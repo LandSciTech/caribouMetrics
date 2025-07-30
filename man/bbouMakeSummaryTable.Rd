@@ -55,3 +55,26 @@ s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 bbouMakeSummaryTable(s_data, r_data, 500, FALSE)
 }
+\seealso{
+Caribou demography functions:
+\code{\link{caribouBayesianPM}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
+\code{\link{compositionBiasCorrection}()},
+\code{\link{convertTrajectories}()},
+\code{\link{demographicCoefficients}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{demographicRates}()},
+\code{\link{doSim}()},
+\code{\link{getOutputTables}()},
+\code{\link{getPriors}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{getSimsInitial}()},
+\code{\link{getSimsNational}()},
+\code{\link{plotRes}()},
+\code{\link{popGrowthTableJohnsonECCC}},
+\code{\link{runScnSet}()},
+\code{\link{simulateObservations}()},
+\code{\link{summarizeCaribouPopSim}()}
+}
+\concept{demography}

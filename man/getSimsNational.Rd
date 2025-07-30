@@ -7,7 +7,8 @@
 getSimsNational(
   replicates = 1000,
   N0 = 1000,
-  covTableObs = expand.grid(Anthro = seq(0, 100, by = 1), fire_excl_anthro = 0),
+  covTableObs = expand.grid(Anthro = seq(0, 100, by = 1), fire_excl_anthro = 0, Year =
+    NA),
   useQuantiles = NULL,
   populationGrowthTable = NULL,
   cPars = getScenarioDefaults(),
@@ -19,7 +20,7 @@ getSimsNational(
 
 \item{N0}{initial population size}
 
-\item{covTableObs}{data frame with Anthro,fire_excl_anthro numeric columns. Each is vector of numbers between 0 and 100
+\item{covTableObs}{data frame with Anthro,fire_excl_anthro and Year numeric columns. Each is vector of numbers between 0 and 100
 representing the percentage of the landscape covered by anthropogenic
 disturbance buffered by 500 m, and the percentage covered by fire that does
 not overlap anthropogenic disturbance.}
@@ -61,13 +62,16 @@ getSimsNational()
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
+\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
@@ -75,6 +79,7 @@ Caribou demography functions:
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
-\code{\link{simulateObservations}()}
+\code{\link{simulateObservations}()},
+\code{\link{summarizeCaribouPopSim}()}
 }
 \concept{demography}

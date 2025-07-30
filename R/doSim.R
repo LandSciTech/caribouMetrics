@@ -4,6 +4,7 @@
 #' @param addl_params a list of additional parameters for `caribouPopGrowth`
 #'
 #' @return numeric
+#' @family demography
 #'
 #' @export
 doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_mean,R_iv_shape,S_iv_mean,S_iv_shape,

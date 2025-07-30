@@ -18,6 +18,7 @@
 #' @return If `return_mcmc` is TRUE then a list with results and fitted models,
 #'   if FALSE just the results table is returned.
 #' @export
+#' @family demography
 #'
 #' @examples
 #' s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)

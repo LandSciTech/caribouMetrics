@@ -1,6 +1,15 @@
 # internal functions related to caribou demographics
 
 # Helpers for table format conversion --------------------------------------------------
+#' Format trajectory tables
+#'
+#' @param pars 
+#'
+#' @returns
+#' @export
+#' @family demography
+#'
+#' @examples
 convertTrajectories<-function(pars){
   #converts output from caribouPopSim to alternate form
   #pars = trajectories
@@ -18,11 +27,13 @@ convertTrajectories<-function(pars){
   fds <- subset(pars, select = nameChange$inName)
   names(fds) <- nameChange$outName
   
-  fds$AnthroID = round(fds$Anthro);fds$fire_excl_anthroID=round(fds$fire_excl_anthro)
+  if(is.element("Anthro", colnames(fds))){
+    fds$AnthroID = round(fds$Anthro);fds$fire_excl_anthroID=round(fds$fire_excl_anthro)
+  }
   
   fds$Timestep = as.numeric(fds$Year)
   fds$Year=as.numeric(as.character(fds$Year))
-  fds <- tidyr::pivot_longer(fds, !("Replicate"|"LambdaPercentile"|"Year"|"Timestep"|"PopulationName"|"AnthroID"|"fire_excl_anthroID"), names_to = "MetricTypeID",
+  fds <- tidyr::pivot_longer(fds, !any_of(c("Replicate","LambdaPercentile","Year","Timestep","PopulationName","AnthroID","fire_excl_anthroID")), names_to = "MetricTypeID",
                              values_to = "Amount")
   fds$MetricTypeID <- as.character(fds$MetricTypeID)
   fds$Replicate <- paste0("x", fds$Replicate)
@@ -33,6 +44,16 @@ convertTrajectories<-function(pars){
   return(fds)
 }
 
+#' Get 95% prediction intervals from trajectories
+#'
+#' @param pars 
+#' @param returnSamples 
+#'
+#' @returns
+#' @export
+#' @family demography
+#'
+#' @examples
 summarizeCaribouPopSim <- function(pars,returnSamples=T){
 
   if(is.element("AnthroID",names(pars))){  
