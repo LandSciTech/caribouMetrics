@@ -17,9 +17,12 @@ convertTrajectories<-function(pars){
   nameChange <-subset(nameChange,is.element(inName,names(pars)))
   fds <- subset(pars, select = nameChange$inName)
   names(fds) <- nameChange$outName
+  
+  fds$AnthroID = round(fds$Anthro);fds$fire_excl_anthroID=round(fds$fire_excl_anthro)
+  
   fds$Timestep = as.numeric(fds$Year)
   fds$Year=as.numeric(as.character(fds$Year))
-  fds <- tidyr::pivot_longer(fds, !("Replicate"|"LambdaPercentile"|"Year"|"Timestep"|"PopulationName"), names_to = "MetricTypeID",
+  fds <- tidyr::pivot_longer(fds, !("Replicate"|"LambdaPercentile"|"Year"|"Timestep"|"PopulationName"|"AnthroID"|"fire_excl_anthroID"), names_to = "MetricTypeID",
                              values_to = "Amount")
   fds$MetricTypeID <- as.character(fds$MetricTypeID)
   fds$Replicate <- paste0("x", fds$Replicate)

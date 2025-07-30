@@ -20,9 +20,11 @@ if(file.exists("inst/extdata/simsInitiald.rds")){
 #'
 #' @param bbouResults Optional. Fitted bboutools model and summary table created by bbouMakeSummaryTable(), 
 #'   or a path to those results. If not specified trajectories will be from national demographic disturbance model.
+#'   To specify a disturbance table for the national model set bbouResults=disturbanceTable. 
+#'   disturbanceTable should be a data.frame with columns Anthro, fire_excl_anthro, and Year.
 #' @param N0 initial population size. If NULL, will use information in bbouResults.
 #' @param replicates Number of replicate trajectories. Default "all"   
-#' @param cPars optional. Parameters for calculating composition survey bias term.
+#' @param cPars optional. Parameters for calculating composition survey bias term and/or disturbance scenario. Note that cPars can specify multiple disturbance scenarios, but only one unique composition bias scenario.
 #' @param forceUpdate logical. If the default inputs are used the result is
 #'   cached. Set `forceUpdate` to TRUE to ensure the simulations are re-run.
 #' @param skipSave logical. If F default consider saved results. Set T to ignore the saved file.
@@ -42,10 +44,12 @@ if(file.exists("inst/extdata/simsInitiald.rds")){
 #' @examples
 #' getSimsInitial()
 getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
-                            cPars=getScenarioDefaults(), forceUpdate = F,skipSave=F,returnSamples=T,...) {
+                            cPars=subset(getScenarioDefaults(),select=-iAnthro), forceUpdate = F,skipSave=F,returnSamples=T,...) {
   doSave <- FALSE
 
+  hasAnthro <- is.element("iAnthro",names(cPars))
   cPars <- getScenarioDefaults(cPars)
+
   if(!skipSave){
     check <- as.list(match.call())
     
@@ -60,17 +64,47 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
       }
     }
     check$forceUpdate <- NULL
-
+    
     if (forceUpdate & (length(check) == 1)) {
       doSave <- TRUE
     }
   }
-  
+  rmSamples<-F
+
   if(is.null(bbouResults)){
-    bbouResults <- list(parTab = eval(formals(getSimsNational)$covTableObs))
-    bbouResults$parTab$pop_name = NA
+    if(hasAnthro){
+      distPars = unique(subset(cPars,select=c(iAnthro,iFire,preYears,obsYears,projYears,obsAnthroSlope,projAnthroSlope,preYears)))
+      
+      first<-T
+      for(r in 1:nrow(distPars)){
+        #r=1
+        cr <- cPars[r,]
+        covariates <- simCovariates(cr$iAnthro, cr$iFire, 
+                                    cr$preYears+cr$obsYears + cr$projYears, 
+                                    cr$obsAnthroSlope, cr$projAnthroSlope, 
+                                    cr$obsYears + cr$preYears + 1)
+        covariates$Year <- cr$startYear + covariates$time - 1
+        covariates$fire_excl_anthro=round(covariates$fire_excl_anthro)
+        if(first){
+          simDisturbance <- covariates
+          first=F
+        }else{
+          simDisturbance <- unique(rbind(simDisturbance,covariates))
+        }
+      }
+      bbouResults <- list(parTab=subset(simDisturbance,select=c(Anthro,fire_excl_anthro,Year)))
+    }else{
+      warning("To create sample trajectories from the national model a disturbance scenario must be specified in bbouResults$parTab or cPars arguments.")
+      rmSamples <- T
+      bbouResults <- list(parTab = eval(formals(getSimsNational)$covTableObs))
+      bbouResults$parTab$Year=bbouResults$parTab$Anthro
+    }
   }
-  
+  if(is.element("Anthro",names(bbouResults))){
+    bbouResults=list(parTab=bbouResults)
+  }
+  if(!is.element("pop_name",names(bbouResults$parTab))){bbouResults$parTab$pop_name=NA}
+    
   #bbouResults = bbouResultFile
   if(is.character(bbouResults) && (length(bbouResults) == 1) ){
     if(file.exists(bbouResults)){
@@ -78,6 +112,11 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     }else{
       stop(paste("bbouResults file not found,",bbouResults))
     }
+  }
+  
+  ccPars = unique(subset(cPars,select=c(qMin,qMax,uMin,uMax,zMin,zMax,cowMult,correlateRates)))
+  if(nrow(ccPars)>1){
+    stop("Do not include more than one composition bias scenario in cPars")
   }
   
   if(is.null(N0)){
@@ -107,13 +146,13 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     }
     
     popInfo <- merge(data.frame(id=seq(1:nr)),N0)
-    popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
-                                           z=runif(nr,cPars$zMin,cPars$zMax))
+    popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),ccPars$qMin,ccPars$qMax),w=ccPars$cowMult,u=runif(nr,ccPars$uMin,ccPars$uMax),
+                                           z=runif(nr,ccPars$zMin,ccPars$zMax))
     #print(paste("getSimsInitial",mean(popInfo$c)))
     parsBar <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
-                                 correlateRates=cPars$correlateRates,returnExpected=T,...)
+                                 correlateRates=ccPars$correlateRates,returnExpected=T,...)
     pars <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
-                              correlateRates=cPars$correlateRates,...)
+                              correlateRates=ccPars$correlateRates,...)
     nrow(pars);nrow(parsBar)
     pars <- merge(pars,parsBar)
     nrow(pars)
@@ -124,18 +163,17 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     
   }else{
     if(replicates == "all"){replicates = formals(getSimsNational)$replicates}
-    
-    covTableObs <- unique(subset(bbouResults$parTab, select=c(Anthro,fire_excl_anthro)))
+    covTableObs <- unique(subset(bbouResults$parTab, select=c(Anthro,fire_excl_anthro,Year)))
     N0s <- unique(N0$N0)
     if(length(N0s)>1){
       stop("Specify a single initial population size for trajectories from national model.")
     }
-    pars<- getSimsNational(replicates = max(replicates,2),N0 = N0s,covTableObs = covTableObs,cPars=cPars,...)
+    pars<- getSimsNational(replicates = max(replicates,2),N0 = N0s,covTableObs = covTableObs,cPars=ccPars,...)
     
     if(replicates==1){
       pars=subset(pars,id==pars$id[1])
     }
-    pars$Year <- pars$Anthro
+    #pars$Year <- pars$Anthro
     pars$PopulationName <- "A"
   }  
   
@@ -161,15 +199,16 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     simBig$popInfo = popInfo
   }
   
-  if(is.null(bbouResults$surv_fit)){
-    names(simBig$summary)[names(simBig$summary)=="Year"]="Anthro"
-    names(simBig$samples)[names(simBig$samples)=="Year"]="Anthro"
-  }
-  
+  if(max(simBig$summary$Year)<=100){names(simBig$summary)[names(simBig$summary)=="Year"]="Anthro"}
+  if(max(simBig$samples$Year)<=100){names(simBig$samples)[names(simBig$samples)=="Year"]="Anthro"}
+
   if (doSave) {
     message("Updating cached initial simulations.")
     assign(saveName, simBig, envir = cacheEnv)
   }
   
+  if(rmSamples){
+    simBig$samples<-NULL
+  }
   return(simBig)
 }
