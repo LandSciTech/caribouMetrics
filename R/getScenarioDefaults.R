@@ -72,9 +72,9 @@ getScenarioDefaults <- function(paramTable = NULL,
   # defList but keep any extra columns not in defList
   paramTable <- select(paramTable, all_of(names(defList)), everything(), -where(~all(is.na(.x))))
 
-  if (is.element("cowMult", names(paramTable)) & is.element("cowCount", names(paramTable))) {
+  if (is.element("cowMult", names(paramTable)) & any(paramTable$cowMult != 1) & is.element("cowCount", names(paramTable))) {
     stop("Specify number of cows per year in recruitment survey (cowCount) or",
-         " multiplier of number of collared cows in recruitment survey (cowMult),",
+         " multiplier of number of collared cows in recruitment survey (cowMult) that is different from 1,",
          " but not both.")
   }
   

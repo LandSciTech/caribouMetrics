@@ -21,7 +21,7 @@ test_that("multiple scenarios not allowed",{
 # internally, do same in getPriors
 
 test_that("collarCount and cowCount behave", {
-  scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = NA)
+  scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 1)
   trajs <- getSimsInitial(replicates = 2,cPars=scns)$samples
   
   simObs <- simulateObservations(trajs, scns)
