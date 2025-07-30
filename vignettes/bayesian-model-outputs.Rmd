@@ -15,11 +15,13 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-#library(caribouMetrics)
-devtools::load_all()
+library(caribouMetrics)
+# use local version on local and installed on GH
+if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
 library(bboudata)
 library(bboutools)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 
 resFile <- "../results/vignetteBbbouExample.rds"
 useSaved <- F #option to skip slow step of fitting bboutools model
@@ -46,7 +48,9 @@ if(useSaved&file.exists(resFile)){
   mod <- bbouMakeSummaryTable(surv_data,
                             recruit_data,
                             N0=NA,return_mcmc=T)
-  saveRDS(mod,resFile)
+  if(useSaved){
+   saveRDS(mod,resFile)
+  }
 }
 
 names(mod)

@@ -5,8 +5,8 @@
 #' trajectory can be specified with `getScenarioDefaults()`.
 #' 
 #' For a detailed description of the process for simulating data see the
-#' [vignette](https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#simulation-of-local-population-dynamics-and-monitoring)
-#' (`vignette("BayesianDemographicProjection", package = "caribouMetrics")`) and 
+#' [vignette](https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html#simulation-of-local-population-dynamics-and-monitoring)
+#' (`vignette("bayesian-model-outputs", package = "caribouMetrics")`) and 
 #' [Hughes et al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095).
 #'
 #' @param trajectories data.frame.

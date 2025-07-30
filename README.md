@@ -179,7 +179,7 @@ and the following articles/vignettes/tutorials:
   Predict demographic rates and population growth based on their
   relationship to habitat disturbance.
 - [**Bayesian Demographic
-  Projection**](https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html):
+  Projection**](https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html):
   Project demographic rates and population growth based on the national
   demographic model and local caribou observations.
 - [**Disturbance

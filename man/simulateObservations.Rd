@@ -87,8 +87,8 @@ trajectory can be specified with \code{getScenarioDefaults()}.
 }
 \details{
 For a detailed description of the process for simulating data see the
-\href{https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#simulation-of-local-population-dynamics-and-monitoring}{vignette}
-(\code{vignette("BayesianDemographicProjection", package = "caribouMetrics")}) and
+\href{https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html#simulation-of-local-population-dynamics-and-monitoring}{vignette}
+(\code{vignette("bayesian-model-outputs", package = "caribouMetrics")}) and
 \href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. 2025}.
 }
 \examples{
