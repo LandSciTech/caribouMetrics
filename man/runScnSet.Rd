@@ -63,13 +63,16 @@ scResults <- runScnSet(scns, eParsIn, getSimsInitial(),
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
+\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
@@ -77,6 +80,7 @@ Caribou demography functions:
 \code{\link{getSimsNational}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{simulateObservations}()}
+\code{\link{simulateObservations}()},
+\code{\link{summarizeCaribouPopSim}()}
 }
 \concept{demography}

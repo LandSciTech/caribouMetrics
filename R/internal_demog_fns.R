@@ -7,6 +7,7 @@
 #'
 #' @returns
 #' @export
+#' @family demography
 #'
 #' @examples
 convertTrajectories<-function(pars){
@@ -48,6 +49,7 @@ convertTrajectories<-function(pars){
 #'
 #' @returns
 #' @export
+#' @family demography
 #'
 #' @examples
 summarizeCaribouPopSim <- function(pars,returnSamples=T){
