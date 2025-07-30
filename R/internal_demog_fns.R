@@ -1,6 +1,14 @@
 # internal functions related to caribou demographics
 
 # Helpers for table format conversion --------------------------------------------------
+#' Format trajectory tables
+#'
+#' @param pars 
+#'
+#' @returns
+#' @export
+#'
+#' @examples
 convertTrajectories<-function(pars){
   #converts output from caribouPopSim to alternate form
   #pars = trajectories
@@ -30,6 +38,15 @@ convertTrajectories<-function(pars){
   return(fds)
 }
 
+#' Get 95% confidence intervals from trajectories
+#'
+#' @param pars 
+#' @param returnSamples 
+#'
+#' @returns
+#' @export
+#'
+#' @examples
 summarizeCaribouPopSim <- function(pars,returnSamples=T){
   
   simSum <- pars  %>%
