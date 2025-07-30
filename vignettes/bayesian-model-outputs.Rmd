@@ -20,7 +20,8 @@ library(caribouMetrics)
 if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
 library(bboudata)
 library(bboutools)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 
 resFile <- "../results/vignetteBbbouExample.rds"
 useSaved <- F #option to skip slow step of fitting bboutools model
