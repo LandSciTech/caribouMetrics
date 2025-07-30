@@ -103,26 +103,30 @@ getOutputTables <- function(caribouBayesDemogMod,
   
   if(!is.null(simInitial)){
     summaries <- simInitial$summary
-    
-    if(!is.element("Year",names(summaries))){
+
+    if(is.element("AnthroID",names(summaries))){
       
       if(!is.element("Anthro",names(dist_params))){
         stop("Set disturbance in caribouBayesianPM function call in order to compare to national model simulations.", call. = FALSE)
       }
-      if(!all(unique(distInput$Anthro) %in% summaries$Anthro)){
+      if(!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
         message("recalculating initial sims to match anthropogenic distubance scenario")
         simInitial <- getSimsInitial(Anthro = unique(distInput$Anthro),cPars=paramTable)
         summaries <- simInitial$summary
       }
       
-      #Need to convert Anthro to Year.
-      distMerge <- subset(dist_params, select=c(Anthro,Year))
-      if(length(setdiff(distMerge$Anthro,summaries$Anthro))>0){
-        stop("Handle this case.")
+      #remove irrelevant disturbance combinations from the summaries, and add Year if missing.
+      distMerge <- subset(dist_params, select=c(Anthro,fire_excl_anthro,Year))
+      distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
+      distMerge=unique(distMerge)
+      names(distMerge) <- c("AnthroID","fire_excl_anthroID","Year")
+      tt<- merge(summaries,distMerge)
+      check <- unique(subset(tt,select=names(distMerge)))
+      if(nrow(check)!=nrow(distMerge)){
+        stop("Handle this case")
       }
-      names(distMerge) <- c("Anthro","Year")
-      simBigO <- merge(summaries, distMerge)
-      simBigO$Anthro <- NULL
+      simBigO<-tt
+      simBigO$AnthroID=NULL;simBigO$fire_excl_anthroID=NULL
     }else{
       by_col <- intersect(names(summaries), names(dist_params))
       if(length(by_col) == 0){

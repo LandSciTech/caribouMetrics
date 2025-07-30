@@ -34,12 +34,18 @@ convertTrajectories<-function(pars){
 }
 
 summarizeCaribouPopSim <- function(pars,returnSamples=T){
-  
-  simSum <- pars  %>%
-    group_by(Year,PopulationName,MetricTypeID) %>%
-    summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
-              upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
-  
+
+  if(is.element("AnthroID",names(pars))){  
+    simSum <- pars  %>%
+      group_by(Year,PopulationName,MetricTypeID,AnthroID,fire_excl_anthroID) %>%
+      summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
+                upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
+  }else{
+    simSum <- pars  %>%
+      group_by(Year,PopulationName,MetricTypeID) %>%
+      summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
+                upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
+  }  
   names = data.frame(MetricTypeID = c("survival","recruitment","X", "lambda","N","c",
                                       "Sbar","Rbar","Xbar","lambda_bar"),
                      Parameter = c("Adult female survival","Recruitment","Adjusted recruitment",

@@ -192,15 +192,15 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   pars <- convertTrajectories(pars)
   
   simBig <- summarizeCaribouPopSim(pars,returnSamples=returnSamples)
-
+  
   if(is.element("surv_fit",names(bbouResults))){
     simBig$surv_data = bbouResults$surv_fit$data
     simBig$recruit_data = bbouResults$recruit_fit$data
     simBig$popInfo = popInfo
   }
   
-  if(max(simBig$summary$Year)<=100){names(simBig$summary)[names(simBig$summary)=="Year"]="Anthro"}
-  if(max(simBig$samples$Year)<=100){names(simBig$samples)[names(simBig$samples)=="Year"]="Anthro"}
+  if(max(simBig$summary$Year)<=100){simBig$summary$Year=NULL}
+  if(max(simBig$samples$Year)<=100){simBig$summary$Year=NULL}
 
   if (doSave) {
     message("Updating cached initial simulations.")
