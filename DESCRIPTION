@@ -112,7 +112,8 @@ Suggests:
     pfocal,
     raster,
     shiny,
-    bboudata
+    bboudata,
+    here
 Remotes: LandSciTech/pfocal,
     LandSciTech/bboudata,
     bboutools=github::LandSciTech/bboutoolsMultiPop
