@@ -104,9 +104,9 @@ getOutputTables <- function(caribouBayesDemogMod,
   if(!is.null(simInitial)){
     summaries <- simInitial$summary
 
-    if(is.element("AnthroID",names(summaries))){
+    if(is.element("AnthroID",names(summaries))&&any(!is.na(summaries$AnthroID))){
       
-      if(!is.element("Anthro",names(dist_params))){
+      if(!is.element("Year",names(summaries))&!is.element("Anthro",names(dist_params))){
         stop("Set disturbance in caribouBayesianPM function call in order to compare to national model simulations.", call. = FALSE)
       }
       if(!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
@@ -114,7 +114,6 @@ getOutputTables <- function(caribouBayesDemogMod,
         simInitial <- getSimsInitial(Anthro = unique(distInput$Anthro),cPars=paramTable)
         summaries <- simInitial$summary
       }
-      
       #remove irrelevant disturbance combinations from the summaries, and add Year if missing.
       distMerge <- subset(dist_params, select=c(Anthro,fire_excl_anthro,Year))
       distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
@@ -128,15 +127,20 @@ getOutputTables <- function(caribouBayesDemogMod,
       simBigO<-tt
       simBigO$AnthroID=NULL;simBigO$fire_excl_anthroID=NULL
     }else{
+      summaries$AnthroID=NULL;summaries$fire_excl_anthroID=NULL
       by_col <- intersect(names(summaries), names(dist_params))
       if(length(by_col) == 0){
-        stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no columns shared between them", call. = FALSE)
+        if(any(table(summaries$Year[summaries$MetricTypeID=="recruitment"])>1)){
+          stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no columns shared between them", call. = FALSE)
+        }
+        simBigO <- summaries
+      }else{
+        matches <- intersect(summaries[[by_col]], dist_params[[by_col]])
+        if(length(matches) == 0){
+          stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no overlapping values in ", by_col, call. = FALSE)
+        }
+        simBigO <- merge(summaries, dist_params)
       }
-      matches <- intersect(summaries[[by_col]], dist_params[[by_col]])
-      if(length(matches) == 0){
-        stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no overlapping values in ", by_col, call. = FALSE)
-      }
-      simBigO <- merge(summaries, dist_params)
     }
   } else {
     simBigO <- NULL

@@ -50,7 +50,7 @@
 getScenarioDefaults <- function(paramTable = NULL,
                          iFire = 0, iAnthro = 0, obsAnthroSlope = 2, projAnthroSlope = 2,
                          rSlopeMod = 1, sSlopeMod = 1,
-                         lQuantile = 0.5, correlateRates = F, projYears = 35, 
+                         lQuantile = NA, correlateRates = F, projYears = 35, 
                          obsYears = 15, preYears=0, N0 = 1000,
                          qMin=0,qMax =0, 
                          uMin = 0, uMax = 0, zMin = 0, zMax = 0, cowMult = 6,

@@ -103,7 +103,6 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   if(is.element("Anthro",names(bbouResults))){
     bbouResults=list(parTab=bbouResults)
   }
-  if(!is.element("pop_name",names(bbouResults$parTab))){bbouResults$parTab$pop_name=NA}
     
   #bbouResults = bbouResultFile
   if(is.character(bbouResults) && (length(bbouResults) == 1) ){
@@ -113,6 +112,8 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
       stop(paste("bbouResults file not found,",bbouResults))
     }
   }
+
+  if(!is.element("pop_name",names(bbouResults$parTab))){bbouResults$parTab$pop_name=NA}
   
   ccPars = unique(subset(cPars,select=c(qMin,qMax,uMin,uMax,zMin,zMax,cowMult,correlateRates)))
   if(nrow(ccPars)>1){
@@ -128,11 +129,13 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   }
 
   if(length(N0)==1){
-    N0 = data.frame(N0=N0)
+    if(class(bbouResults$parTab) == "list"){
+      bbouResults$parTab <- as.data.frame(bbouResults$parTab)
+    }
     N0 = merge(N0,subset(bbouResults$parTab,select=c(pop_name)))
   }
   N0$PopulationName = N0$pop_name
-  
+
   if(!is.null(bbouResults$surv_fit)){
     if(is.element("bboufit",class(bbouResults$surv_fit))){
       nr <- dim(bbouResults$surv_fit$samples$b0)[1]*dim(bbouResults$surv_fit$samples$b0)[2]

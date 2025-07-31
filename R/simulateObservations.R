@@ -107,13 +107,13 @@ simulateObservations <- function(trajectories, paramTable,
     
     recruit_data <- subset(recruit_data,as.numeric(as.character(Annual))<=max(includeTimes))
   }
-  
   # Simulate covariate table
   if (is.null(distScen)) {
     covariates <- simCovariates(paramTable$iAnthro, paramTable$iFire, 
                                 paramTable$preYears+paramTable$obsYears + paramTable$projYears, 
                                 paramTable$obsAnthroSlope, paramTable$projAnthroSlope, 
                                 paramTable$obsYears + paramTable$preYears + 1)
+    
     simDisturbance <- covariates
     simDisturbance$Year <- paramTable$startYear + simDisturbance$time - 1
     
@@ -131,23 +131,25 @@ simulateObservations <- function(trajectories, paramTable,
   }
   
   #remove irrelevant disturbance combinations from the example trajectory.
-  distMerge <- subset(simDisturbance, select=c(Anthro,fire_excl_anthro,Year))
-  distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
-  distMerge=unique(distMerge)
-  names(distMerge) <- c("AnthroID","fire_excl_anthroID","Year")
-  tt<- merge(trajectories,distMerge)
-  check <- unique(subset(tt,select=names(distMerge)))
-  if(nrow(check)!=nrow(distMerge)){
-    simDisturbance <- unique(subset(trajectories,select=c(AnthroID,fire_excl_anthroID,Year)))
-    if(max(table(simDisturbance$Year))>1){
-      stop("The example trajectories do not include the disturbance scenario specified, and they include more than one disturbance scenario. Either provide a trajectory that does not include multiple disturbance scnenario, or specify a disturbance scenario that is included in the trajectories.")
+  if(nrow(simDisturbance)>0){
+    distMerge <- subset(simDisturbance, select=c(Anthro,fire_excl_anthro,Year))
+    distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
+    distMerge=unique(distMerge)
+    names(distMerge) <- c("AnthroID","fire_excl_anthroID","Year")
+    tt<- merge(trajectories,distMerge)
+    check <- unique(subset(tt,select=names(distMerge)))
+    if(nrow(check)!=nrow(distMerge)){
+      simDisturbance <- unique(subset(trajectories,select=c(AnthroID,fire_excl_anthroID,Year)))
+      if(max(table(simDisturbance$Year))>1){
+        stop("The example trajectories do not include the disturbance scenario specified, and they include more than one disturbance scenario. Either provide a trajectory that does not include multiple disturbance scnenario, or specify a disturbance scenario that is included in the trajectories.")
+      }else{
+        warning("The example trajectories do not include the disturbance scenario. Ignoring the disturbance scenario.")
+      }
     }else{
-      warning("The example trajectories do not include the disturbance scenario. Ignoring the disturbance scenario.")
+      trajectories<-tt
     }
-  }else{
-    trajectories<-tt
+    trajectories$AnthroID=NULL;trajectories$fire_excl_anthroID=NULL
   }
-  trajectories$AnthroID=NULL;trajectories$fire_excl_anthroID=NULL
   
   #table(subset(trajectories,Replicate=="xV1")$Year)
   #subset(trajectories,Replicate=="xV1"&Year==2064&MetricTypeID=="Anthro")
@@ -300,6 +302,7 @@ simulateObservations <- function(trajectories, paramTable,
                 file.path(writeFilesDir, paste0("simSurvData", paramTable$label, ".csv")),
                 row.names = FALSE)
     }
+
     if(!is.null(recruit_data)){
       if(nrow(simRecruitObs)>0){
         recruit_data <- merge(recruit_data,data.frame(Replicate=unique(simRecruitObs$Replicate)))
@@ -393,7 +396,6 @@ simulateObservations <- function(trajectories, paramTable,
   if(!is.element("Bulls",names(simRecruitObs))){
     simRecruitObs$Bulls <- simRecruitObs$CowsBulls-simRecruitObs$Cows
   }
-  
   retList = list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
                 simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
                  exData = trajectories, paramTable = paramTable)

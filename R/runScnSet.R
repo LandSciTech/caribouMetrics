@@ -34,12 +34,13 @@
 #'                        niters = 10)# only set to speed up example. Normally keep defaults.
 
 
-runScnSet <- function(scns, ePars, simInitial,Rep=NULL,
+runScnSet <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=4,collarNumYears=4),Rep=NULL,
                       printProgress = FALSE,betaPriors="default",
                       niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,
                       returnSamples=F,...) {
   
   # ePars=eParsIn;simInitial=simBig;printProgress=F;niters = formals(bboutools::bb_fit_survival)$niters)
+
   scns <- getScenarioDefaults(scns)
   errorLog <- list()
   for (p in 1:nrow(scns)) {
@@ -69,7 +70,7 @@ runScnSet <- function(scns, ePars, simInitial,Rep=NULL,
                                collarOnTime = ePars$collarOnTime,
                                surv_data = simInitial$surv_data, recruit_data=simInitial$recruit_data)
     #plot(plotSurvivalSeries(oo$simSurvObs))
-    
+
     if (betaPriors[[1]] == "default") {
       betaPriors <- getPriors(cs)
     }

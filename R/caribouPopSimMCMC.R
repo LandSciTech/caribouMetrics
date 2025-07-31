@@ -137,8 +137,8 @@ caribouPopSimMCMC <- function(popInfo=NA, rec_pred, surv_pred, initYear=NULL,cor
     S_samp <- sur[,,S_lookup$Annual %in% yr]
     R_samp <- rec[,,R_lookup$Annual %in% yr]
     
-    if(class(S_samp)=="numeric"){S_samp<-as.matrix(S_samp,ncol=1)}
-    if(class(R_samp)=="numeric"){R_samp<-as.matrix(R_samp,ncol=1)}
+    if(is.element("numeric",class(S_samp))){S_samp<-as.matrix(S_samp,ncol=1)}
+    if(is.element("numeric",class(R_samp))){R_samp<-as.matrix(R_samp,ncol=1)}
     
     if((ncol(S_samp)==0)|(ncol(R_samp)==0)){next}
     
