@@ -23,7 +23,7 @@ library(bboutools)
 library(dplyr)
 library(ggplot2)
 
-resFile <- "../results/vignetteBbbouExample.rds"
+resFile <- here::here("results/vignetteBbbouExample.rds")
 useSaved <- F #option to skip slow step of fitting bboutools model
 ```
 
