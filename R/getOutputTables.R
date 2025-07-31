@@ -130,7 +130,7 @@ getOutputTables <- function(caribouBayesDemogMod,
       summaries$AnthroID=NULL;summaries$fire_excl_anthroID=NULL
       by_col <- intersect(names(summaries), names(dist_params))
       if(length(by_col) == 0){
-        if(any(table(summaries$Year[summaries$MetricTypeID=="recruitment"])>1)){
+        if(any(table(summaries$Year[summaries$MetricTypeID=="recruitment"])>length(unique(summaries$PopulationName)))){
           stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no columns shared between them", call. = FALSE)
         }
         simBigO <- summaries

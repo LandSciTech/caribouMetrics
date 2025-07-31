@@ -132,7 +132,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     if(class(bbouResults$parTab) == "list"){
       bbouResults$parTab <- as.data.frame(bbouResults$parTab)
     }
-    N0 = merge(N0,subset(bbouResults$parTab,select=c(pop_name)))
+    N0 = merge(data.frame(N0=N0),subset(bbouResults$parTab,select=c(pop_name)))
   }
   N0$PopulationName = N0$pop_name
 
