@@ -18,13 +18,6 @@ test_that("exData ok in simple case with one one input scenario",{
     filter(Year > 2060) %>% 
     pull(N) %>% sd() %>% {. > 1} %>% 
     expect_true()
-  
-  # TODO: but why is N stable over time when anthro is 100 and lambda is less than 1 
-  # Visualize
-  # exDataOut %>%
-  #   ggplot2::ggplot(ggplot2::aes(Year, N, colour = Replicate))+
-  #   ggplot2::geom_point()+
-  #   ggplot2::geom_point(ggplot2::aes(Year, Anthro*0.01), colour = "black")
 })
 
 test_that("sample trajectories are only returned if at least one disturbance scenario is specified", {
