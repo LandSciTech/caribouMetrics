@@ -74,7 +74,6 @@ runScnSet <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=4
     if (betaPriors[[1]] == "default") {
       betaPriors <- getPriors(cs)
     }
-    
     out <- (caribouBayesianPM(
       survData = oo$simSurvObs, recruitData = oo$simRecruitObs,
       disturbance = oo$simDisturbance,

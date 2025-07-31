@@ -132,6 +132,9 @@ simulateObservations <- function(trajectories, paramTable,
   
   #remove irrelevant disturbance combinations from the example trajectory.
   if(nrow(simDisturbance)>0){
+    if(!any(!is.na(trajectories$AnthroID))){trajectories$AnthroID=NULL}
+    if(!any(!is.na(trajectories$fire_excl_anthroID))){trajectories$fire_excl_anthroID=NULL}
+    
     distMerge <- subset(simDisturbance, select=c(Anthro,fire_excl_anthro,Year))
     distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
     distMerge=unique(distMerge)
@@ -150,7 +153,6 @@ simulateObservations <- function(trajectories, paramTable,
     }
     trajectories$AnthroID=NULL;trajectories$fire_excl_anthroID=NULL
   }
-  
   #table(subset(trajectories,Replicate=="xV1")$Year)
   #subset(trajectories,Replicate=="xV1"&Year==2064&MetricTypeID=="Anthro")
   if(length(unique(table(subset(trajectories,Replicate=="xV1")$Year)))>1){stop("Deal with this case")}
@@ -399,7 +401,7 @@ simulateObservations <- function(trajectories, paramTable,
   retList = list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
                 simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
                  exData = trajectories, paramTable = paramTable)
-  if(nrow(simDisturbance)>0){retList$simDisturbance=simDisturbance}
+  if(nrow(simDisturbance)>0){names(simDisturbance)<-gsub("ID","",names(simDisturbance),fixed=T);retList$simDisturbance=simDisturbance}
   
   return(retList)
 }
