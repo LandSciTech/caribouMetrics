@@ -16,7 +16,7 @@ test_that("exData ok in simple case with one one input scenario",{
     filter(Year > 2070) %>% 
     pull(N) %>% mean() %>% {. ==0} %>% 
     expect_true()
-  
+
   # Visualize
   if(0){
     exDataOut %>%
