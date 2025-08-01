@@ -155,8 +155,10 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     
     #remove irrelevant disturbance combinations from the example trajectory.
     if(nrow(simDisturbance)>0){
-      if(!any(!is.na(trajectories$Anthro))){trajectories$Anthro=NULL}
-      if(!any(!is.na(trajectories$fire_excl_anthro))){trajectories$fire_excl_anthro=NULL}
+      if(!is.null(trajectories[["Anthro"]]) && !is.null(trajectories[["fire_excl_anthro"]])){
+        if(!any(!is.na(trajectories$Anthro))){trajectories$Anthro=NULL}
+        if(!any(!is.na(trajectories$fire_excl_anthro))){trajectories$fire_excl_anthro=NULL}
+      }
       
       distMerge <- subset(simDisturbance, select=c(Anthro,fire_excl_anthro,Year))
       distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
