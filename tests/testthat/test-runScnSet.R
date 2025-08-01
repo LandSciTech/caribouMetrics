@@ -1,8 +1,8 @@
 test_that("testScript still works", {
   eParsIn <- list()
-  eParsIn$collarOnTime <- 1
-  eParsIn$collarOffTime <- 12
-  eParsIn$collarNumYears <- 3
+  eParsIn$collarOnTime <- 4
+  eParsIn$collarOffTime <- 4
+  eParsIn$collarNumYears <- 4
 
   scns <- expand.grid(
     obsYears = 8, collarCount = 30, cowMult = 2, collarInterval = 2,
@@ -28,21 +28,10 @@ test_that("testScript still works", {
   expect_s3_class(scResults$rr.summary.all, "data.frame")
 
   if (interactive()) {
-    print(plotRes(scResults, "Population growth rate",
-      lowBound = 0, highBound = 1.5, facetVars = c("obsYears", "lQuantile")
-    ))
-
-    print(plotRes(scResults, "Recruitment",
-      lowBound = 0, facetVars = c("obsYears", "sQuantile")
-    ))
-
-    print(plotRes(scResults, "Adult female survival",
-      lowBound = 0.5, facetVars = c("obsYears", "sQuantile")
-    ))
-
-    print(plotRes(scResults, "Female population size",
-      lowBound = 0, highBound = 10000, facetVars = c("obsYears", "sQuantile")
-    ))
+    print(plotRes(scResults, "Population growth rate",lowBound = 0, highBound = 1.5))
+    print(plotRes(scResults, "Recruitment"))
+    print(plotRes(scResults, "Adult female survival"))
+    print(plotRes(scResults, "Female population size",lowBound = 0, highBound = 1000000))
   }
 })
 
@@ -59,7 +48,6 @@ test_that("bboutools scnenario with no disturbance and no additional monitoring 
       saveRDS(mod_realc, mod_flc)
     }
   }
-
 
   simBig <- getSimsInitial(mod_realc)
 

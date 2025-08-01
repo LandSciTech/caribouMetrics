@@ -4,8 +4,8 @@ mod_fl <- here::here("results/test_mod_real.rds")
 if(file.exists(mod_fl)){
   mod <- readRDS(mod_fl)
 } else {
-  mod <- caribouBayesianPM(survData = bboudata::bbousurv_a %>% filter(Year > 2010), 
-                                recruitData = bboudata::bbourecruit_a %>% filter(Year > 2010),
+  mod <- caribouBayesianPM(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 
+                                recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
                                 niters=1)
   if(dir.exists(dirname(mod_fl))){
     saveRDS(mod, mod_fl)

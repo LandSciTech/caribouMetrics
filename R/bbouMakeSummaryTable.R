@@ -54,8 +54,11 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL,
     if(is.element("PopulationName",names(parTab))){
       names(parTab)[names(parTab)=="PopulationName"]= "pop_name"  
     }
+    if(is.null(priors)){priors=getPriors()}
     ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb) 
+    parTab <- merge(parTab,disturbance)
     ret$parTab <- parTab
+    
     return(ret)
   }
   if(shiny_progress && !rlang::is_installed("shiny")){
