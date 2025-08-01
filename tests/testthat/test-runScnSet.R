@@ -55,8 +55,9 @@ test_that("bboutools scnenario with no disturbance and no additional monitoring 
       bboudata::bbourecruit_a %>% filter(Year > 2010),
       N0 = NA, return_mcmc = T, niters = 3000
     )
-
-    saveRDS(mod_realc, mod_flc)
+    if(dir.exists(dirname(mod_flc))){
+      saveRDS(mod_realc, mod_flc)
+    }
   }
 
 

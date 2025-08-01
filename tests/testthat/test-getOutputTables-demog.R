@@ -46,7 +46,9 @@ if(file.exists(mod_fl)){
   mod_real <- caribouBayesianPM(survData = bboudata::bbousurv_a %>% filter(Year > 2010), 
                                 recruitData = bboudata::bbourecruit_a %>% filter(Year > 2010),
                                 niters=1)
-  saveRDS(mod_real, mod_fl)
+  if(dir.exists(dirname(mod_fl))){
+    saveRDS(mod_real, mod_fl)
+  }
 }
 
 
@@ -64,7 +66,9 @@ if(file.exists(mod_flb)){
     disturbance = disturbance,
     niters = 10
   )
-  saveRDS(mod_realb, mod_flb)
+  if(dir.exists(dirname(mod_flb))){
+    saveRDS(mod_realb, mod_flb)
+  }
 }
 
 test_that("works with simInitial",{

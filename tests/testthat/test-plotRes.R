@@ -7,7 +7,9 @@ if(file.exists(mod_fl)){
   mod <- caribouBayesianPM(survData = bboudata::bbousurv_a %>% filter(Year > 2010), 
                                 recruitData = bboudata::bbourecruit_a %>% filter(Year > 2010),
                                 niters=1)
-  saveRDS(mod, mod_fl)
+  if(dir.exists(dirname(mod_fl))){
+    saveRDS(mod, mod_fl)
+  }
 }
 
 mod_tab <- suppressWarnings(getOutputTables(mod))
