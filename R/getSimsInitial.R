@@ -209,13 +209,15 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   if(max(simBig$summary$Year)<=100){simBig$summary$Year=NULL}
   if(max(simBig$samples$Year)<=100){simBig$summary$Year=NULL}
 
+  if(rmSamples){
+    simBig$samples<-NULL
+  }
+  
+  # Note this must be the last thing before return or the first and cached
+  # results won't match
   if (doSave) {
     message("Updating cached initial simulations.")
     assign(saveName, simBig, envir = cacheEnv)
-  }
-  
-  if(rmSamples){
-    simBig$samples<-NULL
   }
   return(simBig)
 }
