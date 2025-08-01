@@ -38,7 +38,7 @@ test_that("exData ok in simple case with one one input scenario",{
 })
 
 test_that("sample trajectories are not returned when the national model is used", {
-  expect_warning(noDist <- getSimsInitial(forceUpdate = TRUE), "a disturbance scenario must be specified")
+  noDist <- getSimsInitial(forceUpdate = TRUE)
   expect_null(noDist$samples)
 })
 

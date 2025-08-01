@@ -5,8 +5,8 @@
 \title{Bayesian population model for boreal caribou}
 \usage{
 caribouBayesianPM(
-  survData = bboudata::bbousurv_a,
-  recruitData = bboudata::bbourecruit_a,
+  surv_data = bboudata::bbousurv_a,
+  recruit_data = bboudata::bbourecruit_a,
   disturbance = NULL,
   betaPriors = "default",
   startYear = NULL,
@@ -20,9 +20,9 @@ caribouBayesianPM(
 )
 }
 \arguments{
-\item{survData}{either a path to a csv file or a survival data table in bboutools format.}
+\item{surv_data}{either a path to a csv file or a survival data table in bboutools format.}
 
-\item{recruitData}{either a path to a csv file or a recruitment data table in bboutools format.}
+\item{recruit_data}{either a path to a csv file or a recruitment data table in bboutools format.}
 
 \item{disturbance}{either a path to a csv file or a dataframe containing the
 columns "Anthro","fire_excl_anthro", and "Year".}
@@ -62,8 +62,8 @@ Bayesian population model for boreal caribou
 \examples{
 # Using observed survival, recruitment and disturbance data
 mod <- caribouBayesianPM(
-  survData = bboudata::bbousurv_a,
-  recruitData = bboudata::bbourecruit_a,
+  surv_data = bboudata::bbousurv_a,
+  recruit_data = bboudata::bbourecruit_a,
   disturbance = NULL
 )
 str(mod, max.level = 2)
@@ -75,7 +75,7 @@ scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 
 simO <- simulateObservations(scns)
 
-out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
+out <- caribouBayesianPM(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                           disturbance = simO$simDisturbance,
                           startYear = 2014)
 }

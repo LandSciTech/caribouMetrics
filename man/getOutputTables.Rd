@@ -54,7 +54,7 @@ scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 
 simO <- simulateObservations(scns)
 
-out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
+out <- caribouBayesianPM(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                           disturbance = simO$simDisturbance,
                           niters=4)
 
