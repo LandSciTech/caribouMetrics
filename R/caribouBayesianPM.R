@@ -146,7 +146,7 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
 
   # check that year range is within data - model will run either way
   if (inp$endYear < max(surv_data$Year) | inp$startYear < min(surv_data$Year)) {
-    warning(c("requested year range does not match survival data",
+    warning(c("requested year range: ", inp$startYear, " - ", inp$endYear, " does not match survival data",
               c(" year range:", "  ", min(surv_data$Year), " - ", max(surv_data$Year))))
   }
   surv_data <- subset(surv_data, surv_data$Year <= inp$endYear & surv_data$Year >= inp$startYear)
@@ -154,14 +154,13 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
     stop("None of the survival data is within the requested year range",
          call. = FALSE)
   }
-  test1 <- length(c(inp$startYear:max(surv_data$Year)))
-  test2 <- length(unique(surv_data$Year))
-
+  yrs_surv_missing <- setdiff(c(inp$startYear:max(surv_data$Year)),
+                             unique(surv_data$Year))
   # check that year range is within data - model will run either way
-  if (test1 > test2) {
-    warning(c("missing years of survival data.",
-              " ", c("Years of survival data:", "  ",
-                     list(sort(unique(surv_data$Year))))))
+  if (length(yrs_surv_missing) > 0) {
+    warning("missing years of recruitment data:", " ", 
+            paste0(yrs_surv_missing, collapse = ", "), 
+            call. = FALSE) 
   }
 
   #add missing surv yrs
@@ -178,8 +177,9 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   
   # check that year range is within data - model will run either way
   if (inp$endYear < max(recruit_data$Year) | inp$startYear < min(recruit_data$Year)) {
-    warning(c("requested year range does not match recruitment data",
-              c(" year range:", "  ", min(recruit_data$Year), " - ", max(recruit_data$Year))))
+    warning(c("requested year range: ", inp$startYear, " - ", inp$endYear, " does not match recruitment data",
+              c(" year range:", "  ", min(recruit_data$Year), " - ", max(recruit_data$Year))), 
+            call. = FALSE)
   }
   
   recruit_data <- subset(recruit_data, recruit_data$Year <= inp$endYear & recruit_data$Year >= inp$startYear)
@@ -189,14 +189,13 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
          call. = FALSE)
   }
   
-  test1 <- length(c(inp$startYear:max(recruit_data$Year)))
-  test2 <- length(unique(recruit_data$Year))
-  
+  yrs_rec_missing <- setdiff(c(inp$startYear:max(recruit_data$Year)),
+                             unique(recruit_data$Year))
   # check that year range is within data - model will run either way
-  if (test1 > test2) {
-    warning(c("missing years of recruitment data.",
-              " ", c("Years of recruitment data:", "  ",
-                     list(sort(unique(recruit_data$Year))))))
+  if (length(yrs_rec_missing) > 0) {
+    warning("missing years of recruitment data:", " ", 
+            paste0(yrs_rec_missing, collapse = ", "), 
+            call. = FALSE) 
   }
 
   #add missing recruit yrs
