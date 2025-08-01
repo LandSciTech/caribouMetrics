@@ -264,7 +264,7 @@ simulateObservations <- function(trajectories, paramTable,
     
     # if cowMult is provided, set cows as a function of number of surviving cows at
     # year start
-    if (is.element("cowMult", names(paramTable)) & all(paramTable$cowMult != 1) & is.null(cowCountsIn)) {
+    if (is.element("cowMult", names(paramTable)) & all(paramTable[["cowMult"]] != 1) & is.null(cowCountsIn)) {
       
       # if multiple months filter to the start of caribou year
       # if only one subtract all the mortalities for the year

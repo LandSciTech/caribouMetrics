@@ -148,12 +148,23 @@ test_that("collarCount and cowCount behave", {
   simObs5$simRecruitObs %>% filter(Cows != 100) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
+  
   # collarInterval doesn't affect tables
+  
+  # need to set collarNumYears very long so doesn't make it hard to know how
+  # many there should be
   simObs6 <- simulateObservations(trajs, scns3,
                                   freqStartsByYear = data.frame(Year = 2009:2023,
                                                                 numStarts = 10),
                                   cowCounts = data.frame(Year = 2009:2023,
-                                                         Cows = 10))
+                                                         Cows = 10),
+                                  collarNumYears = 20)
+  
+  simObs6$simSurvObs %>% group_by(PopulationName, Replicate) %>%
+    mutate(recalc_starts = 10 + lag(StartTotal- MortalitiesCertain, default = 0), 
+           pass = recalc_starts == StartTotal) %>% 
+    pull(pass) %>% all() %>% 
+    expect_true()
   
   simObs6$simRecruitObs %>% filter(Cows != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
