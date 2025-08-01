@@ -50,25 +50,36 @@ runScnSet <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=4
       print(paste0(c(p, scns[p, ]), collapse = " "))
     }
     
-    if(is.element("lQuantile",names(cs))&&!is.na(cs$lQuantile)){
-      trajectories <- subset(simInitial$samples,LambdaPercentile == round(cs$lQuantile*100))
+    if(is.element("samples",names(simInitial))){
+      if(is.element("lQuantile",names(cs))&&!is.na(cs$lQuantile)){
+        trajectories <- subset(simInitial$samples,LambdaPercentile == round(cs$lQuantile*100))
+      }else{
+        trajectories <- simInitial$samples
+      }
+      if(!is.null(Rep)){
+        trajectories <- subset(trajectories,Replicate==Rep)
+      }else{
+        trajectories <- subset(trajectories,Replicate==sample(unique(trajectories$Replicate),1))
+      }
+      
+      cs$Replicate <- unique(trajectories$Replicate)
+      oo <- simulateObservations(cs, trajectories, 
+                                 cowCounts = ePars$cowCounts,
+                                 freqStartsByYear = ePars$freqStartsByYear,
+                                 collarNumYears = ePars$collarNumYears,
+                                 collarOffTime = ePars$collarOffTime,
+                                 collarOnTime = ePars$collarOnTime,
+                                 surv_data = simInitial$surv_data, recruit_data=simInitial$recruit_data)
+      
     }else{
-      trajectories <- simInitial$samples
+      oo <- simulateObservations(paramTable=cs, trajectories=NULL, 
+                                 cowCounts = ePars$cowCounts,
+                                 freqStartsByYear = ePars$freqStartsByYear,
+                                 collarNumYears = ePars$collarNumYears,
+                                 collarOffTime = ePars$collarOffTime,
+                                 collarOnTime = ePars$collarOnTime,
+                                 surv_data = simInitial$surv_data, recruit_data=simInitial$recruit_data)
     }
-    if(!is.null(Rep)){
-      trajectories <- subset(trajectories,Replicate==Rep)
-    }else{
-      trajectories <- subset(trajectories,Replicate==sample(unique(trajectories$Replicate),1))
-    }
-
-    cs$Replicate <- unique(trajectories$Replicate)
-    oo <- simulateObservations(trajectories, cs, 
-                               cowCounts = ePars$cowCounts,
-                               freqStartsByYear = ePars$freqStartsByYear,
-                               collarNumYears = ePars$collarNumYears,
-                               collarOffTime = ePars$collarOffTime,
-                               collarOnTime = ePars$collarOnTime,
-                               surv_data = simInitial$surv_data, recruit_data=simInitial$recruit_data)
     #plot(plotSurvivalSeries(oo$simSurvObs))
 
     if (betaPriors[[1]] == "default") {

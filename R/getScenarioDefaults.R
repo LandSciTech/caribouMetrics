@@ -57,7 +57,7 @@ getScenarioDefaults <- function(paramTable = NULL,
                          collarInterval = NA, cowCount = NA, 
                          collarCount = NA, startYear = NA,
                          interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
-                         curYear = 2023) {
+                         curYear = 2023,sQuantile=NA,rQuantile=NA) {
   defList <- c(as.list(environment()))
   defList$paramTable <- NULL
   if (is.null(paramTable)) {
@@ -97,6 +97,5 @@ getScenarioDefaults <- function(paramTable = NULL,
   if (!is.element("startYear", names(paramTable))) {
     paramTable$startYear <- paramTable$curYear - paramTable$obsYears - paramTable$preYears + 1
   }
-  
   return(paramTable)
 }

@@ -2,9 +2,8 @@ test_that("works with defaults", {
   
   scns <- getScenarioDefaults(projYears = 0, obsYears = 10, collarCount = 20,
                               cowMult = 3)
-  simIni <-getSimsInitial(cPars=scns) 
-  trajs <- simIni$samples
-  simO <- simulateObservations(trajs, scns)
+  simIni <-getSimsInitial() 
+  simO <- simulateObservations(scns)
   
   out <- caribouBayesianPM(survData = simO$simSurvObs %>% filter(Replicate == "xV1"), 
                            recruitData = simO$simRecruitObs%>% filter(Replicate == "xV1"),
@@ -23,8 +22,7 @@ test_that("decimals in observed disturbance work", {
   # scns <- getScenarioDefaults(projYears = 10, obsYears = 10, 
   #                             obsAnthroSlope = 1.5, projAnthroSlope = 5,
   #                             collarCount = 20, cowMult = 3)
-  # trajs <- getSimsInitial()$samples
-  # simO <- simulateObservations(trajs, scns)
+  # simO <- simulateObservations(scns)
   # 
   # out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
   #                           disturbance = simO$simDisturbance,
@@ -45,7 +43,7 @@ if(file.exists(mod_fl)){
 } else {
   mod_real <- caribouBayesianPM(survData = bboudata::bbousurv_a %>% filter(Year > 2010), 
                                 recruitData = bboudata::bbourecruit_a %>% filter(Year > 2010),
-                                niters=1)
+                                niters=1,returnSamples=T)
   saveRDS(mod_real, mod_fl)
 }
 
@@ -62,7 +60,7 @@ if(file.exists(mod_flb)){
     survData = bboudata::bbousurv_a %>% filter(Year > 2010),
     recruitData = bboudata::bbourecruit_a %>% filter(Year > 2010),
     disturbance = disturbance,
-    niters = 10
+    niters = 10,returnSamples=T
   )
   saveRDS(mod_realb, mod_flb)
 }

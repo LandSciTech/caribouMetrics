@@ -9,9 +9,10 @@
 #' (`vignette("bayesian-model-outputs", package = "caribouMetrics")`) and 
 #' [Hughes et al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095).
 #'
-#' @param trajectories data.frame.
 #' @param paramTable data.frame. Parameters for the simulations. See
 #'   [getScenarioDefaults()] for details.
+#' @param trajectories data.frame. Optional example demographic trajectory. 
+#'   If NULL the trajectory will be simulated from the national model.
 #' @param printPlot logical. print a plot of the true population trajectory?
 #' @param cowCounts data.frame. Optional. Number of cows counted in aerial
 #'   surveys each year. If NULL, and `paramTable` contains `cowMult` the number
@@ -69,7 +70,7 @@
 #'
 #' simO <- simulateObservations(scns)
 #' 
-simulateObservations <- function(trajectories, paramTable,
+simulateObservations <- function(paramTable, trajectories=NULL,
          cowCounts = NULL,
          freqStartsByYear = NULL,
          collarNumYears = 4, collarOffTime = 4,
@@ -130,32 +131,53 @@ simulateObservations <- function(trajectories, paramTable,
                                .data$Year >= paramTable$startYear)
   }
   
-  #remove irrelevant disturbance combinations from the example trajectory.
-  if(nrow(simDisturbance)>0){
-    if(!any(!is.na(trajectories$AnthroID))){trajectories$AnthroID=NULL}
-    if(!any(!is.na(trajectories$fire_excl_anthroID))){trajectories$fire_excl_anthroID=NULL}
-    
-    distMerge <- subset(simDisturbance, select=c(Anthro,fire_excl_anthro,Year))
-    distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
-    distMerge=unique(distMerge)
-    names(distMerge) <- c("AnthroID","fire_excl_anthroID","Year")
-    tt<- merge(trajectories,distMerge)
-    check <- unique(subset(tt,select=names(distMerge)))
-    if(nrow(check)!=nrow(distMerge)){
-      simDisturbance <- unique(subset(trajectories,select=c(AnthroID,fire_excl_anthroID,Year)))
-      if(max(table(simDisturbance$Year))>1){
-        stop("The example trajectories do not include the disturbance scenario specified, and they include more than one disturbance scenario. Either provide a trajectory that does not include multiple disturbance scnenario, or specify a disturbance scenario that is included in the trajectories.")
+  if(is.null(trajectories)){
+    # simulate true population trajectory
+    if(!is.element("rQuantile",names(paramTable))){paramTable$rQuantile=NA}
+    if(!is.element("sQuantile",names(paramTable))){paramTable$sQuantile=NA}
+    suppressMessages(
+      trajectories <- simTrajectory(
+        numYears = paramTable$preYears + paramTable$obsYears + paramTable$projYears, 
+        covariates = simDisturbance,
+        recSlopeMultiplier = paramTable$rSlopeMod,
+        sefSlopeMultiplier = paramTable$sSlopeMod, rQuantile = paramTable$rQuantile,
+        sQuantile = paramTable$sQuantile,
+        N0 = paramTable$N0, cowMult = ifelse(!is.element("cowMult", names(paramTable)), 1, paramTable$cowMult),
+        qMin = paramTable$qMin, qMax = paramTable$qMax, uMin = paramTable$uMin,
+        uMax = paramTable$uMax, zMin = paramTable$zMin, zMax = paramTable$zMax,
+        interannualVar=paramTable$interannualVar[[1]]
+      )
+    )
+    trajectories$PopulationName<-'A'
+  }else{
+    #remove irrelevant disturbance combinations from the example trajectory.
+    if(nrow(simDisturbance)>0){
+      if(!any(!is.na(trajectories$AnthroID))){trajectories$AnthroID=NULL}
+      if(!any(!is.na(trajectories$fire_excl_anthroID))){trajectories$fire_excl_anthroID=NULL}
+      
+      distMerge <- subset(simDisturbance, select=c(Anthro,fire_excl_anthro,Year))
+      distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
+      distMerge=unique(distMerge)
+      names(distMerge) <- c("AnthroID","fire_excl_anthroID","Year")
+      tt<- merge(trajectories,distMerge)
+      check <- unique(subset(tt,select=names(distMerge)))
+      if(nrow(check)!=nrow(distMerge)){
+        simDisturbance <- unique(subset(trajectories,select=c(AnthroID,fire_excl_anthroID,Year)))
+        if(max(table(simDisturbance$Year))>1){
+          stop("The example trajectories do not include the disturbance scenario specified, and they include more than one disturbance scenario. Either provide a trajectory that does not include multiple disturbance scnenario, or specify a disturbance scenario that is included in the trajectories.")
+        }else{
+          warning("The example trajectories do not include the disturbance scenario. Ignoring the disturbance scenario.")
+        }
       }else{
-        warning("The example trajectories do not include the disturbance scenario. Ignoring the disturbance scenario.")
+        trajectories<-tt
       }
-    }else{
-      trajectories<-tt
     }
-    trajectories$AnthroID=NULL;trajectories$fire_excl_anthroID=NULL
   }
+  trajectories$AnthroID=NULL;trajectories$fire_excl_anthroID=NULL
+  
   #table(subset(trajectories,Replicate=="xV1")$Year)
-  #subset(trajectories,Replicate=="xV1"&Year==2064&MetricTypeID=="Anthro")
-  if(length(unique(table(subset(trajectories,Replicate=="xV1")$Year)))>1){stop("Deal with this case")}
+  #subset(trajectories,Replicate=="xV1"&Year==2023&MetricTypeID=="N")
+  if(length(unique(table(subset(trajectories,Replicate==trajectories$Replicate[1]&PopulationName==trajectories$PopulationName[1])$Year)))>length(unique(trajectories$MetricTypeID))){stop("Deal with this case")}
 
   # if cowCounts and freqStartsByYear not provided build from cowCount and collarCount
   cowCountsIn <- cowCounts
@@ -184,7 +206,7 @@ simulateObservations <- function(trajectories, paramTable,
   exData <- tidyr::pivot_wider(popMetrics, id_cols = c("Replicate", "Year","Timestep","PopulationName"),
                                names_from = "MetricTypeID",
                                values_from = "Amount")
-  
+
   if(!is.null(recruit_data)){
     recruitYrs <- sort(setdiff(includeYears,subset(recruit_data,!is.na(Calves))$Annual))
   }else{
