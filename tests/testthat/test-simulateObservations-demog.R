@@ -1,15 +1,15 @@
 test_that("default works", {
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowMult = 3,
                               collarCount = 50)
-  trajs <- getSimsInitial(replicates = 2, cPars=scns)$samples
-  expect_is(simulateObservations(scns,trajs),
-            "list")
+  ss <- getSimsInitial(cPars=scns)
+  
+  expect_is(ss,"list")
+  #see test-getOutputTables-demog.R for more thorough check that outputs are as expected.
 })
 
 test_that("multiple scenarios not allowed",{
   scns <- getScenarioDefaults(data.frame(iFire = 1:2), projYears = 10, obsYears = 10)
-  trajs <- getSimsInitial(replicates = 2,cPars=scns)$samples
-  expect_error(simulateObservations(scns,trajs, 
+  expect_error(simulateObservations(scns,
                                  freqStartsByYear = data.frame(Year = 2014:2023,
                                                                numStarts = 10),
                                  cowCounts = data.frame(Year = 2014:2023,
@@ -22,9 +22,7 @@ test_that("multiple scenarios not allowed",{
 
 test_that("collarCount and cowCount behave", {
   scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 1)
-  trajs <- getSimsInitial(replicates = 2,cPars=scns)$samples
-  
-  simObs <- simulateObservations(scns,trajs)
+  simObs <- simulateObservations(scns)
   
   # if cowCount is 100 we observe 100
   expect_true(all(simObs$simRecruitObs$Cows == 100))
@@ -35,7 +33,7 @@ test_that("collarCount and cowCount behave", {
   # if cowMult is 2 we observe max 2*collarCount but fewer when some deaths were observed
   scns2 <- getScenarioDefaults(collarCount = 30, cowMult = 2)
   
-  simObs2 <- simulateObservations(scns2,trajs)
+  simObs2 <- simulateObservations(scns2)
   
   simObs2$simSurvObs %>% 
     left_join(simObs2$simRecruitObs, 
@@ -51,7 +49,7 @@ test_that("collarCount and cowCount behave", {
 
   # Test with months
   scns10 <- getScenarioDefaults(collarCount = 15, cowMult = 2)
-  simObs_mon <- simulateObservations(scns10, trajs, 
+  simObs_mon <- simulateObservations(scns10,  
                        surv_data = bboudata::bbousurv_a,
                        recruit_data = bboudata::bbourecruit_a)
 
@@ -66,15 +64,10 @@ test_that("collarCount and cowCount behave", {
             simObs_mon$simRecruitObs %>% filter(Year > 2016) %>% pull(Cows) %>% mean)
   
   # Visual:
-  # simObs_mon$simRecruitObs %>% ggplot(aes(Year, Cows, colour = Replicate))+
-  #   geom_point()
-
+  # simObs_mon$simRecruitObs %>% ggplot(aes(Year, Cows, colour = Replicate))+   geom_point()
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 100)
-  
-  trajs <- getSimsInitial(replicates = 2, cPars = scns10)$samples
-
-  simObs8 <- simulateObservations(scns10, trajs, 
+  simObs8 <- simulateObservations(scns10,  
                                   surv_data = bboudata::bbousurv_a,
                                   recruit_data = bboudata::bbourecruit_a)
   simObs8$exData %>% 
@@ -86,7 +79,7 @@ test_that("collarCount and cowCount behave", {
     ggplot2::geom_point(ggplot2::aes(Year, Anthro*1), colour = "black")
   
   # if tables are supplied they should not be modified by cowCount or collarCount
-  simObs3 <- simulateObservations(scns, trajs, 
+  simObs3 <- simulateObservations(scns, 
                        freqStartsByYear = data.frame(Year = 2009:2023,
                                                      numStarts = 10),
                        cowCounts = data.frame(Year = 2009:2023,
@@ -105,9 +98,8 @@ test_that("collarCount and cowCount behave", {
   #   ggplot(aes(Year, StartTotal, colour = Replicate)) +
   #   geom_point()
   
-  
   # cowMult doesn't affect cowCounts table
-  simObs4 <- simulateObservations(scns2, trajs, 
+  simObs4 <- simulateObservations(scns2, 
                                   freqStartsByYear = data.frame(Year = 2009:2023,
                                                                 numStarts = 10),
                                   cowCounts = data.frame(Year = 2009:2023,
@@ -117,11 +109,11 @@ test_that("collarCount and cowCount behave", {
     {expect_true(. == 0)} 
   
   # can supply just freqStartsByYear and cowMult
-  simObs4b <- simulateObservations(scns2,trajs, 
+  simObs4b <- simulateObservations(scns2,
                                   freqStartsByYear = data.frame(Year = 2009:2023,
                                                                 numStarts = 10))
   scns2$cowMult <- 10
-  simObs4c <- simulateObservations(scns2,trajs, 
+  simObs4c <- simulateObservations(scns2, 
                                    freqStartsByYear = data.frame(Year = 2009:2023,
                                                                  numStarts = 10))
   
@@ -134,11 +126,9 @@ test_that("collarCount and cowCount behave", {
   scns3 <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = NA,
                                collarInterval = 3)
   
-  simObs5 <- simulateObservations(scns3,trajs)
+  simObs5 <- simulateObservations(scns3)
   
-  # simObs5$simSurvObs %>%
-  #   ggplot(aes(Year, StartTotal, colour = Replicate)) +
-  #   geom_point()
+  # simObs5$simSurvObs %>% ggplot(aes(Year, StartTotal, colour = Replicate)) +  geom_point()
   
   # Should go back up to 30 collars every 3 years
   simObs5$simSurvObs %>% pull(StartTotal) %>% .[seq(1,15, by = 3)] %>% 
@@ -148,9 +138,8 @@ test_that("collarCount and cowCount behave", {
   simObs5$simRecruitObs %>% filter(Cows != 100) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
-  
   # collarInterval doesn't affect tables
-  simObs6 <- simulateObservations(scns3,trajs, 
+  simObs6 <- simulateObservations(scns3,
                                   freqStartsByYear = data.frame(Year = 2009:2023,
                                                                 numStarts = 10),
                                   cowCounts = data.frame(Year = 2009:2023,
@@ -167,7 +156,7 @@ test_that("collarCount and cowCount behave", {
     {expect_true(. == 0)} 
   
   # confirm that if freqStartByYear table does skips year it still works
-  simObs7 <- simulateObservations(scns,trajs, 
+  simObs7 <- simulateObservations(scns,
                                   freqStartsByYear = data.frame(Year = seq(2009, 2023, by = 3),
                                                                 numStarts = 10),
                                   cowCounts = data.frame(Year = 2009:2023,
@@ -178,3 +167,5 @@ test_that("collarCount and cowCount behave", {
   
 })
 
+#TO DO: test with trajectories from bboutools & jags models
+#TO DO: test methods for combining simulated and observed data -- bboutools example

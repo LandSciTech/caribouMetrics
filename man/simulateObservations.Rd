@@ -5,8 +5,8 @@
 \title{Simulate observations}
 \usage{
 simulateObservations(
-  trajectories,
   paramTable,
+  trajectories = NULL,
   cowCounts = NULL,
   freqStartsByYear = NULL,
   collarNumYears = 4,
@@ -22,10 +22,11 @@ simulateObservations(
 )
 }
 \arguments{
-\item{trajectories}{data.frame.}
-
 \item{paramTable}{data.frame. Parameters for the simulations. See
 \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for details.}
+
+\item{trajectories}{data.frame. Optional example demographic trajectory.
+If NULL the trajectory will be simulated from the national model.}
 
 \item{cowCounts}{data.frame. Optional. Number of cows counted in aerial
 surveys each year. If NULL, and \code{paramTable} contains \code{cowMult} the number

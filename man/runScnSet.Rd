@@ -6,8 +6,8 @@
 \usage{
 runScnSet(
   scns,
-  ePars,
   simInitial,
+  ePars = list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 4),
   Rep = NULL,
   printProgress = FALSE,
   betaPriors = "default",
@@ -21,11 +21,11 @@ runScnSet(
 \item{scns}{data.frame. Parameters for the simulations. See
 \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for details.}
 
-\item{ePars}{list. Additional parameters passed on to
-\code{\link[=simulateObservations]{simulateObservations()}}}
-
 \item{simInitial}{Initial simulation results, produced by calling
 \code{\link[=getSimsInitial]{getSimsInitial()}}}
+
+\item{ePars}{list. Additional parameters passed on to
+\code{\link[=simulateObservations]{simulateObservations()}}}
 
 \item{Rep}{integer. Optional. If specified, select specified replicate trajectory.}
 

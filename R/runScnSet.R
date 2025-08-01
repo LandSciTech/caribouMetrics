@@ -86,7 +86,7 @@ runScnSet <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=4
       betaPriors <- getPriors(cs)
     }
     out <- (caribouBayesianPM(
-      survData = oo$simSurvObs, recruitData = oo$simRecruitObs,
+      surv_data = oo$simSurvObs, recruit_data = oo$simRecruitObs,
       disturbance = oo$simDisturbance,
       betaPriors = betaPriors, startYear = oo$minYr, endYear = oo$maxYr,
       N0 = cs$N0,niters=niters,nthin=nthin,returnSamples=returnSamples,...))

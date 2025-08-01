@@ -150,30 +150,40 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     )
     trajectories$PopulationName<-'A'
   }else{
+    names(trajectories)<-gsub("AnthroID","Anthro",names(trajectories),fixed=T)
+    names(trajectories)<-gsub("fire_excl_anthroID","fire_excl_anthro",names(trajectories),fixed=T)
+    
     #remove irrelevant disturbance combinations from the example trajectory.
     if(nrow(simDisturbance)>0){
-      if(!any(!is.na(trajectories$AnthroID))){trajectories$AnthroID=NULL}
-      if(!any(!is.na(trajectories$fire_excl_anthroID))){trajectories$fire_excl_anthroID=NULL}
+      if(!any(!is.na(trajectories$Anthro))){trajectories$Anthro=NULL}
+      if(!any(!is.na(trajectories$fire_excl_anthro))){trajectories$fire_excl_anthro=NULL}
       
       distMerge <- subset(simDisturbance, select=c(Anthro,fire_excl_anthro,Year))
       distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
       distMerge=unique(distMerge)
-      names(distMerge) <- c("AnthroID","fire_excl_anthroID","Year")
+      names(distMerge) <- c("Anthro","fire_excl_anthro","Year")
       tt<- merge(trajectories,distMerge)
       check <- unique(subset(tt,select=names(distMerge)))
       if(nrow(check)!=nrow(distMerge)){
-        simDisturbance <- unique(subset(trajectories,select=c(AnthroID,fire_excl_anthroID,Year)))
-        if(max(table(simDisturbance$Year))>1){
-          stop("The example trajectories do not include the disturbance scenario specified, and they include more than one disturbance scenario. Either provide a trajectory that does not include multiple disturbance scnenario, or specify a disturbance scenario that is included in the trajectories.")
+        if(is.element("Anthro",names(trajectories))){
+          simDisturbance <- unique(subset(trajectories,select=c(Anthro,fire_excl_anthro,Year)))
+          if(max(table(simDisturbance$Year))>1){
+            stop("The example trajectories do not include the disturbance scenario specified, and they include more than one disturbance scenario. Either provide a trajectory that does not include multiple disturbance scnenario, or specify a disturbance scenario that is included in the trajectories.")
+          }else{
+            warning("The example trajectories do not include the disturbance scenario. Ignoring the disturbance scenario.")
+          }
         }else{
-          warning("The example trajectories do not include the disturbance scenario. Ignoring the disturbance scenario.")
+          if(nrow(tt)==0){
+            stop("The example trajectories do not include the disturbance scenario specified. Either provide trajectories that includes disturbance, or specify a disturbance scenario in paramTable that is applicable to the trajectories.")
+          }
+          warning("The example trajectories do not include the disturbance scenario. Setting disturbance using paramTable.")          
         }
       }else{
         trajectories<-tt
       }
     }
   }
-  trajectories$AnthroID=NULL;trajectories$fire_excl_anthroID=NULL
+  trajectories$Anthro=NULL;trajectories$fire_excl_anthro=NULL
   
   #table(subset(trajectories,Replicate=="xV1")$Year)
   #subset(trajectories,Replicate=="xV1"&Year==2023&MetricTypeID=="N")

@@ -94,8 +94,6 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
       }
       bbouResults <- list(parTab=subset(simDisturbance,select=c(Anthro,fire_excl_anthro,Year)))
     }else{
-      warning("To create sample trajectories from the national model a disturbance scenario must be specified in bbouResults$parTab or cPars arguments.")
-      rmSamples <- T
       bbouResults <- list(parTab = eval(formals(getSimsNational)$covTableObs))
       bbouResults$parTab$Year=bbouResults$parTab$Anthro
     }
@@ -122,7 +120,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   
   if(is.null(N0)){
     if(is.element("N0",names(bbouResults$parTab))){
-      N0 <- subset(bbouResults$parTab,select=c(pop_name,N0))
+      N0 <- unique(subset(bbouResults$parTab,select=c(pop_name,N0)))
     }else{
       N0 <- eval(formals(getSimsNational)$N0)
     }
@@ -132,7 +130,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     if(class(bbouResults$parTab) == "list"){
       bbouResults$parTab <- as.data.frame(bbouResults$parTab)
     }
-    N0 = merge(data.frame(N0=N0),subset(bbouResults$parTab,select=c(pop_name)))
+    N0 = merge(data.frame(N0=N0),unique(subset(bbouResults$parTab,select=c(pop_name))))
   }
   N0$PopulationName = N0$pop_name
 
@@ -160,9 +158,15 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     pars <- merge(pars,parsBar)
     nrow(pars)
 
-    popInfo$PopulationName <- popInfo$pop_name
+    pi <- bbouResults$parTab
+    pi$PopulationName <- pi$pop_name
+    pi$R_bar=NULL;pi$S_bar=NULL;pi$N0=NULL;pi$pop_name=NULL
+    pars <- merge(pars,pi)
     
-    pars <- merge(pars,subset(popInfo,select=c(-N0,-pop_name)))
+    if(replicates!="all"){
+      repSet <- sequence(1:replicates)
+      pars <- subset(pars,is.element(id,repSet))
+    }
     
   }else{
     if(replicates == "all"){replicates = formals(getSimsNational)$replicates}

@@ -4,8 +4,8 @@
 #' Bayesian population model for boreal caribou
 #'
 #'
-#' @param survData either a path to a csv file or a survival data table in bboutools format.
-#' @param recruitData either a path to a csv file or a recruitment data table in bboutools format.
+#' @param surv_data either a path to a csv file or a survival data table in bboutools format.
+#' @param recruit_data either a path to a csv file or a recruitment data table in bboutools format.
 #' @param disturbance either a path to a csv file or a dataframe containing the
 #'   columns "Anthro","fire_excl_anthro", and "Year".
 #' @param betaPriors a list of model priors. See [getPriors()]. Not used if disturbance is NA.
@@ -31,8 +31,8 @@
 #' @examples
 #' # Using observed survival, recruitment and disturbance data
 #' mod <- caribouBayesianPM(
-#'   survData = bboudata::bbousurv_a,
-#'   recruitData = bboudata::bbourecruit_a,
+#'   surv_data = bboudata::bbousurv_a,
+#'   recruit_data = bboudata::bbourecruit_a,
 #'   disturbance = NULL
 #' )
 #' str(mod, max.level = 2)
@@ -44,12 +44,12 @@
 #'
 #' simO <- simulateObservations(scns)
 #'
-#' out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
+#' out <- caribouBayesianPM(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
 #'                           disturbance = simO$simDisturbance,
 #'                           startYear = 2014)
 
-caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
-                       recruitData = bboudata::bbourecruit_a,
+caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
+                       recruit_data = bboudata::bbourecruit_a,
                        disturbance = NULL,
                        betaPriors = "default",
                        startYear = NULL, endYear = NULL,
@@ -61,7 +61,7 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
 
   # combine defaults in function with inputs from input list
   inputArgs <- c(
-    "survData", "recruitData", "disturbance", "startYear", "endYear", "niters", "nthin"
+    "surv_data", "recruit_data", "disturbance", "startYear", "endYear", "niters", "nthin"
   )
   addArgs <- inputArgs # setdiff(inputArgs,names(inp))
   inp <- list()
@@ -78,11 +78,11 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   }
   
   # Run model
-  if (is.character(inp$recruitData)) {
-    recruitData <- read.csv(inp$recruitData, header = T)
-    recruitData$X <- NULL
+  if (is.character(inp$recruit_data)) {
+    recruit_data <- read.csv(inp$recruit_data, header = T)
+    recruit_data$X <- NULL
   } else {
-    recruitData <- inp$recruitData
+    recruit_data <- inp$recruit_data
   }
   if (is.character(inp$disturbance)) {
     disturbance <- read.csv(inp$disturbance)
@@ -90,11 +90,11 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
   } else {
     disturbance <- inp$disturbance
   }
-  if (is.character(inp$survData)) {
-    survData <- read.csv(inp$survData, header = T)
-    survData$X <- NULL
+  if (is.character(inp$surv_data)) {
+    surv_data <- read.csv(inp$surv_data, header = T)
+    surv_data$X <- NULL
   } else {
-    survData <- inp$survData
+    surv_data <- inp$surv_data
   }
 
   # if decide to error when Year ranges don't match could use testTable
@@ -105,13 +105,13 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
 
   # Get start and end years from data
   if(is.null(inp$startYear)){
-    inp$startYear <- min(survData$Year)
+    inp$startYear <- min(surv_data$Year)
   }
 
   if(is.null(inp$endYear)||is.infinite(inp$endYear)){
     if(!is.null(disturbance)){
       inp$endYear <- max(disturbance$Year)
-    }else{inp$endYear <- max(survData$Year);distYrs =survData$Year}
+    }else{inp$endYear <- max(surv_data$Year);distYrs =surv_data$Year}
   }
 
   if(!is.null(disturbance)){
@@ -142,7 +142,7 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
 
   ################
   # Survival data checking and fill missing yrs
-  surv_data <- survData
+  surv_data <- surv_data
 
   # check that year range is within data - model will run either way
   if (inp$endYear < max(surv_data$Year) | inp$startYear < min(surv_data$Year)) {
@@ -174,7 +174,7 @@ caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
 
   ###################
   # Recruitment data checking and fill missing yrs
-  recruit_data <- recruitData
+  recruit_data <- recruit_data
   
   # check that year range is within data - model will run either way
   if (inp$endYear < max(recruit_data$Year) | inp$startYear < min(recruit_data$Year)) {

@@ -12,7 +12,7 @@ getScenarioDefaults(
   projAnthroSlope = 2,
   rSlopeMod = 1,
   sSlopeMod = 1,
-  lQuantile = 0.5,
+  lQuantile = NA,
   correlateRates = F,
   projYears = 35,
   obsYears = 15,
@@ -30,7 +30,9 @@ getScenarioDefaults(
   collarCount = NA,
   startYear = NA,
   interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
-  curYear = 2023
+  curYear = 2023,
+  sQuantile = NA,
+  rQuantile = NA
 )
 }
 \arguments{

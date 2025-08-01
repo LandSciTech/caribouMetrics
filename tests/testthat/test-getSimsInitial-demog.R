@@ -1,4 +1,15 @@
-
+# Use saved file because this takes a long time. 
+mod_fl <- here::here("results/test_mod_real.rds")
+if(file.exists(mod_fl)){
+  mod_real <- readRDS(mod_fl)
+} else {
+  mod_real <- caribouBayesianPM(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 
+                                recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
+                                niters=1,returnSamples=T)
+  if(dir.exists(dirname(mod_fl))){
+    saveRDS(mod_real, mod_fl)
+  }
+}
 
 test_that("exData ok in simple case with one one input scenario",{
   #exData ok in simple case with one one input scenario
@@ -42,40 +53,35 @@ test_that("can specify multiple disturbance scenarios", {
     expect_equal(c(0,5))
 })
 
-
 test_that("Warning if trajs does not include the selected disturbance scenario, and it is possible to set disturbance from trajs.", {
+  #devtools::load_all()
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 100)
-  
-  trajs <- getSimsInitial(replicates = 2, cPars = scns10)$samples
+  trajs <- subset(mod_real$result$samples,is.element(Replicate,c("x1","x2")))
   expect_warning(simulateObservations(scns11,trajs), "do not include the disturbance")
   
 })
 
 test_that("Error if trajs does not include the selected disturbance scenario, and it is not possible to set disturbance from trajs.", {
-  scns10m <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
-                                 projYears = 100,iAnthro=c(0,5))
-  trajs <- getSimsInitial(replicates = 2, cPars = scns10m)$samples
-  
-  scns11 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
-                                projYears = 100,iAnthro=7)
-  expect_error(simulateObservations(scns11,trajs), "do not include the disturbance")
+  scns10m <- getScenarioDefaults(collarCount = 5, cowMult = 2,startYear=2100)
+  trajs <- subset(mod_real$result$samples,is.element(Replicate,c("x1","x2")))
+  expect_error(simulateObservations(scns10m,trajs), "do not include the disturbance")
 })
 
-test_that("Can set disturbance from table", {
+test_that("The trajectory can include disturbance", {
+  #devtools::load_all()
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 100)
-  trajs <- getSimsInitial(data.frame(Year = seq(2009, 2017),
-                                     Anthro = 5,
-                                     fire_excl_anthro = 0.2),
-                          replicates = 2)$samples
-  
+  mod_reald <- bbouMakeSummaryTable(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 
+                                 recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),N0=1000,
+                                 disturbance = data.frame(Year=seq(2010,2017),Anthro=5,fire_excl_anthro=0.2),
+                                 niters=10)
+  trajs <- getSimsInitial(mod_reald,replicates = 2)$samples
+
   # the traj disturbance scenario overrides scns10 disturbance scenario with a warning
   expect_warning(simObs8 <- simulateObservations(scns10,trajs), "do not include the disturbance")
   
   simObs8$exData %>% filter(MetricTypeID == "Anthro") %>% pull(Amount) %>% 
     unique() %>% expect_equal(5)
 })
-
-#TO DO: add tests trajs from bboutools models.
 
