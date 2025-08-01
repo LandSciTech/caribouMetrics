@@ -30,7 +30,8 @@
 #' )
 #' 
 #' eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
-#' scResults <- runScnSet(scns, eParsIn, getSimsInitial(),
+#' simsIn <- getSimsInitial()
+#' scResults <- runScnSet(scns, simsIn, eParsIn,
 #'                        niters = 10)# only set to speed up example. Normally keep defaults.
 
 

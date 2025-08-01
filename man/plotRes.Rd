@@ -50,7 +50,7 @@ simO <- simulateObservations(scns)
 
 out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
                           disturbance = simO$simDisturbance,
-                          startYear = 2014, niters=5)
+                          startYear = 2014, niters=10)
 
 out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
                            simInitial = getSimsInitial())
@@ -64,7 +64,6 @@ Caribou demography functions:
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
@@ -76,7 +75,6 @@ Caribou demography functions:
 \code{\link{getSimsNational}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
-\code{\link{simulateObservations}()},
-\code{\link{summarizeCaribouPopSim}()}
+\code{\link{simulateObservations}()}
 }
 \concept{demography}

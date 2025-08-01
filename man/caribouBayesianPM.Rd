@@ -47,7 +47,18 @@ an argument is included in this list it will override the named argument.}
 \value{
 a list with elements:
 \itemize{
-\item result: ...
+\item result: a list of model results:
+\itemize{
+\item summary: a data.frame
+\item samples: a tibble providing the full range of MCMC trajectories from the model.
+It is in a long format where "Amount" gives the value for
+each metric in Anthro, fire_excl_anthro, c, survival, recruitment, X, N,
+lambda, Sbar, Rbar, Xbar, Nbar, and lambda_bar, with a row for each
+combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"
+\item surv_data: a data.frame
+\item recruit_data: a tibble
+\item popInfo: a data.frame
+}
 \item inData: a list of data that is used as input to the jags model:
 \itemize{
 \item survDataIn:  survival data
@@ -60,24 +71,28 @@ a list with elements:
 Bayesian population model for boreal caribou
 }
 \examples{
-# Using observed survival, recruitment and disturbance data
-mod <- caribouBayesianPM(
-  survData = bboudata::bbousurv_a,
-  recruitData = bboudata::bbourecruit_a,
-  disturbance = NULL
-)
-str(mod, max.level = 2)
-
-# Using simulated observation data
-scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
-                            obsAnthroSlope = 1, projAnthroSlope = 5,
-                            collarCount = 20, cowMult = 5)
-
-simO <- simulateObservations(scns)
-
-out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
-                          disturbance = simO$simDisturbance,
-                          startYear = 2014)
+\donttest{
+  # Note these examples take a long time to run!
+  
+  # Using observed survival, recruitment and disturbance data
+  mod <- caribouBayesianPM(
+    survData = bboudata::bbousurv_a,
+    recruitData = bboudata::bbourecruit_a,
+    disturbance = NULL
+  )
+  str(mod, max.level = 2)
+  
+  # Using simulated observation data
+  scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
+                              obsAnthroSlope = 1, projAnthroSlope = 5,
+                              collarCount = 20, cowMult = 5)
+  
+  simO <- simulateObservations(scns)
+  
+  out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
+                           disturbance = simO$simDisturbance,
+                           startYear = 2014)
+}
 }
 \seealso{
 Caribou demography functions:
@@ -85,7 +100,6 @@ Caribou demography functions:
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
@@ -98,7 +112,6 @@ Caribou demography functions:
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
-\code{\link{simulateObservations}()},
-\code{\link{summarizeCaribouPopSim}()}
+\code{\link{simulateObservations}()}
 }
 \concept{demography}

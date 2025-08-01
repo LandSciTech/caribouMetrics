@@ -6,8 +6,8 @@
 \usage{
 runScnSet(
   scns,
-  ePars,
   simInitial,
+  ePars = list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 4),
   Rep = NULL,
   printProgress = FALSE,
   betaPriors = "default",
@@ -21,11 +21,11 @@ runScnSet(
 \item{scns}{data.frame. Parameters for the simulations. See
 \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for details.}
 
-\item{ePars}{list. Additional parameters passed on to
-\code{\link[=simulateObservations]{simulateObservations()}}}
-
 \item{simInitial}{Initial simulation results, produced by calling
 \code{\link[=getSimsInitial]{getSimsInitial()}}}
+
+\item{ePars}{list. Additional parameters passed on to
+\code{\link[=simulateObservations]{simulateObservations()}}}
 
 \item{Rep}{integer. Optional. If specified, select specified replicate trajectory.}
 
@@ -58,7 +58,8 @@ scns <- expand.grid(
 )
 
 eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
-scResults <- runScnSet(scns, eParsIn, getSimsInitial(),
+simsIn <- getSimsInitial()
+scResults <- runScnSet(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.
 }
 \seealso{
@@ -68,7 +69,6 @@ Caribou demography functions:
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
@@ -80,7 +80,6 @@ Caribou demography functions:
 \code{\link{getSimsNational}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{simulateObservations}()},
-\code{\link{summarizeCaribouPopSim}()}
+\code{\link{simulateObservations}()}
 }
 \concept{demography}

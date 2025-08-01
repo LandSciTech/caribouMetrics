@@ -7,6 +7,17 @@
 #' @family demography
 #'
 #' @export
+#' 
+#' @examples
+#'  outParTab <- doSim(
+#'    numSteps = 5, numPops = 2, N0 = NA, R_bar = 0.18, S_bar = 0.87,
+#'    R_sd = 0.085, S_sd = 0.16,
+#'    R_iv_mean = 0.34, S_iv_mean = 0.31,
+#'    R_iv_shape = 18, S_iv_shape = 3.3,
+#'    scn_nm = "base", addl_params = NULL, type = "logistic"
+#'  )
+#'  outParTab
+#'
 doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_mean,R_iv_shape,S_iv_mean,S_iv_shape,
                   scn_nm, type="logistic", addl_params){
   #type="logistic"

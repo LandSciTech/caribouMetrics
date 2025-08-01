@@ -23,7 +23,7 @@
 #' @examples
 #' s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 #' r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
-#' bbouMakeSummaryTable(s_data, r_data, 500, FALSE)
+#' bbouMakeSummaryTable(s_data, r_data, N0 = 500)
 
 bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL, priors = NULL, shiny_progress = FALSE,
                                 return_mcmc=FALSE,i18n = NULL, niters = formals(bboutools::bb_fit_survival)$niters, nthin = formals(bboutools::bb_fit_survival)$nthin,...){

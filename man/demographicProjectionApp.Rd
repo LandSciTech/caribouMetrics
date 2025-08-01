@@ -27,7 +27,6 @@ Caribou demography functions:
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicRates}()},
 \code{\link{doSim}()},
@@ -39,7 +38,6 @@ Caribou demography functions:
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
-\code{\link{simulateObservations}()},
-\code{\link{summarizeCaribouPopSim}()}
+\code{\link{simulateObservations}()}
 }
 \concept{demography}

@@ -20,7 +20,16 @@
 #' @param niters A whole number of the number of iterations per chain after thinning and burn-in.
 #'
 #' @return a list with elements:
-#'   * result: ...
+#'   * result: a list of model results:
+#'     * summary: a data.frame
+#'     * samples: a tibble providing the full range of MCMC trajectories from the model. 
+#'     It is in a long format where "Amount" gives the value for 
+#'     each metric in Anthro, fire_excl_anthro, c, survival, recruitment, X, N, 
+#'     lambda, Sbar, Rbar, Xbar, Nbar, and lambda_bar, with a row for each 
+#'     combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"
+#'     * surv_data: a data.frame
+#'     * recruit_data: a tibble
+#'     * popInfo: a data.frame
 #'   * inData: a list of data that is used as input to the jags model:
 #'     * survDataIn:  survival data
 #'     * disturbanceIn: disturbance data
@@ -29,24 +38,28 @@
 #' @export
 #'
 #' @examples
-#' # Using observed survival, recruitment and disturbance data
-#' mod <- caribouBayesianPM(
-#'   survData = bboudata::bbousurv_a,
-#'   recruitData = bboudata::bbourecruit_a,
-#'   disturbance = NULL
-#' )
-#' str(mod, max.level = 2)
-#'
-#' # Using simulated observation data
-#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
-#'                             obsAnthroSlope = 1, projAnthroSlope = 5,
-#'                             collarCount = 20, cowMult = 5)
-#'
-#' simO <- simulateObservations(scns)
-#'
-#' out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
-#'                           disturbance = simO$simDisturbance,
-#'                           startYear = 2014)
+#' \donttest{
+#'   # Note these examples take a long time to run!
+#'   
+#'   # Using observed survival, recruitment and disturbance data
+#'   mod <- caribouBayesianPM(
+#'     survData = bboudata::bbousurv_a,
+#'     recruitData = bboudata::bbourecruit_a,
+#'     disturbance = NULL
+#'   )
+#'   str(mod, max.level = 2)
+#'   
+#'   # Using simulated observation data
+#'   scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
+#'                               obsAnthroSlope = 1, projAnthroSlope = 5,
+#'                               collarCount = 20, cowMult = 5)
+#'   
+#'   simO <- simulateObservations(scns)
+#'   
+#'   out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
+#'                            disturbance = simO$simDisturbance,
+#'                            startYear = 2014)
+#' }
 
 caribouBayesianPM <- function(survData = bboudata::bbousurv_a,
                        recruitData = bboudata::bbourecruit_a,

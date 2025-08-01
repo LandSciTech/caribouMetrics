@@ -40,7 +40,9 @@ a list with two elements:
 \item summary: a tibble with a summary of parameter values for each scenario.
 Column names are Year or Anthro, MetricTypeID, PopulationName, Mean, lower, upper, probViable and Parameter
 \item samples: a tibble with parameter values for each scenario and replicate
-1 row per MetricTypeID per replicate \* scenario. Column names are Year or Anthro, Replicate, PopulationName, MetricTypeID and Amount
+1 row per MetricTypeID per replicate \* scenario. Column names are Year or
+Anthro, Replicate, PopulationName, MetricTypeID and Amount. This is NULL
+if bbouResults is NULL and cPars does not include an iAnthro column.
 }
 }
 \description{
@@ -56,7 +58,6 @@ Caribou demography functions:
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
@@ -68,7 +69,6 @@ Caribou demography functions:
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
-\code{\link{simulateObservations}()},
-\code{\link{summarizeCaribouPopSim}()}
+\code{\link{simulateObservations}()}
 }
 \concept{demography}

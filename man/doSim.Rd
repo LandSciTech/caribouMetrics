@@ -41,6 +41,17 @@ numeric
 \description{
 Do multiple caribouPopGrowth runs
 }
+\examples{
+ outParTab <- doSim(
+   numSteps = 5, numPops = 2, N0 = NA, R_bar = 0.18, S_bar = 0.87,
+   R_sd = 0.085, S_sd = 0.16,
+   R_iv_mean = 0.34, S_iv_mean = 0.31,
+   R_iv_shape = 18, S_iv_shape = 3.3,
+   scn_nm = "base", addl_params = NULL, type = "logistic"
+ )
+ outParTab
+
+}
 \seealso{
 Caribou demography functions:
 \code{\link{bbouMakeSummaryTable}()},
@@ -48,7 +59,6 @@ Caribou demography functions:
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
@@ -60,7 +70,6 @@ Caribou demography functions:
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
-\code{\link{simulateObservations}()},
-\code{\link{summarizeCaribouPopSim}()}
+\code{\link{simulateObservations}()}
 }
 \concept{demography}

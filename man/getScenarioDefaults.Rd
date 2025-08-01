@@ -12,7 +12,7 @@ getScenarioDefaults(
   projAnthroSlope = 2,
   rSlopeMod = 1,
   sSlopeMod = 1,
-  lQuantile = 0.5,
+  lQuantile = NA,
   correlateRates = F,
   projYears = 35,
   obsYears = 15,
@@ -30,7 +30,9 @@ getScenarioDefaults(
   collarCount = NA,
   startYear = NA,
   interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
-  curYear = 2023
+  curYear = 2023,
+  sQuantile = NA,
+  rQuantile = NA
 )
 }
 \arguments{
@@ -120,7 +122,6 @@ Caribou demography functions:
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{convertTrajectories}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
@@ -132,7 +133,6 @@ Caribou demography functions:
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
-\code{\link{simulateObservations}()},
-\code{\link{summarizeCaribouPopSim}()}
+\code{\link{simulateObservations}()}
 }
 \concept{demography}

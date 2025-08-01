@@ -9,10 +9,28 @@
 #' @param returnExpected logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are [bb_predict_calf_cow_ratio()]/[bb_predict_survival()] results.
 #' @inheritParams caribouPopGrowth
 #'
-#' @return a data frame with results from [caribouPopGrowth()] for each set of survival/recruitment predictions.
+#' @return caribouPopSimMCMC: a data frame with results from [caribouPopGrowth()] for each set of survival/recruitment predictions.
 #' 
 #' @family demography
 #' @export
+#' 
+#' @examples
+#' \donttest{
+#'   # Note these examples take a long time to run!
+#'   mod <- bbouMakeSummaryTable(
+#'     surv_data = bboudata::bbousurv_a,
+#'     recruit_data = bboudata::bbourecruit_a, 
+#'     N0 = NA, return_mcmc = T
+#'   )
+#'                            
+#'   outmcmc = caribouPopSimMCMC(popInfo=NA,mod$recruit_fit,mod$surv_fit)
+#'   names(outmcmc)
+#' 
+#'   #get 95% prediction intervals from demographic trajectories
+#'   PImcmc <- summarizeCaribouPopSim(convertTrajectories(outmcmc))
+#'   str(PImcmc, max.level = 3, give.attr = FALSE)
+#' }
+#' 
 #'
 caribouPopSimMCMC <- function(popInfo=NA, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,returnExpected=FALSE,c=formals(caribouPopGrowth)$c,...) {
   #TO DO: checks to ensure assumptions about form of rec_pred and surv_pred are correct

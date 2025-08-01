@@ -31,7 +31,7 @@
 #'
 #' out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
 #'                           disturbance = simO$simDisturbance,
-#'                           startYear = 2014, niters=5)
+#'                           startYear = 2014, niters=10)
 #'
 #' out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
 #'                            simInitial = getSimsInitial())

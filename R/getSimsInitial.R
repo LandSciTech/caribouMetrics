@@ -35,7 +35,9 @@ if(file.exists("inst/extdata/simsInitiald.rds")){
 #'  * summary: a tibble with a summary of parameter values for each scenario.
 #'    Column names are Year or Anthro, MetricTypeID, PopulationName, Mean, lower, upper, probViable and Parameter
 #'  * samples: a tibble with parameter values for each scenario and replicate
-#'    1 row per MetricTypeID per replicate \* scenario. Column names are Year or Anthro, Replicate, PopulationName, MetricTypeID and Amount
+#'    1 row per MetricTypeID per replicate \* scenario. Column names are Year or
+#'     Anthro, Replicate, PopulationName, MetricTypeID and Amount. This is NULL
+#'     if bbouResults is NULL and cPars does not include an iAnthro column.
 #'    
 #' 
 #' @family demography

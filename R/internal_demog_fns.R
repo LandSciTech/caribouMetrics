@@ -5,11 +5,11 @@
 #'
 #' @param pars 
 #'
-#' @returns
+#' @returns convertTrajectories: formatted tables
 #' @export
-#' @family demography
 #'
-#' @examples
+#' @rdname caribouPopSimMCMC
+#' 
 
 convertTrajectories<-function(pars){
   #converts output from caribouPopSim to alternate form
@@ -50,11 +50,11 @@ convertTrajectories<-function(pars){
 #' @param pars 
 #' @param returnSamples 
 #'
-#' @returns
+#' @returns summarizeCaribouPopSim:
 #' @export
 #' @family demography
 #'
-#' @examples
+#' @rdname caribouPopSimMCMC
 summarizeCaribouPopSim <- function(pars,returnSamples=T){
 
   if(is.element("AnthroID",names(pars))){  
