@@ -178,6 +178,19 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
       stop("Specify a single initial population size for trajectories from national model.")
     }
     pars<- getSimsNational(replicates = max(replicates,2),N0 = N0s,covTableObs = covTableObs,cPars=ccPars,...)
+    parsBar <- getSimsNational(replicates = max(replicates,2),N0 = N0s,covTableObs = covTableObs,cPars=ccPars,interannualVar=F,...)
+    changeNames <- names(parsBar)
+    changeNames[!is.element(changeNames,c("Year","lab","id","PopulationName","Anthro","fire_excl_anthro","scnID","Total_dist"))] <-
+      paste0(changeNames[!is.element(changeNames,c("Year","lab","id","PopulationName","Anthro","fire_excl_anthro","scnID","Total_dist"))],"_bar")
+    changeNames <- gsub("_t","",changeNames,fixed=T)
+    names(parsBar) <- changeNames  
+    
+    pars$R_bar = NULL;pars$S_bar=NULL
+
+    nrow(pars);nrow(parsBar)
+    pars <- merge(pars,parsBar)
+    nrow(pars)
+    
     rmSamples<-T
     if(replicates==1){
       pars=subset(pars,id==pars$id[1])
