@@ -5,6 +5,7 @@ Version: 0.4.0
 Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec.gc.ca", comment = c(ORCID = "0000-0001-7875-9015")),
     person("Sarah", "Endicott", email = "sarah.endicott@ec.gc.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
+    person("Yuko", "Shimoda", email = "shimoday@gmail.com", role = "aut"),
     person("Craig", "Simpkins", email = "simpkinscraig063@gmail.com", role = "aut"),
     person("Tati", "Michelleti", email = "tati.micheletti@gmail.com", 
            role = c("aut", "cph"), comment = c("Functions getCoefs and sampleRates are derived from code written by Tati Micheletti")),
