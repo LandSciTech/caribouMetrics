@@ -14,7 +14,7 @@ if(file.exists(mod_fl)){
 test_that("exData ok in simple case with one one input scenario",{
   #exData ok in simple case with one one input scenario
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
-                                projYears = 100)
+                                projYears = 200, rSlopeMod = 2, sSlopeMod = 2)
   simObs8 <- simulateObservations(scns10)
   
   exDataOut <- simObs8$exData %>% 
@@ -24,8 +24,8 @@ test_that("exData ok in simple case with one one input scenario",{
   
   # data continues to be simulated after Anthro is 100, but population has collapsed
   exDataOut %>% 
-    filter(Year > 2070) %>% 
-    pull(N) %>% mean() %>% {. ==0} %>% 
+    filter(Year > 2200) %>% 
+    pull(N) %>% mean() %>% {. == 0} %>% 
     expect_true()
 
   # Visualize
@@ -54,9 +54,10 @@ test_that("can specify multiple disturbance scenarios", {
 })
 
 test_that("Warning if trajs does not include the selected disturbance scenario, and it is possible to set disturbance from trajs.", {
-  #devtools::load_all()
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 100)
+  scns11 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
+                                projYears = 100,iAnthro=7)
   trajs <- subset(mod_real$result$samples,is.element(Replicate,c("x1","x2")))
   expect_warning(simulateObservations(scns11,trajs), "do not include the disturbance")
   
@@ -69,7 +70,6 @@ test_that("Error if trajs does not include the selected disturbance scenario, an
 })
 
 test_that("The trajectory can include disturbance", {
-  #devtools::load_all()
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 100)
   mod_reald <- bbouMakeSummaryTable(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 
