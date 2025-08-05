@@ -113,7 +113,7 @@ getOutputTables <- function(caribouBayesDemogMod,
       }
       if(!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
         message("recalculating initial sims to match anthropogenic distubance scenario")
-        simInitial <- getSimsInitial(Anthro = unique(distInput$Anthro),cPars=paramTable)
+        simInitial <- getSimsInitial(cPars=paramTable)
         summaries <- simInitial$summary
       }
       #remove irrelevant disturbance combinations from the summaries, and add Year if missing.

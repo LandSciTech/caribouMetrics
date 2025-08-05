@@ -24,6 +24,10 @@ convertTrajectories<-function(pars){
                                     "lambda","S_bar","R_bar","X_bar","N_bar","lambdaE_bar"),
                            outName=c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "fire_excl_anthro","c", 
                                      "survival","recruitment","X", "N", "lambda","Sbar","Rbar","Xbar","Nbar","lambda_bar"))
+  
+  if(!is.element("lambdaE_bar",names(pars))){
+    pars$lambdaE_bar = pars$lambdaE
+  }
   nameChange <-subset(nameChange,is.element(inName,names(pars)))
   fds <- subset(pars, select = nameChange$inName)
   names(fds) <- nameChange$outName
