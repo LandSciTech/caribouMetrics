@@ -96,8 +96,12 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
       }
       bbouResults <- list(parTab=subset(simDisturbance,select=c(Anthro,fire_excl_anthro,Year)))
     }else{
-      bbouResults <- list(parTab = eval(formals(getSimsNational)$covTableObs))
-      bbouResults$parTab$Year=bbouResults$parTab$Anthro
+      if(!is.element("Anthro",names(cPars))){
+        bbouResults <- list(parTab = eval(formals(getSimsNational)$covTableObs))
+        bbouResults$parTab$Year=bbouResults$parTab$Anthro
+      }else{
+        bbouResults <- list(parTab=unique(subset(cPars,select=c("Year","Anthro","fire_excl_anthro"))))
+      }
     }
   }
   if(is.element("Anthro",names(bbouResults))){

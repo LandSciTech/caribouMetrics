@@ -63,8 +63,9 @@ getOutputTables <- function(caribouBayesDemogMod,
   survInput$Year=as.numeric(as.character(survInput$Annual))
   recInput$Year=as.numeric(as.character(recInput$Annual))
   
-  obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(Mortalities = sum(MortalitiesCertain,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
+  obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(AnyNA=sum(!is.na(Mortalities)),Mortalities = sum(MortalitiesCertain,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
   obsSurv$Mean <- 1-obsSurv$Mortalities/obsSurv$StartTotal
+  obsSurv$Mean[obsSurv$AnyNA==0]=NA
   obsSurv$Parameter <- "Adult female survival"
   obsSurv$MetricTypeID <- "S"
   obsSurv$Type <- "observed"
