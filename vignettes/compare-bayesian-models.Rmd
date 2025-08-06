@@ -23,7 +23,7 @@ library(bboutools)
 library(dplyr)
 library(ggplot2)
 
-useSaved <- F #option to skip slow step of fitting bboutools model
+useSaved <- T #option to skip slow step of fitting bboutools model
 resFile <- here::here("results/vignetteBbbouExample.rds")
 res2File <- here::here("results/vignetteBbbouExample2.rds")
 res1File <- here::here("results/vignetteBbbouExample1.rds")
@@ -68,7 +68,7 @@ The bboutools model default priors are less informative than the beta model defa
 if(useSaved&file.exists(res1File)){
   mod1 <- readRDS(res1File)
 }else{
-  mod1 <- bbouMakeSummaryTable(surv_data1,recruit_data1,N0=NA,return_mcmc=T)
+  mod1 <- bbouMakeSummaryTable(surv_data1,recruit_data1,return_mcmc=T)
   if(dir.exists(dirname(resFile))){saveRDS(mod1,res1File)}
 }
 simBB1 <-getSimsInitial(mod1) 
@@ -89,7 +89,7 @@ modBeta <- caribouBayesianPM(surv_data,recruit_data,disturbance)
 if(useSaved&file.exists(resFile)){
   mod <- readRDS(resFile)
 }else{
-  mod <- bbouMakeSummaryTable(surv_data,recruit_data,N0=NA,return_mcmc=T)
+  mod <- bbouMakeSummaryTable(surv_data,recruit_data,return_mcmc=T)
   if(dir.exists(dirname(resFile))){saveRDS(mod,resFile)}
 }
 simBB <-getSimsInitial(mod) 
@@ -111,7 +111,7 @@ modBeta2 <- caribouBayesianPM(surv_data2,recruit_data2,disturbance)
 if(useSaved&file.exists(res2File)){
   mod2 <- readRDS(res2File)
 }else{
-  mod2 <- bbouMakeSummaryTable(surv_data2,recruit_data2,N0=NA,return_mcmc=T)
+  mod2 <- bbouMakeSummaryTable(surv_data2,recruit_data2,return_mcmc=T)
   if(dir.exists(dirname(resFile))){saveRDS(mod2,res2File)}
 }
 simBB2 <-getSimsInitial(mod2) 

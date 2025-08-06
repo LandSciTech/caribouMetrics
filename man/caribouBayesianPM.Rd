@@ -11,7 +11,7 @@ caribouBayesianPM(
   betaPriors = "default",
   startYear = NULL,
   endYear = NULL,
-  N0 = 1000,
+  N0 = NA,
   returnSamples = F,
   inputList = list(),
   niters = formals(bboutools::bb_fit_survival)$niters,

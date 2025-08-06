@@ -7,7 +7,7 @@
 bbouMakeSummaryTable(
   surv_data,
   recruit_data,
-  N0,
+  N0 = NA,
   disturbance = NULL,
   priors = NULL,
   shiny_progress = FALSE,
@@ -23,8 +23,7 @@ bbouMakeSummaryTable(
 
 \item{recruit_data}{dataframe. Recruitment data in bboudata format}
 
-\item{N0}{dataframe. Initial population estimates, required columns are
-PopulationName and N0}
+\item{N0}{dataframe. Optional. Initial population estimates, required columns are PopulationName and N0}
 
 \item{disturbance}{dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.}
 

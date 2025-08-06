@@ -2,8 +2,7 @@
 #'
 #' @param surv_data dataframe. Survival data in bboudata format
 #' @param recruit_data dataframe. Recruitment data in bboudata format
-#' @param N0 dataframe. Initial population estimates, required columns are
-#'   PopulationName and N0
+#' @param N0 dataframe. Optional. Initial population estimates, required columns are PopulationName and N0
 #' @param disturbance dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.
 #' @param priors list. Optional. At present these are only used if disturbance is also provided.
 #' @param shiny_progress logical. Should shiny progress bar be updated. Only set
@@ -25,7 +24,7 @@
 #' r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 #' bbouMakeSummaryTable(s_data, r_data, N0 = 500)
 
-bbouMakeSummaryTable <-function(surv_data, recruit_data, N0, disturbance = NULL, priors = NULL, shiny_progress = FALSE,
+bbouMakeSummaryTable <-function(surv_data, recruit_data, N0=NA, disturbance = NULL, priors = NULL, shiny_progress = FALSE,
                                 return_mcmc=FALSE,i18n = NULL, niters = formals(bboutools::bb_fit_survival)$niters, nthin = formals(bboutools::bb_fit_survival)$nthin,...){
   #shiny_progress = FALSE;return_mcmc=FALSE;i18n = NULL
   

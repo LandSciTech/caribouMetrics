@@ -75,12 +75,11 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
 
   if(is.null(bbouResults)){
     if(hasAnthro){
-      distPars = unique(subset(cPars,select=c(iAnthro,iFire,preYears,obsYears,projYears,obsAnthroSlope,projAnthroSlope,preYears)))
-      
+      distPars = unique(subset(cPars,select=c(iAnthro,iFire,preYears,obsYears,projYears,obsAnthroSlope,projAnthroSlope,preYears,startYear)))
       first<-T
       for(r in 1:nrow(distPars)){
-        #r=1
-        cr <- cPars[r,]
+        #r=60
+        cr <- distPars[r,]
         covariates <- simCovariates(cr$iAnthro, cr$iFire, 
                                     cr$preYears+cr$obsYears + cr$projYears, 
                                     cr$obsAnthroSlope, cr$projAnthroSlope, 
