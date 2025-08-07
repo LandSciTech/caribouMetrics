@@ -340,7 +340,7 @@ simCalfCowRatios <- function(cowCounts, exData) {
     apparentCows = apparentCows + simRecruitObs$UnknownAdults*0.65
   }
   if(is.element("Yearlings",names(simRecruitObs))){
-    apparentCows = apparentCows + simRecruitObs$UnknownAdults*0.5
+    apparentCows = apparentCows + simRecruitObs$Yearlings*0.5
   }
   
   #apparent number of calves (M+F) from apparent number of cows using apparent recruitment rate
