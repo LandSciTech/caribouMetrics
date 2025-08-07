@@ -217,6 +217,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
 
   if(rmSamples){
     simBig$samples<-NULL
+    simBig$summary <- subset(simBig$summary,MetricTypeID!="N")
   }
   
   # Note this must be the last thing before return or the first and cached

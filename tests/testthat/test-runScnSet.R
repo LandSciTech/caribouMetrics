@@ -31,7 +31,6 @@ test_that("testScript still works", {
     print(plotRes(scResults, "Population growth rate",lowBound = 0, highBound = 1.5))
     print(plotRes(scResults, "Recruitment"))
     print(plotRes(scResults, "Adult female survival"))
-    print(plotRes(scResults, "Female population size",lowBound = 0, highBound = 1000000))
   }
 })
 

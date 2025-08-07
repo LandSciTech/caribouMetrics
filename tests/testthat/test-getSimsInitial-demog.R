@@ -48,7 +48,7 @@ test_that("can specify multiple disturbance scenarios", {
   summary2 <- getSimsInitial(replicates = 2, cPars = scns10m)$summary
   
   # The first year will have both values for Anthro
-  summary2 %>% filter(Year == min(Year), MetricTypeID == "N") %>% pull(AnthroID) %>% 
+  summary2 %>% filter(Year == min(Year), MetricTypeID == "lambda") %>% pull(AnthroID) %>% 
     range() %>% 
     expect_equal(c(0,5))
 })
