@@ -210,9 +210,9 @@ test_that("pop Growth matches Johnson figures", {
   theor_lam <- (testRates$S_bar) * (1 + testRates$R_bar * 0.5) 
   
   # these should all be similar
-  expect_equal(mean(check$lambda), theor_lam, tolerance = 0.003)
-  expect_equal(testCheck$lambda, theor_lam, tolerance = 0.003)
-  expect_equal(testCheck$lambda, mean(check$lambda), tolerance = 0.003)
+  expect_equal(mean(check$lambdaE), theor_lam, tolerance = 0.003)
+  expect_equal(testCheck$lambdaE, theor_lam, tolerance = 0.003)
+  expect_equal(testCheck$lambdaE, mean(check$lambdaE), tolerance = 0.003)
 })
 
 test_that("interannualVar works as expected", {
