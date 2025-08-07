@@ -57,7 +57,7 @@ scns <- expand.grid(
   rQuantile = 0.7, N0 = 1000
 )
 
-eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
+eParsIn <- list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 3)
 simsIn <- getSimsInitial()
 scResults <- runScnSet(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.

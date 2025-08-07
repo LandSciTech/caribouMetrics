@@ -190,6 +190,7 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
   
   # check that year range is within data - model will run either way
   if (inp$endYear < max(recruit_data$Year) | inp$startYear < min(recruit_data$Year)) {
+    
     warning(c("requested year range: ", inp$startYear, " - ", inp$endYear, " does not match recruitment data",
               c(" year range:", "  ", min(recruit_data$Year), " - ", max(recruit_data$Year))), 
             call. = FALSE)

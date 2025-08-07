@@ -298,6 +298,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     
     # if cowMult is provided, set cows as a function of number of surviving cows at
     # year start
+
     if (is.element("cowMult", names(paramTable)) & all(paramTable[["cowMult"]] != 1) & is.null(cowCountsIn)) {
       
       # if multiple months filter to the start of caribou year
@@ -313,7 +314,11 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       }
       survsCalving <- survsCalving %>% 
         mutate(surviving = StartTotal - MortalitiesCertain)
-      
+      if(is.element("Annual",names(survsCalving))){
+        survsCalving$Year = survsCalving$Annual
+      }else{
+        survsCalving$Year[survsCalving$Month<caribouYearStart]=survsCalving$Year[survsCalving$Month<caribouYearStart]-1
+      }
       if (nrow(survsCalving) > 0) {
         cowCounts <- subset(survsCalving, select=c("PopulationName","Replicate","Year","StartTotal", "surviving"))
         cowCounts$Cows <- paramTable$cowMult * cowCounts$surviving
