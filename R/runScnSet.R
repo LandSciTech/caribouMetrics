@@ -41,11 +41,17 @@ runScnSet <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=4
                       returnSamples=F,...) {
   
   # ePars=eParsIn;simInitial=simBig;printProgress=F;niters = formals(bboutools::bb_fit_survival)$niters)
-
   scns <- getScenarioDefaults(scns)
-  errorLog <- list()
+  errorLog <- vector(mode = "list", length = nrow(scns))
+  rr.summary.all <- vector(mode = "list", length = nrow(scns))
+  sim.all <- vector(mode = "list", length = nrow(scns))
+  obs.all <- vector(mode = "list", length = nrow(scns))
   for (p in 1:nrow(scns)) {
     # p=2
+    if (printProgress) {
+      start_time <- Sys.time()
+      print(paste0("start time: ", format(start_time)))
+    }
     cs <- scns[p, ]
     if (printProgress) {
       print(paste0(c(p, scns[p, ]), collapse = " "))
@@ -112,22 +118,23 @@ runScnSet <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=4
                                endYear = maxYr, simInitial = simInitial,
                                exData = oo$exData, paramTable = oo$paramTable)
     
-
-    if (p == 1) {
-      rr.summary.all <- outTabs$rr.summary.all
-      sim.all <- outTabs$sim.all
-      obs.all <- outTabs$obs.all
-    } else {
-      rr.summary.all <- rbind(rr.summary.all, outTabs$rr.summary.all)
-      sim.all <- rbind(sim.all, outTabs$sim.all)
-      obs.all <- rbind(obs.all, outTabs$obs.all)
+    rr.summary.all[[p]] <- outTabs$rr.summary.all
+    sim.all[[p]] <- outTabs$sim.all
+    obs.all[[p]] <- outTabs$obs.all
+    
+    # for good measure, can slow things down but could help with memory
+    gc()
+    if (printProgress) {
+      end_time <- Sys.time()
+      print(paste0("end time: ", format(end_time)))
+      print(paste0("rep time: ", format(end_time - start_time)))
     }
   }
-  if (length(errorLog) > 0) {
+  if (length(purrr::compact(errorLog)) > 0) {
     print(errorLog)
   }
-  ret = list(rr.summary.all = rr.summary.all, sim.all = sim.all,
-             obs.all = obs.all, errorLog = errorLog)
+  ret = list(rr.summary.all = do.call(rbind, rr.summary.all), sim.all = do.call(rbind, sim.all),
+             obs.all = do.call(rbind, obs.all), errorLog = errorLog)
   if(returnSamples){
     ret$out <- out
   }
