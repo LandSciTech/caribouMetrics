@@ -65,12 +65,14 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

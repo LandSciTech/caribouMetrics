@@ -22,6 +22,7 @@ Useful links:
 Authors:
 \itemize{
   \item Josie Hughes \email{josie.hughes@ec.gc.ca} (\href{https://orcid.org/0000-0001-7875-9015}{ORCID})
+  \item Yuko Shimoda \email{shimoday@gmail.com}
   \item Craig Simpkins \email{simpkinscraig063@gmail.com}
   \item Tati Michelleti \email{tati.micheletti@gmail.com} (Functions getCoefs and sampleRates are derived from code written by Tati Micheletti) [copyright holder]
   \item Eliot McIntire \email{eliot.mcintire@canada.ca}

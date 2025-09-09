@@ -1,13 +1,23 @@
 # default input data
-mod <- caribouBayesianPM(niters=100)
 
+mod_fl <- here::here("results/test_mod_real.rds")
+if(file.exists(mod_fl)){
+  mod <- readRDS(mod_fl)
+} else {
+  mod <- caribouBayesianPM(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 
+                                recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
+                                niters=1)
+  if(dir.exists(dirname(mod_fl))){
+    saveRDS(mod, mod_fl)
+  }
+}
 
-mod_tab <- suppressWarnings(getOutputTables(mod, simInitial = getSimsInitial()))
+mod_tab <- suppressWarnings(getOutputTables(mod))
 
 param_nms <- c(
-  "Adult female survival", "Recruitment", "Population growth rate", 
-  "Female population size",
-  "Adjusted recruitment"
+  "Adult female survival","Recruitment","Adjusted recruitment",
+  "Population growth rate","Female population size",
+  "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
 )
 
 test_that("simplest plot works", {

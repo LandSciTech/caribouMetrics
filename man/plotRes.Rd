@@ -48,9 +48,9 @@ scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 
 simO <- simulateObservations(scns)
 
-out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
+out <- caribouBayesianPM(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                           disturbance = simO$simDisturbance,
-                          startYear = 2014, niters=5)
+                          startYear = 2014, niters=10)
 
 out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
                            simInitial = getSimsInitial())
@@ -59,6 +59,7 @@ plotRes(out_tbl, parameter = "Recruitment")
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
@@ -66,6 +67,7 @@ Caribou demography functions:
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

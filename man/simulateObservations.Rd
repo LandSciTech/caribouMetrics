@@ -5,8 +5,8 @@
 \title{Simulate observations}
 \usage{
 simulateObservations(
-  trajectories,
   paramTable,
+  trajectories = NULL,
   cowCounts = NULL,
   freqStartsByYear = NULL,
   collarNumYears = 4,
@@ -22,10 +22,11 @@ simulateObservations(
 )
 }
 \arguments{
-\item{trajectories}{data.frame.}
-
 \item{paramTable}{data.frame. Parameters for the simulations. See
 \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for details.}
+
+\item{trajectories}{data.frame. Optional example demographic trajectory.
+If NULL the trajectory will be simulated from the national model.}
 
 \item{cowCounts}{data.frame. Optional. Number of cows counted in aerial
 surveys each year. If NULL, and \code{paramTable} contains \code{cowMult} the number
@@ -62,9 +63,9 @@ based on \code{paramTable}}
 \item{writeFilesDir}{character. If not NULL \code{simSurvObs} and \code{simRecruitObs}
 results will be saved to csv files in the directory provided}
 
-\item{surv_data}{data.frame. Optional existing survival data in bboudata format}
+\item{surv_data}{data.frame. Optional existing survival data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.}
 
-\item{recruit_data}{data.frame. Optional existing recruitment data in bboudata format}
+\item{recruit_data}{data.frame. Optional existing recruitment data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.}
 
 \item{printPlot}{logical. print a plot of the true population trajectory?}
 }
@@ -87,8 +88,8 @@ trajectory can be specified with \code{getScenarioDefaults()}.
 }
 \details{
 For a detailed description of the process for simulating data see the
-\href{https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#simulation-of-local-population-dynamics-and-monitoring}{vignette}
-(\code{vignette("BayesianDemographicProjection", package = "caribouMetrics")}) and
+\href{https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html#simulation-of-local-population-dynamics-and-monitoring}{vignette}
+(\code{vignette("bayesian-model-outputs", package = "caribouMetrics")}) and
 \href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. 2025}.
 }
 \examples{
@@ -107,6 +108,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
@@ -114,6 +116,7 @@ Caribou demography functions:
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

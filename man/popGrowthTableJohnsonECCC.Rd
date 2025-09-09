@@ -23,6 +23,7 @@ of Applied Ecology, 57(7), pp.1314-1327.
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
@@ -30,6 +31,7 @@ Caribou demography functions:
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

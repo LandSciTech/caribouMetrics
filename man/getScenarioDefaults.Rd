@@ -12,13 +12,12 @@ getScenarioDefaults(
   projAnthroSlope = 2,
   rSlopeMod = 1,
   sSlopeMod = 1,
-  lQuantile = 0.5,
+  lQuantile = NA,
   correlateRates = F,
   projYears = 35,
   obsYears = 15,
   preYears = 0,
   N0 = 1000,
-  assessmentYrs = 3,
   qMin = 0,
   qMax = 0,
   uMin = 0,
@@ -31,7 +30,9 @@ getScenarioDefaults(
   collarCount = NA,
   startYear = NA,
   interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
-  curYear = 2023
+  curYear = 2023,
+  sQuantile = NA,
+  rQuantile = NA
 )
 }
 \arguments{
@@ -63,7 +64,7 @@ the projection period}
 \item{preYears}{Number of years before monitoring begins}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations.}
+more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
 
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
 
@@ -116,6 +117,7 @@ getScenarioDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears =
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
@@ -123,6 +125,7 @@ Caribou demography functions:
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getSimsInitial}()},

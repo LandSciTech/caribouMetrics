@@ -7,8 +7,9 @@
 bbouMakeSummaryTable(
   surv_data,
   recruit_data,
-  N0,
+  N0 = NA,
   disturbance = NULL,
+  priors = NULL,
   shiny_progress = FALSE,
   return_mcmc = FALSE,
   i18n = NULL,
@@ -22,10 +23,11 @@ bbouMakeSummaryTable(
 
 \item{recruit_data}{dataframe. Recruitment data in bboudata format}
 
-\item{N0}{dataframe. Initial population estimates, required columns are
-PopulationName and N0}
+\item{N0}{dataframe. Optional. Initial population estimates, required columns are PopulationName and N0}
 
 \item{disturbance}{dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.}
+
+\item{priors}{list. Optional. At present these are only used if disturbance is also provided.}
 
 \item{shiny_progress}{logical. Should shiny progress bar be updated. Only set
 to TRUE if using in an app.}
@@ -50,5 +52,26 @@ Create summary table of demographic rates from survival and recruitment surveys
 \examples{
 s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
-bbouMakeSummaryTable(s_data, r_data, 500, FALSE)
+bbouMakeSummaryTable(s_data, r_data, N0 = 500)
 }
+\seealso{
+Caribou demography functions:
+\code{\link{caribouBayesianPM}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
+\code{\link{compositionBiasCorrection}()},
+\code{\link{demographicCoefficients}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{demographicRates}()},
+\code{\link{doSim}()},
+\code{\link{getOutputTables}()},
+\code{\link{getPriors}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{getSimsInitial}()},
+\code{\link{getSimsNational}()},
+\code{\link{plotRes}()},
+\code{\link{popGrowthTableJohnsonECCC}},
+\code{\link{runScnSet}()},
+\code{\link{simulateObservations}()}
+}
+\concept{demography}

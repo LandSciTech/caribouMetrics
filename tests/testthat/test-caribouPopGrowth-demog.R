@@ -21,8 +21,8 @@ test_that("caribouPopGrowth options work", {
                                 c(rep(0.7, 5), rep(0.8, 5)), progress = FALSE), 
                "must have length")
   
-  res3 <- caribouPopGrowth(1:10*100, 20, 0.8, 
-                           c(rep(0.6, 5), rep(0.9, 5)), progress = FALSE) 
+  res3 <- expect_warning(caribouPopGrowth(1:10*100, 20, 0.8, 
+                           c(rep(0.6, 5), rep(0.95, 5)), progress = FALSE))
   
   expect_true(all(which(res3$lambda < 1) == 1:5))
   
@@ -33,16 +33,16 @@ test_that("caribouPopGrowth options work", {
   expect_warning(caribouPopGrowth(1000, 20, R_bar = 0.9, S_bar = 0.7, progress = FALSE),
                "expected recruitment R_bar")
   
-  res4 <- caribouPopGrowth(1000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE)
+  res4 <- caribouPopGrowth(9000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE)
   # lower recruitment at carrying capacity
-  res5 <- caribouPopGrowth(1000, 200, R_bar = 0.7, S_bar = 0.9, P_K = 0.4,
+  res5 <- caribouPopGrowth(9000, 200, R_bar = 0.7, S_bar = 0.9, P_K = 0.4,
                            progress = FALSE)
   
   expect_lt(res5$N, res4$N)
   
-  res4_2 <- caribouPopGrowth(1000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE, K = 50000)
+  res4_2 <- caribouPopGrowth(9000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE, K = 50000)
   # lower actual carrying capacity
-  res5_2 <- caribouPopGrowth(1000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE, K = 10000)
+  res5_2 <- caribouPopGrowth(9000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE, K = 10000)
   expect_lt(res5_2$N, res4_2$N)
   
   # population gets larger over longer time with high R and S
@@ -210,9 +210,9 @@ test_that("pop Growth matches Johnson figures", {
   theor_lam <- (testRates$S_bar) * (1 + testRates$R_bar * 0.5) 
   
   # these should all be similar
-  expect_equal(mean(check$lambda), theor_lam, tolerance = 0.003)
-  expect_equal(testCheck$lambda, theor_lam, tolerance = 0.003)
-  expect_equal(testCheck$lambda, mean(check$lambda), tolerance = 0.003)
+  expect_equal(mean(check$lambdaE), theor_lam, tolerance = 0.003)
+  expect_equal(testCheck$lambdaE, theor_lam, tolerance = 0.003)
+  expect_equal(testCheck$lambdaE, mean(check$lambdaE), tolerance = 0.003)
 })
 
 test_that("interannualVar works as expected", {

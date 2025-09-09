@@ -1,20 +1,44 @@
 # internal functions related to caribou demographics
 
 # Helpers for table format conversion --------------------------------------------------
+#' Format trajectory tables
+#'
+#' @param pars 
+#'
+#' @returns convertTrajectories: formatted tables
+#' @export
+#'
+#' @rdname caribouPopSimMCMC
+#' 
+
 convertTrajectories<-function(pars){
   #converts output from caribouPopSim to alternate form
   #pars = trajectories
   if(!is.element("lamPercentile",names(pars))){
     pars$lamPercentile=NA
   }
-  fds <- subset(pars, select = c("id","lamPercentile", "year","PopulationName","Anthro", "fire_excl_anthro",
-                                 "S_t", "R_t", "X_t", "N",
-                                 "lambda"))
-  names(fds) <- c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "fire_excl_anthro", "survival",
-                  "recruitment","Rfemale", "N", "lambda")
+  if(!is.element("c",names(pars))){pars$c=NA}
+  
+  nameChange <- data.frame(inName=c("id","lamPercentile", "Year","PopulationName","Anthro", "fire_excl_anthro","c",
+                                    "S_t", "R_t", "X_t", "N",
+                                    "lambda","S_bar","R_bar","X_bar","N_bar","lambdaE_bar"),
+                           outName=c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "fire_excl_anthro","c", 
+                                     "survival","recruitment","X", "N", "lambda","Sbar","Rbar","Xbar","Nbar","lambda_bar"))
+  
+  if(!is.element("lambdaE_bar",names(pars))){
+    pars$lambdaE_bar = pars$lambdaE
+  }
+  nameChange <-subset(nameChange,is.element(inName,names(pars)))
+  fds <- subset(pars, select = nameChange$inName)
+  names(fds) <- nameChange$outName
+  
+  if(is.element("Anthro", colnames(fds))){
+    fds$AnthroID = round(fds$Anthro);fds$fire_excl_anthroID=round(fds$fire_excl_anthro)
+  }
+  
   fds$Timestep = as.numeric(fds$Year)
   fds$Year=as.numeric(as.character(fds$Year))
-  fds <- tidyr::pivot_longer(fds, !("Replicate"|"LambdaPercentile"|"Year"|"Timestep"|"PopulationName"), names_to = "MetricTypeID",
+  fds <- tidyr::pivot_longer(fds, !any_of(c("Replicate","LambdaPercentile","Year","Timestep","PopulationName","AnthroID","fire_excl_anthroID")), names_to = "MetricTypeID",
                              values_to = "Amount")
   fds$MetricTypeID <- as.character(fds$MetricTypeID)
   fds$Replicate <- paste0("x", fds$Replicate)
@@ -25,16 +49,35 @@ convertTrajectories<-function(pars){
   return(fds)
 }
 
+#' Get 95% prediction intervals from trajectories
+#'
+#' @param pars 
+#' @param returnSamples 
+#'
+#' @returns summarizeCaribouPopSim:
+#' @export
+#' @family demography
+#'
+#' @rdname caribouPopSimMCMC
 summarizeCaribouPopSim <- function(pars,returnSamples=T){
-  
-  simSum <- pars  %>%
-    group_by(Year,PopulationName,MetricTypeID) %>%
-    summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
-              upper = quantile(Amount, 0.975,na.rm=T))
-  
-  names = data.frame(MetricTypeID = c("survival","recruitment","Rfemale", "lambda","N"),
+
+  if(is.element("AnthroID",names(pars))){  
+    simSum <- pars  %>%
+      group_by(Year,PopulationName,MetricTypeID,AnthroID,fire_excl_anthroID) %>%
+      summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
+                upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
+  }else{
+    simSum <- pars  %>%
+      group_by(Year,PopulationName,MetricTypeID) %>%
+      summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
+                upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
+  }  
+  names = data.frame(MetricTypeID = c("survival","recruitment","X", "lambda","N","c",
+                                      "Sbar","Rbar","Xbar","lambda_bar"),
                      Parameter = c("Adult female survival","Recruitment","Adjusted recruitment",
-                                   "Population growth rate","Female population size"))
+                                   "Population growth rate","Female population size","c",
+                                   "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
+                                   ))
   simSum=merge(simSum,names)
   
   simBig <- list(summary = simSum, samples = pars)
@@ -42,6 +85,96 @@ summarizeCaribouPopSim <- function(pars,returnSamples=T){
 }
 
 # Helpers for simulateObservations -----------------------------------------
+
+simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
+                          recruitmentModelNumber = "M4",
+                          popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
+                          recSlopeMultiplier = 1, sefSlopeMultiplier = 1,
+                          rQuantile = NULL, sQuantile = NULL,
+                          stepLength = 1, N0 = 1000,cowMult=1,
+                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,interannualVar = formals(caribouPopGrowth)$interannualVar) {
+  # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
+  # recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
+  # stepLength=1;N0=1000
+  
+  if(is.null(rQuantile)||is.na(rQuantile)){rQuantile<-runif(1)}
+  if(is.null(sQuantile)||is.na(sQuantile)){sQuantile<-runif(1)} 
+  
+  # alter coefficients
+  growthTab <- popGrowthTable
+  
+  growthTab$Value[(growthTab$Coefficient == "Anthro") &
+                    (growthTab$responseVariable == "recruitment")] <-
+    recSlopeMultiplier * growthTab$Value[(growthTab$Coefficient == "Anthro") &
+                                           (growthTab$responseVariable == "recruitment")]
+  
+  growthTab$Value[(growthTab$Coefficient == "Anthro") &
+                    (growthTab$responseVariable == "femaleSurvival")] <-
+    sefSlopeMultiplier * growthTab$Value[(growthTab$Coefficient == "Anthro") &
+                                           (growthTab$responseVariable == "femaleSurvival")]
+  
+  popGrowthParsSmall <- demographicCoefficients(
+    2,
+    modelVersion = "Johnson",
+    survivalModelNumber = survivalModelNumber,
+    recruitmentModelNumber = recruitmentModelNumber,
+    populationGrowthTable = growthTab,
+    useQuantiles = c(rQuantile, rQuantile)
+  )
+  # set quantiles for example population
+  popGrowthParsSmall$coefSamples_Survival$quantiles <- sQuantile
+  
+  # Only use precision if included in the table for this model number for both
+  # rec and surv
+  usePrec <- "Precision" %in% names(popGrowthParsSmall$coefSamples_Survival$coefValues) &
+    "Precision" %in% names(popGrowthParsSmall$coefSamples_Recruitment$coefValues)
+  # at each time,  sample demographic rates and project, save results
+  # TODO: SE thinks this can be done all at once with a table of demographic rates 
+  pars <- data.frame(N0 = N0)
+  for (t in 1:numYears) {
+    # t=1
+    covs <- subset(covariates, time == t)
+    
+    rateSamples <- demographicRates(
+      covTable = covs,
+      popGrowthPars = popGrowthParsSmall,
+      ignorePrecision = !usePrec,
+      returnSample = TRUE
+    )[1,]
+    
+    if(t ==1){
+      #set bias correction term for each example population - constant over time.
+      bc = unique(subset(rateSamples,select=replicate));nr=nrow(bc)
+      bc$c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
+    }
+    rateSamples$c = NULL; rateSamples = merge(rateSamples, bc)
+    
+    if (is.element("N", names(pars))) {
+      pars <- subset(pars, select = c("replicate", "N"))
+      names(pars)[names(pars) == "N"] <- "N0"
+    }
+    pars <- merge(pars, rateSamples)
+    
+    pars <- cbind(
+      pars,
+      caribouPopGrowth(pars$N0,
+                       R_bar = pars$R_bar, S_bar = pars$S_bar,
+                       numSteps = stepLength, K = FALSE, l_R = 1e-06, c=pars$c,
+                       interannualVar=interannualVar,
+                       progress = FALSE
+      )
+    )
+    pars$id <-pars$replicate
+    
+    fds<-convertTrajectories(pars)
+    if (t == 1) {
+      popMetrics <- fds
+    } else {
+      popMetrics <- rbind(popMetrics, fds)
+    }
+  }
+  return(popMetrics)
+}
 
 simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffTime,
                             collarOnTime, caribouYearStart,topUp = FALSE,forceMonths=FALSE) {
@@ -150,6 +283,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
       }
     }
   }
+
   
   simSurvs <- cAll %>%
     group_by(PopulationName, Replicate, Year, Month) %>%
@@ -206,35 +340,25 @@ simCalfCowRatios <- function(cowCounts, exData) {
     apparentCows = apparentCows + simRecruitObs$UnknownAdults*0.65
   }
   if(is.element("Yearlings",names(simRecruitObs))){
-    apparentCows = apparentCows + simRecruitObs$UnknownAdults*0.5
+    apparentCows = apparentCows + simRecruitObs$Yearlings*0.5
   }
   
   #apparent number of calves (M+F) from apparent number of cows using apparent recruitment rate
-  simRecruitObs$Calves <- rbinom(
-                                 n = nrow(simRecruitObs), size = round(apparentCows),
-                                 prob = simRecruitObs$recruitment
-                               )
+  # removing NAs and then putting them back to avoid warning in rbinom
+  na_cows <- which(is.na(apparentCows))
+  apparentCows[na_cows] <- 0
+
+  simRecruitObs$Calves <-  rbinom(
+    n = nrow(simRecruitObs), size = round(apparentCows),
+    prob = simRecruitObs$recruitment
+  )
   
+  simRecruitObs$Calves[na_cows] <- NA_integer_
+       
   simRecruitObs$recruitment = NULL;simRecruitObs$N=NULL;simRecruitObs$StartTotal=NULL
   
   simRecruitObs$Calves[simRecruitObs$Cows==0]=NA
   return(simRecruitObs)
-}
-
-# Helpers for runScnSet and App -------------------------------------------
-
-movingAveGrowthRate <- function(obs, assessmentYrs) {
-  # obs=obsLam
-  if (assessmentYrs == 1) {
-    return(obs)
-  }
-  obsOut <- obs
-  assessmentYrs = min(assessmentYrs,nrow(obsOut))
-  for (k in assessmentYrs:nrow(obsOut)) {
-    # k=3
-    obsOut$Mean[k] <- prod(obs$Mean[(k - assessmentYrs + 1):k])^(1/assessmentYrs) #geometric mean
-  }
-  obsOut
 }
 
 # General helpers ---------------------------------------------------------

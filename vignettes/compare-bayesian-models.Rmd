@@ -1,0 +1,133 @@
+---
+title: "Compare Bayesian models in caribouMetrics and bboutools"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Compare Bayesian models in caribouMetrics and bboutools}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(caribouMetrics)
+# use local version on local and installed on GH
+if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
+library(bboudata)
+library(bboutools)
+library(dplyr)
+library(ggplot2)
+
+useSaved <- T #option to skip slow step of fitting bboutools model
+resFile <- here::here("results/vignetteBbbouExample.rds")
+res2File <- here::here("results/vignetteBbbouExample2.rds")
+res1File <- here::here("results/vignetteBbbouExample1.rds")
+
+surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
+surv_data_add = expand.grid(Year=seq(2017,2022),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
+surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
+surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
+
+recruit_data=bboudata::bbourecruit_a %>% filter(Year > 2010)
+recruit_data_add = expand.grid(Year=seq(2017,2022),PopulationName=unique(recruit_data$PopulationName))
+recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
+recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
+
+surv_data1 <- surv_data %>% filter(Year > 2017)
+recruit_data1 <- recruit_data %>% filter(Year > 2017)
+
+surv_data2 <- surv_data %>% filter(Year > 2014)
+recruit_data2 <- recruit_data %>% filter(Year > 2014)
+```
+
+## Beta model with disturbance covariates and informative priors
+TO DO: Describe beta model mathematically, and note differences/similarities to the ms model and bboutools models.
+
+## Comparison to national models and bboutools models
+With no local data the Beta model with disturbance covariates and informative priors gives results that are comparable to the national model.
+```{r compare beta prior to national model}
+disturbance = data.frame(Year=unique(surv_data$Year),Anthro=5,fire_excl_anthro=1)
+modBeta1 <- caribouBayesianPM(surv_data1,recruit_data1,disturbance)
+simNational <-getSimsInitial(disturbance) 
+out_tbls <- getOutputTables(modBeta1, simInitial = simNational)
+```
+
+```{r plot1, fig.width=8,caption=""}
+rec =  plotRes(out_tbls, "Recruitment");plot(rec)
+surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
+lam =  plotRes(out_tbls, "Population growth rate",lowBound=0.5,highBound=1.5);plot(lam)
+```
+
+The bboutools model default priors are less informative than the beta model default priors.
+```{r compare beta and bboutools priors}
+if(useSaved&file.exists(res1File)){
+  mod1 <- readRDS(res1File)
+}else{
+  mod1 <- bbouMakeSummaryTable(surv_data1,recruit_data1,return_mcmc=T)
+  if(dir.exists(dirname(resFile))){saveRDS(mod1,res1File)}
+}
+simBB1 <-getSimsInitial(mod1) 
+out_tbls <- getOutputTables(modBeta1, simInitial = simBB1)
+```
+
+```{r plot2, fig.width=8,caption=""}
+rec =  plotRes(out_tbls, "Recruitment");plot(rec)
+surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
+lam =  plotRes(out_tbls, "Population growth rate",lowBound=0,highBound=2);plot(lam)
+```
+
+#TO DO: better graph labels.
+
+With more informative data, the Beta model model with constant disturbance covariates and informative priors often gives results that are comparable to bboutools without informative priors.
+```{r compare beta and bboutools posteriors}
+modBeta <- caribouBayesianPM(surv_data,recruit_data,disturbance)
+if(useSaved&file.exists(resFile)){
+  mod <- readRDS(resFile)
+}else{
+  mod <- bbouMakeSummaryTable(surv_data,recruit_data,return_mcmc=T)
+  if(dir.exists(dirname(resFile))){saveRDS(mod,resFile)}
+}
+simBB <-getSimsInitial(mod) 
+out_tbls <- getOutputTables(modBeta, simInitial = simBB)
+```
+
+```{r plot3, fig.width=8,caption=""}
+rec =  plotRes(out_tbls, "Recruitment");plot(rec)
+surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
+lam =  plotRes(out_tbls, "Population growth rate",lowBound=0.5,highBound=1.5);plot(lam)
+```
+
+However, if local data is limited the bboutools model without informative priors and the Beta model 
+with disturbance covariates and informative priors may give different results, particularly if 
+observations are inconsistent with expectations from the observed distribution of outcomes across the country.
+```{r compare beta and bboutools posteriors with limited data.}
+disturbance = data.frame(Year=unique(surv_data$Year),Anthro=95,fire_excl_anthro=90)
+modBeta2 <- caribouBayesianPM(surv_data2,recruit_data2,disturbance)
+if(useSaved&file.exists(res2File)){
+  mod2 <- readRDS(res2File)
+}else{
+  mod2 <- bbouMakeSummaryTable(surv_data2,recruit_data2,return_mcmc=T)
+  if(dir.exists(dirname(resFile))){saveRDS(mod2,res2File)}
+}
+simBB2 <-getSimsInitial(mod2) 
+out_tbls <- getOutputTables(modBeta2, simInitial = simBB2)
+```
+
+```{r plot4, fig.width=8,caption=""}
+rec =  plotRes(out_tbls, "Recruitment");plot(rec)
+surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
+lam =  plotRes(out_tbls, "Population growth rate",lowBound=0.5,highBound=1.5);plot(lam)
+```
+
+TO DO: The bboutools models do not include disturbance covariates, so the models will also give different results in a case where disturbance changes over time.
+
+## Bboutools models with informative priors
+
+TO DO: The bboutools priors can be set to (approximately) match the beta model priors. When disturbance is constant, the models with informative priors are similar to one another. 
+
+

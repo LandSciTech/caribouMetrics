@@ -8,7 +8,7 @@ getSimsInitial(
   bbouResults = NULL,
   N0 = NULL,
   replicates = "all",
-  cPars = getScenarioDefaults(),
+  cPars = subset(getScenarioDefaults(), select = -iAnthro),
   forceUpdate = F,
   skipSave = F,
   returnSamples = T,
@@ -17,13 +17,15 @@ getSimsInitial(
 }
 \arguments{
 \item{bbouResults}{Optional. Fitted bboutools model and summary table created by bbouMakeSummaryTable(),
-or a path to those results. If not specified trajectories will be from national demographic disturbance model.}
+or a path to those results. If not specified trajectories will be from national demographic disturbance model.
+To specify a disturbance table for the national model set bbouResults=disturbanceTable.
+disturbanceTable should be a data.frame with columns Anthro, fire_excl_anthro, and Year.}
 
 \item{N0}{initial population size. If NULL, will use information in bbouResults.}
 
 \item{replicates}{Number of replicate trajectories. Default "all"}
 
-\item{cPars}{optional. Parameters for calculating composition survey bias term.}
+\item{cPars}{optional. Parameters for calculating composition survey bias term and/or disturbance scenario. Note that cPars can specify multiple disturbance scenarios, but only one unique composition bias scenario.}
 
 \item{forceUpdate}{logical. If the default inputs are used the result is
 cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
@@ -36,9 +38,11 @@ cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
 a list with two elements:
 \itemize{
 \item summary: a tibble with a summary of parameter values for each scenario.
-Column names are year, PopulationName, Mean, lower, upper, Parameter.
+Column names are Year or Anthro, MetricTypeID, PopulationName, Mean, lower, upper, probViable and Parameter
 \item samples: a tibble with parameter values for each scenario and replicate
-4 rows per replicate \* scenario. Column names are year, PopulationName,  Parameter and Value
+1 row per MetricTypeID per replicate \* scenario. Column names are Year or
+Anthro, Replicate, PopulationName, MetricTypeID and Amount. This is NULL
+if bbouResults is NULL and cPars does not include an iAnthro column.
 }
 }
 \description{
@@ -49,6 +53,7 @@ getSimsInitial()
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
@@ -56,6 +61,7 @@ Caribou demography functions:
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

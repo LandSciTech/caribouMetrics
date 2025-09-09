@@ -28,7 +28,7 @@ caribouPopGrowth(
 }
 \arguments{
 \item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations.}
+more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
 
 \item{numSteps}{Number. Number of years to project.}
 
@@ -75,17 +75,17 @@ Set to \code{FALSE} to ignore interannual variability.}
 }
 \value{
 A data.frame of population size (\code{N}), expected growth rate
-(\code{lambda}), true growth rate (\code{lambdaTrue}), apparent annual reproduction rate (\code{R_t}), adjusted reproduction (\code{X_t}),
+(\code{lambdaE}), true growth rate (\code{lambda}), apparent annual reproduction rate (\code{R_t}), adjusted reproduction (\code{X_t}),
 survival (\code{S_t}), number of recruits (\code{n_recruits}), and surviving females (\code{surviving_adFemales})
 for each sample population projected for numSteps years.
 }
 \description{
-A two-stage demographic model with density dependence and interannual
+A caribou demographic model with density dependence and interannual
 variability following \href{doi:10.1111/1365-2664.13637}{Johnson et. al. (2020)}
 with modifications described in
 \href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. (2025)} and
 \href{https://doi.org/10.1101/2022.06.01.494350}{Dyson et al. (2022)}.
-Demographic rates vary with disturbance as estimated by \href{doi:10.1111/1365-2664.13637}{Johnson et. al. (2020)}. Default parameter values give the model
+Default parameter values give the model
 in Dyson et al. (2022). Set \code{probOption = "matchJohnson2020"} to reproduce
 the model used in Johnson et al. 2020. Set \code{probOption = "continuous"},
 \code{interannualVar = FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage
@@ -95,6 +95,9 @@ discrete numbers of animals used by \href{https://doi.org/10.1002/eap.2816}{Stew
 \details{
 If R_annual and S_annual are provided, interannual variation in survival and
 recruitment is modelled as in a logistic glmm with random effect of year.
+
+If initial populations size N0 is NA then population growth rate is $\lambda_t=S_t*(1+cR_t/s)$.
+In this case density dependence (P_0,P_K,a,b,K,r_max) and demographic stochasticity (probOption) are ignored.
 
 See \code{vignette("caribouDemography")}
 and \href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. (2025)} for
@@ -133,12 +136,14 @@ Applications, 33(3), p.e2816. \url{https://doi.org/10.1002/eap.2816}
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

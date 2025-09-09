@@ -5,6 +5,7 @@ Version: 0.4.0
 Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec.gc.ca", comment = c(ORCID = "0000-0001-7875-9015")),
     person("Sarah", "Endicott", email = "sarah.endicott@ec.gc.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
+    person("Yuko", "Shimoda", email = "shimoday@gmail.com", role = "aut"),
     person("Craig", "Simpkins", email = "simpkinscraig063@gmail.com", role = "aut"),
     person("Tati", "Michelleti", email = "tati.micheletti@gmail.com", 
            role = c("aut", "cph"), comment = c("Functions getCoefs and sampleRates are derived from code written by Tati Micheletti")),
@@ -50,7 +51,8 @@ Imports:
     rjags,
     survival,
     bboutools,
-    mcmcr
+    mcmcr,
+    fitdistrplus
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
@@ -73,6 +75,7 @@ Collate:
     'demographicProjectionApp.R'
     'demographicRates.R'
     'disturbanceMetrics.R'
+    'doSim.R'
     'getCoefs.R'
     'getOutputTables.R'
     'getPriors.R'
@@ -97,7 +100,6 @@ Collate:
     'sampleCoefs.R'
     'sampleRates.R'
     'simulateObservations.R'
-    'tabAllRes.R'
     'updateCaribou.R'
     'updateDisturbance.R'
 Suggests: 
@@ -109,14 +111,16 @@ Suggests:
     ggplot2,
     rsyncrosim,
     pfocal,
-    BayesianCaribouDemographicProjection,
     raster,
     shiny,
-    bboudata
+    bboudata,
+    here
 Remotes: LandSciTech/pfocal,
-    LandSciTech/BayesianCaribouDemographicProjection
+    LandSciTech/bboudata,
+    bboutools=github::LandSciTech/bboutoolsMultiPop
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
+    nimble,
     R (>= 3.5)
 URL: https://landscitech.github.io/caribouMetrics, https://github.com/LandSciTech/caribouMetrics

@@ -6,12 +6,14 @@
 \usage{
 runScnSet(
   scns,
-  ePars,
   simInitial,
+  ePars = list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 4),
+  Rep = NULL,
   printProgress = FALSE,
   betaPriors = "default",
   niters = formals(bboutools::bb_fit_survival)$niters,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
+  returnSamples = F,
   ...
 )
 }
@@ -19,20 +21,24 @@ runScnSet(
 \item{scns}{data.frame. Parameters for the simulations. See
 \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for details.}
 
+\item{simInitial}{Initial simulation results, produced by calling
+\code{\link[=getSimsInitial]{getSimsInitial()}}}
+
 \item{ePars}{list. Additional parameters passed on to
 \code{\link[=simulateObservations]{simulateObservations()}}}
 
-\item{simInitial}{Initial simulation results, produced by calling
-\code{\link[=getSimsInitial]{getSimsInitial()}}}
+\item{Rep}{integer. Optional. If specified, select specified replicate trajectory.}
 
 \item{printProgress}{logical. Should the scenario number and parameters be
 printed at each step?}
 
-\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}.}
+\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}. Not used if disturbance is NA.}
 
 \item{niters}{A whole number of the number of iterations per chain after thinning and burn-in.}
 
 \item{nthin}{integer. The number of the thinning rate.}
+
+\item{returnSamples}{logical. Optional. If true, return full results from \code{\link[=caribouBayesianPM]{caribouBayesianPM()}}.}
 }
 \value{
 A list similar to \code{\link[=getOutputTables]{getOutputTables()}} where tables for each scenario
@@ -46,17 +52,19 @@ Define scenarios in a table and \code{\link[=simulateObservations]{simulateObser
 \examples{
 scns <- expand.grid(
   obsYears =c(10, 20), collarCount = c(30, 300), cowMult = 2, collarInterval = 2,
-  assessmentYrs = 1, iAnthro = 0,
+  iAnthro = 0,
   obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.9,
   rQuantile = 0.7, N0 = 1000
 )
 
-eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
-scResults <- runScnSet(scns, eParsIn, getSimsInitial(),
+eParsIn <- list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 3)
+simsIn <- getSimsInitial()
+scResults <- runScnSet(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
@@ -64,6 +72,7 @@ Caribou demography functions:
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

@@ -5,14 +5,13 @@
 \title{Bayesian population model for boreal caribou}
 \usage{
 caribouBayesianPM(
-  survData = bboudata::bbousurv_a,
-  recruitData = bboudata::bbourecruit_a,
+  surv_data = bboudata::bbousurv_a,
+  recruit_data = bboudata::bbourecruit_a,
   disturbance = NULL,
   betaPriors = "default",
   startYear = NULL,
   endYear = NULL,
-  N0 = 1000,
-  cPars = getScenarioDefaults(),
+  N0 = NA,
   returnSamples = F,
   inputList = list(),
   niters = formals(bboutools::bb_fit_survival)$niters,
@@ -21,22 +20,20 @@ caribouBayesianPM(
 )
 }
 \arguments{
-\item{survData}{either a path to a csv file or a survival data table in bboutools format.}
+\item{surv_data}{either a path to a csv file or a survival data table in bboutools format.}
 
-\item{recruitData}{either a path to a csv file or a recruitment data table in bboutools format.}
+\item{recruit_data}{either a path to a csv file or a recruitment data table in bboutools format.}
 
 \item{disturbance}{either a path to a csv file or a dataframe containing the
 columns "Anthro","fire_excl_anthro", and "Year".}
 
-\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}.}
+\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}. Not used if disturbance is NA.}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations.}
-
-\item{cPars}{optional. Parameters for calculating composition survey bias term.}
+more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
 
 \item{returnSamples}{logical. If F returns only summaries. If T returns example trajectories.}
 
@@ -50,7 +47,18 @@ an argument is included in this list it will override the named argument.}
 \value{
 a list with elements:
 \itemize{
-\item result: ...
+\item result: a list of model results:
+\itemize{
+\item summary: a data.frame
+\item samples: a tibble providing the full range of MCMC trajectories from the model.
+It is in a long format where "Amount" gives the value for
+each metric in Anthro, fire_excl_anthro, c, survival, recruitment, X, N,
+lambda, Sbar, Rbar, Xbar, Nbar, and lambda_bar, with a row for each
+combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"
+\item surv_data: a data.frame
+\item recruit_data: a tibble
+\item popInfo: a data.frame
+}
 \item inData: a list of data that is used as input to the jags model:
 \itemize{
 \item survDataIn:  survival data
@@ -60,36 +68,42 @@ a list with elements:
 }
 }
 \description{
-So far, a wrapper around bboutools.
+Bayesian population model for boreal caribou
 }
 \examples{
-# Using observed survival, recruitment and disturbance data
-mod <- caribouBayesianPM(
-  survData = bboudata::bbousurv_a,
-  recruitData = bboudata::bbourecruit_a,
-  disturbance = NULL
-)
-str(mod, max.level = 2)
-
-# Using simulated observation data
-scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
-                            obsAnthroSlope = 1, projAnthroSlope = 5,
-                            collarCount = 20, cowMult = 5)
-
-simO <- simulateObservations(scns)
-
-out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
-                          disturbance = simO$simDisturbance,
-                          startYear = 2014)
+\donttest{
+  # Note these examples take a long time to run!
+  
+  # Using observed survival, recruitment and disturbance data
+  mod <- caribouBayesianPM(
+    surv_data = bboudata::bbousurv_a,
+    recruit_data = bboudata::bbourecruit_a,
+    disturbance = NULL
+  )
+  str(mod, max.level = 2)
+  
+  # Using simulated observation data
+  scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
+                              obsAnthroSlope = 1, projAnthroSlope = 5,
+                              collarCount = 20, cowMult = 5)
+  
+  simO <- simulateObservations(scns)
+  
+  out <- caribouBayesianPM(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
+                           disturbance = simO$simDisturbance,
+                           startYear = 2014)
+}
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

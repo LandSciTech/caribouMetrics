@@ -347,7 +347,7 @@ landCoverFN <- reclassPLC(landCoverRaw, plcLU = fnlcToResType)
 
 tmap::tm_shape(landCoverFN)+
   tmap::tm_raster(style = "cat", 
-                  palette = tmaptools::get_brewer_pal("Accent", n = 9, plot = FALSE), 
+                  palette = RColorBrewer::brewer.pal("Accent", n = 8), 
                   labels = resTypeCode$ResourceType,
                   title = "FNLC")+
   tmap::tm_legend(bg.color = "white", legend.outside = TRUE)+

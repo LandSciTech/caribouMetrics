@@ -1,15 +1,15 @@
-betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance, nc,nt,ni,nb){
+betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,nt,ni,nb){
   #Note: using bboutools to check and structure the data without fitting the models...
-  recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
-  recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,nc,nt,ni,nb)
-  
   surv_fit_in <- bboutools::bb_fit_survival(surv_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
-  surv_fit <- betaSurvival(surv_fit_in,disturbance,nc,nt,ni,nb)
+  surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb)
+  
+  recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
+  recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb)
   
   return(list(parTab=NULL,surv_fit=surv_fit,recruit_fit=recruit_fit))
 }
 
-betaSurvival <-function(surv_fit,disturbance,nc,nt,ni,nb){
+betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
   data <- surv_fit$data
   data <- as.data.frame(data)
   data <- subset(data,is.element(Annual,disturbance$Year))
@@ -29,17 +29,18 @@ betaSurvival <-function(surv_fit,disturbance,nc,nt,ni,nb){
                 Annual = as.integer(data$Annual),
                 nPops = length(unique(data$PopulationName)),
                 PopulationID = as.integer(data$PopulationID),
-                anthro = anthro
+                anthro = anthro,
+                nMonths = length(unique(data$Month))
   )
 
-  priors <- getPriors()
   surv_priors <- priors[c("l.Saf.Prior1","l.Saf.Prior2","beta.Saf.Prior1","beta.Saf.Prior2","sig.Saf.Prior1","sig.Saf.Prior2")] # TO DO add composition bias: "bias.Prior1","bias.Prior2")]
   names(surv_priors)<- c("b0_mu","b0_sd","b1_mu","b1_sd","sig.S.Prior1","sig.S.Prior2")
 
   datal <- c(datal,surv_priors)
   
   ###### Survival Model ######
-  sink("survival_model.txt")  # assign model file name #
+  surv_mod_fl <- tempfile(pattern = "survival_model_", fileext = ".txt")
+  sink(surv_mod_fl)  # assign model file name #
   cat("
 
 model {
@@ -54,8 +55,9 @@ model {
       sig.S[i,k] <- min(cv.S[k]*mu.S[i,k],0.99*pow(mu.S[i,k]*(1-mu.S[i,k]),0.5))
       alpha[i,k] <- ((1-mu.S[i,k])/pow(sig.S[i,k],2) - 1/mu.S[i,k]) * pow(mu.S[i,k],2)
       beta[i,k] <- alpha[i,k] * (1/mu.S[i,k] - 1)
+      Sbar[i,k] <- alpha[i,k]/(alpha[i,k]+beta[i,k])
       Survival[i,k]~ dbeta(alpha[i,k],beta[i,k])T(0.01,0.99)
-      AnnualSurvival[i,k] <- pow(Survival[i,k],1/12)
+      AnnualSurvival[i,k] <- pow(Survival[i,k],1/nMonths)
     }
   }
 
@@ -71,7 +73,7 @@ model {
   sink()
   
   # Setting parameters - setting parameters that you want to monitor
-  params = c("Survival")
+  params = c("Sbar","Survival")
   
   # Setting initial values - not assigned
   inits1 <- list(b0 = rnorm(datal$nPops, 3, 2),b1 = rnorm(datal$nPops, 0, 2)) 
@@ -85,16 +87,17 @@ model {
   #################################################################################################################
   ### Running JAGS
   # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed)
-  model.fit <- rjags::jags.model(file="survival_model.txt", data=datal, n.adapt=nb, n.chains = nc)
+  model.fit <- rjags::jags.model(file=surv_mod_fl, data=datal, n.adapt=nb, n.chains = nc)
   
   # To get samples from the posterior distribution of the parameters
   update(model.fit, n.iter=ni)
   model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt)
   surv_data <- subset(data,is.element(Year,disturbance$Year))
+  
   return(list(data=data,samples=model.samples)) 
 }
 
-betaRecruitment <- function(rec_fit, disturbance,nc,nt,ni,nb){
+betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
   rec_data <- rec_fit$data
   data <- as.data.frame(rec_data)
   data <- merge(data,disturbance)
@@ -132,9 +135,6 @@ betaRecruitment <- function(rec_fit, disturbance,nc,nt,ni,nb){
     sex_ratio=0.5
   )
 
-  # Setting priors from caribouMetrics
-  priors <- getPriors()
-  
   rec_priors = priors[c("l.R.Prior1","l.R.Prior2","beta.Rec.anthro.Prior1","beta.Rec.anthro.Prior2","beta.Rec.fire.Prior1","beta.Rec.fire.Prior2","sig.R.Prior1","sig.R.Prior2")]
   names(rec_priors)<- c("b0_mu","b0_sd","b1_mu","b1_sd","b2_mu","b2_sd","sig.R.Prior1","sig.R.Prior2")
   
@@ -145,7 +145,8 @@ betaRecruitment <- function(rec_fit, disturbance,nc,nt,ni,nb){
   # adult_female_proportion_beta=rec_priors[["adult_female_proportion_beta"]]
   
   ###### Recruitment Model ######
-  sink("recruit_model.txt")  # observation model can be connected by CaribouYear[i] 
+  rec_mod_fl <- tempfile(pattern = "recruit_model_", fileext = ".txt")
+  sink(rec_mod_fl)  # observation model can be connected by CaribouYear[i] 
   cat("
 
 model {
@@ -163,6 +164,7 @@ model {
       sig.R[i,k] <- min(cv.R[k]*mu.R[i,k],0.99*pow(mu.R[i,k]*(1-mu.R[i,k]),0.5)) # Constrain on sig.R to fall within theoretical range
       alpha[i,k] <- ((1-mu.R[i,k])/pow(sig.R[i,k],2) - 1/mu.R[i,k]) * pow(mu.R[i,k],2)
       beta[i,k] <- alpha[i,k] * (1/mu.R[i,k] - 1)
+      Rbar[i,k] <- alpha[i,k]/(alpha[i,k]+beta[i,k])
       Recruitment[i,k] ~ dbeta(alpha[i,k],beta[i,k])T(0.01,0.99)
     }
   }
@@ -181,8 +183,8 @@ model {
   
   ######## Define data, parameters, initials and settings #####
   # Setting parameters - setting parameters that you want to monitor
-  params = c("Recruitment")
-  
+  params = c("Rbar","Recruitment")
+
   # Setting initial values
   inits1 <- list(b0 = rnorm(datal$nPops,-1, 2)) 
   inits2 <- list(b0 = rnorm(datal$nPops,-1, 2)) 
@@ -196,7 +198,7 @@ model {
   ### Running JAGS
   # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed)
 
-  model.fit <- rjags::jags.model(file="recruit_model.txt", data=datal, n.adapt=nb, n.chains = nc)
+  model.fit <- rjags::jags.model(file=rec_mod_fl, data=datal, n.adapt=nb, n.chains = nc)
   
   # To get samples from the posterior distribution of the parameters
   update(model.fit, n.iter=ni)

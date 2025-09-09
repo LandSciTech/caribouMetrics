@@ -34,12 +34,14 @@
 #'
 #' simO <- simulateObservations(scns)
 #'
-#' out <- caribouBayesianPM(survData = simO$simSurvObs, recruitData = simO$simRecruitObs,
+#' out <- caribouBayesianPM(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
 #'                           disturbance = simO$simDisturbance,
-#'                           niters=4)
+#'                           niters=10)
 #'
-#' getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-#'                 simInitial = getSimsInitial())
+#' outTables <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
+#'                              simInitial = getSimsInitial())
+#'                              
+#' str(outTables, max.level = 2, give.attr = FALSE)
                              
 getOutputTables <- function(caribouBayesDemogMod, 
                             startYear = min(caribouBayesDemogMod$inData$disturbanceIn$Year), 
@@ -61,10 +63,11 @@ getOutputTables <- function(caribouBayesDemogMod,
   survInput$Year=as.numeric(as.character(survInput$Annual))
   recInput$Year=as.numeric(as.character(recInput$Annual))
   
-  obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(Mortalities = sum(MortalitiesCertain,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
+  obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(AnyNA=sum(!is.na(Mortalities)),Mortalities = sum(MortalitiesCertain,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
   obsSurv$Mean <- 1-obsSurv$Mortalities/obsSurv$StartTotal
+  obsSurv$Mean[obsSurv$AnyNA==0]=NA
   obsSurv$Parameter <- "Adult female survival"
-  obsSurv$MetricTypeID <- "survival"
+  obsSurv$MetricTypeID <- "S"
   obsSurv$Type <- "observed"
 
   obsRec <- subset(recInput, 
@@ -72,23 +75,27 @@ getOutputTables <- function(caribouBayesDemogMod,
   adult_female_proportion = 0.65; sex_ratio=0.5 #TO DO: get from model object
   obsRec$Mean <- obsRec$Calves / (obsRec$Cows + obsRec$UnknownAdults*adult_female_proportion+obsRec$Yearlings*sex_ratio)
   obsRec$Parameter <- "Recruitment"
-  obsRec$MetricTypeID <- "recruitment"
+  obsRec$MetricTypeID <- "R"
   obsRec$Type <- "observed"
 
   #hist(subset(rr.summary,Parameter=="Recruitment")$Mean)
+  
+  obsAll <- rbind(subset(obsRec, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                                            "Type")),
+                  subset(obsSurv, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                                             "Type")))
   
   if(!is.null(exData)){
     
     exData <- merge(exData,unique(subset(rr.summary,select=c(MetricTypeID,Parameter))),all.x=T)
     names(exData)[names(exData)=="Amount"] = "Mean"
     exData$Type = "true"
+    
+    obsAll <- rbind(obsAll,
+                    subset(exData, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                                              "Type")))
   } 
-  obsAll <- rbind(subset(obsRec, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
-                                            "Type")),
-                  subset(obsSurv, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
-                                             "Type")), 
-                  subset(exData, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
-                                             "Type")))
+
   
   if(!is.null(distInput)){
     # combine paramTable and simDisturbance and add to all output tables, nest params in a list
@@ -98,12 +105,46 @@ getOutputTables <- function(caribouBayesDemogMod,
   }
   
   if(!is.null(simInitial)){
-    if(F&&!all(unique(distInput$Anthro) %in% simInitial$summary$Anthro)){
-      message("recalculating initial sims to match anthropogenic distubance scenario")
+    summaries <- simInitial$summary
+
+    if(is.element("AnthroID",names(summaries))&&any(!is.na(summaries$AnthroID))){
       
-      simInitial <- getSimsInitial(Anthro = unique(distInput$Anthro),cPars=paramTable)
+      if(!is.element("Year",names(summaries))&!is.element("Anthro",names(dist_params))){
+        stop("Set disturbance in caribouBayesianPM function call in order to compare to national model simulations.", call. = FALSE)
+      }
+      if(!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
+        message("recalculating initial sims to match anthropogenic distubance scenario")
+        simInitial <- getSimsInitial(cPars=paramTable)
+        summaries <- simInitial$summary
+      }
+      #remove irrelevant disturbance combinations from the summaries, and add Year if missing.
+      distMerge <- subset(dist_params, select=c(Anthro,fire_excl_anthro,Year))
+      distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
+      distMerge=unique(distMerge)
+      names(distMerge) <- c("AnthroID","fire_excl_anthroID","Year")
+      tt<- merge(summaries,distMerge)
+      check <- unique(subset(tt,select=names(distMerge)))
+      if(nrow(check)!=nrow(distMerge)){
+        stop("Handle this case")
+      }
+      simBigO<-tt
+      simBigO$AnthroID=NULL;simBigO$fire_excl_anthroID=NULL
+    }else{
+      summaries$AnthroID=NULL;summaries$fire_excl_anthroID=NULL
+      by_col <- intersect(names(summaries), names(dist_params))
+      if(length(by_col) == 0){
+        if(any(table(summaries$Year[summaries$MetricTypeID=="recruitment"])>length(unique(summaries$PopulationName)))){
+          stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no columns shared between them", call. = FALSE)
+        }
+        simBigO <- summaries
+      }else{
+        matches <- intersect(summaries[[by_col]], dist_params[[by_col]])
+        if(length(matches) == 0){
+          stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no overlapping values in ", by_col, call. = FALSE)
+        }
+        simBigO <- merge(summaries, dist_params)
+      }
     }
-    simBigO <- merge(simInitial$summary, dist_params)
   } else {
     simBigO <- NULL
   }
