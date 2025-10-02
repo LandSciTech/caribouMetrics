@@ -5,133 +5,109 @@
 \title{Bayesian population model for boreal caribou}
 \usage{
 caribouBayesianPM(
-  survData = system.file("extdata/simSurvData.csv", package = "caribouMetrics"),
-  ageRatio = system.file("extdata/simAgeRatio.csv", package = "caribouMetrics"),
-  disturbance = system.file("extdata/simDisturbance.csv", package = "caribouMetrics"),
+  surv_data = bboudata::bbousurv_a,
+  recruit_data = bboudata::bbourecruit_a,
+  disturbance = NULL,
   betaPriors = "default",
   startYear = NULL,
   endYear = NULL,
-  Nchains = 4,
-  Niter = 15000,
-  Nburn = 10000,
-  Nthin = 2,
-  N0 = 1000,
-  survAnalysisMethod = "Binomial",
-  assessmentYrs = 1,
+  N0 = NA,
+  returnSamples = F,
   inputList = list(),
-  saveJAGStxt = tempdir(),
-  quiet = TRUE
+  niters = formals(bboutools::bb_fit_survival)$niters,
+  nthin = formals(bboutools::bb_fit_survival)$nthin,
+  ...
 )
 }
 \arguments{
-\item{survData}{either a path to a csv file or a dataframe containing the
-columns "Year", "event", "enter" and "exit". Enter and exit are the
-beginning and end of the time interval and should be a number from 1 to 12
-(December) or 0 (See Details). Event is 0 or 1 where 0 means the animal
-lived and 1 died. See \code{\link[survival:Surv]{survival::Surv()}} for more details.}
+\item{surv_data}{either a path to a csv file or a survival data table in bboutools format.}
 
-\item{ageRatio}{either a path to a csv file or a dataframe containing the
-columns "Year","Count", and "Class". Where class can be either "calf" or "cow"}
+\item{recruit_data}{either a path to a csv file or a recruitment data table in bboutools format.}
 
 \item{disturbance}{either a path to a csv file or a dataframe containing the
 columns "Anthro","fire_excl_anthro", and "Year".}
 
-\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}.}
+\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}. Not used if disturbance is NA.}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
 
-\item{Nchains}{Number of chains for the MCMC algorithm.}
+\item{N0}{Number or vector of numbers. Initial population size for one or
+more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
 
-\item{Niter}{Number of iterations for the MCMC algorithm.}
-
-\item{Nburn}{Length of burn-in for the MCMC algorithm.}
-
-\item{Nthin}{Thinning rate for the MCMC algorithm.}
-
-\item{N0}{Initial population size.}
-
-\item{survAnalysisMethod}{Survival analysis method either "KaplanMeier" or
-"Binomial". The KaplanMeier method yields slightly biased survival estimates.}
-
-\item{assessmentYrs}{Number of years over which to assess population growth rate lambda.}
+\item{returnSamples}{logical. If F returns only summaries. If T returns example trajectories.}
 
 \item{inputList}{an optional list of inputs with names matching the above. If
 an argument is included in this list it will override the named argument.}
 
-\item{saveJAGStxt}{file path. Directory where the JAGS model txt files will
-be saved. Default is \code{tempdir()}.}
+\item{niters}{A whole number of the number of iterations per chain after thinning and burn-in.}
 
-\item{quiet}{logical. Should jags run quietly?}
+\item{nthin}{integer. The number of the thinning rate.}
 }
 \value{
 a list with elements:
 \itemize{
-\item result: an \code{rjags} model object see \code{\link[R2jags:jags]{R2jags::jags()}}.
+\item result: a list of model results:
+\itemize{
+\item summary: a data.frame
+\item samples: a tibble providing the full range of MCMC trajectories from the model.
+It is in a long format where "Amount" gives the value for
+each metric in Anthro, fire_excl_anthro, c, survival, recruitment, X, N,
+lambda, Sbar, Rbar, Xbar, Nbar, and lambda_bar, with a row for each
+combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"
+\item surv_data: a data.frame
+\item recruit_data: a tibble
+\item popInfo: a data.frame
+}
 \item inData: a list of data that is used as input to the jags model:
 \itemize{
 \item survDataIn:  survival data
 \item disturbanceIn: disturbance data
-\item ageRatioIn: composition data
+\item recruitDataIn: composition data
 }
 }
 }
 \description{
-A Bayesian population model that integrates prior
-information from Johnson et al.'s (2020) national analysis of
-demographic-disturbance relationships with local demographic data to project
-population growth.
-}
-\details{
-The model combines local observations of survival (\code{survData}),
-recruitment based on calf:cow ratios (\code{ageRatio}) and anthropogenic
-disturbance (\code{disturbance}) with prior information on
-the relationship between disturbance and survival and recruitment from the
-Johnson et al. (2020) national model (\code{getPriors()}) to reduce uncertainty and refine parameter estimates.
-
-For a detailed description see the
-\href{https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html#integration-of-local-demographic-data-and-national-disturbance-demographic-relationships-in-a-bayesian-population-model}{vignette}
-(\code{vignette("BayesianDemographicProjection", package = "caribouMetrics")}).
-
-Note: if \code{survData} contains values for enter that are > 0 these rows
-will be dropped to avoid errors when collars are added in the middle of the
-year. This will reduce the sample size in years when new collars are added.
+Bayesian population model for boreal caribou
 }
 \examples{
-# Using observed survival, recruitment and disturbance data
-mod <- caribouBayesianPM(
-  survData = system.file("extdata/simSurvData.csv",
-                         package = "caribouMetrics"),
-  ageRatio = system.file("extdata/simAgeRatio.csv",
-                         package = "caribouMetrics"),
-  disturbance = system.file("extdata/simDisturbance.csv",
-                            package = "caribouMetrics"),
-  Nchains = 1, Niter = 100, Nburn = 10, Nthin = 2
-)
-str(mod, max.level = 2)
-
-# Using simulated observation data
-scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
-                            obsAnthroSlope = 1, projAnthroSlope = 5,
-                            collarCount = 20, cowMult = 5)
-
-simO <- simulateObservations(scns)
-
-out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
-                          disturbance = simO$simDisturbance,
-                          startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
-                          Nthin = 2)
+\donttest{
+  # Note these examples take a long time to run!
+  
+  # Using observed survival, recruitment and disturbance data
+  mod <- caribouBayesianPM(
+    surv_data = bboudata::bbousurv_a,
+    recruit_data = bboudata::bbourecruit_a,
+    disturbance = NULL
+  )
+  str(mod, max.level = 2)
+  
+  # Using simulated observation data
+  scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
+                              obsAnthroSlope = 1, projAnthroSlope = 5,
+                              collarCount = 20, cowMult = 5)
+  
+  simO <- simulateObservations(scns)
+  
+  out <- caribouBayesianPM(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
+                           disturbance = simO$simDisturbance,
+                           startYear = 2014)
+}
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
+\code{\link{getSimsInitial}()},
 \code{\link{getSimsNational}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},

@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The caribouMetrics R package provides reproducible open source implementations of several models of Boreal woodland caribou (_Rangifer tarandus caribou_) demography and habitat use. A national two-stage demographic model with density dependence and interannual variability follows [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with modifications described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates vary with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637). The package also includes a Bayesian population model  designed to integrate prior information from Johnson et al's national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections. The Bayesian population model builds on work by  [Eacker et al. (2019)](https://doi.org/10.1002/wsb.950). The national model can be used to simulate example population trajectories, and combined with a simple observation model and the Bayesian population model to show how monitoring requirements depend on landscape condition. Finally, caribouMetrics contains an implementation of [Hornseth and Rempel's (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource selection model described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Model implementation is intended to be modular and flexible, allowing reuse of components in a variety of contexts including projections of the cumulative effects of disturbance and climate change [(e.g. Stewart et al. 2023)](https://doi.org/10.1002/eap.2816) and a [Shiny app](https://landscitech.github.io/BayesianCaribouDemographicProjection/) designed to allow allow exploration of user-specified monitoring and disturbance scenarios.
+The caribouMetrics R package provides reproducible open source implementations of several models of Boreal woodland caribou (_Rangifer tarandus caribou_) demography and habitat use. A national demographic model with density dependence and interannual variability follows [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with modifications described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates vary with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637). The package also includes Bayesian methods for integrating prior information from Johnson et al's national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections. The national model can be used to simulate example population trajectories, and combined with a simple observation model and the Bayesian population model to show how monitoring requirements depend on landscape condition. Finally, caribouMetrics contains an implementation of [Hornseth and Rempel's (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource selection model described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Model implementation is intended to be modular and flexible, allowing reuse of components in a variety of contexts including projections of the cumulative effects of disturbance and climate change [(e.g. Stewart et al. 2023)](https://doi.org/10.1002/eap.2816) and a [Shiny app](https://landscitech.github.io/BayesianCaribouDemographicProjection/) designed to allow exploration of user-specified monitoring and disturbance scenarios.
 
 ## Installation
 
@@ -81,7 +81,7 @@ simObs <- simulateObservations(params, printPlot = TRUE)
 ipm <- caribouBayesianPM(simObs$simSurvObs, simObs$ageRatioOut, 
                           simObs$simDisturbance,
                           # only set to speed up vignette. Normally keep defaults.
-                          Niter = 150, Nburn = 100)
+                          niters=100)
 
 natSim <- getSimsNational(Anthro = unique(simObs$simDisturbance$Anthro))
 
@@ -112,7 +112,7 @@ The [package website](https://landscitech.github.io/caribouMetrics) contains inf
 
 * [**Demographic Model**](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html): 
 Predict demographic rates and population growth based on their relationship to habitat disturbance. 
-* [**Bayesian Demographic Projection**](https://landscitech.github.io/caribouMetrics/articles/BayesianDemographicProjection.html): Project demographic rates and population growth based on the national demographic model and local caribou observations.
+* [**Bayesian Demographic Projection**](https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html): Project demographic rates and population growth based on the national demographic model and local caribou observations.
 * [**Disturbance Metrics**](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html): Calculate buffered anthropogenic disturbance and fire disturbance percentages for a given area.
 * [**User Interface Help**](https://landscitech.github.io/caribouMetrics/articles/UI_help.html): Instructions for using the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models (WIP)
 
@@ -125,8 +125,6 @@ If you have any questions about the caribouMetrics package or suggestions for im
 # References
 
 Dyson, M., Endicott, S., Simpkins C., Turner, J.W., Avery-Gomm S., Johnson, C.A., Leblond, M., Neilson, E.W., Rempel, R., Wiebe, P.A., Baltzer, J.L., Stewart, F.E.C., Hughes, J. 2022. Existing caribou habitat and demographic models are poorly suited for Ring of Fire impact assessment: A roadmap for improving the usefulness, transparency, and availability of models for conservation. bioRxiv 2022.06.01.494350; https://doi.org/10.1101/2022.06.01.494350
-
-Eacker, D.R., Hebblewhite, M., Steenweg, R., Russell, M., Flasko, A. and Hervieux, D., 2019. Web‐based application for threatened woodland caribou population modeling. Wildlife Society Bulletin, 43(1), pp.167-177. https://doi.org/10.1002/wsb.950
 
 ECCC. 2011. Scientific assessment to inform the identification of critical
 habitat for woodland caribou (*Rangifer tarandus caribou*), boreal population, in

@@ -11,7 +11,6 @@ plotRes(
   highBound = 1,
   facetVars = NULL,
   labFontSize = 14,
-  ksDists = FALSE,
   legendPosition = "right",
   breakInterval = 1
 )
@@ -30,9 +29,6 @@ of plots is returned.}
 \item{labFontSize}{numeric. Optional. Label font size if there are not
 facets. Font size is 10 pt if facets are used.}
 
-\item{ksDists}{logical. If true the \code{modTables$ksDists} table is used to
-create plots for each parameter.}
-
 \item{legendPosition}{"bottom", "right", "left","top", or "none". Legend position.}
 
 \item{breakInterval}{number. How many years between x tick marks?}
@@ -43,7 +39,7 @@ was given.
 }
 \description{
 Plot Bayesian population model results, with (optionally) the
-distribution of outcomes from the national model, local observations, and true local state for comparison.
+distribution of outcomes from the initial model, local observations, and true local state for comparison.
 }
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
@@ -52,27 +48,30 @@ scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 
 simO <- simulateObservations(scns)
 
-out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+out <- caribouBayesianPM(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                           disturbance = simO$simDisturbance,
-                          startYear = 2014, Nchains = 1, Niter = 100, Nburn = 10,
-                          Nthin = 2)
+                          startYear = 2014, niters=10)
 
 out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-                           simNational = getSimsNational(), getKSDists = FALSE)
+                           simInitial = getSimsInitial())
 
 plotRes(out_tbl, parameter = "Recruitment")
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
+\code{\link{getSimsInitial}()},
 \code{\link{getSimsNational}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},

@@ -5,11 +5,11 @@ Version: 0.4.0
 Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec.gc.ca", comment = c(ORCID = "0000-0001-7875-9015")),
     person("Sarah", "Endicott", email = "sarah.endicott@ec.gc.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
+    person("Yuko", "Shimoda", email = "shimoday@gmail.com", role = "aut"),
     person("Craig", "Simpkins", email = "simpkinscraig063@gmail.com", role = "aut"),
     person("Tati", "Michelleti", email = "tati.micheletti@gmail.com", 
            role = c("aut", "cph"), comment = c("Functions getCoefs and sampleRates are derived from code written by Tati Micheletti")),
     person("Eliot", "McIntire", email = "eliot.mcintire@canada.ca", role = "aut"),
-    person("Daniel", "Eacker", role = "cph", comment = c("Lead author of paper where code modified in caribouBayesianPM, plotRes, and getSumStats was published")),
     person("Saralees", "Nadarajah", role = "cph", comment = c("Author of truncdist package, which function rtrunc and qtrunc were modified from")),
     person("Frederick", "Novomestky", role = "cph", comment = c("Author of truncdist package, which function rtrunc and qtrunc were modified from")),
     person(given="Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change",
@@ -19,13 +19,12 @@ Description: caribouMetrics provides implementations of several models of Boreal
     dependence and interannual variability follows [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) 
     with modifications described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). 
     Demographic rates vary with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637).
-    The package also includes a Bayesian population model designed to integrate prior information 
+    The package also includes Bayesian methods for integrating prior information 
     from Johnson et al's national analysis of demographic-disturbance relationships with available 
-    local demographic data to reduce uncertainty in population viability projections. Some aspects of the Bayesian 
-    population model implementation were derived from [Eacker et al. (2019)](https://doi.org/10.1002/wsb.950). 
+    local demographic data to reduce uncertainty in population viability projections ([Hughes et al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095)).  
     The national model can be used to simulate example population trajectories, and combined with a 
     simple observation model and the Bayesian population model to show how monitoring requirements 
-    depend on landscape condition. Finally, caribouMetrics contains an implementation of 
+    depend on landscape condition ([Hughes et al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095)). Finally, caribouMetrics contains an implementation of 
     [Hornseth and Rempel's (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource
     selection model described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). 
     Model implementation is intended to be modular and flexible, allowing reuse of components in a 
@@ -49,10 +48,16 @@ Imports:
     rlang,
     terra,
     R2jags,
-    survival
+    rjags,
+    survival,
+    bboutools,
+    mcmcr,
+    fitdistrplus
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
+    'bbouMakeSummaryTable.R'
+    'betaMakeSummaryTable.R'
     'betaSample.R'
     'calcBinaryUse.R'
     'calcRSP.R'
@@ -60,6 +65,7 @@ Collate:
     'caribouHabitat.R'
     'caribouMetrics-package.R'
     'caribouPopGrowth.R'
+    'caribouPopSimMCMC.R'
     'checkInputs.R'
     'combineLinFeat.R'
     'compositionBiasCorrection.R'
@@ -69,10 +75,12 @@ Collate:
     'demographicProjectionApp.R'
     'demographicRates.R'
     'disturbanceMetrics.R'
+    'doSim.R'
     'getCoefs.R'
     'getOutputTables.R'
     'getPriors.R'
     'getScenarioDefaults.R'
+    'getSimsInitial.R'
     'getSimsNational.R'
     'spatialAlignFns.R'
     'inputData.R'
@@ -92,7 +100,6 @@ Collate:
     'sampleCoefs.R'
     'sampleRates.R'
     'simulateObservations.R'
-    'tabAllRes.R'
     'updateCaribou.R'
     'updateDisturbance.R'
 Suggests: 
@@ -104,12 +111,16 @@ Suggests:
     ggplot2,
     rsyncrosim,
     pfocal,
-    BayesianCaribouDemographicProjection,
-    raster
+    raster,
+    shiny,
+    bboudata,
+    here
 Remotes: LandSciTech/pfocal,
-    LandSciTech/BayesianCaribouDemographicProjection
+    LandSciTech/bboudata,
+    bboutools=github::LandSciTech/bboutoolsMultiPop
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
+    nimble,
     R (>= 3.5)
 URL: https://landscitech.github.io/caribouMetrics, https://github.com/LandSciTech/caribouMetrics

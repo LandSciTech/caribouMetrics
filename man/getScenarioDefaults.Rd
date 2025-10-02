@@ -12,26 +12,27 @@ getScenarioDefaults(
   projAnthroSlope = 2,
   rSlopeMod = 1,
   sSlopeMod = 1,
-  rQuantile = 0.5,
-  sQuantile = 0.5,
+  lQuantile = NA,
+  correlateRates = F,
   projYears = 35,
   obsYears = 15,
   preYears = 0,
   N0 = 1000,
-  assessmentYrs = 3,
   qMin = 0,
-  qMax = 0.6,
+  qMax = 0,
   uMin = 0,
-  uMax = 0.2,
+  uMax = 0,
   zMin = 0,
-  zMax = 0.2,
+  zMax = 0,
   cowMult = 6,
   collarInterval = NA,
   cowCount = NA,
   collarCount = NA,
   startYear = NA,
   interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
-  curYear = 2023
+  curYear = 2023,
+  sQuantile = NA,
+  rQuantile = NA
 )
 }
 \arguments{
@@ -52,9 +53,9 @@ the projection period}
 
 \item{sSlopeMod}{number. Disturbance-survival slope multiplier}
 
-\item{rQuantile}{number in 0, 1. Recruitment quantile}
+\item{lQuantile}{number in 0, 1. Lambda quantile}
 
-\item{sQuantile}{number in 0, 1. Survival quantile}
+\item{correlateRates}{logical. Set TRUE to force correlation between recruitment and survival.}
 
 \item{projYears}{Number of years of projections}
 
@@ -63,9 +64,7 @@ the projection period}
 \item{preYears}{Number of years before monitoring begins}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations.}
-
-\item{assessmentYrs}{Number of years over which to assess population growth rate lambda.}
+more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
 
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
 
@@ -118,14 +117,18 @@ getScenarioDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears =
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
+\code{\link{getSimsInitial}()},
 \code{\link{getSimsNational}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},

@@ -10,8 +10,7 @@ getOutputTables(
   endYear = max(caribouBayesDemogMod$inData$disturbanceIn$Year),
   paramTable = data.frame(param = "observed"),
   exData = NULL,
-  simNational = NULL,
-  getKSDists = FALSE
+  simInitial = NULL
 )
 }
 \arguments{
@@ -28,10 +27,8 @@ period and the end of the projection period.}
 records the true population metrics of the population that observations
 were simulated from.}
 
-\item{simNational}{National simulation results, produced by calling
-\code{\link[=getSimsNational]{getSimsNational()}}}
-
-\item{getKSDists}{logical. Should Kolmogorov–Smirnov distances be calculated?}
+\item{simInitial}{Initial simulation results, produced by calling
+\code{\link[=getSimsInitial]{getSimsInitial()}}}
 }
 \value{
 a list of tables:
@@ -40,17 +37,15 @@ a list of tables:
 upper and lower credible intervals projected by the Bayesian model, as well
 as scenario input parameters.
 \item sim.all: Mean parameter values and upper and lower credible intervals from
-the National model for each year, as well as scenario input parameters.
-\item obs.all: Observed parameter values with column "type" identifying if it is
+the initial model for each year, as well as scenario input parameters.
+\item obs.all: Observed parameter values with column "Type" identifying if it is
 the "true" value of the simulated population or the "observed" value
 simulated based on the collaring program parameters.
-\item kdDists: Kolmogorov–Smirnov distances and p-values, NA if getKSDists is false
 }
 }
 \description{
 Produces summary tables for Bayesian caribou population model
-results. Optionally calculates Kolmogorov–Smirnov distances between Bayesian
-model results and national model results.
+results.
 }
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
@@ -59,24 +54,29 @@ scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
 
 simO <- simulateObservations(scns)
 
-out <- caribouBayesianPM(survData = simO$simSurvObs, ageRatio = simO$ageRatioOut,
+out <- caribouBayesianPM(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                           disturbance = simO$simDisturbance,
-                          Nchains = 1, Niter = 100, Nburn = 10,
-                          Nthin = 2)
+                          niters=10)
 
-getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-                simNational = getSimsNational(), getKSDists = FALSE)
+outTables <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
+                             simInitial = getSimsInitial())
+                             
+str(outTables, max.level = 2, give.attr = FALSE)
 }
 \seealso{
 Caribou demography functions:
+\code{\link{bbouMakeSummaryTable}()},
 \code{\link{caribouBayesianPM}()},
 \code{\link{caribouPopGrowth}()},
+\code{\link{caribouPopSimMCMC}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{demographicCoefficients}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
+\code{\link{doSim}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
+\code{\link{getSimsInitial}()},
 \code{\link{getSimsNational}()},
 \code{\link{plotRes}()},
 \code{\link{popGrowthTableJohnsonECCC}},

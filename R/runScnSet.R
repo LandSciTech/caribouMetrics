@@ -7,6 +7,8 @@
 #'   [getScenarioDefaults()] for details.
 #' @param ePars list. Additional parameters passed on to
 #'   [simulateObservations()]
+#' @param Rep integer. Optional. If specified, select specified replicate trajectory.
+#' @param returnSamples logical. Optional. If true, return full results from [caribouBayesianPM()].
 #' @inheritParams caribouBayesianPM
 #' @inheritParams getOutputTables
 #' @param printProgress logical. Should the scenario number and parameters be
@@ -22,82 +24,113 @@
 #' @examples
 #' scns <- expand.grid(
 #'   obsYears =c(10, 20), collarCount = c(30, 300), cowMult = 2, collarInterval = 2,
-#'   assessmentYrs = 1, iAnthro = 0,
+#'   iAnthro = 0,
 #'   obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.9,
 #'   rQuantile = 0.7, N0 = 1000
 #' )
 #' 
-#' eParsIn <- list(collarOnTime = 1, collarOffTime = 12, collarNumYears = 3)
-#' scResults <- runScnSet(scns, eParsIn, getSimsNational(), getKSDists = FALSE,
-#'                        # only set to speed up example. Normally keep defaults.
-#'                        Niter = 10, Nburn = 2)
+#' eParsIn <- list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 3)
+#' simsIn <- getSimsInitial()
+#' scResults <- runScnSet(scns, simsIn, eParsIn,
+#'                        niters = 10)# only set to speed up example. Normally keep defaults.
 
 
-runScnSet <- function(scns, ePars, simNational, survAnalysisMethod = "Binomial",
-                      getKSDists = TRUE, printProgress = FALSE, 
-                      Niter = formals(caribouBayesianPM)$Niter,
-                      Nburn = formals(caribouBayesianPM)$Nburn) {
-  # ePars=eParsIn;survAnalysisMethod="Binomial";simNational=simBig;getKSDists=T;printProgress=F;Niter = formals(caribouBayesianPM)$Niter;Nburn = formals(caribouBayesianPM)$Nburn
+runScnSet <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=4,collarNumYears=4),Rep=NULL,
+                      printProgress = FALSE,betaPriors="default",
+                      niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,
+                      returnSamples=F,...) {
+  
+  # ePars=eParsIn;simInitial=simBig;printProgress=F;niters = formals(bboutools::bb_fit_survival)$niters)
+
   scns <- getScenarioDefaults(scns)
   errorLog <- list()
   for (p in 1:nrow(scns)) {
-    # p=1
+    # p=2
     cs <- scns[p, ]
     if (printProgress) {
       print(paste0(c(p, scns[p, ]), collapse = " "))
     }
     
-    oo <- simulateObservations(cs, collarNumYears = ePars$collarNumYears,
-                               collarOffTime = ePars$collarOffTime,
-                               collarOnTime = ePars$collarOnTime)
-    
-    betaPriors <- getPriors(cs)
-    minYr <- min(oo$exData$Year)
-    maxYr <- max(oo$simDisturbance$Year)
-    out <- try(caribouBayesianPM(
-      survData = oo$simSurvObs, ageRatio = oo$ageRatioOut,
+    if(is.element("samples",names(simInitial))){
+      if(is.element("lQuantile",names(cs))&&!is.na(cs$lQuantile)){
+        trajectories <- subset(simInitial$samples,LambdaPercentile == round(cs$lQuantile*100))
+      }else{
+        trajectories <- simInitial$samples
+      }
+      if(!is.null(Rep)){
+        trajectories <- subset(trajectories,Replicate==Rep)
+      }else{
+        trajectories <- subset(trajectories,Replicate==sample(unique(trajectories$Replicate),1))
+      }
+      
+      cs$Replicate <- unique(trajectories$Replicate)
+      oo <- simulateObservations(cs, trajectories, 
+                                 cowCounts = ePars$cowCounts,
+                                 freqStartsByYear = ePars$freqStartsByYear,
+                                 collarNumYears = ePars$collarNumYears,
+                                 collarOffTime = ePars$collarOffTime,
+                                 collarOnTime = ePars$collarOnTime,
+                                 surv_data = simInitial$surv_data, recruit_data=simInitial$recruit_data)
+      
+    }else{
+      oo <- simulateObservations(paramTable=cs, trajectories=NULL, 
+                                 cowCounts = ePars$cowCounts,
+                                 freqStartsByYear = ePars$freqStartsByYear,
+                                 collarNumYears = ePars$collarNumYears,
+                                 collarOffTime = ePars$collarOffTime,
+                                 collarOnTime = ePars$collarOnTime,
+                                 surv_data = simInitial$surv_data, recruit_data=simInitial$recruit_data)
+    }
+    #plot(plotSurvivalSeries(oo$simSurvObs))
+
+    if (betaPriors[[1]] == "default") {
+      betaPriors <- getPriors(cs)
+    }
+    out <- (caribouBayesianPM(
+      surv_data = oo$simSurvObs, recruit_data = oo$simRecruitObs,
       disturbance = oo$simDisturbance,
-      betaPriors = betaPriors, startYear = minYr, endYear = maxYr,
-      N0 = cs$N0, survAnalysisMethod = survAnalysisMethod,
-      assessmentYrs = cs$assessmentYrs, Niter = Niter, 
-      Nburn = Nburn
-    ))
+      betaPriors = betaPriors, startYear = oo$minYr, endYear = oo$maxYr,
+      N0 = cs$N0,niters=niters,nthin=nthin,returnSamples=returnSamples,...))
+
     if (inherits(out, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
-                   obs.all = obs.all, ksDists = ksDists, errorLog = errorLog),
+                   obs.all = obs.all, errorLog = errorLog),
               "results/temp.Rds")
       next
     }
-
+    
     if (inherits(out$result, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out$result)
       saveRDS(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
-                   obs.all = obs.all, ksDists = ksDists, errorLog = errorLog),
+                   obs.all = obs.all, errorLog = errorLog),
               "results/temp.Rds")
       next
     }
 
     outTabs <- getOutputTables(caribouBayesDemogMod = out, startYear = minYr,
-                               endYear = maxYr, simNational = simNational,
-                               exData = oo$exData, paramTable = oo$paramTable,
-                               getKSDists = getKSDists)
+                               endYear = maxYr, simInitial = simInitial,
+                               exData = oo$exData, paramTable = oo$paramTable)
+    
 
     if (p == 1) {
       rr.summary.all <- outTabs$rr.summary.all
       sim.all <- outTabs$sim.all
       obs.all <- outTabs$obs.all
-      ksDists <- merge(outTabs$ksDists, cs)
     } else {
       rr.summary.all <- rbind(rr.summary.all, outTabs$rr.summary.all)
       sim.all <- rbind(sim.all, outTabs$sim.all)
       obs.all <- rbind(obs.all, outTabs$obs.all)
-      ksDists <- rbind(ksDists, merge(outTabs$ksDists, cs))
     }
   }
   if (length(errorLog) > 0) {
     print(errorLog)
   }
-  return(list(rr.summary.all = rr.summary.all, sim.all = sim.all,
-              obs.all = obs.all, ksDists = ksDists, errorLog = errorLog))
+  ret = list(rr.summary.all = rr.summary.all, sim.all = sim.all,
+             obs.all = obs.all, errorLog = errorLog)
+  if(returnSamples){
+    ret$out <- out
+  }
+  
+  return(ret)
 }

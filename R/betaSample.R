@@ -153,7 +153,6 @@ rtrunc <- function (n, spec, a = -Inf, b = Inf, ...){
   return(x)
 }
 
-# used for annual interannual variation
 inv.logit <-function(x){
   exp(x)/(1+exp(x))
 }

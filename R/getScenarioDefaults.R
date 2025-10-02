@@ -13,8 +13,8 @@
 #'   the projection period
 #' @param rSlopeMod number. Disturbance-recruitment slope multiplier
 #' @param sSlopeMod number. Disturbance-survival slope multiplier
-#' @param rQuantile number in 0, 1. Recruitment quantile
-#' @param sQuantile number in 0, 1. Survival quantile
+#' @param lQuantile number in 0, 1. Lambda quantile
+#' @param correlateRates logical. Set TRUE to force correlation between recruitment and survival.
 #' @param projYears Number of years of projections
 #' @param obsYears Number of years of observations
 #' @param preYears Number of years before monitoring begins
@@ -50,14 +50,14 @@
 getScenarioDefaults <- function(paramTable = NULL,
                          iFire = 0, iAnthro = 0, obsAnthroSlope = 2, projAnthroSlope = 2,
                          rSlopeMod = 1, sSlopeMod = 1,
-                         rQuantile = 0.5, sQuantile = 0.5, projYears = 35, 
+                         lQuantile = NA, correlateRates = F, projYears = 35, 
                          obsYears = 15, preYears=0, N0 = 1000,
-                         assessmentYrs = 3,qMin=0,qMax =0.6, 
-                         uMin = 0, uMax = 0.2, zMin = 0, zMax = 0.2, cowMult = 6,
+                         qMin=0,qMax =0, 
+                         uMin = 0, uMax = 0, zMin = 0, zMax = 0, cowMult = 6,
                          collarInterval = NA, cowCount = NA, 
                          collarCount = NA, startYear = NA,
                          interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
-                         curYear = 2023) {
+                         curYear = 2023,sQuantile=NA,rQuantile=NA) {
   defList <- c(as.list(environment()))
   defList$paramTable <- NULL
   if (is.null(paramTable)) {
@@ -72,9 +72,9 @@ getScenarioDefaults <- function(paramTable = NULL,
   # defList but keep any extra columns not in defList
   paramTable <- select(paramTable, all_of(names(defList)), everything(), -where(~all(is.na(.x))))
 
-  if (is.element("cowMult", names(paramTable)) & is.element("cowCount", names(paramTable))) {
+  if (is.element("cowMult", names(paramTable)) & any(paramTable$cowMult != 1) & is.element("cowCount", names(paramTable))) {
     stop("Specify number of cows per year in recruitment survey (cowCount) or",
-         " multiplier of number of collared cows in recruitment survey (cowMult),",
+         " multiplier of number of collared cows in recruitment survey (cowMult) that is different from 1,",
          " but not both.")
   }
   
@@ -97,6 +97,5 @@ getScenarioDefaults <- function(paramTable = NULL,
   if (!is.element("startYear", names(paramTable))) {
     paramTable$startYear <- paramTable$curYear - paramTable$obsYears - paramTable$preYears + 1
   }
-  
   return(paramTable)
 }

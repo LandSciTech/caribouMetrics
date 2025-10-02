@@ -9,7 +9,7 @@
 #' been calibrated so that the 95% prior prediction intervals for survival and
 #' recruitment from the Bayesian model match the range between the 2.5% and
 #' 97.5% quantiles of 1000 survival and recruitment trajectories from the
-#' national demographic model [caribouPopGrowth()]. A log-normal prior for the
+#' national demographic model [caribouPopGrowth()]. A prior for the
 #' unknown composition survey bias correction term `c` is set by specifying an
 #' apparent number of adult females per collared animal(`cowMult`) and minimum
 #' and maximum values for each of the ratio of bulls to cows (\eqn{q}), the
@@ -69,8 +69,7 @@
 #'   on adult female survival,
 #' * sig.Saf.Prior2: Standard deviation of the prior distribution of the random
 #'   effect of year on adult female survival,
-#' * bias.Prior1: Log-normal mean composition survey bias correction term,
-#' * bias.Prior2: Log-normal standard deviation of composition survey bias correction term
+#' * qMin,qMax,uMin,uMax,zMin,zMax,cowMult: Composition bias parameters.   
 #' 
 #' @references    
 #'   Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
@@ -154,12 +153,13 @@ getPriors <- function(modList = NULL,
   
   #####
   #get bias coefficient priors - lognormally distributed
-  nr=10000
-  cs = compositionBiasCorrection(w=modList$cowMult,q=runif(nr,modList$qMin,modList$qMax),
-                                u=runif(nr,modList$uMin,modList$uMax),
-                                z=runif(nr,modList$zMin,modList$zMax),approx=T)
-  bias.Prior1 = cs$mu
-  bias.Prior2 = cs$sig2^0.5
+  #nr=10000
+  #cs = compositionBiasCorrection(w=modList$cowMult,q=runif(nr,modList$qMin,modList$qMax),
+  #                              u=runif(nr,modList$uMin,modList$uMax),
+  #                              z=runif(nr,modList$zMin,modList$zMax),approx=T)
+  #bias.Prior1 = cs$mu
+  #bias.Prior2 = cs$sig2^0.5
+  compositionBiasPars <- modList[c("cowMult","qMin","qMax","uMin","uMax","zMin","zMax")]
 
   if (returnValues) {
     betaPriors <- list(
@@ -176,9 +176,7 @@ getPriors <- function(modList = NULL,
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = modList$sAnthroSlopeSE,
       sig.Saf.Prior1 = modList$sNuMin,
-      sig.Saf.Prior2 = modList$sNuMax,
-      bias.Prior1 = bias.Prior1,
-      bias.Prior2 = bias.Prior2
+      sig.Saf.Prior2 = modList$sNuMax
     )
 
     # replace NULL values with 0 for when anthro or fire is not included
@@ -189,6 +187,7 @@ getPriors <- function(modList = NULL,
         x
       }
     })
+    betaPriors <- c(betaPriors,compositionBiasPars)
   } else {
     betaPriors <- list(
       l.R.Prior1 = rPriorCoefs$Intercept,
@@ -204,16 +203,23 @@ getPriors <- function(modList = NULL,
       beta.Saf.Prior1 = sPriorCoefs$Anthro,
       beta.Saf.Prior2 = round(modList$sAnthroSlopeSE, 4),
       sig.Saf.Prior1 = modList$sNuMin,
-      sig.Saf.Prior2 = modList$sNuMax,
-      bias.Prior1 = bias.Prior1,
-      bias.Prior2 = bias.Prior2
+      sig.Saf.Prior2 = modList$sNuMax
     )
   }
+  
   return(betaPriors)
 }
 
 simCovariates <- function(initAnthro, initFire, numYears, anthroSlope,
                           anthroSlopeFuture, futureStep, fireSlope = 0) {
+  if(length(c(initAnthro,initFire,anthroSlope,anthroSlopeFuture,fireSlope))!=5){
+    covariates <- data.frame(time=NA)
+    covariates$Anthro <- NA
+    covariates$fire_excl_anthro <- NA
+    covariates$Total_dist <- NA
+    covariates <- subset(covariates,!is.na(time))
+    return(covariates)
+  }
   covInit <- data.frame(Anthro = initAnthro, fire_excl_anthro = initFire)
   for (t in 1:numYears) {
     # t=1s
