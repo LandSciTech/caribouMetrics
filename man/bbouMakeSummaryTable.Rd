@@ -27,7 +27,8 @@ bbouMakeSummaryTable(
 
 \item{disturbance}{dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.}
 
-\item{priors}{list. Optional. At present these are only used if disturbance is also provided.}
+\item{priors}{list. Optional. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see \code{bboutools::bb_priors_survival} and \code{bboutools::bb_priors_recruitment} for details.
+If disturbance is not NA, see \code{getPriors} for details.}
 
 \item{shiny_progress}{logical. Should shiny progress bar be updated. Only set
 to TRUE if using in an app.}
@@ -64,6 +65,7 @@ Caribou demography functions:
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
 \code{\link{doSim}()},
+\code{\link{getBBNationalInformativePriors}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

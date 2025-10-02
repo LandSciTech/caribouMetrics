@@ -36,7 +36,7 @@
 
 
 runScnSet <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=4,collarNumYears=4),Rep=NULL,
-                      printProgress = FALSE,betaPriors="default",
+                      printProgress = FALSE,priors="default",
                       niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,
                       returnSamples=F,...) {
   
@@ -83,13 +83,13 @@ runScnSet <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=4
     }
     #plot(plotSurvivalSeries(oo$simSurvObs))
 
-    if (betaPriors[[1]] == "default") {
-      betaPriors <- getPriors(cs)
+    if (priors[[1]] == "default") {
+      priors <- getPriors(cs)
     }
     out <- (caribouBayesianPM(
       surv_data = oo$simSurvObs, recruit_data = oo$simRecruitObs,
       disturbance = oo$simDisturbance,
-      betaPriors = betaPriors, startYear = oo$minYr, endYear = oo$maxYr,
+      priors = priors, startYear = oo$minYr, endYear = oo$maxYr,
       N0 = cs$N0,niters=niters,nthin=nthin,returnSamples=returnSamples,...))
 
     if (inherits(out, "try-error")) {

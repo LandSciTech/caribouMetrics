@@ -12,7 +12,8 @@ plotRes(
   facetVars = NULL,
   labFontSize = 14,
   legendPosition = "right",
-  breakInterval = 1
+  breakInterval = 1,
+  typeLabels = c("Bayesian", "initial")
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ facets. Font size is 10 pt if facets are used.}
 \item{legendPosition}{"bottom", "right", "left","top", or "none". Legend position.}
 
 \item{breakInterval}{number. How many years between x tick marks?}
+
+\item{typeLabels}{vector of two labels. Default c("Bayesian","initial"). Names of models to be compared.}
 }
 \value{
 a ggplot object or list of ggplot objects if a vector of parameters
@@ -68,6 +71,7 @@ Caribou demography functions:
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
 \code{\link{doSim}()},
+\code{\link{getBBNationalInformativePriors}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

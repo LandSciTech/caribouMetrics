@@ -1,8 +1,8 @@
 ---
-title: "Compare Bayesian models in caribouMetrics and bboutools"
+title: "Comparing the caribouMetrics Beta model to bboutools models"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Compare Bayesian models in caribouMetrics and bboutools}
+  %\VignetteIndexEntry{Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models }
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,6 +13,34 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+## Similaries and differences between the caribouMetrics Beta model and the bboutools model
+
+Hughes et al. [2025](https://doi.org/10.1016/j.ecoinf.2025.103095) described a Beta model with disturbance covariates and informative priors for analysis of a single boreal caribou population with survival data aggregated by year and only cows and calves reported in the composition survey. To align with and allow comparison to the models implemented in bboutools [Dalgarno et al. 2025]( https://doi.org/10.21105/joss.07997) we extended the Hughes et al. [2025](https://doi.org/10.1016/j.ecoinf.2025.103095) models as follows: 
+
+* Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+* Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
+* Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+* Allow for analysis of groups of populations with shared interannual variation. TO DO: add link to bboutools documentation when it exists.
+
+Note that bboutools includes a number of different model variants. Throughout this document we compare to the Bayesian model with a random effect of year and no annual trend. For brevity, we refer to that as the "bbou" model.
+
+Key remaining differences between the caribouMetrics Beta model and the bbou model include:
+
+* The Beta model includes anthropogenic and fire disturbance covariates.
+* The Beta model intercept and disturbance covariate slope parameters are informed by national demographic-disturbance relationships.
+* The distribution of interannual variation differs between the models.
+* The bbou model allows for variation in survival among months.
+
+## Example data
+
+We compare the Beta and bbou models using three examples derived from the `bboudata::bbousurv_a` and `bboudata::bbourecruit_a` data sets:
+
+* No local data: used to examine and compare prior predictions from the models.
+* Informative local data: Observations from 2010 to 2016.
+* Limited local data: Observations from 2014 to 2016.
+
+To examine and compare predictions for unobserved years (2018 to 2021) we add missing data.
 
 ```{r setup}
 library(caribouMetrics)
@@ -27,6 +55,7 @@ useSaved <- T #option to skip slow step of fitting bboutools model
 resFile <- here::here("results/vignetteBbbouExample.rds")
 res2File <- here::here("results/vignetteBbbouExample2.rds")
 res1File <- here::here("results/vignetteBbbouExample1.rds")
+res1pFile <- here::here("results/vignetteBbbouExample1p.rds")
 
 surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
 surv_data_add = expand.grid(Year=seq(2017,2022),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
@@ -45,45 +74,72 @@ surv_data2 <- surv_data %>% filter(Year > 2014)
 recruit_data2 <- recruit_data %>% filter(Year > 2014)
 ```
 
-## Beta model with disturbance covariates and informative priors
-TO DO: Describe beta model mathematically, and note differences/similarities to the ms model and bboutools models.
+## Comparison of the Beta and national models
 
-## Comparison to national models and bboutools models
-With no local data the Beta model with disturbance covariates and informative priors gives results that are comparable to the national model.
+As shown by Hughes et al. [2025](https://doi.org/10.1016/j.ecoinf.2025.103095) the prior means and 95% prior predictive intervals from the Beta model are similar to the means and ranges between the 2.5% and 97.5% quantiles of 3000 simulated survival and recruitment trajectories from the national model.
+
 ```{r compare beta prior to national model}
 disturbance = data.frame(Year=unique(surv_data$Year),Anthro=5,fire_excl_anthro=1)
 modBeta1 <- caribouBayesianPM(surv_data1,recruit_data1,disturbance)
 simNational <-getSimsInitial(disturbance) 
 out_tbls <- getOutputTables(modBeta1, simInitial = simNational)
+typeLabs = c("Beta","National")
 ```
 
-```{r plot1, fig.width=8,caption=""}
-rec =  plotRes(out_tbls, "Recruitment");plot(rec)
-surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
-lam =  plotRes(out_tbls, "Population growth rate",lowBound=0.5,highBound=1.5);plot(lam)
+```{r plot1, fig.width=8,fig.cap="95% prior predictive intervals from Beta model with 5% anthropogenic disturbance, default priors, and no local data compared to simulations from the national model."}
+rec =  plotRes(out_tbls, "Recruitment",typeLabels=typeLabs);plot(rec)
+surv =  plotRes(out_tbls, "Adult female survival",typeLabels=typeLabs);plot(surv)
+lam =  plotRes(out_tbls, "Population growth rate",typeLabels=typeLabs,lowBound=0.5,highBound=1.5);plot(lam)
 ```
 
-The bboutools model default priors are less informative than the beta model default priors.
-```{r compare beta and bboutools priors}
+## Comparison of Beta and bbou prior predictions
+
+The bbou model default priors are less informative than the Beta model default priors.
+```{r compare beta and bbou priors}
 if(useSaved&file.exists(res1File)){
   mod1 <- readRDS(res1File)
 }else{
   mod1 <- bbouMakeSummaryTable(surv_data1,recruit_data1,return_mcmc=T)
-  if(dir.exists(dirname(resFile))){saveRDS(mod1,res1File)}
+  if(dir.exists(dirname(res1File))){saveRDS(mod1,res1File)}
 }
 simBB1 <-getSimsInitial(mod1) 
 out_tbls <- getOutputTables(modBeta1, simInitial = simBB1)
+typeLabs = c("Beta","Bbou")
 ```
 
-```{r plot2, fig.width=8,caption=""}
-rec =  plotRes(out_tbls, "Recruitment");plot(rec)
-surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
-lam =  plotRes(out_tbls, "Population growth rate",lowBound=0,highBound=2);plot(lam)
+```{r plot2, fig.width=8,fig.cap="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and default priors."}
+rec =  plotRes(out_tbls, "Recruitment",typeLabels=typeLabs);plot(rec)
+surv =  plotRes(out_tbls, "Adult female survival",typeLabels=typeLabs);plot(surv)
+lam =  plotRes(out_tbls, "Population growth rate",typeLabels=typeLabs,lowBound=0,highBound=2);plot(lam)
 ```
 
-#TO DO: better graph labels.
+The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar predictions of expected demographic rates. 
 
-With more informative data, the Beta model model with constant disturbance covariates and informative priors often gives results that are comparable to bboutools without informative priors.
+```{r compare beta and bbou with informative priors.}
+b0Priors <- getBBNationalInformativePriors(Anthro=50,fire_excl_anthro=5,month=T)
+if(useSaved&file.exists(res1pFile)){
+   mod1p <- readRDS(res1pFile)
+}else{
+   mod1p <- bbouMakeSummaryTable(surv_data1,recruit_data1,return_mcmc=T,priors=b0Priors)
+   if(dir.exists(dirname(res1pFile))){saveRDS(mod1p,res1pFile)}
+}
+simBB1p <-getSimsInitial(mod1p)
+out_tbls <- getOutputTables(modBeta1, simInitial = simBB1p)
+typeLabs = c("Beta","Bbou National")
+```
+
+```{r plot5, fig.width=8,fig.cap="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and priors informed by national demographic-disturbance relationships."}
+recBar =  plotRes(out_tbls, "Expected recruitment",typeLabels=typeLabs);plot(recBar)
+rec =  plotRes(out_tbls, "Recruitment",typeLabels=typeLabs);plot(rec)
+survBar =  plotRes(out_tbls, "Expected survival",typeLabels=typeLabs);plot(survBar)
+surv =  plotRes(out_tbls, "Adult female survival",typeLabels=typeLabs);plot(surv)
+lamBar =  plotRes(out_tbls, "Expected growth rate",typeLabels=typeLabs,lowBound=0,highBound=2);plot(lamBar)
+lam =  plotRes(out_tbls, "Population growth rate",typeLabels=typeLabs,lowBound=0,highBound=2);plot(lam)
+```
+
+## Comparison of Beta and bbou models with informative local data
+
+With more informative data, the Beta model with constant disturbance covariates and informative priors often gives results that are comparable to the bbou model with default (less informative) priors.
 ```{r compare beta and bboutools posteriors}
 modBeta <- caribouBayesianPM(surv_data,recruit_data,disturbance)
 if(useSaved&file.exists(resFile)){
@@ -94,19 +150,22 @@ if(useSaved&file.exists(resFile)){
 }
 simBB <-getSimsInitial(mod) 
 out_tbls <- getOutputTables(modBeta, simInitial = simBB)
+typeLabs = c("Beta","Bbou")
 ```
 
-```{r plot3, fig.width=8,caption=""}
-rec =  plotRes(out_tbls, "Recruitment");plot(rec)
-surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
-lam =  plotRes(out_tbls, "Population growth rate",lowBound=0.5,highBound=1.5);plot(lam)
+```{r plot3, fig.width=8,fig.cap="Posterior means and 95% posterior predictive intervals from Beta and bbou models with 5% anthropogenic disturbance, default priors, and informative local data."}
+rec =  plotRes(out_tbls, "Recruitment",typeLabels=typeLabs);plot(rec)
+surv =  plotRes(out_tbls, "Adult female survival",typeLabels=typeLabs);plot(surv)
+lam =  plotRes(out_tbls, "Population growth rate",typeLabels=typeLabs,lowBound=0.5,highBound=1.5);plot(lam)
 ```
 
-However, if local data is limited the bboutools model without informative priors and the Beta model 
+## Comparison of Beta and bbou models with limited local data
+
+However, if local data is limited the bbou model with default (less informative) priors and the Beta model 
 with disturbance covariates and informative priors may give different results, particularly if 
 observations are inconsistent with expectations from the observed distribution of outcomes across the country.
 ```{r compare beta and bboutools posteriors with limited data.}
-disturbance = data.frame(Year=unique(surv_data$Year),Anthro=95,fire_excl_anthro=90)
+disturbance = data.frame(Year=unique(surv_data$Year),Anthro=90,fire_excl_anthro=5)
 modBeta2 <- caribouBayesianPM(surv_data2,recruit_data2,disturbance)
 if(useSaved&file.exists(res2File)){
   mod2 <- readRDS(res2File)
@@ -116,18 +175,22 @@ if(useSaved&file.exists(res2File)){
 }
 simBB2 <-getSimsInitial(mod2) 
 out_tbls <- getOutputTables(modBeta2, simInitial = simBB2)
+typeLabs = c("Beta","Bbou")
 ```
 
-```{r plot4, fig.width=8,caption=""}
-rec =  plotRes(out_tbls, "Recruitment");plot(rec)
-surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
-lam =  plotRes(out_tbls, "Population growth rate",lowBound=0.5,highBound=1.5);plot(lam)
+```{r plot4, fig.width=8,fig.cap="Posterior means and 95% predictive intervals from Beta and bbou models with 90% anthropogenic disturbance, default priors, and limited local data."}
+rec =  plotRes(out_tbls, "Recruitment",typeLabels=typeLabs);plot(rec)
+surv =  plotRes(out_tbls, "Adult female survival",typeLabels=typeLabs);plot(surv)
+lam =  plotRes(out_tbls, "Population growth rate",typeLabels=typeLabs,lowBound=0.5,highBound=1.5);plot(lam)
 ```
 
 TO DO: The bboutools models do not include disturbance covariates, so the models will also give different results in a case where disturbance changes over time.
 
-## Bboutools models with informative priors
+## References
+Dalgarno S, Boulanger J, Pearson A, et al (2025) bbousuite: A set of R packages to facilitate analysis of boreal caribou survival and recruitment data. Journal of Open Source Software 10:7997. https://doi.org/10.21105/joss.07997
 
-TO DO: The bboutools priors can be set to (approximately) match the beta model priors. When disturbance is constant, the models with informative priors are similar to one another. 
+Hughes J, Endicott S, Calvert AM, Johnson CA (2025) Integration of national demographic-disturbance relationships and local data can improve caribou population viability projections and inform monitoring decisions. Ecological Informatics 87:103095. https://doi.org/10.1016/j.ecoinf.2025.103095
+
+
 
 
