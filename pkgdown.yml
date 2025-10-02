@@ -1,13 +1,14 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
-  BayesianDemographicProjection: BayesianDemographicProjection.html
+  bayesian-model-outputs: bayesian-model-outputs.html
   caribouDemography: caribouDemography.html
-  UI_help: UI_help.html
+  combine-observed-simulated: combine-observed-simulated.html
+  compare-bayesian-models: compare-bayesian-models.html
   Using_caribouHabitat: Using_caribouHabitat.html
   Using_disturbanceMetric: Using_disturbanceMetric.html
-last_built: 2025-04-24T13:00Z
+last_built: 2025-10-02T19:01Z
 urls:
   reference: https://landscitech.github.io/caribouMetrics/reference
   article: https://landscitech.github.io/caribouMetrics/articles
