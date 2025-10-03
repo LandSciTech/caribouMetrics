@@ -131,6 +131,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
                                .data$Year >= paramTable$startYear)
   }
   
+  simDisturbance <- round(simDisturbance)
+  
   if(is.null(trajectories)){
     # simulate true population trajectory
     if(!is.element("rQuantile",names(paramTable))){paramTable$rQuantile=NA}

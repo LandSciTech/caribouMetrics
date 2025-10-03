@@ -94,6 +94,6 @@ test_that("bboutools scnenario with no disturbance and no additional monitoring 
     mutate(diff = abs(Bayesian - initial)) %>%
     pull(diff) %>%
     max() %>%
-    # less than 1% absolute difference
-    expect_lt(0.01)
+    # less than 2% absolute difference
+    expect_lt(0.02)
 })

@@ -58,6 +58,7 @@ getScenarioDefaults <- function(paramTable = NULL,
                          collarCount = NA, startYear = NA,
                          interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
                          curYear = 2023,sQuantile=NA,rQuantile=NA) {
+  
   defList <- c(as.list(environment()))
   defList$paramTable <- NULL
   if (is.null(paramTable)) {
