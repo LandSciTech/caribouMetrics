@@ -168,4 +168,4 @@ caribouMetrics - Terms and Condition of Use
 Unless otherwise noted, source code of the `caribouMetrics` R package is covered under
 Crown Copyright, Government of Canada, and distributed under the GPL3 license.
 
-Copyright (C) Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment 2021/(C) Sa Majesté la Reine du chef du Canada représentée par le ministre de l'Environnement 2021.
+Copyright (C) His Majesty the King in Right of Canada as represented by the Minister of the Environment 2025/(C) Sa Majesté le Roi du chef du Canada représentée par le ministre de l'Environnement 2025.

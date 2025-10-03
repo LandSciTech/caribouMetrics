@@ -4,8 +4,6 @@
 #'   representing the percentage of the landscape covered by anthropogenic
 #'   disturbance buffered by 500 m, and the percentage covered by fire that does
 #'   not overlap anthropogenic disturbance. 
-#' @param forceUpdate logical. If the default inputs are used the result is
-#'   cached. Set `forceUpdate` to TRUE to ensure the simulations are re-run.
 #' @inheritParams demographicCoefficients
 #' @inheritParams caribouPopGrowth
 #' @param N0 initial population size
@@ -25,7 +23,7 @@ getSimsNational <- function(replicates = 1000, N0 = 1000,
                             cPars=getScenarioDefaults(),
                             interannualVar = eval(formals(caribouPopGrowth)$interannualVar)) {
   # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;
-  # useQuantiles =NULL;forceUpdate=F
+  # useQuantiles =NULL
   covTableObs$Total_dist <- covTableObs$Anthro + covTableObs$fire_excl_anthro
   
   if (is.null(populationGrowthTable )) {

@@ -12,7 +12,7 @@ Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec
     person("Eliot", "McIntire", email = "eliot.mcintire@canada.ca", role = "aut"),
     person("Saralees", "Nadarajah", role = "cph", comment = c("Author of truncdist package, which function rtrunc and qtrunc were modified from")),
     person("Frederick", "Novomestky", role = "cph", comment = c("Author of truncdist package, which function rtrunc and qtrunc were modified from")),
-    person(given="Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change",
+    person(given="His Majesty the King in Right of Canada, as represented by the Minister of Environment and Climate Change",
            role = "cph"))
 Description: caribouMetrics provides implementations of several models of Boreal woodland 
     caribou demography and habitat selection. A national demographic model with density 

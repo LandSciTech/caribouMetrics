@@ -1,4 +1,4 @@
-# Copyright 2025 Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
+# Copyright 2025 His Majesty the King in Right of Canada as represented by the Minister of the Environment
 # License GPL-3
 
 #' Bayesian population model for boreal caribou
