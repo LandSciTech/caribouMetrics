@@ -13,6 +13,8 @@ getScenarioDefaults(
   rSlopeMod = 1,
   sSlopeMod = 1,
   lQuantile = NA,
+  sQuantile = NA,
+  rQuantile = NA,
   correlateRates = F,
   projYears = 35,
   obsYears = 15,
@@ -30,9 +32,7 @@ getScenarioDefaults(
   collarCount = NA,
   startYear = NA,
   interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
-  curYear = 2023,
-  sQuantile = NA,
-  rQuantile = NA
+  curYear = 2023
 )
 }
 \arguments{
@@ -54,6 +54,10 @@ the projection period}
 \item{sSlopeMod}{number. Disturbance-survival slope multiplier}
 
 \item{lQuantile}{number in 0, 1. Lambda quantile}
+
+\item{sQuantile}{number in 0,1. Survival quantile.}
+
+\item{rQuantile}{number in 0,1. Recruitment quantile.}
 
 \item{correlateRates}{logical. Set TRUE to force correlation between recruitment and survival.}
 

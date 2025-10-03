@@ -64,7 +64,7 @@ Get 95\% prediction intervals from trajectories
   mod <- bbouMakeSummaryTable(
     surv_data = bboudata::bbousurv_a,
     recruit_data = bboudata::bbourecruit_a, 
-    N0 = NA, return_mcmc = T
+    N0 = NA, return_mcmc = TRUE
   )
                            
   outmcmc = caribouPopSimMCMC(popInfo=NA,mod$recruit_fit,mod$surv_fit)

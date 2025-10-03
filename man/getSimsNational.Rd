@@ -47,9 +47,6 @@ variability parameters. These can be either coefficients of variation
 (R_CV, S_CV), beta precision parameters (R_phi, S_phi),
 or random effects parameters from a logistic glmm (R_annual, S_annual).
 Set to \code{FALSE} to ignore interannual variability.}
-
-\item{forceUpdate}{logical. If the default inputs are used the result is
-cached. Set \code{forceUpdate} to TRUE to ensure the simulations are re-run.}
 }
 \value{
 Output from caribouPopGrowth function.

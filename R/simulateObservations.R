@@ -40,7 +40,6 @@
 #'   percentage covered by fire that does not overlap anthropogenic disturbance.
 #'   See [disturbanceMetrics()]. If NULL the disturbance scenario is simulated
 #'   based on `paramTable`
-#' @inheritParams demographicCoefficients
 #' @param writeFilesDir character. If not NULL `simSurvObs` and `simRecruitObs`
 #'   results will be saved to csv files in the directory provided
 #' @param surv_data data.frame. Optional existing survival data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.
