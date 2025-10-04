@@ -38,7 +38,7 @@
 <li><a class="dropdown-item" href="articles/caribouDemography.html">Caribou Demography</a></li>
     <li><a class="dropdown-item" href="articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
     <li><a class="dropdown-item" href="articles/combine-observed-simulated.html">Combine observed and simulated caribou data</a></li>
-    <li><a class="dropdown-item" href="articles/compare-bayesian-models.html">Compare Bayesian models in caribouMetrics and bboutools</a></li>
+    <li><a class="dropdown-item" href="articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
     <li><a class="dropdown-item" href="articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul>
@@ -61,7 +61,20 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The caribouMetrics R package provides reproducible open source implementations of several models of Boreal woodland caribou (<em>Rangifer tarandus caribou</em>) demography and habitat use. A national demographic model with density dependence and interannual variability follows <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a> with modifications described in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (2022)</a>. Demographic rates vary with disturbance as estimated by <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>. The package also includes Bayesian methods for integrating prior information from Johnson et al’s national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections. The national model can be used to simulate example population trajectories, and combined with a simple observation model and the Bayesian population model to show how monitoring requirements depend on landscape condition. Finally, caribouMetrics contains an implementation of <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel’s (2016)</a> Ontario boreal caribou resource selection model described in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (2022)</a>. Model implementation is intended to be modular and flexible, allowing reuse of components in a variety of contexts including projections of the cumulative effects of disturbance and climate change <a href="https://doi.org/10.1002/eap.2816" class="external-link">(e.g. Stewart et al. 2023)</a> and a <a href="https://landscitech.github.io/BayesianCaribouDemographicProjection/" class="external-link">Shiny app</a> designed to allow exploration of user-specified monitoring and disturbance scenarios.</p>
+<p>The <code>caribouMetrics</code> R package provides implementations of models of Boreal woodland caribou (<em>Rangifer tarandus caribou</em>) demography described in <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. (2025)</a>. These include:</p>
+<ul>
+<li>a national demographic model with density dependence and interannual variability follows <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a> with modifications described in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (2022)</a>. Demographic rates vary with disturbance as estimated by <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>.</li>
+<li>a Bayesian Beta model for integrating prior information from Johnson et al’s national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">(Hughes et al. 2025)</a>.</li>
+</ul>
+<p>To facilitate <a href="https://landscitech.github.io/caribouMetrics/articles/compare-bayesian-models.html">comparison with Bayesian logistic models implemented in the <code>bboutools</code></a> R package <a href="https://doi.org/10.21105/joss.07997" class="external-link">(Dalgarno et al. 2025)</a> <code>caribouMetrics</code> also allows for the use of those models. To align with <code>bboutools</code> note that the <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. (2025)</a> model has been extended as follows:</p>
+<ul>
+<li>Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See <a href="https://poissonconsulting.github.io/bboutools/articles/methods.html" class="external-link">Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth</a> for details.</li>
+<li>Allow analysis of monthly survival data in bboutools form (e.g. <code><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bboudata::bbousurv_a</a></code>).</li>
+<li>Allow for calculation of population growth rate without initial population size information. See <a href="https://poissonconsulting.github.io/bboutools/articles/methods.html" class="external-link">Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth</a> for details.</li>
+</ul>
+<p>Simulated example population trajectories can be created from the national model or fitted Bayesian models, and combined with a simple observation model and the Bayesian population model to explore monitoring scenarios and show how monitoring requirements depend on landscape condition (<a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. 2025</a>).</p>
+<p><code>caribouMetrics</code> also contains an implementation of <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link">Hornseth and Rempel’s (2016)</a> Ontario boreal caribou resource selection model described in <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (2022)</a>.</p>
+<p>Model implementation is intended to be modular and flexible, allowing reuse of components in a variety of contexts including projections of the cumulative effects of disturbance and climate change <a href="https://doi.org/10.1002/eap.2816" class="external-link">(e.g. Stewart et al. 2023)</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -76,6 +89,28 @@
 <p>This is a basic example demonstrating all the primary functions of the package.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: nimble</span></span>
+<span><span class="co">#&gt; Warning: package 'nimble' was built under R version 4.3.3</span></span>
+<span><span class="co">#&gt; nimble version 1.3.0 is loaded.</span></span>
+<span><span class="co">#&gt; For more information on NIMBLE and a User Manual,</span></span>
+<span><span class="co">#&gt; please visit https://R-nimble.org.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note for advanced users who have written their own MCMC samplers:</span></span>
+<span><span class="co">#&gt;   As of version 0.13.0, NIMBLE's protocol for handling posterior</span></span>
+<span><span class="co">#&gt;   predictive nodes has changed in a way that could affect user-defined</span></span>
+<span><span class="co">#&gt;   samplers in some situations. Please see Section 15.5.1 of the User Manual.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'nimble'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     simulate</span></span>
+<span><span class="co"># use local version on local and installed on GH</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ℹ Loading caribouMetrics</span></span>
+<span><span class="co">#&gt; Registered S3 method overwritten by 'mcmcr':</span></span>
+<span><span class="co">#&gt;   method               from </span></span>
+<span><span class="co">#&gt;   as.mcmc.list.mcarray rjags</span></span>
+<span><span class="co">#&gt; Warning: package 'testthat' was built under R version 4.3.3</span></span>
 <span></span>
 <span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span>
 <span></span>
@@ -111,20 +146,20 @@
 <span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaults</span></span>
 <span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaults</span></span>
 <span><span class="va">demRates</span></span>
-<span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr</span></span>
-<span><span class="co">#&gt; 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05542411</span></span>
-<span><span class="co">#&gt;     S_PIlow S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh</span></span>
-<span><span class="co">#&gt; 1 0.7293606 0.921553 0.1813372 0.1073342 0.05684825 0.4170454</span></span>
+<span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar S_stdErr</span></span>
+<span><span class="co">#&gt; 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.050644</span></span>
+<span><span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar   R_stdErr   R_PIlow  R_PIhigh</span></span>
+<span><span class="co">#&gt; 1 0.7690494 0.9321272 0.1813372 0.09859156 0.0538864 0.3760678</span></span>
 <span></span>
 <span><span class="co"># Simulate population growth</span></span>
 <span><span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouPopGrowth.html">caribouPopGrowth</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2000</span>, numSteps <span class="op">=</span> <span class="fl">20</span>, R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, </span>
 <span>                            S_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">popGrow</span></span>
-<span><span class="co">#&gt;     N0 lambdaTrue    lambda   N      R_t      X_t       S_t n_recruits</span></span>
-<span><span class="co">#&gt; 1 2000  0.9152136 0.9247487 340 0.295248 0.147624 0.7975367         47</span></span>
+<span><span class="co">#&gt;     N0   lambda   lambdaE   N      R_t      X_t       S_t n_recruits</span></span>
+<span><span class="co">#&gt; 1 2000 0.945426 0.9247487 651 0.216816 0.108408 0.8930332         64</span></span>
 <span><span class="co">#&gt;   surviving_adFemales</span></span>
-<span><span class="co">#&gt; 1                 293</span></span>
+<span><span class="co">#&gt; 1                 587</span></span>
 <span></span>
 <span><span class="co"># simulate caribou collar observations</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span></span>
@@ -132,31 +167,46 @@
 <span>  collarCount <span class="op">=</span> <span class="fl">30</span>, cowMult <span class="op">=</span> <span class="fl">3</span>, </span>
 <span>  obsAnthroSlope <span class="op">=</span> <span class="fl">0</span>, projAnthroSlope <span class="op">=</span> <span class="fl">1</span>, projYears <span class="op">=</span> <span class="fl">10</span>, obsYears <span class="op">=</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">simObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulateObservations.html">simulateObservations</a></span><span class="op">(</span><span class="va">params</span>, printPlot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-1.png" width="100%"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">ipm</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouBayesianPM.html">caribouBayesianPM</a></span><span class="op">(</span><span class="va">simObs</span><span class="op">$</span><span class="va">simSurvObs</span>, <span class="va">simObs</span><span class="op">$</span><span class="va">ageRatioOut</span>, </span>
-<span>                          <span class="va">simObs</span><span class="op">$</span><span class="va">simDisturbance</span>,</span>
-<span>                          <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
-<span>                          Niter <span class="op">=</span> <span class="fl">150</span>, Nburn <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">#&gt; using Binomial survival model</span></span>
+<span><span class="va">simObs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulateObservations.html">simulateObservations</a></span><span class="op">(</span><span class="va">params</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">natSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getSimsNational.html">getSimsNational</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">simObs</span><span class="op">$</span><span class="va">simDisturbance</span><span class="op">$</span><span class="va">Anthro</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#devtools::load_all()</span></span>
+<span><span class="va">pm</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouBayesianPM.html">caribouBayesianPM</a></span><span class="op">(</span><span class="va">simObs</span><span class="op">$</span><span class="va">simSurvObs</span>, <span class="va">simObs</span><span class="op">$</span><span class="va">simRecruitObs</span>, </span>
+<span>                         <span class="va">simObs</span><span class="op">$</span><span class="va">simDisturbance</span>,</span>
+<span>                         <span class="co"># only set to speed up vignette. Normally keep defaults.</span></span>
+<span>                         niters<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Compiling model graph</span></span>
+<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
+<span><span class="co">#&gt;    Allocating nodes</span></span>
+<span><span class="co">#&gt; Graph information:</span></span>
+<span><span class="co">#&gt;    Observed stochastic nodes: 10</span></span>
+<span><span class="co">#&gt;    Unobserved stochastic nodes: 33</span></span>
+<span><span class="co">#&gt;    Total graph size: 449</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Initializing model</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Compiling model graph</span></span>
+<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
+<span><span class="co">#&gt;    Allocating nodes</span></span>
+<span><span class="co">#&gt; Graph information:</span></span>
+<span><span class="co">#&gt;    Observed stochastic nodes: 29</span></span>
+<span><span class="co">#&gt;    Unobserved stochastic nodes: 70</span></span>
+<span><span class="co">#&gt;    Total graph size: 505</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Initializing model</span></span>
 <span></span>
-<span><span class="va">ipmTbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">ipm</span>, paramTable <span class="op">=</span> <span class="va">simObs</span><span class="op">$</span><span class="va">paramTable</span>, </span>
-<span>                            exData <span class="op">=</span> <span class="va">simObs</span><span class="op">$</span><span class="va">exData</span>, </span>
-<span>                            simNational <span class="op">=</span> <span class="va">natSim</span><span class="op">)</span></span>
+<span><span class="va">natSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getSimsInitial.html">getSimsInitial</a></span><span class="op">(</span><span class="va">simObs</span><span class="op">$</span><span class="va">simDisturbance</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Setting expected survival S_bar to be between l_S and h_S.</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">ipmTbls</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">pmTbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">pm</span>, simInitial<span class="op">=</span><span class="va">natSim</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">pmTbls</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $Recruitment</span></span></code></pre></div>
+<p><img src="reference/figures/README-example-1.png" width="100%"></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; $`Adult female survival`</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-2.png" width="100%"></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; $`Adult female survival`</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-3.png" width="100%"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="co"># Calculate habitat use in Ontario's Churchill range</span></span>
+<span><span class="co"># Calculate habitat RSF in Ontario's Churchill range</span></span>
 <span><span class="va">carHab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>,</span>
 <span>  esker <span class="op">=</span> <span class="va">eskerDras</span>, </span>
@@ -176,37 +226,40 @@
 <span><span class="co">#&gt; Applying moving window.</span></span>
 <span></span>
 <span><span class="co"># plot the results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-4.png" width="100%"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">carHab1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; tmap must be attached with library(tmap) to be used. Using terra instead.</span></span></code></pre></div>
+<p><img src="reference/figures/README-example-3.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="resources">Resources<a class="anchor" aria-label="anchor" href="#resources"></a>
 </h2>
-<p>The <a href="https://landscitech.github.io/caribouMetrics">package website</a> contains information on the caribouMetrics package. Here you can find <a href="https://landscitech.github.io/caribouMetrics/reference/index.html">documentation for each function</a> and the following articles/vignettes/tutorials:</p>
+<p>The <a href="https://landscitech.github.io/caribouMetrics">package website</a> contains information on the <code>caribouMetrics</code> package. Here you can find <a href="https://landscitech.github.io/caribouMetrics/reference/index.html">documentation for each function</a> and the following articles/vignettes/tutorials:</p>
 <ul>
 <li>
-<a href="https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html"><strong>Demographic Model</strong></a>: Predict demographic rates and population growth based on their relationship to habitat disturbance.</li>
+<a href="https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html"><strong>Demographic Model</strong></a>: Simulate demographic rates and population growth using a national model informed by demographic-disturbance relationships.</li>
 <li>
-<a href="https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html"><strong>Bayesian Demographic Projection</strong></a>: Project demographic rates and population growth based on the national demographic model and local caribou observations.</li>
+<a href="https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html"><strong>Bayesian Demographic Projection</strong></a>: Estimate and project demographic rates and population growth using a Bayesian model informed by national demographic-disturbance relationships and local demographic data.</li>
 <li>
-<a href="https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html"><strong>Disturbance Metrics</strong></a>: Calculate buffered anthropogenic disturbance and fire disturbance percentages for a given area.</li>
+<a href="https://landscitech.github.io/caribouMetrics/articles/compare-bayesian-models.html"><strong>Comparing the caribouMetrics Beta model to bboutools models</strong></a>: Estimate and project demographic rates and population growth using Bayesian logistic models implemented in the <code>bboutools</code> R package, and compare to Beta models informed by national demographic-disturbance relationships and local demographic data.</li>
 <li>
-<a href="https://landscitech.github.io/caribouMetrics/articles/UI_help.html"><strong>User Interface Help</strong></a>: Instructions for using the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models (WIP)</li>
+<a href="https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetric.html"><strong>Disturbance Metrics</strong></a>: Calculate buffered anthropogenic disturbance and fire disturbance percentages for a given area. <!-- * [**Ontario Habitat Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html): Calculate caribou habitat use with Ontario RSF models. -->
+</li>
 </ul>
-<!-- * [**Ontario Habitat Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html): Calculate caribou habitat use with Ontario RSF models. -->
 </div>
 <div class="section level2">
 <h2 id="getting-help">Getting help<a class="anchor" aria-label="anchor" href="#getting-help"></a>
 </h2>
-<p>If you have any questions about the caribouMetrics package or suggestions for improving it, please <a href="https://github.com/LandSciTech/caribouMetrics/issues/new" class="external-link">post an issue on the code repository</a>.</p>
+<p>If you have any questions about the <code>caribouMetrics</code> package or suggestions for improving it, please <a href="https://github.com/LandSciTech/caribouMetrics/issues/new" class="external-link">post an issue on the code repository</a>.</p>
 </div>
 </div>
 <div class="section level1">
 <h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h1>
+<p>Dalgarno S, Boulanger J, Pearson A, et al (2025) bbousuite: A set of R packages to facilitate analysis of boreal caribou survival and recruitment data. Journal of Open Source Software 10:7997. <a href="https://doi.org/10.21105/joss.07997" class="external-link uri">https://doi.org/10.21105/joss.07997</a></p>
 <p>Dyson, M., Endicott, S., Simpkins C., Turner, J.W., Avery-Gomm S., Johnson, C.A., Leblond, M., Neilson, E.W., Rempel, R., Wiebe, P.A., Baltzer, J.L., Stewart, F.E.C., Hughes, J. 2022. Existing caribou habitat and demographic models are poorly suited for Ring of Fire impact assessment: A roadmap for improving the usefulness, transparency, and availability of models for conservation. bioRxiv 2022.06.01.494350; <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link uri">https://doi.org/10.1101/2022.06.01.494350</a></p>
 <p>ECCC. 2011. Scientific assessment to inform the identification of critical habitat for woodland caribou (<em>Rangifer tarandus caribou</em>), boreal population, in Canada. Canadian Wildlife Service, Ottawa. <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="external-link uri">http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf</a>. Accessed 26 Mar 2021.</p>
 <p>Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of woodland caribou (Rangifer tarandus caribou) across a gradient of anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93. <a href="https://doi.org/10.1139/cjz-2015-0101" class="external-link uri">https://doi.org/10.1139/cjz-2015-0101</a></p>
+<p>Hughes J, Endicott S, Calvert AM, Johnson CA (2025) Integration of national demographic-disturbance relationships and local data can improve caribou population viability projections and inform monitoring decisions. Ecological Informatics 87:103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link uri">https://doi.org/10.1016/j.ecoinf.2025.103095</a></p>
 <p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy: linking population dynamics to habitat for a threatened species in Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637" class="external-link uri">https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.13637</a></p>
 <p>Stewart F.E.C., Micheletti T., Cumming S.G., Barros, C., Chubaty, A. M., Dookie, A. L., Duclos, I., Eddy, I., Haché, S., Hodson, J., Hughes, J., Johnson, C. A., Leblond, M., Schmiegelow, F.K.A., Tremblay, J. A.. McIntire, E.J.B. (2023) Climate-informed forecasts reveal dramatic local habitat shifts and population uncertainty for northern boreal caribou. Ecological Applications 33:e2816. <a href="https://doi.org/10.1002/eap.2816" class="external-link uri">https://doi.org/10.1002/eap.2816</a></p>
 <div class="section level2">

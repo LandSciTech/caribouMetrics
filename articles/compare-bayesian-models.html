@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Compare Bayesian models in caribouMetrics and bboutools • caribouMetrics</title>
+<title>Comparing the caribouMetrics Beta model to bboutools models • caribouMetrics</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Compare Bayesian models in caribouMetrics and bboutools">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Comparing the caribouMetrics Beta model to bboutools models">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -36,7 +36,7 @@
 <li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demography</a></li>
     <li><a class="dropdown-item" href="../articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
     <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Combine observed and simulated caribou data</a></li>
-    <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Compare Bayesian models in caribouMetrics and bboutools</a></li>
+    <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul>
@@ -60,7 +60,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Compare Bayesian models in caribouMetrics and bboutools</h1>
+      <h1>Comparing the caribouMetrics Beta model to bboutools models</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/vignettes/compare-bayesian-models.Rmd" class="external-link"><code>vignettes/compare-bayesian-models.Rmd</code></a></small>
@@ -69,6 +69,63 @@
 
     
     
+<div class="section level2">
+<h2 id="similaries-and-differences-between-the-cariboumetrics-beta-model-and-the-bboutools-model">Similaries and differences between the caribouMetrics Beta model and
+the bboutools model<a class="anchor" aria-label="anchor" href="#similaries-and-differences-between-the-cariboumetrics-beta-model-and-the-bboutools-model"></a>
+</h2>
+<p>Hughes et al. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">2025</a> described a
+Beta model with disturbance covariates and informative priors for
+analysis of a single boreal caribou population with survival data
+aggregated by year and only cows and calves reported in the composition
+survey. To align with and allow comparison to the models implemented in
+bboutools <a href="https://doi.org/10.21105/joss.07997" class="external-link">Dalgarno et
+al. 2025</a> we extended the Hughes et al. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">2025</a> models as
+follows:</p>
+<ul>
+<li>Allow analysis of composition survey data in bboutools form that
+includes Yearlings, Bulls, and UnknownAdults. See <a href="https://poissonconsulting.github.io/bboutools/articles/methods.html" class="external-link">Analytic
+Methods for Estimation of Boreal Caribou Survival, Recruitment and
+Population Growth</a> for details.</li>
+<li>Allow analysis of monthly survival data in bboutools form
+(e.g. <code><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bboudata::bbousurv_a</a></code>).</li>
+<li>Allow for calculation of population growth rate without initial
+population size information. See <a href="https://poissonconsulting.github.io/bboutools/articles/methods.html" class="external-link">Analytic
+Methods for Estimation of Boreal Caribou Survival, Recruitment and
+Population Growth</a> for details.</li>
+<li>Allow for analysis of groups of populations with shared interannual
+variation. TO DO: add link to bboutools documentation when it
+exists.</li>
+</ul>
+<p>Note that bboutools includes a number of different model variants.
+Throughout this document we compare to the Bayesian model with a random
+effect of year and no annual trend. For brevity, we refer to that as the
+“bbou” model.</p>
+<p>Key remaining differences between the caribouMetrics Beta model and
+the bbou model include:</p>
+<ul>
+<li>The Beta model includes anthropogenic and fire disturbance
+covariates.</li>
+<li>The Beta model intercept and disturbance covariate slope parameters
+are informed by national demographic-disturbance relationships.</li>
+<li>The distribution of interannual variation differs between the
+models.</li>
+<li>The bbou model allows for variation in survival among months.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
+</h2>
+<p>We compare the Beta and bbou models using three examples derived from
+the <code><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bboudata::bbousurv_a</a></code> and
+<code><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bboudata::bbourecruit_a</a></code> data sets:</p>
+<ul>
+<li>No local data: used to examine and compare prior predictions from
+the models.</li>
+<li>Informative local data: Observations from 2010 to 2016.</li>
+<li>Limited local data: Observations from 2014 to 2016.</li>
+</ul>
+<p>To examine and compare predictions for unobserved years (2018 to
+2021) we add missing data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: nimble</span></span>
@@ -103,10 +160,14 @@
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">figWidth</span> <span class="op">=</span> <span class="fl">8</span></span>
+<span><span class="va">figHeight</span> <span class="op">=</span> <span class="fl">4</span></span>
+<span></span>
 <span><span class="va">useSaved</span> <span class="op">&lt;-</span> <span class="cn">T</span> <span class="co">#option to skip slow step of fitting bboutools model</span></span>
-<span><span class="va">resFile</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"results/vignetteBbbouExample.rds"</span><span class="op">)</span></span>
-<span><span class="va">res2File</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"results/vignetteBbbouExample2.rds"</span><span class="op">)</span></span>
-<span><span class="va">res1File</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"results/vignetteBbbouExample1.rds"</span><span class="op">)</span></span>
+<span><span class="va">bbouInformativeFile</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"results/vignetteBbbouExample.rds"</span><span class="op">)</span></span>
+<span><span class="va">bbouLimitedFile</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"results/vignetteBbbouExample2.rds"</span><span class="op">)</span></span>
+<span><span class="va">bbouPriorFile</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"results/vignetteBbbouExample1.rds"</span><span class="op">)</span></span>
+<span><span class="va">bbouPriorNationalFile</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"results/vignetteBbbouExample1p.rds"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">surv_data</span> <span class="op">=</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bbousurv_a</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2010</span><span class="op">)</span></span>
 <span><span class="va">surv_data_add</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2017</span>,<span class="fl">2022</span><span class="op">)</span>,Month<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,PopulationName<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">surv_data</span><span class="op">$</span><span class="va">PopulationName</span><span class="op">)</span><span class="op">)</span></span>
@@ -118,26 +179,23 @@
 <span><span class="va">recruit_data</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">recruit_data</span>,<span class="va">recruit_data_add</span>,all.x<span class="op">=</span><span class="cn">T</span>,all.y<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span><span class="va">recruit_data</span><span class="op">$</span><span class="va">Month</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">recruit_data</span><span class="op">$</span><span class="va">Month</span><span class="op">)</span><span class="op">]</span><span class="op">=</span><span class="fl">3</span>;<span class="va">recruit_data</span><span class="op">$</span><span class="va">Day</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">recruit_data</span><span class="op">$</span><span class="va">Day</span><span class="op">)</span><span class="op">]</span><span class="op">=</span><span class="fl">15</span></span>
 <span></span>
-<span><span class="va">surv_data1</span> <span class="op">&lt;-</span> <span class="va">surv_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2017</span><span class="op">)</span></span>
-<span><span class="va">recruit_data1</span> <span class="op">&lt;-</span> <span class="va">recruit_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2017</span><span class="op">)</span></span>
+<span><span class="va">surv_dataNone</span> <span class="op">&lt;-</span> <span class="va">surv_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2017</span><span class="op">)</span></span>
+<span><span class="va">recruit_dataNone</span> <span class="op">&lt;-</span> <span class="va">recruit_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2017</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">surv_data2</span> <span class="op">&lt;-</span> <span class="va">surv_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2014</span><span class="op">)</span></span>
-<span><span class="va">recruit_data2</span> <span class="op">&lt;-</span> <span class="va">recruit_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2014</span><span class="op">)</span></span></code></pre></div>
-<div class="section level2">
-<h2 id="beta-model-with-disturbance-covariates-and-informative-priors">Beta model with disturbance covariates and informative priors<a class="anchor" aria-label="anchor" href="#beta-model-with-disturbance-covariates-and-informative-priors"></a>
-</h2>
-<p>TO DO: Describe beta model mathematically, and note
-differences/similarities to the ms model and bboutools models.</p>
+<span><span class="va">surv_dataLimited</span> <span class="op">&lt;-</span> <span class="va">surv_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2014</span><span class="op">)</span></span>
+<span><span class="va">recruit_dataLimited</span> <span class="op">&lt;-</span> <span class="va">recruit_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2014</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="comparison-to-national-models-and-bboutools-models">Comparison to national models and bboutools models<a class="anchor" aria-label="anchor" href="#comparison-to-national-models-and-bboutools-models"></a>
+<h2 id="comparison-of-the-beta-and-national-models">Comparison of the Beta and national models<a class="anchor" aria-label="anchor" href="#comparison-of-the-beta-and-national-models"></a>
 </h2>
-<p>With no local data the Beta model with disturbance covariates and
-informative priors gives results that are comparable to the national
+<p>As shown by Hughes et al. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">2025</a> the prior
+means and 95% prior predictive intervals from the Beta model are similar
+to the means and ranges between the 2.5% and 97.5% quantiles of 3000
+simulated survival and recruitment trajectories from the national
 model.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">disturbance</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">surv_data</span><span class="op">$</span><span class="va">Year</span><span class="op">)</span>,Anthro<span class="op">=</span><span class="fl">5</span>,fire_excl_anthro<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">modBeta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouBayesianPM.html">caribouBayesianPM</a></span><span class="op">(</span><span class="va">surv_data1</span>,<span class="va">recruit_data1</span>,<span class="va">disturbance</span><span class="op">)</span></span>
+<span><span class="va">betaPrior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouBayesianPM.html">caribouBayesianPM</a></span><span class="op">(</span><span class="va">surv_dataNone</span>,<span class="va">recruit_dataNone</span>,<span class="va">disturbance</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Compiling model graph</span></span>
 <span><span class="co">#&gt;    Resolving undeclared variables</span></span>
 <span><span class="co">#&gt;    Allocating nodes</span></span>
@@ -159,24 +217,47 @@ model.</p>
 <span><span class="co">#&gt; Initializing model</span></span>
 <span><span class="va">simNational</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/getSimsInitial.html">getSimsInitial</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; Warning: Setting expected survival S_bar to be between l_S and h_S.</span></span>
-<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">modBeta1</span>, simInitial <span class="op">=</span> <span class="va">simNational</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">betaPrior</span>, simInitial <span class="op">=</span> <span class="va">simNational</span><span class="op">)</span></span>
+<span><span class="va">typeLabs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Beta"</span>,<span class="st">"National"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot1-1.png" width="768"></p>
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plot1-1.png" alt="95% prior predictive intervals from Beta model with 5% anthropogenic disturbance, default priors, and no local data compared to simulations from the national model." width="768"><p class="caption">
+95% prior predictive intervals from Beta model with 5% anthropogenic
+disturbance, default priors, and no local data compared to simulations
+from the national model.
+</p>
+</div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">surv</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot1-2.png" width="768"></p>
+<code class="sourceCode R"><span><span class="va">surv</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plot1-2.png" alt="95% prior predictive intervals from Beta model with 5% anthropogenic disturbance, default priors, and no local data compared to simulations from the national model." width="768"><p class="caption">
+95% prior predictive intervals from Beta model with 5% anthropogenic
+disturbance, default priors, and no local data compared to simulations
+from the national model.
+</p>
+</div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lam</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>,lowBound<span class="op">=</span><span class="fl">0.5</span>,highBound<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lam</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot1-3.png" width="768"></p>
-<p>The bboutools model default priors are less informative than the beta
+<code class="sourceCode R"><span><span class="va">lam</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span>,lowBound<span class="op">=</span><span class="fl">0.5</span>,highBound<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lam</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plot1-3.png" alt="95% prior predictive intervals from Beta model with 5% anthropogenic disturbance, default priors, and no local data compared to simulations from the national model." width="768"><p class="caption">
+95% prior predictive intervals from Beta model with 5% anthropogenic
+disturbance, default priors, and no local data compared to simulations
+from the national model.
+</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="comparison-of-beta-and-bbou-prior-predictions">Comparison of Beta and bbou prior predictions<a class="anchor" aria-label="anchor" href="#comparison-of-beta-and-bbou-prior-predictions"></a>
+</h2>
+<p>The bbou model default priors are less informative than the Beta
 model default priors.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="va">useSaved</span><span class="op">&amp;</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">res1File</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">res1File</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="va">useSaved</span><span class="op">&amp;</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">bbouPriorFile</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">bbouPrior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">bbouPriorFile</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="kw">else</span><span class="op">{</span></span>
-<span>  <span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bbouMakeSummaryTable.html">bbouMakeSummaryTable</a></span><span class="op">(</span><span class="va">surv_data1</span>,<span class="va">recruit_data1</span>,return_mcmc<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
-<span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">resFile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">mod1</span>,<span class="va">res1File</span><span class="op">)</span><span class="op">}</span></span>
+<span>  <span class="va">bbouPrior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bbouMakeSummaryTable.html">bbouMakeSummaryTable</a></span><span class="op">(</span><span class="va">surv_dataNone</span>,<span class="va">recruit_dataNone</span>,return_mcmc<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">bbouPriorFile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">bbouPrior</span>,<span class="va">bbouPriorFile</span><span class="op">)</span><span class="op">}</span></span>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; Registered S3 methods overwritten by 'mcmcr':</span></span>
 <span><span class="co">#&gt;   method               from </span></span>
@@ -317,23 +398,264 @@ model default priors.</p>
 <span><span class="co">#&gt; warning: problem initializing stochastic node Calves[4]: logProb is NA or NaN.</span></span>
 <span><span class="co">#&gt; warning: value of stochastic node Calves[5]: value is NA or NaN even after trying to simulate.</span></span>
 <span><span class="co">#&gt; warning: problem initializing stochastic node Calves[5]: logProb is NA or NaN.</span></span>
-<span><span class="va">simBB1</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/getSimsInitial.html">getSimsInitial</a></span><span class="op">(</span><span class="va">mod1</span><span class="op">)</span> </span>
-<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">modBeta1</span>, simInitial <span class="op">=</span> <span class="va">simBB1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">simBbouPrior</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/getSimsInitial.html">getSimsInitial</a></span><span class="op">(</span><span class="va">bbouPrior</span><span class="op">)</span> </span>
+<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">betaPrior</span>, simInitial <span class="op">=</span> <span class="va">simBbouPrior</span><span class="op">)</span></span>
+<span><span class="va">typeLabs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Beta"</span>,<span class="st">"Bbou"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot2-1.png" width="768"></p>
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotPriorsDefault-1.png" alt="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and default priors." width="768"><p class="caption">
+Prior means and 95% predictive intervals from Beta and bbou models with
+5% anthropogenic disturbance and default priors.
+</p>
+</div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">surv</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot2-2.png" width="768"></p>
+<code class="sourceCode R"><span><span class="va">surv</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotPriorsDefault-2.png" alt="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and default priors." width="768"><p class="caption">
+Prior means and 95% predictive intervals from Beta and bbou models with
+5% anthropogenic disturbance and default priors.
+</p>
+</div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lam</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>,lowBound<span class="op">=</span><span class="fl">0</span>,highBound<span class="op">=</span><span class="fl">2</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lam</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot2-3.png" width="768"></p>
-<p>#TO DO: better graph labels.</p>
-<p>With more informative data, the Beta model model with constant
-disturbance covariates and informative priors often gives results that
-are comparable to bboutools without informative priors.</p>
+<code class="sourceCode R"><span><span class="va">lam</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span>,lowBound<span class="op">=</span><span class="fl">0</span>,highBound<span class="op">=</span><span class="fl">2</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lam</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotPriorsDefault-3.png" alt="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and default priors." width="768"><p class="caption">
+Prior means and 95% predictive intervals from Beta and bbou models with
+5% anthropogenic disturbance and default priors.
+</p>
+</div>
+<p>The bbou priors can be set to (approximately) match the Beta model
+priors. When disturbance is constant, the models with informative priors
+make similar predictions of expected demographic rates.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">modBeta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouBayesianPM.html">caribouBayesianPM</a></span><span class="op">(</span><span class="va">surv_data</span>,<span class="va">recruit_data</span>,<span class="va">disturbance</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">b0Priors</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBBNationalInformativePriors.html">getBBNationalInformativePriors</a></span><span class="op">(</span>Anthro<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">$</span><span class="va">Anthro</span><span class="op">)</span>,fire_excl_anthro<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">$</span><span class="va">fire_excl_anthro</span><span class="op">)</span>,month<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Compiling model graph</span></span>
+<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
+<span><span class="co">#&gt;    Allocating nodes</span></span>
+<span><span class="co">#&gt; Graph information:</span></span>
+<span><span class="co">#&gt;    Observed stochastic nodes: 0</span></span>
+<span><span class="co">#&gt;    Unobserved stochastic nodes: 78</span></span>
+<span><span class="co">#&gt;    Total graph size: 349</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Initializing model</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Compiling model graph</span></span>
+<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
+<span><span class="co">#&gt;    Allocating nodes</span></span>
+<span><span class="co">#&gt; Graph information:</span></span>
+<span><span class="co">#&gt;    Observed stochastic nodes: 5</span></span>
+<span><span class="co">#&gt;    Unobserved stochastic nodes: 24</span></span>
+<span><span class="co">#&gt;    Total graph size: 120</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Initializing model</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="va">useSaved</span><span class="op">&amp;</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">bbouPriorNationalFile</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>   <span class="va">bbouPriorNational</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">bbouPriorNationalFile</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="kw">else</span><span class="op">{</span></span>
+<span>   <span class="va">bbouPriorNational</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bbouMakeSummaryTable.html">bbouMakeSummaryTable</a></span><span class="op">(</span><span class="va">surv_dataNone</span>,<span class="va">recruit_dataNone</span>,return_mcmc<span class="op">=</span><span class="cn">T</span>,priors<span class="op">=</span><span class="va">b0Priors</span><span class="op">)</span></span>
+<span>   <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">bbouPriorNationalFile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">bbouPriorNational</span>,<span class="va">bbouPriorNationalFile</span><span class="op">)</span><span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[1]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[2]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[3]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[4]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[5]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[1]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[2]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[3]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[4]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[5]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[5]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[1]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[2]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[3]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[4]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[5]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[1]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[1]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[2]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[2]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[3]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[3]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[4]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[4]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[5]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[5]: logProb is NA or NaN.</span></span>
+<span><span class="va">simBbouPriorNational</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/getSimsInitial.html">getSimsInitial</a></span><span class="op">(</span><span class="va">bbouPriorNational</span><span class="op">)</span></span>
+<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">betaPrior</span>, simInitial <span class="op">=</span> <span class="va">simBbouPriorNational</span><span class="op">)</span></span>
+<span><span class="va">typeLabs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Beta"</span>,<span class="st">"Bbou National"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">recBar</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Expected recruitment"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">recBar</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotPriorsNational-1.png" alt="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and priors informed by national demographic-disturbance relationships." width="768"><p class="caption">
+Prior means and 95% predictive intervals from Beta and bbou models with
+5% anthropogenic disturbance and priors informed by national
+demographic-disturbance relationships.
+</p>
+</div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotPriorsNational-2.png" alt="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and priors informed by national demographic-disturbance relationships." width="768"><p class="caption">
+Prior means and 95% predictive intervals from Beta and bbou models with
+5% anthropogenic disturbance and priors informed by national
+demographic-disturbance relationships.
+</p>
+</div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survBar</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Expected survival"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">survBar</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotPriorsNational-3.png" alt="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and priors informed by national demographic-disturbance relationships." width="768"><p class="caption">
+Prior means and 95% predictive intervals from Beta and bbou models with
+5% anthropogenic disturbance and priors informed by national
+demographic-disturbance relationships.
+</p>
+</div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">surv</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotPriorsNational-4.png" alt="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and priors informed by national demographic-disturbance relationships." width="768"><p class="caption">
+Prior means and 95% predictive intervals from Beta and bbou models with
+5% anthropogenic disturbance and priors informed by national
+demographic-disturbance relationships.
+</p>
+</div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lamBar</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Expected growth rate"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span>,lowBound<span class="op">=</span><span class="fl">0</span>,highBound<span class="op">=</span><span class="fl">2</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lamBar</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotPriorsNational-5.png" alt="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and priors informed by national demographic-disturbance relationships." width="768"><p class="caption">
+Prior means and 95% predictive intervals from Beta and bbou models with
+5% anthropogenic disturbance and priors informed by national
+demographic-disturbance relationships.
+</p>
+</div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lam</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span>,lowBound<span class="op">=</span><span class="fl">0</span>,highBound<span class="op">=</span><span class="fl">2</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lam</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotPriorsNational-6.png" alt="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and priors informed by national demographic-disturbance relationships." width="768"><p class="caption">
+Prior means and 95% predictive intervals from Beta and bbou models with
+5% anthropogenic disturbance and priors informed by national
+demographic-disturbance relationships.
+</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="comparison-of-beta-and-bbou-models-with-informative-local-data">Comparison of Beta and bbou models with informative local data<a class="anchor" aria-label="anchor" href="#comparison-of-beta-and-bbou-models-with-informative-local-data"></a>
+</h2>
+<p>With more informative data, the Beta model with constant disturbance
+covariates and informative priors often gives results that are
+comparable to the bbou model with default (less informative) priors.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">betaInformative</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouBayesianPM.html">caribouBayesianPM</a></span><span class="op">(</span><span class="va">surv_data</span>,<span class="va">recruit_data</span>,<span class="va">disturbance</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Compiling model graph</span></span>
 <span><span class="co">#&gt;    Resolving undeclared variables</span></span>
 <span><span class="co">#&gt;    Allocating nodes</span></span>
@@ -353,11 +675,11 @@ are comparable to bboutools without informative priors.</p>
 <span><span class="co">#&gt;    Total graph size: 204</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Initializing model</span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="va">useSaved</span><span class="op">&amp;</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">resFile</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">resFile</span><span class="op">)</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="va">useSaved</span><span class="op">&amp;</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">bbouInformativeFile</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">bbouInformative</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">bbouInformativeFile</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="kw">else</span><span class="op">{</span></span>
-<span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bbouMakeSummaryTable.html">bbouMakeSummaryTable</a></span><span class="op">(</span><span class="va">surv_data</span>,<span class="va">recruit_data</span>,return_mcmc<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
-<span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">resFile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">mod</span>,<span class="va">resFile</span><span class="op">)</span><span class="op">}</span></span>
+<span>  <span class="va">bbouInformative</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bbouMakeSummaryTable.html">bbouMakeSummaryTable</a></span><span class="op">(</span><span class="va">surv_data</span>,<span class="va">recruit_data</span>,return_mcmc<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">bbouInformativeFile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">bbouInformative</span>,<span class="va">bbouInformativeFile</span><span class="op">)</span><span class="op">}</span></span>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[7]: value is NA or NaN even after trying to simulate.</span></span>
 <span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[7]: logProb is NA or NaN.</span></span>
@@ -521,25 +843,271 @@ are comparable to bboutools without informative priors.</p>
 <span><span class="co">#&gt; warning: problem initializing stochastic node Calves[11]: logProb is NA or NaN.</span></span>
 <span><span class="co">#&gt; warning: value of stochastic node Calves[12]: value is NA or NaN even after trying to simulate.</span></span>
 <span><span class="co">#&gt; warning: problem initializing stochastic node Calves[12]: logProb is NA or NaN.</span></span>
-<span><span class="va">simBB</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/getSimsInitial.html">getSimsInitial</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span> </span>
-<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">modBeta</span>, simInitial <span class="op">=</span> <span class="va">simBB</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot3-1.png" width="768"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">surv</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot3-2.png" width="768"></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lam</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>,lowBound<span class="op">=</span><span class="fl">0.5</span>,highBound<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lam</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot3-3.png" width="768"></p>
-<p>However, if local data is limited the bboutools model without
-informative priors and the Beta model with disturbance covariates and
-informative priors may give different results, particularly if
+<span><span class="va">simBbouInformative</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/getSimsInitial.html">getSimsInitial</a></span><span class="op">(</span><span class="va">bbouInformative</span><span class="op">)</span> </span>
+<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">betaInformative</span>, simInitial <span class="op">=</span> <span class="va">simBbouInformative</span><span class="op">)</span></span>
+<span><span class="va">typeLabs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Beta"</span>,<span class="st">"Bbou"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotInformativeLocal-1.png" alt="Posterior means and 95% posterior predictive intervals from Beta and bbou models with 5% anthropogenic disturbance, default priors, and informative local data." width="768"><p class="caption">
+Posterior means and 95% posterior predictive intervals from Beta and
+bbou models with 5% anthropogenic disturbance, default priors, and
+informative local data.
+</p>
+</div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">surv</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotInformativeLocal-2.png" alt="Posterior means and 95% posterior predictive intervals from Beta and bbou models with 5% anthropogenic disturbance, default priors, and informative local data." width="768"><p class="caption">
+Posterior means and 95% posterior predictive intervals from Beta and
+bbou models with 5% anthropogenic disturbance, default priors, and
+informative local data.
+</p>
+</div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lam</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span>,lowBound<span class="op">=</span><span class="fl">0.5</span>,highBound<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lam</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotInformativeLocal-3.png" alt="Posterior means and 95% posterior predictive intervals from Beta and bbou models with 5% anthropogenic disturbance, default priors, and informative local data." width="768"><p class="caption">
+Posterior means and 95% posterior predictive intervals from Beta and
+bbou models with 5% anthropogenic disturbance, default priors, and
+informative local data.
+</p>
+</div>
+<p>The bboutools models do not include disturbance covariates, so we
+expect the models to project different outcomes in a case where
+disturbance changes over time.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">disturbance</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2011</span>,<span class="fl">2051</span><span class="op">)</span>,Anthro<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">2</span><span class="op">*</span><span class="fl">40</span><span class="op">+</span><span class="fl">20</span>,length.out<span class="op">=</span><span class="fl">41</span><span class="op">)</span>,fire_excl_anthro<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">betaAnthroChange</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouBayesianPM.html">caribouBayesianPM</a></span><span class="op">(</span><span class="va">surv_data</span>,<span class="va">recruit_data</span>,<span class="va">disturbance</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Compiling model graph</span></span>
+<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
+<span><span class="co">#&gt;    Allocating nodes</span></span>
+<span><span class="co">#&gt; Graph information:</span></span>
+<span><span class="co">#&gt;    Observed stochastic nodes: 61</span></span>
+<span><span class="co">#&gt;    Unobserved stochastic nodes: 472</span></span>
+<span><span class="co">#&gt;    Total graph size: 3129</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Initializing model</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Compiling model graph</span></span>
+<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
+<span><span class="co">#&gt;    Allocating nodes</span></span>
+<span><span class="co">#&gt; Graph information:</span></span>
+<span><span class="co">#&gt;    Observed stochastic nodes: 45</span></span>
+<span><span class="co">#&gt;    Unobserved stochastic nodes: 159</span></span>
+<span><span class="co">#&gt;    Total graph size: 1429</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Initializing model</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="va">useSaved</span><span class="op">&amp;</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">bbouInformativeFile</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">bbouInformative</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">bbouInformativeFile</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="kw">else</span><span class="op">{</span></span>
+<span>  <span class="va">bbouInformative</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bbouMakeSummaryTable.html">bbouMakeSummaryTable</a></span><span class="op">(</span><span class="va">surv_data</span>,<span class="va">recruit_data</span>,return_mcmc<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">bbouInformativeFile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">bbouInformative</span>,<span class="va">bbouInformativeFile</span><span class="op">)</span><span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[7]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[8]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[9]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[10]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[11]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[12]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[7]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[8]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[9]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[10]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[11]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[12]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Cows[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Cows[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node OtherAdultsFemales[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node OtherAdultsFemales[12]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[7]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[8]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[9]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[10]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[11]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of deterministic node AdultsFemales[12]: value is NA or NaN even after trying to calculate.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[7]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[7]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[8]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[8]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[9]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[9]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[10]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[10]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[11]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[11]: logProb is NA or NaN.</span></span>
+<span><span class="co">#&gt; warning: value of stochastic node Calves[12]: value is NA or NaN even after trying to simulate.</span></span>
+<span><span class="co">#&gt; warning: problem initializing stochastic node Calves[12]: logProb is NA or NaN.</span></span>
+<span><span class="va">simBbouInformative</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/getSimsInitial.html">getSimsInitial</a></span><span class="op">(</span><span class="va">bbouInformative</span><span class="op">)</span></span>
+<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">betaAnthroChange</span>, simInitial <span class="op">=</span> <span class="va">simBbouInformative</span><span class="op">)</span></span>
+<span><span class="va">typeLabs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Beta"</span>,<span class="st">"Bbou"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotDisturbanceChange-1.png" alt="Posterior means and 95% posterior predictive intervals from Beta and bbou models with default priors, informative local data, and anthropogenic disturbance increasing from 20 to 100% over 40 years." width="768"><p class="caption">
+Posterior means and 95% posterior predictive intervals from Beta and
+bbou models with default priors, informative local data, and
+anthropogenic disturbance increasing from 20 to 100% over 40 years.
+</p>
+</div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">surv</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotDisturbanceChange-2.png" alt="Posterior means and 95% posterior predictive intervals from Beta and bbou models with default priors, informative local data, and anthropogenic disturbance increasing from 20 to 100% over 40 years." width="768"><p class="caption">
+Posterior means and 95% posterior predictive intervals from Beta and
+bbou models with default priors, informative local data, and
+anthropogenic disturbance increasing from 20 to 100% over 40 years.
+</p>
+</div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lam</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span>,lowBound<span class="op">=</span><span class="fl">0.5</span>,highBound<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lam</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotDisturbanceChange-3.png" alt="Posterior means and 95% posterior predictive intervals from Beta and bbou models with default priors, informative local data, and anthropogenic disturbance increasing from 20 to 100% over 40 years." width="768"><p class="caption">
+Posterior means and 95% posterior predictive intervals from Beta and
+bbou models with default priors, informative local data, and
+anthropogenic disturbance increasing from 20 to 100% over 40 years.
+</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="comparison-of-beta-and-bbou-models-with-limited-local-data">Comparison of Beta and bbou models with limited local data<a class="anchor" aria-label="anchor" href="#comparison-of-beta-and-bbou-models-with-limited-local-data"></a>
+</h2>
+<p>If local data is limited the bbou model with default (less
+informative) priors and the Beta model with disturbance covariates and
+informative priors may also give different results, particularly if
 observations are inconsistent with expectations from the observed
 distribution of outcomes across the country.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">disturbance</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">surv_data</span><span class="op">$</span><span class="va">Year</span><span class="op">)</span>,Anthro<span class="op">=</span><span class="fl">95</span>,fire_excl_anthro<span class="op">=</span><span class="fl">90</span><span class="op">)</span></span>
-<span><span class="va">modBeta2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouBayesianPM.html">caribouBayesianPM</a></span><span class="op">(</span><span class="va">surv_data2</span>,<span class="va">recruit_data2</span>,<span class="va">disturbance</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">disturbance</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">surv_data</span><span class="op">$</span><span class="va">Year</span><span class="op">)</span>,Anthro<span class="op">=</span><span class="fl">90</span>,fire_excl_anthro<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">betaLimited</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/caribouBayesianPM.html">caribouBayesianPM</a></span><span class="op">(</span><span class="va">surv_dataLimited</span>,<span class="va">recruit_dataLimited</span>,<span class="va">disturbance</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Compiling model graph</span></span>
 <span><span class="co">#&gt;    Resolving undeclared variables</span></span>
 <span><span class="co">#&gt;    Allocating nodes</span></span>
@@ -559,11 +1127,11 @@ distribution of outcomes across the country.</p>
 <span><span class="co">#&gt;    Total graph size: 148</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Initializing model</span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="va">useSaved</span><span class="op">&amp;</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">res2File</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">res2File</span><span class="op">)</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="va">useSaved</span><span class="op">&amp;</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">bbouLimitedFile</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">bbouLimited</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">bbouLimitedFile</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="kw">else</span><span class="op">{</span></span>
-<span>  <span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bbouMakeSummaryTable.html">bbouMakeSummaryTable</a></span><span class="op">(</span><span class="va">surv_data2</span>,<span class="va">recruit_data2</span>,return_mcmc<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
-<span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">resFile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">mod2</span>,<span class="va">res2File</span><span class="op">)</span><span class="op">}</span></span>
+<span>  <span class="va">bbouLimited</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bbouMakeSummaryTable.html">bbouMakeSummaryTable</a></span><span class="op">(</span><span class="va">surv_dataLimited</span>,<span class="va">recruit_dataLimited</span>,return_mcmc<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">bbouLimitedFile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">bbouLimited</span>,<span class="va">bbouLimitedFile</span><span class="op">)</span><span class="op">}</span></span>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; warning: value of stochastic node FemaleYearlings[3]: value is NA or NaN even after trying to simulate.</span></span>
 <span><span class="co">#&gt; warning: problem initializing stochastic node FemaleYearlings[3]: logProb is NA or NaN.</span></span>
@@ -727,27 +1295,49 @@ distribution of outcomes across the country.</p>
 <span><span class="co">#&gt; warning: problem initializing stochastic node Calves[7]: logProb is NA or NaN.</span></span>
 <span><span class="co">#&gt; warning: value of stochastic node Calves[8]: value is NA or NaN even after trying to simulate.</span></span>
 <span><span class="co">#&gt; warning: problem initializing stochastic node Calves[8]: logProb is NA or NaN.</span></span>
-<span><span class="va">simBB2</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/getSimsInitial.html">getSimsInitial</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">)</span> </span>
-<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">modBeta2</span>, simInitial <span class="op">=</span> <span class="va">simBB2</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot4-1.png" width="768"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">surv</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot4-2.png" width="768"></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lam</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>,lowBound<span class="op">=</span><span class="fl">0.5</span>,highBound<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lam</span><span class="op">)</span></span></code></pre></div>
-<p><img src="compare-bayesian-models_files/figure-html/plot4-3.png" width="768"></p>
-<p>TO DO: The bboutools models do not include disturbance covariates, so
-the models will also give different results in a case where disturbance
-changes over time.</p>
+<span><span class="va">simBbouLimited</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/getSimsInitial.html">getSimsInitial</a></span><span class="op">(</span><span class="va">bbouLimited</span><span class="op">)</span> </span>
+<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getOutputTables.html">getOutputTables</a></span><span class="op">(</span><span class="va">betaLimited</span>, simInitial <span class="op">=</span> <span class="va">simBbouLimited</span><span class="op">)</span></span>
+<span><span class="va">typeLabs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Beta"</span>,<span class="st">"Bbou"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotLimitedLocal-1.png" alt="Posterior means and 95% predictive intervals from Beta and bbou models with 90% anthropogenic disturbance, default priors, and limited local data." width="768"><p class="caption">
+Posterior means and 95% predictive intervals from Beta and bbou models
+with 90% anthropogenic disturbance, default priors, and limited local
+data.
+</p>
+</div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">surv</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotLimitedLocal-2.png" alt="Posterior means and 95% predictive intervals from Beta and bbou models with 90% anthropogenic disturbance, default priors, and limited local data." width="768"><p class="caption">
+Posterior means and 95% predictive intervals from Beta and bbou models
+with 90% anthropogenic disturbance, default priors, and limited local
+data.
+</p>
+</div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lam</span> <span class="op">=</span>  <span class="fu"><a href="../reference/plotRes.html">plotRes</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>,typeLabels<span class="op">=</span><span class="va">typeLabs</span>,lowBound<span class="op">=</span><span class="fl">0.5</span>,highBound<span class="op">=</span><span class="fl">1.5</span><span class="op">)</span>;<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lam</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_ribbon()`).</span></span></code></pre></div>
+<div class="figure">
+<img src="compare-bayesian-models_files/figure-html/plotLimitedLocal-3.png" alt="Posterior means and 95% predictive intervals from Beta and bbou models with 90% anthropogenic disturbance, default priors, and limited local data." width="768"><p class="caption">
+Posterior means and 95% predictive intervals from Beta and bbou models
+with 90% anthropogenic disturbance, default priors, and limited local
+data.
+</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="bboutools-models-with-informative-priors">Bboutools models with informative priors<a class="anchor" aria-label="anchor" href="#bboutools-models-with-informative-priors"></a>
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>TO DO: The bboutools priors can be set to (approximately) match the
-beta model priors. When disturbance is constant, the models with
-informative priors are similar to one another.</p>
+<p>Dalgarno S, Boulanger J, Pearson A, et al (2025) bbousuite: A set of
+R packages to facilitate analysis of boreal caribou survival and
+recruitment data. Journal of Open Source Software 10:7997. <a href="https://doi.org/10.21105/joss.07997" class="external-link uri">https://doi.org/10.21105/joss.07997</a></p>
+<p>Hughes J, Endicott S, Calvert AM, Johnson CA (2025) Integration of
+national demographic-disturbance relationships and local data can
+improve caribou population viability projections and inform monitoring
+decisions. Ecological Informatics 87:103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link uri">https://doi.org/10.1016/j.ecoinf.2025.103095</a></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

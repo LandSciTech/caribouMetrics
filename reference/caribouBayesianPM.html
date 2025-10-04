@@ -21,7 +21,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demography</a></li>
     <li><a class="dropdown-item" href="../articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
     <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Combine observed and simulated caribou data</a></li>
-    <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Compare Bayesian models in caribouMetrics and bboutools</a></li>
+    <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul></li>
@@ -51,7 +51,7 @@
 <span>  surv_data <span class="op">=</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bbousurv_a</a></span>,</span>
 <span>  recruit_data <span class="op">=</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span>,</span>
 <span>  disturbance <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  betaPriors <span class="op">=</span> <span class="st">"default"</span>,</span>
+<span>  priors <span class="op">=</span> <span class="st">"default"</span>,</span>
 <span>  startYear <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  endYear <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  N0 <span class="op">=</span> <span class="cn">NA</span>,</span>
@@ -80,8 +80,9 @@
 columns "Anthro","fire_excl_anthro", and "Year".</p></dd>
 
 
-<dt id="arg-betapriors">betaPriors<a class="anchor" aria-label="anchor" href="#arg-betapriors"></a></dt>
-<dd><p>a list of model priors. See <code><a href="getPriors.html">getPriors()</a></code>. Not used if disturbance is NA.</p></dd>
+<dt id="arg-priors">priors<a class="anchor" aria-label="anchor" href="#arg-priors"></a></dt>
+<dd><p>a list of model priors. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html" class="external-link">bboutools::bb_priors_survival</a></code> and <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html" class="external-link">bboutools::bb_priors_recruitment</a></code> for details.
+If disturbance is not NA, see <code><a href="getPriors.html">getPriors()</a></code> for details.</p></dd>
 
 
 <dt id="arg-startyear-endyear">startYear, endYear<a class="anchor" aria-label="anchor" href="#arg-startyear-endyear"></a></dt>
@@ -139,6 +140,7 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <code><a href="demographicProjectionApp.html">demographicProjectionApp</a>()</code>,
 <code><a href="demographicRates.html">demographicRates</a>()</code>,
 <code><a href="doSim.html">doSim</a>()</code>,
+<code><a href="getBBNationalInformativePriors.html">getBBNationalInformativePriors</a>()</code>,
 <code><a href="getOutputTables.html">getOutputTables</a>()</code>,
 <code><a href="getPriors.html">getPriors</a>()</code>,
 <code><a href="getScenarioDefaults.html">getScenarioDefaults</a>()</code>,
@@ -311,7 +313,7 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph information:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 29</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 694</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

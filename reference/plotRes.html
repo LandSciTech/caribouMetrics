@@ -23,7 +23,7 @@ distribution of outcomes from the initial model, local observations, and true lo
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demography</a></li>
     <li><a class="dropdown-item" href="../articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
     <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Combine observed and simulated caribou data</a></li>
-    <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Compare Bayesian models in caribouMetrics and bboutools</a></li>
+    <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul></li>
@@ -58,7 +58,8 @@ distribution of outcomes from the initial model, local observations, and true lo
 <span>  facetVars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  labFontSize <span class="op">=</span> <span class="fl">14</span>,</span>
 <span>  legendPosition <span class="op">=</span> <span class="st">"right"</span>,</span>
-<span>  breakInterval <span class="op">=</span> <span class="fl">1</span></span>
+<span>  breakInterval <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  typeLabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Bayesian"</span>, <span class="st">"initial"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -96,6 +97,10 @@ facets. Font size is 10 pt if facets are used.</p></dd>
 <dt id="arg-breakinterval">breakInterval<a class="anchor" aria-label="anchor" href="#arg-breakinterval"></a></dt>
 <dd><p>number. How many years between x tick marks?</p></dd>
 
+
+<dt id="arg-typelabels">typeLabels<a class="anchor" aria-label="anchor" href="#arg-typelabels"></a></dt>
+<dd><p>vector of two labels. Default c("Bayesian","initial"). Names of models to be compared.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -114,6 +119,7 @@ was given.</p>
 <code><a href="demographicProjectionApp.html">demographicProjectionApp</a>()</code>,
 <code><a href="demographicRates.html">demographicRates</a>()</code>,
 <code><a href="doSim.html">doSim</a>()</code>,
+<code><a href="getBBNationalInformativePriors.html">getBBNationalInformativePriors</a>()</code>,
 <code><a href="getOutputTables.html">getOutputTables</a>()</code>,
 <code><a href="getPriors.html">getPriors</a>()</code>,
 <code><a href="getScenarioDefaults.html">getScenarioDefaults</a>()</code>,
@@ -151,7 +157,7 @@ was given.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph information:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 29</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 694</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

@@ -23,7 +23,7 @@ results."></head><body>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demography</a></li>
     <li><a class="dropdown-item" href="../articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
     <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Combine observed and simulated caribou data</a></li>
-    <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Compare Bayesian models in caribouMetrics and bboutools</a></li>
+    <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul></li>
@@ -113,6 +113,7 @@ simulated based on the collaring program parameters.</p></li>
 <code><a href="demographicProjectionApp.html">demographicProjectionApp</a>()</code>,
 <code><a href="demographicRates.html">demographicRates</a>()</code>,
 <code><a href="doSim.html">doSim</a>()</code>,
+<code><a href="getBBNationalInformativePriors.html">getBBNationalInformativePriors</a>()</code>,
 <code><a href="getPriors.html">getPriors</a>()</code>,
 <code><a href="getScenarioDefaults.html">getScenarioDefaults</a>()</code>,
 <code><a href="getSimsInitial.html">getSimsInitial</a>()</code>,
@@ -150,7 +151,7 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph information:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 29</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 694</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -168,15 +169,15 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName    : chr [1:190] "A" "A" "A" "A" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ AnthroID          : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ fire_excl_anthroID: num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean              : num [1:190] NaN 0.925 1.287 0.391 0.743 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower             : Named num [1:190] NA 0.828 1.148 0.351 0.658 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper             : Named num [1:190] NA 0.987 1.376 0.454 0.809 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable        : num [1:190] NaN 0 1 0 0 NaN 0 0 1 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean              : num [1:190] NaN 0.935 1.147 0.226 0.436 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower             : Named num [1:190] NA 0.825 1.009 0.188 0.373 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper             : Named num [1:190] NA 0.986 1.229 0.272 0.503 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable        : num [1:190] NaN 0 0.983 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Parameter         : chr [1:190] "c" "Adult female survival" "Population growth rate" "Adjusted recruitment" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Anthro            : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ fire_excl_anthro  : num [1:190] 0.00013 0.00013 0.00013 0.00013 0.00013 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time              : int [1:190] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Total_dist        : num [1:190] 0.00013 0.00013 0.00013 0.00013 0.00013 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ fire_excl_anthro  : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time              : num [1:190] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Total_dist        : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iFire             : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iAnthro           : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ obsAnthroSlope    : num [1:190] 1 1 1 1 1 1 1 1 1 1 ...</span>
@@ -206,23 +207,23 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ sim.all       :'data.frame':	160 obs. of  8 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID  : chr [1:160] "c" "lambda_bar" "recruitment" "lambda" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName: chr [1:160] "A" "A" "A" "A" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean          : num [1:160] 1 1.034 0.335 1.026 0.168 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower         : Named num [1:160] 1 0.9011 0.075 0.7899 0.0375 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper         : Named num [1:160] 1 1.164 0.719 1.273 0.359 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable    : num [1:160] 1 0.752 0 0.619 0 0.058 0 0 0 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean          : num [1:160] 1 1.034 0.345 1.025 0.172 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower         : Named num [1:160] 1 0.8986 0.0855 0.757 0.0427 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper         : Named num [1:160] 1 1.172 0.727 1.279 0.363 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable    : num [1:160] 1 0.742 0 0.617 0 0.063 0 0 0 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Parameter     : chr [1:160] "c" "Expected growth rate" "Recruitment" "Population growth rate" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year          : int [1:160] 2014 2014 2014 2014 2014 2014 2014 2014 2015 2015 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ obs.all       :'data.frame':	259 obs. of  36 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year            : num [1:259] 2014 2014 2014 2014 2014 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName  : chr [1:259] "A" "A" "A" "A" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean            : num [1:259] 0.75 0.521 0.95 1172 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean            : num [1:259] 0.44 0.397 0.9 975 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Parameter       : chr [1:259] "Recruitment" "Expected recruitment" "Adult female survival" "Female population size" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID    : chr [1:259] "R" "Rbar" "S" "N" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Type            : chr [1:259] "observed" "true" "observed" "true" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Anthro          : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ fire_excl_anthro: num [1:259] 0.00013 0.00013 0.00013 0.00013 0.00013 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time            : int [1:259] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Total_dist      : num [1:259] 0.00013 0.00013 0.00013 0.00013 0.00013 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ fire_excl_anthro: num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time            : num [1:259] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Total_dist      : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iFire           : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iAnthro         : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ obsAnthroSlope  : num [1:259] 1 1 1 1 1 1 1 1 1 1 ...</span>

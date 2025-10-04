@@ -23,7 +23,7 @@ demographic trajectories. See simulateObservations() for additional details."></
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demography</a></li>
     <li><a class="dropdown-item" href="../articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
     <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Combine observed and simulated caribou data</a></li>
-    <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Compare Bayesian models in caribouMetrics and bboutools</a></li>
+    <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
     <li><a class="dropdown-item" href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul></li>
@@ -59,6 +59,8 @@ demographic trajectories. See <code><a href="simulateObservations.html">simulate
 <span>  rSlopeMod <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  sSlopeMod <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  lQuantile <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  sQuantile <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  rQuantile <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  correlateRates <span class="op">=</span> <span class="cn">F</span>,</span>
 <span>  projYears <span class="op">=</span> <span class="fl">35</span>,</span>
 <span>  obsYears <span class="op">=</span> <span class="fl">15</span>,</span>
@@ -76,9 +78,7 @@ demographic trajectories. See <code><a href="simulateObservations.html">simulate
 <span>  collarCount <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  startYear <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  interannualVar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="va">caribouPopGrowth</span><span class="op">)</span><span class="op">$</span><span class="va">interannualVar</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  curYear <span class="op">=</span> <span class="fl">2023</span>,</span>
-<span>  sQuantile <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  rQuantile <span class="op">=</span> <span class="cn">NA</span></span>
+<span>  curYear <span class="op">=</span> <span class="fl">2023</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -119,6 +119,14 @@ the projection period</p></dd>
 
 <dt id="arg-lquantile">lQuantile<a class="anchor" aria-label="anchor" href="#arg-lquantile"></a></dt>
 <dd><p>number in 0, 1. Lambda quantile</p></dd>
+
+
+<dt id="arg-squantile">sQuantile<a class="anchor" aria-label="anchor" href="#arg-squantile"></a></dt>
+<dd><p>number in 0,1. Survival quantile.</p></dd>
+
+
+<dt id="arg-rquantile">rQuantile<a class="anchor" aria-label="anchor" href="#arg-rquantile"></a></dt>
+<dd><p>number in 0,1. Recruitment quantile.</p></dd>
 
 
 <dt id="arg-correlaterates">correlateRates<a class="anchor" aria-label="anchor" href="#arg-correlaterates"></a></dt>
@@ -219,6 +227,7 @@ the parameter names and values into a string</p>
 <code><a href="demographicProjectionApp.html">demographicProjectionApp</a>()</code>,
 <code><a href="demographicRates.html">demographicRates</a>()</code>,
 <code><a href="doSim.html">doSim</a>()</code>,
+<code><a href="getBBNationalInformativePriors.html">getBBNationalInformativePriors</a>()</code>,
 <code><a href="getOutputTables.html">getOutputTables</a>()</code>,
 <code><a href="getPriors.html">getPriors</a>()</code>,
 <code><a href="getSimsInitial.html">getSimsInitial</a>()</code>,
