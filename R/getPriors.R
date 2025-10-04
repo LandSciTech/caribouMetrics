@@ -1,6 +1,6 @@
-#' Get prior parameters for Bayesian population model
+#' Get prior parameters for Bayesian beta population model
 #'
-#' Returns prior parameter values for the Bayesian population model. The
+#' Returns prior parameter values for the Bayesian beta population model. The
 #' starting point is estimated coefficients from national
 #' demographic-disturbance relationships in the table
 #' `popGrowthTableJohnsonECCC`. 
@@ -253,4 +253,47 @@ simCovariates <- function(initAnthro, initFire, numYears, anthroSlope,
   covariates$Total_dist <- pmin(100, covariates$Anthro + covariates$fire_excl_anthro)
 
   return(covariates)
+}
+
+#' Get informative priors for bboutools logistic models 
+#'
+#' Returns intercept prior parameter values for bboutools logistic models 
+#' that are informed by national demographic-disturbance relationships.
+#' 
+#' This is done by ... TO DO.
+#' 
+#' See `getPriors` for additional details. 
+#' 
+#' @param Anthro numeric. Percent non-overlapping buffered anthropogenic disturbance.
+#' @param fire_excl_anthro numeric. Percent fire not overlapping with anthropogenic disturbance.
+#' @param month logical. Does the survival data to be analyzed include month, or is it aggregated by year?
+#'
+#' @return a list with values:
+#' * priors_survival = c(b0_mu,b0_sd). Passed to `bboutools::bb_fit_survival`. See `bb_priors_survival` for details.
+#' * priors_recruitment=c(b0_mu,b0_sd). Passed to `bboutools::bb_fit_recruitment`. See `bb_priors_recruitment` for details.
+#' 
+#' @examples
+#' getBBNationalInformativePriors(Anthro=50,fire=5)
+#'
+#' @family demography
+#' @export
+getBBNationalInformativePriors<-function(Anthro,fire_excl_anthro,month=T){
+  #Anthro=5;fire_excl_anthro=1
+  surv_dataE = bboudata::bbousurv_a %>% filter(Year > 2010)
+  surv_dataE$StartTotal=1;surv_dataE[,5:6][surv_dataE[,5:6]>-1]=NA
+  
+  recruit_dataE=bboudata::bbourecruit_a %>% filter(Year > 2010)
+  recruit_dataE[,5:9][recruit_dataE[,5:9]>-1]=NA
+  
+  disturbance = data.frame(Year=unique(surv_dataE$Year),Anthro=Anthro,fire_excl_anthro=fire_excl_anthro)
+  modBetaEmpty <- caribouBayesianPM(surv_dataE,recruit_dataE,disturbance)
+  
+  Rbar <- subset(modBetaEmpty$result$samples,MetricTypeID=="Rbar")$Amount
+  Sbar <- subset(modBetaEmpty$result$samples,MetricTypeID=="Sbar")$Amount
+  if(month){
+    Sbar = Sbar^(1/12)
+  }
+  b0Priors = list(priors_recruitment=c(b0_mu = mean(logit(Rbar)),b0_sd = sd(logit(Rbar))),
+                  priors_survival=c(b0_mu = mean(logit(Sbar)),b0_sd = sd(logit(Sbar))))
+  return(b0Priors)
 }

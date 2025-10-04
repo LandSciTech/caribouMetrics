@@ -8,7 +8,7 @@ caribouBayesianPM(
   surv_data = bboudata::bbousurv_a,
   recruit_data = bboudata::bbourecruit_a,
   disturbance = NULL,
-  betaPriors = "default",
+  priors = "default",
   startYear = NULL,
   endYear = NULL,
   N0 = NA,
@@ -27,7 +27,8 @@ caribouBayesianPM(
 \item{disturbance}{either a path to a csv file or a dataframe containing the
 columns "Anthro","fire_excl_anthro", and "Year".}
 
-\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}. Not used if disturbance is NA.}
+\item{priors}{a list of model priors. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see \code{bboutools::bb_priors_survival} and \code{bboutools::bb_priors_recruitment} for details.
+If disturbance is not NA, see \code{\link[=getPriors]{getPriors()}} for details.}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
@@ -104,6 +105,7 @@ Caribou demography functions:
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
 \code{\link{doSim}()},
+\code{\link{getBBNationalInformativePriors}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

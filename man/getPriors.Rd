@@ -2,7 +2,7 @@
 % Please edit documentation in R/getPriors.R
 \name{getPriors}
 \alias{getPriors}
-\title{Get prior parameters for Bayesian population model}
+\title{Get prior parameters for Bayesian beta population model}
 \usage{
 getPriors(
   modList = NULL,
@@ -114,7 +114,7 @@ effect of year on adult female survival,
 }
 }
 \description{
-Returns prior parameter values for the Bayesian population model. The
+Returns prior parameter values for the Bayesian beta population model. The
 starting point is estimated coefficients from national
 demographic-disturbance relationships in the table
 \code{popGrowthTableJohnsonECCC}.
@@ -154,6 +154,7 @@ Caribou demography functions:
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
 \code{\link{doSim}()},
+\code{\link{getBBNationalInformativePriors}()},
 \code{\link{getOutputTables}()},
 \code{\link{getScenarioDefaults}()},
 \code{\link{getSimsInitial}()},

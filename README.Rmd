@@ -19,7 +19,22 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The caribouMetrics R package provides reproducible open source implementations of several models of Boreal woodland caribou (_Rangifer tarandus caribou_) demography and habitat use. A national demographic model with density dependence and interannual variability follows [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with modifications described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates vary with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637). The package also includes Bayesian methods for integrating prior information from Johnson et al's national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections. The national model can be used to simulate example population trajectories, and combined with a simple observation model and the Bayesian population model to show how monitoring requirements depend on landscape condition. Finally, caribouMetrics contains an implementation of [Hornseth and Rempel's (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource selection model described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Model implementation is intended to be modular and flexible, allowing reuse of components in a variety of contexts including projections of the cumulative effects of disturbance and climate change [(e.g. Stewart et al. 2023)](https://doi.org/10.1002/eap.2816) and a [Shiny app](https://landscitech.github.io/BayesianCaribouDemographicProjection/) designed to allow exploration of user-specified monitoring and disturbance scenarios.
+The `caribouMetrics` R package provides implementations of models of Boreal woodland caribou (_Rangifer tarandus caribou_) demography described in [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095). These include: 
+
+* a national demographic model with density dependence and interannual variability follows [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with modifications described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates vary with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637).
+* a Bayesian Beta model for integrating prior information from Johnson et al's national analysis of demographic-disturbance relationships with available local demographic data to reduce uncertainty in population viability projections [(Hughes et al. 2025)](https://doi.org/10.1016/j.ecoinf.2025.103095).  
+    
+To facilitate [comparison with Bayesian logistic models implemented in the `bboutools`](https://landscitech.github.io/caribouMetrics/articles/compare-bayesian-models.html) R package [(Dalgarno et al. 2025)]( https://doi.org/10.21105/joss.07997) `caribouMetrics` also allows for the use of those models. To align with `bboutools` note that the [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095) model has been extended  as follows: 
+
+* Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+* Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
+* Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+
+Simulated example population trajectories can be created from the national model or fitted Bayesian models, and combined with a simple observation model and the Bayesian population model to explore monitoring scenarios and show how monitoring requirements depend on landscape condition ([Hughes et al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095)). 
+
+`caribouMetrics` also contains an implementation of [Hornseth and Rempel's (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource selection model described in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). 
+    
+Model implementation is intended to be modular and flexible, allowing reuse of components in a variety of contexts including projections of the cumulative effects of disturbance and climate change [(e.g. Stewart et al. 2023)](https://doi.org/10.1002/eap.2816).
 
 ## Installation
 
@@ -35,6 +50,8 @@ This is a basic example demonstrating all the primary functions of the package.
 
 ```{r example}
 library(caribouMetrics)
+# use local version on local and installed on GH
+if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
 
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
@@ -76,22 +93,20 @@ params <- getScenarioDefaults(
   collarCount = 30, cowMult = 3, 
   obsAnthroSlope = 0, projAnthroSlope = 1, projYears = 10, obsYears = 10
 )
-simObs <- simulateObservations(params, printPlot = TRUE)
+simObs <- simulateObservations(params)
 
-ipm <- caribouBayesianPM(simObs$simSurvObs, simObs$ageRatioOut, 
-                          simObs$simDisturbance,
-                          # only set to speed up vignette. Normally keep defaults.
-                          niters=100)
+#devtools::load_all()
+pm <- caribouBayesianPM(simObs$simSurvObs, simObs$simRecruitObs, 
+                         simObs$simDisturbance,
+                         # only set to speed up vignette. Normally keep defaults.
+                         niters=100)
 
-natSim <- getSimsNational(Anthro = unique(simObs$simDisturbance$Anthro))
+natSim <- getSimsInitial(simObs$simDisturbance)
 
-ipmTbls <- getOutputTables(ipm, paramTable = simObs$paramTable, 
-                            exData = simObs$exData, 
-                            simNational = natSim)
+pmTbls <- getOutputTables(pm, simInitial=natSim)
+plotRes(pmTbls, c("Recruitment", "Adult female survival"))
 
-plotRes(ipmTbls, c("Recruitment", "Adult female survival"))
-
-# Calculate habitat use in Ontario's Churchill range
+# Calculate habitat RSF in Ontario's Churchill range
 carHab1 <- caribouHabitat(
   landCover = landCoverD,
   esker = eskerDras, 
@@ -108,23 +123,23 @@ plot(carHab1)
 
 ## Resources
 
-The [package website](https://landscitech.github.io/caribouMetrics) contains information on the caribouMetrics package. Here you can find [documentation for each function](https://landscitech.github.io/caribouMetrics/reference/index.html) and the following articles/vignettes/tutorials:
+The [package website](https://landscitech.github.io/caribouMetrics) contains information on the `caribouMetrics` package. Here you can find [documentation for each function](https://landscitech.github.io/caribouMetrics/reference/index.html) and the following articles/vignettes/tutorials:
 
 * [**Demographic Model**](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html): 
-Predict demographic rates and population growth based on their relationship to habitat disturbance. 
-* [**Bayesian Demographic Projection**](https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html): Project demographic rates and population growth based on the national demographic model and local caribou observations.
-* [**Disturbance Metrics**](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html): Calculate buffered anthropogenic disturbance and fire disturbance percentages for a given area.
-* [**User Interface Help**](https://landscitech.github.io/caribouMetrics/articles/UI_help.html): Instructions for using the SyncroSim user interface for integrating SpaDES, LandR and FireSense projections with caribou habitat and demographic models (WIP)
-
+Simulate demographic rates and population growth using a national model informed by demographic-disturbance relationships. 
+* [**Bayesian Demographic Projection**](https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html): Estimate and project demographic rates and population growth using a Bayesian model informed by national demographic-disturbance relationships and local demographic data.
+* [**Comparing the caribouMetrics Beta model to bboutools models**](https://landscitech.github.io/caribouMetrics/articles/compare-bayesian-models.html): Estimate and project demographic rates and population growth using Bayesian logistic models implemented in the `bboutools` R package, and compare to Beta models informed by national demographic-disturbance relationships and local demographic data.
+* [**Disturbance Metrics**](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetric.html): Calculate buffered anthropogenic disturbance and fire disturbance percentages for a given area.
 <!-- * [**Ontario Habitat Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html): Calculate caribou habitat use with Ontario RSF models. -->
 
 ## Getting help
 
-If you have any questions about the caribouMetrics package or suggestions for improving it, please [post an issue on the code repository](https://github.com/LandSciTech/caribouMetrics/issues/new).
+If you have any questions about the `caribouMetrics` package or suggestions for improving it, please [post an issue on the code repository](https://github.com/LandSciTech/caribouMetrics/issues/new).
 
 # References
+Dalgarno S, Boulanger J, Pearson A, et al (2025) bbousuite: A set of R packages to facilitate analysis of boreal caribou survival and recruitment data. Journal of Open Source Software 10:7997. <https://doi.org/10.21105/joss.07997>
 
-Dyson, M., Endicott, S., Simpkins C., Turner, J.W., Avery-Gomm S., Johnson, C.A., Leblond, M., Neilson, E.W., Rempel, R., Wiebe, P.A., Baltzer, J.L., Stewart, F.E.C., Hughes, J. 2022. Existing caribou habitat and demographic models are poorly suited for Ring of Fire impact assessment: A roadmap for improving the usefulness, transparency, and availability of models for conservation. bioRxiv 2022.06.01.494350; https://doi.org/10.1101/2022.06.01.494350
+Dyson, M., Endicott, S., Simpkins C., Turner, J.W., Avery-Gomm S., Johnson, C.A., Leblond, M., Neilson, E.W., Rempel, R., Wiebe, P.A., Baltzer, J.L., Stewart, F.E.C., Hughes, J. 2022. Existing caribou habitat and demographic models are poorly suited for Ring of Fire impact assessment: A roadmap for improving the usefulness, transparency, and availability of models for conservation. bioRxiv 2022.06.01.494350; <https://doi.org/10.1101/2022.06.01.494350>
 
 ECCC. 2011. Scientific assessment to inform the identification of critical
 habitat for woodland caribou (*Rangifer tarandus caribou*), boreal population, in
@@ -135,7 +150,9 @@ Accessed 26 Mar 2021.
 Hornseth, M.L. and Rempel, R.S., 2016. Seasonal resource selection of
 woodland caribou (Rangifer tarandus caribou) across a gradient of
 anthropogenic disturbance. Canadian Journal of Zoology, 94(2), pp.79-93.
-https://doi.org/10.1139/cjz-2015-0101
+<https://doi.org/10.1139/cjz-2015-0101>
+
+Hughes J, Endicott S, Calvert AM, Johnson CA (2025) Integration of national demographic-disturbance relationships and local data can improve caribou population viability projections and inform monitoring decisions. Ecological Informatics 87:103095. <https://doi.org/10.1016/j.ecoinf.2025.103095>
 
 Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P., Superbie, C.
 and McLoughlin, P.D., 2020. Science to inform policy: linking population
@@ -151,4 +168,4 @@ caribouMetrics - Terms and Condition of Use
 Unless otherwise noted, source code of the `caribouMetrics` R package is covered under
 Crown Copyright, Government of Canada, and distributed under the GPL3 license.
 
-Copyright (C) Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment 2021/(C) Sa Majesté la Reine du chef du Canada représentée par le ministre de l'Environnement 2021.
+Copyright (C) His Majesty the King in Right of Canada as represented by the Minister of the Environment 2025/(C) Sa Majesté le Roi du chef du Canada représentée par le ministre de l'Environnement 2025.

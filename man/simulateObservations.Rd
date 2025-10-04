@@ -53,6 +53,10 @@ in that year.}
 
 \item{caribouYearStart}{integer. The first month of the year for caribou.}
 
+\item{recSurveyMonth}{integer. The month of simulated recruitment surveys.}
+
+\item{recSurveyDay}{integer. The day for simulated recruitment surveys.}
+
 \item{distScen}{data.frame. Disturbance scenario. Must have columns "Year",
 "Anthro", and "fire_excl_anthro" containing the year, percentage of the
 landscape covered by anthropogenic disturbance buffered by 500 m, and the
@@ -66,8 +70,6 @@ results will be saved to csv files in the directory provided}
 \item{surv_data}{data.frame. Optional existing survival data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.}
 
 \item{recruit_data}{data.frame. Optional existing recruitment data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.}
-
-\item{printPlot}{logical. print a plot of the true population trajectory?}
 }
 \value{
 a list with elements:
@@ -117,6 +119,7 @@ Caribou demography functions:
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
 \code{\link{doSim}()},
+\code{\link{getBBNationalInformativePriors}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

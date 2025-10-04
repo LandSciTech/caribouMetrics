@@ -32,7 +32,7 @@ Other contributors:
 \itemize{
   \item Saralees Nadarajah (Author of truncdist package, which function rtrunc and qtrunc were modified from) [copyright holder]
   \item Frederick Novomestky (Author of truncdist package, which function rtrunc and qtrunc were modified from) [copyright holder]
-  \item Her Majesty the Queen in Right of Canada, as represented by the Minister of Environment and Climate Change [copyright holder]
+  \item His Majesty the King in Right of Canada, as represented by the Minister of Environment and Climate Change [copyright holder]
 }
 
 }

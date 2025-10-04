@@ -261,7 +261,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
         
         if(any(cInfo$StartTotal>cInfo$N)){
           warning("Target number of collars exceeds population size. Adjusting number of collars for consistency.")
-          cInfo$StartTotal = pmin(cInfo$N,cInfo$StartTotal)
+          cInfo$StartTotal = pmin(cInfo$N,cInfo$StartTotal,na.rm=TRUE)
         }
         
         cInfo$MortalitiesCertain = rbinom(nrow(cInfo),cInfo$StartTotal,prob=(1-cInfo$survival^(1/nMonths)))

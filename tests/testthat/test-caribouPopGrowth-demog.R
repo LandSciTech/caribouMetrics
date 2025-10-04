@@ -14,7 +14,7 @@ test_that("caribouPopGrowth options work", {
   res2 <- caribouPopGrowth(1:10*100, 20, c(rep(0.2, 5), rep(0.8, 5)),
                            0.85, progress = FALSE) 
   
-  expect_true(all(which(res2$lambda < 1) == 1:5))
+  expect_true(all(which(res2$lambdaE < 1) == 1:5))
   
   # vector for S_bar
   expect_error(caribouPopGrowth(1000, 20, 0.8, 
