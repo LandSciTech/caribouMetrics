@@ -26,7 +26,7 @@ if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork'
 
 ## Similarities and differences between the caribouMetrics Beta model and the bboutools model
 
-Hughes et al. [2025](https://doi.org/10.1016/j.ecoinf.2025.103095) described a Beta model with disturbance covariates and informative priors for analysis of a single boreal caribou population with survival data aggregated by year and only cows and calves reported in the composition survey. To align with and allow comparison to the models implemented in bboutools [Dalgarno et al. 2025](https://doi.org/10.21105/joss.07997) we extended the Hughes et al. [2025](https://doi.org/10.1016/j.ecoinf.2025.103095) models as follows:
+@hughes2025 described a Beta model with disturbance covariates and informative priors for analysis of a single boreal caribou population with survival data aggregated by year and only cows and calves reported in the composition survey. To align with and allow comparison to the models implemented in bboutools [@dalgarno2025] we extended the @hughes2025 models as follows:
 
 -   Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
 -   Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
@@ -70,6 +70,7 @@ bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
 bbouLimitedFile <- here::here("results/vignetteBbbouExample2.rds")
 bbouPriorFile <- here::here("results/vignetteBbbouExample1.rds")
 bbouPriorNationalFile <- here::here("results/vignetteBbbouExample1p.rds")
+betaAnthroFile <- here::here("results/betaAnthroExample.rds")
 
 surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
 surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
@@ -92,7 +93,7 @@ recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
 
 ## Comparison of the Beta and national models
 
-As shown by Hughes et al. [2025](https://doi.org/10.1016/j.ecoinf.2025.103095) the prior means and 95% prior predictive intervals from the Beta model are similar to the means and ranges between the 2.5% and 97.5% quantiles of 3000 simulated survival and recruitment trajectories from the national model (Figure \@ref(fig:fig-plot1)).
+As shown by @hughes2025 the prior means and 95% prior predictive intervals from the Beta model are similar to the means and ranges between the 2.5% and 97.5% quantiles of 3000 simulated survival and recruitment trajectories from the national model (Figure \@ref(fig:fig-plot1)).
 
 ```{r compare beta prior to national model, results='hide'}
 disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 5,
@@ -213,7 +214,15 @@ The bboutools models do not include disturbance covariates, so we expect the mod
 disturbance <- data.frame(Year = seq(2011, 2051),
                           Anthro = seq(20, 2 * 40 + 20, length.out = 41),
                           fire_excl_anthro = 1)
-betaAnthroChange <- caribouBayesianPM(surv_data, recruit_data, disturbance)
+if (useSaved & file.exists(betaAnthroFile)){
+  betaAnthroChange <- readRDS(betaAnthroFile)
+} else {
+  betaAnthroChange <- caribouBayesianPM(surv_data, recruit_data, disturbance)  
+  if(dir.exists(dirname(betaAnthroFile))){
+    saveRDS(betaAnthroChange, betaAnthroFile)
+  }
+}
+
 if (useSaved & file.exists(bbouInformativeFile)) {
   bbouInformative <- readRDS(bbouInformativeFile)
 } else {
@@ -229,12 +238,14 @@ typeLabs <- c("Beta", "Bbou")
 ```
 
 ```{r fig-plotDisturbanceChange, fig.width=figWidth,fig.height=figHeight,fig.cap="Posterior means and 95% posterior predictive intervals from Beta and bbou models with default priors, informative local data, and anthropogenic disturbance increasing from 20 to 100% over 40 years."}
-rec <- plotRes(out_tbls, "Recruitment", typeLabels = typeLabs)
+rec <- plotRes(out_tbls, "Recruitment", typeLabels = typeLabs,
+               breakInterval = 5)
 
-surv <- plotRes(out_tbls, "Adult female survival", typeLabels = typeLabs)
+surv <- plotRes(out_tbls, "Adult female survival", typeLabels = typeLabs, 
+                breakInterval = 5)
 
 lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabs, 
-               lowBound = 0.5, highBound = 1.5)
+               lowBound = 0.5, highBound = 1.5, breakInterval = 5)
 rec / surv / lam 
 ```
 
@@ -270,7 +281,3 @@ rec / surv / lam
 ```
 
 ## References
-
-Dalgarno S, Boulanger J, Pearson A, et al (2025) bbousuite: A set of R packages to facilitate analysis of boreal caribou survival and recruitment data. Journal of Open Source Software 10:7997. <https://doi.org/10.21105/joss.07997>
-
-Hughes J, Endicott S, Calvert AM, Johnson CA (2025) Integration of national demographic-disturbance relationships and local data can improve caribou population viability projections and inform monitoring decisions. Ecological Informatics 87:103095. <https://doi.org/10.1016/j.ecoinf.2025.103095>
