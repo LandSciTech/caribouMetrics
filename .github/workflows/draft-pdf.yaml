@@ -5,7 +5,7 @@ on:
       - BbouIntegration
     paths:
       - inst/joss_paper/**
-      - .github/workflows/draft-pdf.yml
+      - .github/workflows/draft-pdf.yaml
 
 jobs:
   render-rmarkdown:
