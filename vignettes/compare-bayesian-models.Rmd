@@ -115,7 +115,7 @@ rec / surv / lam
 
 ## Comparison of Beta and bbou prior predictions
 
-The bbou model default priors are less informative than the Beta model default priors.
+The bbou model default priors are less informative than the Beta model default priors (Figure \@ref(fig:fig-plotPriorsDefault)). The bbou model assumes that nothing is known about a population with no local data, whereas when there is no local data the Beta model assumes the population will have recruitment and survival rates with in a similar range as other boreal caribou populations included in the national model.
 
 ```{r compare beta and bbou priors}
 if (useSaved & file.exists(bbouPriorFile)) {
@@ -143,7 +143,7 @@ lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabs,
 rec / surv / lam
 ```
 
-The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar predictions of expected demographic rates.
+The bbou model can have priors set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar predictions of expected demographic rates. TODO explain what expected demographic parameters are and how they are different from the plots shown on the right.
 
 ```{r compare beta and bbou with informative priors., results='hide'}
 b0Priors <- getBBNationalInformativePriors(Anthro = unique(disturbance$Anthro), fire_excl_anthro = unique(disturbance$fire_excl_anthro), month = TRUE)
@@ -180,7 +180,7 @@ lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabs,
 
 ## Comparison of Beta and bbou models with informative local data
 
-With more informative data, the Beta model with constant disturbance covariates and informative priors often gives results that are comparable to the bbou model with default (less informative) priors.
+With more informative data, the Beta model with constant disturbance covariates and informative priors often gives results that are comparable to the bbou model with default (less informative) priors. In this case there is enough data available that the differences in priors makes less difference.
 
 ```{r compare beta and bbou informative local data, results='hide'}
 betaInformative <- caribouBayesianPM(surv_data, recruit_data, disturbance)
@@ -251,7 +251,7 @@ rec / surv / lam
 
 ## Comparison of Beta and bbou models with limited local data
 
-If local data is limited the bbou model with default (less informative) priors and the Beta model with disturbance covariates and informative priors may also give different results, particularly if observations are inconsistent with expectations from the observed distribution of outcomes across the country.
+If local data is limited the bbou model with default (less informative) priors and the Beta model with disturbance covariates and informative priors may also give different results, particularly if observations are inconsistent with expectations from the observed distribution of outcomes across the country. For example in Figure \@ref(fig:fig-plotLimitedLocal), the recruitment and survival estimates from the data are higher than expected based on the priors from the national model and there are only a few data points. Therefore, the Beta model predicts that the population will be closer to what we expect from the national model if we get more data.
 
 ```{r compare beta and bbou with limited data., results='hide'}
 disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 90, fire_excl_anthro = 5)
