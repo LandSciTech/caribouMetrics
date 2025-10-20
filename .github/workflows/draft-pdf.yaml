@@ -7,6 +7,10 @@ on:
       - inst/joss_paper/**
       - .github/workflows/draft-pdf.yaml
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   render-rmarkdown:
     runs-on: ubuntu-latest
