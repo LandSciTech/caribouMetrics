@@ -1,0 +1,42 @@
+---
+title: 'caribouMetrics'
+tags:
+  - R
+  - boreal caribou
+  - shiny
+authors:
+  - name: Sarah Endicott
+    orcid: 0000-0001-9644-5343
+    affiliation: 1
+  - name: Josie Hughes
+    orcid: 0000-0001-7875-9015
+    affiliation: 1
+affiliations:
+ - name: Landscape Science and Technology Division, National Wildlife Research Centre, Environment and Climate Change Canada, Ottawa, ON, Canada
+   index: 1
+citation_author: Hughes and Endicott
+date: 1 January 2026
+year: 2026
+bibliography: paper.bib
+output: rticles::joss_article
+csl: apa.csl
+journal: JOSS
+---
+
+TODO list: https://docs.google.com/document/d/11fkFIbsrSPQxgkcpvONpLJ5j-RzhD3UpydrfmqbgzgI/edit?usp=sharing
+
+# Summary
+<!-- A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
+
+## Example
+
+# Statement of need
+<!-- A Statement of need section that clearly illustrates the research purpose of the software and places it in the context of related work. -->
+<!-- A list of key references, including to other software addressing related needs. Note that the references should include full names of venues, e.g., journals and conferences, not abbreviations only understood in the context of a specific discipline. -->
+
+<!-- Mention (if applicable) a representative set of past or ongoing research projects using the software and recent scholarly publications enabled by it. -->
+
+# Acknowledgements
+
+
+# References
