@@ -13,7 +13,6 @@
 #'   [getScenarioDefaults()] for details.
 #' @param trajectories data.frame. Optional example demographic trajectory. 
 #'   If NULL the trajectory will be simulated from the national model.
-#' @param printPlot logical. print a plot of the true population trajectory?
 #' @param cowCounts data.frame. Optional. Number of cows counted in aerial
 #'   surveys each year. If NULL, and `paramTable` contains `cowMult` the number
 #'   of cows that survive calving based on the collar data is multiplied by
@@ -33,13 +32,14 @@
 #' @param collarOnTime integer. Month that collars are deployed. A number from 1
 #'   (January) to 12 (December)
 #' @param caribouYearStart integer. The first month of the year for caribou.
+#' @param recSurveyMonth integer. The month of simulated recruitment surveys.
+#' @param recSurveyDay integer. The day for simulated recruitment surveys.
 #' @param distScen data.frame. Disturbance scenario. Must have columns "Year",
 #'   "Anthro", and "fire_excl_anthro" containing the year, percentage of the
 #'   landscape covered by anthropogenic disturbance buffered by 500 m, and the
 #'   percentage covered by fire that does not overlap anthropogenic disturbance.
 #'   See [disturbanceMetrics()]. If NULL the disturbance scenario is simulated
 #'   based on `paramTable`
-#' @inheritParams demographicCoefficients
 #' @param writeFilesDir character. If not NULL `simSurvObs` and `simRecruitObs`
 #'   results will be saved to csv files in the directory provided
 #' @param surv_data data.frame. Optional existing survival data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.
@@ -130,6 +130,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     simDisturbance <- filter(simDisturbance, .data$Year <= (paramTable$startYear + paramTable$preYears + paramTable$obsYears - 1 + paramTable$projYears) &
                                .data$Year >= paramTable$startYear)
   }
+  
+  simDisturbance <- round(simDisturbance)
   
   if(is.null(trajectories)){
     # simulate true population trajectory

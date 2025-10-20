@@ -64,7 +64,7 @@ Get 95\% prediction intervals from trajectories
   mod <- bbouMakeSummaryTable(
     surv_data = bboudata::bbousurv_a,
     recruit_data = bboudata::bbourecruit_a, 
-    N0 = NA, return_mcmc = T
+    N0 = NA, return_mcmc = TRUE
   )
                            
   outmcmc = caribouPopSimMCMC(popInfo=NA,mod$recruit_fit,mod$surv_fit)
@@ -87,6 +87,7 @@ Caribou demography functions:
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
 \code{\link{doSim}()},
+\code{\link{getBBNationalInformativePriors}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
@@ -106,6 +107,7 @@ Caribou demography functions:
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
 \code{\link{doSim}()},
+\code{\link{getBBNationalInformativePriors}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

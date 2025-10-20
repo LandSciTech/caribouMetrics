@@ -10,7 +10,7 @@ runScnSet(
   ePars = list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 4),
   Rep = NULL,
   printProgress = FALSE,
-  betaPriors = "default",
+  priors = "default",
   niters = formals(bboutools::bb_fit_survival)$niters,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
   returnSamples = F,
@@ -32,7 +32,8 @@ runScnSet(
 \item{printProgress}{logical. Should the scenario number and parameters be
 printed at each step?}
 
-\item{betaPriors}{a list of model priors. See \code{\link[=getPriors]{getPriors()}}. Not used if disturbance is NA.}
+\item{priors}{a list of model priors. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see \code{bboutools::bb_priors_survival} and \code{bboutools::bb_priors_recruitment} for details.
+If disturbance is not NA, see \code{\link[=getPriors]{getPriors()}} for details.}
 
 \item{niters}{A whole number of the number of iterations per chain after thinning and burn-in.}
 
@@ -73,6 +74,7 @@ Caribou demography functions:
 \code{\link{demographicProjectionApp}()},
 \code{\link{demographicRates}()},
 \code{\link{doSim}()},
+\code{\link{getBBNationalInformativePriors}()},
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},

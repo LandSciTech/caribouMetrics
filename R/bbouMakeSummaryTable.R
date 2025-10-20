@@ -4,7 +4,8 @@
 #' @param recruit_data dataframe. Recruitment data in bboudata format
 #' @param N0 dataframe. Optional. Initial population estimates, required columns are PopulationName and N0
 #' @param disturbance dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.
-#' @param priors list. Optional. At present these are only used if disturbance is also provided.
+#' @param priors list. Optional. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see `bboutools::bb_priors_survival` and `bboutools::bb_priors_recruitment` for details.
+#'               If disturbance is not NA, see `getPriors` for details.
 #' @param shiny_progress logical. Should shiny progress bar be updated. Only set
 #'   to TRUE if using in an app.
 #' @param return_mcmc boolean. If TRUE return fitted survival and recruitment
@@ -65,18 +66,22 @@ bbouMakeSummaryTable <-function(surv_data, recruit_data, N0=NA, disturbance = NU
     shiny_progress <- FALSE
   }
   if(shiny_progress) shiny::setProgress(0.2, message = i18n$t("Fitting survival"))
-  
-  surv_fit <- bboutools::bb_fit_survival(surv_data, multi_pops = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
+
+  if(is.element("priors_survival",names(priors))){
+    surv_fit <- bboutools::bb_fit_survival(surv_data, priors=priors$priors_survival, multi_pops = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
+  }else{
+    surv_fit <- bboutools::bb_fit_survival(surv_data, multi_pops = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
+  }
   
   if(shiny_progress) shiny::setProgress(0.4, message = i18n$t("Fitting recruitment"))
+  if(is.element("priors_recruitment",names(priors))){
+    recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, priors=priors$priors_recruitment, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
+  }else{
+    recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
+  }
   
-  recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
-  
-  if(shiny_progress) shiny::setProgress(0.6, message = i18n$t("Predicting survival"))
   surv_pred_bar <- bboutools::bb_predict_survival(surv_fit, year = FALSE, month = FALSE, conf_level = FALSE)
-  
-  if(shiny_progress) shiny::setProgress(0.8, message = i18n$t("Predicting recruitment"))
-  rec_pred_bar <- bboutools::bb_predict_calf_cow_ratio(recruit_fit, year = FALSE, conf_level = FALSE)
+  rec_pred_bar <- bboutools::bb_predict_calf_cow_ratio(recruit_fit,year = FALSE, conf_level = FALSE)
   
   # summarize model output
   data_sur <- surv_pred_bar$data

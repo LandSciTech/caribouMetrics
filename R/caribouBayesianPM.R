@@ -1,4 +1,4 @@
-# Copyright 2025 Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
+# Copyright 2025 His Majesty the King in Right of Canada as represented by the Minister of the Environment
 # License GPL-3
 
 #' Bayesian population model for boreal caribou
@@ -8,7 +8,8 @@
 #' @param recruit_data either a path to a csv file or a recruitment data table in bboutools format.
 #' @param disturbance either a path to a csv file or a dataframe containing the
 #'   columns "Anthro","fire_excl_anthro", and "Year".
-#' @param betaPriors a list of model priors. See [getPriors()]. Not used if disturbance is NA.
+#' @param priors a list of model priors. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see `bboutools::bb_priors_survival` and `bboutools::bb_priors_recruitment` for details.
+#'               If disturbance is not NA, see [getPriors()] for details.
 #' @param startYear,endYear year defining the beginning of the observation
 #'   period and the end of the projection period.
 #' @param niters integer. The number of iterations per chain after thinning and burn-in.
@@ -64,7 +65,7 @@
 caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
                        recruit_data = bboudata::bbourecruit_a,
                        disturbance = NULL,
-                       betaPriors = "default",
+                       priors = "default",
                        startYear = NULL, endYear = NULL,
                        N0=NA,
                        returnSamples=F,
@@ -86,8 +87,8 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
     }
   }
 
-  if (betaPriors[[1]] == "default") {
-    betaPriors <- getPriors()
+  if (priors[[1]] == "default") {
+    priors <- getPriors()
   }
   
   # Run model
@@ -219,11 +220,11 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
 
   ##################
   #fit models
-  bbouResults = bbouMakeSummaryTable(surv_data, recruit_data,N0,disturbance,priors=betaPriors,
+  bbouResults = bbouMakeSummaryTable(surv_data, recruit_data,N0,disturbance,priors=priors,
                                      return_mcmc=T,shiny_progress=F,niters=niters,nthin=nthin)
   
   #get output trajectories
-  rr = getSimsInitial(bbouResults,cPars=betaPriors,skipSave=T,returnSamples=returnSamples,...)  
+  rr = getSimsInitial(bbouResults,cPars=priors,skipSave=T,returnSamples=returnSamples,...)  
   
   return(list(result = rr, 
               inData = list(disturbanceIn = disturbance)))

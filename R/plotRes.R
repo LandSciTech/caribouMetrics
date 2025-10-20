@@ -1,4 +1,4 @@
-# Copyright 2025 Her Majesty the Queen in Right of Canada as represented by the Minister of the Environment
+# Copyright 2025 His Majesty the King in Right of Canada as represented by the Minister of the Environment
 # License GPL-3
 
 #' Plot Bayesian population model results
@@ -16,6 +16,7 @@
 #'   facets. Font size is 10 pt if facets are used.
 #' @param legendPosition "bottom", "right", "left","top", or "none". Legend position.
 #' @param breakInterval number. How many years between x tick marks?
+#' @param typeLabels vector of two labels. Default c("Bayesian","initial"). Names of models to be compared.
 #'
 #' @return a ggplot object or list of ggplot objects if a vector of parameters
 #'   was given.
@@ -38,7 +39,8 @@
 #'
 #' plotRes(out_tbl, parameter = "Recruitment")
 plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
-                   facetVars = NULL, labFontSize = 14, legendPosition="right",breakInterval=1) {
+                   facetVars = NULL, labFontSize = 14, legendPosition="right",breakInterval=1,
+                   typeLabels = c("Bayesian","initial")) {
   # modTables= posteriorResult; parameter = "Recruitment"; lowBound=0; highBound = 0.85
   # legendPosition="none";breakInterval=breakInterval;labFontSize=labFontSize
   # facetVars = NULL
@@ -113,8 +115,8 @@ plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,
   
   if (!is.null(simRange)) {
     
-    df$Type <- "Bayesian"
-    simRange$Type <- "initial"
+    df$Type <- typeLabels[1]
+    simRange$Type <- typeLabels[2]
     
     if(!is.element("Year",names(simRange))){
       
