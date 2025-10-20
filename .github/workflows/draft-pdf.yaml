@@ -29,7 +29,7 @@ jobs:
       - name: Render Rmarkdown files and Commit Results
         run: |
           RMD_PATH=($(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'paper[.]Rmd$'))
-          Rscript -e 'install.packages("rmarkdown")'
+          echo $RMD_PATH
           Rscript -e 'for (f in commandArgs(TRUE)) if (file.exists(f)) rmarkdown::render(f, output_format = rmarkdown::md_document(preserve_yaml = TRUE))' ${RMD_PATH[*]}
       
       - name: Build draft PDF
