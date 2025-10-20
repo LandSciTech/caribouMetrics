@@ -26,29 +26,29 @@ if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork'
 
 ## Similarities and differences between the caribouMetrics Beta model and the bboutools model
 
-Hughes et al. [2025](https://doi.org/10.1016/j.ecoinf.2025.103095) described a Beta model with disturbance covariates and informative priors for analysis of a single boreal caribou population with survival data aggregated by year and only cows and calves reported in the composition survey. To align with and allow comparison to the models implemented in bboutools [Dalgarno et al. 2025]( https://doi.org/10.21105/joss.07997) we extended the Hughes et al. [2025](https://doi.org/10.1016/j.ecoinf.2025.103095) models as follows: 
+Hughes et al. [2025](https://doi.org/10.1016/j.ecoinf.2025.103095) described a Beta model with disturbance covariates and informative priors for analysis of a single boreal caribou population with survival data aggregated by year and only cows and calves reported in the composition survey. To align with and allow comparison to the models implemented in bboutools [Dalgarno et al. 2025](https://doi.org/10.21105/joss.07997) we extended the Hughes et al. [2025](https://doi.org/10.1016/j.ecoinf.2025.103095) models as follows:
 
-* Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
-* Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
-* Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
-* Allow for analysis of groups of populations with shared interannual variation. TO DO: add link to bboutools documentation when it exists.
+-   Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+-   Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
+-   Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+-   Allow for analysis of groups of populations with shared interannual variation. TO DO: add link to bboutools documentation when it exists.
 
 Note that bboutools includes a number of different model variants. Throughout this document we compare to the Bayesian model with a random effect of year and no annual trend. For brevity, we refer to that as the "bbou" model.
 
 Key remaining differences between the caribouMetrics Beta model and the bbou model include:
 
-* The Beta model includes anthropogenic and fire disturbance covariates.
-* The Beta model intercept and disturbance covariate slope parameters are informed by national demographic-disturbance relationships.
-* The distribution of interannual variation differs between the models.
-* The bbou model allows for variation in survival among months.
+-   The Beta model includes anthropogenic and fire disturbance covariates.
+-   The Beta model intercept and disturbance covariate slope parameters are informed by national demographic-disturbance relationships.
+-   The distribution of interannual variation differs between the models.
+-   The bbou model allows for variation in survival among months.
 
 ## Example data
 
 We compare the Beta and bbou models using three examples derived from the `bboudata::bbousurv_a` and `bboudata::bbourecruit_a` data sets:
 
-* No local data: used to examine and compare prior predictions from the models.
-* Informative local data: Observations from 2010 to 2016.
-* Limited local data: Observations from 2014 to 2016.
+-   No local data: used to examine and compare prior predictions from the models.
+-   Informative local data: Observations from 2010 to 2016.
+-   Limited local data: Observations from 2014 to 2016.
 
 To examine and compare predictions for unobserved years (2018 to 2021) we add missing data.
 
@@ -115,6 +115,7 @@ rec / surv / lam
 ## Comparison of Beta and bbou prior predictions
 
 The bbou model default priors are less informative than the Beta model default priors.
+
 ```{r compare beta and bbou priors}
 if (useSaved & file.exists(bbouPriorFile)) {
   bbouPrior <- readRDS(bbouPriorFile)
@@ -141,7 +142,7 @@ lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabs,
 rec / surv / lam
 ```
 
-The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar predictions of expected demographic rates. 
+The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar predictions of expected demographic rates.
 
 ```{r compare beta and bbou with informative priors., results='hide'}
 b0Priors <- getBBNationalInformativePriors(Anthro = unique(disturbance$Anthro), fire_excl_anthro = unique(disturbance$fire_excl_anthro), month = TRUE)
@@ -179,6 +180,7 @@ lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabs,
 ## Comparison of Beta and bbou models with informative local data
 
 With more informative data, the Beta model with constant disturbance covariates and informative priors often gives results that are comparable to the bbou model with default (less informative) priors.
+
 ```{r compare beta and bbou informative local data, results='hide'}
 betaInformative <- caribouBayesianPM(surv_data, recruit_data, disturbance)
 if (useSaved & file.exists(bbouInformativeFile)) {
@@ -236,12 +238,10 @@ lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabs,
 rec / surv / lam 
 ```
 
-
 ## Comparison of Beta and bbou models with limited local data
 
-If local data is limited the bbou model with default (less informative) priors and the Beta model 
-with disturbance covariates and informative priors may also give different results, particularly if 
-observations are inconsistent with expectations from the observed distribution of outcomes across the country.
+If local data is limited the bbou model with default (less informative) priors and the Beta model with disturbance covariates and informative priors may also give different results, particularly if observations are inconsistent with expectations from the observed distribution of outcomes across the country.
+
 ```{r compare beta and bbou with limited data., results='hide'}
 disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 90, fire_excl_anthro = 5)
 betaLimited <- caribouBayesianPM(surv_dataLimited, recruit_dataLimited, disturbance)
@@ -270,6 +270,7 @@ rec / surv / lam
 ```
 
 ## References
-Dalgarno S, Boulanger J, Pearson A, et al (2025) bbousuite: A set of R packages to facilitate analysis of boreal caribou survival and recruitment data. Journal of Open Source Software 10:7997. https://doi.org/10.21105/joss.07997
 
-Hughes J, Endicott S, Calvert AM, Johnson CA (2025) Integration of national demographic-disturbance relationships and local data can improve caribou population viability projections and inform monitoring decisions. Ecological Informatics 87:103095. https://doi.org/10.1016/j.ecoinf.2025.103095
+Dalgarno S, Boulanger J, Pearson A, et al (2025) bbousuite: A set of R packages to facilitate analysis of boreal caribou survival and recruitment data. Journal of Open Source Software 10:7997. <https://doi.org/10.21105/joss.07997>
+
+Hughes J, Endicott S, Calvert AM, Johnson CA (2025) Integration of national demographic-disturbance relationships and local data can improve caribou population viability projections and inform monitoring decisions. Ecological Informatics 87:103095. <https://doi.org/10.1016/j.ecoinf.2025.103095>
