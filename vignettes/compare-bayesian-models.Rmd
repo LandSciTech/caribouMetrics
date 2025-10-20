@@ -10,8 +10,13 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>", 
+  warning = FALSE, 
+  message = FALSE
 )
+
+if(!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork') to run this vignette")
+
 ```
 
 ## Similaries and differences between the caribouMetrics Beta model and the bboutools model
@@ -50,6 +55,7 @@ library(bboudata)
 library(bboutools)
 library(dplyr)
 library(ggplot2)
+library(patchwork)
 
 figWidth = 8
 figHeight = 4
@@ -89,10 +95,13 @@ out_tbls <- getOutputTables(betaPrior, simInitial = simNational)
 typeLabs = c("Beta","National")
 ```
 
-```{r plot1, fig.width=figWidth,fig.height=figHeight,fig.cap="95% prior predictive intervals from Beta model with 5% anthropogenic disturbance, default priors, and no local data compared to simulations from the national model."}
-rec =  plotRes(out_tbls, "Recruitment",typeLabels=typeLabs);plot(rec)
-surv =  plotRes(out_tbls, "Adult female survival",typeLabels=typeLabs);plot(surv)
-lam =  plotRes(out_tbls, "Population growth rate",typeLabels=typeLabs,lowBound=0.5,highBound=1.5);plot(lam)
+```{r plot1, fig.width=figWidth,fig.height=10,fig.cap="95% prior predictive intervals from Beta model with 5% anthropogenic disturbance, default priors, and no local data compared to simulations from the national model."}
+rec =  plotRes(out_tbls, "Recruitment",typeLabels=typeLabs)
+surv =  plotRes(out_tbls, "Adult female survival",typeLabels=typeLabs)
+lam =  plotRes(out_tbls, "Population growth rate",typeLabels=typeLabs,lowBound=0.5,highBound=1.5)
+
+rec / surv / lam
+
 ```
 
 ## Comparison of Beta and bbou prior predictions

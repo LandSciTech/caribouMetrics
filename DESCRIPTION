@@ -114,7 +114,8 @@ Suggests:
     raster,
     shiny,
     bboudata,
-    here
+    here,
+    patchwork
 Remotes: LandSciTech/pfocal,
     LandSciTech/bboudata,
     bboutools=github::LandSciTech/bboutoolsMultiPop
