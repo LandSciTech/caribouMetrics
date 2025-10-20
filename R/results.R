@@ -11,8 +11,8 @@ NULL
 #'   returned as a RasterStack.
 #' @param ... arguments passed to methods
 #'
-#' @return By default a RasterStack if x is a CaribouHabitat object and a
-#'   data.frame if x is a DisturbanceMetrics object. 
+#' @return By default a multi-layer SpatRaster if x is a CaribouHabitat object
+#'   and a data.frame if x is a DisturbanceMetrics object.
 #'   
 #' @examples 
 #' # create example rasters for habitat

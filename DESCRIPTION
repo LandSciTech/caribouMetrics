@@ -109,7 +109,6 @@ Suggests:
     tmap,
     tmaptools,
     ggplot2,
-    rsyncrosim,
     pfocal,
     raster,
     shiny,
