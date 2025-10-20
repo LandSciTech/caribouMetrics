@@ -29,7 +29,7 @@ TODO list: https://docs.google.com/document/d/11fkFIbsrSPQxgkcpvONpLJ5j-RzhD3Upy
 <!-- A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience. -->
 
 ## Example
-
+<!-- Example of how to use the package -->
 # Statement of need
 <!-- A Statement of need section that clearly illustrates the research purpose of the software and places it in the context of related work. -->
 <!-- A list of key references, including to other software addressing related needs. Note that the references should include full names of venues, e.g., journals and conferences, not abbreviations only understood in the context of a specific discipline. -->
