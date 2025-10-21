@@ -143,11 +143,7 @@ lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabs,
 rec / surv / lam
 ```
 
-<<<<<<< HEAD
-The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar prior predictions of expected demographic rates. The bbou model assumes more prior uncertainty about interannual variation, so prior predictions of the distribution of observed demographic rates in each year continue to differ. 
-=======
-The bbou model can have priors set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar predictions of expected demographic rates. TODO explain what expected demographic parameters are and how they are different from the plots shown on the right.
->>>>>>> 090c21e86a36384be4fee0dc8dcc8e1f74fbe0cc
+The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar prior predictions of expected demographic rates. The bbou model assumes more prior uncertainty about interannual variation, so prior predictions of the distribution of observed demographic rates in each year continue to differ. TODO explain what expected demographic parameters are and how they are different from the plots shown on the right.
 
 ```{r compare beta and bbou with informative priors., results='hide'}
 b0Priors <- getBBNationalInformativePriors(Anthro = unique(disturbance$Anthro), fire_excl_anthro = unique(disturbance$fire_excl_anthro), month = TRUE)
