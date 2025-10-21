@@ -79,7 +79,7 @@
 #'
 #'   Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty, A.M.,
 #'   Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and Hughes, J.,
-#'   2023. Climate‐informed forecasts reveal dramatic local habitat shifts and
+#'   2023. Climate-informed forecasts reveal dramatic local habitat shifts and
 #'   population uncertainty for northern boreal caribou. Ecological
 #'   Applications, 33(3), p.e2816. <https://doi.org/10.1002/eap.2816>
 #' @examples

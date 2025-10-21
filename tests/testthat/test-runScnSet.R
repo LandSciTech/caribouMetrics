@@ -5,7 +5,7 @@ test_that("testScript still works", {
   eParsIn$collarNumYears <- 4
 
   scns <- expand.grid(
-    obsYears = 8, collarCount = 30, cowMult = 2, collarInterval = 2,
+    obsYears = c(8, 20), collarCount = 30, cowMult = 2, collarInterval = 2,
     iAnthro = 0,
     tA = 0, obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.960908218594268,
     rQuantile = 0.744425233039074, N0 = 1000
@@ -22,7 +22,7 @@ test_that("testScript still works", {
   # eParsIn$collarNumYears=1
 
   scResults <- suppressWarnings(runScnSet(scns,  simBig, eParsIn,
-    niters = 100
+    niters = 100, printProgress = TRUE
   ))
 
   expect_s3_class(scResults$rr.summary.all, "data.frame")

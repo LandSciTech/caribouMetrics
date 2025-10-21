@@ -109,12 +109,12 @@ Suggests:
     tmap,
     tmaptools,
     ggplot2,
-    rsyncrosim,
     pfocal,
     raster,
     shiny,
     bboudata,
-    here
+    here,
+    patchwork
 Remotes: LandSciTech/pfocal,
     LandSciTech/bboudata,
     bboutools=github::LandSciTech/bboutoolsMultiPop

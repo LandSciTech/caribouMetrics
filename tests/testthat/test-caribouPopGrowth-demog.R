@@ -33,10 +33,12 @@ test_that("caribouPopGrowth options work", {
   expect_warning(caribouPopGrowth(1000, 20, R_bar = 0.9, S_bar = 0.7, progress = FALSE),
                "expected recruitment R_bar")
   
-  res4 <- caribouPopGrowth(9000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE)
+  res4 <- caribouPopGrowth(9990, 200, R_bar = 0.7, S_bar = 0.9, 
+                           progress = FALSE, interannualVar = FALSE)
+  
   # lower recruitment at carrying capacity
-  res5 <- caribouPopGrowth(9000, 200, R_bar = 0.7, S_bar = 0.9, P_K = 0.4,
-                           progress = FALSE)
+  res5 <- caribouPopGrowth(9990, 200, R_bar = 0.7, S_bar = 0.9, P_K = 0.2,
+                           progress = FALSE, interannualVar = FALSE)
   
   expect_lt(res5$N, res4$N)
   
