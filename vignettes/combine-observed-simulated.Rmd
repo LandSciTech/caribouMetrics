@@ -5,19 +5,26 @@ vignette: >
   %\VignetteIndexEntry{Simulation of monitoring scenarios informed by local data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+pkgdown:
+  as_is: true
+link-citations: yes
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
 )
+
+if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork') to run this vignette")
 ```
 
 ```{r setup}
 library(caribouMetrics)
 ```
-
 
 ## Example data
 
@@ -63,7 +70,7 @@ recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
 
 ## Analysis of simulated monitoring using the bbou model with limited local data and no disturbance information
 
-The starting point for analysis is a Bayesian model with a random effect of year and no annual trend implemented in the bboutools R package [Dalgarno et al. 2025]( https://doi.org/10.21105/joss.07997). For brevity, we refer to that as the "bbou" model.
+The starting point for analysis is a Bayesian model with a random effect of year and no annual trend implemented in the bboutools R package [@dalgarno2025]. For brevity, we refer to that as the "bbou" model.
 
 ```{r compare beta and bbou with limited data.}
 if(useSaved&file.exists(bbouLimitedFile)){
@@ -90,8 +97,5 @@ simBbouLimited <-getSimsInitial(bbouLimited)
 ## Simulation of monitoring using Beta model, high disturance scenario
 
 ## References
-Dalgarno S, Boulanger J, Pearson A, et al (2025) bbousuite: A set of R packages to facilitate analysis of boreal caribou survival and recruitment data. Journal of Open Source Software 10:7997. https://doi.org/10.21105/joss.07997
-
-Hughes J, Endicott S, Calvert AM, Johnson CA (2025) Integration of national demographic-disturbance relationships and local data can improve caribou population viability projections and inform monitoring decisions. Ecological Informatics 87:103095. https://doi.org/10.1016/j.ecoinf.2025.103095
 
 

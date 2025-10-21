@@ -115,7 +115,7 @@ rec / surv / lam
 
 ## Comparison of Beta and bbou prior predictions
 
-The bbou model default priors are less informative than the Beta model default priors (Figure \@ref(fig:fig-plotPriorsDefault)). The bbou model assumes that nothing is known about a population with no local data, whereas when there is no local data the Beta model assumes the population will have recruitment and survival rates with in a similar range as other boreal caribou populations included in the national model.
+The bbou model default priors are less informative than the Beta model default priors (Figure \@ref(fig:fig-plotPriorsDefault)). The bbou model assumes that little is known about a population with no local data, whereas when there is no local data the Beta model assumes that local recruitment and survival rates are within the range of variation among boreal caribou populations there were included in the national model.
 
 ```{r compare beta and bbou priors}
 if (useSaved & file.exists(bbouPriorFile)) {
@@ -180,7 +180,7 @@ lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabs,
 
 ## Comparison of Beta and bbou models with informative local data
 
-With more informative data, the Beta model with constant disturbance covariates and informative priors often gives results that are comparable to the bbou model with default (less informative) priors. In this case there is enough data available that the differences in priors makes less difference.
+With more informative data, the Beta model with constant disturbance covariates and informative priors often gives results that are comparable to the bbou model with default (less informative) priors. When there is enough local data available differences in the priors are less important.
 
 ```{r compare beta and bbou informative local data, results='hide'}
 betaInformative <- caribouBayesianPM(surv_data, recruit_data, disturbance)
@@ -208,7 +208,7 @@ lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabs,
 rec / surv / lam
 ```
 
-The bboutools models do not include disturbance covariates, so we expect the models to project different outcomes in a case where disturbance changes over time.
+The bbou model does not include disturbance covariates, so we expect the models to project different outcomes in a case where disturbance changes over time.
 
 ```{r compare beta and bbou with changing disturbance, results='hide'}
 disturbance <- data.frame(Year = seq(2011, 2051),
@@ -251,7 +251,7 @@ rec / surv / lam
 
 ## Comparison of Beta and bbou models with limited local data
 
-If local data is limited the bbou model with default (less informative) priors and the Beta model with disturbance covariates and informative priors may also give different results, particularly if observations are inconsistent with expectations from the observed distribution of outcomes across the country. For example in Figure \@ref(fig:fig-plotLimitedLocal), the recruitment and survival estimates from the data are higher than expected based on the priors from the national model and there are only a few data points. Therefore, the Beta model predicts that the population will be closer to what we expect from the national model if we get more data.
+If local data is limited the bbou model with default (less informative) priors and the Beta model with disturbance covariates and informative priors may also give different results, particularly if observations are inconsistent with expectations from the observed distribution of outcomes across the country. For example (Figure \@ref(fig:fig-plotLimitedLocal)) when disturbance is high the prior expectation from the Beta model is that recruitment and survival will be low. In this example there are a couple of observations of survival and recruitment that are higher than expected given knowledge of disturbance. Both models acknowledge high uncertainty about the true state of the population given limited local data. The Beta model predicts lower growth than the bbou model in this case because it is combining the limited local information with a prior expectation that demographic rates will be low when disturbance is high.
 
 ```{r compare beta and bbou with limited data., results='hide'}
 disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 90, fire_excl_anthro = 5)
