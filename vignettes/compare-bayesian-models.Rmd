@@ -29,8 +29,8 @@ Key remaining differences between the caribouMetrics Beta model and the bbou mod
 
 * The Beta model includes anthropogenic and fire disturbance covariates.
 * The Beta model intercept and disturbance covariate slope parameters are informed by national demographic-disturbance relationships.
-* The distribution of interannual variation differs between the models.
 * The bbou model allows for variation in survival among months.
+* The form of distribution of interannual variation differs between the models.
 
 ## Example data
 
@@ -116,7 +116,7 @@ surv =  plotRes(out_tbls, "Adult female survival",typeLabels=typeLabs);plot(surv
 lam =  plotRes(out_tbls, "Population growth rate",typeLabels=typeLabs,lowBound=0,highBound=2);plot(lam)
 ```
 
-The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar predictions of expected demographic rates. 
+The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar prior predictions of expected demographic rates. The bbou model assumes more prior uncertainty about interannual variation, so prior predictions of the distribution of observed demographic rates in each year continue to differ. 
 
 ```{r compare beta and bbou with informative priors.}
 b0Priors <- getBBNationalInformativePriors(Anthro=unique(disturbance$Anthro),fire_excl_anthro=unique(disturbance$fire_excl_anthro),month=T)

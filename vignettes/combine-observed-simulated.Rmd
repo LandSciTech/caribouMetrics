@@ -1,8 +1,8 @@
 ---
-title: "Combine observed and simulated caribou data"
+title: "Simulation of monitoring scenarios informed by local data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Combine observed and simulated caribou data}
+  %\VignetteIndexEntry{Simulation of monitoring scenarios informed by local data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,3 +17,81 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(caribouMetrics)
 ```
+
+
+## Example data
+
+We simulate monitoring scenarios informed by example data from the `bboudata::bbousurv_a` and `bboudata::bbourecruit_a` data sets:
+
+* Informative local data: Observations from 2010 to 2016.
+* Limited local data: Observations from 2014 to 2016.
+
+To examine and compare predictions for unobserved years (2018 to 2021) we add missing data.
+
+```{r setup}
+library(caribouMetrics)
+# use local version on local and installed on GH
+if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
+library(bboudata)
+library(bboutools)
+library(dplyr)
+library(ggplot2)
+
+figWidth = 8
+figHeight = 4
+
+useSaved <- T #option to skip slow step of fitting bboutools model
+bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
+bbouLimitedFile <- here::here("results/vignetteBbbouExample2.rds")
+
+surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
+surv_data_add = expand.grid(Year=seq(2017,2022),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
+surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
+surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
+
+recruit_data=bboudata::bbourecruit_a %>% filter(Year > 2010)
+recruit_data_add = expand.grid(Year=seq(2017,2022),PopulationName=unique(recruit_data$PopulationName))
+recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
+recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
+
+surv_dataNone <- surv_data %>% filter(Year > 2017)
+recruit_dataNone <- recruit_data %>% filter(Year > 2017)
+
+surv_dataLimited <- surv_data %>% filter(Year > 2014)
+recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
+```
+
+## Analysis of simulated monitoring using the bbou model with limited local data and no disturbance information
+
+The starting point for analysis is a Bayesian model with a random effect of year and no annual trend implemented in the bboutools R package [Dalgarno et al. 2025]( https://doi.org/10.21105/joss.07997). For brevity, we refer to that as the "bbou" model.
+
+```{r compare beta and bbou with limited data.}
+if(useSaved&file.exists(bbouLimitedFile)){
+  bbouLimited <- readRDS(bbouLimitedFile)
+}else{
+  bbouLimited <- bbouMakeSummaryTable(surv_dataLimited,recruit_dataLimited,return_mcmc=T)
+  if(dir.exists(dirname(bbouLimitedFile))){saveRDS(bbouLimited,bbouLimitedFile)}
+}
+simBbouLimited <-getSimsInitial(bbouLimited) 
+```
+
+
+
+
+
+
+
+## Simulation of monitoring using Beta model with no disturbance
+
+
+## Simulation of monitoring using Beta model, low disturance scenario
+
+
+## Simulation of monitoring using Beta model, high disturance scenario
+
+## References
+Dalgarno S, Boulanger J, Pearson A, et al (2025) bbousuite: A set of R packages to facilitate analysis of boreal caribou survival and recruitment data. Journal of Open Source Software 10:7997. https://doi.org/10.21105/joss.07997
+
+Hughes J, Endicott S, Calvert AM, Johnson CA (2025) Integration of national demographic-disturbance relationships and local data can improve caribou population viability projections and inform monitoring decisions. Ecological Informatics 87:103095. https://doi.org/10.1016/j.ecoinf.2025.103095
+
+
