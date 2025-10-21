@@ -114,7 +114,8 @@ Suggests:
     shiny,
     bboudata,
     here,
-    patchwork
+    patchwork,
+    bookdown
 Remotes: LandSciTech/pfocal,
     LandSciTech/bboudata,
     bboutools=github::LandSciTech/bboutoolsMultiPop
