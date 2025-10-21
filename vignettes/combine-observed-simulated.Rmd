@@ -22,10 +22,6 @@ knitr::opts_chunk$set(
 if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork') to run this vignette")
 ```
 
-```{r setup}
-library(caribouMetrics)
-```
-
 ## Example data
 
 We simulate monitoring scenarios informed by example data from the `bboudata::bbousurv_a` and `bboudata::bbourecruit_a` data sets:
@@ -80,6 +76,9 @@ if(useSaved&file.exists(bbouLimitedFile)){
   if(dir.exists(dirname(bbouLimitedFile))){saveRDS(bbouLimited,bbouLimitedFile)}
 }
 simBbouLimited <-getSimsInitial(bbouLimited) 
+
+surv_fit <- simBbouLimited$surv_fit
+recruit_fit <- simBbouLimited$recruit_fit
 ```
 
 
