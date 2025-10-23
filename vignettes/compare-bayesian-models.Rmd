@@ -117,7 +117,7 @@ rec / surv / lam
 
 The bbou model default priors are less informative than the Beta model default priors (Figure \@ref(fig:fig-plotPriorsDefault)). The bbou model assumes that little is known about a population with no local data, whereas when there is no local data the Beta model assumes that local recruitment and survival rates are within the range of variation among boreal caribou populations there were included in the national model.
 
-```{r compare beta and bbou priors}
+```{r compare beta and bbou priors, results='hide'}
 if (useSaved & file.exists(bbouPriorFile)) {
   bbouPrior <- readRDS(bbouPriorFile)
 } else {
@@ -276,7 +276,7 @@ rec <- plotRes(out_tbls, "Recruitment", typeLabels = typeLabs)
 surv <- plotRes(out_tbls, "Adult female survival", typeLabels = typeLabs)
 
 lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabs,
-               lowBound = 0.5, highBound = 1.5)
+               lowBound = 0.45, highBound = 1.55)
 rec / surv / lam
 ```
 

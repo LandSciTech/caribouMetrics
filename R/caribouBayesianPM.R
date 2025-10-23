@@ -70,9 +70,15 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
                        N0=NA,
                        returnSamples=F,
                        inputList = list(),
-                       niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,
+                       niters=formals(bboutools::bb_fit_survival)$niters,
+                       nthin=formals(bboutools::bb_fit_survival)$nthin,
                        ...) {
-
+  
+  if(any(c("survData", "ageRatio", "Niter", "Nthin") %in% names(match.call()))){
+    stop("old argument names detected see ?caribouBayesianPM for current argument names", 
+         call. = FALSE)
+  }
+  
   # combine defaults in function with inputs from input list
   inputArgs <- c(
     "surv_data", "recruit_data", "disturbance", "startYear", "endYear", "niters", "nthin"
@@ -117,7 +123,10 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
     testTable(disturbance, c("Year", "Anthro", "fire_excl_anthro"))
   }
   #TO DO: use bboutools data test functions for survival and recruitment
-
+  bboudata::bbd_chk_data_survival(surv_data, allow_missing = TRUE)
+  bboudata::bbd_chk_data_recruitment(recruit_data, multi_pops = TRUE)
+  
+  
   # Get start and end years from data
   if(is.null(inp$startYear)){
     inp$startYear <- min(surv_data$Year)
@@ -155,6 +164,8 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
       }
     }
     distYrs = disturbance$Year
+  }else if(!is.null(inp$endYear) && is.finite(inp$endYear)){
+    distYrs = surv_data$Year
   }
   ################
   # Survival data checking and fill missing yrs
