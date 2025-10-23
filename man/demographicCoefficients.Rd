@@ -134,6 +134,7 @@ Caribou demography functions:
 \code{\link{getSimsInitial}()},
 \code{\link{getSimsNational}()},
 \code{\link{plotRes}()},
+\code{\link{plotSurvivalSeries}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{runScnSet}()},
 \code{\link{simulateObservations}()}
