@@ -90,6 +90,7 @@ Collate:
     'movingWindowAvg.R'
     'plot.R'
     'plotRes.R'
+    'plotSurvivalSeries.R'
     'popGrowthTableJohnsonECCC.R'
     'processData.R'
     'rasterizeLineDensity.R'
