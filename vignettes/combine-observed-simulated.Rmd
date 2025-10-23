@@ -35,7 +35,7 @@ To examine and compare predictions for unobserved years (2018 to 2021) we add mi
 
 Our starting points for analysis of monitoring scenarios are Bayesian Beta models informed by local data and prior knowledge of national demographic-disturbance relationships. See compare vignette for details. We examine the influence of prior information from national-demographic disturbance relationships in low disturbance (5% anthropogenic, 5% fire) and high disturbance (80% anthropogenic, 10% fire) scenarios.
 
-```{r setup}
+```{r setup, results='hide'}
 library(caribouMetrics)
 # use local version on local and installed on GH
 if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
@@ -47,7 +47,7 @@ figWidth <- 8
 figHeight <- 10
 
 #Note - set niters to 100 to run quickly when testing. Set to 1000 for complete results.
-niters <- 100
+niters <- 1000
 
 useSaved <- T #option to skip slow step of fitting bboutools model
 surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
@@ -67,13 +67,14 @@ surv_dataLimited <- surv_data %>% filter(Year > 2014)
 recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
 
 disturbance = data.frame(Year = unique(surv_data$Year), Anthro = 5, fire_excl_anthro = 5)
+disturbanceHigh <- data.frame(Year = disturbance$Year,Anthro = 80,fire_excl_anthro = 10)
+
 betaLimited <- bbouMakeSummaryTable(surv_dataLimited, recruit_dataLimited, disturbance=disturbance,niters=niters)
 betaInformative <- bbouMakeSummaryTable(surv_data, recruit_data, disturbance=disturbance,niters=niters)
+betaLimitedHigh <- bbouMakeSummaryTable(surv_dataLimited, recruit_dataLimited, disturbance=disturbanceHigh,niters=niters)
+
 simInformative <- getSimsInitial(betaInformative)
 simLimited <- getSimsInitial(betaLimited)
-
-disturbanceHigh <- data.frame(Year = disturbance$Year,Anthro = 80,fire_excl_anthro = 10)
-betaLimitedHigh <- bbouMakeSummaryTable(surv_dataLimited, recruit_dataLimited, disturbance=disturbanceHigh)
 simLimitedHigh <- getSimsInitial(betaLimitedHigh)
 ```
 
@@ -97,15 +98,15 @@ trajectories <- subset(trajectories,Replicate==sample(unique(trajectories$Replic
 
 oo <- simulateObservations(getScenarioDefaults(scns), trajectories,
                            surv_data = simInformative$surv_data, recruit_data=simInformative$recruit_data)
-informativeMoreMonitoring <- caribouBayesianPM(surv_data = oo$simSurvObs, recruit_data = oo$simRecruitObs, disturbance=disturbance)
+informativeMoreMonitoring <- caribouBayesianPM(surv_data = oo$simSurvObs, recruit_data = oo$simRecruitObs, disturbance=disturbance,niters=niters)
 out_tbls <- getOutputTables(informativeMoreMonitoring, simInitial = simInformative)
 typeLabsI <- c("More", "Informative")
 
 #Use runScnSet to select trajectory, simulate observations, fit new model and summarize results for the case when initial data is limited.
-limitedMoreMonitoring = runScnSet(scns,simLimited) 
+limitedMoreMonitoring = runScnSet(scns,simLimited,niters=niters) 
 typeLabsL <- c("More", "Limited")
 
-limitedMoreHigh = runScnSet(scns,simLimitedHigh) 
+limitedMoreHigh = runScnSet(scns,simLimitedHigh,niters=niters) 
 #TO DO: fix discrepancies between these two methods.
 #TO DO: change dot labels. "True simulated" should be "trajectory", and "observed" should be "observation".
 ```
@@ -119,7 +120,7 @@ plotSurvivalSeries(oo$simSurvObs)
 rec <- plotRes(out_tbls, "Recruitment", typeLabels = typeLabsI)
 surv <- plotRes(out_tbls, "Adult female survival", typeLabels = typeLabsI)
 lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabsI,
-               lowBound = 0.5, highBound = 1.5)
+               lowBound = 0, highBound = 1.5)
 rec / surv / lam
 ```
 
@@ -127,7 +128,7 @@ rec / surv / lam
 rec <- plotRes(limitedMoreMonitoring, "Recruitment", typeLabels = typeLabsL)
 surv <- plotRes(limitedMoreMonitoring, "Adult female survival", typeLabels = typeLabsL)
 lam <- plotRes(limitedMoreMonitoring, "Population growth rate", typeLabels = typeLabsL,
-               lowBound = 0.5, highBound = 1.5)
+               lowBound = 0, highBound = 1.5)
 rec / surv / lam
 ```
 
@@ -135,17 +136,30 @@ rec / surv / lam
 rec <- plotRes(limitedMoreHigh, "Recruitment", typeLabels = typeLabsL)
 surv <- plotRes(limitedMoreHigh, "Adult female survival", typeLabels = typeLabsL)
 lam <- plotRes(limitedMoreHigh, "Population growth rate", typeLabels = typeLabsL,
-               lowBound = 0.5, highBound = 1.5)
+               lowBound = 0, highBound = 1.5)
 rec / surv / lam
 ```
 
 In these examples, an additional 5 years of monitoring of a plausible low growth rate trajectory with 5 intial years of data does not provide additional clarity about whether the population is likely to decline or not in future (Figure \@ref(fig:fig-plot2)). In contrast, an additional 5 years of monitoring does substantially reduce uncertainty when there is less initial data and disturbance is low (Figure \@ref(fig:fig-plot3)). When disturbance is high, additional monitoring does less to reduce uncertainty because we have clearer prior expectations from the national model even when local data is limited (Figure \@ref(fig:fig-plot4)).
 
+Examining multiple example trajectories clarifies that there are a range of possible outcomes from additional monitoring.In the case where true growth rate is plausibly high (99th percentile of the distribution of expected growth rate) 5 years of additional monitoring clarifies that the population is likely viable. In the case where true growth rate is plausibly low (1st percentile of the distribution of expected growth rate) 5 years of additional monitoring does not clarify whether the population is stable or declining. Additional collars do help distinguish the cases from one another, but additional benefits of that information should be weighed against additional costs. More formal and thorough analyses of the value of additional monitoring can be done by examining outcomes from a larger representative sample of plausible trajectories from the initial model (as @hughes2025).
 
+```{r Multiple trajectories and monitoring scenarios, results='hide'}
+#Add rows to the scenario table to examine multiple monitoring scenarios and example trajectories
+scnsMulti=scns;scnsMulti$lQuantile=NULL;scnsMulti$collarCount=NULL
+scnsMulti = merge(scnsMulti,expand.grid(lQuantile=c(0.01,0.5,0.99),collarCount=c(15,30)))
 
+limitedMoreMulti = runScnSet(scnsMulti,simLimited,niters=niters) 
 
+lmmView <- subset(limitedMoreMulti$rr.summary.all,(Parameter=="Expected growth rate")&(Year==2021),select=c(lQuantile,collarCount,Mean,lower,upper,probViable))
+base <- ggplot(lmmView,aes(x=collarCount,y=Mean,ymax=upper,ymin=lower,group=lQuantile,colour=probViable))+geom_point()+geom_errorbar()+ylab("Expected growth rate")
+```
 
+```{r fig-plot5, fig.width=figWidth,fig.height=10,fig.cap="Outcomes of additional monitoring vary among example trajectories (points), and with monitoring effort (collarCount). In these examples there is 5 years additional monitoring, limited initial data (2 years), and low disturbance. Example trajectories are from the 99th, 50th, and 1st percentiles of the distribution of expected growth rate in the initial model informed by 2 years of local data."}
+base
+```
 
+TO DO: As in Hughes et al we can also explore monitoring scenarios using simulated trajectories from the national model instead of trajectories from a fitted Bayesian model.
 
 ## References
 
