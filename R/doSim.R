@@ -59,7 +59,7 @@ doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_mean,R_i
 
   mod_mean <- do.call(caribouPopSim, c(
     list(
-      N0 = N0, numSteps = numSteps, R_samp = R_bar, S_samp = S_bar,
+      N0 = mean(N0), numSteps = numSteps, R_samp = R_bar, S_samp = S_bar,
       # using simplified model version with no stochasticity
       interannualVar = NA, probOption = "continuous", l_S = 0, h_R = 1),
     addl_params)) %>%
@@ -71,7 +71,14 @@ doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_mean,R_i
 caribouPopSim <- function(N0, numSteps, R_samp, S_samp, interannualVar, ...) {
   for (ts in 1:numSteps) {
     if (ts == 1) {
-      out <- caribouPopGrowth(rep(N0, length(R_samp)),
+      if(length(N0) == 1){
+        N0 <- rep(N0, length(R_samp))
+      } else if (length(N0) == 2) {
+        N0 <- seq(from = N0[1], to = N0[2], by  = 1) %>% round() %>% 
+          sample(size = length(R_samp), replace = TRUE)
+      }
+      
+      out <- caribouPopGrowth(N0,
                               numSteps = 1,
                               interannualVar = interannualVar,
                               R_bar = R_samp, S_bar = S_samp, ...
