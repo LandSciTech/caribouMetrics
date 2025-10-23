@@ -87,6 +87,7 @@ getScenarioDefaults <- function(paramTable = NULL,
 
   if(hasName(paramTable, "collarCount") && 
      hasName(paramTable, "cowMult") && 
+     hasName(paramTable, "N0") && 
      sum(paramTable$collarCount*paramTable$cowMult>paramTable$N0)>0){
     warning("Set cowMult, collarCount and N0 so the expected number of cows in composition surveys does not exceed initial population size N0.")
   }

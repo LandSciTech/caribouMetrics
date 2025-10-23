@@ -259,7 +259,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
           #if(sum(cInfo$StartTotal)==0){break}
         }
         
-        if(any(cInfo$StartTotal>cInfo$N)){
+        if(any(cInfo$StartTotal[!is.na(cInfo$N)]>cInfo$N[!is.na(cInfo$N)])){
           warning("Target number of collars exceeds population size. Adjusting number of collars for consistency.")
           cInfo$StartTotal[cInfo$StartTotal>cInfo$N] = cInfo$N[cInfo$StartTotal>cInfo$N]
         }

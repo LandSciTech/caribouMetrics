@@ -87,6 +87,7 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
     }
   }
 
+  if(is.null(N0)){N0=NA}
   if (priors[[1]] == "default") {
     priors <- getPriors()
   }
@@ -126,6 +127,8 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
     if(!is.null(disturbance)){
       inp$endYear <- max(disturbance$Year)
     }else{inp$endYear <- max(surv_data$Year);distYrs =surv_data$Year}
+  }else{
+    distYrs = seq(startYear,endYear)
   }
 
   if(!is.null(disturbance)){
@@ -153,7 +156,6 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
     }
     distYrs = disturbance$Year
   }
-
   ################
   # Survival data checking and fill missing yrs
   surv_data <- surv_data

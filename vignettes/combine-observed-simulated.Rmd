@@ -1,6 +1,8 @@
 ---
 title: "Simulation of monitoring scenarios informed by local data"
-output: rmarkdown::html_vignette
+output: 
+    bookdown::html_document2:
+        base_format: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Simulation of monitoring scenarios informed by local data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -22,7 +24,7 @@ knitr::opts_chunk$set(
 if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork') to run this vignette")
 ```
 
-## Example data
+## Examples of initial Bayesian models informed by local data and national-demographic disturbance relationships
 
 We simulate monitoring scenarios informed by example data from the `bboudata::bbousurv_a` and `bboudata::bbourecruit_a` data sets:
 
@@ -31,29 +33,30 @@ We simulate monitoring scenarios informed by example data from the `bboudata::bb
 
 To examine and compare predictions for unobserved years (2018 to 2021) we add missing data.
 
+Our starting points for analysis of monitoring scenarios are Bayesian Beta models informed by local data and prior knowledge of national demographic-disturbance relationships. See compare vignette for details. We examine the influence of prior information from national-demographic disturbance relationships in low disturbance (5% anthropogenic, 5% fire) and high disturbance (80% anthropogenic, 10% fire) scenarios.
+
 ```{r setup}
 library(caribouMetrics)
 # use local version on local and installed on GH
 if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
 library(bboudata)
-library(bboutools)
 library(dplyr)
 library(ggplot2)
 
-figWidth = 8
-figHeight = 4
+figWidth <- 8
+figHeight <- 10
+
+#Note - set niters to 100 to run quickly when testing. Set to 1000 for complete results.
+niters <- 100
 
 useSaved <- T #option to skip slow step of fitting bboutools model
-bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
-bbouLimitedFile <- here::here("results/vignetteBbbouExample2.rds")
-
 surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
-surv_data_add = expand.grid(Year=seq(2017,2022),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
+surv_data_add = expand.grid(Year=seq(2017,2025),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
 surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
 surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
 
 recruit_data=bboudata::bbourecruit_a %>% filter(Year > 2010)
-recruit_data_add = expand.grid(Year=seq(2017,2022),PopulationName=unique(recruit_data$PopulationName))
+recruit_data_add = expand.grid(Year=seq(2017,2025),PopulationName=unique(recruit_data$PopulationName))
 recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
 recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
 
@@ -62,38 +65,87 @@ recruit_dataNone <- recruit_data %>% filter(Year > 2017)
 
 surv_dataLimited <- surv_data %>% filter(Year > 2014)
 recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
+
+disturbance = data.frame(Year = unique(surv_data$Year), Anthro = 5, fire_excl_anthro = 5)
+betaLimited <- bbouMakeSummaryTable(surv_dataLimited, recruit_dataLimited, disturbance=disturbance,niters=niters)
+betaInformative <- bbouMakeSummaryTable(surv_data, recruit_data, disturbance=disturbance,niters=niters)
+simInformative <- getSimsInitial(betaInformative)
+simLimited <- getSimsInitial(betaLimited)
+
+disturbanceHigh <- data.frame(Year = disturbance$Year,Anthro = 80,fire_excl_anthro = 10)
+betaLimitedHigh <- bbouMakeSummaryTable(surv_dataLimited, recruit_dataLimited, disturbance=disturbanceHigh)
+simLimitedHigh <- getSimsInitial(betaLimitedHigh)
 ```
 
-## Analysis of simulated monitoring using the bbou model with limited local data and no disturbance information
+## Simulating additional monitoring of plausible example trajectories from fitted Bayesian models
 
-The starting point for analysis is a Bayesian model with a random effect of year and no annual trend implemented in the bboutools R package [@dalgarno2025]. For brevity, we refer to that as the "bbou" model.
+We begin by specifying monitoring scenario parameters, and selecting an example trajectory with a relatively low expected growth rate (i.e. in the 1st percentile of the distribution of mcmc samples from the initial model). In this example, we specify 5 additional years of monitoring, with a target of 30 collars per year, and 6 cows per collared cow in the composition surveys. We then simulate additional years of monitoring, combine the simulated and observed data, and reanalyze the combined data. Methods for simulating monitoring of example trajectories are described in @hughes2025.
 
-```{r compare beta and bbou with limited data.}
-if(useSaved&file.exists(bbouLimitedFile)){
-  bbouLimited <- readRDS(bbouLimitedFile)
-}else{
-  bbouLimited <- bbouMakeSummaryTable(surv_dataLimited,recruit_dataLimited,return_mcmc=T)
-  if(dir.exists(dirname(bbouLimitedFile))){saveRDS(bbouLimited,bbouLimitedFile)}
-}
-simBbouLimited <-getSimsInitial(bbouLimited) 
+```{r Example monitoring scenario, results='hide'}
+scns=list()
+scns$lQuantile=0.01 #select example trajectories with low growth rate
+correlateRates = T #Force correlation among demographic rates to examine extreme cases
+scns$N0 = NA
+scns$projYears = 3
+scns$curYear = max(simInformative$recruit_data$Year)- scns$projYears
+scns$obsYears = scns$curYear - min(simInformative$recruit_data$Year)
+scns$cowMult = 6
+scns$collarCount = 30
 
-surv_fit <- simBbouLimited$surv_fit
-recruit_fit <- simBbouLimited$recruit_fit
+trajectories <- subset(simInformative$samples,LambdaPercentile == round(scns$lQuantile*100))
+trajectories <- subset(trajectories,Replicate==sample(unique(trajectories$Replicate),1))
+
+oo <- simulateObservations(getScenarioDefaults(scns), trajectories,
+                           surv_data = simInformative$surv_data, recruit_data=simInformative$recruit_data)
+informativeMoreMonitoring <- caribouBayesianPM(surv_data = oo$simSurvObs, recruit_data = oo$simRecruitObs, disturbance=disturbance)
+out_tbls <- getOutputTables(informativeMoreMonitoring, simInitial = simInformative)
+typeLabsI <- c("More", "Informative")
+
+#Use runScnSet to select trajectory, simulate observations, fit new model and summarize results for the case when initial data is limited.
+limitedMoreMonitoring = runScnSet(scns,simLimited) 
+typeLabsL <- c("More", "Limited")
+
+limitedMoreHigh = runScnSet(scns,simLimitedHigh) 
+#TO DO: fix discrepancies between these two methods.
+#TO DO: change dot labels. "True simulated" should be "trajectory", and "observed" should be "observation".
 ```
 
+```{r fig-plot1, fig.width=figWidth,fig.height=10,fig.cap="Observed (2010-2017) and simulated (2018-2022) survival data for an example trajectory with a relatively low expected growth rate (i.e. in the 1st percentile of the distribution of mcmc samples from the initial model)."}
+plotSurvivalSeries(oo$simSurvObs)
+#TO DO: fix data gap
+```
+
+```{r fig-plot2, fig.width=figWidth,fig.height=10,fig.cap="95% prior predictive intervals from Beta models with and without additional monitoring (5 years) of an example trajectory with informative initial data (5 years), low disturbance, and a relatively low expected growth rate (Figure 1)."}
+rec <- plotRes(out_tbls, "Recruitment", typeLabels = typeLabsI)
+surv <- plotRes(out_tbls, "Adult female survival", typeLabels = typeLabsI)
+lam <- plotRes(out_tbls, "Population growth rate", typeLabels = typeLabsI,
+               lowBound = 0.5, highBound = 1.5)
+rec / surv / lam
+```
+
+```{r fig-plot3, fig.width=figWidth,fig.height=10,fig.cap="95% prior predictive intervals from Beta models with and without additional monitoring (5 years) of an example trajectory with limited initial data (2 years), low disturbance, and a relatively low expected growth rate (Figure 1)."}
+rec <- plotRes(limitedMoreMonitoring, "Recruitment", typeLabels = typeLabsL)
+surv <- plotRes(limitedMoreMonitoring, "Adult female survival", typeLabels = typeLabsL)
+lam <- plotRes(limitedMoreMonitoring, "Population growth rate", typeLabels = typeLabsL,
+               lowBound = 0.5, highBound = 1.5)
+rec / surv / lam
+```
+
+```{r fig-plot4, fig.width=figWidth,fig.height=10,fig.cap="95% prior predictive intervals from Beta models with and without additional monitoring (5 years) of an example trajectory with limited initial data (2 years), high disturbance, and a relatively low expected growth rate (Figure 1)."}
+rec <- plotRes(limitedMoreHigh, "Recruitment", typeLabels = typeLabsL)
+surv <- plotRes(limitedMoreHigh, "Adult female survival", typeLabels = typeLabsL)
+lam <- plotRes(limitedMoreHigh, "Population growth rate", typeLabels = typeLabsL,
+               lowBound = 0.5, highBound = 1.5)
+rec / surv / lam
+```
+
+In these examples, an additional 5 years of monitoring of a plausible low growth rate trajectory with 5 intial years of data does not provide additional clarity about whether the population is likely to decline or not in future (Figure \@ref(fig:fig-plot2)). In contrast, an additional 5 years of monitoring does substantially reduce uncertainty when there is less initial data and disturbance is low (Figure \@ref(fig:fig-plot3)). When disturbance is high, additional monitoring does less to reduce uncertainty because we have clearer prior expectations from the national model even when local data is limited (Figure \@ref(fig:fig-plot4)).
 
 
 
 
 
 
-## Simulation of monitoring using Beta model with no disturbance
-
-
-## Simulation of monitoring using Beta model, low disturance scenario
-
-
-## Simulation of monitoring using Beta model, high disturance scenario
 
 ## References
 

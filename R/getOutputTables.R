@@ -117,8 +117,9 @@ getOutputTables <- function(caribouBayesDemogMod,
         simInitial <- getSimsInitial(cPars=paramTable)
         summaries <- simInitial$summary
       }
-      #remove irrelevant disturbance combinations from the summaries, and add Year if missing.
-      distMerge <- subset(dist_params, select=c(Anthro,fire_excl_anthro,Year))
+      #remove irrelevant disturbance combinations from the summaries
+      distMerge <- subset(dist_params, is.element(Year,summaries$Year),select=c(Anthro,fire_excl_anthro,Year))
+      
       distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
       distMerge=unique(distMerge)
       names(distMerge) <- c("AnthroID","fire_excl_anthroID","Year")
