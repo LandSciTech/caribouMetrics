@@ -45,19 +45,6 @@ plot(rastLines)
 }
 \seealso{
 Caribou habitat functions:
-\code{\link{CaribouHabitat-class}},
-\code{\link{calcBinaryUse}()},
-\code{\link{caribouHabitat}()},
-\code{\link{coefTableHR}},
-\code{\link{coefTableStd}},
-\code{\link{fnlcToResType}},
-\code{\link{loadSpatialInputs}()},
-\code{\link{plcToResType}},
-\code{\link{reclassPLC}()},
-\code{\link{resTypeCode}},
-\code{\link{results}()},
-\code{\link{rfuToResType}},
-\code{\link{threshTable}},
-\code{\link{updateCaribou}()}
+\code{\link{loadSpatialInputs}()}
 }
 \concept{habitat}

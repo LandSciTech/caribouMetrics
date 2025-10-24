@@ -8,8 +8,8 @@ test_that("works with defaults", {
   
   out <- caribouBayesianPM(surv_data = simO$simSurvObs, 
                            recruit_data = simO$simRecruitObs,
-                    disturbance = simO$simDisturbance,
-                    niters=100)
+                           disturbance = simO$simDisturbance,
+                           niters=100)
   
   out_tbls <- getOutputTables(out, simInitial = simIni, paramTable = scns)
   
