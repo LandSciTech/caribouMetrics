@@ -44,7 +44,12 @@ plot(rastLines)
 
 }
 \seealso{
-Caribou habitat functions:
-\code{\link{loadSpatialInputs}()}
+Functions for calculating disturbance:
+\code{\link{DisturbanceMetrics-class}},
+\code{\link{disturbanceMetrics}()},
+\code{\link{loadSpatialInputs}()},
+\code{\link{reclassDist}()},
+\code{\link{results}()},
+\code{\link{updateDisturbance}()}
 }
-\concept{habitat}
+\concept{disturbance}
