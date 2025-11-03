@@ -1,6 +1,5 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/LICENSE-text.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/articles/Using_caribouHabitat.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/articles/Using_disturbanceMetric.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/articles/bayesian-model-outputs.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/articles/caribouDemography.html</loc></url>
@@ -10,24 +9,18 @@
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/authors.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/index.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/news/index.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/CaribouHabitat-class.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/DisturbanceMetrics-class.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/bbouMakeSummaryTable.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/calcBinaryUse.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/caribouBayesianPM.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/caribouHabitat.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/caribouMetrics-package.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopSimMCMC.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/coefTableHR.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/coefTableStd.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/demographicCoefficients.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/demographicRates.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/disturbanceMetrics.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/doSim.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/fnlcToResType.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/getBBNationalInformativePriors.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/getOutputTables.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/getPriors.html</loc></url>
@@ -36,21 +29,14 @@
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/getSimsNational.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/index.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/loadSpatialInputs.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/plcToResType.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/plot-CaribouHabitat.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/plotRes.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/rasterizeLineDensity.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/reclassDist.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/reclassPLC.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/resTypeCode.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/results.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/rfuToResType.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/runScnSet.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/threshTable.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/updateCaribou.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/updateDisturbance.html</loc></url>
 </urlset>
 

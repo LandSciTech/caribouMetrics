@@ -41,7 +41,6 @@
     <li><a class="dropdown-item" href="articles/combine-observed-simulated.html">Simulation of monitoring scenarios informed by local data</a></li>
     <li><a class="dropdown-item" href="articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
-    <li><a class="dropdown-item" href="articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul>
 </li>
       </ul>
@@ -118,7 +117,7 @@
 <span><span class="co"># load example data</span></span>
 <span><span class="va">landCoverD</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> </span>
 <span>  <span class="co"># convert PLC classes to resource types used in the model </span></span>
-<span><span class="va">landCoverD</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/reclassPLC.html">reclassPLC</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span></span>
+<span><span class="va">landCoverD</span> <span class="op">&lt;-</span> <span class="fu">reclassPLC</span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span></span>
 <span><span class="va">eskerDras</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"eskerTif.tif"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">eskerDshp</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"esker.shp"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">natDistD</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"natDist.tif"</span><span class="op">)</span><span class="op">)</span></span>
@@ -208,7 +207,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Calculate habitat RSF in Ontario's Churchill range</span></span>
-<span><span class="va">carHab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouHabitat.html">caribouHabitat</a></span><span class="op">(</span></span>
+<span><span class="va">carHab1</span> <span class="op">&lt;-</span> <span class="fu">caribouHabitat</span><span class="op">(</span></span>
 <span>  landCover <span class="op">=</span> <span class="va">landCoverD</span>,</span>
 <span>  esker <span class="op">=</span> <span class="va">eskerDras</span>, </span>
 <span>  natDist <span class="op">=</span> <span class="va">natDistD</span>, </span>

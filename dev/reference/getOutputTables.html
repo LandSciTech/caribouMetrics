@@ -25,7 +25,6 @@ results."><meta name="robots" content="noindex"></head><body>
     <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Simulation of monitoring scenarios informed by local data</a></li>
     <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -170,10 +169,10 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName    : chr [1:190] "A" "A" "A" "A" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ AnthroID          : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ fire_excl_anthroID: num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean              : num [1:190] NaN 0.926 1.135 0.226 0.434 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower             : Named num [1:190] NA 0.81 0.993 0.172 0.362 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper             : Named num [1:190] NA 0.986 1.244 0.288 0.522 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable        : num [1:190] NaN 0 0.983 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean              : num [1:190] NaN 0.845 0.955 0.13 0.246 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower             : Named num [1:190] NA 0.7186 0.8083 0.0796 0.1571 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper             : Named num [1:190] NA 0.948 1.083 0.192 0.348 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable        : num [1:190] NaN 0 0.367 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Parameter         : chr [1:190] "c" "Adult female survival" "Population growth rate" "Adjusted recruitment" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Anthro            : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ fire_excl_anthro  : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
@@ -205,19 +204,19 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ startYear         : num [1:190] 2014 2014 2014 2014 2014 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rQuantile         : logi [1:190] NA NA NA NA NA NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sQuantile         : logi [1:190] NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ sim.all       :'data.frame':	0 obs. of  8 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID  : chr(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName: chr(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean          : num(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower         : Named num(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper         : Named num(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable    : num(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Parameter     : chr(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year          : int(0) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ sim.all       :'data.frame':	160 obs. of  8 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID  : chr [1:160] "c" "lambda_bar" "recruitment" "lambda" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName: chr [1:160] "A" "A" "A" "A" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean          : num [1:160] 1 1.031 0.341 1.031 0.171 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower         : Named num [1:160] 1 0.8963 0.081 0.7759 0.0405 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper         : Named num [1:160] 1 1.159 0.718 1.282 0.359 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable    : num [1:160] 1 0.755 0 0.629 0 0.061 0 0 0 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Parameter     : chr [1:160] "c" "Expected growth rate" "Recruitment" "Population growth rate" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year          : int [1:160] 2014 2014 2014 2014 2014 2014 2014 2014 2015 2015 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ obs.all       :'data.frame':	259 obs. of  36 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year            : num [1:259] 2014 2014 2014 2014 2014 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName  : chr [1:259] "A" "A" "A" "A" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean            : num [1:259] 0.44 0.397 0.9 975 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean            : num [1:259] 0.237 0.37 0.9 948 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Parameter       : chr [1:259] "Recruitment" "Expected recruitment" "Adult female survival" "Female population size" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID    : chr [1:259] "R" "Rbar" "S" "N" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Type            : chr [1:259] "observed" "true" "observed" "true" ...</span>

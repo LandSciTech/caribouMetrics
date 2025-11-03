@@ -29,7 +29,6 @@ disturbanceMetrics()."><meta name="robots" content="noindex"></head><body>
     <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Simulation of monitoring scenarios informed by local data</a></li>
     <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -103,6 +102,8 @@ year/time since disturbance is recorded.</p></dd>
     <div class="dont-index"><p>Functions for calculating disturbance:
 <code><a href="DisturbanceMetrics-class.html">DisturbanceMetrics-class</a></code>,
 <code><a href="disturbanceMetrics.html">disturbanceMetrics</a>()</code>,
+<code><a href="loadSpatialInputs.html">loadSpatialInputs</a>()</code>,
+<code><a href="rasterizeLineDensity.html">rasterizeLineDensity</a>()</code>,
 <code><a href="results.html">results</a>()</code>,
 <code><a href="updateDisturbance.html">updateDisturbance</a>()</code></p></div>
     </div>
@@ -135,6 +136,7 @@ year/time since disturbance is recorded.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cumFirePresence</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="reclassDist-1.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot.xy(xy, type, ...):</span> invalid type passed to graphics function</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># with time since disturbance</span></span></span>
 <span class="r-in"><span><span class="va">fireYr</span><span class="op">$</span><span class="va">FIRE_YEAR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">15</span>, <span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span></span></span>
@@ -145,7 +147,7 @@ year/time since disturbance is recorded.</p></dd>
 <span class="r-in"><span>                               dateField <span class="op">=</span> <span class="st">"FIRE_YEAR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>                               </span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cumFirePresence2</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="reclassDist-2.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot.xy(xy, type, ...):</span> invalid type passed to graphics function</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
