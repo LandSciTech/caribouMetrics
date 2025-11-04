@@ -182,6 +182,33 @@ gantt
 Note that if a fitted disturbance scenario is not specified (either as a disturbance table or disturbance scenario parameters) getSimsInitial returns demographic summaries for different levels of anthropogenic disturbance from 1 to 100. Otherwise, outputs include demographic trajectories and summaries of those trajectories.
 
 
+```{mermaid}
+%%| column: screen
+%%| fig.width: 20
+---
+displayMode: compact
+---
+%%{init: { "gantt": { "barGap": 20 } } }%%
+gantt
+    title Demographic rates, trajectories, and trajectory summaries from Bayesian model posterior samples. 
+    dateFormat YYYY-MM-DD
+    axisFormat %i
+    
+    section A
+    bbouMakeSummaryTable :a1, 2000-01-01, 40d
+    .              :done, ax, after a1, 1d  
+    getSimsInitial :a2, after ax, 160d
+
+    section B
+    compositionBiasCorr :b1, after ax, 40d
+    caribouPopSimMCMC  :b2, after b1, 40d
+    convertTrajectories :b3, after b2, 40d
+    summarizeCaribouPopSim  :b4, after b3, 40d
+
+```
+
+TO DO: Demographic rates, trajectories, and trajectory summaries from Bayesian model posterior summaries...
+
 \* indicates abbreviated function names for trajectoriesFromNational, compositionBiasCorrection and simulateTrajectoriesFromPosterior.
 
 Using grey "done" period to create some space between groupings of functions 
