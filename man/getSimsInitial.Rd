@@ -2,10 +2,10 @@
 % Please edit documentation in R/getSimsInitial.R
 \name{getSimsInitial}
 \alias{getSimsInitial}
-\title{Get a set of simulation results from fitted demographic models (if bbouResults argument is provided) or from national demographic disturbance model.}
+\title{Get a set of simulation results from a fitted Bayesian demographic model (if bayesianResults argument is provided) or from national demographic disturbance model.}
 \usage{
 getSimsInitial(
-  bbouResults = NULL,
+  bayesianResults = NULL,
   N0 = NULL,
   replicates = "all",
   cPars = subset(getScenarioDefaults(), select = -iAnthro),
@@ -16,12 +16,12 @@ getSimsInitial(
 )
 }
 \arguments{
-\item{bbouResults}{Optional. Fitted bboutools model and summary table created by bbouMakeSummaryTable(),
+\item{bayesianResults}{Optional. Fitted Bayesian model and summary table created by bbouMakeSummaryTable(),
 or a path to those results. If not specified trajectories will be from national demographic disturbance model.
-To specify a disturbance table for the national model set bbouResults=disturbanceTable.
+To specify a disturbance table for the national model set bayesianResults=disturbanceTable.
 disturbanceTable should be a data.frame with columns Anthro, fire_excl_anthro, and Year.}
 
-\item{N0}{initial population size. If NULL, will use information in bbouResults.}
+\item{N0}{initial population size. If NULL, will use information in bayesianResults.}
 
 \item{replicates}{Number of replicate trajectories. Default "all"}
 
@@ -42,11 +42,11 @@ Column names are Year or Anthro, MetricTypeID, PopulationName, Mean, lower, uppe
 \item samples: a tibble with parameter values for each scenario and replicate
 1 row per MetricTypeID per replicate \* scenario. Column names are Year or
 Anthro, Replicate, PopulationName, MetricTypeID and Amount. This is NULL
-if bbouResults is NULL and cPars does not include an iAnthro column.
+if bayesianResults is NULL and cPars does not include an iAnthro column.
 }
 }
 \description{
-Get a set of simulation results from fitted demographic models (if bbouResults argument is provided) or from national demographic disturbance model.
+Get a set of simulation results from a fitted Bayesian demographic model (if bayesianResults argument is provided) or from national demographic disturbance model.
 }
 \examples{
 getSimsInitial()
