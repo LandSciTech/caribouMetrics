@@ -148,6 +148,40 @@ gantt
     summarizeTrajectories     :d8, after d7, 25d
 ```
 
+
+# Getting demographic rates, trajectories, and trajectory summaries
+
+```{mermaid}
+%%| column: screen
+%%| fig.width: 20
+---
+displayMode: compact
+---
+%%{init: { "gantt": { "barGap": 20 } } }%%
+gantt
+    title Demographic rates, trajectories, and trajectory summaries from the national model. 
+    dateFormat YYYY-MM-DD
+    axisFormat %i
+    
+    section A
+    getSimsInitial :a1, 2000-01-01, 240d
+
+    section B
+    getSimsNational       :b1, 2000-01-01, 160d
+    convertTrajectories     :b2, after b1, 40d
+    summarizeCaribouPopSim     :b3, after b2, 40d
+
+    section C
+    demographicCoefficients  :c1, 2000-01-01, 40d
+    demographicRates         :c2, after c1, 40d
+    compositionBiasCorr      :c3, after c2, 40d 
+    caribouPopGrowth         :c4, after c3, 40d
+
+```
+
+Note that if a fitted disturbance scenario is not specified (either as a disturbance table or disturbance scenario parameters) getSimsInitial returns demographic summaries for different levels of anthropogenic disturbance from 1 to 100. Otherwise, outputs include demographic trajectories and summaries of those trajectories.
+
+
 \* indicates abbreviated function names for trajectoriesFromNational, compositionBiasCorrection and simulateTrajectoriesFromPosterior.
 
 Using grey "done" period to create some space between groupings of functions 
