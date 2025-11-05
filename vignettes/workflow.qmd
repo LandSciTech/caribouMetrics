@@ -44,6 +44,47 @@ gantt
     plotRes        :a3, after ay, 20d  
     
     section B
+    getScenarioDefaults  :b2, after ax, 40d
+    .                    :done, bx, after b2, 1d  
+    simulateObservations :b3, after bx, 80d
+    .                    :done, by, after b3, 1d 
+    caribouBayesianPM    :b4, after by, 101d
+    .                    :done, bz, after b4, 1d  
+    getOutputTables      :b5, after bz, 20d
+    
+    section C
+    trajectoriesFrom??  :c1, after bx, 40d
+
+    bbouMakeSummaryTable     :c5, after by, 40d
+    .                        :done, cy, after c5, 1d
+    getSimsInitial           :c6, after cy, 40d
+    
+    section D
+    getPriors    :d4, after by, 20d
+    
+```
+
+
+```{mermaid}
+%%| column: screen
+%%| fig.width: 20
+---
+displayMode: compact
+---
+%%{init: { "gantt": { "barGap": 20 } } }%%
+gantt
+    title Paper workflow
+    dateFormat YYYY-MM-DD
+    axisFormat %i
+    
+    section A
+    getSimsInitial :a1, 2000-01-01, 20d
+    .              :done, ax, after a1, 1d  
+    runScnSet      :a2, after ax, 245d
+    .              :done, ay, after a2, 1d  
+    plotRes        :a3, after ay, 20d  
+    
+    section B
     getSimsNational      :b1, 2000-01-01, 20d
     
     getScenarioDefaults  :b2, after ax, 20d
@@ -79,6 +120,7 @@ gantt
     summarizeTrajectories     :d8, after d7, 20d
     
 ```
+
 
 ```{r eval=FALSE}
 # don't run just used to create chart with new names
