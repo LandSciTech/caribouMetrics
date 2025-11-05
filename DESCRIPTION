@@ -51,6 +51,7 @@ Imports:
     rjags,
     survival,
     bboutools,
+    bboudata,
     mcmcr,
     fitdistrplus
 Collate: 
@@ -104,12 +105,11 @@ Suggests:
     pfocal,
     raster,
     shiny,
-    bboudata,
     here,
     patchwork,
     bookdown
 Remotes: LandSciTech/pfocal,
-    LandSciTech/bboudata,
+    bboudata=github::LandSciTech/bboudata,
     bboutools=github::LandSciTech/bboutoolsMultiPop
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
