@@ -142,37 +142,22 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   )[1:nrow(covariates),] # only using the first replicate but doesn't work with just 1
   
   #set bias correction term for each example population - constant over time.
-  bc = unique(subset(rateSamples,select=replicate));nr=nrow(bc)
-  bc$c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
+  bc = unique(subset(rateSamples,select=replicate))
+  nr=nrow(bc)
+  c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,
+                                   u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
+
+  popMetrics <- caribouPopSim(N0, numSteps = numYears, R_samp = rateSamples$R_bar,
+                              S_samp = rateSamples$S_bar, 
+                              interannualVar = interannualVar,
+                              onePop = TRUE,
+                              stepLength = stepLength,
+                              K = FALSE,
+                              l_R = 1e-06,
+                              c = c, 
+                              progress = FALSE)
+  popMetrics <- merge(popMetrics, rateSamples)
   
-  rateSamples$c = NULL
-  rateSamples = merge(rateSamples, bc)
-  
-  for (t in 1:numYears) {
-    
-    if (is.element("N", names(pars))) {
-      pars <- subset(pars, select = c("replicate", "N"))
-      names(pars)[names(pars) == "N"] <- "N0"
-    }
-    pars <- merge(pars, rateSamples %>% filter(time == t))
-    
-    pars <- cbind(
-      pars,
-      caribouPopGrowth(pars$N0,
-                       R_bar = pars$R_bar, S_bar = pars$S_bar,
-                       numSteps = stepLength, K = FALSE, l_R = 1e-06, c=pars$c,
-                       interannualVar=interannualVar,
-                       progress = FALSE
-      )
-    )
-    pars$id <-pars$replicate
-    
-    if (t == 1) {
-      popMetrics <- pars
-    } else {
-      popMetrics <- rbind(popMetrics, pars)
-    }
-  }
   popMetrics <- convertTrajectories(popMetrics)
   return(popMetrics)
 }
