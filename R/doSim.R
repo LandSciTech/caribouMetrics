@@ -18,8 +18,9 @@
 #'  )
 #'  outParTab
 #'
-doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_mean,R_iv_shape,S_iv_mean,S_iv_shape,
-                  scn_nm, type="logistic", addl_params){
+doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd,
+                  R_iv_mean, R_iv_shape, S_iv_mean, S_iv_shape,  
+                  scn_nm, type = "logistic", addl_params){
   #type="logistic"
 
   if(type=="beta"){

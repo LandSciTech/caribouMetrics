@@ -11,7 +11,7 @@ if(file.exists(mod_fl)){
   }
 }
 
-test_that("exData ok in simple case with one one input scenario",{
+test_that("exData ok in simple case with one input scenario",{
   #exData ok in simple case with one one input scenario
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 200, rSlopeMod = 2, sSlopeMod = 2)
@@ -38,14 +38,14 @@ test_that("exData ok in simple case with one one input scenario",{
 })
 
 test_that("sample trajectories are not returned when the national model is used", {
-  noDist <- getSimsInitial(forceUpdate = TRUE)
+  noDist <- getSimsNational(forceUpdate = TRUE)
   expect_null(noDist$samples)
 })
 
 test_that("can specify multiple disturbance scenarios", {
   scns10m <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                  projYears = 100,iAnthro=c(0,5))
-  summary2 <- getSimsInitial(replicates = 2, cPars = scns10m)$summary
+  summary2 <- getSimsNational(replicates = 2, cPars = scns10m)$summary
   
   # The first year will have both values for Anthro
   summary2 %>% filter(Year == min(Year), MetricTypeID == "lambda") %>% pull(AnthroID) %>% 
@@ -76,7 +76,7 @@ test_that("The trajectory can include disturbance", {
                                  recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),N0=1000,
                                  disturbance = data.frame(Year=seq(2010,2017),Anthro=5,fire_excl_anthro=0.2),
                                  niters=10)
-  trajs <- getSimsInitial(mod_reald,replicates = 2)$samples
+  trajs <- trajectoriesFromBayesian(mod_reald)$samples
 
   # the traj disturbance scenario overrides scns10 disturbance scenario with a warning
   expect_warning(simObs8 <- simulateObservations(scns10,trajs), "do not include the disturbance")

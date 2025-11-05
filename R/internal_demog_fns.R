@@ -79,8 +79,12 @@ summarizeCaribouPopSim <- function(pars,returnSamples=T){
                                    "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
                                    ))
   simSum=merge(simSum,names)
-  
-  simBig <- list(summary = simSum, samples = pars)
+  if (returnSamples){
+    simBig <- list(summary = simSum, samples = pars)
+  } else {
+    simBig <- list(summary = simSum)
+  }
+
   return(simBig)
 }
 
