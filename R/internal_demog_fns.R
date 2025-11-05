@@ -129,31 +129,32 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   usePrec <- "Precision" %in% names(popGrowthParsSmall$coefSamples_Survival$coefValues) &
     "Precision" %in% names(popGrowthParsSmall$coefSamples_Recruitment$coefValues)
   # at each time,  sample demographic rates and project, save results
-  # TODO: SE thinks this can be done all at once with a table of demographic rates 
+  
+  
   pars <- data.frame(N0 = N0)
+  
+  # sample rates with covariates from each timestep
+  rateSamples <- demographicRates(
+    covTable = covariates,
+    popGrowthPars = popGrowthParsSmall,
+    ignorePrecision = !usePrec,
+    returnSample = TRUE
+  )[1:nrow(covariates),] # only using the first replicate but doesn't work with just 1
+  
+  #set bias correction term for each example population - constant over time.
+  bc = unique(subset(rateSamples,select=replicate));nr=nrow(bc)
+  bc$c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
+  
+  rateSamples$c = NULL
+  rateSamples = merge(rateSamples, bc)
+  
   for (t in 1:numYears) {
-    # t=1
-    covs <- subset(covariates, time == t)
-    
-    rateSamples <- demographicRates(
-      covTable = covs,
-      popGrowthPars = popGrowthParsSmall,
-      ignorePrecision = !usePrec,
-      returnSample = TRUE
-    )[1,]
-    
-    if(t ==1){
-      #set bias correction term for each example population - constant over time.
-      bc = unique(subset(rateSamples,select=replicate));nr=nrow(bc)
-      bc$c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
-    }
-    rateSamples$c = NULL; rateSamples = merge(rateSamples, bc)
     
     if (is.element("N", names(pars))) {
       pars <- subset(pars, select = c("replicate", "N"))
       names(pars)[names(pars) == "N"] <- "N0"
     }
-    pars <- merge(pars, rateSamples)
+    pars <- merge(pars, rateSamples %>% filter(time == t))
     
     pars <- cbind(
       pars,
@@ -166,13 +167,13 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
     )
     pars$id <-pars$replicate
     
-    fds<-convertTrajectories(pars)
     if (t == 1) {
-      popMetrics <- fds
+      popMetrics <- pars
     } else {
-      popMetrics <- rbind(popMetrics, fds)
+      popMetrics <- rbind(popMetrics, pars)
     }
   }
+  popMetrics <- convertTrajectories(popMetrics)
   return(popMetrics)
 }
 
