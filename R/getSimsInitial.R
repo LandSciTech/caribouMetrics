@@ -10,19 +10,19 @@ cacheEnv <- new.env(parent = emptyenv())
 # getSimsInitial
 if(file.exists("inst/extdata/simsInitiald.rds")){
   simsInitial <- readRDS( "inst/extdata/simsInitial.rds")
-  bbouResults <- readRDS( "inst/extdata/bbouResults.rds")
+  bayesianResults <- readRDS( "inst/extdata/bayesianResults.rds")
 
   assign("simsInitial", simsInitial, envir = cacheEnv)
-  assign("bbouResults", bbouResults, envir = cacheEnv)
+  assign("bayesianResults", bayesianResults, envir = cacheEnv)
 }
 
-#' Get a set of simulation results from fitted demographic models (if bbouResults argument is provided) or from national demographic disturbance model.
+#' Get a set of simulation results from a fitted Bayesian demographic model (if bayesianResults argument is provided) or from national demographic disturbance model.
 #'
-#' @param bbouResults Optional. Fitted bboutools model and summary table created by bbouMakeSummaryTable(), 
+#' @param bayesianResults Optional. Fitted Bayesian model and summary table created by bbouMakeSummaryTable(), 
 #'   or a path to those results. If not specified trajectories will be from national demographic disturbance model.
-#'   To specify a disturbance table for the national model set bbouResults=disturbanceTable. 
+#'   To specify a disturbance table for the national model set bayesianResults=disturbanceTable. 
 #'   disturbanceTable should be a data.frame with columns Anthro, fire_excl_anthro, and Year.
-#' @param N0 initial population size. If NULL, will use information in bbouResults.
+#' @param N0 initial population size. If NULL, will use information in bayesianResults.
 #' @param replicates Number of replicate trajectories. Default "all"   
 #' @param cPars optional. Parameters for calculating composition survey bias term and/or disturbance scenario. Note that cPars can specify multiple disturbance scenarios, but only one unique composition bias scenario.
 #' @param forceUpdate logical. If the default inputs are used the result is
@@ -37,7 +37,7 @@ if(file.exists("inst/extdata/simsInitiald.rds")){
 #'  * samples: a tibble with parameter values for each scenario and replicate
 #'    1 row per MetricTypeID per replicate \* scenario. Column names are Year or
 #'     Anthro, Replicate, PopulationName, MetricTypeID and Amount. This is NULL
-#'     if bbouResults is NULL and cPars does not include an iAnthro column.
+#'     if bayesianResults is NULL and cPars does not include an iAnthro column.
 #'    
 #' 
 #' @family demography
@@ -45,7 +45,7 @@ if(file.exists("inst/extdata/simsInitiald.rds")){
 #'
 #' @examples
 #' getSimsInitial()
-getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
+getSimsInitial <- function(bayesianResults=NULL, N0=NULL, replicates = "all",
                             cPars=subset(getScenarioDefaults(),select=-iAnthro), forceUpdate = F,skipSave=F,returnSamples=T,...) {
   doSave <- FALSE
 
@@ -73,7 +73,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   }
   rmSamples<-F
 
-  if(is.null(bbouResults)){
+  if(is.null(bayesianResults)){
     if(hasAnthro){
       distPars = unique(subset(cPars,select=c(iAnthro,iFire,preYears,obsYears,projYears,obsAnthroSlope,projAnthroSlope,preYears,startYear)))
       first<-T
@@ -93,30 +93,30 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
           simDisturbance <- unique(rbind(simDisturbance,covariates))
         }
       }
-      bbouResults <- list(parTab=subset(simDisturbance,select=c(Anthro,fire_excl_anthro,Year)))
+      bayesianResults <- list(parTab=subset(simDisturbance,select=c(Anthro,fire_excl_anthro,Year)))
     }else{
       if(!is.element("Anthro",names(cPars))){
-        bbouResults <- list(parTab = eval(formals(getSimsNational)$covTableObs))
-        bbouResults$parTab$Year=bbouResults$parTab$Anthro
+        bayesianResults <- list(parTab = eval(formals(getSimsNational)$covTableObs))
+        bayesianResults$parTab$Year=bayesianResults$parTab$Anthro
       }else{
-        bbouResults <- list(parTab=unique(subset(cPars,select=c("Year","Anthro","fire_excl_anthro"))))
+        bayesianResults <- list(parTab=unique(subset(cPars,select=c("Year","Anthro","fire_excl_anthro"))))
       }
     }
   }
-  if(is.element("Anthro",names(bbouResults))){
-    bbouResults=list(parTab=bbouResults)
+  if(is.element("Anthro",names(bayesianResults))){
+    bayesianResults=list(parTab=bayesianResults)
   }
     
-  #bbouResults = bbouResultFile
-  if(is.character(bbouResults) && (length(bbouResults) == 1) ){
-    if(file.exists(bbouResults)){
-      bbouResults <- readRDS(bbouResults)
+  #bayesianResults = bbouResultFile
+  if(is.character(bayesianResults) && (length(bayesianResults) == 1) ){
+    if(file.exists(bayesianResults)){
+      bayesianResults <- readRDS(bayesianResults)
     }else{
-      stop(paste("bbouResults file not found,",bbouResults))
+      stop(paste("bayesianResults file not found,",bayesianResults))
     }
   }
 
-  if(!is.element("pop_name",names(bbouResults$parTab))){bbouResults$parTab$pop_name=NA}
+  if(!is.element("pop_name",names(bayesianResults$parTab))){bayesianResults$parTab$pop_name=NA}
   
   ccPars = unique(subset(cPars,select=c(qMin,qMax,uMin,uMax,zMin,zMax,cowMult,correlateRates)))
   if(nrow(ccPars)>1){
@@ -124,46 +124,46 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   }
   
   if(is.null(N0)){
-    if(is.element("N0",names(bbouResults$parTab))){
-      N0 <- unique(subset(bbouResults$parTab,select=c(pop_name,N0)))
+    if(is.element("N0",names(bayesianResults$parTab))){
+      N0 <- unique(subset(bayesianResults$parTab,select=c(pop_name,N0)))
     }else{
       N0 <- eval(formals(getSimsNational)$N0)
     }
   }
 
   if(length(N0)==1){
-    if(class(bbouResults$parTab) == "list"){
-      bbouResults$parTab <- as.data.frame(bbouResults$parTab)
+    if(class(bayesianResults$parTab) == "list"){
+      bayesianResults$parTab <- as.data.frame(bayesianResults$parTab)
     }
-    N0 = merge(data.frame(N0=N0),unique(subset(bbouResults$parTab,select=c(pop_name))))
+    N0 = merge(data.frame(N0=N0),unique(subset(bayesianResults$parTab,select=c(pop_name))))
   }
   N0$PopulationName = N0$pop_name
 
-  if(!is.null(bbouResults$surv_fit)){
-    if(is.element("bboufit",class(bbouResults$surv_fit))){
-      nr <- dim(bbouResults$surv_fit$samples$b0)[1]*dim(bbouResults$surv_fit$samples$b0)[2]
+  if(!is.null(bayesianResults$surv_fit)){
+    if(is.element("bboufit",class(bayesianResults$surv_fit))){
+      nr <- dim(bayesianResults$surv_fit$samples$b0)[1]*dim(bayesianResults$surv_fit$samples$b0)[2]
     }else{
-      if(sum(grepl("Sbar",colnames(bbouResults$surv_fit$samples[[1]]),fixed=T))>0){
+      if(sum(grepl("Sbar",colnames(bayesianResults$surv_fit$samples[[1]]),fixed=T))>0){
         divBy=2
       }else{
         divBy=1
       }
-      nr <- dim(bbouResults$surv_fit$samples[[1]])[1]*dim(bbouResults$surv_fit$samples[[1]])[2]*length(bbouResults$surv_fit$samples)/divBy
+      nr <- dim(bayesianResults$surv_fit$samples[[1]])[1]*dim(bayesianResults$surv_fit$samples[[1]])[2]*length(bayesianResults$surv_fit$samples)/divBy
     }
     
     popInfo <- merge(data.frame(id=seq(1:nr)),N0)
     popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),ccPars$qMin,ccPars$qMax),w=ccPars$cowMult,u=runif(nr,ccPars$uMin,ccPars$uMax),
                                            z=runif(nr,ccPars$zMin,ccPars$zMax))
     #print(paste("getSimsInitial",mean(popInfo$c)))
-    parsBar <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
+    parsBar <- caribouPopSimMCMC(popInfo,bayesianResults$recruit_fit,bayesianResults$surv_fit,progress=F,
                                  correlateRates=ccPars$correlateRates,returnExpected=T,...)
-    pars <- caribouPopSimMCMC(popInfo,bbouResults$recruit_fit,bbouResults$surv_fit,progress=F,
+    pars <- caribouPopSimMCMC(popInfo,bayesianResults$recruit_fit,bayesianResults$surv_fit,progress=F,
                               correlateRates=ccPars$correlateRates,...)
     nrow(pars);nrow(parsBar)
     pars <- merge(pars,parsBar)
     nrow(pars)
 
-    pi <- bbouResults$parTab
+    pi <- bayesianResults$parTab
     pi$PopulationName <- pi$pop_name
     pi$R_bar=NULL;pi$S_bar=NULL;pi$N0=NULL;pi$pop_name=NULL
     pars <- merge(pars,pi)
@@ -175,7 +175,7 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
     
   }else{
     if(replicates == "all"){replicates = formals(getSimsNational)$replicates}
-    covTableObs <- unique(subset(bbouResults$parTab, select=c(Anthro,fire_excl_anthro,Year)))
+    covTableObs <- unique(subset(bayesianResults$parTab, select=c(Anthro,fire_excl_anthro,Year)))
     N0s <- unique(N0$N0)
     if(length(N0s)>1){
       stop("Specify a single initial population size for trajectories from national model.")
@@ -206,9 +206,9 @@ getSimsInitial <- function(bbouResults=NULL, N0=NULL, replicates = "all",
   
   simBig <- summarizeCaribouPopSim(pars,returnSamples=returnSamples)
   
-  if(is.element("surv_fit",names(bbouResults))){
-    simBig$surv_data = bbouResults$surv_fit$data
-    simBig$recruit_data = bbouResults$recruit_fit$data
+  if(is.element("surv_fit",names(bayesianResults))){
+    simBig$surv_data = bayesianResults$surv_fit$data
+    simBig$recruit_data = bayesianResults$recruit_fit$data
     simBig$popInfo = popInfo
   }
   
