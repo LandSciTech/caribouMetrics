@@ -92,7 +92,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           recSlopeMultiplier = 1, sefSlopeMultiplier = 1,
                           rQuantile = NULL, sQuantile = NULL,
                           stepLength = 1, N0 = 1000,cowMult=1,
-                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,interannualVar = formals(caribouPopGrowth)$interannualVar) {
+                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,interannualVar = eval(formals(caribouPopGrowth)$interannualVar)) {
   # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
   # recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
   # stepLength=1;N0=1000
