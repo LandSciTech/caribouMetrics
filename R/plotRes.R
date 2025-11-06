@@ -35,7 +35,7 @@
 #'                           startYear = 2014, niters=10)
 #'
 #' out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-#'                            simInitial = getSimsInitial())
+#'                            simInitial = getSimsNational())
 #'
 #' plotRes(out_tbl, parameter = "Recruitment")
 plotRes <- function(modTables, parameter, lowBound = 0, highBound = 1,

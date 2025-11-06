@@ -75,7 +75,6 @@ Collate:
     'getOutputTables.R'
     'getPriors.R'
     'getScenarioDefaults.R'
-    'getSimsInitial.R'
     'getSimsNational.R'
     'spatialAlignFns.R'
     'inputDataDisturbance.R'
@@ -85,6 +84,7 @@ Collate:
     'plotRes.R'
     'plotSurvivalSeries.R'
     'popGrowthTableJohnsonECCC.R'
+    'prepareTrajectories.R'
     'processData.R'
     'rasterizeLineDensity.R'
     'reclassDist.R'
@@ -93,6 +93,7 @@ Collate:
     'sampleCoefs.R'
     'sampleRates.R'
     'simulateObservations.R'
+    'trajectoriesFromBayesian.R'
     'updateDisturbance.R'
 Suggests: 
     testthat (>= 2.1.0),

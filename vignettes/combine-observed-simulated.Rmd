@@ -73,9 +73,9 @@ betaLimited <- bbouMakeSummaryTable(surv_dataLimited, recruit_dataLimited, distu
 betaInformative <- bbouMakeSummaryTable(surv_data, recruit_data, disturbance=disturbance,niters=niters)
 betaLimitedHigh <- bbouMakeSummaryTable(surv_dataLimited, recruit_dataLimited, disturbance=disturbanceHigh,niters=niters)
 
-simInformative <- getSimsInitial(betaInformative)
-simLimited <- getSimsInitial(betaLimited)
-simLimitedHigh <- getSimsInitial(betaLimitedHigh)
+simInformative <- trajectoriesFromBayesian(betaInformative)
+simLimited <- trajectoriesFromBayesian(betaLimited)
+simLimitedHigh <- trajectoriesFromBayesian(betaLimitedHigh)
 ```
 
 ## Simulating additional monitoring of plausible example trajectories from fitted Bayesian models

@@ -39,7 +39,7 @@
 #'                           niters=10)
 #'
 #' outTables <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-#'                              simInitial = getSimsInitial())
+#'                              simInitial = getSimsNational())
 #'                              
 #' str(outTables, max.level = 2, give.attr = FALSE)
                              
@@ -114,7 +114,7 @@ getOutputTables <- function(caribouBayesDemogMod,
       }
       if(!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
         message("recalculating initial sims to match anthropogenic distubance scenario")
-        simInitial <- getSimsInitial(cPars=paramTable)
+        simInitial <- getSimsNational(cPars=paramTable)
         summaries <- simInitial$summary
       }
       #remove irrelevant disturbance combinations from the summaries

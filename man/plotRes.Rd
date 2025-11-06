@@ -56,7 +56,7 @@ out <- caribouBayesianPM(surv_data = simO$simSurvObs, recruit_data = simO$simRec
                           startYear = 2014, niters=10)
 
 out_tbl <- getOutputTables(out, exData = simO$exData, paramTable = simO$paramTable,
-                           simInitial = getSimsInitial())
+                           simInitial = getSimsNational())
 
 plotRes(out_tbl, parameter = "Recruitment")
 }
@@ -75,7 +75,6 @@ Caribou demography functions:
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsInitial}()},
 \code{\link{getSimsNational}()},
 \code{\link{plotSurvivalSeries}()},
 \code{\link{popGrowthTableJohnsonECCC}},

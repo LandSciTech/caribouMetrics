@@ -289,7 +289,7 @@ getBBNationalInformativePriors<-function(Anthro,fire_excl_anthro,month=T){
   recruit_dataE[,5:9][recruit_dataE[,5:9]>-1]=NA
   
   disturbance = data.frame(Year=unique(surv_dataE$Year),Anthro=Anthro,fire_excl_anthro=fire_excl_anthro)
-  modBetaEmpty <- caribouBayesianPM(surv_dataE,recruit_dataE,disturbance)
+  modBetaEmpty <- caribouBayesianPM(surv_dataE,recruit_dataE,disturbance, returnSamples = TRUE)
   
   Rbar <- subset(modBetaEmpty$result$samples,MetricTypeID=="Rbar")$Amount
   Sbar <- subset(modBetaEmpty$result$samples,MetricTypeID=="Sbar")$Amount

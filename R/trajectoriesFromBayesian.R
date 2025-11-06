@@ -1,6 +1,8 @@
 trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
                                      cPars=subset(getScenarioDefaults(),select=-iAnthro),
                                      returnSamples = TRUE, doSummary = TRUE, ...){
+  cPars <- getScenarioDefaults(cPars)
+  
   if(is.element("Anthro",names(bayesianResults))){
     message("Anthro from bayesianResults")
     bayesianResults=list(parTab=bayesianResults)
@@ -53,7 +55,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   popInfo <- merge(data.frame(id=seq(1:nr)),N0)
   popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),ccPars$qMin,ccPars$qMax),w=ccPars$cowMult,u=runif(nr,ccPars$uMin,ccPars$uMax),
                                          z=runif(nr,ccPars$zMin,ccPars$zMax))
-  #print(paste("getSimsInitial",mean(popInfo$c)))
+  
   parsBar <- caribouPopSimMCMC(popInfo,
                                bayesianResults$recruit_fit,
                                bayesianResults$surv_fit,

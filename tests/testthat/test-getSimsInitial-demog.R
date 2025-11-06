@@ -38,13 +38,25 @@ test_that("exData ok in simple case with one input scenario",{
 })
 
 test_that("sample trajectories are not returned when the national model is used", {
-  noDist <- getSimsNational(forceUpdate = TRUE)
+  noDist <- getSimsNational(forceUpdate = TRUE)$summary
+  
   expect_null(noDist$samples)
+})
+
+test_that("Can set constant Anthro", {
+  scnsConst <- getScenarioDefaults()
+  distScn <- data.frame(Anthro = 20, fire_excl_anthro = 0, Year = 1:10+2000)
+  scnsConst <- merge(scnsConst, distScn)
+  scnsConst$iAnthro <- NULL
+  distConst <- getSimsNational(cPars = scnsConst, forceUpdate = TRUE)$summary
+  
+  expect_equal(unique(distConst$AnthroID), 20)
 })
 
 test_that("can specify multiple disturbance scenarios", {
   scns10m <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                  projYears = 100,iAnthro=c(0,5))
+
   summary2 <- getSimsNational(replicates = 2, cPars = scns10m)$summary
   
   # The first year will have both values for Anthro
@@ -76,6 +88,7 @@ test_that("The trajectory can include disturbance", {
                                  recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),N0=1000,
                                  disturbance = data.frame(Year=seq(2010,2017),Anthro=5,fire_excl_anthro=0.2),
                                  niters=10)
+
   trajs <- trajectoriesFromBayesian(mod_reald)$samples
 
   # the traj disturbance scenario overrides scns10 disturbance scenario with a warning

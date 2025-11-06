@@ -56,13 +56,8 @@ if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
 # load example data
-landCoverD <- terra::rast(file.path(pthBase, "landCover.tif")) 
-  # convert PLC classes to resource types used in the model 
-landCoverD <- reclassPLC(landCoverD)
-eskerDras <- terra::rast(file.path(pthBase, "eskerTif.tif"))
-eskerDshp <- sf::read_sf(file.path(pthBase, "esker.shp"))
+landCoverD <- terra::rast(file.path(pthBase, "landCover.tif"))
 natDistD <- terra::rast(file.path(pthBase, "natDist.tif"))
-anthroDistD <-terra::rast(file.path(pthBase, "anthroDist.tif"))
 linFeatDras <- terra::rast(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD <- sf::read_sf(file.path(pthBase, "projectPoly.shp"))
 
@@ -101,24 +96,12 @@ pm <- caribouBayesianPM(simObs$simSurvObs, simObs$simRecruitObs,
                          # only set to speed up vignette. Normally keep defaults.
                          niters=100)
 
-natSim <- getSimsInitial(simObs$simDisturbance)
+natSim <- getSimsNational(disturbance = simObs$simDisturbance)
 
 pmTbls <- getOutputTables(pm, simInitial=natSim)
 plotRes(pmTbls, c("Recruitment", "Adult female survival"))
 
-# Calculate habitat RSF in Ontario's Churchill range
-carHab1 <- caribouHabitat(
-  landCover = landCoverD,
-  esker = eskerDras, 
-  natDist = natDistD, 
-  anthroDist = anthroDistD, 
-  linFeat = linFeatDras, 
-  projectPoly = projectPolyD,
-  caribouRange = "Churchill"
-)
 
-# plot the results
-plot(carHab1)
 ```
 
 ## Resources

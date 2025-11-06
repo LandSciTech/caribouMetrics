@@ -13,7 +13,7 @@ test_that("testScript still works", {
 
   ##########
   # Get full set of sims for comparison
-  simBig <- suppressWarnings(getSimsInitial(cPars = scns)) # If called with default parameters, use saved object to speed things up.
+  simBig <- suppressWarnings(getSimsNational(cPars = scns)) # If called with default parameters, use saved object to speed things up.
 
   ###############
   # Step 1: confirm appropriate prior variability in survival intercept using minimal (2) observed data points & 0 fire/anthro covariates. Controlled by priors on l.Saf, phi and sig.Saf.
@@ -48,7 +48,7 @@ test_that("bboutools scnenario with no disturbance and no additional monitoring 
     }
   }
 
-  simBig <- getSimsInitial(mod_realc)
+  simBig <- trajectoriesFromBayesian(mod_realc)
 
   ###############
   # Example scenario - no disturbance and no additional monitoring

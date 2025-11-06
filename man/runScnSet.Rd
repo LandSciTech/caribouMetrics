@@ -59,7 +59,7 @@ scns <- expand.grid(
 )
 
 eParsIn <- list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 3)
-simsIn <- getSimsInitial()
+simsIn <- getSimsNational()
 scResults <- runScnSet(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.
 }
@@ -78,7 +78,6 @@ Caribou demography functions:
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsInitial}()},
 \code{\link{getSimsNational}()},
 \code{\link{plotRes}()},
 \code{\link{plotSurvivalSeries}()},

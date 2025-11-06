@@ -3,7 +3,7 @@ test_that("works with defaults", {
   
   scns <- getScenarioDefaults(projYears = 0, obsYears = 10, collarCount = 0,
                               cowMult = 3)
-  simIni <-getSimsInitial() 
+  simIni <-getSimsNational() 
   simO <- simulateObservations(scns)
   
   out <- caribouBayesianPM(surv_data = simO$simSurvObs, 
@@ -33,7 +33,7 @@ test_that("works with defaults", {
 
 test_that("decimals in observed disturbance work", {
   # TODO: See Handle this case at simulateObservations.R#137
-  # scns <- getScenarioDefaults(projYears = 10, obsYears = 10, 
+  # scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
   #                             obsAnthroSlope = 1.5, projAnthroSlope = 5,
   #                             collarCount = 20, cowMult = 3)
   # simO <- simulateObservations(scns)
@@ -45,7 +45,7 @@ test_that("decimals in observed disturbance work", {
   # expect_message(
   #   getOutputTables(
   #     out, exData = simO$exData, paramTable = simO$paramTable,
-  #     simInitial = getSimsInitial()),
+  #     simInitial = getSimsNational()),
   #   "recalculating")
              
 })
@@ -85,7 +85,7 @@ if(file.exists(mod_flb)){
 test_that("works with simInitial",{
   #devtools::load_all()
   # Can't compare with out disturbance in the original model
-  simIni <- getSimsInitial()
+  simIni <- getSimsNational()
   
   expect_error(getOutputTables(mod_real,
                                simInitial = simIni), "Set disturbance")
