@@ -108,7 +108,8 @@ Suggests:
     shiny,
     here,
     patchwork,
-    bookdown
+    bookdown,
+    quarto
 Remotes: LandSciTech/pfocal,
     bboudata=github::LandSciTech/bboudata,
     bboutools=github::LandSciTech/bboutoolsMultiPop
