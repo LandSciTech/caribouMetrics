@@ -123,9 +123,8 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
     testTable(disturbance, c("Year", "Anthro", "fire_excl_anthro"))
   }
   #TO DO: use bboutools data test functions for survival and recruitment
-  bboudata::bbd_chk_data_survival(surv_data, allow_missing = TRUE)
+  bboudata::bbd_chk_data_survival(surv_data, allow_missing = TRUE,multi_pops=T)
   bboudata::bbd_chk_data_recruitment(recruit_data, multi_pops = TRUE)
-  
   
   # Get start and end years from data
   if(is.null(inp$startYear)){
