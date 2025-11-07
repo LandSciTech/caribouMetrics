@@ -10,6 +10,6 @@ prepareTrajectories <- function(trajs, returnSamples){
   
   trajs <- convertTrajectories(trajs)
   
-  simSum <- summarizeCaribouPopSim(trajs, returnSamples = returnSamples)
+  simSum <- summarizeTrajectories(trajs, returnSamples = returnSamples)
   return(simSum)
 }

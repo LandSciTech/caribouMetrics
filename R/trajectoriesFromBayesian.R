@@ -1,3 +1,18 @@
+#' Get trajectories from a Bayesian model result
+#' 
+#' 
+#'
+#' @param bayesianResults 
+#' @param N0 
+#' @param cPars 
+#' @param returnSamples 
+#' @param doSummary 
+#' @param ... 
+#'
+#' @returns
+#' @export
+#'
+#' @examples
 trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
                                      cPars=subset(getScenarioDefaults(),select=-iAnthro),
                                      returnSamples = TRUE, doSummary = TRUE, ...){
@@ -28,7 +43,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     if(is.element("N0",names(bayesianResults$parTab))){
       N0 <- unique(subset(bayesianResults$parTab,select=c(pop_name,N0)))
     }else{
-      N0 <- eval(formals(getSimsNational)$N0)
+      N0 <- eval(formals(trajectoriesFromNational)$N0)
     }
   }
   
@@ -56,14 +71,14 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),ccPars$qMin,ccPars$qMax),w=ccPars$cowMult,u=runif(nr,ccPars$uMin,ccPars$uMax),
                                          z=runif(nr,ccPars$zMin,ccPars$zMax))
   
-  parsBar <- caribouPopSimMCMC(popInfo,
+  parsBar <- simulateTrajectoriesFromPosterior(popInfo,
                                bayesianResults$recruit_fit,
                                bayesianResults$surv_fit,
                                progress=F,
                                correlateRates=ccPars$correlateRates,
                                returnExpected=T,
                                ...)
-  pars <- caribouPopSimMCMC(popInfo,
+  pars <- simulateTrajectoriesFromPosterior(popInfo,
                             bayesianResults$recruit_fit,
                             bayesianResults$surv_fit,
                             progress=F,

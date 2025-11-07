@@ -66,19 +66,19 @@ test_that("pop Growth matches Johnson figures", {
   covTableSim$area <- "FarNorth"
   covTableSim$Total_dist <- covTableSim$Anthro + covTableSim$fire_excl_anthro
   
-  popGrowthPars <- demographicCoefficients(500,
+  popGrowthPars <- getNationalCoefficients(500,
                                            modelVersion = "Johnson",
                                            survivalModelNumber = "M1",
                                            recruitmentModelNumber = "M4"
   )
   
-  rateSamplesLarge <- demographicRates(
+  rateSamplesLarge <- estimateNationalRates(
     covTable = covTableSim,
     popGrowthPars = popGrowthPars,
     ignorePrecision = F, returnSample = T, useQuantiles = T
   )
   
-  rateSummaries <- demographicRates(
+  rateSummaries <- estimateNationalRates(
     covTable = covTableSim, popGrowthPars = popGrowthPars,
     ignorePrecision = F, returnSample = F, useQuantiles = F
   )
@@ -134,13 +134,13 @@ test_that("pop Growth matches Johnson figures", {
   if(F){
     # reproduce comparison plots used in the MS
     library(ggplot2)
-    popGrowthParsSmall <- demographicCoefficients(35,
+    popGrowthParsSmall <- getNationalCoefficients(35,
                                                   modelVersion = "Johnson",
                                                   survivalModelNumber = "M1",
                                                   recruitmentModelNumber = "M4"
     )
     
-    rateSamples <- demographicRates(
+    rateSamples <- estimateNationalRates(
       covTable = covTableSim,
       popGrowthPars = popGrowthParsSmall,
       ignorePrecision = F, returnSample = T, useQuantiles = T

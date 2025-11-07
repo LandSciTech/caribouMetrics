@@ -12,14 +12,14 @@ covTableSim$ln_nn <- 1
 covTableSim$hqh <- 1
 
 test_that("basic example works", {
-  demCoefs <- demographicCoefficients(replicates = 10)
+  demCoefs <- getNationalCoefficients(replicates = 10)
 
-  demRates <- demographicRates(covTable = covTableSim,
+  demRates <- estimateNationalRates(covTable = covTableSim,
                                popGrowthPars = demCoefs)
   
   expect_equal(nrow(demRates), nrow(covTableSim))
   
-  demRates <- demographicRates(covTable = covTableSim,
+  demRates <- estimateNationalRates(covTable = covTableSim,
                                popGrowthPars = demCoefs,
                                returnSample = TRUE)
   
@@ -28,38 +28,38 @@ test_that("basic example works", {
 })
 
 test_that("useQuantiles works as expected", {
-  demCoefswQ <- demographicCoefficients(replicates = 10)
-  demCoefsnQ <- demographicCoefficients(replicates = 10, useQuantiles = FALSE)
+  demCoefswQ <- getNationalCoefficients(replicates = 10)
+  demCoefsnQ <- getNationalCoefficients(replicates = 10, useQuantiles = FALSE)
   
   expect_gt(length(demCoefswQ$coefSamples_Survival), 
             length(demCoefsnQ$coefSamples_Survival))
   
   # custom quantiles
-  demCoefsCustomQ <- demographicCoefficients(replicates = 10, useQuantiles = c(0.2, 0.8))
+  demCoefsCustomQ <- getNationalCoefficients(replicates = 10, useQuantiles = c(0.2, 0.8))
   
   expect_gt(demCoefswQ$coefSamples_Survival$quantiles %>% max(),
             demCoefsCustomQ$coefSamples_Survival$quantiles %>% max())
   
   # in demRates
-  demRates1 <- demographicRates(covTable = covTableSim,
+  demRates1 <- estimateNationalRates(covTable = covTableSim,
                                 popGrowthPars = demCoefswQ,
                                 returnSample = TRUE,
                                 ignorePrecision = FALSE, 
                                 useQuantiles = FALSE)
   
-  demRates2 <- demographicRates(covTable = covTableSim,
+  demRates2 <- estimateNationalRates(covTable = covTableSim,
                                 popGrowthPars = demCoefsnQ,
                                 returnSample = TRUE, 
                                 ignorePrecision = FALSE,
                                 useQuantiles = FALSE)
   
-  demRates3 <- demographicRates(covTable = covTableSim,
+  demRates3 <- estimateNationalRates(covTable = covTableSim,
                                 popGrowthPars = demCoefswQ,
                                 returnSample = TRUE,
                                 ignorePrecision = FALSE,
                                 useQuantiles = TRUE)
   
-  demRates4 <- demographicRates(covTable = covTableSim,
+  demRates4 <- estimateNationalRates(covTable = covTableSim,
                                 popGrowthPars = demCoefsnQ,
                                 returnSample = TRUE,
                                 ignorePrecision = FALSE,
@@ -82,7 +82,7 @@ test_that("useQuantiles works as expected", {
   
   # Try using different quantiles
   # in demRates
-  demRates5 <- demographicRates(covTable = covTableSim,
+  demRates5 <- estimateNationalRates(covTable = covTableSim,
                                 popGrowthPars = demCoefsnQ,
                                 returnSample = TRUE,
                                 useQuantiles = c(0.001, 0.999))
@@ -91,21 +91,21 @@ test_that("useQuantiles works as expected", {
   
   # from demCoefs
   # should override quantiles added in demRates
-  expect_warning(demRates6 <- demographicRates(covTable = covTableSim,
+  expect_warning(demRates6 <- estimateNationalRates(covTable = covTableSim,
                                 popGrowthPars = demCoefsCustomQ,
                                 returnSample = TRUE,
                                 useQuantiles = c(0.001, 0.999)))
   
   expect_gt(max(demRates4$S_bar), max(demRates6$S_bar))
   
-  expect_message(demRates6_2 <- demographicRates(covTable = covTableSim,
+  expect_message(demRates6_2 <- estimateNationalRates(covTable = covTableSim,
                                                popGrowthPars = demCoefsCustomQ,
                                                returnSample = TRUE,
                                                useQuantiles = TRUE))
   
   expect_gt(max(demRates4$S_bar), max(demRates6_2$S_bar))
   
-  demRates7 <- demographicRates(covTable = covTableSim,
+  demRates7 <- estimateNationalRates(covTable = covTableSim,
                                 popGrowthPars = demCoefsCustomQ,
                                 returnSample = TRUE)
   
@@ -116,12 +116,12 @@ test_that("useQuantiles works as expected", {
 })
 
 test_that("ignorePrecision works as expected", {
-  demCoefs <- demographicCoefficients(replicates = 10)
+  demCoefs <- getNationalCoefficients(replicates = 10)
   
-  demRates1 <- demographicRates(covTable = covTableSim,
+  demRates1 <- estimateNationalRates(covTable = covTableSim,
                                 popGrowthPars = demCoefs,
                                 ignorePrecision = TRUE)
-  demRates2 <- demographicRates(covTable = covTableSim,
+  demRates2 <- estimateNationalRates(covTable = covTableSim,
                                 popGrowthPars = demCoefs,
                                 ignorePrecision = FALSE)
   
@@ -133,8 +133,8 @@ test_that("all model versions in table work", {
     filter(modelVersion == "Johnson")
   
   allJmods <- purrr::map2(versJ$modelVersion, versJ$ModelNumber,
-                          ~demographicRates(covTableSim, 
-                                            demographicCoefficients(10, modelVersion = .x, 
+                          ~estimateNationalRates(covTableSim, 
+                                            getNationalCoefficients(10, modelVersion = .x, 
                                                                     survivalModelNumber = .y, 
                                                                     recruitmentModelNumber = .y),
                                             ignorePrecision = TRUE))
@@ -147,8 +147,8 @@ test_that("all model versions in table work", {
   #   distinct(ModelNumber)
   # 
   # allECmods <- purrr::map(versEC$ModelNumber,
-  #                         ~demographicRates(covTableSim, 
-  #                                           demographicCoefficients(10, modelVersion = "ECCC", 
+  #                         ~estimateNationalRates(covTableSim, 
+  #                                           getNationalCoefficients(10, modelVersion = "ECCC", 
   #                                                                   survivalModelNumber = "M1", 
   #                                                                   recruitmentModelNumber = .x),
   #                                           ignorePrecision = TRUE))
@@ -156,25 +156,25 @@ test_that("all model versions in table work", {
 
 test_that("demoCoefs has reasonable errors", {
   # wrong model #
-  expect_error(demographicCoefficients(10, modelVersion = "Johnson", 
+  expect_error(getNationalCoefficients(10, modelVersion = "Johnson", 
                                          survivalModelNumber = "M7"), 
                 "Model not available")
 
   
-  # multiple models getCoefs can take multiple models but demCoefs can't
-  expect_error(demographicCoefficients(10, modelVersion = c("ECCC", "Johnson"), 
+  # multiple models subsetNationalCoefs can take multiple models but demCoefs can't
+  expect_error(getNationalCoefficients(10, modelVersion = c("ECCC", "Johnson"), 
                           survivalModelNumber = c("M1", "M2"), 
                           recruitmentModelNumber = c("M3", "M2")),
                "Multiple models")
 })
 
 test_that("demoRates has reasonable errors",{
-  expect_error(demographicRates(rename(covTableSim, ant = Anthro),
-                   demographicCoefficients(10)),
+  expect_error(estimateNationalRates(rename(covTableSim, ant = Anthro),
+                   getNationalCoefficients(10)),
                "Covariates missing")
   
-  expect_error(demographicRates(covTableSim,
-                                demographicCoefficients(10, modelVersion = "Johnson", 
+  expect_error(estimateNationalRates(covTableSim,
+                                getNationalCoefficients(10, modelVersion = "Johnson", 
                                                         recruitmentModelNumber = "M5")),
                "Missing precision")
 })
@@ -183,9 +183,9 @@ test_that("demoRates has reasonable errors",{
 # changed. Update the stored result if the change was expected.
 resultCompare <- readRDS(file.path("data", "demog_resultCompare.rds"))
 
-demCoefs <- demographicCoefficients(replicates = 10)
+demCoefs <- getNationalCoefficients(replicates = 10)
 
-demRates <- demographicRates(covTable = covTableSim,
+demRates <- estimateNationalRates(covTable = covTableSim,
                              popGrowthPars = demCoefs)
 
 # To update

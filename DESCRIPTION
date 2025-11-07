@@ -57,32 +57,30 @@ Imports:
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'
-    'bbouMakeSummaryTable.R'
+    'bayesianScenariosWorkflow.R'
+    'bayesianTrajectoryWorkflow.R'
     'betaMakeSummaryTable.R'
+    'betaNationalPriors.R'
     'betaSample.R'
-    'caribouBayesianPM.R'
     'caribouMetrics-package.R'
     'caribouPopGrowth.R'
-    'caribouPopSimMCMC.R'
     'combineLinFeat.R'
+    'compareTrajectories.R'
     'compositionBiasCorrection.R'
     'dataPrepFns.R'
-    'demographicCoefficients.R'
     'demographicProjectionApp.R'
-    'demographicRates.R'
     'disturbanceMetrics.R'
-    'doSim.R'
-    'getCoefs.R'
-    'getOutputTables.R'
-    'getPriors.R'
+    'estimateBayesianRates.R'
+    'estimateNationalRate.R'
+    'estimateNationalRates.R'
+    'getNationalCoefficients.R'
     'getScenarioDefaults.R'
-    'getSimsNational.R'
     'spatialAlignFns.R'
     'inputDataDisturbance.R'
     'internal_demog_fns.R'
     'loadSpatialInputs.R'
     'movingWindowAvg.R'
-    'plotRes.R'
+    'plotCompareTrajectories.R'
     'plotSurvivalSeries.R'
     'popGrowthTableJohnsonECCC.R'
     'prepareTrajectories.R'
@@ -90,11 +88,13 @@ Collate:
     'rasterizeLineDensity.R'
     'reclassDist.R'
     'results.R'
-    'runScnSet.R'
-    'sampleCoefs.R'
-    'sampleRates.R'
+    'sampleNationalCoefs.R'
     'simulateObservations.R'
+    'simulateTrajectoriesFromPosterior.R'
+    'subsetNationalCoefs.R'
     'trajectoriesFromBayesian.R'
+    'trajectoriesFromNational.R'
+    'trajectoriesFromSummary.R'
     'updateDisturbance.R'
 Suggests: 
     testthat (>= 2.1.0),
@@ -108,8 +108,7 @@ Suggests:
     shiny,
     here,
     patchwork,
-    bookdown,
-    quarto
+    bookdown
 Remotes: LandSciTech/pfocal,
     bboudata=github::LandSciTech/bboudata,
     bboutools=github::LandSciTech/bboutoolsMultiPop

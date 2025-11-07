@@ -107,11 +107,6 @@ if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
 #>   method               from 
 #>   as.mcmc.nlists       nlist
 #>   as.mcmc.list.mcarray rjags
-#> ! Adding files missing in collate:
-#>   'C:/Users/EndicottS/Documents/gitprojects/caribouMetrics/R/old_getSimsNational.R',
-#>   'C:/Users/EndicottS/Documents/gitprojects/caribouMetrics/R/prepareTrajectories.R',
-#>   and
-#>   'C:/Users/EndicottS/Documents/gitprojects/caribouMetrics/R/trajectoriesFromBayesian.R'
 #> Warning: package 'testthat' was built under R version 4.4.3
 
 pthBase <- system.file("extdata", package = "caribouMetrics")
@@ -136,27 +131,27 @@ disturb <- disturbanceMetrics(landCover = landCoverD,
 disturb_tbl <- results(disturb)
 
 # Calculate demographic rates
-demCoefs <- demographicCoefficients(replicates = 10)
+demCoefs <- getNationalCoefficients(replicates = 10)
 
-demRates <- demographicRates(covTable = disturb_tbl,
+demRates <- estimateNationalRates(covTable = disturb_tbl,
                              popGrowthPars = demCoefs)
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05111222
+#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.04371567
 #>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7463604 0.9273805 0.1813372 0.08822883 0.05179534 0.3273509
+#> 1 0.7745046 0.9145213 0.1813372 0.09400579 0.05235174 0.3466292
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
 popGrow
-#>     N0    lambda   lambdaE   N       R_t       X_t       S_t n_recruits
-#> 1 2000 0.9314206 0.9247487 483 0.2199248 0.1099624 0.8987474         53
+#>     N0    lambda   lambdaE   N       R_t        X_t       S_t n_recruits
+#> 1 2000 0.8995998 0.9247487 241 0.1119087 0.05595437 0.8821323         12
 #>   surviving_adFemales
-#> 1                 430
+#> 1                 229
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(
@@ -167,7 +162,7 @@ params <- getScenarioDefaults(
 simObs <- simulateObservations(params)
 
 #devtools::load_all()
-pm <- caribouBayesianPM(simObs$simSurvObs, simObs$simRecruitObs, 
+pm <- bayesianTrajectoryWorkflow(simObs$simSurvObs, simObs$simRecruitObs, 
                          simObs$simDisturbance,
                          # only set to speed up vignette. Normally keep defaults.
                          niters=100)
@@ -193,10 +188,11 @@ pm <- caribouBayesianPM(simObs$simSurvObs, simObs$simRecruitObs,
 #> Warning in max(simBig$samples$Year): no non-missing arguments to max; returning
 #> -Inf
 
-natSim <- getSimsNational(disturbance = simObs$simDisturbance)
+natSim <- trajectoriesFromNational(disturbance = simObs$simDisturbance)
+#> Warning: Setting expected survival S_bar to be between l_S and h_S.
 
-pmTbls <- getOutputTables(pm, simInitial=natSim)
-plotRes(pmTbls, c("Recruitment", "Adult female survival"))
+pmTbls <- compareTrajectories(pm, simInitial=natSim)
+plotCompareTrajectories(pmTbls, c("Recruitment", "Adult female survival"))
 #> $Recruitment
 ```
 

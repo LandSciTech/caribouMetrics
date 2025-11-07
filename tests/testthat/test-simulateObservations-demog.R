@@ -1,10 +1,10 @@
 test_that("default works", {
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowMult = 3,
                               collarCount = 50)
-  ss <- getSimsNational(cPars=scns)
+  ss <- trajectoriesFromNational(cPars=scns)
   
   expect_is(ss,"list")
-  #see test-getOutputTables-demog.R for more thorough check that outputs are as expected.
+  #see test-compareTrajectories-demog.R for more thorough check that outputs are as expected.
 })
 
 test_that("multiple scenarios not allowed",{
@@ -18,7 +18,7 @@ test_that("multiple scenarios not allowed",{
 })
 
 # TODO: add test for non-default popGrow table should use testPopGrowTable
-# internally, do same in getPriors
+# internally, do same in betaNationalPriors
 
 test_that("collarCount and cowCount behave", {
   scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 1)

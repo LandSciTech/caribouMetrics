@@ -8,11 +8,11 @@
 #' @returns convertTrajectories: formatted tables
 #' @export
 #'
-#' @rdname caribouPopSimMCMC
+#' @rdname simulateTrajectoriesFromPosterior
 #' 
 
 convertTrajectories<-function(pars){
-  #converts output from caribouPopSim to alternate form
+  #converts output from simPopsOverTime to alternate form
   #pars = trajectories
   if(!is.element("lamPercentile",names(pars))){
     pars$lamPercentile=NA
@@ -54,12 +54,12 @@ convertTrajectories<-function(pars){
 #' @param pars 
 #' @param returnSamples 
 #'
-#' @returns summarizeCaribouPopSim:
+#' @returns summarizeTrajectories:
 #' @export
 #' @family demography
 #'
-#' @rdname caribouPopSimMCMC
-summarizeCaribouPopSim <- function(pars,returnSamples=T){
+#' @rdname simulateTrajectoriesFromPosterior
+summarizeTrajectories <- function(pars,returnSamples=T){
 
   if(is.element("AnthroID",names(pars))){  
     simSum <- pars  %>%
@@ -117,7 +117,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
     sefSlopeMultiplier * growthTab$Value[(growthTab$Coefficient == "Anthro") &
                                            (growthTab$responseVariable == "femaleSurvival")]
   
-  popGrowthParsSmall <- demographicCoefficients(
+  popGrowthParsSmall <- getNationalCoefficients(
     2,
     modelVersion = "Johnson",
     survivalModelNumber = survivalModelNumber,
@@ -138,7 +138,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   pars <- data.frame(N0 = N0)
   
   # sample rates with covariates from each timestep
-  rateSamples <- demographicRates(
+  rateSamples <- estimateNationalRates(
     covTable = covariates,
     popGrowthPars = popGrowthParsSmall,
     ignorePrecision = !usePrec,
@@ -151,7 +151,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,
                                    u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
 
-  popMetrics <- caribouPopSim(N0, numSteps = numYears, R_samp = rateSamples$R_bar,
+  popMetrics <- simPopsOverTime(N0, numSteps = numYears, R_samp = rateSamples$R_bar,
                               S_samp = rateSamples$S_bar, 
                               interannualVar = interannualVar,
                               onePop = TRUE,
@@ -477,7 +477,7 @@ savePersistentCache <- function(env = cacheEnv){
   obj_nms <- ls(envir = env)
   lapply(obj_nms, function(x){
     obj <- get(x, envir=env)
-    saveRDS(obj, paste0("inst/extdata/", x, ".rds"))
+    saveRDS(obj, paste0("results/", x, ".rds"))
   })
   return(invisible())
 }
