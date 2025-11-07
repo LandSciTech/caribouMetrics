@@ -148,7 +148,6 @@ Caribou demography functions:
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsInitial}()},
 \code{\link{getSimsNational}()},
 \code{\link{plotRes}()},
 \code{\link{plotSurvivalSeries}()},

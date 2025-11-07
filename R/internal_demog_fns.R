@@ -79,8 +79,12 @@ summarizeCaribouPopSim <- function(pars,returnSamples=T){
                                    "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
                                    ))
   simSum=merge(simSum,names)
-  
-  simBig <- list(summary = simSum, samples = pars)
+  if (returnSamples){
+    simBig <- list(summary = simSum, samples = pars)
+  } else {
+    simBig <- list(summary = simSum)
+  }
+
   return(simBig)
 }
 
@@ -92,7 +96,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           recSlopeMultiplier = 1, sefSlopeMultiplier = 1,
                           rQuantile = NULL, sQuantile = NULL,
                           stepLength = 1, N0 = 1000,cowMult=1,
-                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,interannualVar = formals(caribouPopGrowth)$interannualVar) {
+                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,interannualVar = eval(formals(caribouPopGrowth)$interannualVar)) {
   # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
   # recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
   # stepLength=1;N0=1000
@@ -129,50 +133,36 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   usePrec <- "Precision" %in% names(popGrowthParsSmall$coefSamples_Survival$coefValues) &
     "Precision" %in% names(popGrowthParsSmall$coefSamples_Recruitment$coefValues)
   # at each time,  sample demographic rates and project, save results
-  # TODO: SE thinks this can be done all at once with a table of demographic rates 
+  
+  
   pars <- data.frame(N0 = N0)
-  for (t in 1:numYears) {
-    # t=1
-    covs <- subset(covariates, time == t)
-    
-    rateSamples <- demographicRates(
-      covTable = covs,
-      popGrowthPars = popGrowthParsSmall,
-      ignorePrecision = !usePrec,
-      returnSample = TRUE
-    )[1,]
-    
-    if(t ==1){
-      #set bias correction term for each example population - constant over time.
-      bc = unique(subset(rateSamples,select=replicate));nr=nrow(bc)
-      bc$c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
-    }
-    rateSamples$c = NULL; rateSamples = merge(rateSamples, bc)
-    
-    if (is.element("N", names(pars))) {
-      pars <- subset(pars, select = c("replicate", "N"))
-      names(pars)[names(pars) == "N"] <- "N0"
-    }
-    pars <- merge(pars, rateSamples)
-    
-    pars <- cbind(
-      pars,
-      caribouPopGrowth(pars$N0,
-                       R_bar = pars$R_bar, S_bar = pars$S_bar,
-                       numSteps = stepLength, K = FALSE, l_R = 1e-06, c=pars$c,
-                       interannualVar=interannualVar,
-                       progress = FALSE
-      )
-    )
-    pars$id <-pars$replicate
-    
-    fds<-convertTrajectories(pars)
-    if (t == 1) {
-      popMetrics <- fds
-    } else {
-      popMetrics <- rbind(popMetrics, fds)
-    }
-  }
+  
+  # sample rates with covariates from each timestep
+  rateSamples <- demographicRates(
+    covTable = covariates,
+    popGrowthPars = popGrowthParsSmall,
+    ignorePrecision = !usePrec,
+    returnSample = TRUE
+  )[1:nrow(covariates),] # only using the first replicate but doesn't work with just 1
+  
+  #set bias correction term for each example population - constant over time.
+  bc = unique(subset(rateSamples,select=replicate))
+  nr=nrow(bc)
+  c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,
+                                   u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
+
+  popMetrics <- caribouPopSim(N0, numSteps = numYears, R_samp = rateSamples$R_bar,
+                              S_samp = rateSamples$S_bar, 
+                              interannualVar = interannualVar,
+                              onePop = TRUE,
+                              stepLength = stepLength,
+                              K = FALSE,
+                              l_R = 1e-06,
+                              c = c, 
+                              progress = FALSE)
+  popMetrics <- merge(popMetrics, rateSamples)
+  
+  popMetrics <- convertTrajectories(popMetrics)
   return(popMetrics)
 }
 

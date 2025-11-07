@@ -99,7 +99,7 @@ As shown by @hughes2025 the prior means and 95% prior predictive intervals from 
 disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 5,
                           fire_excl_anthro = 1)
 betaPrior <- caribouBayesianPM(surv_dataNone, recruit_dataNone, disturbance)
-simNational <- getSimsInitial(disturbance)
+simNational <- getSimsNational(disturbance = disturbance)
 out_tbls <- getOutputTables(betaPrior, simInitial = simNational)
 typeLabs <- c("Beta", "National")
 ```
@@ -127,7 +127,7 @@ if (useSaved & file.exists(bbouPriorFile)) {
     saveRDS(bbouPrior, bbouPriorFile)
   }
 }
-simBbouPrior <- getSimsInitial(bbouPrior)
+simBbouPrior <- trajectoriesFromBayesian(bbouPrior)
 out_tbls <- getOutputTables(betaPrior, simInitial = simBbouPrior)
 typeLabs <- c("Beta", "Bbou")
 ```
@@ -156,7 +156,7 @@ if (useSaved & file.exists(bbouPriorNationalFile)) {
     saveRDS(bbouPriorNational, bbouPriorNationalFile)
   }
 }
-simBbouPriorNational <- getSimsInitial(bbouPriorNational)
+simBbouPriorNational <- trajectoriesFromBayesian(bbouPriorNational)
 out_tbls <- getOutputTables(betaPrior, simInitial = simBbouPriorNational)
 typeLabs <- c("Beta", "Bbou National")
 ```
@@ -193,7 +193,7 @@ if (useSaved & file.exists(bbouInformativeFile)) {
     saveRDS(bbouInformative, bbouInformativeFile)
   }
 }
-simBbouInformative <- getSimsInitial(bbouInformative)
+simBbouInformative <- trajectoriesFromBayesian(bbouInformative)
 out_tbls <- getOutputTables(betaInformative, simInitial = simBbouInformative)
 typeLabs <- c("Beta", "Bbou")
 ```
@@ -232,7 +232,7 @@ if (useSaved & file.exists(bbouInformativeFile)) {
     saveRDS(bbouInformative, bbouInformativeFile)
   }
 }
-simBbouInformative <- getSimsInitial(bbouInformative)
+simBbouInformative <- trajectoriesFromBayesian(bbouInformative)
 out_tbls <- getOutputTables(betaAnthroChange, simInitial = simBbouInformative)
 typeLabs <- c("Beta", "Bbou")
 ```
@@ -265,7 +265,7 @@ if (useSaved & file.exists(bbouLimitedFile)) {
     saveRDS(bbouLimited, bbouLimitedFile)
   }
 }
-simBbouLimited <- getSimsInitial(bbouLimited)
+simBbouLimited <- trajectoriesFromBayesian(bbouLimited)
 out_tbls <- getOutputTables(betaLimited, simInitial = simBbouLimited)
 typeLabs <- c("Beta", "Bbou")
 ```

@@ -18,8 +18,9 @@
 #'  )
 #'  outParTab
 #'
-doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_mean,R_iv_shape,S_iv_mean,S_iv_shape,
-                  scn_nm, type="logistic", addl_params){
+doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd,
+                  R_iv_mean, R_iv_shape, S_iv_mean, S_iv_shape,  
+                  scn_nm, type = "logistic", addl_params){
   #type="logistic"
 
   if(type=="beta"){
@@ -68,28 +69,55 @@ doSim <- function(numSteps, numPops, N0, R_bar, S_bar, R_sd, S_sd, R_iv_mean,R_i
   return(bind_rows(mod_mean, mod_samps))
 }
 
-caribouPopSim <- function(N0, numSteps, R_samp, S_samp, interannualVar, ...) {
+#' Simulate caribou population over time
+#'
+#' If `onePop = FALSE` then `R_samp` and `S_samp` are constant rates over time
+#' and their length is the number of populations. If `onePop = TRUE` then
+#' `R_samp` and `S_samp` represent the rate at each time step and there length 
+#' should be equal to `numSteps`
+#'
+#' @param N0
+#' @param numSteps
+#' @param R_samp
+#' @param S_samp
+#' @param interannualVar
+#' @param onePop
+#' @param ...
+#'
+#' @returns
+#' @noRd
+caribouPopSim <- function(N0, numSteps, R_samp, S_samp, interannualVar, onePop = FALSE, stepLength = 1, ...) {
+  if(onePop){
+    stopifnot(length(R_samp) == numSteps)
+  }
   for (ts in 1:numSteps) {
+    if(onePop){
+      R_use <- R_samp[ts]
+      S_use <- S_samp[ts]
+    } else {
+      R_use <- R_samp
+      S_use <- S_samp
+    }
     if (ts == 1) {
       if(length(N0) == 1){
-        N0 <- rep(N0, length(R_samp))
+        N0 <- rep(N0, length(R_use))
       } else if (length(N0) == 2) {
         N0 <- seq(from = N0[1], to = N0[2], by  = 1) %>% round() %>% 
-          sample(size = length(R_samp), replace = TRUE)
+          sample(size = length(R_use), replace = TRUE)
       }
-      
+
       out <- caribouPopGrowth(N0,
-                              numSteps = 1,
+                              numSteps = stepLength,
                               interannualVar = interannualVar,
-                              R_bar = R_samp, S_bar = S_samp, ...
+                              R_bar = R_use, S_bar = S_use, ...
       )
       out$id <- seq(1:nrow(out))
       out$time <- ts
       outBit <- out
     } else {
       outBit <- caribouPopGrowth(outBit$N,
-                                 numSteps = 1, interannualVar = interannualVar,
-                                 R_bar = R_samp, S_bar = S_samp, ...
+                                 numSteps = stepLength, interannualVar = interannualVar,
+                                 R_bar = R_use, S_bar = S_use, ...
       )
       outBit$id <- seq(1, nrow(outBit))
       outBit$time <- ts

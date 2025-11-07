@@ -11,8 +11,12 @@ getSimsNational(
     NA),
   useQuantiles = NULL,
   populationGrowthTable = NULL,
-  cPars = getScenarioDefaults(),
-  interannualVar = eval(formals(caribouPopGrowth)$interannualVar)
+  cPars = subset(getScenarioDefaults(), select = -iAnthro),
+  interannualVar = eval(formals(caribouPopGrowth)$interannualVar),
+  disturbance = NULL,
+  skipSave = FALSE,
+  forceUpdate = FALSE,
+  doSummary = TRUE
 )
 }
 \arguments{
@@ -72,7 +76,6 @@ Caribou demography functions:
 \code{\link{getOutputTables}()},
 \code{\link{getPriors}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsInitial}()},
 \code{\link{plotRes}()},
 \code{\link{plotSurvivalSeries}()},
 \code{\link{popGrowthTableJohnsonECCC}},

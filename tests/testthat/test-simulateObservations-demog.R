@@ -1,7 +1,7 @@
 test_that("default works", {
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowMult = 3,
                               collarCount = 50)
-  ss <- getSimsInitial(cPars=scns)
+  ss <- getSimsNational(cPars=scns)
   
   expect_is(ss,"list")
   #see test-getOutputTables-demog.R for more thorough check that outputs are as expected.

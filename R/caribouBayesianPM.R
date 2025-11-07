@@ -236,7 +236,8 @@ caribouBayesianPM <- function(surv_data = bboudata::bbousurv_a,
                                      return_mcmc=T,shiny_progress=F,niters=niters,nthin=nthin)
   
   #get output trajectories
-  rr = getSimsInitial(bbouResults,cPars=priors,skipSave=T,returnSamples=returnSamples,...)  
+  rr <- trajectoriesFromBayesian(bbouResults, cPars = priors,
+                                    returnSamples = returnSamples, ...)
   
   return(list(result = rr, 
               inData = list(disturbanceIn = disturbance)))
