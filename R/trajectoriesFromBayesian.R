@@ -11,7 +11,7 @@
 #'
 #' @returns
 #' @export
-#'
+#' @family demography
 #' @examples
 trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
                                      cPars=subset(getScenarioDefaults(),select=-iAnthro),
