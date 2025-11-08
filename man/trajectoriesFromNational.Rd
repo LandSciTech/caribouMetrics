@@ -80,6 +80,7 @@ Caribou demography functions:
 \code{\link{plotSurvivalSeries}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{simulateObservations}()},
+\code{\link{trajectoriesFromBayesian}()},
 \code{\link{trajectoriesFromSummary}()}
 }
 \concept{demography}

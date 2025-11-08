@@ -39,6 +39,7 @@ Caribou demography functions:
 \code{\link{plotCompareTrajectories}()},
 \code{\link{plotSurvivalSeries}()},
 \code{\link{simulateObservations}()},
+\code{\link{trajectoriesFromBayesian}()},
 \code{\link{trajectoriesFromNational}()},
 \code{\link{trajectoriesFromSummary}()}
 }
