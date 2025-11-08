@@ -1,0 +1,105 @@
+# Update an existing DisturbanceMetrics Object
+
+Update a DisturbanceMetrics object in order to avoid reprocessing parts
+of the data that have not changed. New data is supplied as a named list
+and the object is updated depending on the elements provided in the
+list.
+
+## Usage
+
+``` r
+updateDisturbance(distMet, newData, linBuffMethod = "raster", isPercent = TRUE)
+```
+
+## Arguments
+
+- distMet:
+
+  DisturbanceMetrics object
+
+- newData:
+
+  named list of objects to be used to update distMet. Potential names
+  are: natDist, anthroDist, and linFeat.
+
+- linBuffMethod:
+
+  character. The method used to buffer linear features if they are
+  supplied as sf lines. The default is "raster" in which case they are
+  rasterized then buffered using a moving window method. If "sf" then
+  the lines are buffered with st_buffer and then rasterized. Either way
+  points are included in the raster output.
+
+- isPercent:
+
+  logical. Should the results be returned as a percentage?
+
+## Value
+
+A DisturbanceMetrics Object see
+[`DisturbanceMetrics-class()`](https://landscitech.github.io/caribouMetrics/dev/reference/DisturbanceMetrics-class.md)
+
+## Details
+
+If `newData` contains only linFeat or anthroDist then the new data will
+be combined with the existing data in the DisturbanceMetrics object to
+determine the buffered anthropogenic disturbance
+
+If `newData` contains only natDist then only Fire is updated.
+
+## See also
+
+[`DisturbanceMetrics-class()`](https://landscitech.github.io/caribouMetrics/dev/reference/DisturbanceMetrics-class.md)
+for information on the object returned and
+[`disturbanceMetrics()`](https://landscitech.github.io/caribouMetrics/dev/reference/disturbanceMetrics.md)
+for making a new DisturbanceMetrics object.
+
+Functions for calculating disturbance:
+[`DisturbanceMetrics-class`](https://landscitech.github.io/caribouMetrics/dev/reference/DisturbanceMetrics-class.md),
+[`disturbanceMetrics()`](https://landscitech.github.io/caribouMetrics/dev/reference/disturbanceMetrics.md),
+[`loadSpatialInputs()`](https://landscitech.github.io/caribouMetrics/dev/reference/loadSpatialInputs.md),
+[`rasterizeLineDensity()`](https://landscitech.github.io/caribouMetrics/dev/reference/rasterizeLineDensity.md),
+[`reclassDist()`](https://landscitech.github.io/caribouMetrics/dev/reference/reclassDist.md),
+[`results()`](https://landscitech.github.io/caribouMetrics/dev/reference/results.md)
+
+## Examples
+
+``` r
+# create example rasters
+lc <- terra::rast(xmin = 0, xmax = 10, ymin = 0, ymax = 10, 
+                     ncols = 10, nrow = 10, crs = "EPSG:5070")
+nd <- lc
+nd[1:3, 1:3] <- 1
+ad <- lc
+ad[3:5, 3:5] <- 1
+lc[] <- 1
+
+# create sf objects
+lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10, 10), 
+                                                            ncol = 2, byrow = TRUE))),
+                              crs = 5070))
+projPol <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(ad)))
+
+# calculate disturbance 
+dm <- disturbanceMetrics(landCover = lc,
+                         linFeat = lf,
+                         natDist = nd,
+                         anthroDist = ad,
+                         projectPoly = projPol,
+                         padFocal = TRUE,
+                         bufferWidth = 1)
+#> buffering anthropogenic disturbance
+#> calculating disturbance metrics
+                   
+# new linear features
+lf2 <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10, 10),
+                                                             ncol = 2, byrow = TRUE)),
+                                    sf::st_linestring(matrix(c(0, 9, 9, 10),
+                                                             ncol = 2, byrow = TRUE)),
+                                    sf::st_linestring(matrix(c(10, 0, 5, 5),
+                                                             ncol = 2, byrow = TRUE))),
+                              crs = 5070))
+dm2 <- updateDisturbance(dm, newData = list(linFeat = lf2))
+#> buffering anthropogenic disturbance
+#> calculating disturbance metrics
+```

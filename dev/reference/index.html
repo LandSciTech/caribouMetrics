@@ -43,8 +43,7 @@
 
       <div class="section-desc"><p>Overview of the package.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -60,139 +59,156 @@
 
       <div class="section-desc"><p>Functions for predicting boreal caribou demographic rates and projecting population growth</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
 
       <dl><dt>
 
-          <code><a href="bbouMakeSummaryTable.html">bbouMakeSummaryTable()</a></code>
+          <code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>
 
         </dt>
-        <dd>Create summary table of demographic rates from survival and recruitment surveys</dd>
-      </dl><dl><dt>
+        <dd>Run the Bayesian population model for multiple parameter sets</dd>
 
-          <code><a href="caribouBayesianPM.html">caribouBayesianPM()</a></code>
+        <dt>
+
+          <code><a href="bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow()</a></code>
 
         </dt>
         <dd>Bayesian population model for boreal caribou</dd>
-      </dl><dl><dt>
+
+        <dt>
+
+          <code><a href="bbouNationalPriors.html">bbouNationalPriors()</a></code>
+
+        </dt>
+        <dd>Get informative priors for bboutools logistic models</dd>
+
+        <dt>
+
+          <code><a href="betaNationalPriors.html">betaNationalPriors()</a></code>
+
+        </dt>
+        <dd>Get prior parameters for Bayesian beta population model</dd>
+
+        <dt>
 
           <code><a href="caribouPopGrowth.html">caribouPopGrowth()</a></code>
 
         </dt>
         <dd>Caribou demographic model</dd>
-      </dl><dl><dt>
 
-          <code><a href="caribouPopSimMCMC.html">caribouPopSimMCMC()</a></code> <code><a href="caribouPopSimMCMC.html">convertTrajectories()</a></code> <code><a href="caribouPopSimMCMC.html">summarizeCaribouPopSim()</a></code>
+        <dt>
+
+          <code><a href="compareTrajectories.html">compareTrajectories()</a></code>
 
         </dt>
-        <dd>Get a set of simulation results from fitted demographic models in raw form Assumes that rec_pred and surv_pred each include the same years and populations.TO DO: check this.</dd>
-      </dl><dl><dt>
+        <dd>Summarize results of Bayesian demographic model in tables</dd>
+
+        <dt>
 
           <code><a href="compositionBiasCorrection.html">compositionBiasCorrection()</a></code>
 
         </dt>
         <dd>Calculate bias correction term for calf:cow composition survey.</dd>
-      </dl><dl><dt>
 
-          <code><a href="demographicCoefficients.html">demographicCoefficients()</a></code> <code><a href="demographicCoefficients.html">getCoefs()</a></code> <code><a href="demographicCoefficients.html">sampleCoefs()</a></code>
-
-        </dt>
-        <dd>Sample demographic regression model coefficients</dd>
-      </dl><dl><dt>
+        <dt>
 
           <code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code>
 
         </dt>
         <dd>Run the Bayesian caribou demographic projection app</dd>
-      </dl><dl><dt>
 
-          <code><a href="demographicRates.html">demographicRates()</a></code> <code><a href="demographicRates.html">sampleRates()</a></code>
+        <dt>
 
-        </dt>
-        <dd>Sample expected survival and recruitment rates</dd>
-      </dl><dl><dt>
-
-          <code><a href="doSim.html">doSim()</a></code>
+          <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>
 
         </dt>
-        <dd>Do multiple caribouPopGrowth runs</dd>
-      </dl><dl><dt>
+        <dd>Create summary table of demographic rates from survival and recruitment surveys</dd>
 
-          <code><a href="getBBNationalInformativePriors.html">getBBNationalInformativePriors()</a></code>
+        <dt>
 
-        </dt>
-        <dd>Get informative priors for bboutools logistic models</dd>
-      </dl><dl><dt>
-
-          <code><a href="getOutputTables.html">getOutputTables()</a></code>
+          <code><a href="estimateNationalRates.html">estimateNationalRate()</a></code> <code><a href="estimateNationalRates.html">estimateNationalRates()</a></code>
 
         </dt>
-        <dd>Summarize results of Bayesian demographic model in tables</dd>
-      </dl><dl><dt>
+        <dd>Sample demographic rates</dd>
 
-          <code><a href="getPriors.html">getPriors()</a></code>
+        <dt>
+
+          <code><a href="getNationalCoefficients.html">getNationalCoefficients()</a></code> <code><a href="getNationalCoefficients.html">sampleNationalCoefs()</a></code> <code><a href="getNationalCoefficients.html">subsetNationalCoefs()</a></code>
 
         </dt>
-        <dd>Get prior parameters for Bayesian beta population model</dd>
-      </dl><dl><dt>
+        <dd>Sample demographic regression model coefficients</dd>
+
+        <dt>
 
           <code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code>
 
         </dt>
         <dd>Default parameters for simulation of example demographic trajectories.</dd>
-      </dl><dl><dt>
 
-          <code><a href="getSimsInitial.html">getSimsInitial()</a></code>
+        <dt>
 
-        </dt>
-        <dd>Get a set of simulation results from fitted demographic models (if bbouResults argument is provided) or from national demographic disturbance model.</dd>
-      </dl><dl><dt>
-
-          <code><a href="getSimsNational.html">getSimsNational()</a></code>
-
-        </dt>
-        <dd>Get a set of simulation results from the national demographic model</dd>
-      </dl><dl><dt>
-
-          <code><a href="plotRes.html">plotRes()</a></code>
+          <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>
 
         </dt>
         <dd>Plot Bayesian population model results</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plotSurvivalSeries.html">plotSurvivalSeries()</a></code>
 
         </dt>
         <dd>Plot survival time series</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code>
 
         </dt>
         <dd>Population growth model table for Johnson models</dd>
-      </dl><dl><dt>
 
-          <code><a href="runScnSet.html">runScnSet()</a></code>
-
-        </dt>
-        <dd>Run the Bayesian population model for multiple parameter sets</dd>
-      </dl><dl><dt>
+        <dt>
 
           <code><a href="simulateObservations.html">simulateObservations()</a></code>
 
         </dt>
         <dd>Simulate observations</dd>
+
+        <dt>
+
+          <code><a href="simulateTrajectoriesFromPosterior.html">convertTrajectories()</a></code> <code><a href="simulateTrajectoriesFromPosterior.html">summarizeTrajectories()</a></code> <code><a href="simulateTrajectoriesFromPosterior.html">simulateTrajectoriesFromPosterior()</a></code>
+
+        </dt>
+        <dd>Format trajectory tables</dd>
+
+        <dt>
+
+          <code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>
+
+        </dt>
+        <dd>Get trajectories from a Bayesian model result</dd>
+
+        <dt>
+
+          <code><a href="trajectoriesFromNational.html">trajectoriesFromNational()</a></code>
+
+        </dt>
+        <dd>Get a set of simulation results from the national demographic model</dd>
+
+        <dt>
+
+          <code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code>
+
+        </dt>
+        <dd>Do multiple caribouPopGrowth runs</dd>
       </dl></div><div class="section level2">
       <h2 id="summarizing-disturbance">Summarizing disturbance<a class="anchor" aria-label="anchor" href="#summarizing-disturbance"></a></h2>
 
       <div class="section-desc"><p>Functions for determining the percentage of a landscape that has been disturbed</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -203,37 +219,43 @@
 
         </dt>
         <dd>Disturbance Metrics class</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="disturbanceMetrics.html">disturbanceMetrics()</a></code>
 
         </dt>
         <dd>Calculate metrics of natural and anthropogenic disturbance</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="loadSpatialInputs.html">loadSpatialInputs()</a></code>
 
         </dt>
         <dd>Load Spatial Input Data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="rasterizeLineDensity.html">rasterizeLineDensity()</a></code>
 
         </dt>
         <dd>Rasterize line density</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="reclassDist.html">reclassDist()</a></code>
 
         </dt>
         <dd>Reclassify natural disturbance and harvest layers</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="results.html">results()</a></code>
 
         </dt>
         <dd>Extract results</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="updateDisturbance.html">updateDisturbance()</a></code>
 
@@ -249,7 +271,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

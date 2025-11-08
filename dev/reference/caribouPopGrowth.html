@@ -232,34 +232,34 @@ Applications, 33(3), p.e2816. <a href="https://doi.org/10.1002/eap.2816" class="
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Caribou demography functions:
-<code><a href="bbouMakeSummaryTable.html">bbouMakeSummaryTable</a>()</code>,
-<code><a href="caribouBayesianPM.html">caribouBayesianPM</a>()</code>,
-<code><a href="caribouPopSimMCMC.html">caribouPopSimMCMC</a>()</code>,
-<code><a href="compositionBiasCorrection.html">compositionBiasCorrection</a>()</code>,
-<code><a href="demographicCoefficients.html">demographicCoefficients</a>()</code>,
-<code><a href="demographicProjectionApp.html">demographicProjectionApp</a>()</code>,
-<code><a href="demographicRates.html">demographicRates</a>()</code>,
-<code><a href="doSim.html">doSim</a>()</code>,
-<code><a href="getBBNationalInformativePriors.html">getBBNationalInformativePriors</a>()</code>,
-<code><a href="getOutputTables.html">getOutputTables</a>()</code>,
-<code><a href="getPriors.html">getPriors</a>()</code>,
-<code><a href="getScenarioDefaults.html">getScenarioDefaults</a>()</code>,
-<code><a href="getSimsInitial.html">getSimsInitial</a>()</code>,
-<code><a href="getSimsNational.html">getSimsNational</a>()</code>,
-<code><a href="plotRes.html">plotRes</a>()</code>,
-<code><a href="plotSurvivalSeries.html">plotSurvivalSeries</a>()</code>,
+<code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>,
+<code><a href="bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow()</a></code>,
+<code><a href="bbouNationalPriors.html">bbouNationalPriors()</a></code>,
+<code><a href="betaNationalPriors.html">betaNationalPriors()</a></code>,
+<code><a href="compareTrajectories.html">compareTrajectories()</a></code>,
+<code><a href="compositionBiasCorrection.html">compositionBiasCorrection()</a></code>,
+<code><a href="simulateTrajectoriesFromPosterior.html">convertTrajectories()</a></code>,
+<code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code>,
+<code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>,
+<code><a href="estimateNationalRates.html">estimateNationalRate()</a></code>,
+<code><a href="getNationalCoefficients.html">getNationalCoefficients()</a></code>,
+<code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code>,
+<code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
+<code><a href="plotSurvivalSeries.html">plotSurvivalSeries()</a></code>,
 <code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code>,
-<code><a href="runScnSet.html">runScnSet</a>()</code>,
-<code><a href="simulateObservations.html">simulateObservations</a>()</code></p></div>
+<code><a href="simulateObservations.html">simulateObservations()</a></code>,
+<code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>,
+<code><a href="trajectoriesFromNational.html">trajectoriesFromNational()</a></code>,
+<code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">caribouPopGrowth</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">2</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    N0   lambda lambdaE  N       R_t       X_t       S_t n_recruits</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 100 0.842615   0.875 71 0.3131807 0.1565903 0.7307242         12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    N0    lambda lambdaE  N       R_t       X_t       S_t n_recruits</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 100 0.8831761   0.875 78 0.6674352 0.3337176 0.7342619         18</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   surviving_adFemales</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  60</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -272,7 +272,7 @@ Applications, 33(3), p.e2816. <a href="https://doi.org/10.1002/eap.2816" class="
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

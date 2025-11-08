@@ -113,25 +113,25 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Caribou demography functions:
-<code><a href="bbouMakeSummaryTable.html">bbouMakeSummaryTable</a>()</code>,
-<code><a href="caribouBayesianPM.html">caribouBayesianPM</a>()</code>,
-<code><a href="caribouPopGrowth.html">caribouPopGrowth</a>()</code>,
-<code><a href="caribouPopSimMCMC.html">caribouPopSimMCMC</a>()</code>,
-<code><a href="demographicCoefficients.html">demographicCoefficients</a>()</code>,
-<code><a href="demographicProjectionApp.html">demographicProjectionApp</a>()</code>,
-<code><a href="demographicRates.html">demographicRates</a>()</code>,
-<code><a href="doSim.html">doSim</a>()</code>,
-<code><a href="getBBNationalInformativePriors.html">getBBNationalInformativePriors</a>()</code>,
-<code><a href="getOutputTables.html">getOutputTables</a>()</code>,
-<code><a href="getPriors.html">getPriors</a>()</code>,
-<code><a href="getScenarioDefaults.html">getScenarioDefaults</a>()</code>,
-<code><a href="getSimsInitial.html">getSimsInitial</a>()</code>,
-<code><a href="getSimsNational.html">getSimsNational</a>()</code>,
-<code><a href="plotRes.html">plotRes</a>()</code>,
-<code><a href="plotSurvivalSeries.html">plotSurvivalSeries</a>()</code>,
+<code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>,
+<code><a href="bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow()</a></code>,
+<code><a href="bbouNationalPriors.html">bbouNationalPriors()</a></code>,
+<code><a href="betaNationalPriors.html">betaNationalPriors()</a></code>,
+<code><a href="caribouPopGrowth.html">caribouPopGrowth()</a></code>,
+<code><a href="compareTrajectories.html">compareTrajectories()</a></code>,
+<code><a href="simulateTrajectoriesFromPosterior.html">convertTrajectories()</a></code>,
+<code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code>,
+<code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>,
+<code><a href="estimateNationalRates.html">estimateNationalRate()</a></code>,
+<code><a href="getNationalCoefficients.html">getNationalCoefficients()</a></code>,
+<code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code>,
+<code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
+<code><a href="plotSurvivalSeries.html">plotSurvivalSeries()</a></code>,
 <code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code>,
-<code><a href="runScnSet.html">runScnSet</a>()</code>,
-<code><a href="simulateObservations.html">simulateObservations</a>()</code></p></div>
+<code><a href="simulateObservations.html">simulateObservations()</a></code>,
+<code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>,
+<code><a href="trajectoriesFromNational.html">trajectoriesFromNational()</a></code>,
+<code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -144,8 +144,8 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-in"><span>                          u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          approx <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.0840980 1.0918337 0.9708000 0.8537950 1.1375330 0.9632762 1.2211709</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.9204665 0.9971273 1.0773428</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.1334480 0.9627959 1.0332743 1.0670685 1.0466662 1.0402957 1.0572060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.9184121 1.0181569 0.9123904</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">compositionBiasCorrection</span><span class="op">(</span>w <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>                          q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.6</span><span class="op">)</span>,</span></span>
@@ -153,9 +153,9 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-in"><span>                          z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          approx <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       w     m       v    sig2     mu</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.06 0.006<span style="text-decoration: underline;">19</span> 0.005<span style="text-decoration: underline;">48</span> 0.056<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       w     m       v    sig2       mu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6 0.998 0.001<span style="text-decoration: underline;">84</span> 0.001<span style="text-decoration: underline;">85</span> -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">44</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -169,7 +169,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

@@ -80,13 +80,13 @@ al. (2022)</a>. Demographic rates vary with disturbance as estimated by
 <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>. A
 detailed description of the model is provided in <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. (2025)
 Section 2.4</a>.</p>
-<p><code><a href="../reference/demographicCoefficients.html">demographicCoefficients()</a></code> selects the regression
+<p><code><a href="../reference/getNationalCoefficients.html">getNationalCoefficients()</a></code> selects the regression
 coefficient values and standard errors for the desired model version
 (see <code>popGrowthTableJohnsonECCC</code> for options) and then
 samples coefficients from these Gaussian distributions for each
 replicate population.</p>
-<p>Next <code><a href="../reference/demographicRates.html">demographicRates()</a></code> is used to apply the sampled
-coefficients to the disturbance covariates to calculate expected
+<p>Next <code><a href="../reference/estimateNationalRates.html">estimateNationalRates()</a></code> is used to apply the
+sampled coefficients to the disturbance covariates to calculate expected
 recruitment and survival according to the beta regression models
 estimated by Johnson et al. (2020). Each population is optionally
 assigned to quantiles of the Beta error distributions for survival and
@@ -124,7 +124,7 @@ is a list containing the coefficients and standard errors from the
 national model as well as the sampled coefficients and the quantiles
 that they have been assigned to.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getNationalCoefficients.html">getNationalCoefficients</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefSamples</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       Intercept        Anthro Precision</span></span>
@@ -155,7 +155,7 @@ landscape, so the projected population growth rate for most sample
 populations is below 1, but uncertainty in the model means that a few
 sample populations persist.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">disturbance</span>,</span>
 <span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,</span>
 <span>  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -180,7 +180,7 @@ sample populations persist.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Anthro"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="caribouDemography_files/figure-html/plotSimpleDemography-1.png" width="768"></p>
+<p><img src="caribouDemography_files/figure-html/plotSimpleDemography-1.png" class="r-plt" width="768"></p>
 </div>
 <div class="section level2">
 <h2 id="effects-of-disturbance-on-demographic-rates">Effects of disturbance on demographic rates<a class="anchor" aria-label="anchor" href="#effects-of-disturbance-on-demographic-rates"></a>
@@ -198,7 +198,7 @@ fire and anthropogenic disturbance.</p>
 sample of 500 is used to calculate averages, while the sample of 35 is
 used to show variability among populations.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getNationalCoefficients.html">getNationalCoefficients</a></span><span class="op">(</span></span>
 <span>  <span class="fl">500</span>,</span>
 <span>  modelVersion <span class="op">=</span> <span class="st">"Johnson"</span>,</span>
 <span>  survivalModelNumber <span class="op">=</span> <span class="st">"M1"</span>,</span>
@@ -206,7 +206,7 @@ used to show variability among populations.</p>
 <span>  populationGrowthTable <span class="op">=</span> <span class="va">popGrowthTableJohnsonECCC</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">popGrowthParsSmall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span></span>
+<span><span class="va">popGrowthParsSmall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getNationalCoefficients.html">getNationalCoefficients</a></span><span class="op">(</span></span>
 <span>  <span class="fl">35</span>,</span>
 <span>  modelVersion <span class="op">=</span> <span class="st">"Johnson"</span>,</span>
 <span>  survivalModelNumber <span class="op">=</span> <span class="st">"M1"</span>,</span>
@@ -227,7 +227,7 @@ the uncertainty across the samples. We do this twice, once with
 considering the variance among populations around the National mean in
 addition to the uncertainty about the coefficient estimates.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
 <span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthParsSmall</span>,</span>
 <span>  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -235,7 +235,7 @@ addition to the uncertainty about the coefficient estimates.</p>
 <span>  useQuantiles <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">rateSummaries</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span><span class="va">rateSummaries</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
 <span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,</span>
 <span>  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -243,7 +243,7 @@ addition to the uncertainty about the coefficient estimates.</p>
 <span>  useQuantiles <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">rateSummariesIgnorePrecision</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span><span class="va">rateSummariesIgnorePrecision</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
 <span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,</span>
 <span>  ignorePrecision <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -259,7 +259,7 @@ variation captured by the precision parameter of the Beta regression
 model <a href="https://doi.org/10.1080/0266476042000214501" class="external-link">Ferrari and
 Cribari-Neto 2004</a>. The bands are the 2.5% and 97.5% quantiles of 500
 sample parameter values.
-<img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-1.png" width="768"><img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-2.png" width="768"></p>
+<img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-1.png" class="r-plt" width="768"><img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-2.png" class="r-plt" width="768"></p>
 </div>
 <div class="section level3">
 <h3 id="parameter-uncertainty-and-precision">Parameter uncertainty and precision<a class="anchor" aria-label="anchor" href="#parameter-uncertainty-and-precision"></a>
@@ -277,7 +277,7 @@ beta distribution as disturbance changes.</p>
 <span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre>
-<p><img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
+<p><img src="caribouDemography_files/figure-html/withPrecision-1.png" class="r-plt" width="768"><img src="caribouDemography_files/figure-html/withPrecision-2.png" class="r-plt" width="768"></p>
 </div>
 </div>
 <div class="section level2">
@@ -302,7 +302,7 @@ or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816"
 <span>  <span class="va">covariates</span> <span class="op">&lt;-</span> <span class="va">disturbance</span></span>
 <span>  <span class="va">covariates</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">&lt;-</span> <span class="va">covariates</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">AnthroChange</span> <span class="op">*</span> <span class="op">(</span><span class="va">t</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span>  <span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>    covTable <span class="op">=</span> <span class="va">covariates</span>,</span>
 <span>    popGrowthPars <span class="op">=</span> <span class="va">popGrowthParsSmall</span>,</span>
 <span>    ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -336,7 +336,7 @@ or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816"
 <span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeID</span><span class="op">)</span></span>
 <span><span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span><span class="op">)</span></span>
 <span><span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">popMetrics</span>, <span class="op">!</span><span class="va">MetricTypeID</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="caribouDemography_files/figure-html/changeOverTime-1.png" width="768"></p>
+<p><img src="caribouDemography_files/figure-html/changeOverTime-1.png" class="r-plt" width="768"></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -376,7 +376,7 @@ Ecological Applications 33:e2816.<br><a href="https://doi.org/10.1002/eap.2816" 
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
