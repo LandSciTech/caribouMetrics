@@ -121,6 +121,12 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
     if(!is.element("Year",names(simRange))){
       
     }
+    
+    missing=setdiff(facetVars,names(simRange))
+    if(length(missing)>0){
+      mergeBit <- unique(subset(df,select=missing))
+      simRange <- merge(simRange,mergeBit)
+    }
     nameSel <- c(c("Year", "Mean", "lower", "upper", "Type"), facetVars)
     df <- rbind(subset(df, select = nameSel), subset(simRange, select = nameSel))
     df$grp <- df$Type
