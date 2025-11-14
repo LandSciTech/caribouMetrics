@@ -91,10 +91,10 @@ bbouNationalPriors(Anthro=50,fire=5)
 #> 
 #> $priors_recruitment
 #>      b0_mu      b0_sd 
-#> -1.7335919  0.5599547 
+#> -1.7340885  0.5647783 
 #> 
 #> $priors_survival
 #>     b0_mu     b0_sd 
-#> 4.3339322 0.4996344 
+#> 4.3241711 0.5118371 
 #> 
 ```

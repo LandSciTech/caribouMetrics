@@ -8,8 +8,6 @@ Get a set of simulation results from the national demographic model
 trajectoriesFromNational(
   replicates = 1000,
   N0 = 1000,
-  covTableObs = expand.grid(Anthro = seq(0, 100, by = 1), fire_excl_anthro = 0, Year =
-    NA),
   useQuantiles = NULL,
   populationGrowthTable = NULL,
   cPars = subset(getScenarioDefaults(), select = -iAnthro),
@@ -17,7 +15,8 @@ trajectoriesFromNational(
   disturbance = NULL,
   skipSave = FALSE,
   forceUpdate = FALSE,
-  doSummary = TRUE
+  doSummary = TRUE,
+  returnSamples = TRUE
 )
 ```
 
@@ -30,14 +29,6 @@ trajectoriesFromNational(
 - N0:
 
   initial population size
-
-- covTableObs:
-
-  data frame with Anthro,fire_excl_anthro and Year numeric columns. Each
-  is vector of numbers between 0 and 100 representing the percentage of
-  the landscape covered by anthropogenic disturbance buffered by 500 m,
-  and the percentage covered by fire that does not overlap anthropogenic
-  disturbance.
 
 - useQuantiles:
 
@@ -70,6 +61,14 @@ trajectoriesFromNational(
   precision parameters (R_phi, S_phi), or random effects parameters from
   a logistic glmm (R_annual, S_annual). Set to `FALSE` to ignore
   interannual variability.
+
+- disturbance:
+
+  data frame with Anthro,fire_excl_anthro and Year numeric columns. Each
+  is vector of numbers between 0 and 100 representing the percentage of
+  the landscape covered by anthropogenic disturbance buffered by 500 m,
+  and the percentage covered by fire that does not overlap anthropogenic
+  disturbance.
 
 ## Value
 

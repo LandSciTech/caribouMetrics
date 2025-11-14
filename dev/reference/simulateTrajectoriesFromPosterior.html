@@ -88,11 +88,11 @@ Assumes that rec_pred and surv_pred each include the same years and populations.
 
 
 <dt id="arg-rec-pred">rec_pred<a class="anchor" aria-label="anchor" href="#arg-rec-pred"></a></dt>
-<dd><p>results returned by <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment()</a></code> or <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_calf_cow_ratio.html" class="external-link">bboutools::bb_predict_calf_cow_ratio()</a></code> functions of bboutools R package, or recruit_fit returned by <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>.</p></dd>
+<dd><p>results returned by <code>bb_fit_recruitment()</code> or <code>bb_predict_calf_cow_ratio()</code> functions of bboutools R package, or recruit_fit returned by <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>.</p></dd>
 
 
 <dt id="arg-surv-pred">surv_pred<a class="anchor" aria-label="anchor" href="#arg-surv-pred"></a></dt>
-<dd><p>bboufit object return by <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival()</a></code> or <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival.html" class="external-link">bboutools::bb_predict_survival()</a></code> functions of bboutools R package, or surv_fit returned by <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>.</p></dd>
+<dd><p>bboufit object return by <code>bb_fit_survival()</code> or <code>bb_predict_survival()</code> functions of bboutools R package, or surv_fit returned by <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>.</p></dd>
 
 
 <dt id="arg-inityear">initYear<a class="anchor" aria-label="anchor" href="#arg-inityear"></a></dt>
@@ -104,7 +104,7 @@ Assumes that rec_pred and surv_pred each include the same years and populations.
 
 
 <dt id="arg-returnexpected">returnExpected<a class="anchor" aria-label="anchor" href="#arg-returnexpected"></a></dt>
-<dd><p>logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_calf_cow_ratio.html" class="external-link">bboutools::bb_predict_calf_cow_ratio()</a></code>/<code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival.html" class="external-link">bboutools::bb_predict_survival()</a></code> results.</p></dd>
+<dd><p>logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are <code>bb_predict_calf_cow_ratio()</code>/<code>bb_predict_survival()</code> results.</p></dd>
 
 
 <dt id="arg-c">c<a class="anchor" aria-label="anchor" href="#arg-c"></a></dt>
@@ -199,7 +199,7 @@ Assumes that rec_pred and surv_pred each include the same years and populations.
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName  : chr [1:567000] "A" "A" "A" "A" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Timestep        : num [1:567000] 1989 1989 1989 1989 1989 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID    : chr [1:567000] "c" "survival" "recruitment" "X" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Amount          : num [1:567000] NA 0.809 0.247 0.123 NA ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Amount          : num [1:567000] NA 0.9275 0.1154 0.0577 NA ...</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>

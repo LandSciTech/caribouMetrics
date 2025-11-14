@@ -49,8 +49,6 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">trajectoriesFromNational</span><span class="op">(</span></span>
 <span>  replicates <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  N0 <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  covTableObs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, fire_excl_anthro <span class="op">=</span> <span class="fl">0</span>, Year <span class="op">=</span></span>
-<span>    <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>  useQuantiles <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  populationGrowthTable <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cPars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="fu"><a href="getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span><span class="op">)</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">iAnthro</span><span class="op">)</span>,</span>
@@ -58,7 +56,8 @@
 <span>  disturbance <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  skipSave <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  forceUpdate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  doSummary <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  doSummary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  returnSamples <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -72,13 +71,6 @@
 
 <dt id="arg-n-">N0<a class="anchor" aria-label="anchor" href="#arg-n-"></a></dt>
 <dd><p>initial population size</p></dd>
-
-
-<dt id="arg-covtableobs">covTableObs<a class="anchor" aria-label="anchor" href="#arg-covtableobs"></a></dt>
-<dd><p>data frame with Anthro,fire_excl_anthro and Year numeric columns. Each is vector of numbers between 0 and 100
-representing the percentage of the landscape covered by anthropogenic
-disturbance buffered by 500 m, and the percentage covered by fire that does
-not overlap anthropogenic disturbance.</p></dd>
 
 
 <dt id="arg-usequantiles">useQuantiles<a class="anchor" aria-label="anchor" href="#arg-usequantiles"></a></dt>
@@ -110,6 +102,13 @@ variability parameters. These can be either coefficients of variation
 (R_CV, S_CV), beta precision parameters (R_phi, S_phi),
 or random effects parameters from a logistic glmm (R_annual, S_annual).
 Set to <code>FALSE</code> to ignore interannual variability.</p></dd>
+
+
+<dt id="arg-disturbance">disturbance<a class="anchor" aria-label="anchor" href="#arg-disturbance"></a></dt>
+<dd><p>data frame with Anthro,fire_excl_anthro and Year numeric columns. Each is vector of numbers between 0 and 100
+representing the percentage of the landscape covered by anthropogenic
+disturbance buffered by 500 m, and the percentage covered by fire that does
+not overlap anthropogenic disturbance.</p></dd>
 
 </dl></div>
     <div class="section level2">
