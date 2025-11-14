@@ -36,13 +36,6 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     i18n <- list(t = function(x)paste0(x))
   }
   
-  if(length(unique(surv_data$Year))<5){
-    stop("At least 5 years of survival data are needed to estimate interannual variation using bboutools")
-  }
-  
-  if(length(unique(recruit_data$Year))<5){
-    stop("At least 5 years of survival data are needed to estimate interannual variation using bboutools")
-  }
 
   # MCMC settings - (bboutools default: 1000 MCMC samples from 3 chains, number of )
   nc <- 3      # number of chains
@@ -61,6 +54,15 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     
     return(ret)
   }
+  
+  if(length(unique(surv_data$Year))<5){
+    stop("At least 5 years of survival data are needed to estimate interannual variation using bboutools")
+  }
+  
+  if(length(unique(recruit_data$Year))<5){
+    stop("At least 5 years of survival data are needed to estimate interannual variation using bboutools")
+  }
+  
   if(shiny_progress && !rlang::is_installed("shiny")){
     warning("Package shiny is not installed. Setting shiny_progress to FALSE")
     shiny_progress <- FALSE

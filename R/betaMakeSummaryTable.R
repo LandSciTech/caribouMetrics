@@ -1,5 +1,6 @@
 betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,nt,ni,nb){
-  #Note: using bboutools to check and structure the data without fitting the models...
+  
+  #Note: using bboutools to check and structure the data without fitting the models...0
   surv_fit_in <- bboutools::bb_fit_survival(surv_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
   surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb)
   
@@ -37,12 +38,12 @@ betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
   names(surv_priors)<- c("b0_mu","b0_sd","b1_mu","b1_sd","sig.S.Prior1","sig.S.Prior2")
 
   datal <- c(datal,surv_priors)
-  
+
   ###### Survival Model ######
   surv_mod_fl <- tempfile(pattern = "survival_model_", fileext = ".txt")
   sink(surv_mod_fl)  # assign model file name #
-  cat("
-
+  if(surv_priors$sig.S.Prior2>0){
+    cat("
 model {
   for(i in 1:nObs) {
     eSurvival[i] <- AnnualSurvival[Annual[i],PopulationID[i]]
@@ -52,7 +53,7 @@ model {
   for (i in 1:nAnnual) {
     for (k in 1:nPops) {
       mu.S[i,k] <- max(0.01,min(0.99,(46*exp(b0[k] + b1[k]*anthro[i,k])-0.5)/45))
-      sig.S[i,k] <- min(cv.S[k]*mu.S[i,k],0.99*pow(mu.S[i,k]*(1-mu.S[i,k]),0.5))
+      sig.S[i,k] <- min(cv.S[k]*mu.S[i,k],0.99*pow(mu.S[i,k]*(1-mu.S[i,k]),0.5)) \n 
       alpha[i,k] <- ((1-mu.S[i,k])/pow(sig.S[i,k],2) - 1/mu.S[i,k]) * pow(mu.S[i,k],2)
       beta[i,k] <- alpha[i,k] * (1/mu.S[i,k] - 1)
       Sbar[i,k] <- alpha[i,k]/(alpha[i,k]+beta[i,k])
@@ -68,9 +69,34 @@ model {
   }
 
 }
-
 ", fill = TRUE)
-  sink()
+  }else{
+    datal$sig.S.Prior1=NULL;datal$sig.S.Prior2=NULL
+    cat("
+model {
+  for(i in 1:nObs) {
+    eSurvival[i] <- AnnualSurvival[Annual[i],PopulationID[i]]
+    Mortalities[i] ~ dbin(1 - eSurvival[i], StartTotal[i])
+  }
+
+  for (i in 1:nAnnual) {
+    for (k in 1:nPops) {
+      mu.S[i,k] <- max(0.01,min(0.99,(46*exp(b0[k] + b1[k]*anthro[i,k])-0.5)/45))
+      Sbar[i,k] <- mu.S[i,k]
+      Survival[i,k] <- mu.S[i,k]
+      AnnualSurvival[i,k] <- pow(Survival[i,k],1/nMonths)
+    }
+  }
+
+  for (k in 1:nPops) {
+    b0[k] ~ dnorm(b0_mu, 1/pow(b0_sd,2))
+    b1[k] ~ dnorm(b1_mu, 1/pow(b1_sd,2))
+  }
+
+}
+", fill = TRUE)
+}
+    sink()
   
   # Setting parameters - setting parameters that you want to monitor
   params = c("Sbar","Survival")
@@ -147,6 +173,8 @@ betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
   ###### Recruitment Model ######
   rec_mod_fl <- tempfile(pattern = "recruit_model_", fileext = ".txt")
   sink(rec_mod_fl)  # observation model can be connected by CaribouYear[i] 
+  
+  if(rec_priors$sig.R.Prior2>0){
   cat("
 
 model {
@@ -179,6 +207,37 @@ model {
 }
   
 ", fill = TRUE)
+  }else{
+    datal$sig.R.Prior1=NULL;datal$sig.R.Prior2=NULL
+    
+    cat("
+
+model {
+  for (i in 1:nObs){
+    FemaleYearlings[i] ~ dbin(sex_ratio, Yearlings[i])
+    Cows[i] ~ dbin(adult_female_proportion, CowsBulls[i])
+    OtherAdultsFemales[i] ~ dbin(adult_female_proportion, UnknownAdults[i])
+    AdultsFemales[i] <- max(FemaleYearlings[i] + Cows[i] + OtherAdultsFemales[i], 1)
+    Calves[i] ~ dbin(Recruitment[Annual[i],PopulationID[i]], AdultsFemales[i])
+  }
+
+  for (i in 1:nAnnual) {
+    for (k in 1:nPops) {
+      mu.R[i,k] <- max(0.01,min(0.99,exp(b0[k] + b1[k]*anthro[i,k] + b2[k]*fire[i,k])))
+      Rbar[i,k] <- mu.R[i,k]
+      Recruitment[i,k] <- mu.R[i,k]
+    }
+  }
+
+  #adult_female_proportion ~ dbeta(adult_female_proportion_alpha, adult_female_proportion_beta)
+  for (k in 1:nPops) {
+    b0[k] ~ dnorm(b0_mu, 1/pow(b0_sd,2))
+    b1[k] ~ dnorm(b1_mu, 1/pow(b1_sd,2))
+    b2[k] ~ dnorm(b2_mu, 1/pow(b2_sd,2))
+  }
+}
+", fill = TRUE)
+}
   sink()
   
   ######## Define data, parameters, initials and settings #####

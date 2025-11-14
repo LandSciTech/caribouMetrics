@@ -439,6 +439,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   if(!is.element("Bulls",names(simRecruitObs))){
     simRecruitObs$Bulls <- simRecruitObs$CowsBulls-simRecruitObs$Cows
   }
+
+  simSurvObs$StartTotal[(simSurvObs$StartTotal==0)&is.na(simSurvObs$MortalitiesCertain)]<-1
   retList = list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
                 simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
                  exData = trajectories, paramTable = paramTable)

@@ -193,7 +193,7 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   #add missing surv yrs
   surv_data_add = expand.grid(Year=union(distYrs,surv_data$Year),Month=unique(surv_data$Month),PopulationName=unique(surv_data$PopulationName))
   surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
-  surv_data$StartTotal[is.na(surv_data$StartTotal)]=0
+  surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
   
   #dups = table(subset(surv_data,select=c(Year,Month,PopulationName)))
   

@@ -19,7 +19,7 @@ if(file.exists("results/simsInitial.rds")){
 
 #' Get a set of simulation results from the national demographic model
 #'
-#' @param covTableObs data frame with Anthro,fire_excl_anthro and Year numeric columns. Each is vector of numbers between 0 and 100
+#' @param disturbance data frame with Anthro,fire_excl_anthro and Year numeric columns. Each is vector of numbers between 0 and 100
 #'   representing the percentage of the landscape covered by anthropogenic
 #'   disturbance buffered by 500 m, and the percentage covered by fire that does
 #'   not overlap anthropogenic disturbance. 
@@ -36,7 +36,6 @@ if(file.exists("results/simsInitial.rds")){
 #' @examples
 #' trajectoriesFromNational()
 trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
-                            covTableObs =  expand.grid(Anthro=seq(0,100,by=1),fire_excl_anthro=0,Year=NA),
                             useQuantiles  = NULL,
                             populationGrowthTable  = NULL,
                             cPars = subset(getScenarioDefaults(),select=-iAnthro),
@@ -44,7 +43,8 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
                             disturbance = NULL,
                             skipSave = FALSE,
                             forceUpdate = FALSE,
-                            doSummary = TRUE) {
+                            doSummary = TRUE,
+                            returnSamples = TRUE) {
   # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;
   # useQuantiles =NULL
 
@@ -73,6 +73,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
       doSave <- TRUE
     }
   }
+  hasYear <- T
   if(is.null(disturbance)){
     if(hasAnthro){
       message("hasAnthro")
@@ -97,14 +98,19 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
     }else{
       if(!is.element("Anthro",names(cPars))){
         message("no anthro using default from trajectoriesFromNational")
-        
+        covTableObs <- expand.grid(Anthro=seq(0,100,by=1),fire_excl_anthro=0,Year=NA)
         covTableObs$Year <- covTableObs$Anthro
+        hasYear <- F
       }else{
         message("Anthro in cPars")
         covTableObs <- unique(subset(cPars, select = c("Year","Anthro","fire_excl_anthro")))
       }
     }
   }else {
+    if(!is.element("Year",names(disturbance))){
+      hasYear <- F
+      disturbance$Year <- disturbance$Anthro
+    }
     covTableObs <- disturbance %>% select(Year, Anthro, fire_excl_anthro)
   }
   ccPars = unique(subset(cPars,select=c(qMin,qMax,uMin,uMax,zMin,zMax,cowMult,correlateRates)))
@@ -114,7 +120,6 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   if(length(N0)>1){
     stop("Specify a single initial population size for trajectories from national model.")
   }
-
 
   # original trajectoriesFromNational #============================================
 
@@ -157,17 +162,16 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
 
 
   if(doSummary){
-    simBig <- prepareTrajectories(pars, returnSamples = FALSE)
-
-    if(max(simBig$summary$Year)<=100){simBig$summary$Year=NULL}
-    
-    simBig$summary <- subset(simBig$summary,MetricTypeID!="N")
-
+    if(!hasYear){
+      simBig <- prepareTrajectories(pars, returnSamples = FALSE)
+      simBig$summary$Year = NULL
+      simBig$summary <- subset(simBig$summary,MetricTypeID!="N")
+    }else{
+      simBig <- prepareTrajectories(pars, returnSamples = returnSamples)
+    }
   }else {
     simBig <- pars
   }
-
-
 
   # Note this must be the last thing before return or the first and cached
   # results won't match

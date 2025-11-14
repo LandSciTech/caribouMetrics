@@ -46,6 +46,7 @@ bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4
   rr.summary.all <- vector(mode = "list", length = nrow(scns))
   sim.all <- vector(mode = "list", length = nrow(scns))
   obs.all <- vector(mode = "list", length = nrow(scns))
+  inPriors <- priors
   for (p in 1:nrow(scns)) {
     # p=2
     if (printProgress) {
@@ -89,7 +90,7 @@ bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4
     }
     #plot(plotSurvivalSeries(oo$simSurvObs))
 
-    if (priors[[1]] == "default") {
+    if (inPriors[[1]] == "default") {
       priors <- betaNationalPriors(cs)
     }
     out <- (bayesianTrajectoryWorkflow(

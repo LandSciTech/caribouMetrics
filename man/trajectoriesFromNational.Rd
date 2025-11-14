@@ -7,8 +7,6 @@
 trajectoriesFromNational(
   replicates = 1000,
   N0 = 1000,
-  covTableObs = expand.grid(Anthro = seq(0, 100, by = 1), fire_excl_anthro = 0, Year =
-    NA),
   useQuantiles = NULL,
   populationGrowthTable = NULL,
   cPars = subset(getScenarioDefaults(), select = -iAnthro),
@@ -16,18 +14,14 @@ trajectoriesFromNational(
   disturbance = NULL,
   skipSave = FALSE,
   forceUpdate = FALSE,
-  doSummary = TRUE
+  doSummary = TRUE,
+  returnSamples = TRUE
 )
 }
 \arguments{
 \item{replicates}{integer. Number of replicate populations.}
 
 \item{N0}{initial population size}
-
-\item{covTableObs}{data frame with Anthro,fire_excl_anthro and Year numeric columns. Each is vector of numbers between 0 and 100
-representing the percentage of the landscape covered by anthropogenic
-disturbance buffered by 500 m, and the percentage covered by fire that does
-not overlap anthropogenic disturbance.}
 
 \item{useQuantiles}{logical or numeric. If it is a numeric vector it must be
 length 2 and give the low and high limits of the quantiles to use. If
@@ -51,6 +45,11 @@ variability parameters. These can be either coefficients of variation
 (R_CV, S_CV), beta precision parameters (R_phi, S_phi),
 or random effects parameters from a logistic glmm (R_annual, S_annual).
 Set to \code{FALSE} to ignore interannual variability.}
+
+\item{disturbance}{data frame with Anthro,fire_excl_anthro and Year numeric columns. Each is vector of numbers between 0 and 100
+representing the percentage of the landscape covered by anthropogenic
+disturbance buffered by 500 m, and the percentage covered by fire that does
+not overlap anthropogenic disturbance.}
 }
 \value{
 Output from caribouPopGrowth function.
