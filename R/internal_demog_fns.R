@@ -116,6 +116,7 @@ summarizeTrajectories <- function(pars,returnSamples=T){
 #'
 #' @returns
 #' @export
+#' @family demography
 
 simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           recruitmentModelNumber = "M4",
