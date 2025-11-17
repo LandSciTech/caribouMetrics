@@ -44,7 +44,8 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
                             skipSave = FALSE,
                             forceUpdate = FALSE,
                             doSummary = TRUE,
-                            returnSamples = TRUE) {
+                            returnSamples = TRUE,
+                            numSteps = 1) {
   # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;
   # useQuantiles =NULL
 
@@ -76,7 +77,6 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   hasYear <- T
   if(is.null(disturbance)){
     if(hasAnthro){
-      message("hasAnthro")
       distPars = unique(subset(cPars,select=c(iAnthro,iFire,preYears,obsYears,projYears,obsAnthroSlope,projAnthroSlope,preYears,startYear)))
       first<-T
       for(r in 1:nrow(distPars)){
@@ -97,12 +97,10 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
       }
     }else{
       if(!is.element("Anthro",names(cPars))){
-        message("no anthro using default from trajectoriesFromNational")
         covTableObs <- expand.grid(Anthro=seq(0,100,by=1),fire_excl_anthro=0,Year=NA)
         covTableObs$Year <- covTableObs$Anthro
         hasYear <- F
       }else{
-        message("Anthro in cPars")
         covTableObs <- unique(subset(cPars, select = c("Year","Anthro","fire_excl_anthro")))
       }
     }
@@ -155,7 +153,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
 
   pars <- merge(data.frame(N0 = N0, PopulationName = "National"), rateSamplesAll)
   pars <- cbind(subset(pars,select=-N0), caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
-                                       S_bar = pars$S_bar, numSteps = 1,
+                                       S_bar = pars$S_bar, numSteps = numSteps,
                                        K = FALSE, c = pars$c,
                                        interannualVar=interannualVar, progress = FALSE))
   names(pars)[names(pars)=="replicate"]= "id"
@@ -163,7 +161,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
 
   if(doSummary){
     if(!hasYear){
-      simBig <- prepareTrajectories(pars, returnSamples = FALSE)
+      simBig <- prepareTrajectories(pars, returnSamples = returnSamples)
       simBig$summary$Year = NULL
       simBig$summary <- subset(simBig$summary,MetricTypeID!="N")
     }else{

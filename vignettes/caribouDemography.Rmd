@@ -274,6 +274,66 @@ base1 <- ggplot(data = popMetrics, aes(x = Timestep, y = Amount, colour = Replic
 base1
 ```
 
+## Using wrapper functions
+TODO add the sample lines
+```{r results='hide',message=F, warning=T}
+natTraj <- trajectoriesFromNational(replicates = 500, disturbance = covTableSim, 
+                                    returnSamples = TRUE, interannualVar = FALSE, 
+                                    useQuantiles = TRUE)
+```
+
+```{r echo=FALSE, fig.width=8, fig.height=5}
+base2 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "survival", fire_excl_anthroID == 0) ,
+                aes(x = AnthroID, y = Mean, ymin = lower, ymax = upper))+
+  geom_line(colour = "black", linewidth = 2)+
+  geom_ribbon(alpha = 0.25)+
+  xlab("Anthropogenic Disturbance (%)")+
+  ylab("Adult Female Survival")+
+  scale_y_continuous(limits = c(0.65, 1))+
+  theme(legend.position = "none")+
+  scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))
+base2
+plot_recruitment4 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "recruitment"),
+                            aes(x = AnthroID, y = Mean * 100,  group = fire_excl_anthroID,
+                                colour = fire_excl_anthroID, type = fire_excl_anthroID))+
+  geom_line(linewidth = 2)+
+  scale_colour_gradient(low = "green", high = "red")+
+  scale_y_continuous(limits = c(0, 60),
+                     breaks = c(0, 10, 20, 30, 40, 50, 60))+
+  scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))+
+  xlab("Anthropogenic disturbance (%)")+
+  ylab("Recruitment (calves per 100 cows)")
+plot_recruitment4
+```
+
+```{r results='hide',message=F, warning=T}
+disturbance2 = data.frame(step = 0:4) %>% bind_cols(disturbance) %>% 
+  mutate(Anthro = Anthro + AnthroChange * step, 
+         Year = step * 10)
+
+popMetrics2 <- purrr::map2(popGrowthParsSmall$coefSamples_Survival$quantiles, 
+                           popGrowthParsSmall$coefSamples_Recruitment$quantiles,
+                          \(x, y) simTrajectory(numYears = 5, N0 = 100, stepLength = 1,
+                                             rQuantile = y, sQuantile = x,
+                                             covariates = disturbance2, 
+                                             interannualVar = FALSE)) %>% 
+  bind_rows(.id = "Replicate") 
+
+popMetrics2 <- popMetrics2 %>% 
+  filter(MetricTypeID %in% c("Anthro", "recruitment","survival", "lambda_bar"))
+```
+
+```{r echo=FALSE, fig.width=8, fig.height=10}
+proj <- ggplot(data = popMetrics2, aes(x = Timestep, y = Amount, colour = Replicate,
+group = Replicate)) +
+geom_line() +
+facet_wrap(~MetricTypeID, scales = "free") +
+xlab("Time") +
+theme(legend.position = "none")
+proj
+```
+
+
 ## References
   Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
   Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,

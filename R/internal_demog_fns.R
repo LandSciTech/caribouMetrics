@@ -90,13 +90,41 @@ summarizeTrajectories <- function(pars,returnSamples=T){
 
 # Helpers for simulateObservations -----------------------------------------
 
+#' Dynamically simulate a trajectory over time based on the national model
+#' 
+#' 
+#' 
+#' @param numYears 
+#' @param covariates 
+#' @param survivalModelNumber 
+#' @param recruitmentModelNumber 
+#' @param popGrowthTable 
+#' @param recSlopeMultiplier 
+#' @param sefSlopeMultiplier 
+#' @param rQuantile 
+#' @param sQuantile 
+#' @param stepLength 
+#' @param N0 
+#' @param cowMult 
+#' @param qMin 
+#' @param qMax 
+#' @param uMin 
+#' @param uMax 
+#' @param zMin 
+#' @param zMax 
+#' @param interannualVar 
+#'
+#' @returns
+#' @export
+
 simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           recruitmentModelNumber = "M4",
                           popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                           recSlopeMultiplier = 1, sefSlopeMultiplier = 1,
                           rQuantile = NULL, sQuantile = NULL,
                           stepLength = 1, N0 = 1000,cowMult=1,
-                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,interannualVar = eval(formals(caribouPopGrowth)$interannualVar)) {
+                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,
+                          interannualVar = eval(formals(caribouPopGrowth)$interannualVar)) {
   # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
   # recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
   # stepLength=1;N0=1000
@@ -160,7 +188,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                               l_R = 1e-06,
                               c = c, 
                               progress = FALSE)
-  popMetrics <- merge(popMetrics, rateSamples)
+  popMetrics <- merge(popMetrics, rateSamples, by.x = "time", by.y = "scnID")
   
   popMetrics <- convertTrajectories(popMetrics)
   return(popMetrics)

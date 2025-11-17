@@ -15,7 +15,8 @@ trajectoriesFromNational(
   skipSave = FALSE,
   forceUpdate = FALSE,
   doSummary = TRUE,
-  returnSamples = TRUE
+  returnSamples = TRUE,
+  numSteps = 1
 )
 }
 \arguments{
@@ -50,6 +51,8 @@ Set to \code{FALSE} to ignore interannual variability.}
 representing the percentage of the landscape covered by anthropogenic
 disturbance buffered by 500 m, and the percentage covered by fire that does
 not overlap anthropogenic disturbance.}
+
+\item{numSteps}{Number. Number of years to project.}
 }
 \value{
 Output from caribouPopGrowth function.
