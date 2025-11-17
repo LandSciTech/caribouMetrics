@@ -16,7 +16,8 @@ trajectoriesFromNational(
   skipSave = FALSE,
   forceUpdate = FALSE,
   doSummary = TRUE,
-  returnSamples = TRUE
+  returnSamples = TRUE,
+  numSteps = 1
 )
 ```
 
@@ -70,6 +71,10 @@ trajectoriesFromNational(
   and the percentage covered by fire that does not overlap anthropogenic
   disturbance.
 
+- numSteps:
+
+  Number. Number of years to project.
+
 ## Value
 
 Output from caribouPopGrowth function.
@@ -93,6 +98,7 @@ Caribou demography functions:
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
+[`simTrajectory()`](https://landscitech.github.io/caribouMetrics/dev/reference/simTrajectory.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)
@@ -1721,5 +1727,22 @@ trajectoriesFromNational()
 #> 907 0.6791183569 0.9896423      0.024  Adult female survival
 #> 908 0.6433634605 0.9577030      0.004  Adult female survival
 #> 909 0.6479633509 0.9601764      0.002  Adult female survival
+#> 
+#> $samples
+#> # A tibble: 1,111,000 × 9
+#>    Replicate LambdaPercentile  Year PopulationName AnthroID fire_excl_anthroID
+#>    <chr>                <dbl> <dbl> <chr>             <dbl>              <dbl>
+#>  1 xV1                     87     0 National              0                  0
+#>  2 xV1                     87     0 National              0                  0
+#>  3 xV1                     87     0 National              0                  0
+#>  4 xV1                     87     0 National              0                  0
+#>  5 xV1                     87     0 National              0                  0
+#>  6 xV1                     87     0 National              0                  0
+#>  7 xV1                     87     0 National              0                  0
+#>  8 xV1                     87     0 National              0                  0
+#>  9 xV1                     87     0 National              0                  0
+#> 10 xV1                     87     0 National              0                  0
+#> # ℹ 1,110,990 more rows
+#> # ℹ 3 more variables: Timestep <dbl>, MetricTypeID <chr>, Amount <dbl>
 #> 
 ```

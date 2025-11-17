@@ -103,6 +103,7 @@ Caribou demography functions:
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
+[`simTrajectory()`](https://landscitech.github.io/caribouMetrics/dev/reference/simTrajectory.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
@@ -120,93 +121,14 @@ scns <- expand.grid(
 
 eParsIn <- list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 3)
 simsIn <- trajectoriesFromNational()
-#> no anthro using default from trajectoriesFromNational
 #> Warning: Setting expected survival S_bar to be between l_S and h_S.
 #> Updating cached initial simulations.
 scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 10
-#>    Unobserved stochastic nodes: 83
-#>    Total graph size: 409
-#> 
-#> Initializing model
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 54
-#>    Unobserved stochastic nodes: 170
-#>    Total graph size: 666
-#> 
-#> Initializing model
-#> 
+#> Warning: The example trajectories do not include the disturbance scenario. Ignoring the disturbance scenario.
 #> Warning: no non-missing arguments to max; returning -Inf
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 20
-#>    Unobserved stochastic nodes: 93
-#>    Total graph size: 489
-#> 
-#> Initializing model
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 74
-#>    Unobserved stochastic nodes: 200
-#>    Total graph size: 806
-#> 
-#> Initializing model
-#> 
 #> Warning: no non-missing arguments to max; returning -Inf
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 10
-#>    Unobserved stochastic nodes: 83
-#>    Total graph size: 409
-#> 
-#> Initializing model
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 54
-#>    Unobserved stochastic nodes: 170
-#>    Total graph size: 666
-#> 
-#> Initializing model
-#> 
-#> Warning: no non-missing arguments to max; returning -Inf
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 20
-#>    Unobserved stochastic nodes: 93
-#>    Total graph size: 489
-#> 
-#> Initializing model
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 74
-#>    Unobserved stochastic nodes: 200
-#>    Total graph size: 806
-#> 
-#> Initializing model
-#> 
-#> Warning: no non-missing arguments to max; returning -Inf
+#> Warning: no non-missing arguments to min; returning Inf
+#> Warning: no non-missing arguments to min; returning Inf
+#> Error in bboudata::bbd_chk_data_survival(surv_data, allow_missing = TRUE,     multi_pops = TRUE): Surv_data must include 'Month', 'MortalitiesCertain', 'MortalitiesUncertain', 'PopulationName' and 'Year'.
 ```

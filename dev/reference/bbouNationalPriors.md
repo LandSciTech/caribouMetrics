@@ -60,6 +60,7 @@ Caribou demography functions:
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
+[`simTrajectory()`](https://landscitech.github.io/caribouMetrics/dev/reference/simTrajectory.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
@@ -91,10 +92,10 @@ bbouNationalPriors(Anthro=50,fire=5)
 #> 
 #> $priors_recruitment
 #>      b0_mu      b0_sd 
-#> -1.7256436  0.5692641 
+#> -1.7209326  0.5484984 
 #> 
 #> $priors_survival
 #>     b0_mu     b0_sd 
-#> 4.3259454 0.5091821 
+#> 4.3239851 0.5000246 
 #> 
 ```

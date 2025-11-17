@@ -1,28 +1,54 @@
-# Get trajectories from a Bayesian model result
+# Dynamically simulate a trajectory over time based on the national model
 
-Get trajectories from a Bayesian model result
+Dynamically simulate a trajectory over time based on the national model
 
 ## Usage
 
 ``` r
-trajectoriesFromBayesian(
-  bayesianResults,
-  N0 = NULL,
-  cPars = subset(getScenarioDefaults(), select = -iAnthro),
-  returnSamples = TRUE,
-  doSummary = TRUE,
-  ...
+simTrajectory(
+  numYears,
+  covariates,
+  survivalModelNumber = "M1",
+  recruitmentModelNumber = "M4",
+  popGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
+  recSlopeMultiplier = 1,
+  sefSlopeMultiplier = 1,
+  rQuantile = NULL,
+  sQuantile = NULL,
+  stepLength = 1,
+  N0 = 1000,
+  cowMult = 1,
+  qMin = 0,
+  qMax = 0,
+  uMin = 0,
+  uMax = 0,
+  zMin = 0,
+  zMax = 0,
+  interannualVar = eval(formals(caribouPopGrowth)$interannualVar)
 )
 ```
 
 ## Arguments
 
-- bayesianResults:
+- numYears:
+- covariates:
+- survivalModelNumber:
+- recruitmentModelNumber:
+- popGrowthTable:
+- recSlopeMultiplier:
+- sefSlopeMultiplier:
+- rQuantile:
+- sQuantile:
+- stepLength:
 - N0:
-- cPars:
-- returnSamples:
-- doSummary:
-- ...:
+- cowMult:
+- qMin:
+- qMax:
+- uMin:
+- uMax:
+- zMin:
+- zMax:
+- interannualVar:
 
 ## See also
 
@@ -43,7 +69,7 @@ Caribou demography functions:
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
-[`simTrajectory()`](https://landscitech.github.io/caribouMetrics/dev/reference/simTrajectory.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
+[`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)

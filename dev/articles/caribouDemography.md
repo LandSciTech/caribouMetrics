@@ -295,6 +295,37 @@ popMetrics <- subset(popMetrics, !MetricTypeID == "N")
 
 ![](caribouDemography_files/figure-html/changeOverTime-1.png)
 
+## Using wrapper functions
+
+TODO add the sample lines
+
+``` r
+natTraj <- trajectoriesFromNational(replicates = 500, disturbance = covTableSim, 
+                                    returnSamples = TRUE, interannualVar = FALSE, 
+                                    useQuantiles = TRUE)
+```
+
+![](caribouDemography_files/figure-html/unnamed-chunk-3-1.png)![](caribouDemography_files/figure-html/unnamed-chunk-3-2.png)
+
+``` r
+disturbance2 = data.frame(step = 0:4) %>% bind_cols(disturbance) %>% 
+  mutate(Anthro = Anthro + AnthroChange * step, 
+         Year = step * 10)
+
+popMetrics2 <- purrr::map2(popGrowthParsSmall$coefSamples_Survival$quantiles, 
+                           popGrowthParsSmall$coefSamples_Recruitment$quantiles,
+                          \(x, y) simTrajectory(numYears = 5, N0 = 100, stepLength = 1,
+                                             rQuantile = y, sQuantile = x,
+                                             covariates = disturbance2, 
+                                             interannualVar = FALSE)) %>% 
+  bind_rows(.id = "Replicate") 
+
+popMetrics2 <- popMetrics2 %>% 
+  filter(MetricTypeID %in% c("Anthro", "recruitment","survival", "lambda_bar"))
+```
+
+![](caribouDemography_files/figure-html/unnamed-chunk-5-1.png)
+
 ## References
 
 Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,

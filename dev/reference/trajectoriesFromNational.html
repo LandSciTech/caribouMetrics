@@ -57,7 +57,8 @@
 <span>  skipSave <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  forceUpdate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  doSummary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  returnSamples <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  returnSamples <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  numSteps <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -110,6 +111,10 @@ representing the percentage of the landscape covered by anthropogenic
 disturbance buffered by 500 m, and the percentage covered by fire that does
 not overlap anthropogenic disturbance.</p></dd>
 
+
+<dt id="arg-numsteps">numSteps<a class="anchor" aria-label="anchor" href="#arg-numsteps"></a></dt>
+<dd><p>Number. Number of years to project.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -134,6 +139,7 @@ not overlap anthropogenic disturbance.</p></dd>
 <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
 <code><a href="plotSurvivalSeries.html">plotSurvivalSeries()</a></code>,
 <code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code>,
+<code><a href="simTrajectory.html">simTrajectory()</a></code>,
 <code><a href="simulateObservations.html">simulateObservations()</a></code>,
 <code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>,
 <code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code></p></div>
@@ -1762,6 +1768,23 @@ not overlap anthropogenic disturbance.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 907 0.6791183569 0.9896423      0.024  Adult female survival</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 908 0.6433634605 0.9577030      0.004  Adult female survival</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 909 0.6479633509 0.9601764      0.002  Adult female survival</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $samples</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,111,000 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Replicate LambdaPercentile  Year PopulationName AnthroID fire_excl_anthroID</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> xV1                     87     0 National              0                  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> xV1                     87     0 National              0                  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> xV1                     87     0 National              0                  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> xV1                     87     0 National              0                  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> xV1                     87     0 National              0                  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> xV1                     87     0 National              0                  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> xV1                     87     0 National              0                  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> xV1                     87     0 National              0                  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> xV1                     87     0 National              0                  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> xV1                     87     0 National              0                  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,110,990 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: Timestep &lt;dbl&gt;, MetricTypeID &lt;chr&gt;, Amount &lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

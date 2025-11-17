@@ -100,6 +100,7 @@ Caribou demography functions:
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
+[`simTrajectory()`](https://landscitech.github.io/caribouMetrics/dev/reference/simTrajectory.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
@@ -112,11 +113,11 @@ s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 estimateBayesianRates(s_data, r_data, N0 = 500)
 #>   pop_name     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower R_bar_upper
-#> 1        A 0.1894571 0.08380331 0.3177228   26.42563   0.1654207   0.2174672
-#> 2        B 0.2034502 0.10124996 0.3177228   26.42563   0.1718426   0.2363121
+#> 1        A 0.1896370 0.08101666  0.315737   24.50298   0.1665319   0.2166522
+#> 2        B 0.2039736 0.10700718  0.315737   24.50298   0.1710193   0.2387438
 #>       S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper  N0
-#> 1 0.8825898 0.2484717 0.4871195   10.48011   0.8232259   0.9284864 500
-#> 2 0.9061014 0.2884544 0.4871195   10.48011   0.8488396   0.9455856 500
+#> 1 0.8811514 0.2404515 0.4957214   13.22188   0.8213813   0.9237809 500
+#> 2 0.9075884 0.2971067 0.4957214   13.22188   0.8500543   0.9477256 500
 #>   nCollarYears nSurvYears nCowsAllYears nRecruitYears
 #> 1          900         31          2353            27
 #> 2          519         18          2001            15

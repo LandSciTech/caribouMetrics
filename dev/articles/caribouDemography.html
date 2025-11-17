@@ -339,6 +339,32 @@ or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816"
 <p><img src="caribouDemography_files/figure-html/changeOverTime-1.png" class="r-plt" width="768"></p>
 </div>
 <div class="section level2">
+<h2 id="using-wrapper-functions">Using wrapper functions<a class="anchor" aria-label="anchor" href="#using-wrapper-functions"></a>
+</h2>
+<p>TODO add the sample lines</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">natTraj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromNational.html">trajectoriesFromNational</a></span><span class="op">(</span>replicates <span class="op">=</span> <span class="fl">500</span>, disturbance <span class="op">=</span> <span class="va">covTableSim</span>, </span>
+<span>                                    returnSamples <span class="op">=</span> <span class="cn">TRUE</span>, interannualVar <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>                                    useQuantiles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="caribouDemography_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="768"><img src="caribouDemography_files/figure-html/unnamed-chunk-3-2.png" class="r-plt" width="768"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">disturbance2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>step <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="va">Anthro</span> <span class="op">+</span> <span class="va">AnthroChange</span> <span class="op">*</span> <span class="va">step</span>, </span>
+<span>         Year <span class="op">=</span> <span class="va">step</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">popMetrics2</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2</a></span><span class="op">(</span><span class="va">popGrowthParsSmall</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">quantiles</span>, </span>
+<span>                           <span class="va">popGrowthParsSmall</span><span class="op">$</span><span class="va">coefSamples_Recruitment</span><span class="op">$</span><span class="va">quantiles</span>,</span>
+<span>                          \<span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="../reference/simTrajectory.html">simTrajectory</a></span><span class="op">(</span>numYears <span class="op">=</span> <span class="fl">5</span>, N0 <span class="op">=</span> <span class="fl">100</span>, stepLength <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                             rQuantile <span class="op">=</span> <span class="va">y</span>, sQuantile <span class="op">=</span> <span class="va">x</span>,</span>
+<span>                                             covariates <span class="op">=</span> <span class="va">disturbance2</span>, </span>
+<span>                                             interannualVar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span>.id <span class="op">=</span> <span class="st">"Replicate"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">popMetrics2</span> <span class="op">&lt;-</span> <span class="va">popMetrics2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MetricTypeID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Anthro"</span>, <span class="st">"recruitment"</span>,<span class="st">"survival"</span>, <span class="st">"lambda_bar"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="caribouDemography_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="768"></p>
+</div>
+<div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <p>Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,

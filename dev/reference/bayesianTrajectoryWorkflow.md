@@ -126,6 +126,7 @@ Caribou demography functions:
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
+[`simTrajectory()`](https://landscitech.github.io/caribouMetrics/dev/reference/simTrajectory.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
@@ -145,10 +146,9 @@ Caribou demography functions:
   )
 #> Warning: requested year range: 1986 - 2016 does not match recruitment data year range:  1990 - 2016
 #> Warning: missing years of recruitment data: 1986, 1987, 1988, 1989
-#> Registered S3 methods overwritten by 'mcmcr':
-#>   method               from 
-#>   as.mcmc.nlists       nlist
-#>   as.mcmc.list.mcarray rjags
+#> Registered S3 method overwritten by 'mcmcr':
+#>   method         from 
+#>   as.mcmc.nlists nlist
 #> warning: value of stochastic node FemaleYearlings[1]: value is NA or NaN even after trying to simulate.
 #> warning: problem initializing stochastic node FemaleYearlings[1]: logProb is NA or NaN.
 #> warning: value of stochastic node FemaleYearlings[2]: value is NA or NaN even after trying to simulate.
@@ -278,6 +278,9 @@ Caribou demography functions:
   out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                            disturbance = simO$simDisturbance,
                            startYear = 2014)
+#> Registered S3 method overwritten by 'rjags':
+#>   method               from 
+#>   as.mcmc.list.mcarray mcmcr
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
