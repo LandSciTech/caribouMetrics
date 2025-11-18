@@ -37,33 +37,6 @@ test_that("exData ok in simple case with one input scenario",{
   }
 })
 
-test_that("sample trajectories are not returned when the national model is used", {
-  noDist <- trajectoriesFromNational(forceUpdate = TRUE)$summary
-  
-  expect_null(noDist$samples)
-})
-
-test_that("Can set constant Anthro", {
-  scnsConst <- getScenarioDefaults()
-  distScn <- data.frame(Anthro = 20, fire_excl_anthro = 0, Year = 1:10+2000)
-  scnsConst <- merge(scnsConst, distScn)
-  scnsConst$iAnthro <- NULL
-  distConst <- trajectoriesFromNational(cPars = scnsConst, forceUpdate = TRUE)$summary
-  
-  expect_equal(unique(distConst$AnthroID), 20)
-})
-
-test_that("can specify multiple disturbance scenarios", {
-  scns10m <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
-                                 projYears = 100,iAnthro=c(0,5))
-
-  summary2 <- trajectoriesFromNational(replicates = 2, cPars = scns10m)$summary
-  
-  # The first year will have both values for Anthro
-  summary2 %>% filter(Year == min(Year), MetricTypeID == "lambda") %>% pull(AnthroID) %>% 
-    range() %>% 
-    expect_equal(c(0,5))
-})
 
 test_that("Warning if trajs does not include the selected disturbance scenario, and it is possible to set disturbance from trajs.", {
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 

@@ -18,15 +18,25 @@ if(file.exists("results/simsInitial.rds")){
 
 
 #' Get a set of simulation results from the national demographic model
+#' 
+#' Simulate demograhic rates based on the National demographic - disturbance model
+#' If a disturbance scenario containing Years is supplied trajectories will show
+#' growth of a population over time based on the National demographic - disturbance model
 #'
-#' @param disturbance data frame with Anthro,fire_excl_anthro and Year numeric columns. Each is vector of numbers between 0 and 100
+#' @param disturbance data frame with Anthro, fire_excl_anthro and Year numeric
+#'   columns. Anthro and fire_excl_anthro are vectors of numbers between 0 and 100
 #'   representing the percentage of the landscape covered by anthropogenic
 #'   disturbance buffered by 500 m, and the percentage covered by fire that does
-#'   not overlap anthropogenic disturbance. 
+#'   not overlap anthropogenic disturbance.
 #' @inheritParams getNationalCoefficients
 #' @inheritParams caribouPopGrowth
 #' @param N0 initial population size
 #' @param cPars optional. Parameters for calculating composition survey bias term.
+#' @param returnSamples logical. If FALSE returns only summaries. If TRUE
+#'   returns example trajectories as well. By default summaries are not returned
+#'   unless the disturbance data provided contains a column named "Year".
+#' @param numSteps numeric. Number of steps to run `caribouPopGrowth()` at each 
+#'   disturbance level. 
 #'
 #' @return Output from caribouPopGrowth function.
 #' 
@@ -44,7 +54,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
                             skipSave = FALSE,
                             forceUpdate = FALSE,
                             doSummary = TRUE,
-                            returnSamples = TRUE,
+                            returnSamples = "default",
                             numSteps = 1) {
   # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;
   # useQuantiles =NULL
@@ -150,18 +160,40 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   rateSamplesAll$c = NULL; rateSamplesAll= merge(rateSamplesAll, bc)
 
   #print(paste("trajectoriesFromNational",mean(bc$c)))
-
   pars <- merge(data.frame(N0 = N0, PopulationName = "National"), rateSamplesAll)
-  pars <- cbind(subset(pars,select=-N0), caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
-                                       S_bar = pars$S_bar, numSteps = numSteps,
-                                       K = FALSE, c = pars$c,
-                                       interannualVar=interannualVar, progress = FALSE))
-  names(pars)[names(pars)=="replicate"]= "id"
 
+  if(hasYear){
+    pars <- pars %>% select(-N0) %>% nest_by(replicate) %>% 
+      mutate(proj = list(simPopsOverTime(
+        N0, numSteps = n_distinct(data$Year), R_samp = data$R_bar,
+        S_samp = data$S_bar, onePop = TRUE, stepLength = numSteps,
+        c = unique(data$c),interannualVar = interannualVar, 
+        progress = FALSE))) %>% 
+      unnest(c(data, proj)) %>% 
+      select(-id, -time) %>% 
+      as.data.frame()
+    
+
+  } else {
+    pars <- cbind(subset(pars,select=-N0), 
+                  caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
+                                   S_bar = pars$S_bar, numSteps = numSteps,
+                                   K = FALSE, c = pars$c,
+                                   interannualVar=interannualVar, progress = FALSE))
+  }
+  
+  
+  names(pars)[names(pars)=="replicate"]= "id"
+  
+  if(returnSamples == "default"){
+      returnSamples <- hasYear
+  } else if (!hasYear & isTRUE(returnSamples)){
+    warning("returnSamples is set to FALSE when Year is not included in the disturbance scenario")
+  }
 
   if(doSummary){
     if(!hasYear){
-      simBig <- prepareTrajectories(pars, returnSamples = returnSamples)
+      simBig <- prepareTrajectories(pars, returnSamples = FALSE)
       simBig$summary$Year = NULL
       simBig$summary <- subset(simBig$summary,MetricTypeID!="N")
     }else{

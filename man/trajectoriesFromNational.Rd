@@ -15,7 +15,7 @@ trajectoriesFromNational(
   skipSave = FALSE,
   forceUpdate = FALSE,
   doSummary = TRUE,
-  returnSamples = TRUE,
+  returnSamples = "default",
   numSteps = 1
 )
 }
@@ -47,18 +47,26 @@ variability parameters. These can be either coefficients of variation
 or random effects parameters from a logistic glmm (R_annual, S_annual).
 Set to \code{FALSE} to ignore interannual variability.}
 
-\item{disturbance}{data frame with Anthro,fire_excl_anthro and Year numeric columns. Each is vector of numbers between 0 and 100
+\item{disturbance}{data frame with Anthro, fire_excl_anthro and Year numeric
+columns. Anthro and fire_excl_anthro are vectors of numbers between 0 and 100
 representing the percentage of the landscape covered by anthropogenic
 disturbance buffered by 500 m, and the percentage covered by fire that does
 not overlap anthropogenic disturbance.}
 
-\item{numSteps}{Number. Number of years to project.}
+\item{returnSamples}{logical. If FALSE returns only summaries. If TRUE
+returns example trajectories as well. By default summaries are not returned
+unless the disturbance data provided contains a column named "Year".}
+
+\item{numSteps}{numeric. Number of steps to run \code{caribouPopGrowth()} at each
+disturbance level.}
 }
 \value{
 Output from caribouPopGrowth function.
 }
 \description{
-Get a set of simulation results from the national demographic model
+Simulate demograhic rates based on the National demographic - disturbance model
+If a disturbance scenario containing Years is supplied trajectories will show
+growth of a population over time based on the National demographic - disturbance model
 }
 \examples{
 trajectoriesFromNational()
