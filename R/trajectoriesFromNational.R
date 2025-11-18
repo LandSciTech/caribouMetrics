@@ -167,7 +167,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
       mutate(proj = list(simPopsOverTime(
         N0, numSteps = n_distinct(data$Year), R_samp = data$R_bar,
         S_samp = data$S_bar, onePop = TRUE, stepLength = numSteps,
-        c = unique(data$c),interannualVar = interannualVar, 
+        c = unique(data$c), interannualVar = interannualVar, 
         progress = FALSE))) %>% 
       unnest(c(data, proj)) %>% 
       select(-id, -time) %>% 

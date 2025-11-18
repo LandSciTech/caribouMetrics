@@ -222,6 +222,9 @@ stepLength <- 10
 N0 <- 100
 AnthroChange <- 5 #For illustration assume 5% increase in anthropogenic disturbance footprint each decade
 
+# set seed so quantiles in wrapper function will match
+set.seed(54545)
+
 # at each time,  sample demographic rates and project, save results
 pars <- data.frame(N0 = N0)
 for (t in 1:numTimesteps) {
@@ -247,9 +250,9 @@ for (t in 1:numTimesteps) {
                                  K = FALSE, probOption = "continuous"))
 
   # add results to output set
-  fds <- subset(pars, select = c(replicate, Anthro, S_bar, R_bar, N, lambda))
+  fds <- subset(pars, select = c(replicate, Anthro, S_bar, R_bar, N, lambda, lambdaE))
   fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
-  names(fds) <- c("Replicate", "anthro", "survival", "recruitment", "N", "lambda")
+  names(fds) <- c("Replicate", "anthro", "survival", "recruitment", "N", "lambda", "lambda_bar")
   fds <- pivot_longer(fds, !Replicate, names_to = "MetricTypeID", values_to = "Amount")
   fds$Timestep <- t * stepLength
   if (t == 1) {
@@ -261,7 +264,7 @@ for (t in 1:numTimesteps) {
 
 popMetrics$MetricTypeID <- as.character(popMetrics$MetricTypeID)
 popMetrics$Replicate <- paste0("x", popMetrics$Replicate)
-popMetrics <- subset(popMetrics, !MetricTypeID == "N")
+# popMetrics <- subset(popMetrics, !MetricTypeID == "N")
 ```
 
 ```{r changeOverTime, echo=FALSE, fig.width=8, fig.height=10}
@@ -311,25 +314,25 @@ disturbance2 = data.frame(step = 0:4) %>% bind_cols(disturbance) %>%
   mutate(Anthro = Anthro + AnthroChange * step, 
          Year = step * 10)
 
-popMetrics2 <- purrr::map2(popGrowthParsSmall$coefSamples_Survival$quantiles, 
-                           popGrowthParsSmall$coefSamples_Recruitment$quantiles,
-                          \(x, y) simTrajectory(numYears = 5, N0 = 100, stepLength = 1,
-                                             rQuantile = y, sQuantile = x,
-                                             covariates = disturbance2, 
-                                             interannualVar = FALSE)) %>% 
-  bind_rows(.id = "Replicate") 
+# set seed so quantiles in wrapper function will match
+set.seed(54545)
 
-popMetrics2 <- popMetrics2 %>% 
-  filter(MetricTypeID %in% c("Anthro", "recruitment","survival", "lambda_bar"))
+popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates = 35, 
+                                        interannualVar = FALSE, useQuantiles = TRUE,
+                                        N0 = 100, numSteps = 10)
+
+popMetrics2 <- popMetrics2$samples %>% 
+  filter(MetricTypeID %in% c("Anthro", "N", "recruitment","survival", "lambda_bar", "lambda"))
 ```
 
 ```{r echo=FALSE, fig.width=8, fig.height=10}
-proj <- ggplot(data = popMetrics2, aes(x = Timestep, y = Amount, colour = Replicate,
-group = Replicate)) +
-geom_line() +
-facet_wrap(~MetricTypeID, scales = "free") +
-xlab("Time") +
-theme(legend.position = "none")
+proj <- ggplot(data = popMetrics2, 
+               aes(x = Timestep, y = Amount, colour = Replicate,
+                   group = Replicate)) +
+  geom_line() +
+  facet_wrap(~MetricTypeID, scales = "free") +
+  xlab("Time") +
+  theme(legend.position = "none")
 proj
 ```
 
