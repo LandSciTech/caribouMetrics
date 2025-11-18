@@ -123,8 +123,6 @@ DisturbanceMetrics object.
 
 Functions for calculating disturbance:
 \code{\link{DisturbanceMetrics-class}},
-\code{\link{loadSpatialInputs}()},
-\code{\link{rasterizeLineDensity}()},
 \code{\link{reclassDist}()},
 \code{\link{results}()},
 \code{\link{updateDisturbance}()}

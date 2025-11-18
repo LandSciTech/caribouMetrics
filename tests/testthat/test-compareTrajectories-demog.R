@@ -8,8 +8,8 @@ test_that("works with defaults", {
   
   out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, 
                            recruit_data = simO$simRecruitObs,
-                           disturbance = simO$simDisturbance,
-                           niters=100)
+                    disturbance = simO$simDisturbance,
+                    niters=100)
   
   out_tbls <- compareTrajectories(out, simInitial = simIni, paramTable = scns)
   

@@ -9,6 +9,227 @@ setGeneric("processData", function(inData, newData, ...) standardGeneric("proces
 # Method for initial processing when no new data is provided
 #' @noRd
 setMethod(
+  "processData", signature(inData = "CaribouHabitat", newData = "missing"), 
+  function(inData) {
+ 
+    tmplt <- inData@attributes$tmplt
+    
+    # resample to 16ha and flag cells with >35% disturbance
+    expVars <- applyDist(inData@landCover, inData@natDist, inData@anthroDist, 
+                         tmplt)
+
+    # create raster attribute table
+    inData@landCover <- terra::categories(
+      inData@landCover, layer = 1,
+      left_join(terra::unique(inData@landCover) %>% setNames("landCover"),
+                resTypeCode, by = c(landCover = "code")) %>%
+        setNames(c("ID", "ResourceType")))
+    
+    # Resample linFeat and esker to 16 ha
+    if(any(terra::res(inData@linFeat) < terra::res(tmplt)[1])){
+      message("resampling linFeat to match landCover resolution")
+      
+      inData@linFeat <- terra::resample(inData@linFeat, tmplt,
+                                         method = "bilinear")
+    }
+    if(!terra::compareGeom(expVars[[1]], inData@linFeat, stopOnError = FALSE)){
+      stop("linFeat could not be aligned with landCover.",
+           " Please provide a higher resolution raster or a shapefile",
+           call. = FALSE)
+    }
+    
+    if(any(terra::res(inData@esker) < terra::res(tmplt)[1])){
+      message("resampling esker to match landCover resolution")
+      
+      inData@esker <- terra::resample(inData@esker, tmplt,
+                                       method = "bilinear")
+    }
+    if(!terra::compareGeom(expVars[[1]], inData@esker, stopOnError = FALSE)){
+      stop("esker could not be aligned with landCover.",
+           " Please provide a higher resolution raster or a shapefile",
+           call. = FALSE)
+    }
+    
+    # Get window area from table b/c some models used different sizes
+    # if(is.null(inData@attributes$winArea)){
+    #   inData@attributes$winArea <- coefTable %>% 
+    #     filter(.data$Range %in% inData@attributes$caribouRange$coefRange) %>% 
+    #     pull(.data$WinArea) %>% 
+    #     unique()
+    # }
+    
+    # window radius is radius of circle with winArea rounded to even number of
+    # raster cells based on resolution
+    winRad <- (sqrt(inData@attributes$winArea*10000/pi)/terra::res(expVars[[1]])[1]) %>% 
+      round(digits = 0)*terra::res(expVars[[1]])[1] %>% 
+      round()
+    
+    # calculate moving window average for all explanatory variables
+    expVars <- c(expVars, inData@linFeat, inData@esker) 
+    
+    layernames <- c(resTypeCode %>% arrange(.data$code) %>%
+                      pull(.data$ResourceType) %>% 
+                      as.character(),
+                    "TDENLF", "ESK")
+    
+    if(!inData@attributes$padProjPoly){
+      expVars <- terra::mask(expVars, inData@projectPoly)
+    }
+    
+    message("Applying moving window.")
+    
+    expVars <- movingWindowAvg(rast = expVars, radius = winRad,
+                               nms = layernames, 
+                               naExternal = ifelse(inData@attributes$padFocal,
+                                                   "expand", "NA"), 
+                               naInternal = "interpolate")
+    
+    inData@processedData <- c(expVars, 
+                              expVars[["MIX"]] + expVars[["DEC"]], 
+                              makeDummyRast(expVars[[1]],1)) %>% 
+      `names<-`(c(names(expVars), "LGMD", "CONST"))
+    
+    return(inData)
+    
+  })
+
+# method to update processed data when new data is supplied avoids unnecessary
+# steps if new data is not provided for all variables
+
+#' @noRd
+setMethod(
+  "processData", 
+  signature(inData = "CaribouHabitat", newData = "list"), 
+  function(inData, newData) {
+    
+    if(is.null(names(newData)) ||
+       !all(names(newData) %in% c("landCover", "natDist", "anthroDist",
+                                  "linFeat" ))){
+      stop("newData must be a named list with any of the names ",
+           "landCover ", "natDist ", "anthroDist ",  "linFeat ", 
+           "incorrect names provided are:  ", 
+           names(newData)[which(!names(newData) %in% 
+                                  c("landCover", "natDist", "anthroDist",
+                                    "linFeat" ))], call. = FALSE)
+    }
+    
+    tmplt <- inData@attributes$tmplt
+    
+    if(!is.null(newData$linFeat)){
+      # rasterize linFeat
+      if(inherits(newData$linFeat, "list")){
+        newData$linFeat <- combineLinFeat(newData$linFeat)
+      }
+      
+      if(inherits(newData$linFeat, "sf")){
+        newData$linFeat <- checkAlign(newData$linFeat, inData@projectPoly,
+                                      "linFeat", "projectPoly")
+        
+        inData@linFeat <- rasterizeLineDensity(newData$linFeat, tmplt)
+      }
+      
+    }
+    
+    newData <- rapply(newData, f = terra::rast, classes = "RasterLayer", how = "replace")
+    
+    if(!all(sapply(newData[setdiff(names(newData), "linFeat")], is, "SpatRaster"))){
+      stop("All data supplied in the newData list must be SpatRaster or RasterLayer objects", 
+           call. = FALSE)
+    }
+    
+    # check alignment of new data with projectPoly except for linFeat
+    rastCRSMatch <- lapply(newData[which(names(newData) != "linFeat")],
+                           terra::compareGeom,
+                           y = inData@landCover, crs = TRUE, res = TRUE, ext = FALSE, 
+                           rowcol = FALSE, stopOnError = FALSE) %>%
+      unlist() %>% all()
+    
+    if(!rastCRSMatch){
+      stop("all raster data sets must have matching resolution", call. = FALSE)
+    }
+    
+    newData <- purrr::map2(newData, names(newData), 
+                           ~cropIf(.x, inData@projectPoly, .y, "projectPoly"))
+    
+    if(any(names(newData) %in% c("landCover", "natDist", "anthroDist" ))){
+      
+      # TODO: should you be able to update only Nat or Anthro dist?
+      if(is.null(newData$landCover)){
+        newData$landCover <- inData@landCover
+        warning("existing landCover being updated with new disturbance", 
+                call. = FALSE)
+      }
+      
+      if(is.null(newData$natDist)){
+        newData$natDist <- inData@natDist
+        warning("existing natDist being used to update landCover", 
+                call. = FALSE)
+      }
+      if(is.null(newData$anthroDist)){
+        newData$anthroDist <- inData@anthroDist
+        warning("existing anthroDist being used to update landCover", 
+                call. = FALSE)
+      }
+      
+      expVars <- applyDist(newData$landCover, natDist = newData$natDist, 
+                           anthroDist = newData$anthroDist, tmplt = tmplt)
+    }
+    
+    # resample linFeat if provided
+    if(inherits(newData$linFeat, "SpatRaster")){
+      message("resampling linFeat to match landCover resolution")
+      newData$linFeat <- terra::resample(newData$linFeat, tmplt, 
+                                          method = "bilinear")
+      inData@linFeat <- newData$linFeat
+    } 
+    
+    # calculate moving window average for changed explanatory variables
+    if(all(c("linFeat", "landCover") %in% names(newData))){
+      expVars <- c(expVars, inData@linFeat)
+      
+      layernames <- c(resTypeCode %>% arrange(.data$code) %>%
+                        pull(.data$ResourceType) %>% as.character(), "TDENLF")
+    } else if ("landCover" %in% names(newData)){
+      layernames <- resTypeCode %>% arrange(.data$code) %>%
+        pull(.data$ResourceType) %>% as.character()
+    } else {
+      expVars <- inData@linFeat
+      
+      layernames <- "TDENLF"
+    }
+    
+    # window radius is radius of circle with winArea rounded to even number of
+    # raster cells based on resolution
+    winRad <- (sqrt(inData@attributes$winArea*10000/pi)/terra::res(expVars[[1]])[1]) %>% 
+      round(digits = 0)*terra::res(expVars[[1]])[1] %>% 
+      round()
+    
+    message("Applying moving window.")
+    
+    expVars <- movingWindowAvg(rast = expVars, radius = winRad,
+                               nms = layernames, 
+                               naExternal = ifelse(inData@attributes$padFocal,
+                                                   "expand", "NA"), 
+                               naInternal = "interpolate")
+    
+    if(all(c("MIX","DEC") %in% names(expVars))){
+      expVars <- c(expVars, (expVars[["MIX"]] + expVars[["DEC"]])) %>% 
+        `names<-`(c(names(expVars), "LGMD"))
+    }
+    
+    notUpdated <- which(!names(inData@processedData) %in% names(expVars)) 
+    
+    expVars <- c(expVars, inData@processedData[[notUpdated]])
+    # order output stack to match 
+    inData@processedData <- expVars[[names(inData@processedData)]]
+    
+    
+    return(inData)
+  })
+
+# Method for initial processing when no new data is provided
+#' @noRd
+setMethod(
   "processData", signature(inData = "DisturbanceMetrics", newData = "missing"), 
   function(inData, linBuffMethod = "raster", isPercent) {
     #inData=dm

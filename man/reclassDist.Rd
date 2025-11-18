@@ -78,8 +78,6 @@ plot(cumFirePresence2)
 Functions for calculating disturbance:
 \code{\link{DisturbanceMetrics-class}},
 \code{\link{disturbanceMetrics}()},
-\code{\link{loadSpatialInputs}()},
-\code{\link{rasterizeLineDensity}()},
 \code{\link{results}()},
 \code{\link{updateDisturbance}()}
 }

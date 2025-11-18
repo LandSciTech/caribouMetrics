@@ -2,4 +2,4 @@
 fl <- system.file("extdata/populationGrowthTable.csv", package = "caribouMetrics")
 popGrowthTableJohnsonECCC <- read.csv(fl)
 usethis::use_data(popGrowthTableJohnsonECCC, overwrite = TRUE)
-usethis::use_data(popGrowthTableJohnsonECCC, overwrite = TRUE, internal = TRUE)
+# have to run threshTable script to add to the internal data

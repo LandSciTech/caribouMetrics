@@ -44,12 +44,20 @@ plot(rastLines)
 
 }
 \seealso{
-Functions for calculating disturbance:
-\code{\link{DisturbanceMetrics-class}},
-\code{\link{disturbanceMetrics}()},
+Caribou habitat functions:
+\code{\link{CaribouHabitat-class}},
+\code{\link{calcBinaryUse}()},
+\code{\link{caribouHabitat}()},
+\code{\link{coefTableHR}},
+\code{\link{coefTableStd}},
+\code{\link{fnlcToResType}},
 \code{\link{loadSpatialInputs}()},
-\code{\link{reclassDist}()},
+\code{\link{plcToResType}},
+\code{\link{reclassPLC}()},
+\code{\link{resTypeCode}},
 \code{\link{results}()},
-\code{\link{updateDisturbance}()}
+\code{\link{rfuToResType}},
+\code{\link{threshTable}},
+\code{\link{updateCaribou}()}
 }
-\concept{disturbance}
+\concept{habitat}

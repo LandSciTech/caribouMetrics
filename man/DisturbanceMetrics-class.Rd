@@ -48,8 +48,6 @@ DisturbanceMetrics object.
 
 Functions for calculating disturbance:
 \code{\link{disturbanceMetrics}()},
-\code{\link{loadSpatialInputs}()},
-\code{\link{rasterizeLineDensity}()},
 \code{\link{reclassDist}()},
 \code{\link{results}()},
 \code{\link{updateDisturbance}()}
