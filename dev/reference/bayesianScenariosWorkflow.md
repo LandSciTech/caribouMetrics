@@ -125,10 +125,88 @@ simsIn <- trajectoriesFromNational()
 #> Updating cached initial simulations.
 scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.
-#> Warning: The example trajectories do not include the disturbance scenario. Ignoring the disturbance scenario.
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 10
+#>    Unobserved stochastic nodes: 83
+#>    Total graph size: 409
+#> 
+#> Initializing model
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 54
+#>    Unobserved stochastic nodes: 170
+#>    Total graph size: 666
+#> 
+#> Initializing model
+#> 
 #> Warning: no non-missing arguments to max; returning -Inf
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 19
+#>    Unobserved stochastic nodes: 94
+#>    Total graph size: 489
+#> 
+#> Initializing model
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 72
+#>    Unobserved stochastic nodes: 202
+#>    Total graph size: 806
+#> 
+#> Initializing model
+#> 
 #> Warning: no non-missing arguments to max; returning -Inf
-#> Warning: no non-missing arguments to min; returning Inf
-#> Warning: no non-missing arguments to min; returning Inf
-#> Error in bboudata::bbd_chk_data_survival(surv_data, allow_missing = TRUE,     multi_pops = TRUE): Surv_data must include 'Month', 'MortalitiesCertain', 'MortalitiesUncertain', 'PopulationName' and 'Year'.
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 10
+#>    Unobserved stochastic nodes: 83
+#>    Total graph size: 409
+#> 
+#> Initializing model
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 54
+#>    Unobserved stochastic nodes: 170
+#>    Total graph size: 666
+#> 
+#> Initializing model
+#> 
+#> Warning: no non-missing arguments to max; returning -Inf
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 20
+#>    Unobserved stochastic nodes: 93
+#>    Total graph size: 489
+#> 
+#> Initializing model
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 74
+#>    Unobserved stochastic nodes: 200
+#>    Total graph size: 806
+#> 
+#> Initializing model
+#> 
+#> Warning: no non-missing arguments to max; returning -Inf
 ```

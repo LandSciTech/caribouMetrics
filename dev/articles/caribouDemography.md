@@ -303,6 +303,9 @@ TODO add the sample lines
 natTraj <- trajectoriesFromNational(replicates = 500, disturbance = covTableSim, 
                                     returnSamples = TRUE, interannualVar = FALSE, 
                                     useQuantiles = TRUE)
+#> Warning in trajectoriesFromNational(replicates = 500, disturbance =
+#> covTableSim, : returnSamples is set to FALSE when Year is not included in the
+#> disturbance scenario
 ```
 
 ![](caribouDemography_files/figure-html/unnamed-chunk-3-1.png)![](caribouDemography_files/figure-html/unnamed-chunk-3-2.png)

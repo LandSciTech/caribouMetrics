@@ -166,9 +166,10 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>requested year range: 1986 - 2016 does not match recruitment data year range:  1990 - 2016</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>missing years of recruitment data: 1986, 1987, 1988, 1989</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Registered S3 method overwritten by 'mcmcr':</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   method         from </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   as.mcmc.nlists nlist</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Registered S3 methods overwritten by 'mcmcr':</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   method               from </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   as.mcmc.nlists       nlist</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   as.mcmc.list.mcarray rjags</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> warning: value of stochastic node FemaleYearlings[1]: value is NA or NaN even after trying to simulate.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> warning: problem initializing stochastic node FemaleYearlings[1]: logProb is NA or NaN.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> warning: value of stochastic node FemaleYearlings[2]: value is NA or NaN even after trying to simulate.</span>
@@ -298,9 +299,6 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <span class="r-in"><span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">bayesianTrajectoryWorkflow</span><span class="op">(</span>surv_data <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simSurvObs</span>, recruit_data <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simRecruitObs</span>,</span></span>
 <span class="r-in"><span>                           disturbance <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simDisturbance</span>,</span></span>
 <span class="r-in"><span>                           startYear <span class="op">=</span> <span class="fl">2014</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Registered S3 method overwritten by 'rjags':</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   method               from </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   as.mcmc.list.mcarray mcmcr</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>

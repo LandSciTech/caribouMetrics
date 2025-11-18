@@ -1,6 +1,9 @@
 # Get a set of simulation results from the national demographic model
 
-Get a set of simulation results from the national demographic model
+Simulate demograhic rates based on the National demographic -
+disturbance model If a disturbance scenario containing Years is supplied
+trajectories will show growth of a population over time based on the
+National demographic - disturbance model
 
 ## Usage
 
@@ -16,7 +19,7 @@ trajectoriesFromNational(
   skipSave = FALSE,
   forceUpdate = FALSE,
   doSummary = TRUE,
-  returnSamples = TRUE,
+  returnSamples = "default",
   numSteps = 1
 )
 ```
@@ -65,15 +68,23 @@ trajectoriesFromNational(
 
 - disturbance:
 
-  data frame with Anthro,fire_excl_anthro and Year numeric columns. Each
-  is vector of numbers between 0 and 100 representing the percentage of
-  the landscape covered by anthropogenic disturbance buffered by 500 m,
-  and the percentage covered by fire that does not overlap anthropogenic
-  disturbance.
+  data frame with Anthro, fire_excl_anthro and Year numeric columns.
+  Anthro and fire_excl_anthro are vectors of numbers between 0 and 100
+  representing the percentage of the landscape covered by anthropogenic
+  disturbance buffered by 500 m, and the percentage covered by fire that
+  does not overlap anthropogenic disturbance.
+
+- returnSamples:
+
+  logical. If FALSE returns only summaries. If TRUE returns example
+  trajectories as well. By default summaries are not returned unless the
+  disturbance data provided contains a column named "Year".
 
 - numSteps:
 
-  Number. Number of years to project.
+  numeric. Number of steps to run
+  [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md)
+  at each disturbance level.
 
 ## Value
 
@@ -1727,22 +1738,5 @@ trajectoriesFromNational()
 #> 907 0.6791183569 0.9896423      0.024  Adult female survival
 #> 908 0.6433634605 0.9577030      0.004  Adult female survival
 #> 909 0.6479633509 0.9601764      0.002  Adult female survival
-#> 
-#> $samples
-#> # A tibble: 1,111,000 × 9
-#>    Replicate LambdaPercentile  Year PopulationName AnthroID fire_excl_anthroID
-#>    <chr>                <dbl> <dbl> <chr>             <dbl>              <dbl>
-#>  1 xV1                     87     0 National              0                  0
-#>  2 xV1                     87     0 National              0                  0
-#>  3 xV1                     87     0 National              0                  0
-#>  4 xV1                     87     0 National              0                  0
-#>  5 xV1                     87     0 National              0                  0
-#>  6 xV1                     87     0 National              0                  0
-#>  7 xV1                     87     0 National              0                  0
-#>  8 xV1                     87     0 National              0                  0
-#>  9 xV1                     87     0 National              0                  0
-#> 10 xV1                     87     0 National              0                  0
-#> # ℹ 1,110,990 more rows
-#> # ℹ 3 more variables: Timestep <dbl>, MetricTypeID <chr>, Amount <dbl>
 #> 
 ```
