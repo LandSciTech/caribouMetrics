@@ -26,7 +26,6 @@ Caribou demography functions:
 \code{\link{getScenarioDefaults}()},
 \code{\link{plotCompareTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{simTrajectory}()},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},
 \code{\link{trajectoriesFromNational}()},

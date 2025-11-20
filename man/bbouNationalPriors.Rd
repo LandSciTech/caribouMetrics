@@ -50,7 +50,6 @@ Caribou demography functions:
 \code{\link{plotCompareTrajectories}()},
 \code{\link{plotSurvivalSeries}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{simTrajectory}()},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},
 \code{\link{trajectoriesFromNational}()},

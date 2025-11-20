@@ -113,10 +113,9 @@ summarizeTrajectories <- function(pars,returnSamples=T){
 #' @param zMin 
 #' @param zMax 
 #' @param interannualVar 
-#'
-#' @returns
-#' @export
 #' @family demography
+#' 
+#' @noRd
 
 simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           recruitmentModelNumber = "M4",
