@@ -339,9 +339,6 @@ population growth
   : Plot survival time series
 - [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md)
   : Population growth model table for Johnson models
-- [`simTrajectory()`](https://landscitech.github.io/caribouMetrics/dev/reference/simTrajectory.md)
-  : Dynamically simulate a trajectory over time based on the national
-  model
 - [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md)
   : Simulate observations
 - [`convertTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md)

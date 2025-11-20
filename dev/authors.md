@@ -35,13 +35,13 @@ Source:
 
 Hughes J, Endicott S, Shimoda Y, Simpkins C, Michelleti T, McIntire E
 (2025). *caribouMetrics: Models and Metrics of Boreal Caribou Demography
-and Habitat Selection*. R package version 0.4.0.9000,
+and Habitat Selection*. R package version 0.4.0.9002,
 <https://landscitech.github.io/caribouMetrics>.
 
     @Manual{,
       title = {caribouMetrics: Models and Metrics of Boreal Caribou Demography and Habitat Selection},
       author = {Josie Hughes and Sarah Endicott and Yuko Shimoda and Craig Simpkins and Tati Michelleti and Eliot McIntire},
       year = {2025},
-      note = {R package version 0.4.0.9000},
+      note = {R package version 0.4.0.9002},
       url = {https://landscitech.github.io/caribouMetrics},
     }

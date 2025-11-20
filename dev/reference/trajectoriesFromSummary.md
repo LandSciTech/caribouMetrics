@@ -91,7 +91,6 @@ Caribou demography functions:
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
-[`simTrajectory()`](https://landscitech.github.io/caribouMetrics/dev/reference/simTrajectory.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md)
@@ -107,22 +106,22 @@ Caribou demography functions:
    scn_nm = "base", addl_params = NULL, type = "logistic"
  )
  outParTab
-#>    N0    lambda   lambdaE  N       R_t        X_t       S_t n_recruits
-#> 1  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
-#> 2  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
-#> 3  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
-#> 4  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
-#> 5  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
-#> 6  NA 0.8557581 0.9526899 NA 0.2070115 0.10350574 0.7754904         NA
-#> 7  NA 0.9633175 0.9263487 NA 0.2192908 0.10964540 0.8681309         NA
-#> 8  NA 0.9622174 0.9526899 NA 0.1535408 0.07677038 0.8936143         NA
-#> 9  NA 0.9372049 0.9263487 NA 0.2341660 0.11708298 0.8389752         NA
-#> 10 NA 1.0122748 0.9526899 NA 0.1743614 0.08718070 0.9311007         NA
-#> 11 NA 0.9027242 0.9263487 NA 0.1182574 0.05912870 0.8523272         NA
-#> 12 NA 0.9335832 0.9526899 NA 0.2050791 0.10253953 0.8467572         NA
-#> 13 NA 0.9288989 0.9263487 NA 0.1426117 0.07130584 0.8670716         NA
-#> 14 NA 0.9350846 0.9526899 NA 0.1535522 0.07677612 0.8684114         NA
-#> 15 NA 0.8854523 0.9263487 NA 0.1026232 0.05131160 0.8422359         NA
+#>    N0    lambda   lambdaE  N        R_t        X_t       S_t n_recruits
+#> 1  NA 0.9483000 0.9483000 NA 0.18000000 0.09000000 0.8700000         NA
+#> 2  NA 0.9483000 0.9483000 NA 0.18000000 0.09000000 0.8700000         NA
+#> 3  NA 0.9483000 0.9483000 NA 0.18000000 0.09000000 0.8700000         NA
+#> 4  NA 0.9483000 0.9483000 NA 0.18000000 0.09000000 0.8700000         NA
+#> 5  NA 0.9483000 0.9483000 NA 0.18000000 0.09000000 0.8700000         NA
+#> 6  NA 0.9358845 0.9338742 NA 0.15972312 0.07986156 0.8666708         NA
+#> 7  NA 0.8364511 0.8941811 NA 0.16062413 0.08031207 0.7742681         NA
+#> 8  NA 0.9599136 0.9338742 NA 0.15983166 0.07991583 0.8888782         NA
+#> 9  NA 0.8782673 0.8941811 NA 0.12254968 0.06127484 0.8275587         NA
+#> 10 NA 1.0350547 0.9338742 NA 0.20280522 0.10140261 0.9397606         NA
+#> 11 NA 0.7933208 0.8941811 NA 0.09794245 0.04897123 0.7562846         NA
+#> 12 NA 0.9561612 0.9338742 NA 0.17093070 0.08546535 0.8808768         NA
+#> 13 NA 0.8897089 0.8941811 NA 0.17939776 0.08969888 0.8164722         NA
+#> 14 NA 0.9155271 0.9338742 NA 0.16605802 0.08302901 0.8453394         NA
+#> 15 NA 0.9446451 0.8941811 NA 0.14839204 0.07419602 0.8793973         NA
 #>    surviving_adFemales id time type  scn
 #> 1                   NA  1    1 mean base
 #> 2                   NA  1    2 mean base

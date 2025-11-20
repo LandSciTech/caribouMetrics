@@ -9,7 +9,7 @@ results."><meta name="robots" content="noindex"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">caribouMetrics</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.4.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,7 +118,6 @@ simulated based on the collaring program parameters.</p></li>
 <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
 <code><a href="plotSurvivalSeries.html">plotSurvivalSeries()</a></code>,
 <code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code>,
-<code><a href="simTrajectory.html">simTrajectory()</a></code>,
 <code><a href="simulateObservations.html">simulateObservations()</a></code>,
 <code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>,
 <code><a href="trajectoriesFromNational.html">trajectoriesFromNational()</a></code>,
@@ -170,10 +169,10 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName    : chr [1:190] "A" "A" "A" "A" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ AnthroID          : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ fire_excl_anthroID: num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean              : num [1:190] NaN 0.8999 0.9649 0.0722 0.1387 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower             : Named num [1:190] NA 0.798 0.8619 0.0435 0.0801 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper             : Named num [1:190] NA 0.964 1.057 0.103 0.188 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable        : num [1:190] NaN 0 0.367 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean              : num [1:190] NaN 0.96 1.113 0.16 0.305 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower             : Named num [1:190] NA 0.889 1.027 0.123 0.241 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper             : Named num [1:190] NA 0.989 1.166 0.223 0.395 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable        : num [1:190] NaN 0 1 0 0 NaN 0 0 1 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Parameter         : chr [1:190] "c" "Adult female survival" "Population growth rate" "Adjusted recruitment" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Anthro            : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ fire_excl_anthro  : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
@@ -217,7 +216,7 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ obs.all       :'data.frame':	259 obs. of  36 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year            : num [1:259] 2014 2014 2014 2014 2014 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName  : chr [1:259] "A" "A" "A" "A" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean            : num [1:259] 0.105 0.308 0.9 1188 NA ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean            : num [1:259] 0.29 0.369 1 1300 NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Parameter       : chr [1:259] "Recruitment" "Expected recruitment" "Adult female survival" "Female population size" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID    : chr [1:259] "R" "Rbar" "S" "N" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Type            : chr [1:259] "observed" "true" "observed" "true" ...</span>

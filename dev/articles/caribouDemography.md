@@ -150,6 +150,9 @@ of 500 is used to calculate averages, while the sample of 35 is used to
 show variability among populations.
 
 ``` r
+# set seed so vignette looks the same each time
+set.seed(34533)
+
 popGrowthPars <- getNationalCoefficients(
   500,
   modelVersion = "Johnson",
@@ -227,13 +230,6 @@ in sample populations, assuming each sample population is randomly
 distributed among quantiles of the beta distribution, and each
 population remains in the same quantile of the beta distribution as
 disturbance changes.
-
-    #> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-    #> ℹ Please use `linewidth` instead.
-    #> This warning is displayed once every 8 hours.
-    #> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-    #> generated.
-
 ![](caribouDemography_files/figure-html/withPrecision-1.png)![](caribouDemography_files/figure-html/withPrecision-2.png)
 
 ## Projection of population growth over time on a changing landscape
@@ -276,9 +272,9 @@ for (t in 1:numTimesteps) {
                                  K = FALSE, probOption = "continuous"))
 
   # add results to output set
-  fds <- subset(pars, select = c(replicate, Anthro, S_bar, R_bar, N, lambda))
+  fds <- subset(pars, select = c(replicate, Anthro, S_bar, R_bar, N, lambda, lambdaE))
   fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
-  names(fds) <- c("Replicate", "anthro", "survival", "recruitment", "N", "lambda")
+  names(fds) <- c("Replicate", "anthro", "survival", "recruitment", "N", "lambda", "lambda_bar")
   fds <- pivot_longer(fds, !Replicate, names_to = "MetricTypeID", values_to = "Amount")
   fds$Timestep <- t * stepLength
   if (t == 1) {
@@ -290,41 +286,59 @@ for (t in 1:numTimesteps) {
 
 popMetrics$MetricTypeID <- as.character(popMetrics$MetricTypeID)
 popMetrics$Replicate <- paste0("x", popMetrics$Replicate)
-popMetrics <- subset(popMetrics, !MetricTypeID == "N")
+# popMetrics <- subset(popMetrics, !MetricTypeID == "N")
 ```
+
+TODO: explain difference between lambda in this graph and in the one
+from `trajectoriesFromNational`
 
 ![](caribouDemography_files/figure-html/changeOverTime-1.png)
 
 ## Using wrapper functions
 
-TODO add the sample lines
+The examples above show how to produce trajectories using the individual
+functions, but the package also contains a wrapper function to do all of
+these steps in one. `trajectoriesFromNational` samples the coefficients
+from the National model, calculates demographic rates given those
+coefficients and the level of disturbance and projects the population’s
+growth using `caribouPopGrowth` for one time step. If the disturbance
+scenario includes a Year column `trajectoriesFromNational` does the same
+process but will project population growth over time and can return the
+samples.
 
 ``` r
-natTraj <- trajectoriesFromNational(replicates = 500, disturbance = covTableSim, 
+natTraj <- trajectoriesFromNational(replicates = 500, 
+                                    disturbance = covTableSim, interannualVar = FALSE, 
+                                    useQuantiles = TRUE)
+
+# add year to return samples
+natTraj35 <- trajectoriesFromNational(replicates = 35, 
+                                    disturbance = covTableSim %>% 
+                                      mutate(Year = Anthro+100*fire_excl_anthro), 
                                     returnSamples = TRUE, interannualVar = FALSE, 
                                     useQuantiles = TRUE)
-#> Warning in trajectoriesFromNational(replicates = 500, disturbance =
-#> covTableSim, : returnSamples is set to FALSE when Year is not included in the
-#> disturbance scenario
 ```
 
 ![](caribouDemography_files/figure-html/unnamed-chunk-3-1.png)![](caribouDemography_files/figure-html/unnamed-chunk-3-2.png)
+
+Using the same scenario with anthropogenic disturbance footprint
+increasing by 5% per decade, we can also produce projections over a
+changing landscape with `trajectoriesFromNational`.
 
 ``` r
 disturbance2 = data.frame(step = 0:4) %>% bind_cols(disturbance) %>% 
   mutate(Anthro = Anthro + AnthroChange * step, 
          Year = step * 10)
 
-popMetrics2 <- purrr::map2(popGrowthParsSmall$coefSamples_Survival$quantiles, 
-                           popGrowthParsSmall$coefSamples_Recruitment$quantiles,
-                          \(x, y) simTrajectory(numYears = 5, N0 = 100, stepLength = 1,
-                                             rQuantile = y, sQuantile = x,
-                                             covariates = disturbance2, 
-                                             interannualVar = FALSE)) %>% 
-  bind_rows(.id = "Replicate") 
+# set seed so vignette looks the same each time
+set.seed(54545)
 
-popMetrics2 <- popMetrics2 %>% 
-  filter(MetricTypeID %in% c("Anthro", "recruitment","survival", "lambda_bar"))
+popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates = 35, 
+                                        interannualVar = FALSE, useQuantiles = TRUE,
+                                        N0 = 100, numSteps = 10)
+
+popMetrics2 <- popMetrics2$samples %>% 
+  filter(MetricTypeID %in% c("Anthro", "N", "recruitment","survival", "lambda_bar", "lambda"))
 ```
 
 ![](caribouDemography_files/figure-html/unnamed-chunk-5-1.png)
