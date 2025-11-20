@@ -98,6 +98,9 @@ covTableSim$Total_dist = covTableSim$Anthro + covTableSim$fire_excl_anthro
 We again sample coefficients from default models M1 and M4. The sample of 500 is used to calculate averages, while the sample of 35 is used to show variability among populations.
 
 ```{r popGrowthParameters, results='hide',message=F, warning=T}
+# set seed so vignette looks the same each time
+set.seed(34533)
+
 popGrowthPars <- getNationalCoefficients(
   500,
   modelVersion = "Johnson",
@@ -185,7 +188,7 @@ Variation in demographic rates from model that includes uncertainty about the re
 ```{r withPrecision,echo=FALSE, fig.width=8, fig.height=5}
 base1 <- ggplot(data = rateSummaries, 
                 aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh))+
-  geom_line(data = subset(rateSamples, fire_excl_anthro == 0), size = 0.5, 
+  geom_line(data = subset(rateSamples, fire_excl_anthro == 0), linewidth = 0.5, 
             aes(x = Anthro, y = S_bar, group = rep, colour = rep), inherit.aes = FALSE)+
   geom_line(colour = "black", linewidth = 2)+
   geom_ribbon(alpha = 0.25)+
@@ -221,9 +224,6 @@ numTimesteps <- 5
 stepLength <- 10
 N0 <- 100
 AnthroChange <- 5 #For illustration assume 5% increase in anthropogenic disturbance footprint each decade
-
-# set seed so quantiles in wrapper function will match
-set.seed(54545)
 
 # at each time,  sample demographic rates and project, save results
 pars <- data.frame(N0 = N0)
@@ -267,6 +267,8 @@ popMetrics$Replicate <- paste0("x", popMetrics$Replicate)
 # popMetrics <- subset(popMetrics, !MetricTypeID == "N")
 ```
 
+TODO: explain difference between lambda in this graph and in the one from `trajectoriesFromNational`
+
 ```{r changeOverTime, echo=FALSE, fig.width=8, fig.height=10}
 base1 <- ggplot(data = popMetrics, aes(x = Timestep, y = Amount, colour = Replicate, 
                                        group = Replicate)) +
@@ -278,9 +280,16 @@ base1
 ```
 
 ## Using wrapper functions
-TODO add the sample lines
+The examples above show how to produce trajectories using the individual functions, but the package also contains a wrapper function to do all of these steps in one. `trajectoriesFromNational` samples the coefficients from the National model, calculates demographic rates given those coefficients and the level of disturbance and projects the population's growth using `caribouPopGrowth` for one time step. If the disturbance scenario includes a Year column `trajectoriesFromNational` does the same process but will project population growth over time and can return the samples. 
 ```{r results='hide',message=F, warning=T}
-natTraj <- trajectoriesFromNational(replicates = 500, disturbance = covTableSim, 
+natTraj <- trajectoriesFromNational(replicates = 500, 
+                                    disturbance = covTableSim, interannualVar = FALSE, 
+                                    useQuantiles = TRUE)
+
+# add year to return samples
+natTraj35 <- trajectoriesFromNational(replicates = 35, 
+                                    disturbance = covTableSim %>% 
+                                      mutate(Year = Anthro+100*fire_excl_anthro), 
                                     returnSamples = TRUE, interannualVar = FALSE, 
                                     useQuantiles = TRUE)
 ```
@@ -288,6 +297,11 @@ natTraj <- trajectoriesFromNational(replicates = 500, disturbance = covTableSim,
 ```{r echo=FALSE, fig.width=8, fig.height=5}
 base2 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "survival", fire_excl_anthroID == 0) ,
                 aes(x = AnthroID, y = Mean, ymin = lower, ymax = upper))+
+   geom_line(data = natTraj35$samples%>% 
+               filter(MetricTypeID == "survival", fire_excl_anthroID == 0),
+             linewidth = 0.5,
+            aes(x = AnthroID, y = Amount, group = Replicate, colour = Replicate),
+            inherit.aes = FALSE)+
   geom_line(colour = "black", linewidth = 2)+
   geom_ribbon(alpha = 0.25)+
   xlab("Anthropogenic Disturbance (%)")+
@@ -299,6 +313,11 @@ base2
 plot_recruitment4 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "recruitment"),
                             aes(x = AnthroID, y = Mean * 100,  group = fire_excl_anthroID,
                                 colour = fire_excl_anthroID, type = fire_excl_anthroID))+
+  geom_line(data = natTraj35$samples%>% 
+               filter(MetricTypeID == "recruitment"),
+            aes(x = AnthroID, y = Amount*100, group =interaction(Replicate, fire_excl_anthroID),
+                colour = fire_excl_anthroID),
+            linewidth = 0.5, alpha = 0.2, inherit.aes = FALSE)+
   geom_line(linewidth = 2)+
   scale_colour_gradient(low = "green", high = "red")+
   scale_y_continuous(limits = c(0, 60),
@@ -309,12 +328,15 @@ plot_recruitment4 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "r
 plot_recruitment4
 ```
 
+Using the same scenario with anthropogenic disturbance footprint increasing by 5% per decade, we 
+can also produce projections over a changing landscape with `trajectoriesFromNational`. 
+
 ```{r results='hide',message=F, warning=T}
 disturbance2 = data.frame(step = 0:4) %>% bind_cols(disturbance) %>% 
   mutate(Anthro = Anthro + AnthroChange * step, 
          Year = step * 10)
 
-# set seed so quantiles in wrapper function will match
+# set seed so vignette looks the same each time
 set.seed(54545)
 
 popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates = 35, 
