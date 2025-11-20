@@ -163,17 +163,23 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   pars <- merge(data.frame(N0 = N0, PopulationName = "National"), rateSamplesAll)
 
   if(hasYear){
-    pars <- pars %>% select(-N0) %>% nest_by(replicate) %>% 
-      mutate(proj = list(simPopsOverTime(
-        N0, numSteps = n_distinct(data$Year), R_samp = data$R_bar,
-        S_samp = data$S_bar, onePop = TRUE, stepLength = numSteps,
-        c = unique(data$c), interannualVar = interannualVar, 
-        progress = FALSE))) %>% 
-      unnest(c(data, proj)) %>% 
-      select(-id, -time) %>% 
-      as.data.frame()
+    R_dat <- pars %>% select(Year, replicate, R_bar) %>% 
+      pivot_wider(names_from = Year, values_from = R_bar) %>% 
+      tibble::column_to_rownames("replicate")
+    S_dat <- pars %>% select(Year, replicate, S_bar) %>% 
+      pivot_wider(names_from = Year, values_from = S_bar) %>% 
+      tibble::column_to_rownames("replicate")
     
-
+    out <- simPopsOverTime(
+      N0, numSteps = n_distinct(pars$Year), R_samp = R_dat,
+      S_samp = S_dat, dynamicRates = TRUE, stepLength = numSteps,
+      c = unique(pars$c), interannualVar = interannualVar, 
+      progress = FALSE, K = FALSE
+    ) %>% mutate(replicate = factor(id, labels = rownames(R_dat)), 
+                   Year = factor(time, labels = colnames(R_dat)) %>%
+                     as.character() %>% as.numeric(), .keep = "unused") 
+    
+    pars <- full_join(pars %>% select(-N0), out, by = c("replicate", "Year"))
   } else {
     pars <- cbind(subset(pars,select=-N0), 
                   caribouPopGrowth(pars$N0, R_bar = pars$R_bar,

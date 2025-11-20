@@ -45,11 +45,13 @@ test_that("get samples by default and projects over time when Year supplied",{
                                     N0 = 100, numSteps = 10)
   expect_named(wDist, c("summary", "samples"))
   
-  proj <- ggplot(data = wDist$samples, aes(x = Timestep, y = Amount, colour = Replicate,
-                                         group = Replicate)) +
-    geom_line() +
-    facet_wrap(~MetricTypeID, scales = "free") +
-    xlab("Time") +
-    theme(legend.position = "none")
-  proj
+  if(interactive()){
+    proj <- ggplot(data = wDist$samples, aes(x = Timestep, y = Amount, colour = Replicate,
+                                             group = Replicate)) +
+      geom_line() +
+      facet_wrap(~MetricTypeID, scales = "free") +
+      xlab("Time") +
+      theme(legend.position = "none")
+    proj
+  }
 })

@@ -76,21 +76,37 @@ trajectoriesFromSummary <- function(numSteps, replicates, N0, R_bar, S_bar, R_sd
 
 #' Simulate caribou population over time
 #'
-#' If `onePop = FALSE` then `R_samp` and `S_samp` are constant rates over time
-#' and their length is the number of populations. If `onePop = TRUE` then
-#' `R_samp` and `S_samp` represent the rate at each time step and there length 
-#' should be equal to `numSteps`
-#'
+#' If `dynamicRates = FALSE` then `R_samp` and `S_samp` are constant rates over
+#' time and their length is the number of populations. If `dynamicRates = TRUE`
+#' and `R_samp` and `S_samp` are vectors they represent the rate at each time
+#' step and there length should be equal to `numSteps`. If If `dynamicRates =
+#' TRUE` and `R_samp` and `S_samp` are matrices then rows represent populations
+#' and columns represent timesteps, so cell `[i,j]` of the matrix is the rate
+#' for population i at timestep j
+#' 
+#' `numSteps` is the number of timesteps in the simulation while `stepLength` is
+#' the `numSteps` in each call to `caribouPopGrowth`
 #'
 #' @noRd
-simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, onePop = FALSE, stepLength = 1, ...) {
-  if(onePop){
-    stopifnot(length(R_samp) == numSteps)
+simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynamicRates = FALSE, stepLength = 1, ...) {
+  if(dynamicRates){
+    if(!is.null(dim(R_samp))){
+      stopifnot(ncol(R_samp) == numSteps)
+      onePop <- FALSE
+    }else {
+      stopifnot(length(R_samp) == numSteps)
+      onePop <- TRUE
+    }
   }
   for (ts in 1:numSteps) {
-    if(onePop){
-      R_use <- R_samp[ts]
-      S_use <- S_samp[ts]
+    if(dynamicRates){
+      if(onePop){
+        R_use <- R_samp[ts]
+        S_use <- S_samp[ts]
+      } else {
+        R_use <- R_samp[,ts]
+        S_use <- S_samp[,ts]
+      } 
     } else {
       R_use <- R_samp
       S_use <- S_samp
