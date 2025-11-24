@@ -1,133 +1,283 @@
 ---
-title: "Compare Bayesian models in caribouMetrics and bboutools"
-output: rmarkdown::html_vignette
+title: "Comparing the caribouMetrics Beta model to bboutools models"
+output: 
+    bookdown::html_document2:
+        base_format: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Compare Bayesian models in caribouMetrics and bboutools}
+  %\VignetteIndexEntry{Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models }
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+pkgdown:
+  as_is: true
+link-citations: yes
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
 )
+
+if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork') to run this vignette")
 ```
+
+## Similarities and differences between the caribouMetrics Beta model and the bboutools model
+
+@hughes2025 described a Beta model with disturbance covariates and informative priors for analysis of a single boreal caribou population with survival data aggregated by year and only cows and calves reported in the composition survey. To align with and allow comparison to the models implemented in bboutools [@dalgarno2025] we extended the @hughes2025 models as follows:
+
+-   Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+-   Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
+-   Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+-   Allow for analysis of groups of populations with shared interannual variation. TO DO: add link to bboutools documentation when it exists.
+
+Note that bboutools includes a number of different model variants. Throughout this document we compare to the Bayesian model with a random effect of year and no annual trend. For brevity, we refer to that as the "bbou" model.
+
+Key remaining differences between the caribouMetrics Beta model and the bbou model include:
+
+-   The Beta model includes anthropogenic and fire disturbance covariates.
+-   The Beta model intercept and disturbance covariate slope parameters are informed by national demographic-disturbance relationships.
+-   The distribution of interannual variation differs between the models.
+-   The bbou model allows for variation in survival among months.
+
+## Example data
+
+We compare the Beta and bbou models using three examples derived from the `bboudata::bbousurv_a` and `bboudata::bbourecruit_a` data sets:
+
+-   No local data: used to examine and compare prior predictions from the models.
+-   Informative local data: Observations from 2010 to 2016.
+-   Limited local data: Observations from 2014 to 2016.
+
+To examine and compare predictions for unobserved years (2018 to 2021) we add missing data.
 
 ```{r setup}
 library(caribouMetrics)
 # use local version on local and installed on GH
-if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
+if (requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
 library(bboudata)
 library(bboutools)
 library(dplyr)
 library(ggplot2)
+library(patchwork)
 
-useSaved <- T #option to skip slow step of fitting bboutools model
-resFile <- here::here("results/vignetteBbbouExample.rds")
-res2File <- here::here("results/vignetteBbbouExample2.rds")
-res1File <- here::here("results/vignetteBbbouExample1.rds")
+figWidth <- 8
+figHeight <- 10
 
-surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
-surv_data_add = expand.grid(Year=seq(2017,2022),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
-surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
-surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
+useSaved <- T # option to skip slow step of fitting bboutools model
+bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
+bbouLimitedFile <- here::here("results/vignetteBbbouExample2.rds")
+bbouPriorFile <- here::here("results/vignetteBbbouExample1.rds")
+bbouPriorNationalFile <- here::here("results/vignetteBbbouExample1p.rds")
+betaAnthroFile <- here::here("results/betaAnthroExample.rds")
 
-recruit_data=bboudata::bbourecruit_a %>% filter(Year > 2010)
-recruit_data_add = expand.grid(Year=seq(2017,2022),PopulationName=unique(recruit_data$PopulationName))
-recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
-recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
+surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
+surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
+                             PopulationName = unique(surv_data$PopulationName))
+surv_data <- merge(surv_data, surv_data_add, all.x = TRUE, all.y = TRUE)
+surv_data$StartTotal[is.na(surv_data$StartTotal)] <- 1
 
-surv_data1 <- surv_data %>% filter(Year > 2017)
-recruit_data1 <- recruit_data %>% filter(Year > 2017)
+recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
+recruit_data_add <- expand.grid(Year = seq(2017, 2022), PopulationName = unique(recruit_data$PopulationName))
+recruit_data <- merge(recruit_data, recruit_data_add, all.x = TRUE, all.y = TRUE)
+recruit_data$Month[is.na(recruit_data$Month)] <- 3
+recruit_data$Day[is.na(recruit_data$Day)] <- 15
 
-surv_data2 <- surv_data %>% filter(Year > 2014)
-recruit_data2 <- recruit_data %>% filter(Year > 2014)
+surv_dataNone <- surv_data %>% filter(Year > 2017)
+recruit_dataNone <- recruit_data %>% filter(Year > 2017)
+
+surv_dataLimited <- surv_data %>% filter(Year > 2014)
+recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
 ```
 
-## Beta model with disturbance covariates and informative priors
-TO DO: Describe beta model mathematically, and note differences/similarities to the ms model and bboutools models.
+## Comparison of the Beta and national models
 
-## Comparison to national models and bboutools models
-With no local data the Beta model with disturbance covariates and informative priors gives results that are comparable to the national model.
-```{r compare beta prior to national model}
-disturbance = data.frame(Year=unique(surv_data$Year),Anthro=5,fire_excl_anthro=1)
-modBeta1 <- caribouBayesianPM(surv_data1,recruit_data1,disturbance)
-simNational <-getSimsInitial(disturbance) 
-out_tbls <- getOutputTables(modBeta1, simInitial = simNational)
+As shown by @hughes2025 the prior means and 95% prior predictive intervals from the Beta model are similar to the means and ranges between the 2.5% and 97.5% quantiles of 3000 simulated survival and recruitment trajectories from the national model (Figure \@ref(fig:fig-plot1)).
+
+```{r compare beta prior to national model, results='hide'}
+disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 5,
+                          fire_excl_anthro = 1)
+betaPrior <- bayesianTrajectoryWorkflow(surv_dataNone, recruit_dataNone, disturbance)
+simNational <- trajectoriesFromNational(disturbance = disturbance)
+out_tbls <- compareTrajectories(betaPrior, simInitial = simNational)
+typeLabs <- c("Beta", "National")
 ```
 
-```{r plot1, fig.width=8,caption=""}
-rec =  plotRes(out_tbls, "Recruitment");plot(rec)
-surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
-lam =  plotRes(out_tbls, "Population growth rate",lowBound=0.5,highBound=1.5);plot(lam)
+```{r fig-plot1, fig.width=figWidth,fig.height=10,fig.cap="95% prior predictive intervals from Beta model with 5% anthropogenic disturbance, default priors, and no local data compared to simulations from the national model."}
+rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
+surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
+lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
+               lowBound = 0.5, highBound = 1.5)
+
+rec / surv / lam
 ```
 
-The bboutools model default priors are less informative than the beta model default priors.
-```{r compare beta and bboutools priors}
-if(useSaved&file.exists(res1File)){
-  mod1 <- readRDS(res1File)
-}else{
-  mod1 <- bbouMakeSummaryTable(surv_data1,recruit_data1,return_mcmc=T)
-  if(dir.exists(dirname(resFile))){saveRDS(mod1,res1File)}
+## Comparison of Beta and bbou prior predictions
+
+The bbou model default priors are less informative than the Beta model default priors (Figure \@ref(fig:fig-plotPriorsDefault)). The bbou model assumes that little is known about a population with no local data, whereas when there is no local data the Beta model assumes that local recruitment and survival rates are within the range of variation among boreal caribou populations there were included in the national model.
+
+```{r compare beta and bbou priors, results='hide'}
+if (useSaved & file.exists(bbouPriorFile)) {
+  bbouPrior <- readRDS(bbouPriorFile)
+} else {
+  bbouPrior <- estimateBayesianRates(surv_dataNone, recruit_dataNone, 
+                                    return_mcmc = TRUE)
+  if (dir.exists(dirname(bbouPriorFile))) {
+    saveRDS(bbouPrior, bbouPriorFile)
+  }
 }
-simBB1 <-getSimsInitial(mod1) 
-out_tbls <- getOutputTables(modBeta1, simInitial = simBB1)
+simBbouPrior <- trajectoriesFromBayesian(bbouPrior)
+out_tbls <- compareTrajectories(betaPrior, simInitial = simBbouPrior)
+typeLabs <- c("Beta", "Bbou")
 ```
 
-```{r plot2, fig.width=8,caption=""}
-rec =  plotRes(out_tbls, "Recruitment");plot(rec)
-surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
-lam =  plotRes(out_tbls, "Population growth rate",lowBound=0,highBound=2);plot(lam)
+```{r fig-plotPriorsDefault, fig.width=figWidth,fig.height=figHeight,fig.cap="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and default priors."}
+rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
+
+surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
+
+lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs, 
+               lowBound = 0, highBound = 2)
+
+rec / surv / lam
 ```
 
-#TO DO: better graph labels.
+The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar prior predictions of expected demographic rates. The bbou model assumes more prior uncertainty about interannual variation, so prior predictions of the distribution of observed demographic rates in each year continue to differ. TODO explain what expected demographic parameters are and how they are different from the plots shown on the right.
 
-With more informative data, the Beta model model with constant disturbance covariates and informative priors often gives results that are comparable to bboutools without informative priors.
-```{r compare beta and bboutools posteriors}
-modBeta <- caribouBayesianPM(surv_data,recruit_data,disturbance)
-if(useSaved&file.exists(resFile)){
-  mod <- readRDS(resFile)
-}else{
-  mod <- bbouMakeSummaryTable(surv_data,recruit_data,return_mcmc=T)
-  if(dir.exists(dirname(resFile))){saveRDS(mod,resFile)}
+```{r compare beta and bbou with informative priors., results='hide'}
+b0Priors <- bbouNationalPriors(Anthro = unique(disturbance$Anthro), fire_excl_anthro = unique(disturbance$fire_excl_anthro), month = TRUE)
+if (useSaved & file.exists(bbouPriorNationalFile)) {
+  bbouPriorNational <- readRDS(bbouPriorNationalFile)
+} else {
+  bbouPriorNational <- estimateBayesianRates(surv_dataNone, recruit_dataNone,
+                                            return_mcmc = TRUE, priors = b0Priors)
+  if (dir.exists(dirname(bbouPriorNationalFile))) {
+    saveRDS(bbouPriorNational, bbouPriorNationalFile)
+  }
 }
-simBB <-getSimsInitial(mod) 
-out_tbls <- getOutputTables(modBeta, simInitial = simBB)
+simBbouPriorNational <- trajectoriesFromBayesian(bbouPriorNational)
+out_tbls <- compareTrajectories(betaPrior, simInitial = simBbouPriorNational)
+typeLabs <- c("Beta", "Bbou National")
 ```
 
-```{r plot3, fig.width=8,caption=""}
-rec =  plotRes(out_tbls, "Recruitment");plot(rec)
-surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
-lam =  plotRes(out_tbls, "Population growth rate",lowBound=0.5,highBound=1.5);plot(lam)
+```{r fig-plotPriorsNational, fig.width=12,fig.height=figHeight,fig.cap="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and priors informed by national demographic-disturbance relationships."}
+recBar <- plotCompareTrajectories(out_tbls, "Expected recruitment", typeLabels = typeLabs)
+
+rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
+
+survBar <- plotCompareTrajectories(out_tbls, "Expected survival", typeLabels = typeLabs)
+
+surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
+
+lamBar <- plotCompareTrajectories(out_tbls, "Expected growth rate", typeLabels = typeLabs,
+                  lowBound = 0, highBound = 2)
+
+lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs, 
+               lowBound = 0, highBound = 2)
+(recBar + rec) / (survBar + surv) / (lamBar + lam)
 ```
 
-However, if local data is limited the bboutools model without informative priors and the Beta model 
-with disturbance covariates and informative priors may give different results, particularly if 
-observations are inconsistent with expectations from the observed distribution of outcomes across the country.
-```{r compare beta and bboutools posteriors with limited data.}
-disturbance = data.frame(Year=unique(surv_data$Year),Anthro=95,fire_excl_anthro=90)
-modBeta2 <- caribouBayesianPM(surv_data2,recruit_data2,disturbance)
-if(useSaved&file.exists(res2File)){
-  mod2 <- readRDS(res2File)
-}else{
-  mod2 <- bbouMakeSummaryTable(surv_data2,recruit_data2,return_mcmc=T)
-  if(dir.exists(dirname(resFile))){saveRDS(mod2,res2File)}
+## Comparison of Beta and bbou models with informative local data
+
+With more informative data, the Beta model with constant disturbance covariates and informative priors often gives results that are comparable to the bbou model with default (less informative) priors. When there is enough local data available differences in the priors are less important.
+
+```{r compare beta and bbou informative local data, results='hide'}
+betaInformative <- bayesianTrajectoryWorkflow(surv_data, recruit_data, disturbance)
+if (useSaved & file.exists(bbouInformativeFile)) {
+  bbouInformative <- readRDS(bbouInformativeFile)
+} else {
+  bbouInformative <- estimateBayesianRates(surv_data, recruit_data,
+                                          return_mcmc = TRUE)
+  if (dir.exists(dirname(bbouInformativeFile))) {
+    saveRDS(bbouInformative, bbouInformativeFile)
+  }
 }
-simBB2 <-getSimsInitial(mod2) 
-out_tbls <- getOutputTables(modBeta2, simInitial = simBB2)
+simBbouInformative <- trajectoriesFromBayesian(bbouInformative)
+out_tbls <- compareTrajectories(betaInformative, simInitial = simBbouInformative)
+typeLabs <- c("Beta", "Bbou")
 ```
 
-```{r plot4, fig.width=8,caption=""}
-rec =  plotRes(out_tbls, "Recruitment");plot(rec)
-surv =  plotRes(out_tbls, "Adult female survival");plot(surv)
-lam =  plotRes(out_tbls, "Population growth rate",lowBound=0.5,highBound=1.5);plot(lam)
+```{r fig-plotInformativeLocal, fig.cap="Posterior means and 95% posterior predictive intervals from Beta and bbou models with 5% anthropogenic disturbance, default priors, and informative local data.", fig.width=figWidth,fig.height=figHeight}
+rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
+
+surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
+
+lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
+               lowBound = 0.5, highBound = 1.5)
+rec / surv / lam
 ```
 
-TO DO: The bboutools models do not include disturbance covariates, so the models will also give different results in a case where disturbance changes over time.
+The bbou model does not include disturbance covariates, so we expect the models to project different outcomes in a case where disturbance changes over time.
 
-## Bboutools models with informative priors
+```{r compare beta and bbou with changing disturbance, results='hide'}
+disturbance <- data.frame(Year = seq(2011, 2051),
+                          Anthro = seq(20, 2 * 40 + 20, length.out = 41),
+                          fire_excl_anthro = 1)
+if (useSaved & file.exists(betaAnthroFile)){
+  betaAnthroChange <- readRDS(betaAnthroFile)
+} else {
+  betaAnthroChange <- bayesianTrajectoryWorkflow(surv_data, recruit_data, disturbance)  
+  if(dir.exists(dirname(betaAnthroFile))){
+    saveRDS(betaAnthroChange, betaAnthroFile)
+  }
+}
 
-TO DO: The bboutools priors can be set to (approximately) match the beta model priors. When disturbance is constant, the models with informative priors are similar to one another. 
+if (useSaved & file.exists(bbouInformativeFile)) {
+  bbouInformative <- readRDS(bbouInformativeFile)
+} else {
+  bbouInformative <- estimateBayesianRates(surv_data, recruit_data,
+                                          return_mcmc = TRUE)
+  if (dir.exists(dirname(bbouInformativeFile))) {
+    saveRDS(bbouInformative, bbouInformativeFile)
+  }
+}
+simBbouInformative <- trajectoriesFromBayesian(bbouInformative)
+out_tbls <- compareTrajectories(betaAnthroChange, simInitial = simBbouInformative)
+typeLabs <- c("Beta", "Bbou")
+```
 
+```{r fig-plotDisturbanceChange, fig.width=figWidth,fig.height=figHeight,fig.cap="Posterior means and 95% posterior predictive intervals from Beta and bbou models with default priors, informative local data, and anthropogenic disturbance increasing from 20 to 100% over 40 years."}
+rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs,
+               breakInterval = 5)
 
+surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs, 
+                breakInterval = 5)
+
+lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs, 
+               lowBound = 0.5, highBound = 1.5, breakInterval = 5)
+rec / surv / lam 
+```
+
+## Comparison of Beta and bbou models with limited local data
+
+If local data is limited the bbou model with default (less informative) priors and the Beta model with disturbance covariates and informative priors may also give different results, particularly if observations are inconsistent with expectations from the observed distribution of outcomes across the country. For example (Figure \@ref(fig:fig-plotLimitedLocal)) when disturbance is high the prior expectation from the Beta model is that recruitment and survival will be low. In this example there are a couple of observations of survival and recruitment that are higher than expected given knowledge of disturbance. Both models acknowledge high uncertainty about the true state of the population given limited local data. The Beta model predicts lower growth than the bbou model in this case because it is combining the limited local information with a prior expectation that demographic rates will be low when disturbance is high.
+
+```{r compare beta and bbou with limited data., results='hide'}
+disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 90, fire_excl_anthro = 5)
+betaLimited <- bayesianTrajectoryWorkflow(surv_dataLimited, recruit_dataLimited, disturbance)
+if (useSaved & file.exists(bbouLimitedFile)) {
+  bbouLimited <- readRDS(bbouLimitedFile)
+} else {
+  bbouLimited <- estimateBayesianRates(surv_dataLimited, recruit_dataLimited,
+                                      return_mcmc = TRUE)
+  if (dir.exists(dirname(bbouLimitedFile))) {
+    saveRDS(bbouLimited, bbouLimitedFile)
+  }
+}
+simBbouLimited <- trajectoriesFromBayesian(bbouLimited)
+out_tbls <- compareTrajectories(betaLimited, simInitial = simBbouLimited)
+typeLabs <- c("Beta", "Bbou")
+```
+
+```{r fig-plotLimitedLocal, fig.width=figWidth,fig.height=figHeight,fig.cap="Posterior means and 95% predictive intervals from Beta and bbou models with 90% anthropogenic disturbance, default priors, and limited local data."}
+rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
+
+surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
+
+lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
+               lowBound = 0.45, highBound = 1.55)
+rec / surv / lam
+```
+
+## References

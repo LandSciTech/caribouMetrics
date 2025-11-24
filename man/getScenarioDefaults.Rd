@@ -13,6 +13,8 @@ getScenarioDefaults(
   rSlopeMod = 1,
   sSlopeMod = 1,
   lQuantile = NA,
+  sQuantile = NA,
+  rQuantile = NA,
   correlateRates = F,
   projYears = 35,
   obsYears = 15,
@@ -30,9 +32,7 @@ getScenarioDefaults(
   collarCount = NA,
   startYear = NA,
   interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
-  curYear = 2023,
-  sQuantile = NA,
-  rQuantile = NA
+  curYear = 2023
 )
 }
 \arguments{
@@ -54,6 +54,10 @@ the projection period}
 \item{sSlopeMod}{number. Disturbance-survival slope multiplier}
 
 \item{lQuantile}{number in 0, 1. Lambda quantile}
+
+\item{sQuantile}{number in 0,1. Survival quantile.}
+
+\item{rQuantile}{number in 0,1. Recruitment quantile.}
 
 \item{correlateRates}{logical. Set TRUE to force correlation between recruitment and survival.}
 
@@ -83,7 +87,7 @@ more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+
 \item{collarInterval}{number. Optional. Number of years between collar deployments. If
 missing assumed to be every year}
 
-\item{cowCount}{Optional. Only used in \code{runScnSet()} to set the number of cows per
+\item{cowCount}{Optional. Only used in \code{bayesianScenariosWorkflow()} to set the number of cows per
 year in recruitment survey}
 
 \item{collarCount}{number >= 1. The target number of collars active each year. Set to NA to use \code{freqStartsPerYear} in \code{simulateObservations()}}
@@ -117,22 +121,24 @@ getScenarioDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears =
 }
 \seealso{
 Caribou demography functions:
-\code{\link{bbouMakeSummaryTable}()},
-\code{\link{caribouBayesianPM}()},
+\code{\link{bayesianScenariosWorkflow}()},
+\code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{bbouNationalPriors}()},
+\code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
-\code{\link{caribouPopSimMCMC}()},
+\code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{demographicCoefficients}()},
+\code{\link{convertTrajectories}()},
 \code{\link{demographicProjectionApp}()},
-\code{\link{demographicRates}()},
-\code{\link{doSim}()},
-\code{\link{getOutputTables}()},
-\code{\link{getPriors}()},
-\code{\link{getSimsInitial}()},
-\code{\link{getSimsNational}()},
-\code{\link{plotRes}()},
+\code{\link{estimateBayesianRates}()},
+\code{\link{estimateNationalRate}()},
+\code{\link{getNationalCoefficients}()},
+\code{\link{plotCompareTrajectories}()},
+\code{\link{plotSurvivalSeries}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{runScnSet}()},
-\code{\link{simulateObservations}()}
+\code{\link{simulateObservations}()},
+\code{\link{trajectoriesFromBayesian}()},
+\code{\link{trajectoriesFromNational}()},
+\code{\link{trajectoriesFromSummary}()}
 }
 \concept{demography}

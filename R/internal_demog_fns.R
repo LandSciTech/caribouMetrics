@@ -8,11 +8,11 @@
 #' @returns convertTrajectories: formatted tables
 #' @export
 #'
-#' @rdname caribouPopSimMCMC
+#' @rdname simulateTrajectoriesFromPosterior
 #' 
 
 convertTrajectories<-function(pars){
-  #converts output from caribouPopSim to alternate form
+  #converts output from simPopsOverTime to alternate form
   #pars = trajectories
   if(!is.element("lamPercentile",names(pars))){
     pars$lamPercentile=NA
@@ -54,12 +54,12 @@ convertTrajectories<-function(pars){
 #' @param pars 
 #' @param returnSamples 
 #'
-#' @returns summarizeCaribouPopSim:
+#' @returns summarizeTrajectories:
 #' @export
 #' @family demography
 #'
-#' @rdname caribouPopSimMCMC
-summarizeCaribouPopSim <- function(pars,returnSamples=T){
+#' @rdname simulateTrajectoriesFromPosterior
+summarizeTrajectories <- function(pars,returnSamples=T){
 
   if(is.element("AnthroID",names(pars))){  
     simSum <- pars  %>%
@@ -79,12 +79,43 @@ summarizeCaribouPopSim <- function(pars,returnSamples=T){
                                    "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
                                    ))
   simSum=merge(simSum,names)
-  
-  simBig <- list(summary = simSum, samples = pars)
+  if (returnSamples){
+    simBig <- list(summary = simSum, samples = pars)
+  } else {
+    simBig <- list(summary = simSum)
+  }
+
   return(simBig)
 }
 
 # Helpers for simulateObservations -----------------------------------------
+
+#' Dynamically simulate a trajectory over time based on the national model
+#' 
+#' 
+#' 
+#' @param numYears 
+#' @param covariates 
+#' @param survivalModelNumber 
+#' @param recruitmentModelNumber 
+#' @param popGrowthTable 
+#' @param recSlopeMultiplier 
+#' @param sefSlopeMultiplier 
+#' @param rQuantile 
+#' @param sQuantile 
+#' @param stepLength 
+#' @param N0 
+#' @param cowMult 
+#' @param qMin 
+#' @param qMax 
+#' @param uMin 
+#' @param uMax 
+#' @param zMin 
+#' @param zMax 
+#' @param interannualVar 
+#' @family demography
+#' 
+#' @noRd
 
 simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           recruitmentModelNumber = "M4",
@@ -92,7 +123,8 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           recSlopeMultiplier = 1, sefSlopeMultiplier = 1,
                           rQuantile = NULL, sQuantile = NULL,
                           stepLength = 1, N0 = 1000,cowMult=1,
-                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,interannualVar = formals(caribouPopGrowth)$interannualVar) {
+                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,
+                          interannualVar = eval(formals(caribouPopGrowth)$interannualVar)) {
   # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
   # recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
   # stepLength=1;N0=1000
@@ -113,7 +145,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
     sefSlopeMultiplier * growthTab$Value[(growthTab$Coefficient == "Anthro") &
                                            (growthTab$responseVariable == "femaleSurvival")]
   
-  popGrowthParsSmall <- demographicCoefficients(
+  popGrowthParsSmall <- getNationalCoefficients(
     2,
     modelVersion = "Johnson",
     survivalModelNumber = survivalModelNumber,
@@ -129,50 +161,36 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   usePrec <- "Precision" %in% names(popGrowthParsSmall$coefSamples_Survival$coefValues) &
     "Precision" %in% names(popGrowthParsSmall$coefSamples_Recruitment$coefValues)
   # at each time,  sample demographic rates and project, save results
-  # TODO: SE thinks this can be done all at once with a table of demographic rates 
+  
+  
   pars <- data.frame(N0 = N0)
-  for (t in 1:numYears) {
-    # t=1
-    covs <- subset(covariates, time == t)
-    
-    rateSamples <- demographicRates(
-      covTable = covs,
-      popGrowthPars = popGrowthParsSmall,
-      ignorePrecision = !usePrec,
-      returnSample = TRUE
-    )[1,]
-    
-    if(t ==1){
-      #set bias correction term for each example population - constant over time.
-      bc = unique(subset(rateSamples,select=replicate));nr=nrow(bc)
-      bc$c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
-    }
-    rateSamples$c = NULL; rateSamples = merge(rateSamples, bc)
-    
-    if (is.element("N", names(pars))) {
-      pars <- subset(pars, select = c("replicate", "N"))
-      names(pars)[names(pars) == "N"] <- "N0"
-    }
-    pars <- merge(pars, rateSamples)
-    
-    pars <- cbind(
-      pars,
-      caribouPopGrowth(pars$N0,
-                       R_bar = pars$R_bar, S_bar = pars$S_bar,
-                       numSteps = stepLength, K = FALSE, l_R = 1e-06, c=pars$c,
-                       interannualVar=interannualVar,
-                       progress = FALSE
-      )
-    )
-    pars$id <-pars$replicate
-    
-    fds<-convertTrajectories(pars)
-    if (t == 1) {
-      popMetrics <- fds
-    } else {
-      popMetrics <- rbind(popMetrics, fds)
-    }
-  }
+  
+  # sample rates with covariates from each timestep
+  rateSamples <- estimateNationalRates(
+    covTable = covariates,
+    popGrowthPars = popGrowthParsSmall,
+    ignorePrecision = !usePrec,
+    returnSample = TRUE
+  )[1:nrow(covariates),] # only using the first replicate but doesn't work with just 1
+  
+  #set bias correction term for each example population - constant over time.
+  bc = unique(subset(rateSamples,select=replicate))
+  nr=nrow(bc)
+  c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,
+                                   u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
+
+  popMetrics <- simPopsOverTime(N0, numSteps = numYears, R_samp = rateSamples$R_bar,
+                              S_samp = rateSamples$S_bar, 
+                              interannualVar = interannualVar,
+                              dynamicRates = TRUE,
+                              stepLength = stepLength,
+                              K = FALSE,
+                              l_R = 1e-06,
+                              c = c, 
+                              progress = FALSE)
+  popMetrics <- merge(popMetrics, rateSamples, by.x = "time", by.y = "scnID")
+  
+  popMetrics <- convertTrajectories(popMetrics)
   return(popMetrics)
 }
 
@@ -259,9 +277,9 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
           #if(sum(cInfo$StartTotal)==0){break}
         }
         
-        if(any(cInfo$StartTotal>cInfo$N)){
+        if(any(cInfo$StartTotal[!is.na(cInfo$N)]>cInfo$N[!is.na(cInfo$N)])){
           warning("Target number of collars exceeds population size. Adjusting number of collars for consistency.")
-          cInfo$StartTotal = pmin(cInfo$N,cInfo$StartTotal)
+          cInfo$StartTotal[cInfo$StartTotal>cInfo$N] = cInfo$N[cInfo$StartTotal>cInfo$N]
         }
         
         cInfo$MortalitiesCertain = rbinom(nrow(cInfo),cInfo$StartTotal,prob=(1-cInfo$survival^(1/nMonths)))
@@ -302,26 +320,6 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   simSurvs$MortalitiesCertain[simSurvs$StartTotal==0]=NA
   
   return(simSurvs)
-}
-
-plotSurvivalSeries<-function(surv_data_show){
-  #surv_data_show = subset(outObs$simSurvObs,Replicate==outObs$simSurvObs$Replicate[1])
-  
-  surv_data_show$MortalitiesCertain[surv_data_show$MortalitiesCertain==0]=NA
-  surv_data_show$Malfunctions[surv_data_show$Malfunctions==0]=NA
-  surv_data_show$Month=factor(surv_data_show$Month,levels=seq(1:12))
-  if(length(unique(surv_data_show$Month))==1){
-    base = ggplot(surv_data_show,aes(x=Year,y=StartTotal,group=PopulationName,colour=PopulationName))+geom_line()+
-      geom_point(aes(x=Year,y=MortalitiesCertain,group=PopulationName,colour=PopulationName),shape=4)+
-      geom_col(aes(x=Year,y=Malfunctions,group=PopulationName,colour=PopulationName,fill=PopulationName),alpha=0.2)+
-      ylab("Number of Animals")+theme_bw()
-  }else{
-    base = ggplot(surv_data_show,aes(x=Month,y=StartTotal,group=PopulationName,colour=PopulationName))+geom_line()+facet_wrap(~Year)+
-      geom_point(aes(x=Month,y=MortalitiesCertain,group=PopulationName,colour=PopulationName),shape=4)+
-      geom_col(aes(x=Month,y=Malfunctions,group=PopulationName,colour=PopulationName,fill=PopulationName),alpha=0.2)+
-      ylab("Number of Animals")+theme_bw()
-  }
-  return(base)
 }
 
 simCalfCowRatios <- function(cowCounts, exData) {
@@ -507,7 +505,7 @@ savePersistentCache <- function(env = cacheEnv){
   obj_nms <- ls(envir = env)
   lapply(obj_nms, function(x){
     obj <- get(x, envir=env)
-    saveRDS(obj, paste0("inst/extdata/", x, ".rds"))
+    saveRDS(obj, paste0("results/", x, ".rds"))
   })
   return(invisible())
 }

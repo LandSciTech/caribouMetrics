@@ -1,0 +1,256 @@
+---
+title: "workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+#| width: 100
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+  echo = FALSE
+)
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+```{mermaid}
+%%| column: screen
+%%| fig.width: 20
+---
+displayMode: compact
+---
+%%{init: { "gantt": { "barGap": 20 } } }%%
+gantt
+    title Paper workflow
+    dateFormat YYYY-MM-DD
+    axisFormat %i
+    
+    section A
+    getSimsInitial :a1, 2000-01-01, 20d
+    .              :done, ax, after a1, 1d  
+    runScnSet      :a2, after ax, 245d
+    .              :done, ay, after a2, 1d  
+    plotRes        :a3, after ay, 20d  
+    
+    section B
+    getScenarioDefaults  :b2, after ax, 40d
+    .                    :done, bx, after b2, 1d  
+    simulateObservations :b3, after bx, 80d
+    .                    :done, by, after b3, 1d 
+    caribouBayesianPM    :b4, after by, 101d
+    .                    :done, bz, after b4, 1d  
+    getOutputTables      :b5, after bz, 20d
+    
+    section C
+    trajectoriesFrom??  :c1, after bx, 40d
+
+    bbouMakeSummaryTable     :c5, after by, 40d
+    .                        :done, cy, after c5, 1d
+    getSimsInitial           :c6, after cy, 40d
+    
+    section D
+    getPriors    :d4, after by, 20d
+    
+```
+
+
+```{mermaid}
+%%| column: screen
+%%| fig.width: 20
+---
+displayMode: compact
+---
+%%{init: { "gantt": { "barGap": 20 } } }%%
+gantt
+    title Paper workflow
+    dateFormat YYYY-MM-DD
+    axisFormat %i
+    
+    section A
+    getSimsInitial :a1, 2000-01-01, 20d
+    .              :done, ax, after a1, 1d  
+    runScnSet      :a2, after ax, 245d
+    .              :done, ay, after a2, 1d  
+    plotRes        :a3, after ay, 20d  
+    
+    section B
+    getSimsNational      :b1, 2000-01-01, 20d
+    
+    getScenarioDefaults  :b2, after ax, 20d
+    .                    :done, bx, after b2, 1d  
+    simulateObservations :b3, after bx, 101d
+    .                    :done, by, after b3, 1d 
+    caribouBayesianPM    :b4, after by, 101d
+    .                    :done, bz, after b4, 1d  
+    getOutputTables      :b5, after bz, 20d
+    
+    section C
+    demographicCoefficients  :c1, after bx, 40d
+    .                        :done, cx, after c1, 1d  
+    demographicRates         :c2, after cx, 20d
+    compositionBiasCorr      :c3, after c2, 20d 
+    caribouPopGrowth         :c4, after c3, 20d
+    
+    bbouMakeSummaryTable     :c5, after by, 20d
+    .                        :done, cy, after c5, 1d
+    getSimsInitial           :c6, after cy, 80d
+    
+    section D
+    getCoefs     :d1, after bx, 20d
+    sampleCoefs  :d2, after d1, 20d
+    
+    sampleRates  :d3, after cx, 20d 
+    
+    getPriors    :d4, after by, 20d
+    
+    compositionBiasCorr       :d5, after cy, 20d
+    caribouPopSimMCMC         :d6, after d5, 20d
+    convertTrajectories       :d7, after d6, 20d
+    summarizeTrajectories     :d8, after d7, 20d
+    
+```
+
+
+```{r eval=FALSE}
+# don't run just used to create chart with new names
+
+lu_tbl <- clipr::read_clip_tbl()
+
+gantt_str <- clipr::read_clip()
+
+new_gantt <- stringr::str_replace_all(gantt_str, setNames(lu_tbl$NewFunctionName, lu_tbl$FunctionName))
+
+cat(new_gantt, sep = "\n")
+```
+
+```{mermaid}
+%%| column: screen
+%%| fig.width: 20
+---
+displayMode: compact
+---
+%%{init: { "gantt": { "barGap": 20 } } }%%
+
+gantt
+    title Paper workflow new names
+    dateFormat YYYY-MM-DD
+    axisFormat %i
+    
+    section A
+    trajectoriesFromAny :a1, 2000-01-01, 25d
+    .              :done, ax, after a1, 1d  
+    bayesianScenariosWorkflow      :a2, after ax, 305d
+    .              :done, ay, after a2, 1d  
+    plotCompareTrajectories        :a3, after ay, 25d  
+    
+    section B
+    trajectoriesFromNtnl*      :b1, 2000-01-01, 25d
+    
+    getScenarioDefaults  :b2, after ax, 25d
+    .                    :done, bx, after b2, 1d  
+    simulateObservations :b3, after bx, 126d
+    .                    :done, by, after b3, 1d 
+    bayesianTrajectoryWorkflow    :b4, after by, 126d
+    .                    :done, bz, after b4, 1d  
+    compareTrajectories      :b5, after bz, 25d
+    
+    section C
+    getNationalCoefficients :c1, after bx, 50d
+    .                       :done, cx, after c1, 1d  
+    estimateNationalRates   :c2, after cx, 25d
+    compositionBiasCorr*    :c3, after c2, 25d 
+    caribouPopGrowth        :c4, after c3, 25d
+    
+    estimateBayesianRates :c5, after by, 25d
+    .                     :done, cy, after c5, 1d
+    trajectoriesFromAny   :c6, after cy, 100d
+    
+    section D
+    subsetNationalCoefs   :d1, after bx, 25d
+    sampleNationalCoefs   :d2, after d1, 25d
+    
+    estimateNationalRate  :d3, after cx, 25d 
+    
+    betaNationalPriors    :d4, after by, 25d
+    
+    compositionBiasCorr*      :d5, after cy, 25d
+    simTrajFromPosterior*     :d6, after d5, 25d
+    convertTrajectories       :d7, after d6, 25d
+    summarizeTrajectories     :d8, after d7, 25d
+```
+
+
+# Getting demographic rates, trajectories, and trajectory summaries
+
+```{mermaid}
+%%| column: screen
+%%| fig.width: 20
+---
+displayMode: compact
+---
+%%{init: { "gantt": { "barGap": 20 } } }%%
+gantt
+    title Demographic rates, trajectories, and trajectory summaries from the national model. 
+    dateFormat YYYY-MM-DD
+    axisFormat %i
+    
+    section A
+    getSimsInitial :a1, 2000-01-01, 240d
+
+    section B
+    getSimsNational       :b1, 2000-01-01, 160d
+    convertTrajectories     :b2, after b1, 40d
+    summarizeCaribouPopSim     :b3, after b2, 40d
+
+    section C
+    demographicCoefficients  :c1, 2000-01-01, 40d
+    demographicRates         :c2, after c1, 40d
+    compositionBiasCorr      :c3, after c2, 40d 
+    caribouPopGrowth         :c4, after c3, 40d
+
+```
+
+Note that if a fitted disturbance scenario is not specified (either as a disturbance table or disturbance scenario parameters) getSimsInitial returns demographic summaries for different levels of anthropogenic disturbance from 1 to 100. Otherwise, outputs include demographic trajectories and summaries of those trajectories.
+
+
+```{mermaid}
+%%| column: screen
+%%| fig.width: 20
+---
+displayMode: compact
+---
+%%{init: { "gantt": { "barGap": 20 } } }%%
+gantt
+    title Demographic rates, trajectories, and trajectory summaries from Bayesian model posterior samples. 
+    dateFormat YYYY-MM-DD
+    axisFormat %i
+    
+    section A
+    bbouMakeSummaryTable :a1, 2000-01-01, 40d
+    .              :done, ax, after a1, 1d  
+    getSimsInitial :a2, after ax, 160d
+
+    section B
+    compositionBiasCorr :b1, after ax, 40d
+    caribouPopSimMCMC  :b2, after b1, 40d
+    convertTrajectories :b3, after b2, 40d
+    summarizeCaribouPopSim  :b4, after b3, 40d
+
+```
+
+TO DO: Demographic rates, trajectories, and trajectory summaries from Bayesian model posterior summaries...
+
+\* indicates abbreviated function names for trajectoriesFromNational, compositionBiasCorrection and simulateTrajectoriesFromPosterior.
+
+Using grey "done" period to create some space between groupings of functions 

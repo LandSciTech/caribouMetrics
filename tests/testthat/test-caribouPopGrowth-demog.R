@@ -14,7 +14,7 @@ test_that("caribouPopGrowth options work", {
   res2 <- caribouPopGrowth(1:10*100, 20, c(rep(0.2, 5), rep(0.8, 5)),
                            0.85, progress = FALSE) 
   
-  expect_true(all(which(res2$lambda < 1) == 1:5))
+  expect_true(all(which(res2$lambdaE < 1) == 1:5))
   
   # vector for S_bar
   expect_error(caribouPopGrowth(1000, 20, 0.8, 
@@ -33,10 +33,12 @@ test_that("caribouPopGrowth options work", {
   expect_warning(caribouPopGrowth(1000, 20, R_bar = 0.9, S_bar = 0.7, progress = FALSE),
                "expected recruitment R_bar")
   
-  res4 <- caribouPopGrowth(9000, 200, R_bar = 0.7, S_bar = 0.9, progress = FALSE)
+  res4 <- caribouPopGrowth(9990, 200, R_bar = 0.7, S_bar = 0.9, 
+                           progress = FALSE, interannualVar = FALSE)
+  
   # lower recruitment at carrying capacity
-  res5 <- caribouPopGrowth(9000, 200, R_bar = 0.7, S_bar = 0.9, P_K = 0.4,
-                           progress = FALSE)
+  res5 <- caribouPopGrowth(9990, 200, R_bar = 0.7, S_bar = 0.9, P_K = 0.2,
+                           progress = FALSE, interannualVar = FALSE)
   
   expect_lt(res5$N, res4$N)
   
@@ -64,19 +66,19 @@ test_that("pop Growth matches Johnson figures", {
   covTableSim$area <- "FarNorth"
   covTableSim$Total_dist <- covTableSim$Anthro + covTableSim$fire_excl_anthro
   
-  popGrowthPars <- demographicCoefficients(500,
+  popGrowthPars <- getNationalCoefficients(500,
                                            modelVersion = "Johnson",
                                            survivalModelNumber = "M1",
                                            recruitmentModelNumber = "M4"
   )
   
-  rateSamplesLarge <- demographicRates(
+  rateSamplesLarge <- estimateNationalRates(
     covTable = covTableSim,
     popGrowthPars = popGrowthPars,
     ignorePrecision = F, returnSample = T, useQuantiles = T
   )
   
-  rateSummaries <- demographicRates(
+  rateSummaries <- estimateNationalRates(
     covTable = covTableSim, popGrowthPars = popGrowthPars,
     ignorePrecision = F, returnSample = F, useQuantiles = F
   )
@@ -132,13 +134,13 @@ test_that("pop Growth matches Johnson figures", {
   if(F){
     # reproduce comparison plots used in the MS
     library(ggplot2)
-    popGrowthParsSmall <- demographicCoefficients(35,
+    popGrowthParsSmall <- getNationalCoefficients(35,
                                                   modelVersion = "Johnson",
                                                   survivalModelNumber = "M1",
                                                   recruitmentModelNumber = "M4"
     )
     
-    rateSamples <- demographicRates(
+    rateSamples <- estimateNationalRates(
       covTable = covTableSim,
       popGrowthPars = popGrowthParsSmall,
       ignorePrecision = F, returnSample = T, useQuantiles = T

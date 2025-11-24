@@ -3,6 +3,9 @@ template:
 
 url: https://landscitech.github.io/caribouMetrics
 
+development:
+  mode: auto
+
 navbar:
   structure:
     left:  [home, reference, articles]
@@ -24,12 +27,6 @@ reference:
     contents:
       - has_concept("disturbance")
 
-  - title: Caribou habitiat
-    desc: Functions for predicting boreal caribou habitat use in 13 Ontario caribou ranges
-    contents:
-      - has_concept("habitat")
-      - plot,CaribouHabitat,ANY-method
-
 articles:
   - title: Articles
     navbar: ~
@@ -39,7 +36,6 @@ articles:
       - combine-observed-simulated
       - compare-bayesian-models
       - Using_disturbanceMetric
-      - Using_caribouHabitat
       
       
 

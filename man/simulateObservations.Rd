@@ -53,6 +53,10 @@ in that year.}
 
 \item{caribouYearStart}{integer. The first month of the year for caribou.}
 
+\item{recSurveyMonth}{integer. The month of simulated recruitment surveys.}
+
+\item{recSurveyDay}{integer. The day for simulated recruitment surveys.}
+
 \item{distScen}{data.frame. Disturbance scenario. Must have columns "Year",
 "Anthro", and "fire_excl_anthro" containing the year, percentage of the
 landscape covered by anthropogenic disturbance buffered by 500 m, and the
@@ -66,8 +70,6 @@ results will be saved to csv files in the directory provided}
 \item{surv_data}{data.frame. Optional existing survival data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.}
 
 \item{recruit_data}{data.frame. Optional existing recruitment data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.}
-
-\item{printPlot}{logical. print a plot of the true population trajectory?}
 }
 \value{
 a list with elements:
@@ -108,22 +110,24 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 }
 \seealso{
 Caribou demography functions:
-\code{\link{bbouMakeSummaryTable}()},
-\code{\link{caribouBayesianPM}()},
+\code{\link{bayesianScenariosWorkflow}()},
+\code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{bbouNationalPriors}()},
+\code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
-\code{\link{caribouPopSimMCMC}()},
+\code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{demographicCoefficients}()},
+\code{\link{convertTrajectories}()},
 \code{\link{demographicProjectionApp}()},
-\code{\link{demographicRates}()},
-\code{\link{doSim}()},
-\code{\link{getOutputTables}()},
-\code{\link{getPriors}()},
+\code{\link{estimateBayesianRates}()},
+\code{\link{estimateNationalRate}()},
+\code{\link{getNationalCoefficients}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsInitial}()},
-\code{\link{getSimsNational}()},
-\code{\link{plotRes}()},
+\code{\link{plotCompareTrajectories}()},
+\code{\link{plotSurvivalSeries}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{runScnSet}()}
+\code{\link{trajectoriesFromBayesian}()},
+\code{\link{trajectoriesFromNational}()},
+\code{\link{trajectoriesFromSummary}()}
 }
 \concept{demography}

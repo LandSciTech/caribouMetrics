@@ -1,0 +1,44 @@
+# set values that work for test and are fast
+niters <- 100
+nthin <- 5
+nc <- 3      # number of chains
+ni <- niters * nthin * 2   # number of samples for each chain
+nb <- ni / 2 
+
+test_that("Basic inputs works", {
+  out <- betaMakeSummaryTable(
+    surv_data = bboudata::bbousurv_a %>% filter(Year > 2010),
+    recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
+    disturbance = data.frame(Year = 2010:2020, Anthro = 10:20, fire_excl_anthro = 10:20),
+    priors = betaNationalPriors(), 
+    nc, nthin, ni, nb
+  )
+  expect_type(out, "list")
+})
+
+test_that("multiple populations works", {
+  expect_error(
+    betaMakeSummaryTable(
+      surv_data = bboudata::bbousurv_a %>% bind_rows(bboudata::bbousurv_b) %>% filter(Year > 2010),
+      recruit_data = bboudata::bbourecruit_a %>% bind_rows(bboudata::bbourecruit_b) %>% filter(Year > 2010),
+      disturbance = data.frame(Year = 2010:2020, Anthro = 10:20, fire_excl_anthro = 10:20),
+      priors = betaNationalPriors(), 
+      nc, nthin, ni, nb
+    ),
+    "missing expected columns"
+  ) 
+  
+  expect_warning(
+    out2 <- betaMakeSummaryTable(
+      surv_data = bboudata::bbousurv_a %>% bind_rows(bboudata::bbousurv_b) %>% filter(Year > 2010),
+      recruit_data = bboudata::bbourecruit_a %>% bind_rows(bboudata::bbourecruit_b) %>% filter(Year > 2010),
+      disturbance = bind_rows(
+        data.frame(PopulationName = "A", Year = 2010:2020, Anthro = 10:20, fire_excl_anthro = 10:20),
+        data.frame(PopulationName = "B", Year = 2010:2020, Anthro = 10:20, fire_excl_anthro = 10:20)
+      ),
+      priors = betaNationalPriors(), 
+      nc, nthin, ni, nb
+    ),
+    "no data for population"
+  )
+})

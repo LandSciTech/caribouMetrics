@@ -18,9 +18,9 @@ knitr::opts_chunk$set(
 ## Introduction
 Here we describe a two-stage demographic model with density dependence and interannual variability following [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637) with modifications noted in [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095) and [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates vary with disturbance as estimated by [Johnson et. al. (2020)](doi:10.1111/1365-2664.13637). A detailed description of the model is provided in [Hughes et al. (2025) Section 2.4](https://doi.org/10.1016/j.ecoinf.2025.103095).
 
-`demographicCoefficients()` selects the regression coefficient values and standard errors for the desired model version (see `popGrowthTableJohnsonECCC` for options) and then samples coefficients from these Gaussian distributions for each replicate population.  
+`getNationalCoefficients()` selects the regression coefficient values and standard errors for the desired model version (see `popGrowthTableJohnsonECCC` for options) and then samples coefficients from these Gaussian distributions for each replicate population.  
 
-Next `demographicRates()` is used to apply the sampled coefficients to the disturbance covariates to calculate expected recruitment and survival according to the beta regression models estimated by Johnson et al. (2020). Each population is optionally assigned to quantiles of the Beta error distributions for survival and recruitment. Using quantiles means that the population will stay in these quantiles as disturbance changes over time, so there is persistent variation in recruitment and survival among example populations.
+Next `estimateNationalRates()` is used to apply the sampled coefficients to the disturbance covariates to calculate expected recruitment and survival according to the beta regression models estimated by Johnson et al. (2020). Each population is optionally assigned to quantiles of the Beta error distributions for survival and recruitment. Using quantiles means that the population will stay in these quantiles as disturbance changes over time, so there is persistent variation in recruitment and survival among example populations.
 
 Finally, we can use the estimated demographic rates to project population dynamics using a simple model with two age classes. Interannual variation in survival and recruitment is modelled using truncated beta distributions.
 
@@ -43,7 +43,7 @@ disturbance <- data.frame(Anthro = 40, fire_excl_anthro = 2)
 We begin by sampling coefficients for 500 replicate populations using default Johnson et al. (2020) models "M1" and "M4". The returned object is a list containing the coefficients and standard errors from the national model as well as the sampled coefficients and the quantiles that they have been assigned to.
 
 ```{r coefs}
-popGrowthPars <- demographicCoefficients(500)
+popGrowthPars <- getNationalCoefficients(500)
 
 head(popGrowthPars$coefSamples_Survival$coefSamples)
 head(popGrowthPars$coefSamples_Survival$coefValues)
@@ -55,7 +55,7 @@ Next we calculate sample demographic rates given sampled model coefficients and 
 
 
 ```{r simpleProjection, results='hide',message=F, warning=T}
-rateSamples <- demographicRates(
+rateSamples <- estimateNationalRates(
   covTable = disturbance,
   popGrowthPars = popGrowthPars,
   ignorePrecision = FALSE,
@@ -98,7 +98,10 @@ covTableSim$Total_dist = covTableSim$Anthro + covTableSim$fire_excl_anthro
 We again sample coefficients from default models M1 and M4. The sample of 500 is used to calculate averages, while the sample of 35 is used to show variability among populations.
 
 ```{r popGrowthParameters, results='hide',message=F, warning=T}
-popGrowthPars <- demographicCoefficients(
+# set seed so vignette looks the same each time
+set.seed(34533)
+
+popGrowthPars <- getNationalCoefficients(
   500,
   modelVersion = "Johnson",
   survivalModelNumber = "M1",
@@ -106,7 +109,7 @@ popGrowthPars <- demographicCoefficients(
   populationGrowthTable = popGrowthTableJohnsonECCC
 )
 
-popGrowthParsSmall <- demographicCoefficients(
+popGrowthParsSmall <- getNationalCoefficients(
   35,
   modelVersion = "Johnson",
   survivalModelNumber = "M1",
@@ -117,8 +120,8 @@ popGrowthParsSmall <- demographicCoefficients(
 
 Next we calculate demographic rates given sampled model coefficients. For the smaller sample we set `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. Setting `useQuantiles = TRUE` assigns each sample population to a quantile of the regression model error distributions for survival and recruitment, which allows us to see how demographic rates change. For the larger sample we set `returnSample = FALSE` and the result has one row for each scenario and includes summary statistics of the uncertainty across the samples. We do this twice, once with `ignorePrecision = TRUE` and once with `ignorePrecision = FALSE` to demonstrate the effect of considering the variance among populations around the National mean in addition to the uncertainty about the coefficient estimates.
 
-```{r demographicRates, results='hide',message=F, warning=T}
-rateSamples <- demographicRates(
+```{r estimateNationalRates, results='hide',message=F, warning=T}
+rateSamples <- estimateNationalRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthParsSmall,
   ignorePrecision = FALSE,
@@ -126,7 +129,7 @@ rateSamples <- demographicRates(
   useQuantiles = TRUE
 )
 
-rateSummaries <- demographicRates(
+rateSummaries <- estimateNationalRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthPars,
   ignorePrecision = FALSE,
@@ -134,7 +137,7 @@ rateSummaries <- demographicRates(
   useQuantiles = FALSE
 )
 
-rateSummariesIgnorePrecision <- demographicRates(
+rateSummariesIgnorePrecision <- estimateNationalRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthPars,
   ignorePrecision = TRUE,
@@ -185,7 +188,7 @@ Variation in demographic rates from model that includes uncertainty about the re
 ```{r withPrecision,echo=FALSE, fig.width=8, fig.height=5}
 base1 <- ggplot(data = rateSummaries, 
                 aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh))+
-  geom_line(data = subset(rateSamples, fire_excl_anthro == 0), size = 0.5, 
+  geom_line(data = subset(rateSamples, fire_excl_anthro == 0), linewidth = 0.5, 
             aes(x = Anthro, y = S_bar, group = rep, colour = rep), inherit.aes = FALSE)+
   geom_line(colour = "black", linewidth = 2)+
   geom_ribbon(alpha = 0.25)+
@@ -228,7 +231,7 @@ for (t in 1:numTimesteps) {
   covariates <- disturbance
   covariates$Anthro <- covariates$Anthro + AnthroChange * (t - 1)
 
-  rateSamples <- demographicRates(
+  rateSamples <- estimateNationalRates(
     covTable = covariates,
     popGrowthPars = popGrowthParsSmall,
     ignorePrecision = FALSE,
@@ -247,9 +250,9 @@ for (t in 1:numTimesteps) {
                                  K = FALSE, probOption = "continuous"))
 
   # add results to output set
-  fds <- subset(pars, select = c(replicate, Anthro, S_bar, R_bar, N, lambda))
+  fds <- subset(pars, select = c(replicate, Anthro, S_bar, R_bar, N, lambda, lambdaE))
   fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
-  names(fds) <- c("Replicate", "anthro", "survival", "recruitment", "N", "lambda")
+  names(fds) <- c("Replicate", "anthro", "survival", "recruitment", "N", "lambda", "lambda_bar")
   fds <- pivot_longer(fds, !Replicate, names_to = "MetricTypeID", values_to = "Amount")
   fds$Timestep <- t * stepLength
   if (t == 1) {
@@ -261,8 +264,10 @@ for (t in 1:numTimesteps) {
 
 popMetrics$MetricTypeID <- as.character(popMetrics$MetricTypeID)
 popMetrics$Replicate <- paste0("x", popMetrics$Replicate)
-popMetrics <- subset(popMetrics, !MetricTypeID == "N")
+# popMetrics <- subset(popMetrics, !MetricTypeID == "N")
 ```
+
+TODO: explain difference between lambda in this graph and in the one from `trajectoriesFromNational`
 
 ```{r changeOverTime, echo=FALSE, fig.width=8, fig.height=10}
 base1 <- ggplot(data = popMetrics, aes(x = Timestep, y = Amount, colour = Replicate, 
@@ -273,6 +278,86 @@ base1 <- ggplot(data = popMetrics, aes(x = Timestep, y = Amount, colour = Replic
   theme(legend.position = "none")
 base1
 ```
+
+## Using wrapper functions
+The examples above show how to produce trajectories using the individual functions, but the package also contains a wrapper function to do all of these steps in one. `trajectoriesFromNational` samples the coefficients from the National model, calculates demographic rates given those coefficients and the level of disturbance and projects the population's growth using `caribouPopGrowth` for one time step. If the disturbance scenario includes a Year column `trajectoriesFromNational` does the same process but will project population growth over time and can return the samples. 
+```{r results='hide',message=F, warning=T}
+natTraj <- trajectoriesFromNational(replicates = 500, 
+                                    disturbance = covTableSim, interannualVar = FALSE, 
+                                    useQuantiles = TRUE)
+
+# add year to return samples
+natTraj35 <- trajectoriesFromNational(replicates = 35, 
+                                    disturbance = covTableSim %>% 
+                                      mutate(Year = Anthro+100*fire_excl_anthro), 
+                                    returnSamples = TRUE, interannualVar = FALSE, 
+                                    useQuantiles = TRUE)
+```
+
+```{r echo=FALSE, fig.width=8, fig.height=5}
+base2 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "survival", fire_excl_anthroID == 0) ,
+                aes(x = AnthroID, y = Mean, ymin = lower, ymax = upper))+
+   geom_line(data = natTraj35$samples%>% 
+               filter(MetricTypeID == "survival", fire_excl_anthroID == 0),
+             linewidth = 0.5,
+            aes(x = AnthroID, y = Amount, group = Replicate, colour = Replicate),
+            inherit.aes = FALSE)+
+  geom_line(colour = "black", linewidth = 2)+
+  geom_ribbon(alpha = 0.25)+
+  xlab("Anthropogenic Disturbance (%)")+
+  ylab("Adult Female Survival")+
+  scale_y_continuous(limits = c(0.65, 1))+
+  theme(legend.position = "none")+
+  scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))
+base2
+plot_recruitment4 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "recruitment"),
+                            aes(x = AnthroID, y = Mean * 100,  group = fire_excl_anthroID,
+                                colour = fire_excl_anthroID, type = fire_excl_anthroID))+
+  geom_line(data = natTraj35$samples%>% 
+               filter(MetricTypeID == "recruitment"),
+            aes(x = AnthroID, y = Amount*100, group =interaction(Replicate, fire_excl_anthroID),
+                colour = fire_excl_anthroID),
+            linewidth = 0.5, alpha = 0.2, inherit.aes = FALSE)+
+  geom_line(linewidth = 2)+
+  scale_colour_gradient(low = "green", high = "red")+
+  scale_y_continuous(limits = c(0, 60),
+                     breaks = c(0, 10, 20, 30, 40, 50, 60))+
+  scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))+
+  xlab("Anthropogenic disturbance (%)")+
+  ylab("Recruitment (calves per 100 cows)")
+plot_recruitment4
+```
+
+Using the same scenario with anthropogenic disturbance footprint increasing by 5% per decade, we 
+can also produce projections over a changing landscape with `trajectoriesFromNational`. 
+
+```{r results='hide',message=F, warning=T}
+disturbance2 = data.frame(step = 0:4) %>% bind_cols(disturbance) %>% 
+  mutate(Anthro = Anthro + AnthroChange * step, 
+         Year = step * 10)
+
+# set seed so vignette looks the same each time
+set.seed(54545)
+
+popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates = 35, 
+                                        interannualVar = FALSE, useQuantiles = TRUE,
+                                        N0 = 100, numSteps = 10)
+
+popMetrics2 <- popMetrics2$samples %>% 
+  filter(MetricTypeID %in% c("Anthro", "N", "recruitment","survival", "lambda_bar", "lambda"))
+```
+
+```{r echo=FALSE, fig.width=8, fig.height=10}
+proj <- ggplot(data = popMetrics2, 
+               aes(x = Timestep, y = Amount, colour = Replicate,
+                   group = Replicate)) +
+  geom_line() +
+  facet_wrap(~MetricTypeID, scales = "free") +
+  xlab("Time") +
+  theme(legend.position = "none")
+proj
+```
+
 
 ## References
   Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,

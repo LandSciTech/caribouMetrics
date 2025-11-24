@@ -11,7 +11,7 @@ scripts/profiler_script.R
 docs
 inst/extdata/simsNational*
 results
-
+function_map/
 # History files
 .Rhistory
 .Rapp.history
