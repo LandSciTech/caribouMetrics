@@ -7,7 +7,7 @@ cacheEnv <- new.env(parent = emptyenv())
 # Not supposed to save files to user computer on CRAN so for users the cache is
 # only preserved within a session but for dev I have added this "persistent
 # cache" use savePersistentCache function to update/create it after having run
-# getSimsInitial
+# trajectoriesFromNational
 if(file.exists("results/simsInitial.rds")){
   simsInitial <- readRDS( "results/simsInitial.rds")
   bayesianResults <- readRDS( "results/bayesianResults.rds")
