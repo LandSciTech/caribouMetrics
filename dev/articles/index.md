@@ -2,8 +2,8 @@
 
 ### Articles
 
-- [Caribou
-  Demography](https://landscitech.github.io/caribouMetrics/dev/articles/caribouDemography.md):
+- [Caribou Demographic Rates and
+  Trajectories](https://landscitech.github.io/caribouMetrics/dev/articles/caribouDemography.md):
 - [Options for using Bayesian model
   results](https://landscitech.github.io/caribouMetrics/dev/articles/bayesian-model-outputs.md):
 - [Simulation of monitoring scenarios informed by local

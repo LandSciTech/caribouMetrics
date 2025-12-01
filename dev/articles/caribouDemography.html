@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Caribou Demography • caribouMetrics</title>
+<title>Caribou Demographic Rates and Trajectories • caribouMetrics</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Caribou Demography">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Caribou Demographic Rates and Trajectories">
 <meta name="robots" content="noindex">
 </head>
 <body>
@@ -34,7 +34,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demography</a></li>
+<li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demographic Rates and Trajectories</a></li>
     <li><a class="dropdown-item" href="../articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
     <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Simulation of monitoring scenarios informed by local data</a></li>
     <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
@@ -55,12 +55,10 @@
 </nav><div class="container template-article">
 
 
-
-
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Caribou Demography</h1>
+      <h1>Caribou Demographic Rates and Trajectories</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/BbouIntegration/vignettes/caribouDemography.Rmd" class="external-link"><code>vignettes/caribouDemography.Rmd</code></a></small>
@@ -69,60 +67,41 @@
 
     
     
-<div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<div class="section level2" number="1">
+<h2 id="demographic-rates-and-trajectories-from-the-national-model">
+<span class="header-section-number">1</span> Demographic rates and trajectories from the national model<a class="anchor" aria-label="anchor" href="#demographic-rates-and-trajectories-from-the-national-model"></a>
 </h2>
-<p>Here we describe a two-stage demographic model with density
-dependence and interannual variability following <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a> with
-modifications noted in <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et
-al. (2025)</a> and <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et
-al. (2022)</a>. Demographic rates vary with disturbance as estimated by
-<a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>. A
-detailed description of the model is provided in <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. (2025)
-Section 2.4</a>.</p>
-<p><code><a href="../reference/getNationalCoefficients.html">getNationalCoefficients()</a></code> selects the regression
-coefficient values and standard errors for the desired model version
-(see <code>popGrowthTableJohnsonECCC</code> for options) and then
-samples coefficients from these Gaussian distributions for each
-replicate population.</p>
-<p>Next <code><a href="../reference/estimateNationalRates.html">estimateNationalRates()</a></code> is used to apply the
-sampled coefficients to the disturbance covariates to calculate expected
-recruitment and survival according to the beta regression models
-estimated by Johnson et al. (2020). Each population is optionally
-assigned to quantiles of the Beta error distributions for survival and
-recruitment. Using quantiles means that the population will stay in
-these quantiles as disturbance changes over time, so there is persistent
-variation in recruitment and survival among example populations.</p>
-<p>Finally, we can use the estimated demographic rates to project
-population dynamics using a simple model with two age classes.
-Interannual variation in survival and recruitment is modelled using
-truncated beta distributions.</p>
+<div class="section level3" number="1.1">
+<h3 id="overview">
+<span class="header-section-number">1.1</span> Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h3>
+<p>Here we describe a demographic model with density dependence and interannual variability following <span class="citation">Johnson et al. (<a href="#ref-johnson2020">2020</a>)</span> with modifications noted in <span class="citation">Hughes et al. (<a href="#ref-hughes2025">2025</a>)</span> and <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (2022)</a>. Demographic rates vary with disturbance as estimated by <span class="citation">Johnson et al. (<a href="#ref-johnson2020">2020</a>)</span>. A detailed description of the model is provided in <span class="citation">(<a href="#ref-hughes2025">Hughes et al. 2025, sec. 2.4</a>)</span>.</p>
+<p><code><a href="../reference/getNationalCoefficients.html">getNationalCoefficients()</a></code> selects the regression coefficient values and standard errors for the desired model version (see <code>popGrowthTableJohnsonECCC</code> for options) and then samples coefficients from these Gaussian distributions for each replicate population.</p>
+<p>Next <code><a href="../reference/estimateNationalRates.html">estimateNationalRates()</a></code> is used to apply the sampled coefficients to the disturbance covariates to calculate expected recruitment and survival according to the beta regression models estimated by <span class="citation">Johnson et al. (<a href="#ref-johnson2020">2020</a>)</span>. Each population is optionally assigned to quantiles of the Beta error distributions for survival and recruitment. Using quantiles means that the population will stay in these quantiles as disturbance changes over time, so there is persistent variation in recruitment and survival among example populations.</p>
+<p>Finally, we can use the estimated demographic rates to project population dynamics using a simple model with two age classes. Interannual variation in survival and recruitment is modelled using truncated beta distributions.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
+<span><span class="co"># use local version on local and installed on GH</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">figWidth</span> <span class="op">&lt;-</span> <span class="fl">8</span></span>
+<span><span class="va">figHeight</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="simple-demographic-projection-for-a-single-example-landscape">Simple demographic projection for a single example landscape<a class="anchor" aria-label="anchor" href="#simple-demographic-projection-for-a-single-example-landscape"></a>
-</h2>
-<p>A simple case for demographic projection is multiple stochastic
-projections from a single landscape that does not change over time.
-First we define a disturbance scenario with 40% anthropogenic
-disturbance and 2% fire disturbance. If we had spatial data for the
-disturbance in our area of interest we could use
-<code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> to directly calculate the disturbance.
-(See <a href="https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html">Disturbance
-Metrics</a> vignette for an example).</p>
+<div class="section level3" number="1.2">
+<h3 id="a-simple-case---no-variation-in-disturbance-over-time-or-among-populations">
+<span class="header-section-number">1.2</span> A simple case - no variation in disturbance over time or among populations<a class="anchor" aria-label="anchor" href="#a-simple-case---no-variation-in-disturbance-over-time-or-among-populations"></a>
+</h3>
+<p>A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. First we define a disturbance scenario with 40% anthropogenic disturbance and 2% fire disturbance. If we had spatial data for the disturbance in our area of interest we could use <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> to directly calculate the disturbance. (See <a href="https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html">Disturbance Metrics</a> vignette for an example).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">disturbance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fl">40</span>, fire_excl_anthro <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p>We begin by sampling coefficients for 500 replicate populations using
-default Johnson et al. (2020) models “M1” and “M4”. The returned object
-is a list containing the coefficients and standard errors from the
-national model as well as the sampled coefficients and the quantiles
-that they have been assigned to.</p>
+<p>We begin by sampling coefficients for 500 replicate populations using default Johnson et al. (2020) models “M1” and “M4”. The returned object is a list containing the coefficients and standard errors from the national model as well as the sampled coefficients and the quantiles that they have been assigned to.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getNationalCoefficients.html">getNationalCoefficients</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></span>
 <span></span>
@@ -144,16 +123,7 @@ that they have been assigned to.</p>
 <span><span class="co">#&gt; 1: 0.007908163 0.000127551  8.272731</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">quantiles</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.25345691 0.02880762 0.89123246 0.36007014 0.55806613 0.19063126</span></span></code></pre></div>
-<p>Next we calculate sample demographic rates given sampled model
-coefficients and disturbance metrics for our example landscape, setting
-<code>returnSample = TRUE</code> so that the results returned contain a
-row for each sample in each scenario. We set the initial population size
-for each sample population to 100, and project population dynamics for
-20 years using the <code>caribouPopGrowth</code> function with default
-parameter values. Anthropogenic disturbance is high on this example
-landscape, so the projected population growth rate for most sample
-populations is below 1, but uncertainty in the model means that a few
-sample populations persist.</p>
+<p>Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting <code>returnSample = TRUE</code> so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the <code>caribouPopGrowth</code> function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but uncertainty in the model means that a few sample populations persist.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">disturbance</span>,</span>
@@ -180,23 +150,20 @@ sample populations persist.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Anthro"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="caribouDemography_files/figure-html/plotSimpleDemography-1.png" class="r-plt" width="768"></p>
+<p><img src="caribouDemography_files/figure-html/plotSimpleDemography-1.png"><!-- --></p>
+<p>TO DO: explain various outcome metrics</p>
+<p>TO DO: show and explain outcome if no N0 provided.</p>
 </div>
-<div class="section level2">
-<h2 id="effects-of-disturbance-on-demographic-rates">Effects of disturbance on demographic rates<a class="anchor" aria-label="anchor" href="#effects-of-disturbance-on-demographic-rates"></a>
-</h2>
-<p>We can project demographic rates over a range of landscape conditions
-to recreate figures 3 and 5 from Johnson et al. (2020) and see the
-effects of changing disturbance on model behaviour. First we create a
-table of disturbance scenarios across a range of different levels of
-fire and anthropogenic disturbance.</p>
+<div class="section level3" number="1.3">
+<h3 id="expected-recruitment-and-survival-effects-of-disturbance-and-variation-among-populations">
+<span class="header-section-number">1.3</span> Expected recruitment and survival: effects of disturbance and variation among populations<a class="anchor" aria-label="anchor" href="#expected-recruitment-and-survival-effects-of-disturbance-and-variation-among-populations"></a>
+</h3>
+<p>We can project demographic rates over a range of landscape conditions to recreate figures 3 and 5 from Johnson et al. (2020) and see the effects of changing disturbance on expected recruitment and survival. First we create a table of disturbance scenarios across a range of different levels of fire and anthropogenic disturbance.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">covTableSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, </span>
 <span>                           fire_excl_anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span>, by <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="va">covTableSim</span><span class="op">$</span><span class="va">Total_dist</span> <span class="op">=</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">fire_excl_anthro</span></span></code></pre></div>
-<p>We again sample coefficients from default models M1 and M4. The
-sample of 500 is used to calculate averages, while the sample of 35 is
-used to show variability among populations.</p>
+<p>We again sample coefficients from default models M1 and M4. The sample of 500 is used to calculate averages, while the sample of 35 is used to show variability among populations.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># set seed so vignette looks the same each time</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">34533</span><span class="op">)</span></span>
@@ -216,19 +183,8 @@ used to show variability among populations.</p>
 <span>  recruitmentModelNumber <span class="op">=</span> <span class="st">"M4"</span>,</span>
 <span>  populationGrowthTable <span class="op">=</span> <span class="va">popGrowthTableJohnsonECCC</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Next we calculate demographic rates given sampled model coefficients.
-For the smaller sample we set <code>returnSample = TRUE</code> so that
-the results returned contain a row for each sample in each scenario.
-Setting <code>useQuantiles = TRUE</code> assigns each sample population
-to a quantile of the regression model error distributions for survival
-and recruitment, which allows us to see how demographic rates change.
-For the larger sample we set <code>returnSample = FALSE</code> and the
-result has one row for each scenario and includes summary statistics of
-the uncertainty across the samples. We do this twice, once with
-<code>ignorePrecision = TRUE</code> and once with
-<code>ignorePrecision = FALSE</code> to demonstrate the effect of
-considering the variance among populations around the National mean in
-addition to the uncertainty about the coefficient estimates.</p>
+<p>Next we calculate expected survival and recruitment rates given sampled model coefficients. For the smaller sample we set <code>returnSample = TRUE</code> so that the results returned contain a row for each sample in each scenario. Setting <code>useQuantiles = TRUE</code> assigns each sample population to a quantile of the regression model error distributions for survival and recruitment, allowing variation among populations to persist as disturbance changes. For the larger sample we set <code>returnSample = FALSE</code> to get summaries of mean and variation across the samples.</p>
+<p>Johnson et al’s <span class="citation">(<a href="#ref-johnson2020">2020</a>)</span> Beta regression models estimate uncertainty about intercept and slope coefficients, and a precision parameter that describes variation among observations <a href="https://doi.org/10.1080/0266476042000214501" class="external-link">Ferrari and Cribari-Neto 2004</a>. To show the importance of considering both these sources of variation we compare results with <code>ignorePrecision = TRUE</code> and <code>ignorePrecision = FALSE</code>. If the goal is to estimate and visualize nationally applicable demographic-disturbance relationships then the precision parameter may not be of interest (Figure <a href="#fig:parameterUncertaintyOnly">1.1</a>). If we are interested in the distribution of variation across the country it is essential to include both uncertainty about the regression coefficients and additional variation summarized by the precision parameter of the Beta regression model (Figure <a href="#fig:withPrecision">1.2</a>).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
@@ -253,41 +209,24 @@ addition to the uncertainty about the coefficient estimates.</p>
 <span>  returnSample <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  useQuantiles <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="parameter-uncertainty">Parameter uncertainty<a class="anchor" aria-label="anchor" href="#parameter-uncertainty"></a>
+<div class="figure">
+<span style="display:block;" id="fig:parameterUncertaintyOnly"></span>
+<img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-1.png" alt="TO DO. Bands are the 2.5% and 97.5% quantiles of 500 sample parameter values"><p class="caption">
+Figure 1.1: TO DO. Bands are the 2.5% and 97.5% quantiles of 500 sample parameter values
+</p>
+</div>
+<div class="figure">
+<span style="display:block;" id="fig:withPrecision"></span>
+<img src="caribouDemography_files/figure-html/withPrecision-1.png" alt="TO DO. Faint coloured lines show example trajectories of expected demographic rates in sample populations, assuming each sample population is randomly distributed among quantiles of the beta distribution, and each population remains in the same quantile of the beta distribution as disturbance changes."><p class="caption">
+Figure 1.2: TO DO. Faint coloured lines show example trajectories of expected demographic rates in sample populations, assuming each sample population is randomly distributed among quantiles of the beta distribution, and each population remains in the same quantile of the beta distribution as disturbance changes.
+</p>
+</div>
+</div>
+<div class="section level3" number="1.4">
+<h3 id="projection-of-population-growth-over-time-on-a-changing-landscape">
+<span class="header-section-number">1.4</span> Projection of population growth over time on a changing landscape<a class="anchor" aria-label="anchor" href="#projection-of-population-growth-over-time-on-a-changing-landscape"></a>
 </h3>
-<p>Variation in demographic rates from model that includes uncertainty
-about the regression coefficients, and does not include additional
-variation captured by the precision parameter of the Beta regression
-model <a href="https://doi.org/10.1080/0266476042000214501" class="external-link">Ferrari and
-Cribari-Neto 2004</a>. The bands are the 2.5% and 97.5% quantiles of 500
-sample parameter values.
-<img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-1.png" class="r-plt" width="768"><img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-2.png" class="r-plt" width="768"></p>
-</div>
-<div class="section level3">
-<h3 id="parameter-uncertainty-and-precision">Parameter uncertainty and precision<a class="anchor" aria-label="anchor" href="#parameter-uncertainty-and-precision"></a>
-</h3>
-<p>Variation in demographic rates from model that includes uncertainty
-about the regression coefficients and additional variation captured by
-the precision parameter of the Beta regression model <a href="https://doi.org/10.1080/0266476042000214501" class="external-link">Ferrari and
-Cribari-Neto 2004</a>. Faint coloured lines show example trajectories of
-expected demographic rates in sample populations, assuming each sample
-population is randomly distributed among quantiles of the beta
-distribution, and each population remains in the same quantile of the
-beta distribution as disturbance changes.
-<img src="caribouDemography_files/figure-html/withPrecision-1.png" class="r-plt" width="768"><img src="caribouDemography_files/figure-html/withPrecision-2.png" class="r-plt" width="768"></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="projection-of-population-growth-over-time-on-a-changing-landscape">Projection of population growth over time on a changing
-landscape<a class="anchor" aria-label="anchor" href="#projection-of-population-growth-over-time-on-a-changing-landscape"></a>
-</h2>
-<p>In this example, we project 35 sample populations for 50 years on a
-landscape where the anthropogenic disturbance footprint is increasing by
-5% per decade. We set <code>interannualVar = FALSE</code>,
-<code>K = FALSE</code>, and <code>probOption = "continuous"</code> to
-use a simpler model without interannual variability, density dependence,
-or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816" class="external-link">Stewart et al. 2023</a>.</p>
+<p>In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade. We start by setting <code>interannualVar = FALSE</code>, <code>K = FALSE</code>, and <code>probOption = "continuous"</code> to use a simple model without interannual variability, density dependence, discrete numbers of animals or demographic stochasticity, as in <a href="https://doi.org/10.1002/eap.2816" class="external-link">Stewart et al. 2023</a>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">numTimesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">stepLength</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
@@ -334,22 +273,15 @@ or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816"
 <span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeID</span><span class="op">)</span></span>
 <span><span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span><span class="op">)</span></span>
 <span><span class="co"># popMetrics &lt;- subset(popMetrics, !MetricTypeID == "N")</span></span></code></pre></div>
-<p>TODO: explain difference between lambda in this graph and in the one
-from <code>trajectoriesFromNational</code></p>
-<p><img src="caribouDemography_files/figure-html/changeOverTime-1.png" class="r-plt" width="768"></p>
+<p>TODO: explain difference between lambda in this graph and in the one from <code>trajectoriesFromNational</code></p>
+<p><img src="caribouDemography_files/figure-html/changeOverTime-1.png"><!-- --></p>
 </div>
-<div class="section level2">
-<h2 id="using-wrapper-functions">Using wrapper functions<a class="anchor" aria-label="anchor" href="#using-wrapper-functions"></a>
-</h2>
-<p>The examples above show how to produce trajectories using the
-individual functions, but the package also contains a wrapper function
-to do all of these steps in one. <code>trajectoriesFromNational</code>
-samples the coefficients from the National model, calculates demographic
-rates given those coefficients and the level of disturbance and projects
-the population’s growth using <code>caribouPopGrowth</code> for one time
-step. If the disturbance scenario includes a Year column
-<code>trajectoriesFromNational</code> does the same process but will
-project population growth over time and can return the samples.</p>
+<div class="section level3" number="1.5">
+<h3 id="using-trajectoriesfromnational-wrapper-function">
+<span class="header-section-number">1.5</span> Using trajectoriesFromNational wrapper function<a class="anchor" aria-label="anchor" href="#using-trajectoriesfromnational-wrapper-function"></a>
+</h3>
+<p>The examples above show how to produce trajectories using the individual functions, but the package also contains a wrapper function to do all of these steps in one. <code>trajectoriesFromNational</code> samples the coefficients from the National model, calculates demographic rates given those coefficients and the level of disturbance and projects the population’s growth using <code>caribouPopGrowth</code> for one time step. If the disturbance scenario includes a Year column <code>trajectoriesFromNational</code> does the same process but will project population growth over time and can return the samples.</p>
+<p>TO DO: add trajectoriesFromNational workflow diagram</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">natTraj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromNational.html">trajectoriesFromNational</a></span><span class="op">(</span>replicates <span class="op">=</span> <span class="fl">500</span>, </span>
 <span>                                    disturbance <span class="op">=</span> <span class="va">covTableSim</span>, interannualVar <span class="op">=</span> <span class="cn">FALSE</span>, </span>
@@ -361,10 +293,9 @@ project population growth over time and can return the samples.</p>
 <span>                                      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Year <span class="op">=</span> <span class="va">Anthro</span><span class="op">+</span><span class="fl">100</span><span class="op">*</span><span class="va">fire_excl_anthro</span><span class="op">)</span>, </span>
 <span>                                    returnSamples <span class="op">=</span> <span class="cn">TRUE</span>, interannualVar <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>                                    useQuantiles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="caribouDemography_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="768"><img src="caribouDemography_files/figure-html/unnamed-chunk-3-2.png" class="r-plt" width="768"></p>
-<p>Using the same scenario with anthropogenic disturbance footprint
-increasing by 5% per decade, we can also produce projections over a
-changing landscape with <code>trajectoriesFromNational</code>.</p>
+<p><img src="caribouDemography_files/figure-html/unnamed-chunk-3-1.png"><!-- --><img src="caribouDemography_files/figure-html/unnamed-chunk-3-2.png"><!-- --></p>
+<p>Using the same scenario with anthropogenic disturbance footprint increasing by 5% per decade, we
+can also produce projections over a changing landscape with <code>trajectoriesFromNational</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">disturbance2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>step <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="va">Anthro</span> <span class="op">+</span> <span class="va">AnthroChange</span> <span class="op">*</span> <span class="va">step</span>, </span>
@@ -379,34 +310,45 @@ changing landscape with <code>trajectoriesFromNational</code>.</p>
 <span></span>
 <span><span class="va">popMetrics2</span> <span class="op">&lt;-</span> <span class="va">popMetrics2</span><span class="op">$</span><span class="va">samples</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MetricTypeID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Anthro"</span>, <span class="st">"N"</span>, <span class="st">"recruitment"</span>,<span class="st">"survival"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"lambda"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="caribouDemography_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="768"></p>
+<p><img src="caribouDemography_files/figure-html/unnamed-chunk-5-1.png"><!-- --></p>
 </div>
-<div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h2>
+<div class="section level3" number="1.6">
+<h3 id="references">
+<span class="header-section-number">1.6</span> References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h3>
 <p>Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
 Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
 Baltzer, J. L., Stewart, F. E. C., &amp; Hughes, J. (2022). Existing
 caribou habitat and demographic models need improvement for Ring of Fire
 impact assessment: A roadmap for improving the usefulness, transparency,
-and availability of models for conservation. <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link uri">https://doi.org/10.1101/2022.06.01.494350</a></p>
-<p>Ferrari S, Cribari-Neto F (2004) Beta Regression for Modelling Rates
-and Proportions. Journal of Applied Statistics 31:799–815. <a href="https://doi.org/10.1080/0266476042000214501" class="external-link uri">https://doi.org/10.1080/0266476042000214501</a></p>
+and availability of models for conservation.
+<a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link uri">https://doi.org/10.1101/2022.06.01.494350</a></p>
+<p>Ferrari S, Cribari-Neto F (2004) Beta Regression for Modelling Rates and Proportions. Journal of Applied Statistics 31:799–815. <a href="https://doi.org/10.1080/0266476042000214501" class="external-link uri">https://doi.org/10.1080/0266476042000214501</a></p>
 <p>Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
 Integration of national demographic-disturbance relationships and local
 data can improve caribou population viability projections and inform
-monitoring decisions. Ecological Informatics, 87, p.103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link uri">https://doi.org/10.1016/j.ecoinf.2025.103095</a></p>
-<p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
-Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
-linking population dynamics to habitat for a threatened species in
-Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link uri">https://doi.org/10.1111/1365-2664.13637</a></p>
-<p>Novomestky F, Nadarajah S (2016) Package ‘truncdist.’ Version
-1.0-2URL <a href="https://CRAN.R-project.org/package=truncdist" class="external-link uri">https://CRAN.R-project.org/package=truncdist</a></p>
-<p>Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty,
-A.M., Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and
-Hughes, J., 2023. Climate‐informed forecasts reveal dramatic local
-habitat shifts and population uncertainty for northern boreal caribou.
-Ecological Applications 33:e2816.<br><a href="https://doi.org/10.1002/eap.2816" class="external-link uri">https://doi.org/10.1002/eap.2816</a></p>
+monitoring decisions. Ecological Informatics, 87, p.103095.
+<a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link uri">https://doi.org/10.1016/j.ecoinf.2025.103095</a></p>
+<p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
+P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
+linking population dynamics to habitat for a threatened species in Canada.
+Journal of Applied Ecology, 57(7), pp.1314-1327.
+<a href="https://doi.org/10.1111/1365-2664.13637" class="external-link uri">https://doi.org/10.1111/1365-2664.13637</a></p>
+<p>Novomestky F, Nadarajah S (2016) Package ‘truncdist.’ Version 1.0-2URL
+<a href="https://CRAN.R-project.org/package=truncdist" class="external-link uri">https://CRAN.R-project.org/package=truncdist</a></p>
+<p>Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty, A.M.,
+Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and Hughes, J.,
+2023. Climate‐informed forecasts reveal dramatic local habitat shifts and
+population uncertainty for northern boreal caribou. Ecological Applications 33:e2816.<br><a href="https://doi.org/10.1002/eap.2816" class="external-link uri">https://doi.org/10.1002/eap.2816</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-hughes2025" class="csl-entry">
+Hughes, Josie, Sarah Endicott, Anna M. Calvert, and Cheryl A. Johnson. 2025. <span>“Integration of National Demographic-Disturbance Relationships and Local Data Can Improve Caribou Population Viability Projections and Inform Monitoring Decisions.”</span> <em>Ecological Informatics</em> 87 (July): 103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">https://doi.org/10.1016/j.ecoinf.2025.103095</a>.
+</div>
+<div id="ref-johnson2020" class="csl-entry">
+Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, Mathieu Leblond, Patrick Kirby, Clara Superbie, and Philip D. McLoughlin. 2020. <span>“Science to Inform Policy: <span>Linking</span> Population Dynamics to Habitat for a Threatened Species in <span>Canada</span>.”</span> <em>Journal of Applied Ecology</em> 57 (7): 1314–27. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link">https://doi.org/10.1111/1365-2664.13637</a>.
+</div>
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
