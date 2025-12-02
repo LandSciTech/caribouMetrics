@@ -4,7 +4,7 @@ output:
     bookdown::html_document2:
         base_format: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models }
+  %\VignetteIndexEntry{Caribou Demographic Rates and Trajectories}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: references.bib
@@ -33,7 +33,7 @@ Here we describe a demographic model with density dependence and interannual var
 
 Next `estimateNationalRates()` is used to apply the sampled coefficients to the disturbance covariates to calculate expected recruitment and survival according to the beta regression models estimated by @johnson2020. Each population is optionally assigned to quantiles of the Beta error distributions for survival and recruitment. Using quantiles means that the population will stay in these quantiles as disturbance changes over time, so there is persistent variation in recruitment and survival among example populations.
 
-Finally, we can use the estimated demographic rates to project population dynamics using a simple model with two age classes. Interannual variation in survival and recruitment is modelled using truncated beta distributions.
+Finally, we can use the estimated demographic rates to project population dynamics using a simple model with two age classes. Interannual variation in survival and recruitment is modelled using truncated Beta distributions.
 
 ```{r setup, results='hide',message=F, warning=T}
 library(caribouMetrics)
@@ -47,12 +47,11 @@ library(patchwork)
 theme_set(theme_bw())
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
-figWidth <- 8
-figHeight <- 10
+figWidth <- 8; figHeight <- 10
 
 ```
 
-## A simple case - no variation in disturbance over time or among populations
+## Demographic outcomes in a simple case no variation in disturbance over time or among populations
 
 A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. First we define a disturbance scenario with 40% anthropogenic disturbance and 2% fire disturbance. If we had spatial data for the disturbance in our area of interest we could use `disturbanceMetrics()` to directly calculate the disturbance. (See [Disturbance Metrics](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html) vignette for an example).
 ```{r make-dist}
@@ -70,8 +69,7 @@ head(popGrowthPars$coefSamples_Survival$coefStdErrs)
 head(popGrowthPars$coefSamples_Survival$quantiles)
 ```
 
-Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the `caribouPopGrowth` function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but uncertainty in the model means that a few sample populations persist.
-
+Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the `caribouPopGrowth` function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but there is variability in the model so few sample populations persist.
 
 ```{r simpleProjection, results='hide',message=F, warning=T}
 rateSamples <- estimateNationalRates(
@@ -89,8 +87,7 @@ demography <- cbind(rateSamples,
 
 ```
 
-```{r plotSimpleDemography, fig.width=8, fig.height=5}
-
+```{r plotSimpleDemography, echo=F, fig.width=figWidth,fig.height=5,fig.cap="Variation in demographic rates and outcomes among 500 sample populations after a 20 year projection. Anthropogenic disturbance is 40%, fire disturbance is 2%. 'lambda' is realized population growth rate in the final year, and 'lambdaE' is expected population growth rate without interannual variation, density dependence or demographic stochasticity. 'N' is the number of adult females, which includes new recruits 'n_recruits' and survivors 'surviving_adFemales' from the previous year. 'R_bar/S_bar' are the expected recruitment (calf:cow ratio) and survival rates, 'R_t/S_t' are the recruitment and survival rates in the final year, which are more variable because they include interannual variation. 'X_t' is the recruitment rate adjusted for sex ratio and (optionally) composition survey bias - see Hughes et al. (2025) for details."}
 fds <- pivot_longer(demography, !(scnID:replicate) & !N0, names_to = "Metric",
                     values_to = "Amount")
 d1 <- ggplot(fds, aes(x = as.factor(round(Anthro, 2)), y = Amount, 
@@ -104,13 +101,13 @@ d1 <- ggplot(fds, aes(x = as.factor(round(Anthro, 2)), y = Amount,
 plot(d1)
 ```
 
-TO DO: explain various outcome metrics
+TO DO: Use consistent labels for outcomes throughout
 
 TO DO: show and explain outcome if no N0 provided.
 
 ## Expected recruitment and survival: effects of disturbance and variation among populations
 
-We can project demographic rates over a range of landscape conditions to recreate figures 3 and 5 from Johnson et al. (2020) and see the effects of changing disturbance on expected recruitment and survival. First we create a table of disturbance scenarios across a range of different levels of fire and anthropogenic disturbance.
+We can project demographic rates over a range of landscape conditions to recreate figures 3 and 5 from Johnson et al. [@johnson2020] and see the effects of changing disturbance on expected recruitment and survival. First we create a table of disturbance scenarios across a range of different levels of fire and anthropogenic disturbance.
 
 ```{r disturbanceCovariates, results='hide',message=F, warning=T}
 covTableSim <- expand.grid(Anthro = seq(0, 90, by = 2), 
@@ -143,7 +140,7 @@ popGrowthParsSmall <- getNationalCoefficients(
 
 Next we calculate expected survival and recruitment rates given sampled model coefficients. For the smaller sample we set `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. Setting `useQuantiles = TRUE` assigns each sample population to a quantile of the regression model error distributions for survival and recruitment, allowing variation among populations to persist as disturbance changes. For the larger sample we set `returnSample = FALSE` to get summaries of mean and variation across the samples. 
 
-Johnson et al's [-@johnson2020] Beta regression models estimate uncertainty about intercept and slope coefficients, and a precision parameter that describes variation among observations [Ferrari and Cribari-Neto 2004](https://doi.org/10.1080/0266476042000214501). To show the importance of considering both these sources of variation we compare results with `ignorePrecision = TRUE` and `ignorePrecision = FALSE`. If the goal is to estimate and visualize nationally applicable demographic-disturbance relationships then the precision parameter may not be of interest (Figure \@ref(fig:parameterUncertaintyOnly)). If we are interested in the distribution of variation across the country it is essential to include both uncertainty about the regression coefficients and additional variation summarized by the precision parameter of the Beta regression model (Figure \@ref(fig:withPrecision)). 
+Johnson et al's [-@johnson2020] Beta regression models estimate uncertainty about intercept and slope coefficients, and a precision parameter that describes variation among observations [@ferrari2004]. To show the importance of considering both these sources of variation we compare results with `ignorePrecision = TRUE` and `ignorePrecision = FALSE`. If the goal is to estimate and visualize nationally applicable demographic-disturbance relationships then the precision parameter may not be of interest (Figure \@ref(fig:parameterUncertaintyOnly)). If we are interested in the distribution of variation across the country it is essential to include both uncertainty about the regression coefficients and additional variation summarized by the precision parameter of the Beta regression model (Figure \@ref(fig:withPrecision)). 
 
 ```{r estimateNationalRates, results='hide',message=F, warning=T}
 rateSamples <- estimateNationalRates(
@@ -171,7 +168,7 @@ rateSummariesIgnorePrecision <- estimateNationalRates(
 )
 ```
 
-```{r parameterUncertaintyOnly, echo=F, fig.width=figWidth,fig.height=10,fig.cap="TO DO. Bands are the 2.5% and 97.5% quantiles of 500 sample parameter values"}
+```{r parameterUncertaintyOnly, echo=F, fig.width=figWidth,fig.height=5,fig.cap="Variation in expected survival and recruitment with disturbance. Bands (2.5% and 97.5% quantiles of 500 samples) show variation due to uncertainty about intercept and slope coefficients in Johnson et al's [-@johnson2020] Beta regression models."}
 rateSamples$rep = as.factor(rateSamples$replicate)
 levels(rateSamples$rep) = sample(unique(rateSamples$replicate), replace = FALSE)
 rateSamples$rep = as.character(rateSamples$rep)
@@ -203,7 +200,7 @@ plot_recruitment3 <- ggplot(
 
 base1 / plot_recruitment3
 ```
-```{r withPrecision, echo=F, fig.width=figWidth,fig.height=10,fig.cap="TO DO. Faint coloured lines show example trajectories of expected demographic rates in sample populations, assuming each sample population is randomly distributed among quantiles of the beta distribution, and each population remains in the same quantile of the beta distribution as disturbance changes."}
+```{r withPrecision, echo=F, fig.width=figWidth,fig.height=5,fig.cap="Variation in expected survival and recruitment with disturbance. Bands (2.5% and 97.5% quantiles of 500 samples) include both uncertainty about the regression coefficients and additional variation summarized by the precision parameter of Johnson et al's [-@johnson2020] Beta regression models. Faint coloured lines show example trajectories of expected demographic rates in sample populations, assuming each sample population is randomly distributed among quantiles of the beta distribution, and each population remains in the same quantile of the Beta distribution as disturbance changes."}
 base1 <- ggplot(data = rateSummaries, 
                 aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh))+
   geom_line(data = subset(rateSamples, fire_excl_anthro == 0), linewidth = 0.5, 
@@ -232,9 +229,9 @@ plot_recruitment3 <- ggplot(data = rateSummaries,
 base1 / plot_recruitment3
 ```
 
-## Projection of population growth over time on a changing landscape
+## Projection of population growth over time on a changing landscape: workflow details
 
-In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade. We start by setting `interannualVar = FALSE`, `K = FALSE`, and  `probOption = "continuous"` to use a simple model without interannual variability, density dependence, discrete numbers of animals or demographic stochasticity, as in [Stewart et al. 2023](https://doi.org/10.1002/eap.2816).
+In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade (Figure \@ref(fig:changeOverTime)). 
 
 ```{r projectionOverTime, results='hide',message=F, warning=T}
 numTimesteps <- 5
@@ -245,6 +242,7 @@ AnthroChange <- 5 #For illustration assume 5% increase in anthropogenic disturba
 # at each time,  sample demographic rates and project, save results
 pars <- data.frame(N0 = N0)
 for (t in 1:numTimesteps) {
+  #t=1
   covariates <- disturbance
   covariates$Anthro <- covariates$Anthro + AnthroChange * (t - 1)
 
@@ -263,14 +261,13 @@ for (t in 1:numTimesteps) {
   pars <- cbind(pars, 
                 caribouPopGrowth(pars$N0,
                                  R_bar = pars$R_bar, S_bar = pars$S_bar,
-                                 numSteps = stepLength, interannualVar = FALSE, 
-                                 K = FALSE, probOption = "continuous"))
+                                 numSteps = stepLength))
 
   # add results to output set
-  fds <- subset(pars, select = c(replicate, Anthro, S_bar, R_bar, N, lambda, lambdaE))
+  fds <- subset(pars, select = c(replicate, Anthro, N, S_bar,S_t, R_bar,R_t,lambdaE,lambda))
   fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
-  names(fds) <- c("Replicate", "anthro", "survival", "recruitment", "N", "lambda", "lambda_bar")
-  fds <- pivot_longer(fds, !Replicate, names_to = "MetricTypeID", values_to = "Amount")
+  #names(fds) <- c("Replicate", "anthro", "survival", "recruitment", "N", "lambda", "lambda_bar")
+  fds <- pivot_longer(fds, !replicate, names_to = "MetricTypeID", values_to = "Amount")
   fds$Timestep <- t * stepLength
   if (t == 1) {
     popMetrics <- fds
@@ -280,13 +277,11 @@ for (t in 1:numTimesteps) {
 }
 
 popMetrics$MetricTypeID <- as.character(popMetrics$MetricTypeID)
-popMetrics$Replicate <- paste0("x", popMetrics$Replicate)
+popMetrics$Replicate <- paste0("x", popMetrics$replicate)
 # popMetrics <- subset(popMetrics, !MetricTypeID == "N")
 ```
 
-TODO: explain difference between lambda in this graph and in the one from `trajectoriesFromNational`
-
-```{r changeOverTime, echo=FALSE, fig.width=8, fig.height=10}
+```{r changeOverTime, echo=F, fig.width=figWidth,fig.height=7,fig.cap="TO DO."}
 base1 <- ggplot(data = popMetrics, aes(x = Timestep, y = Amount, colour = Replicate, 
                                        group = Replicate)) +
   geom_line() +
@@ -296,8 +291,9 @@ base1 <- ggplot(data = popMetrics, aes(x = Timestep, y = Amount, colour = Replic
 base1
 ```
 
-## Using trajectoriesFromNational wrapper function
-The examples above show how to produce trajectories using the individual functions, but the package also contains a wrapper function to do all of these steps in one. `trajectoriesFromNational` samples the coefficients from the National model, calculates demographic rates given those coefficients and the level of disturbance and projects the population's growth using `caribouPopGrowth` for one time step. If the disturbance scenario includes a Year column `trajectoriesFromNational` does the same process but will project population growth over time and can return the samples. 
+## Using the trajectoriesFromNational wrapper function to project population growth
+
+The examples above show steps in the demographic modeling workflow. We also provide a `trajectoriesFromNational` wrapper function that samples the coefficients from the National model, calculates demographic rates given those coefficients and the level of disturbance, projects population growth using `caribouPopGrowth`, and returns summaries of the demographic rates (ref workflow diagram). If the disturbance scenario includes a Year column `trajectoriesFromNational` projects population growth over time, and also returns sample demographic trajectories. If year is not provided, population growth is projected for one year, and sample trajectories are not returned.  
 
 TO DO: add trajectoriesFromNational workflow diagram
 
@@ -314,7 +310,7 @@ natTraj35 <- trajectoriesFromNational(replicates = 35,
                                     useQuantiles = TRUE)
 ```
 
-```{r echo=FALSE, fig.width=8, fig.height=5}
+```{r withPrecisionWrapper, echo=F, fig.width=figWidth,fig.height=5,fig.cap="TO DO."}
 base2 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "survival", fire_excl_anthroID == 0) ,
                 aes(x = AnthroID, y = Mean, ymin = lower, ymax = upper))+
    geom_line(data = natTraj35$samples%>% 
@@ -329,7 +325,6 @@ base2 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "survival", fi
   scale_y_continuous(limits = c(0.65, 1))+
   theme(legend.position = "none")+
   scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))
-base2
 plot_recruitment4 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "recruitment"),
                             aes(x = AnthroID, y = Mean * 100,  group = fire_excl_anthroID,
                                 colour = fire_excl_anthroID, type = fire_excl_anthroID))+
@@ -345,7 +340,24 @@ plot_recruitment4 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "r
   scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))+
   xlab("Anthropogenic disturbance (%)")+
   ylab("Recruitment (calves per 100 cows)")
-plot_recruitment4
+plot_lambda <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "recruitment"),
+                            aes(x = AnthroID, y = Mean * 100,  group = fire_excl_anthroID,
+                                colour = fire_excl_anthroID, type = fire_excl_anthroID))+
+  geom_line(data = natTraj35$samples%>% 
+               filter(MetricTypeID == "recruitment"),
+            aes(x = AnthroID, y = Amount*100, group =interaction(Replicate, fire_excl_anthroID),
+                colour = fire_excl_anthroID),
+            linewidth = 0.5, alpha = 0.2, inherit.aes = FALSE)+
+  geom_line(linewidth = 2)+
+  scale_colour_gradient(low = "green", high = "red")+
+  scale_y_continuous(limits = c(0, 60),
+                     breaks = c(0, 10, 20, 30, 40, 50, 60))+
+  scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))+
+  xlab("Anthropogenic disturbance (%)")+
+  ylab("Recruitment (calves per 100 cows)")
+
+
+base2 / plot_recruitment4
 ```
 
 Using the same scenario with anthropogenic disturbance footprint increasing by 5% per decade, we 
@@ -360,14 +372,13 @@ disturbance2 = data.frame(step = 0:4) %>% bind_cols(disturbance) %>%
 set.seed(54545)
 
 popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates = 35, 
-                                        interannualVar = FALSE, useQuantiles = TRUE,
-                                        N0 = 100, numSteps = 10)
+                                        useQuantiles = TRUE,N0 = 100, numSteps = 10)
 
 popMetrics2 <- popMetrics2$samples %>% 
-  filter(MetricTypeID %in% c("Anthro", "N", "recruitment","survival", "lambda_bar", "lambda"))
+  filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
 ```
 
-```{r echo=FALSE, fig.width=8, fig.height=10}
+```{r changeOverTime2, echo=F, fig.width=figWidth,fig.height=7,fig.cap="TO DO."}
 proj <- ggplot(data = popMetrics2, 
                aes(x = Timestep, y = Amount, colour = Replicate,
                    group = Replicate)) +
@@ -388,26 +399,7 @@ proj
   and availability of models for conservation.
   <https://doi.org/10.1101/2022.06.01.494350>
   
-  Ferrari S, Cribari-Neto F (2004) Beta Regression for Modelling Rates and Proportions. Journal of   Applied Statistics 31:799–815. <https://doi.org/10.1080/0266476042000214501>
-  
-  Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
-  Integration of national demographic-disturbance relationships and local
-  data can improve caribou population viability projections and inform
-  monitoring decisions. Ecological Informatics, 87, p.103095.
-  <https://doi.org/10.1016/j.ecoinf.2025.103095>
-
-  Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby,
-  P., Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
-  linking population dynamics to habitat for a threatened species in Canada.
-  Journal of Applied Ecology, 57(7), pp.1314-1327.
-  <https://doi.org/10.1111/1365-2664.13637>
-  
   Novomestky F, Nadarajah S (2016) Package ‘truncdist.’ Version 1.0-2URL
   <https://CRAN.R-project.org/package=truncdist>
 
-  Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty, A.M.,
-  Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and Hughes, J.,
-  2023. Climate‐informed forecasts reveal dramatic local habitat shifts and
-  population uncertainty for northern boreal caribou. Ecological Applications 33:e2816.   
-  <https://doi.org/10.1002/eap.2816>
-
+  
