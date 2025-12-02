@@ -29,7 +29,7 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 library(terra)
-#> terra 1.8.80
+#> terra 1.8.86
 #> 
 #> Attaching package: 'terra'
 #> The following objects are masked from 'package:nimble':
