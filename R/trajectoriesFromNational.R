@@ -87,7 +87,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   hasYear <- T
   if(is.null(disturbance)){
     if(hasAnthro){
-      distPars = unique(subset(cPars,select=c(iAnthro,iFire,preYears,obsYears,projYears,obsAnthroSlope,projAnthroSlope,preYears,startYear)))
+      distPars = unique(subset(cPars,select=c(iAnthro,iFire,preYears,obsYears,projYears,obsAnthroSlope,projAnthroSlope,preYears,startYear, ID)))
       first<-T
       for(r in 1:nrow(distPars)){
         #r=60
@@ -98,6 +98,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
                                     cr$obsYears + cr$preYears + 1)
         covariates$Year <- cr$startYear + covariates$time - 1
         covariates$fire_excl_anthro=round(covariates$fire_excl_anthro)
+        covariates$distID <- cr$ID
         if(first){
           covTableObs <- covariates
           first=F
@@ -121,6 +122,11 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
     }
     covTableObs <- disturbance %>% select(Year, Anthro, fire_excl_anthro)
   }
+  
+  if(!is.element("distID",names(covTableObs))){
+    covTableObs$distID <- 1
+  }
+  
   ccPars = unique(subset(cPars,select=c(qMin,qMax,uMin,uMax,zMin,zMax,cowMult,correlateRates)))
   if(nrow(ccPars)>1){
     stop("Do not include more than one composition bias scenario in cPars")
@@ -160,14 +166,19 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   rateSamplesAll$c = NULL; rateSamplesAll= merge(rateSamplesAll, bc)
 
   #print(paste("trajectoriesFromNational",mean(bc$c)))
-  pars <- merge(data.frame(N0 = N0, PopulationName = "National"), rateSamplesAll)
+  pars <- merge(data.frame(N0 = N0, PopulationName = "National"), rateSamplesAll)# %>% 
+    # mutate(PopulationName = paste0(PopulationName, distID))
 
   if(hasYear){
-    R_dat <- pars %>% select(Year, replicate, R_bar) %>% 
+    R_dat <- pars %>% select(Year, replicate, distID, R_bar) %>% 
+      arrange(Year) %>% 
       pivot_wider(names_from = Year, values_from = R_bar) %>% 
+      tidyr::unite("replicate", replicate, distID) %>% 
       tibble::column_to_rownames("replicate")
-    S_dat <- pars %>% select(Year, replicate, S_bar) %>% 
+    S_dat <- pars %>% select(Year, replicate, distID, S_bar) %>% 
+      arrange(Year) %>% 
       pivot_wider(names_from = Year, values_from = S_bar) %>% 
+      tidyr::unite("replicate", replicate, distID) %>% 
       tibble::column_to_rownames("replicate")
     
     out <- simPopsOverTime(
@@ -175,11 +186,12 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
       S_samp = S_dat, dynamicRates = TRUE, stepLength = numSteps,
       c = unique(pars$c), interannualVar = interannualVar, 
       progress = FALSE, K = FALSE
-    ) %>% mutate(replicate = factor(id, labels = rownames(R_dat)), 
-                   Year = factor(time, labels = colnames(R_dat)) %>%
-                     as.character() %>% as.numeric(), .keep = "unused") 
+    ) %>%  
+      separate_wider_delim(id, delim = "_", names = c("replicate", "distID")) %>% 
+      mutate(distID = as.integer(distID), 
+             Year = as.integer(time), .keep = "unused")
     
-    pars <- full_join(pars %>% select(-N0), out, by = c("replicate", "Year"))
+    pars <- full_join(pars %>% select(-N0), out, by = c("replicate", "Year", "distID"))
   } else {
     pars <- cbind(subset(pars,select=-N0), 
                   caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
@@ -193,6 +205,9 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   
   if(returnSamples == "default"){
       returnSamples <- hasYear
+      if(nrow(cPars) > 1){
+        returnSamples <- FALSE
+      }
   } else if (!hasYear & isTRUE(returnSamples)){
     warning("returnSamples is set to FALSE when Year is not included in the disturbance scenario")
   }
