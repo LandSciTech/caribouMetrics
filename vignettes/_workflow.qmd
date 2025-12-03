@@ -37,87 +37,28 @@ gantt
     axisFormat %i
     
     section A
-    getSimsInitial :a1, 2000-01-01, 20d
+    trajectoriesFromNational :a1, 2000-01-01, 40d
     .              :done, ax, after a1, 1d  
-    runScnSet      :a2, after ax, 245d
+    bayesianScenariosWorkflow      :a2, after ax, 205d
     .              :done, ay, after a2, 1d  
-    plotRes        :a3, after ay, 20d  
+    plotCompareTrajectories        :a3, after ay, 40d  
     
     section B
     getScenarioDefaults  :b2, after ax, 40d
     .                    :done, bx, after b2, 1d  
-    simulateObservations :b3, after bx, 80d
+    simulateObservations :b3, after bx, 40d
     .                    :done, by, after b3, 1d 
-    caribouBayesianPM    :b4, after by, 101d
+    bayesianTrajectoryWorkflow    :b4, after by, 81d
     .                    :done, bz, after b4, 1d  
-    getOutputTables      :b5, after bz, 20d
+    compareTrajectories      :b5, after bz, 40d
     
     section C
-    trajectoriesFrom??  :c1, after bx, 40d
-
-    bbouMakeSummaryTable     :c5, after by, 40d
+    estimateBayesianRates     :c5, after by, 40d
     .                        :done, cy, after c5, 1d
-    getSimsInitial           :c6, after cy, 40d
+    trajectoriesFromBayesian           :c6, after cy, 40d
     
     section D
-    getPriors    :d4, after by, 20d
-    
-```
-
-
-```{mermaid}
-%%| column: screen
-%%| fig.width: 20
----
-displayMode: compact
----
-%%{init: { "gantt": { "barGap": 20 } } }%%
-gantt
-    title Paper workflow
-    dateFormat YYYY-MM-DD
-    axisFormat %i
-    
-    section A
-    getSimsInitial :a1, 2000-01-01, 20d
-    .              :done, ax, after a1, 1d  
-    runScnSet      :a2, after ax, 245d
-    .              :done, ay, after a2, 1d  
-    plotRes        :a3, after ay, 20d  
-    
-    section B
-    getSimsNational      :b1, 2000-01-01, 20d
-    
-    getScenarioDefaults  :b2, after ax, 20d
-    .                    :done, bx, after b2, 1d  
-    simulateObservations :b3, after bx, 101d
-    .                    :done, by, after b3, 1d 
-    caribouBayesianPM    :b4, after by, 101d
-    .                    :done, bz, after b4, 1d  
-    getOutputTables      :b5, after bz, 20d
-    
-    section C
-    demographicCoefficients  :c1, after bx, 40d
-    .                        :done, cx, after c1, 1d  
-    demographicRates         :c2, after cx, 20d
-    compositionBiasCorr      :c3, after c2, 20d 
-    caribouPopGrowth         :c4, after c3, 20d
-    
-    bbouMakeSummaryTable     :c5, after by, 20d
-    .                        :done, cy, after c5, 1d
-    getSimsInitial           :c6, after cy, 80d
-    
-    section D
-    getCoefs     :d1, after bx, 20d
-    sampleCoefs  :d2, after d1, 20d
-    
-    sampleRates  :d3, after cx, 20d 
-    
-    getPriors    :d4, after by, 20d
-    
-    compositionBiasCorr       :d5, after cy, 20d
-    caribouPopSimMCMC         :d6, after d5, 20d
-    convertTrajectories       :d7, after d6, 20d
-    summarizeTrajectories     :d8, after d7, 20d
+    betaNationalPriors    :d4, after by, 20d
     
 ```
 
@@ -206,18 +147,15 @@ gantt
     axisFormat %i
     
     section A
-    getSimsInitial :a1, 2000-01-01, 240d
+    trajectoriesFromNational :a1, 2000-01-01, 240d
 
     section B
-    getSimsNational       :b1, 2000-01-01, 160d
-    convertTrajectories     :b2, after b1, 40d
-    summarizeCaribouPopSim     :b3, after b2, 40d
-
-    section C
-    demographicCoefficients  :c1, 2000-01-01, 40d
-    demographicRates         :c2, after c1, 40d
-    compositionBiasCorr      :c3, after c2, 40d 
-    caribouPopGrowth         :c4, after c3, 40d
+    getScenarioDefaults      :b1, 2000-01-01, 40d
+    getNationalCoefficients     :b2, after b1, 40d
+    estimateNationalRates     :b3, after b2, 40d
+    compositionBiasCorrection     :b4, after b3, 40d
+    caribouPopGrowth     :b5, after b4, 40d
+    prepareTrajectories     :b6, after b5, 40d
 
 ```
 

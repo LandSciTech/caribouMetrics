@@ -29,15 +29,15 @@ simulateTrajectoriesFromPosterior(
 
 \item{popInfo}{If NA (default) predictions are made without populations size, density dependence, or demographic stochasticity. See \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for details.}
 
-\item{rec_pred}{results returned by \code{\link[bboutools:bb_fit_recruitment]{bboutools::bb_fit_recruitment()}} or \code{\link[bboutools:bb_predict_calf_cow_ratio]{bboutools::bb_predict_calf_cow_ratio()}} functions of bboutools R package, or recruit_fit returned by \code{\link[=estimateBayesianRates]{estimateBayesianRates()}}.}
+\item{rec_pred}{results returned by \code{\link[=bb_fit_recruitment]{bb_fit_recruitment()}} or \code{\link[=bb_predict_calf_cow_ratio]{bb_predict_calf_cow_ratio()}} functions of bboutools R package, or recruit_fit returned by \code{\link[=estimateBayesianRates]{estimateBayesianRates()}}.}
 
-\item{surv_pred}{bboufit object return by \code{\link[bboutools:bb_fit_survival]{bboutools::bb_fit_survival()}} or \code{\link[bboutools:bb_predict_survival]{bboutools::bb_predict_survival()}} functions of bboutools R package, or surv_fit returned by \code{\link[=estimateBayesianRates]{estimateBayesianRates()}}.}
+\item{surv_pred}{bboufit object return by \code{\link[=bb_fit_survival]{bb_fit_survival()}} or \code{\link[=bb_predict_survival]{bb_predict_survival()}} functions of bboutools R package, or surv_fit returned by \code{\link[=estimateBayesianRates]{estimateBayesianRates()}}.}
 
 \item{initYear}{numeric. Initial year.}
 
 \item{correlateRates}{logical. Set TRUE to force correlation between recruitment and survival. Ignored}
 
-\item{returnExpected}{logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are \code{\link[bboutools:bb_predict_calf_cow_ratio]{bboutools::bb_predict_calf_cow_ratio()}}/\code{\link[bboutools:bb_predict_survival]{bboutools::bb_predict_survival()}} results.}
+\item{returnExpected}{logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are \code{\link[=bb_predict_calf_cow_ratio]{bb_predict_calf_cow_ratio()}}/\code{\link[=bb_predict_survival]{bb_predict_survival()}} results.}
 
 \item{c}{Number. Bias correction term.}
 }
