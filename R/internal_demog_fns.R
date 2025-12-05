@@ -18,7 +18,7 @@ convertTrajectories<-function(pars){
     pars$lamPercentile=NA
   }
   if(!is.element("c",names(pars))){pars$c=NA}
-  
+
   nameChange <- data.frame(inName=c("id","lamPercentile", "Year","PopulationName","Anthro", "fire_excl_anthro","c",
                                     "S_t", "R_t", "X_t", "N",
                                     "lambda","S_bar","R_bar","X_bar","N_bar","lambdaE_bar"),
@@ -35,7 +35,7 @@ convertTrajectories<-function(pars){
   if(is.element("Anthro", colnames(fds))){
     fds$AnthroID = round(fds$Anthro);fds$fire_excl_anthroID=round(fds$fire_excl_anthro)
   }
-  
+
   fds$Timestep = as.numeric(fds$Year)
   fds$Year=as.numeric(as.character(fds$Year))
   fds <- tidyr::pivot_longer(fds, !any_of(c("Replicate","LambdaPercentile","Year","Timestep","PopulationName","AnthroID","fire_excl_anthroID")), names_to = "MetricTypeID",

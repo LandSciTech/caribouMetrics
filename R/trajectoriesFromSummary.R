@@ -7,7 +7,10 @@
 #' @param R_iv_mean,R_iv_shape,S_iv_mean,S_iv_shape define the mean and shape of the interannual variation
 #' @param scn_nm Sceanrio name
 #' @param type "logistic" or "beta" defines how demographic rates are sampled from the given mean and standard deviation.
-#'
+#' @param doSummary logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth. 
+#'  If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.
+#' @param returnSamples logical. If FALSE returns only summaries. If TRUE
+#'   returns example trajectories as well. 
 #' @return a data.frame
 #' @family demography
 #'
@@ -25,7 +28,7 @@
 #'
 trajectoriesFromSummary <- function(numSteps, replicates, N0, R_bar, S_bar, R_sd, S_sd,
                   R_iv_mean, R_iv_shape, S_iv_mean, S_iv_shape,  
-                  scn_nm, type = "logistic", addl_params){
+                  scn_nm, type = "logistic", addl_params = list(), doSummary = F, returnSamples = T){
   #type="logistic"
 
   if(type=="beta"){
@@ -71,7 +74,13 @@ trajectoriesFromSummary <- function(numSteps, replicates, N0, R_bar, S_bar, R_sd
     addl_params)) %>%
     mutate(type = "mean", scn = scn_nm)
 
-  return(bind_rows(mod_mean, mod_samps))
+  if(!doSummary){
+    return(bind_rows(mod_mean, mod_samps))
+  }else{
+    mod_samps$Year <- mod_samps$time
+    mod_samps$PopulationName <- mod_samps$scn
+    simBig <- prepareTrajectories(mod_samps, returnSamples = returnSamples)
+  }
 }
 
 #' Simulate caribou population over time
