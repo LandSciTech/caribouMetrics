@@ -32,7 +32,6 @@ articles:
     navbar: ~
     contents:
       - caribouDemography
-      - bayesian-model-outputs
       - combine-observed-simulated
       - compare-bayesian-models
       - Using_disturbanceMetric
