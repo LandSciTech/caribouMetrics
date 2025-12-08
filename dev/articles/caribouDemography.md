@@ -404,12 +404,12 @@ popMetrics2$summary <- popMetrics2$summary %>%
 names <- popMetrics2$summary %>% select(MetricTypeID,Parameter) %>% unique();names
 #>    MetricTypeID              Parameter
 #> 1        lambda Population growth rate
-#> 6    lambda_bar   Expected growth rate
-#> 11            N Female population size
-#> 16         Rbar   Expected recruitment
-#> 21  recruitment            Recruitment
-#> 26         Sbar      Expected survival
-#> 31     survival  Adult female survival
+#> 11   lambda_bar   Expected growth rate
+#> 21            N Female population size
+#> 31         Rbar   Expected recruitment
+#> 41  recruitment            Recruitment
+#> 51         Sbar      Expected survival
+#> 61     survival  Adult female survival
 popMetrics2$samples <- merge(popMetrics2$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=35)
 ```
 
@@ -584,26 +584,22 @@ popMetricsBase <- trajectoriesFromSummary(numSteps=10,replicates=500,N0=500,R_ba
                                              R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
                                              S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,
                                              scn_nm="base",doSummary=T)
-#> Warning in convertTrajectories(trajs): NAs introduced by coercion
-#> Warning in convertTrajectories(trajs): NAs introduced by coercion
 popMetricsS85 <- trajectoriesFromSummary(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=0.85,
                                              R_sd=pt$R_sd,S_sd=pt$S_sd,
                                              R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
                                              S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,
                                              scn_nm="S85",doSummary=T)
-#> Warning in convertTrajectories(trajs): NAs introduced by coercion
-#> Warning in convertTrajectories(trajs): NAs introduced by coercion
 scnCompare <- list(summary=rbind(popMetricsBase$summary,popMetricsS85$summary),
                    samples=rbind(popMetricsBase$samples,popMetricsS85$samples))
 scnCompare$summary <- scnCompare$summary %>% 
   filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
 names <- scnCompare$summary %>% select(MetricTypeID,Parameter) %>% unique();names
-#>   MetricTypeID              Parameter
-#> 1       lambda Population growth rate
-#> 2   lambda_bar   Expected growth rate
-#> 3            N Female population size
-#> 4  recruitment            Recruitment
-#> 5     survival  Adult female survival
+#>    MetricTypeID              Parameter
+#> 1        lambda Population growth rate
+#> 11   lambda_bar   Expected growth rate
+#> 21            N Female population size
+#> 31  recruitment            Recruitment
+#> 41     survival  Adult female survival
 scnCompare$samples <- merge(scnCompare$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=25)
 ```
 
