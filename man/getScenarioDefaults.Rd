@@ -123,6 +123,7 @@ getScenarioDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears =
 Caribou demography functions:
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{bbouNationalPriors}()},
 \code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compareTrajectories}()},

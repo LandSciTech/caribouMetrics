@@ -159,6 +159,7 @@ if (useSaved & file.exists(bbouPriorNationalFile)) {
 simBbouPriorNational <- trajectoriesFromBayesian(bbouPriorNational)
 out_tbls <- compareTrajectories(betaPrior, simInitial = simBbouPriorNational)
 typeLabs <- c("Beta", "Bbou National")
+
 ```
 
 ```{r fig-plotPriorsNational, fig.width=12,fig.height=figHeight,fig.cap="Prior means and 95% predictive intervals from Beta and bbou models with 5% anthropogenic disturbance and priors informed by national demographic-disturbance relationships."}

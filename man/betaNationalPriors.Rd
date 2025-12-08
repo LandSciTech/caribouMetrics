@@ -147,6 +147,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 Caribou demography functions:
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{bbouNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},

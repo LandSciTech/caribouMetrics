@@ -66,6 +66,7 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 \seealso{
 Caribou demography functions:
 \code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{bbouNationalPriors}()},
 \code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compareTrajectories}()},

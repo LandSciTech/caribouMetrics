@@ -3,6 +3,7 @@
 export(DisturbanceMetrics)
 export(bayesianScenariosWorkflow)
 export(bayesianTrajectoryWorkflow)
+export(bbouNationalPriors)
 export(betaNationalPriors)
 export(caribouPopGrowth)
 export(compareTrajectories)
