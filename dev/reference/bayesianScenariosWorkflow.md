@@ -170,8 +170,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 9
-#>    Unobserved stochastic nodes: 84
+#>    Observed stochastic nodes: 10
+#>    Unobserved stochastic nodes: 83
 #>    Total graph size: 409
 #> 
 #> Initializing model
@@ -180,8 +180,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 53
-#>    Unobserved stochastic nodes: 171
+#>    Observed stochastic nodes: 54
+#>    Unobserved stochastic nodes: 170
 #>    Total graph size: 666
 #> 
 #> Initializing model
