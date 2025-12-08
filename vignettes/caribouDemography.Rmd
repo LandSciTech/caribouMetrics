@@ -398,7 +398,7 @@ NOTE: To enable the QC app project and others we made several changes to bboutoo
 See [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html) vignette for an overview of the Bayesian models.
 For this example we use a bboutools logistic model and example data.
 
-```{r setupBayesian}
+```{r setupBayesian, results='hide'}
 library(bboudata)
 library(bboutools)
 useSaved <- T # option to skip slow step of fitting bboutools model
