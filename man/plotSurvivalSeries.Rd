@@ -13,7 +13,6 @@ TO DO: write documentation
 Caribou demography functions:
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
-\code{\link{bbouNationalPriors}()},
 \code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compareTrajectories}()},

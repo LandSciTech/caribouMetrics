@@ -98,7 +98,6 @@ Bayesian population model for boreal caribou
 \seealso{
 Caribou demography functions:
 \code{\link{bayesianScenariosWorkflow}()},
-\code{\link{bbouNationalPriors}()},
 \code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compareTrajectories}()},

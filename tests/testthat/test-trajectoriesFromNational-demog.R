@@ -45,7 +45,7 @@ test_that("get samples by default and projects over time when Year supplied",{
                                     N0 = 100, numSteps = 10)
   expect_named(wDist, c("summary", "samples"))
   
-  if(interactive()){
+  if(F&interactive()){
     proj <- ggplot(data = wDist$samples, aes(x = Timestep, y = Amount, colour = Replicate,
                                              group = Replicate)) +
       geom_line() +
