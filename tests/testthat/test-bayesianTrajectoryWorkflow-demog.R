@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("real and simulated data work", {
   # Using observed survival, recruitment and disturbance data
   mod <- bayesianTrajectoryWorkflow(
     surv_data = bboudata::bbousurv_a %>% filter(Year > 2010),
@@ -6,6 +6,8 @@ test_that("multiplication works", {
     disturbance = NULL
   )
   str(mod, max.level = 2)
+  
+  expect_type(mod, "list")
   
   # Using simulated observation data
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
@@ -17,4 +19,6 @@ test_that("multiplication works", {
   out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                            disturbance = simO$simDisturbance,
                            startYear = 2014)
+  
+  expect_type(out, "list")
 })

@@ -110,39 +110,65 @@ simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynami
   for (ts in 1:numSteps) {
     if(dynamicRates){
       if(onePop){
-        R_use <- R_samp[ts]
-        S_use <- S_samp[ts]
+        R_use <- data.frame(value = R_samp[ts]) %>% setNames(ts)
+        S_use <- data.frame(value = S_samp[ts]) %>% setNames(ts)
       } else {
-        R_use <- R_samp[,ts]
-        S_use <- S_samp[,ts]
+        R_use <- R_samp[,ts, drop = FALSE]
+        S_use <- S_samp[,ts, drop = FALSE]
       } 
     } else {
-      R_use <- R_samp
-      S_use <- S_samp
+      R_use <- data.frame(value = R_samp)
+      S_use <- data.frame(value = S_samp)
     }
+    R_use <- na.omit(R_use)
+    S_use <- na.omit(S_use)
     if (ts == 1) {
       if(length(N0) == 1){
-        N0 <- rep(N0, length(R_use))
+        N0 <- rep(N0, nrow(R_use))
       } else if (length(N0) == 2) {
         N0 <- seq(from = N0[1], to = N0[2], by  = 1) %>% round() %>% 
-          sample(size = length(R_use), replace = TRUE)
+          sample(size = nrow(R_use), replace = TRUE)
       }
 
       out <- caribouPopGrowth(N0,
                               numSteps = stepLength,
                               interannualVar = interannualVar,
-                              R_bar = R_use, S_bar = S_use, ...
+                              R_bar = R_use[,1], S_bar = S_use[,1], ...
       )
-      out$id <- seq(1:nrow(out))
-      out$time <- ts
+      
+      if(is.null(rownames(R_use))){
+        out$id <- seq(1, nrow(out))
+      } else {
+        out$id <- rownames(R_use)
+      }
+      
+      out$time <- ifelse(!is.null(colnames(R_use)), colnames(R_use), ts)
+      
       outBit <- out
     } else {
+      if(length(outBit$N) != length(R_use)){
+        if(length(unique(N0)) > 1){
+          stop("Range of N0 only supported for static rates when there are NAs in R_samp")
+        }
+        # Add rows missing in previous rounds and set N to N0
+        outBit <- left_join(R_use %>% tibble::rownames_to_column(),
+                            outBit %>% select(-N0) %>% mutate(id = as.character(id)),
+                            by = join_by(rowname == id)) %>% 
+          mutate(N = ifelse(is.na(N), unique(N0), N)) %>% 
+          select(any_of(colnames(outBit))) 
+      }
       outBit <- caribouPopGrowth(outBit$N,
                                  numSteps = stepLength, interannualVar = interannualVar,
-                                 R_bar = R_use, S_bar = S_use, ...
+                                 R_bar = R_use[,1], S_bar = S_use[,1], ...
       )
-      outBit$id <- seq(1, nrow(outBit))
-      outBit$time <- ts
+      if(is.null(rownames(R_use))){
+        outBit$id <- seq(1, nrow(outBit))
+      } else {
+        outBit$id <- rownames(R_use)
+      }
+   
+      outBit$time <- ifelse(!is.null(colnames(R_use)), colnames(R_use), ts)
+      
       out <- rbind(out, outBit)
     }
   }

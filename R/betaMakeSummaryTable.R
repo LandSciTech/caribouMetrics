@@ -1,8 +1,8 @@
 betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,nt,ni,nb){
-  if(n_distinct(surv_data$PopulationName) > 1){
-    testTable(disturbance, req_col_names = "PopulationName", 
-              req_vals = unique(surv_data$PopulationName))
-  }
+  # if(n_distinct(surv_data$PopulationName) > 1){
+  #   testTable(disturbance, req_col_names = "PopulationName", 
+  #             req_vals = unique(surv_data$PopulationName))
+  # }
   #Note: using bboutools to check and structure the data without fitting the models...0
   surv_fit_in <- bboutools::bb_fit_survival(surv_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
   surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb)
@@ -18,7 +18,7 @@ betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
   data <- as.data.frame(data)
   data <- subset(data,is.element(Annual,disturbance$Year))
   data$Annual <- as.factor(as.character(data$Annual))
-  disturbance <- merge(disturbance,unique(subset(data,select=c(Annual,Year, PopulationName,PopulationID))))
+  disturbance <- merge(disturbance,unique(select(data, any_of(c("Annual", "Year", "PopulationName","PopulationID")))))
   anthro <- spread(subset(disturbance,select=c(Annual,PopulationID,Anthro)), PopulationID, Anthro)
   
   if(any(is.na(anthro))){

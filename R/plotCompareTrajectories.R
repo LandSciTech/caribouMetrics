@@ -125,16 +125,25 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
     missing=setdiff(facetVars,names(simRange))
     if(length(missing)>0){
       mergeBit <- unique(subset(df,select=missing))
-      simRange <- merge(simRange,mergeBit)
+      simRange <- merge(unique(simRange),mergeBit)
     }
     nameSel <- c(c("Year", "Mean", "lower", "upper", "Type"), facetVars)
     df <- rbind(subset(df, select = nameSel), subset(simRange, select = nameSel))
+    
     df$grp <- df$Type
     if (!is.null(facetVars)) {
       for (i in facetVars) {
         df$grp <- paste0(df$grp, df[[i]])
       }
     }
+    
+    dups <- df %>% count(Year, grp) %>% filter(n > 1)
+    if(nrow(dups) > 0){
+      warning("modTables contains duplicate observations of the same parameter,",
+              " year and type (eg observed or simulated). If there are multiple",
+              " scenarios identify them using the facetVars")
+    }
+    
     x1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data[["Year"]], y = .data[["Mean"]], 
                                            fill = .data[["Type"]], col = .data[["Type"]]))
   } else {

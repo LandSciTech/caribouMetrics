@@ -17,16 +17,14 @@ test_that("Basic inputs works", {
 })
 
 test_that("multiple populations works", {
-  expect_error(
-    betaMakeSummaryTable(
+ # disturbance doesn't have PopName so assumed to apply to both
+    out <- betaMakeSummaryTable(
       surv_data = bboudata::bbousurv_a %>% bind_rows(bboudata::bbousurv_b) %>% filter(Year > 2010),
       recruit_data = bboudata::bbourecruit_a %>% bind_rows(bboudata::bbourecruit_b) %>% filter(Year > 2010),
       disturbance = data.frame(Year = 2010:2020, Anthro = 10:20, fire_excl_anthro = 10:20),
       priors = betaNationalPriors(), 
       nc, nthin, ni, nb
-    ),
-    "missing expected columns"
-  ) 
+    )
   
   expect_warning(
     out2 <- betaMakeSummaryTable(
@@ -41,4 +39,15 @@ test_that("multiple populations works", {
     ),
     "no data for population"
   )
+})
+
+test_that("works with simulated data",{
+  simO <- simulateObservations(getScenarioDefaults(collarCount = 10))
+  
+  out <- betaMakeSummaryTable(surv_data = simO$simSurvObs, 
+                              recruit_data = simO$simRecruitObs, 
+                              disturbance = simO$simDisturbance, 
+                              priors = betaNationalPriors(), 
+                              nc, nthin, ni, nb)
+  expect_type(out, "list")
 })
