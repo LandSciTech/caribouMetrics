@@ -19,7 +19,6 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demographic Rates and Trajectories</a></li>
-    <li><a class="dropdown-item" href="../articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
     <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Simulation of monitoring scenarios informed by local data</a></li>
     <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
@@ -60,7 +59,9 @@
 <span>  <span class="va">S_iv_shape</span>,</span>
 <span>  <span class="va">scn_nm</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"logistic"</span>,</span>
-<span>  <span class="va">addl_params</span></span>
+<span>  addl_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  doSummary <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  returnSamples <span class="op">=</span> <span class="cn">T</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -110,6 +111,16 @@ one or more sample populations.</p></dd>
 <dt id="arg-addl-params">addl_params<a class="anchor" aria-label="anchor" href="#arg-addl-params"></a></dt>
 <dd><p>a list of additional parameters for <code>caribouPopGrowth</code></p></dd>
 
+
+<dt id="arg-dosummary">doSummary<a class="anchor" aria-label="anchor" href="#arg-dosummary"></a></dt>
+<dd><p>logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth.
+If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.</p></dd>
+
+
+<dt id="arg-returnsamples">returnSamples<a class="anchor" aria-label="anchor" href="#arg-returnsamples"></a></dt>
+<dd><p>logical. If FALSE returns only summaries. If TRUE
+returns example trajectories as well.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -149,38 +160,38 @@ one or more sample populations.</p></dd>
 <span class="r-in"><span>   scn_nm <span class="op">=</span> <span class="st">"base"</span>, addl_params <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"logistic"</span></span></span>
 <span class="r-in"><span> <span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="va">outParTab</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    N0    lambda   lambdaE  N       R_t        X_t       S_t n_recruits</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  NA 0.8732208 0.9291704 NA 0.2464673 0.12323363 0.7774169         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  NA 0.9592624 0.9732188 NA 0.1398352 0.06991761 0.8965760         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  NA 0.9104215 0.9291704 NA 0.1585313 0.07926566 0.8435565         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  NA 0.9779617 0.9732188 NA 0.1887095 0.09435474 0.8936423         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 NA 0.9700922 0.9291704 NA 0.1595875 0.07979376 0.8984051         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 NA 0.9755772 0.9732188 NA 0.1736364 0.08681822 0.8976452         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 NA 0.9618322 0.9291704 NA 0.1618140 0.08090702 0.8898381         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 NA 0.9816932 0.9732188 NA 0.2053741 0.10268704 0.8902737         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 NA 0.7646397 0.9291704 NA 0.2121796 0.10608981 0.6912998         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 NA 0.9572864 0.9732188 NA 0.1446053 0.07230267 0.8927390         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    surviving_adFemales id time type  scn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                   NA  1    1 mean base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                   NA  1    2 mean base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                   NA  1    3 mean base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                   NA  1    4 mean base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                   NA  1    5 mean base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                   NA  1    1 samp base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                   NA  2    1 samp base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                   NA  1    2 samp base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                   NA  2    2 samp base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10                  NA  1    3 samp base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11                  NA  2    3 samp base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12                  NA  1    4 samp base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13                  NA  2    4 samp base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14                  NA  1    5 samp base</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15                  NA  2    5 samp base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    N0    lambda  lambdaE  N        R_t        X_t       S_t n_recruits</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  NA 0.9483000 0.948300 NA 0.18000000 0.09000000 0.8700000         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  NA 0.9483000 0.948300 NA 0.18000000 0.09000000 0.8700000         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  NA 0.9483000 0.948300 NA 0.18000000 0.09000000 0.8700000         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  NA 0.9483000 0.948300 NA 0.18000000 0.09000000 0.8700000         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  NA 0.9483000 0.948300 NA 0.18000000 0.09000000 0.8700000         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  NA 0.9906811 0.945523 NA 0.33758306 0.16879153 0.8476115         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  NA 0.9445214 0.944343 NA 0.14824558 0.07412279 0.8793421         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  NA 0.9697466 0.945523 NA 0.22407055 0.11203527 0.8720466         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  NA 0.9490204 0.944343 NA 0.16240332 0.08120166 0.8777460         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 NA 0.9428867 0.945523 NA 0.21493632 0.10746816 0.8513894         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 NA 0.9010762 0.944343 NA 0.19358218 0.09679109 0.8215568         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 NA 0.9325672 0.945523 NA 0.15200955 0.07600478 0.8666943         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 NA 0.8571384 0.944343 NA 0.22738776 0.11369388 0.7696355         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 NA 0.8628831 0.945523 NA 0.06635537 0.03317768 0.8351740         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 NA 0.9064271 0.944343 NA 0.14212023 0.07106011 0.8462897         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    surviving_adFemales id  time type  scn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                   NA  1 value mean base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                   NA  1 value mean base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                   NA  1 value mean base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                   NA  1 value mean base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                   NA  1 value mean base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                   NA  1 value samp base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                   NA  2 value samp base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8                   NA  1 value samp base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                   NA  2 value samp base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10                  NA  1 value samp base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11                  NA  2 value samp base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12                  NA  1 value samp base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13                  NA  2 value samp base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14                  NA  1 value samp base</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15                  NA  2 value samp base</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -135,7 +135,7 @@ a list with elements:
 
 For a detailed description of the process for simulating data see the
 [vignette](https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html#simulation-of-local-population-dynamics-and-monitoring)
-([`vignette("bayesian-model-outputs", package = "caribouMetrics")`](https://landscitech.github.io/caribouMetrics/dev/articles/bayesian-model-outputs.md))
+([`vignette("bayesian-model-outputs", package = "caribouMetrics")`](https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html))
 and [Hughes et al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095).
 
 ## References

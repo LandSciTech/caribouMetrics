@@ -19,7 +19,6 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demographic Rates and Trajectories</a></li>
-    <li><a class="dropdown-item" href="../articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
     <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Simulation of monitoring scenarios informed by local data</a></li>
     <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
@@ -144,11 +143,11 @@ if FALSE just the results table is returned.</p>
 <span class="r-in"><span><span class="va">r_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span>, <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_b.html" class="external-link">bbourecruit_b</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">estimateBayesianRates</span><span class="op">(</span><span class="va">s_data</span>, <span class="va">r_data</span>, N0 <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   pop_name     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower R_bar_upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 0.1890361 0.08146205 0.3180711    26.9572   0.1650052   0.2136814</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        B 0.2035419 0.10552491 0.3180711    26.9572   0.1709275   0.2382139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 0.1894920 0.08184165 0.3149665   25.99022   0.1653572   0.2142177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        B 0.2035126 0.10424536 0.3149665   25.99022   0.1717486   0.2381621</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper  N0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.8817271 0.2352997  0.498872   11.99553   0.8268869   0.9229652 500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.9074842 0.2938012  0.498872   11.99553   0.8498524   0.9478038 500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.8826832 0.2360963 0.4920445   9.820891    0.827720   0.9245298 500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.9070345 0.2888871 0.4920445   9.820891    0.848778   0.9464062 500</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nCollarYears nSurvYears nCowsAllYears nRecruitYears</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          900         31          2353            27</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2          519         18          2001            15</span>

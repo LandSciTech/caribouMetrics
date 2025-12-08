@@ -279,7 +279,10 @@ the same quantile of the Beta distribution as disturbance changes.
 
 In this example, we project 35 sample populations for 50 years on a
 landscape where the anthropogenic disturbance footprint is increasing by
-5% per decade (Figure [1.4](#fig:changeOverTime)).
+5% per decade (Figure [1.4](#fig:changeOverTime)). Note the form of the
+growth model (density dependence, interannual variation, demographic
+stochasticity etc) can be changed by setting `caribouPopGrowth` function
+parameters; see XX for details.
 
 ``` r
 numTimesteps <- 5
@@ -290,7 +293,6 @@ AnthroChange <- 5 #For illustration assume 5% increase in anthropogenic disturba
 # at each time,  sample demographic rates and project, save results
 pars <- data.frame(N0 = N0)
 for (t in 1:numTimesteps) {
-  #t=1
   covariates <- disturbance
   covariates$Anthro <- covariates$Anthro + AnthroChange * (t - 1)
 
@@ -314,7 +316,6 @@ for (t in 1:numTimesteps) {
   # add results to output set
   fds <- subset(pars, select = c(replicate, Anthro, N, S_bar,S_t, R_bar,R_t,lambdaE,lambda))
   fds$replicate <- as.numeric(gsub("V", "", fds$replicate))
-  #names(fds) <- c("Replicate", "anthro", "survival", "recruitment", "N", "lambda", "lambda_bar")
   fds <- pivot_longer(fds, !replicate, names_to = "MetricTypeID", values_to = "Amount")
   fds$Timestep <- t * stepLength
   if (t == 1) {
@@ -329,9 +330,22 @@ popMetrics$Replicate <- paste0("x", popMetrics$replicate)
 # popMetrics <- subset(popMetrics, !MetricTypeID == "N")
 ```
 
-![TO DO.](caribouDemography_files/figure-html/changeOverTime-1.png)
+![Example demographic trajectories from the national model on a changing
+landscape. ‘lambda’ is realized population growth rate in the final
+year, and ‘lambdaE’ is expected population growth rate without
+interannual variation, density dependence or demographic stochasticity.
+‘N’ is the number of adult females. ‘R_bar/S_bar’ are the expected
+recruitment (calf:cow ratio) and survival rates, ‘R_t/S_t’ are the
+recruitment and survival
+rates.](caribouDemography_files/figure-html/changeOverTime-1.png)
 
-Figure 1.4: TO DO.
+Figure 1.4: Example demographic trajectories from the national model on
+a changing landscape. ‘lambda’ is realized population growth rate in the
+final year, and ‘lambdaE’ is expected population growth rate without
+interannual variation, density dependence or demographic stochasticity.
+‘N’ is the number of adult females. ‘R_bar/S_bar’ are the expected
+recruitment (calf:cow ratio) and survival rates, ‘R_t/S_t’ are the
+recruitment and survival rates.
 
 ### 1.5 Using the trajectoriesFromNational wrapper function to project population growth
 
@@ -361,10 +375,14 @@ natTraj35 <- trajectoriesFromNational(replicates = 35,
                                     useQuantiles = TRUE)
 ```
 
-![TO
-DO.](caribouDemography_files/figure-html/withPrecisionWrapper-1.png)
+![Variation in expected survival and recruitment with disturbance,
+obtained using the trajectoriesFromNational wrapper function. See Figure
+1.3 for
+details.](caribouDemography_files/figure-html/withPrecisionWrapper-1.png)
 
-Figure 1.5: TO DO.
+Figure 1.5: Variation in expected survival and recruitment with
+disturbance, obtained using the trajectoriesFromNational wrapper
+function. See Figure 1.3 for details.
 
 Using the same scenario with anthropogenic disturbance footprint
 increasing by 5% per decade, we can also produce projections over a
@@ -378,18 +396,402 @@ disturbance2 = data.frame(step = 0:4) %>% bind_cols(disturbance) %>%
 # set seed so vignette looks the same each time
 set.seed(54545)
 
-popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates = 35, 
+popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates = 500, 
                                         useQuantiles = TRUE,N0 = 100, numSteps = 10)
 
-popMetrics2 <- popMetrics2$samples %>% 
+popMetrics2$summary <- popMetrics2$summary %>% 
   filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
+names <- popMetrics2$summary %>% select(MetricTypeID,Parameter) %>% unique();names
+#>    MetricTypeID              Parameter
+#> 1        lambda Population growth rate
+#> 6    lambda_bar   Expected growth rate
+#> 11            N Female population size
+#> 16         Rbar   Expected recruitment
+#> 21  recruitment            Recruitment
+#> 26         Sbar      Expected survival
+#> 31     survival  Adult female survival
+popMetrics2$samples <- merge(popMetrics2$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=35)
 ```
 
-![TO DO.](caribouDemography_files/figure-html/changeOverTime2-1.png)
+``` r
+proj <- ggplot(data = popMetrics2$summary,
+               aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
+  geom_ribbon(fill="grey") +
+  geom_line(colour="black",linewidth=2)+
+  geom_line(data=popMetrics2$samples,aes(x=Year,y=Amount,colour=Replicate,group=Replicate,ymin=Amount,ymax=Amount)) +
+  facet_wrap(~Parameter, scales = "free") +
+  ylab("")+
+  theme(legend.position = "none")
+proj
+```
 
-Figure 1.6: TO DO.
+![Example demographic trajectories and from the national model on a
+changing landscape, obtained using the trajectoriesFromNational wrapper
+function. Bands are the 2.5% and 97.5% quantiles of 500
+samples.](caribouDemography_files/figure-html/changeOverTime2-1.png)
 
-### 1.6 References
+Figure 1.6: Example demographic trajectories and from the national model
+on a changing landscape, obtained using the trajectoriesFromNational
+wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples.
+
+## 2 Demographic rates and trajectories from bboutools Bayesian models
+
+NOTE: To enable the QC app project and others we made several changes to
+bboutools. At present these examples only work with our modified version
+of bboutools. bboutools developers are integrating the changes into
+their main package, with an update to be released in spring 2026. Once
+they have finalized their methods and workflows we will update our code,
+tests, and documentation to be consistent with their updated package.
+Until all that is done these tools remain a work in progress - they
+should only be used by people who won’t be surprised or upset when we
+make changes. It is also important to note that we have very little
+capacity for user support at this time; time we spend supporting users
+will will delay progress on building, documenting, testing and
+publishing the tools.
+
+### 2.1 Getting a fitted bboutools logistic model
+
+See [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian
+models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html)
+vignette for an overview of the Bayesian models. For this example we use
+a bboutools logistic model and example data.
+
+``` r
+library(bboudata)
+library(bboutools)
+useSaved <- T # option to skip slow step of fitting bboutools model
+bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
+surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
+surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
+                             PopulationName = unique(surv_data$PopulationName))
+surv_data <- merge(surv_data, surv_data_add, all.x = TRUE, all.y = TRUE)
+surv_data$StartTotal[is.na(surv_data$StartTotal)] <- 1
+recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
+recruit_data_add <- expand.grid(Year = seq(2017, 2022), PopulationName = unique(recruit_data$PopulationName))
+recruit_data <- merge(recruit_data, recruit_data_add, all.x = TRUE, all.y = TRUE)
+recruit_data$Month[is.na(recruit_data$Month)] <- 3
+recruit_data$Day[is.na(recruit_data$Day)] <- 15
+if (useSaved & file.exists(bbouInformativeFile)) {
+  bbouInformative <- readRDS(bbouInformativeFile)
+} else {
+  bbouInformative <- estimateBayesianRates(surv_data, recruit_data,
+                                          return_mcmc = TRUE)
+  if (dir.exists(dirname(bbouInformativeFile))) {
+    saveRDS(bbouInformative, bbouInformativeFile)
+  }
+}
+#> warning: value of stochastic node FemaleYearlings[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[7]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[8]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[9]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[10]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[11]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[12]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[7]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[8]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[9]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[10]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[11]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[12]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[7]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[8]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[9]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[10]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[11]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[12]: logProb is NA or NaN.
+#> warning: value of deterministic node AdultsFemales[7]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[8]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[9]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[10]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[11]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[12]: value is NA or NaN even after trying to calculate.
+#> warning: value of stochastic node Calves[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[7]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[8]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[9]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[10]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[11]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[12]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[7]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[8]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[9]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[10]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[11]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[12]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[7]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[8]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[9]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[10]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[11]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[12]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[7]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[8]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[9]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[10]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[11]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[12]: logProb is NA or NaN.
+#> warning: value of deterministic node AdultsFemales[7]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[8]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[9]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[10]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[11]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[12]: value is NA or NaN even after trying to calculate.
+#> warning: value of stochastic node Calves[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[7]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[8]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[9]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[10]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[11]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[12]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[7]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[8]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[9]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[10]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[11]: logProb is NA or NaN.
+#> warning: value of stochastic node FemaleYearlings[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node FemaleYearlings[12]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[7]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[8]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[9]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[10]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[11]: logProb is NA or NaN.
+#> warning: value of stochastic node Cows[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Cows[12]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[7]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[8]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[9]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[10]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[11]: logProb is NA or NaN.
+#> warning: value of stochastic node OtherAdultsFemales[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node OtherAdultsFemales[12]: logProb is NA or NaN.
+#> warning: value of deterministic node AdultsFemales[7]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[8]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[9]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[10]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[11]: value is NA or NaN even after trying to calculate.
+#> warning: value of deterministic node AdultsFemales[12]: value is NA or NaN even after trying to calculate.
+#> warning: value of stochastic node Calves[7]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[7]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[8]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[8]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[9]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[9]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[10]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[10]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[11]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[11]: logProb is NA or NaN.
+#> warning: value of stochastic node Calves[12]: value is NA or NaN even after trying to simulate.
+#> warning: problem initializing stochastic node Calves[12]: logProb is NA or NaN.
+```
+
+### 2.2 Using bboutools to project population growth
+
+The bboutools R package includes methods for projecting calf:cow ratios,
+recruitment, survival, and population growth rate.
+
+Note pop growth rate reported by bboutools is…
+
+Note no density dependence or demographic stochasticity…
+
+### 2.3 Using the trajectoriesFromBayesian wrapper function to project population growth
+
+For convenience, to enable comparisons (e.g. [Comparing caribouMetrics
+(Beta) and bboutools (logistic) Bayesian
+models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html)
+vignette), and to integrate with other methods and workflows, we can use
+the `trajectoriesFromBayesian` wrapper function to get sample
+trajectories and summaries from our fitted bboutools model. Note that if
+we use only the information in the fitted model (that does not include
+initial population size) then the summary results (bands in Figure X)
+are identical to the bboutools projections (Figs X). The returned
+example trajectories are derived from the MCMC samples. If we also
+provide initial population size information then the projection (by
+default) includes density dependence and demographic stochasticity
+([**dyson2022?**](#ref-dyson2022); [Hughes et al.
+2025](#ref-hughes2025)) (Fig X); . Note that in this case the form of
+the growth model (density dependence & demographic stochasticity, but
+not interannual variability) can be changed by setting
+`caribouPopGrowth` function parameters (e.g. Fig X no demographic
+stochasticity); see XX for details, but note that the Bayesian MCMC
+samples include interannual variation in recruitment and survival, so no
+additional interannual variation is added by `caribouPopGrowth` in this
+case.
+
+TO DO: add trajectoriesFromBayesian workflow diagram
+
+``` r
+
+popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
+popMetricsBayes$summary <- popMetricsBayes$summary %>% 
+  filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
+names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique();names
+#>    MetricTypeID              Parameter
+#> 1        lambda Population growth rate
+#> 13   lambda_bar   Expected growth rate
+#> 25            N Female population size
+#> 37         Rbar   Expected recruitment
+#> 49  recruitment            Recruitment
+#> 61         Sbar      Expected survival
+#> 73     survival  Adult female survival
+popMetricsBayes$samples <- merge(popMetricsBayes$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=35)
+```
+
+``` r
+proj <- ggplot(data = popMetricsBayes$summary,
+               aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
+  geom_ribbon(fill="grey") +
+  geom_line(colour="black",linewidth=2)+
+  geom_line(data=popMetricsBayes$samples,aes(x=Year,y=Amount,colour=Replicate,group=Replicate,ymin=Amount,ymax=Amount)) +
+  facet_wrap(~Parameter, scales = "free") +
+  ylab("")+
+  theme(legend.position = "none")
+proj
+```
+
+![Example demographic trajectories from a fitted bboutools model,
+obtained using the trajectoriesFromBayesian wrapper function. Bands are
+95% predictive
+intervals.](caribouDemography_files/figure-html/bayesTrajectoryPlot-1.png)
+
+Figure 2.1: Example demographic trajectories from a fitted bboutools
+model, obtained using the trajectoriesFromBayesian wrapper function.
+Bands are 95% predictive intervals.
+
+### 2.4 Using the trajectoriesFromSummaries wrapper function to project population growth
+
+To allow for the possibility of using fitted Bayesian models as a
+starting point for exploring demographic scenarios, the
+`estimateBayesianRates` function also returns a table of model
+parameters. The `trajectoriesFromSummary` projects outcomes from a model
+defined by these parameters. When parameters from a fitted Bayesian
+model are used, outcomes from `trajectoriesFromSummary` and
+`trajectoriesFromBayesian` are the same (compare Figs X and X) (though
+note we don’t yet have this working for dynamic disturbance scenarios).
+`trajectoriesFromSummary` allow us to explore the implications of
+changing model parameters (Fig X), and enables the scenario exploration
+in our [Boreal Caribou Demographic Projection
+Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp).
+
+``` r
+pt <- bbouInformative$parTab;pt
+#>   pop_name    R_bar      R_sd R_iv_mean R_iv_shape R_bar_lower R_bar_upper
+#> 1        A 0.193378 0.2071858 0.3733476   2.228027    0.136304    0.270608
+#>       S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper N0
+#> 1 0.9435812 0.6158295 0.6422284   1.579427   0.8579385   0.9855566 NA
+#>   nCollarYears nSurvYears nCowsAllYears nRecruitYears
+#> 1          185         12            NA            12
+
+popMetricsBase <- trajectoriesFromSummary(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
+                                             R_sd=pt$R_sd,S_sd=pt$S_sd,
+                                             R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
+                                             S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,
+                                             scn_nm="base",doSummary=T)
+#> Warning in convertTrajectories(trajs): NAs introduced by coercion
+#> Warning in convertTrajectories(trajs): NAs introduced by coercion
+popMetricsS85 <- trajectoriesFromSummary(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=0.85,
+                                             R_sd=pt$R_sd,S_sd=pt$S_sd,
+                                             R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
+                                             S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,
+                                             scn_nm="S85",doSummary=T)
+#> Warning in convertTrajectories(trajs): NAs introduced by coercion
+#> Warning in convertTrajectories(trajs): NAs introduced by coercion
+scnCompare <- list(summary=rbind(popMetricsBase$summary,popMetricsS85$summary),
+                   samples=rbind(popMetricsBase$samples,popMetricsS85$samples))
+scnCompare$summary <- scnCompare$summary %>% 
+  filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
+names <- scnCompare$summary %>% select(MetricTypeID,Parameter) %>% unique();names
+#>   MetricTypeID              Parameter
+#> 1       lambda Population growth rate
+#> 2   lambda_bar   Expected growth rate
+#> 3            N Female population size
+#> 4  recruitment            Recruitment
+#> 5     survival  Adult female survival
+scnCompare$samples <- merge(scnCompare$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=25)
+```
+
+``` r
+proj <- ggplot(data = scnCompare$summary,
+               aes(x=Year,y=Mean,ymin=lower,ymax=upper,fill=PopulationName,group=PopulationName))+
+  geom_ribbon(alpha=0.2) +
+  geom_line(linewidth=2,colour="black")+
+  geom_line(data=scnCompare$samples,aes(x=Year,y=Amount,colour=PopulationName,group=paste0(Replicate,PopulationName),ymin=Amount,ymax=Amount)) +
+  facet_wrap(~Parameter, scales = "free") +
+  ylab("")
+proj
+```
+
+![Comparison of demographic trajectories from a fitted bboutools model
+(base) and a scenario in which expected survival is increased to 85%
+(S85), obtained using the trajectoriesFromSummary wrapper function.
+Bands are the 2.5% and 97.5% quantiles of 500
+samples.](caribouDemography_files/figure-html/summaryTrajectoryPlot-1.png)
+
+Figure 2.2: Comparison of demographic trajectories from a fitted
+bboutools model (base) and a scenario in which expected survival is
+increased to 85% (S85), obtained using the trajectoriesFromSummary
+wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples.
+
+### 2.5 References
 
 Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
 Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
