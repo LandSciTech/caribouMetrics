@@ -142,8 +142,7 @@ simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynami
         out$id <- rownames(R_use)
       }
 
-      #TO DO: replace temporary fix with something else here.
-      out$time <- ts#ifelse(!is.null(colnames(R_use)), colnames(R_use), ts)
+      out$time <- ifelse(!is.null(colnames(R_samp)), colnames(R_use), ts)
       
       outBit <- out
     } else {
@@ -168,7 +167,7 @@ simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynami
         outBit$id <- rownames(R_use)
       }
    
-      outBit$time <- ts#ifelse(!is.null(colnames(R_use)), colnames(R_use), ts)
+      outBit$time <- ifelse(!is.null(colnames(R_samp)), colnames(R_use), ts)
       
       out <- rbind(out, outBit)
     }
