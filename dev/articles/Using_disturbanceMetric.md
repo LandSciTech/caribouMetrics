@@ -3,14 +3,9 @@
 ``` r
 library(caribouMetrics)
 #> Loading required package: nimble
-#> nimble version 1.3.0 is loaded.
+#> nimble version 1.4.0 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
-#> 
-#> Note for advanced users who have written their own MCMC samplers:
-#>   As of version 0.13.0, NIMBLE's protocol for handling posterior
-#>   predictive nodes has changed in a way that could affect user-defined
-#>   samplers in some situations. Please see Section 15.5.1 of the User Manual.
 #> 
 #> Attaching package: 'nimble'
 #> The following object is masked from 'package:stats':

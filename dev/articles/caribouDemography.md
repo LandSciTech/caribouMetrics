@@ -281,14 +281,15 @@ In this example, we project 35 sample populations for 50 years on a
 landscape where the anthropogenic disturbance footprint is increasing by
 5% per decade (Figure [1.4](#fig:changeOverTime)). Note the form of the
 growth model (density dependence, interannual variation, demographic
-stochasticity etc) can be changed by setting `caribouPopGrowth` function
-parameters; see XX for details.
+stochasticity etc) can be changed by setting
+[`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md)
+function parameters; see XX for details.
 
 ``` r
-numTimesteps <- 5
-stepLength <- 10
+numTimesteps <- 50
+stepLength <- 1
 N0 <- 100
-AnthroChange <- 5 #For illustration assume 5% increase in anthropogenic disturbance footprint each decade
+AnthroChange <- 5/10 #For illustration assume 5% increase in anthropogenic disturbance footprint each decade
 
 # at each time,  sample demographic rates and project, save results
 pars <- data.frame(N0 = N0)
@@ -389,50 +390,51 @@ increasing by 5% per decade, we can also produce projections over a
 changing landscape with `trajectoriesFromNational`.
 
 ``` r
-disturbance2 = data.frame(step = 0:4) %>% bind_cols(disturbance) %>% 
+disturbance2 = data.frame(step = 0:40) %>% bind_cols(disturbance) %>% 
   mutate(Anthro = Anthro + AnthroChange * step, 
-         Year = step * 10)
+         Year = step)
 
 # set seed so vignette looks the same each time
-set.seed(54545)
+set.seed(123)
 
 popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates = 500, 
-                                        useQuantiles = TRUE,N0 = 100, numSteps = 10)
+                                        useQuantiles = TRUE,N0 = 100, numSteps = 1)
 
 popMetrics2$summary <- popMetrics2$summary %>% 
   filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
-names <- popMetrics2$summary %>% select(MetricTypeID,Parameter) %>% unique();names
-#>    MetricTypeID              Parameter
-#> 1        lambda Population growth rate
-#> 11   lambda_bar   Expected growth rate
-#> 21            N Female population size
-#> 31         Rbar   Expected recruitment
-#> 41  recruitment            Recruitment
-#> 51         Sbar      Expected survival
-#> 61     survival  Adult female survival
-popMetrics2$samples <- merge(popMetrics2$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=35)
+names <- popMetrics2$summary %>% select(MetricTypeID,Parameter) %>% unique()
+popMetrics2$samples <- merge(popMetrics2$samples,names) %>%
+  filter(as.numeric(as.factor(Replicate))<=35)
 ```
 
 ``` r
+
 proj <- ggplot(data = popMetrics2$summary,
                aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
   geom_ribbon(fill="grey") +
   geom_line(colour="black",linewidth=2)+
-  geom_line(data=popMetrics2$samples,aes(x=Year,y=Amount,colour=Replicate,group=Replicate,ymin=Amount,ymax=Amount)) +
+  geom_line(data=popMetrics2$samples,
+            aes(x=Year,y=Amount,colour=Replicate, group=Replicate),
+            inherit.aes = FALSE) +
   facet_wrap(~Parameter, scales = "free") +
   ylab("")+
   theme(legend.position = "none")
+
 proj
 ```
 
 ![Example demographic trajectories and from the national model on a
 changing landscape, obtained using the trajectoriesFromNational wrapper
-function. Bands are the 2.5% and 97.5% quantiles of 500
-samples.](caribouDemography_files/figure-html/changeOverTime2-1.png)
+function. Bands are the 2.5% and 97.5% quantiles of 500 samples. Female
+population size is shown separately with a log scaled y axis to allow
+comparison of divergent
+trajectories.](caribouDemography_files/figure-html/changeOverTime2-1.png)
 
 Figure 1.6: Example demographic trajectories and from the national model
 on a changing landscape, obtained using the trajectoriesFromNational
 wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples.
+Female population size is shown separately with a log scaled y axis to
+allow comparison of divergent trajectories.
 
 ## 2 Demographic rates and trajectories from bboutools Bayesian models
 
@@ -521,17 +523,22 @@ TO DO: add trajectoriesFromBayesian workflow diagram
 
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
 popMetricsBayes$summary <- popMetricsBayes$summary %>% 
-  filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
-names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique();names
+  filter(MetricTypeID %in% c("Anthro", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
+names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique()
+names
 #>    MetricTypeID              Parameter
 #> 1        lambda Population growth rate
 #> 13   lambda_bar   Expected growth rate
-#> 25            N Female population size
-#> 37         Rbar   Expected recruitment
-#> 49  recruitment            Recruitment
-#> 61         Sbar      Expected survival
-#> 73     survival  Adult female survival
-popMetricsBayes$samples <- merge(popMetricsBayes$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=35)
+#> 25         Rbar   Expected recruitment
+#> 37  recruitment            Recruitment
+#> 49         Sbar      Expected survival
+#> 61     survival  Adult female survival
+
+popMetricsBayes$samples <- popMetricsBayes$samples %>% 
+  filter(MetricTypeID %in% c("Anthro", "Sbar","survival","Rbar",
+                             "recruitment", "lambda_bar", "lambda")) %>% 
+  merge(names) %>% 
+  filter(as.numeric(as.factor(Replicate))<=35)
 ```
 
 ``` r
@@ -539,7 +546,8 @@ proj <- ggplot(data = popMetricsBayes$summary,
                aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
   geom_ribbon(fill="grey") +
   geom_line(colour="black",linewidth=2)+
-  geom_line(data=popMetricsBayes$samples,aes(x=Year,y=Amount,colour=Replicate,group=Replicate,ymin=Amount,ymax=Amount)) +
+  geom_line(data=popMetricsBayes$samples,
+            aes(x=Year,y=Amount,colour=Replicate,group=Replicate), inherit.aes = FALSE) +
   facet_wrap(~Parameter, scales = "free") +
   ylab("")+
   theme(legend.position = "none")
@@ -573,9 +581,9 @@ Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp).
 ``` r
 pt <- bbouInformative$parTab;pt
 #>   pop_name    R_bar      R_sd R_iv_mean R_iv_shape R_bar_lower R_bar_upper
-#> 1        A 0.193378 0.2071858 0.3733476   2.228027    0.136304    0.270608
+#> 1        A 0.194056 0.2165262  0.367511   1.890141   0.1342273   0.2642005
 #>       S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper N0
-#> 1 0.9435812 0.6158295 0.6422284   1.579427   0.8579385   0.9855566 NA
+#> 1 0.9425775 0.5557561 0.5544629   1.323514   0.8679028   0.9828818 NA
 #>   nCollarYears nSurvYears nCowsAllYears nRecruitYears
 #> 1          185         12            NA            12
 
