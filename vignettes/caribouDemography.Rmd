@@ -231,13 +231,13 @@ base1 / plot_recruitment3
 
 ## Projection of population growth over time on a changing landscape: workflow details
 
-In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade (Figure \@ref(fig:changeOverTime)). Note the form of the growth model (density dependence, interannual variation, demographic stochasticity etc) can be changed by setting `caribouPopGrowth` function parameters; see XX for details.
+In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade (Figure \@ref(fig:changeOverTime)). Note the form of the growth model (density dependence, interannual variation, demographic stochasticity etc) can be changed by setting `caribouPopGrowth()` function parameters; see XX for details.
 
 ```{r projectionOverTime, results='hide',message=F, warning=T}
-numTimesteps <- 5
-stepLength <- 10
+numTimesteps <- 50
+stepLength <- 1
 N0 <- 100
-AnthroChange <- 5 #For illustration assume 5% increase in anthropogenic disturbance footprint each decade
+AnthroChange <- 5/10 #For illustration assume 5% increase in anthropogenic disturbance footprint each decade
 
 # at each time,  sample demographic rates and project, save results
 pars <- data.frame(N0 = N0)
@@ -358,35 +358,39 @@ plot_lambda <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "recruit
 base2 / plot_recruitment4
 ```
 
-Using the same scenario with anthropogenic disturbance footprint increasing by 5% per decade, we 
-can also produce projections over a changing landscape with `trajectoriesFromNational`. 
+Using the same scenario with anthropogenic disturbance footprint increasing by 5% per decade, we can also produce projections over a changing landscape with `trajectoriesFromNational`. 
 
 ```{r,message=F, warning=T}
-disturbance2 = data.frame(step = 0:4) %>% bind_cols(disturbance) %>% 
+disturbance2 = data.frame(step = 0:40) %>% bind_cols(disturbance) %>% 
   mutate(Anthro = Anthro + AnthroChange * step, 
-         Year = step * 10)
+         Year = step)
 
 # set seed so vignette looks the same each time
-set.seed(54545)
+set.seed(123)
 
 popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates = 500, 
-                                        useQuantiles = TRUE,N0 = 100, numSteps = 10)
+                                        useQuantiles = TRUE,N0 = 100, numSteps = 1)
 
 popMetrics2$summary <- popMetrics2$summary %>% 
   filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
-names <- popMetrics2$summary %>% select(MetricTypeID,Parameter) %>% unique();names
-popMetrics2$samples <- merge(popMetrics2$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=35)
+names <- popMetrics2$summary %>% select(MetricTypeID,Parameter) %>% unique()
+popMetrics2$samples <- merge(popMetrics2$samples,names) %>%
+  filter(as.numeric(as.factor(Replicate))<=35)
 ```
 
-```{r changeOverTime2, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Example demographic trajectories and from the national model on a changing landscape, obtained using the trajectoriesFromNational wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
+```{r changeOverTime2, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Example demographic trajectories and from the national model on a changing landscape, obtained using the trajectoriesFromNational wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples. Female population size is shown separately with a log scaled y axis to allow comparison of divergent trajectories."}
+
 proj <- ggplot(data = popMetrics2$summary,
                aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
   geom_ribbon(fill="grey") +
   geom_line(colour="black",linewidth=2)+
-  geom_line(data=popMetrics2$samples,aes(x=Year,y=Amount,colour=Replicate,group=Replicate,ymin=Amount,ymax=Amount)) +
+  geom_line(data=popMetrics2$samples,
+            aes(x=Year,y=Amount,colour=Replicate, group=Replicate),
+            inherit.aes = FALSE) +
   facet_wrap(~Parameter, scales = "free") +
   ylab("")+
   theme(legend.position = "none")
+
 proj
 ```
 # Demographic rates and trajectories from bboutools Bayesian models
@@ -449,9 +453,15 @@ TO DO: add trajectoriesFromBayesian workflow diagram
 
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
 popMetricsBayes$summary <- popMetricsBayes$summary %>% 
-  filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
-names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique();names
-popMetricsBayes$samples <- merge(popMetricsBayes$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=35)
+  filter(MetricTypeID %in% c("Anthro", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
+names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique()
+names
+
+popMetricsBayes$samples <- popMetricsBayes$samples %>% 
+  filter(MetricTypeID %in% c("Anthro", "Sbar","survival","Rbar",
+                             "recruitment", "lambda_bar", "lambda")) %>% 
+  merge(names) %>% 
+  filter(as.numeric(as.factor(Replicate))<=35)
 ```
 
 ```{r bayesTrajectoryPlot, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Example demographic trajectories from a fitted bboutools model, obtained using the trajectoriesFromBayesian wrapper function. Bands are 95% predictive intervals."}
@@ -459,7 +469,8 @@ proj <- ggplot(data = popMetricsBayes$summary,
                aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
   geom_ribbon(fill="grey") +
   geom_line(colour="black",linewidth=2)+
-  geom_line(data=popMetricsBayes$samples,aes(x=Year,y=Amount,colour=Replicate,group=Replicate,ymin=Amount,ymax=Amount)) +
+  geom_line(data=popMetricsBayes$samples,
+            aes(x=Year,y=Amount,colour=Replicate,group=Replicate), inherit.aes = FALSE) +
   facet_wrap(~Parameter, scales = "free") +
   ylab("")+
   theme(legend.position = "none")
