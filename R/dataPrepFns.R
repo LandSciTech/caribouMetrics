@@ -1,8 +1,35 @@
 #' Demographic data from google sheet
 #' 
+#' @param survey_url character. Google Sheet url.
+#' @param shiny_progress logical. Is this inside a shiny app and called with `shiny::withProgress`?
+#' @param i18n shiny.i18n translator, or NULL
+#'
+#' @examples
+#'  
+#' dataFromSheets("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
+#' 
 #' @export
-dataFromSheets <- function(survey_url,shiny_progress=F){
-  sh_name <- googlesheets4::gs4_get(survey_url)$name
+dataFromSheets <- function(survey_url, shiny_progress = FALSE, i18n = NULL){
+  if(!googlesheets4::gs4_has_token()){
+    # this lets Google sheets work for a public sheet without authentication
+    googlesheets4::gs4_deauth()
+    
+    sh_name <- tryCatch(
+      googlesheets4::gs4_get(input$survey_url)$name,
+      error = function(e) e
+    )
+    
+    if(inherits(sh_name, "error") && sh_name$message == "Client error: (403) PERMISSION_DENIED"){
+      message("Google sheet is private, attempting to authenticate")
+      #Authenticate Google Sheets
+      googlesheets4::gs4_auth(email = TRUE)
+    }  
+  }
+  
+  if(is.null(i18n)){
+    i18n <- list(t = function(x, session = NULL)paste0(x))
+  }
+
   if(shiny_progress && !rlang::is_installed("shiny")){
     warning("Package shiny is not installed. Setting shiny_progress to FALSE")
     shiny_progress <- FALSE

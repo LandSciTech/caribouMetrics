@@ -31,9 +31,6 @@ test_that("summary gives expected trajectory", {
     R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
     scn_nm = "test", doSummary = TRUE)
   
-  trajs_no_sum %>% filter(type == "samp") %>% 
-    summarise(mlambda = mean(lambda))
-  
   # setting no Summary doesn't change mean lambda
   expect_equal(
     trajs_w_sum$summary %>% filter(MetricTypeID == "lambda") %>% 
