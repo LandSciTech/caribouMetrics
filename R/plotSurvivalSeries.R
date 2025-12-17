@@ -12,30 +12,30 @@ plotSurvivalSeries <- function(surv_data_show) {
   surv_data_show$Month <- factor(surv_data_show$Month, levels = seq(1:12))
   
   if (length(unique(surv_data_show$Month)) == 1) {
-    base <- ggplot(surv_data_show, 
-                   aes(x = Year, y = StartTotal, group = PopulationName, 
-                       colour = PopulationName)) +
-      geom_line() +
-      geom_point(aes(x = Year, y = MortalitiesCertain, group = PopulationName, 
-                     colour = PopulationName), shape = 4) +
-      geom_col(aes(x = Year, y = Malfunctions, group = PopulationName, 
-                   colour = PopulationName, fill = PopulationName), 
-               alpha = 0.2) +
-      ylab("Number of Animals") +
-      theme_bw()
+    base <- ggplot2::ggplot(surv_data_show, 
+                            ggplot2::aes(x = Year, y = StartTotal, group = PopulationName, 
+                                         colour = PopulationName)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_point(ggplot2::aes(x = Year, y = MortalitiesCertain, group = PopulationName, 
+                                       colour = PopulationName), shape = 4) +
+      ggplot2::geom_col(ggplot2::aes(x = Year, y = Malfunctions, group = PopulationName, 
+                                     colour = PopulationName, fill = PopulationName), 
+                        alpha = 0.2) +
+      ggplot2::ylab("Number of Animals") +
+      ggplot2::theme_bw()
   } else {
-    base <- ggplot(surv_data_show, 
-                   aes(x = Month, y = StartTotal, group = PopulationName, 
-                       colour = PopulationName)) +
-      geom_line() +
-      facet_wrap(~Year) +
-      geom_point(aes(x = Month, y = MortalitiesCertain, group = PopulationName, 
-                     colour = PopulationName), shape = 4) +
-      geom_col(aes(x = Month, y = Malfunctions, group = PopulationName, 
-                   colour = PopulationName, fill = PopulationName), 
-               alpha = 0.2) +
-      ylab("Number of Animals") +
-      theme_bw()
+    base <- ggplot2::ggplot(surv_data_show, 
+                            ggplot2::aes(x = Month, y = StartTotal, group = PopulationName, 
+                                         colour = PopulationName)) +
+      ggplot2::geom_line() +
+      ggplot2::facet_wrap(~Year) +
+      ggplot2::geom_point(ggplot2::aes(x = Month, y = MortalitiesCertain, group = PopulationName, 
+                                       colour = PopulationName), shape = 4) +
+      ggplot2::geom_col(ggplot2::aes(x = Month, y = Malfunctions, group = PopulationName, 
+                                     colour = PopulationName, fill = PopulationName), 
+                        alpha = 0.2) +
+      ggplot2::ylab("Number of Animals") +
+      ggplot2::theme_bw()
   }
   return(base)
 }

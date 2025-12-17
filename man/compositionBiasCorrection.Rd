@@ -26,7 +26,8 @@ composition bias correction value (c) is returned for each value of \code{q},
 }
 \value{
 number or tibble. If \code{approx = FALSE} a vector of composition bias
-correction values (c) of the same length as \code{q}, \code{u}, and \code{z}. If \code{approx = TRUE} a tibble with on row per unique value of \code{w} and columns \code{w}, \code{m},
+correction values (c) of the same length as \code{q}, \code{u}, and \code{z}. If \code{approx = TRUE}
+a tibble with one row per unique value of \code{w} and columns \code{w}, \code{m},
 \code{v}, \code{sig2}, \code{mu} representing \code{w}, mean \code{c}, variance of \code{c}, and parameters for a
 log-normal approximation of the distribution of \code{c}.
 }
@@ -39,7 +40,7 @@ model of the recruitment survey observation process. See
 for a detailed description of the model.
 }
 \examples{
-# number or reps
+# number of reps
 nr <- 10
 
 compositionBiasCorrection(w = 6,

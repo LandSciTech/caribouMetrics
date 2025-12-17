@@ -1,0 +1,45 @@
+test_that("summary gives expected trajectory", {
+  trajs <- trajectoriesFromSummary(
+    numSteps = 10, replicates = 5000, N0 = 100, R_bar = 0.3,
+    S_bar = 0.8, R_sd = 0.05, S_sd = 0.1, R_iv_shape = 0.01, 
+    R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
+    scn_nm = "test")
+  
+  expect_equal(
+    trajs %>% filter(type == "mean") %>% pull(R_t) %>% unique(),
+    0.3
+  )
+
+  trajs_beta <- trajectoriesFromSummary(
+    numSteps = 10, replicates = 5000, N0 = 100, R_bar = 0.3,
+    S_bar = 0.8, R_sd = 0.05, S_sd = 0.1, R_iv_shape = 0.01, 
+    R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
+    scn_nm = "test", type = "beta")
+  
+  # beta and logistic give similar results
+  expect_equal(
+    trajs_beta %>% filter(type == "samp") %>% 
+      summarise(mlambda = mean(lambda)),
+    trajs %>% filter(type == "samp") %>% 
+      summarise(mlambda = mean(lambda)),
+    tolerance = 0.01
+  )  
+  
+  trajs_w_sum <- trajectoriesFromSummary(
+    numSteps = 10, replicates = 5000, N0 = 100, R_bar = 0.3,
+    S_bar = 0.8, R_sd = 0.05, S_sd = 0.1, R_iv_shape = 0.01, 
+    R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
+    scn_nm = "test", doSummary = TRUE)
+  
+  trajs_no_sum %>% filter(type == "samp") %>% 
+    summarise(mlambda = mean(lambda))
+  
+  # setting no Summary doesn't change mean lambda
+  expect_equal(
+    trajs_w_sum$summary %>% filter(MetricTypeID == "lambda") %>% 
+      summarise(mlambda = mean(Mean)),
+    trajs %>% filter(type == "samp") %>% 
+      summarise(mlambda = mean(lambda)),
+    tolerance = 0.01
+  ) 
+})

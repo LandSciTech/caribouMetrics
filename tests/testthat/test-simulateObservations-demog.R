@@ -24,6 +24,9 @@ test_that("collarCount and cowCount behave", {
   scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 1)
   simObs <- simulateObservations(scns)
   
+  surv_plt <- plotSurvivalSeries(simObs$simSurvObs)
+  expect_is(surv_plt, "ggplot2::ggplot")
+  
   # if cowCount is 100 we observe 100
   expect_true(all(simObs$simRecruitObs$Cows == 100))
   

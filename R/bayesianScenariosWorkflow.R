@@ -147,8 +147,8 @@ bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4
   if (length(purrr::compact(errorLog)) > 0) {
     print(errorLog)
   }
-  ret = list(rr.summary.all = do.call(rbind, rr.summary.all), sim.all = do.call(rbind, sim.all),
-             obs.all = do.call(rbind, obs.all), errorLog = errorLog)
+  ret = list(rr.summary.all = bind_rows(rr.summary.all), sim.all = bind_rows(sim.all),
+             obs.all = bind_rows(obs.all), errorLog = errorLog)
   if(returnSamples){
     ret$out <- out
   }
