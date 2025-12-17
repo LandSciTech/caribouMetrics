@@ -145,9 +145,9 @@
 <span><span class="co">#&gt; popGrowthPars contains quantiles so they are used instead of the defaults</span></span>
 <span><span class="va">demRates</span></span>
 <span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr</span></span>
-<span><span class="co">#&gt; 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.04371567</span></span>
+<span><span class="co">#&gt; 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05024037</span></span>
 <span><span class="co">#&gt;     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh</span></span>
-<span><span class="co">#&gt; 1 0.7745046 0.9145213 0.1813372 0.09400579 0.05235174 0.3466292</span></span>
+<span><span class="co">#&gt; 1 0.7625781 0.9198247 0.1813372 0.09842164 0.03913806 0.3782637</span></span>
 <span></span>
 <span><span class="co"># Simulate population growth</span></span>
 <span><span class="va">popGrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/caribouPopGrowth.html">caribouPopGrowth</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2000</span>, numSteps <span class="op">=</span> <span class="fl">20</span>, R_bar <span class="op">=</span> <span class="va">demRates</span><span class="op">$</span><span class="va">R_bar</span>, </span>
@@ -155,9 +155,9 @@
 <span></span>
 <span><span class="va">popGrow</span></span>
 <span><span class="co">#&gt;     N0    lambda   lambdaE   N       R_t        X_t       S_t n_recruits</span></span>
-<span><span class="co">#&gt; 1 2000 0.8995998 0.9247487 241 0.1119087 0.05595437 0.8821323         12</span></span>
+<span><span class="co">#&gt; 1 2000 0.9071743 0.9247487 285 0.1865682 0.09328412 0.8584614         23</span></span>
 <span><span class="co">#&gt;   surviving_adFemales</span></span>
-<span><span class="co">#&gt; 1                 229</span></span>
+<span><span class="co">#&gt; 1                 262</span></span>
 <span></span>
 <span><span class="co"># simulate caribou collar observations</span></span>
 <span><span class="va">params</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span></span>
@@ -195,7 +195,6 @@
 <span><span class="co">#&gt; -Inf</span></span>
 <span></span>
 <span><span class="va">natSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/trajectoriesFromNational.html">trajectoriesFromNational</a></span><span class="op">(</span>disturbance <span class="op">=</span> <span class="va">simObs</span><span class="op">$</span><span class="va">simDisturbance</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Setting expected survival S_bar to be between l_S and h_S.</span></span>
 <span></span>
 <span><span class="va">pmTbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/compareTrajectories.html">compareTrajectories</a></span><span class="op">(</span><span class="va">pm</span>, simInitial<span class="op">=</span><span class="va">natSim</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">pmTbls</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Recruitment"</span>, <span class="st">"Adult female survival"</span><span class="op">)</span><span class="op">)</span></span>
@@ -287,6 +286,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/LandSciTech/caribouMetrics" class="external-link"><img src="https://codecov.io/gh/LandSciTech/caribouMetrics/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
