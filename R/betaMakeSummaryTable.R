@@ -1,5 +1,8 @@
 betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,nt,ni,nb){
-  
+  # if(n_distinct(surv_data$PopulationName) > 1){
+  #   testTable(disturbance, req_col_names = "PopulationName", 
+  #             req_vals = unique(surv_data$PopulationName))
+  # }
   #Note: using bboutools to check and structure the data without fitting the models...0
   surv_fit_in <- bboutools::bb_fit_survival(surv_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
   surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb)
@@ -15,8 +18,25 @@ betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
   data <- as.data.frame(data)
   data <- subset(data,is.element(Annual,disturbance$Year))
   data$Annual <- as.factor(as.character(data$Annual))
-  disturbance <- merge(disturbance,unique(subset(data,select=c(Annual,Year,PopulationID))))
+  disturbance <- merge(disturbance,unique(select(data, any_of(c("Annual", "Year", "PopulationName","PopulationID")))))
   anthro <- spread(subset(disturbance,select=c(Annual,PopulationID,Anthro)), PopulationID, Anthro)
+  
+  if(any(is.na(anthro))){
+    filter(anthro, if_any(-Annual, \(x)is.na(x))) %>% 
+      select(Annual, where(\(x) any(is.na(x))))
+    
+   na_yrs <- anthro %>% summarise(across(-Annual, \(x) {
+      paste0(Annual[which(is.na(x))], collapse = ", ")
+    })) %>% 
+     select(where(\(x) x != ""))
+   
+   warning("no data for population(s) ", paste0(names(na_yrs), collapse = ", "), " for years ", 
+           paste0(unlist(na_yrs), collapse = ", "), 
+           ". These years will be removed from the data for all populations")
+   
+   anthro <- na.omit(anthro)
+   data <- subset(data,is.element(Annual, anthro$Annual))
+  }
   if(ncol(anthro)==2){
     anthro = matrix(anthro[,2:ncol(anthro)],ncol= ncol(anthro)-1)
   }else{
@@ -136,6 +156,41 @@ betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
   
   anthro <- spread(subset(data,select=c(Annual,PopulationID,Anthro)), PopulationID, Anthro)
   fire <- spread(subset(data,select=c(Annual,PopulationID,fire_excl_anthro)), PopulationID, fire_excl_anthro)
+  
+  if(any(is.na(anthro))){
+    filter(anthro, if_any(-Annual, \(x)is.na(x))) %>% 
+      select(Annual, where(\(x) any(is.na(x))))
+    
+    na_yrs <- anthro %>% summarise(across(-Annual, \(x) {
+      paste0(Annual[which(is.na(x))], collapse = ", ")
+    })) %>% 
+      select(where(\(x) x != ""))
+    
+    warning("no data for population(s) ", paste0(names(na_yrs), collapse = ", "), " for years ", 
+            paste0(unlist(na_yrs), collapse = ", "), 
+            ". These years will be removed from the data for all populations")
+    
+    anthro <- na.omit(anthro)
+    data <- subset(data,is.element(Annual, anthro$Annual))
+  }
+  
+  if(any(is.na(fire))){
+    filter(fire, if_any(-Annual, \(x)is.na(x))) %>% 
+      select(Annual, where(\(x) any(is.na(x))))
+    
+    na_yrs <- fire %>% summarise(across(-Annual, \(x) {
+      paste0(Annual[which(is.na(x))], collapse = ", ")
+    })) %>% 
+      select(where(\(x) x != ""))
+    
+    warning("no data for population(s) ", paste0(names(na_yrs), collapse = ", "), " for years ", 
+            paste0(unlist(na_yrs), collapse = ", "), 
+            ". These years will be removed from the data for all populations")
+    
+    fire <- na.omit(fire)
+    data <- subset(data,is.element(Annual, fire$Annual))
+  }
+  
   if(ncol(anthro)==2){
     anthro = matrix(anthro[,2:ncol(anthro)],ncol= ncol(anthro)-1)
     fire = matrix(fire[,2:ncol(fire)],ncol= ncol(fire)-1)

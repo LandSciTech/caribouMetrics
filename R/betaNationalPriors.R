@@ -258,6 +258,7 @@ simCovariates <- function(initAnthro, initFire, numYears, anthroSlope,
   return(covariates)
 }
 
+
 #' Get informative priors for bboutools logistic models 
 #'
 #' Returns intercept prior parameter values for bboutools logistic models 

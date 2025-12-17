@@ -21,17 +21,48 @@ test_that("testScript still works", {
   # source("CaribouDemoFns.R")
   # eParsIn$collarNumYears=1
 
-  scResults <- suppressWarnings(bayesianScenariosWorkflow(scns,  simBig, eParsIn,
+  scResults <- suppressWarnings(bayesianScenariosWorkflow(scns, simBig, eParsIn,
     niters = 100, printProgress = TRUE
   ))
 
   expect_s3_class(scResults$rr.summary.all, "data.frame")
 
+  expect_warning(
+    plotCompareTrajectories(scResults, "Recruitment"), 
+    "duplicate"
+  )
+  expect_no_warning(
+    plotCompareTrajectories(scResults, "Recruitment", facetVars = "ID")
+  )
+  
   if (interactive()) {
-    print(plotCompareTrajectories(scResults, "Population growth rate",lowBound = 0, highBound = 1.5))
-    print(plotCompareTrajectories(scResults, "Recruitment"))
-    print(plotCompareTrajectories(scResults, "Adult female survival"))
+    print(plotCompareTrajectories(scResults, "Population growth rate", facetVars = "ID",
+                                  lowBound = 0, highBound = 1.5))
+    print(plotCompareTrajectories(scResults, "Recruitment", facetVars = "ID"))
+    print(plotCompareTrajectories(scResults, "Adult female survival", facetVars = "ID"))
   }
+  
+  # test what happens if samples are returned from trajectoriesFromNational
+  simBig2 <- suppressWarnings(trajectoriesFromNational(cPars = scns, 
+                                                       returnSamples = TRUE)) 
+  
+  # TODO there are no identifiers to distinguish the samples from different scns
+  # rows. This means that the pivot_wider at line 220 of simulateObservations is
+  # not uniquely identified. I had tried to fix this by making the
+  # PopulationName created in trajectoriesFromNational unique for different scns
+  # but that created other problems. I still think it would make sense but
+  # would require other changes.
+  
+  # If scn table sets trajectory related parameters and simInitial has samples 
+  #   warn that simInitial$samples will be used.
+  scResults2 <- expect_warning(
+    bayesianScenariosWorkflow(scns, simBig2, eParsIn,
+                              niters = 100, printProgress = TRUE)
+  )
+  
+  plotCompareTrajectories(scResults2, "Population growth rate",
+                          lowBound = 0, highBound = 1.5)
+
 })
 
 test_that("bboutools scnenario with no disturbance and no additional monitoring ", {

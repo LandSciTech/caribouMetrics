@@ -7,7 +7,7 @@ cacheEnv <- new.env(parent = emptyenv())
 # Not supposed to save files to user computer on CRAN so for users the cache is
 # only preserved within a session but for dev I have added this "persistent
 # cache" use savePersistentCache function to update/create it after having run
-# getSimsInitial
+# trajectoriesFromNational
 if(file.exists("results/simsInitial.rds")){
   simsInitial <- readRDS( "results/simsInitial.rds")
   bayesianResults <- readRDS( "results/bayesianResults.rds")
@@ -32,6 +32,8 @@ if(file.exists("results/simsInitial.rds")){
 #' @inheritParams caribouPopGrowth
 #' @param N0 initial population size
 #' @param cPars optional. Parameters for calculating composition survey bias term.
+#' @param doSummary logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth. 
+#'  If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.
 #' @param returnSamples logical. If FALSE returns only summaries. If TRUE
 #'   returns example trajectories as well. By default summaries are not returned
 #'   unless the disturbance data provided contains a column named "Year".
@@ -87,7 +89,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   hasYear <- T
   if(is.null(disturbance)){
     if(hasAnthro){
-      distPars = unique(subset(cPars,select=c(iAnthro,iFire,preYears,obsYears,projYears,obsAnthroSlope,projAnthroSlope,preYears,startYear)))
+      distPars = unique(subset(cPars,select=c(iAnthro,iFire,preYears,obsYears,projYears,obsAnthroSlope,projAnthroSlope,preYears,startYear, ID)))
       first<-T
       for(r in 1:nrow(distPars)){
         #r=60
@@ -98,6 +100,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
                                     cr$obsYears + cr$preYears + 1)
         covariates$Year <- cr$startYear + covariates$time - 1
         covariates$fire_excl_anthro=round(covariates$fire_excl_anthro)
+        covariates$distID <- cr$ID
         if(first){
           covTableObs <- covariates
           first=F
@@ -121,6 +124,11 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
     }
     covTableObs <- disturbance %>% select(Year, Anthro, fire_excl_anthro)
   }
+  
+  if(!is.element("distID",names(covTableObs))){
+    covTableObs$distID <- 1
+  }
+  
   ccPars = unique(subset(cPars,select=c(qMin,qMax,uMin,uMax,zMin,zMax,cowMult,correlateRates)))
   if(nrow(ccPars)>1){
     stop("Do not include more than one composition bias scenario in cPars")
@@ -160,20 +168,32 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   rateSamplesAll$c = NULL; rateSamplesAll= merge(rateSamplesAll, bc)
 
   #print(paste("trajectoriesFromNational",mean(bc$c)))
-  pars <- merge(data.frame(N0 = N0, PopulationName = "National"), rateSamplesAll)
+  pars <- merge(data.frame(N0 = N0, PopulationName = "National"), rateSamplesAll)# %>% 
+    # mutate(PopulationName = paste0(PopulationName, distID))
 
   if(hasYear){
-    pars <- pars %>% select(-N0) %>% nest_by(replicate) %>% 
-      mutate(proj = list(simPopsOverTime(
-        N0, numSteps = n_distinct(data$Year), R_samp = data$R_bar,
-        S_samp = data$S_bar, onePop = TRUE, stepLength = numSteps,
-        c = unique(data$c), interannualVar = interannualVar, 
-        progress = FALSE))) %>% 
-      unnest(c(data, proj)) %>% 
-      select(-id, -time) %>% 
-      as.data.frame()
+    R_dat <- pars %>% select(Year, replicate, distID, R_bar) %>% 
+      arrange(Year) %>% 
+      pivot_wider(names_from = Year, values_from = R_bar) %>% 
+      tidyr::unite("replicate", replicate, distID) %>% 
+      tibble::column_to_rownames("replicate")
+    S_dat <- pars %>% select(Year, replicate, distID, S_bar) %>% 
+      arrange(Year) %>% 
+      pivot_wider(names_from = Year, values_from = S_bar) %>% 
+      tidyr::unite("replicate", replicate, distID) %>% 
+      tibble::column_to_rownames("replicate")
     
-
+    out <- simPopsOverTime(
+      N0, numSteps = n_distinct(pars$Year), R_samp = R_dat,
+      S_samp = S_dat, dynamicRates = TRUE, stepLength = numSteps,
+      c = unique(pars$c), interannualVar = interannualVar, 
+      progress = FALSE, K = FALSE
+    ) %>%  
+      separate_wider_delim(id, delim = "_", names = c("replicate", "distID")) %>% 
+      mutate(distID = as.integer(distID), 
+             Year = as.integer(time), .keep = "unused")
+    
+    pars <- full_join(pars %>% select(-N0), out, by = c("replicate", "Year", "distID"))
   } else {
     pars <- cbind(subset(pars,select=-N0), 
                   caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
@@ -187,6 +207,9 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   
   if(returnSamples == "default"){
       returnSamples <- hasYear
+      if(nrow(cPars) > 1){
+        returnSamples <- FALSE
+      }
   } else if (!hasYear & isTRUE(returnSamples)){
     warning("returnSamples is set to FALSE when Year is not included in the disturbance scenario")
   }

@@ -53,6 +53,9 @@ representing the percentage of the landscape covered by anthropogenic
 disturbance buffered by 500 m, and the percentage covered by fire that does
 not overlap anthropogenic disturbance.}
 
+\item{doSummary}{logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth.
+If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.}
+
 \item{returnSamples}{logical. If FALSE returns only summaries. If TRUE
 returns example trajectories as well. By default summaries are not returned
 unless the disturbance data provided contains a column named "Year".}
@@ -89,7 +92,6 @@ Caribou demography functions:
 \code{\link{plotCompareTrajectories}()},
 \code{\link{plotSurvivalSeries}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{simTrajectory}()},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},
 \code{\link{trajectoriesFromSummary}()}

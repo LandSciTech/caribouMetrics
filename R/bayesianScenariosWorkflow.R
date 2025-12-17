@@ -59,6 +59,19 @@ bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4
     }
     
     if(is.element("samples",names(simInitial))){
+      if(any(c("rQuantile", "sQuantile") %in% names(cs))){
+        warning("scns includes parameters for National model trajectories and ",
+                "simInitial includes samples. simInitial$samples will be ",
+                "supplied as trajectories in simulateObservations and rQuantile ",
+                "and sQuantile will be ignored")
+      }
+      if(cs$sSlopeMod !=1 | cs$rSlopeMod != 1){
+        warning("scns includes parameters for National model trajectories and ",
+                "simInitial includes samples. simInitial$samples will be ",
+                "supplied as trajectories in simulateObservations and rSlopeMod ",
+                "and sSlopeMod will be ignored")
+      }
+      
       if(is.element("lQuantile",names(cs))&&!is.na(cs$lQuantile)){
         trajectories <- subset(simInitial$samples,LambdaPercentile == round(cs$lQuantile*100))
       }else{

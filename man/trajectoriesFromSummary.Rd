@@ -18,7 +18,9 @@ trajectoriesFromSummary(
   S_iv_shape,
   scn_nm,
   type = "logistic",
-  addl_params
+  addl_params = list(),
+  doSummary = F,
+  returnSamples = T
 )
 }
 \arguments{
@@ -44,6 +46,12 @@ one or more sample populations.}
 \item{type}{"logistic" or "beta" defines how demographic rates are sampled from the given mean and standard deviation.}
 
 \item{addl_params}{a list of additional parameters for \code{caribouPopGrowth}}
+
+\item{doSummary}{logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth.
+If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.}
+
+\item{returnSamples}{logical. If FALSE returns only summaries. If TRUE
+returns example trajectories as well.}
 }
 \value{
 a data.frame
@@ -80,7 +88,6 @@ Caribou demography functions:
 \code{\link{plotCompareTrajectories}()},
 \code{\link{plotSurvivalSeries}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{simTrajectory}()},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},
 \code{\link{trajectoriesFromNational}()}

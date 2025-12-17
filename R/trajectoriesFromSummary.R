@@ -7,7 +7,10 @@
 #' @param R_iv_mean,R_iv_shape,S_iv_mean,S_iv_shape define the mean and shape of the interannual variation
 #' @param scn_nm Sceanrio name
 #' @param type "logistic" or "beta" defines how demographic rates are sampled from the given mean and standard deviation.
-#'
+#' @param doSummary logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth. 
+#'  If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.
+#' @param returnSamples logical. If FALSE returns only summaries. If TRUE
+#'   returns example trajectories as well. 
 #' @return a data.frame
 #' @family demography
 #'
@@ -25,7 +28,7 @@
 #'
 trajectoriesFromSummary <- function(numSteps, replicates, N0, R_bar, S_bar, R_sd, S_sd,
                   R_iv_mean, R_iv_shape, S_iv_mean, S_iv_shape,  
-                  scn_nm, type = "logistic", addl_params){
+                  scn_nm, type = "logistic", addl_params = list(), doSummary = F, returnSamples = T){
   #type="logistic"
 
   if(type=="beta"){
@@ -71,53 +74,101 @@ trajectoriesFromSummary <- function(numSteps, replicates, N0, R_bar, S_bar, R_sd
     addl_params)) %>%
     mutate(type = "mean", scn = scn_nm)
 
-  return(bind_rows(mod_mean, mod_samps))
+  if(!doSummary){
+    return(bind_rows(mod_mean, mod_samps))
+  }else{
+    mod_samps$Year <- mod_samps$time
+    mod_samps$PopulationName <- mod_samps$scn
+    simBig <- prepareTrajectories(mod_samps, returnSamples = returnSamples)
+  }
 }
 
 #' Simulate caribou population over time
 #'
-#' If `onePop = FALSE` then `R_samp` and `S_samp` are constant rates over time
-#' and their length is the number of populations. If `onePop = TRUE` then
-#' `R_samp` and `S_samp` represent the rate at each time step and there length 
-#' should be equal to `numSteps`
-#'
+#' If `dynamicRates = FALSE` then `R_samp` and `S_samp` are constant rates over
+#' time and their length is the number of populations. If `dynamicRates = TRUE`
+#' and `R_samp` and `S_samp` are vectors they represent the rate at each time
+#' step and there length should be equal to `numSteps`. If If `dynamicRates =
+#' TRUE` and `R_samp` and `S_samp` are matrices then rows represent populations
+#' and columns represent timesteps, so cell `[i,j]` of the matrix is the rate
+#' for population i at timestep j
+#' 
+#' `numSteps` is the number of timesteps in the simulation while `stepLength` is
+#' the `numSteps` in each call to `caribouPopGrowth`
 #'
 #' @noRd
-simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, onePop = FALSE, stepLength = 1, ...) {
-  if(onePop){
-    stopifnot(length(R_samp) == numSteps)
+simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynamicRates = FALSE, stepLength = 1, ...) {
+  if(dynamicRates){
+    if(!is.null(dim(R_samp))){
+      stopifnot(ncol(R_samp) == numSteps)
+      onePop <- FALSE
+    }else {
+      stopifnot(length(R_samp) == numSteps)
+      onePop <- TRUE
+    }
   }
   for (ts in 1:numSteps) {
-    if(onePop){
-      R_use <- R_samp[ts]
-      S_use <- S_samp[ts]
+    if(dynamicRates){
+      if(onePop){
+        R_use <- data.frame(value = R_samp[ts]) %>% setNames(ts)
+        S_use <- data.frame(value = S_samp[ts]) %>% setNames(ts)
+      } else {
+        R_use <- R_samp[,ts, drop = FALSE]
+        S_use <- S_samp[,ts, drop = FALSE]
+      } 
     } else {
-      R_use <- R_samp
-      S_use <- S_samp
+      R_use <- data.frame(value = R_samp)
+      S_use <- data.frame(value = S_samp)
     }
+    R_use <- na.omit(R_use)
+    S_use <- na.omit(S_use)
     if (ts == 1) {
       if(length(N0) == 1){
-        N0 <- rep(N0, length(R_use))
+        N0 <- rep(N0, nrow(R_use))
       } else if (length(N0) == 2) {
         N0 <- seq(from = N0[1], to = N0[2], by  = 1) %>% round() %>% 
-          sample(size = length(R_use), replace = TRUE)
+          sample(size = nrow(R_use), replace = TRUE)
       }
 
       out <- caribouPopGrowth(N0,
                               numSteps = stepLength,
                               interannualVar = interannualVar,
-                              R_bar = R_use, S_bar = S_use, ...
+                              R_bar = R_use[,1], S_bar = S_use[,1], ...
       )
-      out$id <- seq(1:nrow(out))
-      out$time <- ts
+      
+      if(is.null(rownames(R_use))){
+        out$id <- seq(1, nrow(out))
+      } else {
+        out$id <- rownames(R_use)
+      }
+
+      out$time <- ifelse(!is.null(colnames(R_samp)), colnames(R_use), ts)
+      
       outBit <- out
     } else {
+      if(length(outBit$N) != length(R_use)){
+        if(length(unique(N0)) > 1){
+          stop("Range of N0 only supported for static rates when there are NAs in R_samp")
+        }
+        # Add rows missing in previous rounds and set N to N0
+        outBit <- left_join(R_use %>% tibble::rownames_to_column(),
+                            outBit %>% select(-N0) %>% mutate(id = as.character(id)),
+                            by = join_by(rowname == id)) %>% 
+          mutate(N = ifelse(is.na(N), unique(N0), N)) %>% 
+          select(any_of(colnames(outBit))) 
+      }
       outBit <- caribouPopGrowth(outBit$N,
                                  numSteps = stepLength, interannualVar = interannualVar,
-                                 R_bar = R_use, S_bar = S_use, ...
+                                 R_bar = R_use[,1], S_bar = S_use[,1], ...
       )
-      outBit$id <- seq(1, nrow(outBit))
-      outBit$time <- ts
+      if(is.null(rownames(R_use))){
+        outBit$id <- seq(1, nrow(outBit))
+      } else {
+        outBit$id <- rownames(R_use)
+      }
+   
+      outBit$time <- ifelse(!is.null(colnames(R_samp)), colnames(R_use), ts)
+      
       out <- rbind(out, outBit)
     }
   }
