@@ -47,7 +47,9 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     if(is.element("PopulationName",names(parTab))){
       names(parTab)[names(parTab)=="PopulationName"]= "pop_name"  
     }
-    if(is.null(priors)){priors=betaNationalPriors()}
+    if(is.null(priors)){
+      priors=betaNationalPriors()
+    }
     ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb) 
     parTab <- merge(parTab,disturbance)
     ret$parTab <- parTab

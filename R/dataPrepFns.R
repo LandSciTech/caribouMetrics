@@ -1,3 +1,72 @@
+#' Demographic data from google sheet
+#' 
+#' @export
+dataFromSheets <- function(survey_url,shiny_progress=F){
+  sh_name <- googlesheets4::gs4_get(survey_url)$name
+  if(shiny_progress && !rlang::is_installed("shiny")){
+    warning("Package shiny is not installed. Setting shiny_progress to FALSE")
+    shiny_progress <- FALSE
+  }
+  
+  if(shiny_progress) shiny::setProgress(0.1, message = paste0(i18n$t("Downloading data from "), sh_name))
+  survey_sh_names <- googlesheets4::sheet_names(survey_url)
+  
+  recruit_sh <- stringr::str_subset(survey_sh_names, "[R,r]ecruit_data")
+  if(length(recruit_sh)<1){
+    stop("The spreadsheet does not include a sheet named 'recruit_data'")
+  }
+  nms <- c("PopulationName", "Year", "Month", "Day", "Cows",
+           "Bulls", "UnknownAdults", "Yearlings", "Calves")
+  survey_recruit <- googlesheets4::read_sheet(survey_url, recruit_sh,
+                                              na = "NA") %>%
+    select(any_of(nms)) %>%
+    filter(if_all(everything(), \(x)!is.na(x))) %>%
+    bboudata::bbd_chk_data_recruitment(multi_pops = TRUE)
+  
+  # Error in make bbouSummary table if only 1 year
+  #survey_recruit <- survey_recruit %>% group_by(PopulationName) %>%
+  #  filter(n_distinct(Year) > 1)
+  
+  surv_sh <- stringr::str_subset(survey_sh_names, "[S,s]urv_data")
+  if(length(surv_sh)<1){
+    stop("The spreadsheet does not include a sheet named 'surv_data'")
+  }
+  survey_surv <- googlesheets4::read_sheet(survey_url, surv_sh,
+                                           na = "NA") %>%
+    bboudata::bbd_chk_data_survival(multi_pops = TRUE, allow_missing = TRUE)
+  
+  #survey_surv <- survey_surv %>% group_by(PopulationName) %>%
+  #  filter(n_distinct(Year) > 1)
+  
+  pop_sh <- stringr::str_subset(survey_sh_names, "[P,p]opulation")
+  if(length(pop_sh)<1){
+    stop("The spreadsheet does not include a sheet named 'population'")
+  }
+  
+  nms <- c("PopulationName", "Year", "FemalePopulationLower", "FemalePopulationUpper")
+  
+  survey_pop <- googlesheets4::read_sheet(survey_url, pop_sh,
+                                          na = "NA") %>%
+    select(any_of(nms))
+  
+  pop_nms <- purrr::map_lgl(nms,
+                            \(x)stringr::str_detect(colnames(survey_pop), x) %>% any())
+  
+  if(!all(pop_nms)){
+    stop("The population estimates sheet is missing the expected column names:",
+         paste0(colnames(survey_pop)[!pop_nms], collapse = ", "))
+  }
+  
+  N0 <- survey_pop %>% group_by(PopulationName) %>% filter(Year == max(Year))
+  
+  pops_run <- intersect(survey_recruit$PopulationName,
+                        survey_surv$PopulationName) %>%
+    intersect(N0$PopulationName)
+  
+  return(list(survey_surv = survey_surv, pops_run = pops_run,
+              survey_recruit = survey_recruit, N0 = N0))
+}
+
 #' Functions used for data prep for disturbanceMetrics and caribouHabitat
 #' 
 #' @noRd

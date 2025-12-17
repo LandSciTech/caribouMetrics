@@ -54,15 +54,15 @@ betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
                 nMonths = length(unique(data$Month))
   )
 
-  surv_priors <- priors[c("l.Saf.Prior1","l.Saf.Prior2","beta.Saf.Prior1","beta.Saf.Prior2","sig.Saf.Prior1","sig.Saf.Prior2")] # TO DO add composition bias: "bias.Prior1","bias.Prior2")]
-  names(surv_priors)<- c("b0_mu","b0_sd","b1_mu","b1_sd","sig.S.Prior1","sig.S.Prior2")
+  surv_priors <- priors[c("S_b0_mu","S_b0_sd","S_b1_mu","S_b1_sd","S_cv_min","S_cv_max")] 
+  names(surv_priors)<- gsub("S_","",names(surv_priors),fixed=T)
 
   datal <- c(datal,surv_priors)
 
   ###### Survival Model ######
   surv_mod_fl <- tempfile(pattern = "survival_model_", fileext = ".txt")
   sink(surv_mod_fl)  # assign model file name #
-  if(surv_priors$sig.S.Prior2>0){
+  if(surv_priors$cv_max>0){
     cat("
 model {
   for(i in 1:nObs) {
@@ -85,13 +85,13 @@ model {
   for (k in 1:nPops) {
     b0[k] ~ dnorm(b0_mu, 1/pow(b0_sd,2))
     b1[k] ~ dnorm(b1_mu, 1/pow(b1_sd,2))
-    cv.S[k]~dunif(sig.S.Prior1,sig.S.Prior2)
+    cv.S[k]~dunif(cv_min,cv_max)
   }
 
 }
 ", fill = TRUE)
   }else{
-    datal$sig.S.Prior1=NULL;datal$sig.S.Prior2=NULL
+    datal$cv_min=NULL;datal$cv_max=NULL
     cat("
 model {
   for(i in 1:nObs) {
@@ -216,8 +216,8 @@ betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
     sex_ratio=0.5
   )
 
-  rec_priors = priors[c("l.R.Prior1","l.R.Prior2","beta.Rec.anthro.Prior1","beta.Rec.anthro.Prior2","beta.Rec.fire.Prior1","beta.Rec.fire.Prior2","sig.R.Prior1","sig.R.Prior2")]
-  names(rec_priors)<- c("b0_mu","b0_sd","b1_mu","b1_sd","b2_mu","b2_sd","sig.R.Prior1","sig.R.Prior2")
+  rec_priors = priors[c("R_b0_mu","R_b0_sd","R_b1_mu","R_b1_sd","R_b2_mu","R_b2_sd","R_cv_min","R_cv_max")]
+  names(rec_priors)<- gsub("R_","",names(rec_priors),fixed=T)
   
   datal <- c(datal,rec_priors)
   
@@ -229,7 +229,7 @@ betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
   rec_mod_fl <- tempfile(pattern = "recruit_model_", fileext = ".txt")
   sink(rec_mod_fl)  # observation model can be connected by CaribouYear[i] 
   
-  if(rec_priors$sig.R.Prior2>0){
+  if(rec_priors$cv_max>0){
   cat("
 
 model {
@@ -257,13 +257,13 @@ model {
     b0[k] ~ dnorm(b0_mu, 1/pow(b0_sd,2))
     b1[k] ~ dnorm(b1_mu, 1/pow(b1_sd,2))
     b2[k] ~ dnorm(b2_mu, 1/pow(b2_sd,2))
-    cv.R[k]~dunif(sig.R.Prior1,sig.R.Prior2)
+    cv.R[k]~dunif(cv_min,cv_max)
   }
 }
   
 ", fill = TRUE)
   }else{
-    datal$sig.R.Prior1=NULL;datal$sig.R.Prior2=NULL
+    datal$cv_min=NULL;datal$cv_max=NULL
     
     cat("
 
