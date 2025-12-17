@@ -1,7 +1,7 @@
-#' Get prior parameters for Bayesian beta population model
+#' Get prior parameters for Bayesian Beta demographic rate models 
 #'
-#' Returns prior parameter values for the Bayesian beta population model. The
-#' starting point is estimated coefficients from national
+#' Returns prior parameter values for Bayesian Beta demographic rate models described by [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095). 
+#' The starting point is estimated coefficients from national
 #' demographic-disturbance relationships in the table
 #' `popGrowthTableJohnsonECCC`. 
 #' 
@@ -22,12 +22,12 @@
 #' @param returnValues logical. Default is TRUE. If FALSE returns strings for
 #'   some values showing the initial values and the modifier ie "0.9 * 1.05"
 #' @param sAnthroSlopeSE Standard deviation of effect of disturbance on survival.
-#' @param rAnthroSlopeSE Standard deviation of effect of disturbance on recruitment.
+#' @param rAnthroSlopeSE Standard deviation of effect of anthropogenic disturbance on recruitment.
 #' @param rFireSlopeSE Standard deviation of effect of fire on recruitment.
 #' @param sIntSE Standard deviation of survival intercept.
 #' @param rIntSE Standard deviation of recruitment intercept.
-#' @param sNuMin,sNuMax Uniform prior for coefficient of variation among years. 
-#' @param rNuMin,rNuMax Uniform prior for coefficient of variation among years. 
+#' @param sNuMin,sNuMax Uniform prior for coefficient of variation among years for recruitment. 
+#' @param rNuMin,rNuMax Uniform prior for coefficient of variation among years for recruitment. 
 #' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition
 #'   survey groups.
 #' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition
@@ -47,27 +47,23 @@
 #'
 #' @return a list with values:
 #'
-#' * l.R.Prior1: Recruitment intercept
-#' * l.R.Prior2: Recruitment intercept standard error times modifier,
-#' * beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,
-#' * beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard
-#'   error times modifier,
-#' * beta.Rec.fire.Prior1: Recruitment fire excluding anthropogenic disturbance
+#' * R_b0_mu: Recruitment intercept
+#' * R_b0_sd: Recruitment intercept standard deviation,
+#' * R_b1_mu: Recruitment anthropogenic disturbance slope,
+#' * R_b1_sd: Recruitment anthropogenic disturbance standard deviation,
+#' * R_b2_mu: Recruitment fire excluding anthropogenic disturbance
 #'   slope,
-#' * beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance
-#'   standard error,
-#' * sig.R.Prior1: Mean of the prior distribution of the random effect of year
+#' * R_b2_sd: Recruitment fire excluding anthropogenic disturbance standard deviation,
+#' * R_cv_min: Min of the prior distribution of the random effect of year
 #'   on recruitment,
-#' * sig.R.Prior2: Standard deviation of the prior distribution of the random
-#'   effect of year on recruitment,
-#' * l.Saf.Prior1: Adult female survival intercept,
-#' * l.Saf.Prior2: Adult female survival intercept standard error times modifier,
-#' * beta.Saf.Prior1: Adult female survival anthropogenic disturbance slope,
-#' * beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
-#'   error times modifier,
-#' * sig.Saf.Prior1: Mean of the prior distribution of the random effect of year
+#' * R_cv_max: Max of the prior distribution of the random effect of year on recruitment,
+#' * S_b0_mu: Adult female survival intercept,
+#' * S_b0_sd: Adult female survival intercept standard error times modifier,
+#' * S_b1_mu: Adult female survival anthropogenic disturbance slope,
+#' * S_b1_sd: Adult female survival anthropogenic disturbance standard deviation,
+#' * S_cv_min: Min of the prior distribution of the random effect of year
 #'   on adult female survival,
-#' * sig.Saf.Prior2: Standard deviation of the prior distribution of the random
+#' * S_cv_max: Max of the prior distribution of the random
 #'   effect of year on adult female survival,
 #' * qMin,qMax,uMin,uMax,zMin,zMax,cowMult: Composition bias parameters.   
 #' 
@@ -95,9 +91,9 @@ betaNationalPriors <- function(modList = NULL,
                       rIntSE = 0.35,
                       rNuMin =0.01,
                       rNuMax =0.7,
-                      qMin=0, qMax =0.6, 
-                      uMin = 0, uMax = 0.2, 
-                      zMin = 0, zMax = 0.2, 
+                      qMin=0, qMax =0, 
+                      uMin = 0, uMax = 0, 
+                      zMin = 0, zMax = 0, 
                       cowMult = 6,
                       populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                       modelVersion = "Johnson",
@@ -163,20 +159,20 @@ betaNationalPriors <- function(modList = NULL,
 
   if (returnValues) {
     betaPriors <- list(
-      l.R.Prior1 = rPriorCoefs$Intercept,
-      l.R.Prior2 = modList$rIntSE,
-      beta.Rec.anthro.Prior1 = rPriorCoefs$Anthro,
-      beta.Rec.anthro.Prior2 = modList$rAnthroSlopeSE,
-      beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
-      beta.Rec.fire.Prior2 = modList$rFireSlopeSE,
-      sig.R.Prior1 = modList$rNuMin,
-      sig.R.Prior2 = modList$rNuMax,
-      l.Saf.Prior1 = sPriorCoefs$Intercept,
-      l.Saf.Prior2 = modList$sIntSE,
-      beta.Saf.Prior1 = sPriorCoefs$Anthro,
-      beta.Saf.Prior2 = modList$sAnthroSlopeSE,
-      sig.Saf.Prior1 = modList$sNuMin,
-      sig.Saf.Prior2 = modList$sNuMax
+      R_b0_mu = rPriorCoefs$Intercept,
+      R_b0_sd = modList$rIntSE,
+      R_b1_mu = rPriorCoefs$Anthro,
+      R_b1_sd = modList$rAnthroSlopeSE,
+      R_b2_mu = rPriorCoefs$fire_excl_anthro,
+      R_b2_sd = modList$rFireSlopeSE,
+      R_cv_min = modList$rNuMin,
+      R_cv_max = modList$rNuMax,
+      S_b0_mu = sPriorCoefs$Intercept,
+      S_b0_sd = modList$sIntSE,
+      S_b1_mu = sPriorCoefs$Anthro,
+      S_b1_sd = modList$sAnthroSlopeSE,
+      S_cv_min = modList$sNuMin,
+      S_cv_max = modList$sNuMax
     )
 
     # replace NULL values with 0 for when anthro or fire is not included
@@ -190,20 +186,20 @@ betaNationalPriors <- function(modList = NULL,
     betaPriors <- c(betaPriors,compositionBiasPars)
   } else {
     betaPriors <- list(
-      l.R.Prior1 = rPriorCoefs$Intercept,
-      l.R.Prior2 = round(modList$rIntSE, 4),
-      beta.Rec.anthro.Prior1 = rPriorCoefs$Anthro,
-      beta.Rec.anthro.Prior2 = round(modList$rAnthroSlopeSE, 4),
-      beta.Rec.fire.Prior1 = rPriorCoefs$fire_excl_anthro,
-      beta.Rec.fire.Prior2 = round(modList$rFireSlopeSE,4),
-      sig.R.Prior1 = modList$rNuMin,
-      sig.R.Prior2 = modList$rNuMax,
-      l.Saf.Prior1 = sPriorCoefs$Intercept,
-      l.Saf.Prior2 = round(modList$sIntSE, 4),
-      beta.Saf.Prior1 = sPriorCoefs$Anthro,
-      beta.Saf.Prior2 = round(modList$sAnthroSlopeSE, 4),
-      sig.Saf.Prior1 = modList$sNuMin,
-      sig.Saf.Prior2 = modList$sNuMax
+      R_b0_mu = rPriorCoefs$Intercept,
+      R_b0_sd = round(modList$rIntSE, 4),
+      R_b1_mu = rPriorCoefs$Anthro,
+      R_b1_sd = round(modList$rAnthroSlopeSE, 4),
+      R_b2_mu = rPriorCoefs$fire_excl_anthro,
+      R_b2_sd = round(modList$rFireSlopeSE,4),
+      R_cv_min = modList$rNuMin,
+      R_cv_max = modList$rNuMax,
+      S_b0_mu = sPriorCoefs$Intercept,
+      S_b0_sd = round(modList$sIntSE, 4),
+      S_b1_mu = sPriorCoefs$Anthro,
+      S_b1_sd = round(modList$sAnthroSlopeSE, 4),
+      S_cv_min = modList$sNuMin,
+      S_cv_max = modList$sNuMax
     )
   }
   
