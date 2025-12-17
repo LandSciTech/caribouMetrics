@@ -193,7 +193,8 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
       mutate(distID = as.integer(distID), 
              Year = as.integer(time), .keep = "unused")
     
-    pars <- full_join(pars %>% select(-N0), out, by = c("replicate", "Year", "distID"))
+    pars <- full_join(pars %>% select(-N0), out, by = c("replicate", "Year", "distID")) %>% 
+      tidyr::unite("replicate", replicate, distID)
   } else {
     pars <- cbind(subset(pars,select=-N0), 
                   caribouPopGrowth(pars$N0, R_bar = pars$R_bar,

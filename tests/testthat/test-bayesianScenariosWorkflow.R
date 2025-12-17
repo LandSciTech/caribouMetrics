@@ -43,18 +43,18 @@ test_that("testScript still works", {
   }
   
   # test what happens if samples are returned from trajectoriesFromNational
-  simBig2 <- suppressWarnings(trajectoriesFromNational(cPars = scns, 
-                                                       returnSamples = TRUE)) 
+  # simBig2 <- suppressWarnings(trajectoriesFromNational(cPars = scns, 
+  #                                                      returnSamples = TRUE)) 
   
   # TODO there are no identifiers to distinguish the samples from different scns
   # rows. This means that the pivot_wider at line 220 of simulateObservations is
   # not uniquely identified. I had tried to fix this by making the
-  # PopulationName created in trajectoriesFromNational unique for different scns
-  # but that created other problems. I still think it would make sense but
-  # would require other changes.
+  # replicate created in trajectoriesFromNational unique for different scns
+  # but that created other problems. I still think it would make sense to include,
+  # and use identifiers or error but would require other changes.
   
-  # If scn table sets trajectory related parameters and simInitial has samples 
-  #   warn that simInitial$samples will be used.
+  # # If scn table sets trajectory related parameters and simInitial has samples 
+  # #   warn that simInitial$samples will be used.
   # scResults2 <- expect_warning(
   #   bayesianScenariosWorkflow(scns, simBig2, eParsIn,
   #                             niters = 100, printProgress = TRUE)
@@ -62,7 +62,7 @@ test_that("testScript still works", {
   # 
   # plotCompareTrajectories(scResults2, "Population growth rate",
   #                         lowBound = 0, highBound = 1.5)
-  # 
+
 })
 
 test_that("bboutools scnenario with no disturbance and no additional monitoring ", {
