@@ -62,7 +62,7 @@ test_that("testScript still works", {
   # 
   # plotCompareTrajectories(scResults2, "Population growth rate",
   #                         lowBound = 0, highBound = 1.5)
-
+  # 
 })
 
 test_that("bboutools scnenario with no disturbance and no additional monitoring ", {
