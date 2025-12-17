@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/LandSciTech/caribouMetrics/graph/badge.svg)](https://app.codecov.io/gh/LandSciTech/caribouMetrics)
 <!-- badges: end -->
 
 The `caribouMetrics` R package provides implementations of models of
@@ -139,9 +141,9 @@ demRates <- estimateNationalRates(covTable = disturb_tbl,
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
 #>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.04371567
+#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05024037
 #>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7745046 0.9145213 0.1813372 0.09400579 0.05235174 0.3466292
+#> 1 0.7625781 0.9198247 0.1813372 0.09842164 0.03913806 0.3782637
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
@@ -149,9 +151,9 @@ popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar,
 
 popGrow
 #>     N0    lambda   lambdaE   N       R_t        X_t       S_t n_recruits
-#> 1 2000 0.8995998 0.9247487 241 0.1119087 0.05595437 0.8821323         12
+#> 1 2000 0.9071743 0.9247487 285 0.1865682 0.09328412 0.8584614         23
 #>   surviving_adFemales
-#> 1                 229
+#> 1                 262
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(
@@ -189,7 +191,6 @@ pm <- bayesianTrajectoryWorkflow(simObs$simSurvObs, simObs$simRecruitObs,
 #> -Inf
 
 natSim <- trajectoriesFromNational(disturbance = simObs$simDisturbance)
-#> Warning: Setting expected survival S_bar to be between l_S and h_S.
 
 pmTbls <- compareTrajectories(pm, simInitial=natSim)
 plotCompareTrajectories(pmTbls, c("Recruitment", "Adult female survival"))

@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/LandSciTech/caribouMetrics/graph/badge.svg)](https://app.codecov.io/gh/LandSciTech/caribouMetrics)
 <!-- badges: end -->
 
 The `caribouMetrics` R package provides implementations of models of Boreal woodland caribou (_Rangifer tarandus caribou_) demography described in [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095). These include: 
