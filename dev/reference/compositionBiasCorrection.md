@@ -46,10 +46,10 @@ compositionBiasCorrection(w, q, u, z, approx = F)
 
 number or tibble. If `approx = FALSE` a vector of composition bias
 correction values (c) of the same length as `q`, `u`, and `z`. If
-`approx = TRUE` a tibble with on row per unique value of `w` and columns
-`w`, `m`, `v`, `sig2`, `mu` representing `w`, mean `c`, variance of `c`,
-and parameters for a log-normal approximation of the distribution of
-`c`.
+`approx = TRUE` a tibble with one row per unique value of `w` and
+columns `w`, `m`, `v`, `sig2`, `mu` representing `w`, mean `c`, variance
+of `c`, and parameters for a log-normal approximation of the
+distribution of `c`.
 
 ## References
 
@@ -85,7 +85,7 @@ Caribou demography functions:
 ## Examples
 
 ``` r
-# number or reps
+# number of reps
 nr <- 10
 
 compositionBiasCorrection(w = 6,
@@ -93,8 +93,8 @@ compositionBiasCorrection(w = 6,
                           u = runif(nr, 0, 0.2),
                           z = runif(nr, 0, 0.2),
                           approx = FALSE)
-#>  [1] 0.9672291 1.1279035 1.1036826 1.1417115 0.9739142 1.0280751 0.9769193
-#>  [8] 1.0302242 0.9003332 0.9329934
+#>  [1] 1.0674695 1.0434662 1.1593874 1.0718026 0.9618399 1.2068765 1.1238518
+#>  [8] 0.9972855 0.9779032 0.9413030
 
 compositionBiasCorrection(w = 6,
                           q = runif(nr, 0, 0.6),
@@ -104,6 +104,6 @@ compositionBiasCorrection(w = 6,
 #> # A tibble: 1 × 5
 #>       w     m       v    sig2     mu
 #>   <dbl> <dbl>   <dbl>   <dbl>  <dbl>
-#> 1     6  1.05 0.00848 0.00771 0.0418
+#> 1     6  1.09 0.00927 0.00777 0.0825
 
 ```

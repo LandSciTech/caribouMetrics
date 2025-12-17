@@ -44,16 +44,20 @@ simulateTrajectoriesFromPosterior(
 
 - rec_pred:
 
-  results returned by `bb_fit_recruitment()` or
-  `bb_predict_calf_cow_ratio()` functions of bboutools R package, or
-  recruit_fit returned by
+  results returned by
+  [`bboutools::bb_fit_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html)
+  or
+  [`bboutools::bb_predict_calf_cow_ratio()`](https://poissonconsulting.github.io/bboutools/reference/bb_predict_calf_cow_ratio.html)
+  functions of bboutools R package, or recruit_fit returned by
   [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md).
 
 - surv_pred:
 
-  bboufit object return by `bb_fit_survival()` or
-  `bb_predict_survival()` functions of bboutools R package, or surv_fit
-  returned by
+  bboufit object return by
+  [`bboutools::bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  or
+  [`bboutools::bb_predict_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival.html)
+  functions of bboutools R package, or surv_fit returned by
   [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md).
 
 - initYear:
@@ -70,7 +74,8 @@ simulateTrajectoriesFromPosterior(
   logical. Default FALSE. Set TRUE to return expected values of R, S,
   and lambda (without interannual variation). Ignored if
   rec_pred/surv_pred are
-  `bb_predict_calf_cow_ratio()`/`bb_predict_survival()` results.
+  [`bboutools::bb_predict_calf_cow_ratio()`](https://poissonconsulting.github.io/bboutools/reference/bb_predict_calf_cow_ratio.html)/[`bboutools::bb_predict_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival.html)
+  results.
 
 - c:
 
@@ -169,7 +174,7 @@ Caribou demography functions:
 #>   ..$ PopulationName  : chr [1:567000] "A" "A" "A" "A" ...
 #>   ..$ Timestep        : num [1:567000] 1989 1989 1989 1989 1989 ...
 #>   ..$ MetricTypeID    : chr [1:567000] "c" "survival" "recruitment" "X" ...
-#>   ..$ Amount          : num [1:567000] NA 0.934 0.1512 0.0756 NA ...
+#>   ..$ Amount          : num [1:567000] NA 0.8252 0.1507 0.0753 NA ...
 # }
 
 ```

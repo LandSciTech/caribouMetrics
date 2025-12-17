@@ -228,46 +228,46 @@ Caribou demography functions:
 
 ``` r
 betaNationalPriors()
-#> $l.R.Prior1
+#> $R_b0_mu
 #> [1] -1.023
 #> 
-#> $l.R.Prior2
+#> $R_b0_sd
 #> [1] 0.35
 #> 
-#> $beta.Rec.anthro.Prior1
+#> $R_b1_mu
 #> [1] -0.017
 #> 
-#> $beta.Rec.anthro.Prior2
+#> $R_b1_sd
 #> [1] 0.006
 #> 
-#> $beta.Rec.fire.Prior1
+#> $R_b2_mu
 #> [1] -0.0081
 #> 
-#> $beta.Rec.fire.Prior2
+#> $R_b2_sd
 #> [1] 0.002
 #> 
-#> $sig.R.Prior1
+#> $R_cv_min
 #> [1] 0.01
 #> 
-#> $sig.R.Prior2
+#> $R_cv_max
 #> [1] 0.7
 #> 
-#> $l.Saf.Prior1
+#> $S_b0_mu
 #> [1] -0.142
 #> 
-#> $l.Saf.Prior2
+#> $S_b0_sd
 #> [1] 0.06
 #> 
-#> $beta.Saf.Prior1
+#> $S_b1_mu
 #> [1] -8e-04
 #> 
-#> $beta.Saf.Prior2
+#> $S_b1_sd
 #> [1] 5e-04
 #> 
-#> $sig.Saf.Prior1
+#> $S_cv_min
 #> [1] 0.01
 #> 
-#> $sig.Saf.Prior2
+#> $S_cv_max
 #> [1] 0.13
 #> 
 #> $cowMult
@@ -277,18 +277,18 @@ betaNationalPriors()
 #> [1] 0
 #> 
 #> $qMax
-#> [1] 0.6
+#> [1] 0
 #> 
 #> $uMin
 #> [1] 0
 #> 
 #> $uMax
-#> [1] 0.2
+#> [1] 0
 #> 
 #> $zMin
 #> [1] 0
 #> 
 #> $zMax
-#> [1] 0.2
+#> [1] 0
 #> 
 ```

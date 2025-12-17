@@ -252,46 +252,46 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">betaNationalPriors</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $l.R.Prior1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $R_b0_mu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.023</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $l.R.Prior2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $R_b0_sd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.35</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $beta.Rec.anthro.Prior1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $R_b1_mu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.017</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $beta.Rec.anthro.Prior2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $R_b1_sd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.006</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $beta.Rec.fire.Prior1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $R_b2_mu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.0081</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $beta.Rec.fire.Prior2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $R_b2_sd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.002</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $sig.R.Prior1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $R_cv_min</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $sig.R.Prior2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $R_cv_max</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $l.Saf.Prior1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $S_b0_mu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.142</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $l.Saf.Prior2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $S_b0_sd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.06</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $beta.Saf.Prior1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $S_b1_mu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -8e-04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $beta.Saf.Prior2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $S_b1_sd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5e-04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $sig.Saf.Prior1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $S_cv_min</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $sig.Saf.Prior2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $S_cv_max</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.13</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $cowMult</span>
@@ -301,19 +301,19 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $qMax</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $uMin</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $uMax</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $zMin</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $zMax</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
