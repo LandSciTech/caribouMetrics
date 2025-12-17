@@ -69,7 +69,7 @@ head(popGrowthPars$coefSamples_Survival$coefStdErrs)
 head(popGrowthPars$coefSamples_Survival$quantiles)
 ```
 
-Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the `caribouPopGrowth` function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but there is variability in the model so few sample populations persist.
+Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting `returnSample = TRUE` so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the `caribouPopGrowth` function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but there is variability in the model so a  few sample populations persist.
 
 ```{r simpleProjection, results='hide',message=F, warning=T}
 rateSamples <- estimateNationalRates(
@@ -101,13 +101,9 @@ d1 <- ggplot(fds, aes(x = as.factor(round(Anthro, 2)), y = Amount,
 plot(d1)
 ```
 
-TO DO: Use consistent labels for outcomes throughout
-
-TO DO: show and explain outcome if no N0 provided.
-
 ## Expected recruitment and survival: effects of disturbance and variation among populations
 
-We can project demographic rates over a range of landscape conditions to recreate figures 3 and 5 from Johnson et al. [@johnson2020] and see the effects of changing disturbance on expected recruitment and survival. First we create a table of disturbance scenarios across a range of different levels of fire and anthropogenic disturbance.
+We can project demographic rates over a range of landscape conditions to recreate figures 3 and 5 from @johnson2020 and see the effects of changing disturbance on expected recruitment and survival. First we create a table of disturbance scenarios across a range of different levels of fire and anthropogenic disturbance.
 
 ```{r disturbanceCovariates, results='hide',message=F, warning=T}
 covTableSim <- expand.grid(Anthro = seq(0, 90, by = 2), 
@@ -195,7 +191,7 @@ plot_recruitment3 <- ggplot(
   scale_colour_gradient(low = "green", high = "red")+
   scale_y_continuous(limits = c(0, 60), breaks = c(0, 10, 20, 30, 40, 50, 60))+
   scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))+
-  xlab("Anthropogenic disturbance (%)")+
+  xlab("Anthropogenic Disturbance (%)")+
   ylab("Recruitment (calves per 100 cows)")
 
 base1 / plot_recruitment3
@@ -224,14 +220,14 @@ plot_recruitment3 <- ggplot(data = rateSummaries,
   scale_y_continuous(limits = c(0, 60),
                      breaks = c(0, 10, 20, 30, 40, 50, 60))+
   scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))+
-  xlab("Anthropogenic disturbance (%)")+
+  xlab("Anthropogenic Disturbance (%)")+
   ylab("Recruitment (calves per 100 cows)")
 base1 / plot_recruitment3
 ```
 
 ## Projection of population growth over time on a changing landscape: workflow details
 
-In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade (Figure \@ref(fig:changeOverTime)). Note the form of the growth model (density dependence, interannual variation, demographic stochasticity etc) can be changed by setting `caribouPopGrowth()` function parameters; see XX for details.
+In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade (Figure \@ref(fig:changeOverTime)). Note the form of the growth model (density dependence, interannual variation, demographic stochasticity etc) can be changed by setting `caribouPopGrowth()` function parameters; see the function documentation for details.
 
 ```{r projectionOverTime, results='hide',message=F, warning=T}
 numTimesteps <- 50
@@ -291,9 +287,8 @@ base1
 
 ## Using the trajectoriesFromNational wrapper function to project population growth
 
-The examples above show steps in the demographic modeling workflow. We also provide a `trajectoriesFromNational` wrapper function that samples the coefficients from the National model, calculates demographic rates given those coefficients and the level of disturbance, projects population growth using `caribouPopGrowth`, and returns summaries of the demographic rates (ref workflow diagram). If the disturbance scenario includes a Year column `trajectoriesFromNational` projects population growth over time, and also returns sample demographic trajectories. If year is not provided, population growth is projected for one year, and sample trajectories are not returned.  
+The examples above show steps in the demographic modeling workflow. We also provide a `trajectoriesFromNational` wrapper function that samples the coefficients from the National model, calculates demographic rates given those coefficients and the level of disturbance, projects population growth using `caribouPopGrowth`, and returns summaries of the demographic rates. If the disturbance scenario includes a Year column `trajectoriesFromNational` projects population growth over time, and also returns sample demographic trajectories. If Year is not provided, population growth is projected for one year, and sample trajectories are not returned.  
 
-TO DO: add trajectoriesFromNational workflow diagram
 
 ```{r results='hide',message=F, warning=T}
 natTraj <- trajectoriesFromNational(replicates = 500, 
@@ -378,7 +373,7 @@ popMetrics2$samples <- merge(popMetrics2$samples,names) %>%
   filter(as.numeric(as.factor(Replicate))<=35)
 ```
 
-```{r changeOverTime2, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Example demographic trajectories and from the national model on a changing landscape, obtained using the trajectoriesFromNational wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples. Female population size is shown separately with a log scaled y axis to allow comparison of divergent trajectories."}
+```{r changeOverTime2, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Example demographic trajectories and from the national model on a changing landscape, obtained using the trajectoriesFromNational wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
 
 proj <- ggplot(data = popMetrics2$summary,
                aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
@@ -393,126 +388,6 @@ proj <- ggplot(data = popMetrics2$summary,
 
 proj
 ```
-# Demographic rates and trajectories from bboutools Bayesian models
-
-NOTE: To enable the QC app project and others we made several changes to bboutools. At present these examples only work with our modified version of bboutools. bboutools developers are integrating the changes into their main package, with an update to be released in spring 2026. Once they have finalized their methods and workflows we will update our code, tests, and documentation to be consistent with their updated package. Until all that is done these tools remain a work in progress - they should only be used by people who won't be surprised or upset when we make changes. It is also important to note that we have very little capacity for user support at this time; time we spend supporting users will will delay progress on building, documenting, testing and publishing the tools.
-
-## Getting a fitted bboutools logistic model
-
-See [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html) vignette for an overview of the Bayesian models.
-For this example we use a bboutools logistic model and example data.
-
-```{r setupBayesian, results='hide'}
-library(bboudata)
-library(bboutools)
-useSaved <- T # option to skip slow step of fitting bboutools model
-bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
-surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
-surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
-                             PopulationName = unique(surv_data$PopulationName))
-surv_data <- merge(surv_data, surv_data_add, all.x = TRUE, all.y = TRUE)
-surv_data$StartTotal[is.na(surv_data$StartTotal)] <- 1
-recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
-recruit_data_add <- expand.grid(Year = seq(2017, 2022), PopulationName = unique(recruit_data$PopulationName))
-recruit_data <- merge(recruit_data, recruit_data_add, all.x = TRUE, all.y = TRUE)
-recruit_data$Month[is.na(recruit_data$Month)] <- 3
-recruit_data$Day[is.na(recruit_data$Day)] <- 15
-if (useSaved & file.exists(bbouInformativeFile)) {
-  bbouInformative <- readRDS(bbouInformativeFile)
-} else {
-  bbouInformative <- estimateBayesianRates(surv_data, recruit_data,
-                                          return_mcmc = TRUE)
-  if (dir.exists(dirname(bbouInformativeFile))) {
-    saveRDS(bbouInformative, bbouInformativeFile)
-  }
-}
-```
-
-## Using bboutools to project population growth
-
-The bboutools R package includes methods for projecting calf:cow ratios, recruitment, survival, and population growth rate.
-
-```{r bboutoolsProjection}
-
-
-
-
-```
-
-Note pop growth rate reported by bboutools is...
-
-Note no density dependence or demographic stochasticity...
-
-## Using the trajectoriesFromBayesian wrapper function to project population growth
-
-For convenience, to enable comparisons (e.g. [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html) vignette), and to integrate with other methods and workflows, we can use the `trajectoriesFromBayesian` wrapper function to get sample trajectories and summaries from our fitted bboutools model. Note that if we use only the information in the fitted model (that does not include initial population size) then the summary results (bands in Figure X) are identical to the bboutools projections (Figs X). The returned example trajectories are derived from the MCMC samples. If we also provide initial population size information then the projection (by default) includes density dependence and demographic stochasticity [@dyson2022; @hughes2025] (Fig X); . Note that in this case the form of the growth model (density dependence & demographic stochasticity, but not interannual variability) can be changed by setting `caribouPopGrowth` function parameters (e.g. Fig X no demographic stochasticity); see XX for details, but note that the Bayesian MCMC samples include interannual variation in recruitment and survival, so no additional interannual variation is added by `caribouPopGrowth` in this case.
-
-TO DO: add trajectoriesFromBayesian workflow diagram
-
-```{r,trajectoriesFromBayesian,message=F, warning=T}
-
-popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
-popMetricsBayes$summary <- popMetricsBayes$summary %>% 
-  filter(MetricTypeID %in% c("Anthro", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
-names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique()
-names
-
-popMetricsBayes$samples <- popMetricsBayes$samples %>% 
-  filter(MetricTypeID %in% c("Anthro", "Sbar","survival","Rbar",
-                             "recruitment", "lambda_bar", "lambda")) %>% 
-  merge(names) %>% 
-  filter(as.numeric(as.factor(Replicate))<=35)
-```
-
-```{r bayesTrajectoryPlot, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Example demographic trajectories from a fitted bboutools model, obtained using the trajectoriesFromBayesian wrapper function. Bands are 95% predictive intervals."}
-proj <- ggplot(data = popMetricsBayes$summary,
-               aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
-  geom_ribbon(fill="grey") +
-  geom_line(colour="black",linewidth=2)+
-  geom_line(data=popMetricsBayes$samples,
-            aes(x=Year,y=Amount,colour=Replicate,group=Replicate), inherit.aes = FALSE) +
-  facet_wrap(~Parameter, scales = "free") +
-  ylab("")+
-  theme(legend.position = "none")
-proj
-```
-
-## Using the trajectoriesFromSummaries wrapper function to project population growth
-
-To allow for the possibility of using fitted Bayesian models as a starting point for exploring demographic scenarios, the `estimateBayesianRates` function also returns a table of model parameters. The `trajectoriesFromSummary` projects outcomes from a model defined by these parameters. When parameters from a fitted Bayesian model are used, outcomes from `trajectoriesFromSummary` and `trajectoriesFromBayesian` are the same (compare Figs X and X) (though note we don't yet have this working for dynamic disturbance scenarios). `trajectoriesFromSummary` allow us to explore the implications of changing model parameters (Fig X), and enables the scenario exploration in our [Boreal Caribou Demographic Projection Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp).  
-
-```{r,trajectoriesFromSummary,message=F, warning=T}
-pt <- bbouInformative$parTab;pt
-
-popMetricsBase <- trajectoriesFromSummary(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
-                                             R_sd=pt$R_sd,S_sd=pt$S_sd,
-                                             R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
-                                             S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,
-                                             scn_nm="base",doSummary=T)
-popMetricsS85 <- trajectoriesFromSummary(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=0.85,
-                                             R_sd=pt$R_sd,S_sd=pt$S_sd,
-                                             R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
-                                             S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,
-                                             scn_nm="S85",doSummary=T)
-scnCompare <- list(summary=rbind(popMetricsBase$summary,popMetricsS85$summary),
-                   samples=rbind(popMetricsBase$samples,popMetricsS85$samples))
-scnCompare$summary <- scnCompare$summary %>% 
-  filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
-names <- scnCompare$summary %>% select(MetricTypeID,Parameter) %>% unique();names
-scnCompare$samples <- merge(scnCompare$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=25)
-```
-
-```{r summaryTrajectoryPlot, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Comparison of demographic trajectories from a fitted bboutools model (base) and a scenario in which expected survival is increased to 85% (S85), obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
-proj <- ggplot(data = scnCompare$summary,
-               aes(x=Year,y=Mean,ymin=lower,ymax=upper,fill=PopulationName,group=PopulationName))+
-  geom_ribbon(alpha=0.2) +
-  geom_line(linewidth=2,colour="black")+
-  geom_line(data=scnCompare$samples,aes(x=Year,y=Amount,colour=PopulationName,group=paste0(Replicate,PopulationName),ymin=Amount,ymax=Amount)) +
-  facet_wrap(~Parameter, scales = "free") +
-  ylab("")
-proj
-```
-
 
 ## References
   Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
@@ -523,7 +398,5 @@ proj
   and availability of models for conservation.
   <https://doi.org/10.1101/2022.06.01.494350>
   
-  Novomestky F, Nadarajah S (2016) Package ‘truncdist.’ Version 1.0-2URL
-  <https://CRAN.R-project.org/package=truncdist>
 
   
