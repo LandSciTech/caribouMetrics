@@ -36,7 +36,7 @@
 #'
 #' @return A named list with aligned spatial data components
 #'
-#' @family disturbance
+#' @family habitat
 #' @export
 #'
 #' @examples

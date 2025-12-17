@@ -1,7 +1,7 @@
 Package: caribouMetrics
 Type: Package
 Title: Models and Metrics of Boreal Caribou Demography and Habitat Selection
-Version: 0.4.0.9002
+Version: 0.4.0.9001
 Authors@R: c(person("Josie", "Hughes", role = c("aut"), email = "josie.hughes@ec.gc.ca", comment = c(ORCID = "0000-0001-7875-9015")),
     person("Sarah", "Endicott", email = "sarah.endicott@ec.gc.ca", 
            role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9644-5343")),
@@ -62,11 +62,16 @@ Collate:
     'betaMakeSummaryTable.R'
     'betaNationalPriors.R'
     'betaSample.R'
+    'calcBinaryUse.R'
+    'calcRSP.R'
+    'caribouHabitat.R'
     'caribouMetrics-package.R'
     'caribouPopGrowth.R'
+    'checkInputs.R'
     'combineLinFeat.R'
     'compareTrajectories.R'
     'compositionBiasCorrection.R'
+    'data.R'
     'dataPrepFns.R'
     'demographicProjectionApp.R'
     'disturbanceMetrics.R'
@@ -76,10 +81,12 @@ Collate:
     'getNationalCoefficients.R'
     'getScenarioDefaults.R'
     'spatialAlignFns.R'
+    'inputData.R'
     'inputDataDisturbance.R'
     'internal_demog_fns.R'
     'loadSpatialInputs.R'
     'movingWindowAvg.R'
+    'plot.R'
     'plotCompareTrajectories.R'
     'plotSurvivalSeries.R'
     'popGrowthTableJohnsonECCC.R'
@@ -87,6 +94,7 @@ Collate:
     'processData.R'
     'rasterizeLineDensity.R'
     'reclassDist.R'
+    'reclassPLC.R'
     'results.R'
     'sampleNationalCoefs.R'
     'simulateObservations.R'
@@ -95,6 +103,7 @@ Collate:
     'trajectoriesFromBayesian.R'
     'trajectoriesFromNational.R'
     'trajectoriesFromSummary.R'
+    'updateCaribou.R'
     'updateDisturbance.R'
 Suggests: 
     testthat (>= 2.1.0),

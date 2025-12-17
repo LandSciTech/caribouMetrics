@@ -45,7 +45,8 @@ out <- loadSpatialInputs(projectPoly = singlePolyP, refRast = landCoverP,
                                            linFeat = linFeatP, 
                                            natDist = natDistP, 
                                            anthroDist = anthroDistP), 
-                         reclassOptions = list(natDist = cbind(NA, 0)))
+                         reclassOptions = list(refRast = reclassPLC, 
+                                               natDist = cbind(NA, 0)))
 
 test_that("with paths", {
   expect_type(out, "list")
@@ -59,7 +60,8 @@ out2 <- loadSpatialInputs(
                     anthroDist = anthroDist), 
   convertToRastDens = c("esker", "linFeat"),
   useTemplate = c("esker", "linFeat"),
-  reclassOptions = list(natDist = list(fn = reclassDist,
+  reclassOptions = list(refRast = reclassPLC, 
+                        natDist = list(fn = reclassDist,
                                        endYr = 2020, 
                                        numCumYrs = 30,
                                        dateField = "FIRE_YEAR"))
@@ -82,14 +84,16 @@ test_that("works when inputs have different crs", {
                       anthroDist = anthroDist), 
     convertToRastDens = c("esker", "linFeat"),
     useTemplate = c("esker", "linFeat"),
-    reclassOptions = list(natDist = list(fn = reclassDist,
+    reclassOptions = list(refRast = reclassPLC, 
+                          natDist = list(fn = reclassDist,
                                          endYr = 2020, 
                                          numCumYrs = 30,
-                                         dateField = "FIRE_YEAR"))
+                                         dateField = "FIRE_YEAR")),
+    rastOut = "raster"
   )
   expect_type(out3, "list")
   
-  expect_s4_class(out3$refRast, "SpatRaster")
+  expect_s4_class(out3$refRast, "RasterLayer")
 })
 
 out4 <- loadSpatialInputs(
@@ -100,13 +104,30 @@ out4 <- loadSpatialInputs(
                     anthroDist = anthroDist), 
   convertToRastDens = c("esker", "linFeat"),
   useTemplate = c("esker", "linFeat"),
-  reclassOptions = list(natDist = list(fn = reclassDist,
+  reclassOptions = list(refRast = reclassPLC, 
+                        natDist = list(fn = reclassDist,
                                        endYr = 2020, 
                                        numCumYrs = 30,
                                        dateField = "FIRE_YEAR"))
 )
 
 test_that("use pre-loaded spatial inputs in caribouHabitat or disturbanceMetrics", {
+  res1 <- caribouHabitat(preppedData = out4, caribouRange = "Churchill")
+  
+  # should be the same as if they were used directly
+  res2 <- caribouHabitat(landCover = reclassPLC(landCover),
+                         projectPoly = singlePoly,
+                         esker = esker, 
+                         linFeat = linFeat, 
+                         natDist = reclassDist(natDist, endYr = 2020, 
+                                               numCumYrs = 30,
+                                               dateField = "FIRE_YEAR", 
+                                               template = landCover), 
+                         anthroDist = anthroDist,
+                         caribouRange = "Churchill")
+  
+  expect_true(all.equal(res1@habitatUse, res2@habitatUse))
+  
   dm1 <- disturbanceMetrics(preppedData = out)
   
   dm2 <- disturbanceMetrics(projectPoly = singlePolyP, landCover = landCoverP, 

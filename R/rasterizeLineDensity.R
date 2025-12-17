@@ -30,7 +30,7 @@
 #'
 #' plot(rastLines)
 #'
-#' @family disturbance
+#' @family habitat
 #' @export
 #' 
 rasterizeLineDensity <- function(x, r, ptDensity = 1) {

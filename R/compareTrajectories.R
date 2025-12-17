@@ -126,8 +126,7 @@ compareTrajectories <- function(caribouBayesDemogMod,
         }  
       }
       
-      distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);
-      distMerge$Anthro=round(distMerge$Anthro)
+      distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
       distMerge=unique(distMerge)
       names(distMerge) <- c("AnthroID","fire_excl_anthroID","Year")
       tt<- merge(summaries,distMerge)
