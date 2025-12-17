@@ -2,13 +2,10 @@
 % Please edit documentation in R/results.R
 \name{results}
 \alias{results}
-\alias{results,CaribouHabitat-method}
 \alias{results,DisturbanceMetrics-method}
 \title{Extract results}
 \usage{
 results(x, ...)
-
-\S4method{results}{CaribouHabitat}(x, type = "both")
 
 \S4method{results}{DisturbanceMetrics}(x, type = "disturbanceMetrics")
 }
@@ -29,45 +26,6 @@ and a data.frame if x is a DisturbanceMetrics object.
 Extract results from CaribouHabitat or DisturbanceMetrics object.
 }
 \examples{
-# create example rasters for habitat
-lc <- terra::rast(xmin = 0, xmax = 25000, ymin = 0, ymax = 25000, 
-                     resolution = 250, crs = "EPSG:5070")
-lc[] <- 0
-nd <- lc
-nd[1:30, 1:30] <- 1
-ad <- lc
-ad[30:50, 3:50] <- 1
-lc[] <- 1
-lc[70:100, 70:100] <- 2
-
-# create sf objects
-lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10000, 10000),
-                                                            ncol = 2, byrow = TRUE))),
-                              crs = 5070))
-esk <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 10000, 10000, 0),
-                                                            ncol = 2, byrow = TRUE))),
-                              crs = 5070))
-
-
-projPol <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(ad)))
-
-# calculate relative probability of use
-res <- caribouHabitat(landCover = lc,
-               linFeat = lf,
-               esker = esk,
-               natDist = nd,
-               anthroDist = ad,
-               projectPoly = projPol,
-               caribouRange = "Nipigon",
-               winArea = 1000 #leave as default NULL except for small examples
-)
-
-# default gets raster of both habitatUse and processedData slots
-resBoth <- results(res)
-
-# provide a slot name to get one of them
-resHabUse <- results(res, type = "habitatUse")
-
 # create example rasters for disturbance metrics
 lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
                   ymax = 10, crs = "EPSG:5070")
@@ -100,27 +58,12 @@ resDMrasters <- results(dm, type = "processedData")
 
 }
 \seealso{
-Caribou habitat functions:
-\code{\link{CaribouHabitat-class}},
-\code{\link{calcBinaryUse}()},
-\code{\link{caribouHabitat}()},
-\code{\link{coefTableHR}},
-\code{\link{coefTableStd}},
-\code{\link{fnlcToResType}},
-\code{\link{loadSpatialInputs}()},
-\code{\link{plcToResType}},
-\code{\link{rasterizeLineDensity}()},
-\code{\link{reclassPLC}()},
-\code{\link{resTypeCode}},
-\code{\link{rfuToResType}},
-\code{\link{threshTable}},
-\code{\link{updateCaribou}()}
-
 Functions for calculating disturbance:
 \code{\link{DisturbanceMetrics-class}},
 \code{\link{disturbanceMetrics}()},
+\code{\link{loadSpatialInputs}()},
+\code{\link{rasterizeLineDensity}()},
 \code{\link{reclassDist}()},
 \code{\link{updateDisturbance}()}
 }
 \concept{disturbance}
-\concept{habitat}

@@ -98,20 +98,12 @@ res <- loadSpatialInputs(projectPoly = projPol, refRast = lc,
                                            
 }
 \seealso{
-Caribou habitat functions:
-\code{\link{CaribouHabitat-class}},
-\code{\link{calcBinaryUse}()},
-\code{\link{caribouHabitat}()},
-\code{\link{coefTableHR}},
-\code{\link{coefTableStd}},
-\code{\link{fnlcToResType}},
-\code{\link{plcToResType}},
+Functions for calculating disturbance:
+\code{\link{DisturbanceMetrics-class}},
+\code{\link{disturbanceMetrics}()},
 \code{\link{rasterizeLineDensity}()},
-\code{\link{reclassPLC}()},
-\code{\link{resTypeCode}},
+\code{\link{reclassDist}()},
 \code{\link{results}()},
-\code{\link{rfuToResType}},
-\code{\link{threshTable}},
-\code{\link{updateCaribou}()}
+\code{\link{updateDisturbance}()}
 }
-\concept{habitat}
+\concept{disturbance}
