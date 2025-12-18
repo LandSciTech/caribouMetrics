@@ -41,6 +41,8 @@ a list containing:
 - pops_run: a vector of population names that are present in all the
   sheets
 
+- dat_desc: description of the survey data for use in the app.
+
 ## See also
 
 Caribou demography functions:
