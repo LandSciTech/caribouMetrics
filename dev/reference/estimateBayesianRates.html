@@ -124,6 +124,7 @@ if FALSE just the results table is returned.</p>
 <code><a href="compareTrajectories.html">compareTrajectories()</a></code>,
 <code><a href="compositionBiasCorrection.html">compositionBiasCorrection()</a></code>,
 <code><a href="simulateTrajectoriesFromPosterior.html">convertTrajectories()</a></code>,
+<code><a href="dataFromSheets.html">dataFromSheets()</a></code>,
 <code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code>,
 <code><a href="estimateNationalRates.html">estimateNationalRate()</a></code>,
 <code><a href="getNationalCoefficients.html">getNationalCoefficients()</a></code>,
@@ -143,11 +144,11 @@ if FALSE just the results table is returned.</p>
 <span class="r-in"><span><span class="va">r_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span>, <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_b.html" class="external-link">bbourecruit_b</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">estimateBayesianRates</span><span class="op">(</span><span class="va">s_data</span>, <span class="va">r_data</span>, N0 <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   pop_name     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower R_bar_upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 0.1896678 0.08139372  0.315008   26.54767   0.1655013   0.2150693</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        B 0.2029059 0.10394202  0.315008   26.54767   0.1716701   0.2378903</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        A 0.1892497 0.08152381 0.3142531     23.444   0.1655626   0.2150194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        B 0.2051869 0.10229975 0.3142531     23.444   0.1743979   0.2401371</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper  N0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.8828654 0.2413111 0.4857051   13.11829   0.8243215   0.9239382 500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.9065601 0.2904318 0.4857051   13.11829   0.8516170   0.9467872 500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.8816210 0.2393870 0.4980075    12.7618   0.8235669   0.9240947 500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.9063136 0.2854704 0.4980075    12.7618   0.8487852   0.9446027 500</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nCollarYears nSurvYears nCowsAllYears nRecruitYears</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1          900         31          2353            27</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2          519         18          2001            15</span>

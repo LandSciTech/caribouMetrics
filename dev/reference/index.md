@@ -21,13 +21,15 @@ population growth
 - [`bbouNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/bbouNationalPriors.md)
   : Get informative priors for bboutools logistic models
 - [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md)
-  : Get prior parameters for Bayesian beta population model
+  : Get prior parameters for Bayesian Beta demographic rate models
 - [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md)
   : Caribou demographic model
 - [`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md)
   : Summarize results of Bayesian demographic model in tables
 - [`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md)
   : Calculate bias correction term for calf:cow composition survey.
+- [`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md)
+  : Demographic data from Google sheet
 - [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md)
   : Run the Bayesian caribou demographic projection app
 - [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md)

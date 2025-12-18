@@ -96,6 +96,7 @@ Caribou demography functions:
 [`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md),
 [`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md),
 [`convertTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md),
+[`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
@@ -125,16 +126,16 @@ Caribou demography functions:
 #> 3  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
 #> 4  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
 #> 5  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
-#> 6  NA 0.9302379 0.9576593 NA 0.1444235 0.07221174 0.8675879         NA
-#> 7  NA 0.9897028 0.9385867 NA 0.1808260 0.09041301 0.9076403         NA
-#> 8  NA 0.9699516 0.9576593 NA 0.2349793 0.11748963 0.8679737         NA
-#> 9  NA 0.9275614 0.9385867 NA 0.1225531 0.06127653 0.8740054         NA
-#> 10 NA 0.9510071 0.9576593 NA 0.1795234 0.08976168 0.8726744         NA
-#> 11 NA 0.9247989 0.9385867 NA 0.1952277 0.09761384 0.8425540         NA
-#> 12 NA 0.9720151 0.9576593 NA 0.2316730 0.11583650 0.8711089         NA
-#> 13 NA 0.8833501 0.9385867 NA 0.1281039 0.06405194 0.8301757         NA
-#> 14 NA 0.9543730 0.9576593 NA 0.2073339 0.10366693 0.8647292         NA
-#> 15 NA 0.9404279 0.9385867 NA 0.2680849 0.13404244 0.8292704         NA
+#> 6  NA 0.8843283 0.9108934 NA 0.1658015 0.08290077 0.8166291         NA
+#> 7  NA 0.9646004 0.9688517 NA 0.2226971 0.11134853 0.8679549         NA
+#> 8  NA 0.9056834 0.9108934 NA 0.1457167 0.07285833 0.8441780         NA
+#> 9  NA 0.9282960 0.9688517 NA 0.1142088 0.05710440 0.8781498         NA
+#> 10 NA 0.8507694 0.9108934 NA 0.1689658 0.08448289 0.7844932         NA
+#> 11 NA 0.9695961 0.9688517 NA 0.1310562 0.06552811 0.9099677         NA
+#> 12 NA 0.8909591 0.9108934 NA 0.1268754 0.06343769 0.8378104         NA
+#> 13 NA 1.0167610 0.9688517 NA 0.2075839 0.10379194 0.9211527         NA
+#> 14 NA 0.8956572 0.9108934 NA 0.1431875 0.07159373 0.8358178         NA
+#> 15 NA 1.0043672 0.9688517 NA 0.1759925 0.08799625 0.9231348         NA
 #>    surviving_adFemales id time type  scn
 #> 1                   NA  1    1 mean base
 #> 2                   NA  1    2 mean base

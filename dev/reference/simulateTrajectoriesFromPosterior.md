@@ -101,6 +101,7 @@ Caribou demography functions:
 [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md),
 [`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md),
 [`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md),
+[`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
@@ -122,6 +123,7 @@ Caribou demography functions:
 [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md),
 [`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md),
 [`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md),
+[`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
@@ -174,7 +176,7 @@ Caribou demography functions:
 #>   ..$ PopulationName  : chr [1:567000] "A" "A" "A" "A" ...
 #>   ..$ Timestep        : num [1:567000] 1989 1989 1989 1989 1989 ...
 #>   ..$ MetricTypeID    : chr [1:567000] "c" "survival" "recruitment" "X" ...
-#>   ..$ Amount          : num [1:567000] NA 0.8252 0.1507 0.0753 NA ...
+#>   ..$ Amount          : num [1:567000] NA 0.8658 0.1501 0.0751 NA ...
 # }
 
 ```

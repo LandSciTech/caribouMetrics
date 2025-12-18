@@ -1,9 +1,10 @@
-# Get prior parameters for Bayesian beta population model
+# Get prior parameters for Bayesian Beta demographic rate models
 
-Returns prior parameter values for the Bayesian beta population model.
-The starting point is estimated coefficients from national
-demographic-disturbance relationships in the table
-`popGrowthTableJohnsonECCC`.
+Returns prior parameter values for Bayesian Beta demographic rate models
+described by [Hughes et al.
+(2025)](https://doi.org/10.1016/j.ecoinf.2025.103095). The starting
+point is estimated coefficients from national demographic-disturbance
+relationships in the table `popGrowthTableJohnsonECCC`.
 
 ## Usage
 
@@ -22,11 +23,11 @@ betaNationalPriors(
   rNuMin = 0.01,
   rNuMax = 0.7,
   qMin = 0,
-  qMax = 0.6,
+  qMax = 0,
   uMin = 0,
-  uMax = 0.2,
+  uMax = 0,
   zMin = 0,
-  zMax = 0.2,
+  zMax = 0,
   cowMult = 6,
   populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
   modelVersion = "Johnson",
@@ -49,7 +50,8 @@ betaNationalPriors(
 
 - rAnthroSlopeSE:
 
-  Standard deviation of effect of disturbance on recruitment.
+  Standard deviation of effect of anthropogenic disturbance on
+  recruitment.
 
 - rFireSlopeSE:
 
@@ -65,7 +67,8 @@ betaNationalPriors(
 
 - sNuMin, sNuMax:
 
-  Uniform prior for coefficient of variation among years.
+  Uniform prior for coefficient of variation among years for
+  recruitment.
 
 - rIntSE:
 
@@ -73,7 +76,8 @@ betaNationalPriors(
 
 - rNuMin, rNuMax:
 
-  Uniform prior for coefficient of variation among years.
+  Uniform prior for coefficient of variation among years for
+  recruitment.
 
 - qMin:
 
@@ -135,43 +139,40 @@ betaNationalPriors(
 
 a list with values:
 
-- l.R.Prior1: Recruitment intercept
+- R_b0_mu: Recruitment intercept
 
-- l.R.Prior2: Recruitment intercept standard error times modifier,
+- R_b0_sd: Recruitment intercept standard deviation,
 
-- beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,
+- R_b1_mu: Recruitment anthropogenic disturbance slope,
 
-- beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard
-  error times modifier,
+- R_b1_sd: Recruitment anthropogenic disturbance standard deviation,
 
-- beta.Rec.fire.Prior1: Recruitment fire excluding anthropogenic
-  disturbance slope,
+- R_b2_mu: Recruitment fire excluding anthropogenic disturbance slope,
 
-- beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic
-  disturbance standard error,
+- R_b2_sd: Recruitment fire excluding anthropogenic disturbance standard
+  deviation,
 
-- sig.R.Prior1: Mean of the prior distribution of the random effect of
-  year on recruitment,
+- R_cv_min: Min of the prior distribution of the random effect of year
+  on recruitment,
 
-- sig.R.Prior2: Standard deviation of the prior distribution of the
-  random effect of year on recruitment,
+- R_cv_max: Max of the prior distribution of the random effect of year
+  on recruitment,
 
-- l.Saf.Prior1: Adult female survival intercept,
+- S_b0_mu: Adult female survival intercept,
 
-- l.Saf.Prior2: Adult female survival intercept standard error times
+- S_b0_sd: Adult female survival intercept standard error times
   modifier,
 
-- beta.Saf.Prior1: Adult female survival anthropogenic disturbance
-  slope,
+- S_b1_mu: Adult female survival anthropogenic disturbance slope,
 
-- beta.Saf.Prior2: Adult female survival anthropogenic disturbance
-  standard error times modifier,
+- S_b1_sd: Adult female survival anthropogenic disturbance standard
+  deviation,
 
-- sig.Saf.Prior1: Mean of the prior distribution of the random effect of
-  year on adult female survival,
+- S_cv_min: Min of the prior distribution of the random effect of year
+  on adult female survival,
 
-- sig.Saf.Prior2: Standard deviation of the prior distribution of the
-  random effect of year on adult female survival,
+- S_cv_max: Max of the prior distribution of the random effect of year
+  on adult female survival,
 
 - qMin,qMax,uMin,uMax,zMin,zMax,cowMult: Composition bias parameters.
 
@@ -211,6 +212,7 @@ Caribou demography functions:
 [`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md),
 [`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md),
 [`convertTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md),
+[`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),

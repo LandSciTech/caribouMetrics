@@ -189,6 +189,7 @@ Caribou demography functions:
 [`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md),
 [`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md),
 [`convertTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md),
+[`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
@@ -206,8 +207,8 @@ Caribou demography functions:
 
 ``` r
 caribouPopGrowth(100, 2, 0.5, 0.7)
-#>    N0    lambda lambdaE  N       R_t       X_t       S_t n_recruits
-#> 1 100 0.8124038   0.875 66 0.6668136 0.3334068 0.6918341         18
+#>    N0    lambda lambdaE  N       R_t       X_t      S_t n_recruits
+#> 1 100 0.7416198   0.875 55 0.2598898 0.1299449 0.755031          7
 #>   surviving_adFemales
 #> 1                  48
 ```

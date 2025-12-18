@@ -69,6 +69,7 @@ Caribou demography functions:
 [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md),
 [`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md),
 [`convertTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md),
+[`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
@@ -93,8 +94,8 @@ compositionBiasCorrection(w = 6,
                           u = runif(nr, 0, 0.2),
                           z = runif(nr, 0, 0.2),
                           approx = FALSE)
-#>  [1] 1.0674695 1.0434662 1.1593874 1.0718026 0.9618399 1.2068765 1.1238518
-#>  [8] 0.9972855 0.9779032 0.9413030
+#>  [1] 1.0021906 1.1351104 1.0482246 0.9693448 0.9765000 1.1644758 1.0652694
+#>  [8] 0.9695719 0.9633392 0.9824180
 
 compositionBiasCorrection(w = 6,
                           q = runif(nr, 0, 0.6),
@@ -104,6 +105,6 @@ compositionBiasCorrection(w = 6,
 #> # A tibble: 1 × 5
 #>       w     m       v    sig2     mu
 #>   <dbl> <dbl>   <dbl>   <dbl>  <dbl>
-#> 1     6  1.09 0.00927 0.00777 0.0825
+#> 1     6  1.06 0.00361 0.00321 0.0570
 
 ```

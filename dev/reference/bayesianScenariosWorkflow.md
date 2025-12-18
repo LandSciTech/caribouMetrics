@@ -36,7 +36,9 @@ bayesianScenariosWorkflow(
 - simInitial:
 
   Initial simulation results, produced by calling
-  `trajectoriesFromAny()`
+  [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md)
+  or
+  [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md)
 
 - ePars:
 
@@ -95,6 +97,7 @@ Caribou demography functions:
 [`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md),
 [`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md),
 [`convertTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md),
+[`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
@@ -149,8 +152,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 20
-#>    Unobserved stochastic nodes: 93
+#>    Observed stochastic nodes: 18
+#>    Unobserved stochastic nodes: 95
 #>    Total graph size: 489
 #> 
 #> Initializing model
@@ -159,8 +162,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 74
-#>    Unobserved stochastic nodes: 200
+#>    Observed stochastic nodes: 72
+#>    Unobserved stochastic nodes: 202
 #>    Total graph size: 806
 #> 
 #> Initializing model

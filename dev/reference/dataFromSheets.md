@@ -1,25 +1,45 @@
-# Population growth model table for Johnson models
+# Demographic data from Google sheet
 
-A table of population growth model coefficients and standard errors or
-confidence intervals for the models described in Johnson et. al. (2020)
+Download data from Google sheets stored in bboutools format. See the
+[bboutools
+website](https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data)
+and this [template
+sheet](https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing)
+for more details on the format of the data.
 
 ## Usage
 
 ``` r
-popGrowthTableJohnsonECCC
+dataFromSheets(survey_url, shiny_progress = FALSE, i18n = NULL)
 ```
 
-## Format
+## Arguments
 
-An object of class `data.frame` with 32 rows and 9 columns.
+- survey_url:
 
-## References
+  character. Google Sheet url.
 
-Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
-Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
-linking population dynamics to habitat for a threatened species in
-Canada. Journal of Applied Ecology, 57(7), pp.1314-1327.
-<https://doi.org/10.1111/1365-2664.13637>
+- shiny_progress:
+
+  logical. Is this inside a shiny app and called with
+  [`shiny::withProgress`](https://rdrr.io/pkg/shiny/man/withProgress.html)?
+
+- i18n:
+
+  shiny.i18n translator, or NULL
+
+## Value
+
+a list containing:
+
+- survey_surv: survey data for survival
+
+- survey_recruit: survey data for recruitment
+
+- N0: Initial population data
+
+- pops_run: a vector of population names that are present in all the
+  sheets
 
 ## See also
 
@@ -32,7 +52,6 @@ Caribou demography functions:
 [`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md),
 [`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md),
 [`convertTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md),
-[`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
@@ -40,7 +59,16 @@ Caribou demography functions:
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
+[`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)
+
+## Examples
+
+``` r
+ 
+dataFromSheets("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
+#> Error in loadNamespace(x): there is no package called ‘googlesheets4’
+```
