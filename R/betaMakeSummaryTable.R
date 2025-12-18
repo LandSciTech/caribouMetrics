@@ -230,7 +230,7 @@ betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
   sink(rec_mod_fl)  # observation model can be connected by CaribouYear[i] 
   
   if(rec_priors$cv_max>0){
-  cat("
+  modStr <- "
 
 model {
   for (i in 1:nObs){
@@ -243,7 +243,7 @@ model {
 
   for (i in 1:nAnnual) {
     for (k in 1:nPops) {
-      mu.R[i,k] <- max(0.01,min(0.99,exp(b0[k] + b1[k]*anthro[i,k] + b2[k]*fire[i,k])))
+      mu.R[i,k] <- max(0.01,min(0.99,_Rinvlink_(b0[k] + b1[k]*anthro[i,k] + b2[k]*fire[i,k])))
       sig.R[i,k] <- min(cv.R[k]*mu.R[i,k],0.99*pow(mu.R[i,k]*(1-mu.R[i,k]),0.5)) # Constrain on sig.R to fall within theoretical range
       alpha[i,k] <- ((1-mu.R[i,k])/pow(sig.R[i,k],2) - 1/mu.R[i,k]) * pow(mu.R[i,k],2)
       beta[i,k] <- alpha[i,k] * (1/mu.R[i,k] - 1)
@@ -261,11 +261,10 @@ model {
   }
 }
   
-", fill = TRUE)
+"
   }else{
     datal$cv_min=NULL;datal$cv_max=NULL
-    
-    cat("
+    modStr <- "
 
 model {
   for (i in 1:nObs){
@@ -278,7 +277,7 @@ model {
 
   for (i in 1:nAnnual) {
     for (k in 1:nPops) {
-      mu.R[i,k] <- max(0.01,min(0.99,exp(b0[k] + b1[k]*anthro[i,k] + b2[k]*fire[i,k])))
+      mu.R[i,k] <- max(0.01,min(0.99,_Rinvlink_(b0[k] + b1[k]*anthro[i,k] + b2[k]*fire[i,k])))
       Rbar[i,k] <- mu.R[i,k]
       Recruitment[i,k] <- mu.R[i,k]
     }
@@ -291,8 +290,9 @@ model {
     b2[k] ~ dnorm(b2_mu, 1/pow(b2_sd,2))
   }
 }
-", fill = TRUE)
+"
 }
+  cat(gsub("_Rinvlink_",priors$R_inv_link,modStr,fixed=T), fill = TRUE)
   sink()
   
   ######## Define data, parameters, initials and settings #####

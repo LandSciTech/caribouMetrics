@@ -207,3 +207,29 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
   
   x2
 }
+
+#' TO DO: document plotTrajectories
+#' 
+#' @export
+#' 
+#' @family demography
+plotTrajectories <- function(popMetrics,reps=35,metrics = c("Anthro", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda")){
+  popMetrics$summary <- popMetrics$summary %>%
+    filter(MetricTypeID %in% metrics)
+  names <- popMetrics$summary %>% select(MetricTypeID,Parameter) %>% unique()
+  popMetrics$samples <- popMetrics$samples %>%
+    filter(MetricTypeID %in% metrics) %>%
+    merge(names) %>%
+    filter(as.numeric(as.factor(Replicate))<=reps)
+  proj <- ggplot(data = popMetrics$summary,
+                 aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
+    geom_ribbon(fill="grey") +
+    geom_line(colour="black",linewidth=2)+
+    geom_line(data=popMetrics$samples,
+              aes(x=Year,y=Amount,colour=Replicate,group=Replicate), inherit.aes = FALSE) +
+    facet_wrap(~Parameter, scales = "free") +
+    ylab("")+
+    theme(legend.position = "none")
+  proj
+}
+
