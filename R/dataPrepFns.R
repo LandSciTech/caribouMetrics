@@ -14,6 +14,7 @@
 #'  - survey_recruit: survey data for recruitment
 #'  - N0: Initial population data 
 #'  - pops_run: a vector of population names that are present in all the sheets
+#'  - dat_desc: description of the survey data for use in the app.
 #' 
 #' @examples
 #'  
@@ -102,8 +103,26 @@ dataFromSheets <- function(survey_url, shiny_progress = FALSE, i18n = NULL){
                         survey_surv$PopulationName) %>%
     intersect(N0$PopulationName)
   
+  # Add description
+  desc_sh <- stringr::str_subset(survey_sh_names, "[D,d]escription")
+  if(length(desc_sh)<1){
+    stop("The spreadsheet does not include a sheet named 'description'")
+  }
+  
+  dat_desc <- googlesheets4::read_sheet(survey_url, desc_sh)
+  
+  # desc_nms <- colnames(dat_desc)
+  # 
+  # if(length(desc_nms) > 1){
+  #   dat_desc <- dat_desc %>% rename_with(\(x)stringr::str_replace(x, ".*(?=_..)", "description"))
+  # } else {
+  #   names(dat_desc) <- paste0("description_", lang)
+  # }
+  # 
+  
   return(list(survey_surv = survey_surv, pops_run = pops_run,
-              survey_recruit = survey_recruit, N0 = N0))
+              survey_recruit = survey_recruit, N0 = N0, 
+              dat_desc = dat_desc))
 }
 
 #' Functions used for data prep for disturbanceMetrics and caribouHabitat

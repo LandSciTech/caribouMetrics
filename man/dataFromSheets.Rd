@@ -20,6 +20,7 @@ a list containing:
 \item survey_recruit: survey data for recruitment
 \item N0: Initial population data
 \item pops_run: a vector of population names that are present in all the sheets
+\item dat_desc: description of the survey data for use in the app.
 }
 }
 \description{
