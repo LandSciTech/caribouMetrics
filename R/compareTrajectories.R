@@ -12,7 +12,7 @@
 #'   records the true population metrics of the population that observations
 #'   were simulated from.
 #' @param simInitial Initial simulation results, produced by calling
-#'   [trajectoriesFromAny()]
+#'   [trajectoriesFromNational()] or [trajectoriesFromBayesian()]
 #'
 #' @return a list of tables:
 #' * rr.summary.all: Mean parameter values for each year and standard deviation,

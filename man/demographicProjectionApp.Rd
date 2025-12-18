@@ -30,6 +30,7 @@ Caribou demography functions:
 \code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
 \code{\link{estimateBayesianRates}()},
 \code{\link{estimateNationalRate}()},
 \code{\link{getNationalCoefficients}()},

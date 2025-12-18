@@ -22,7 +22,7 @@ bayesianScenariosWorkflow(
 \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for details.}
 
 \item{simInitial}{Initial simulation results, produced by calling
-\code{\link[=trajectoriesFromAny]{trajectoriesFromAny()}}}
+\code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}} or \code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}}}
 
 \item{ePars}{list. Additional parameters passed on to
 \code{\link[=simulateObservations]{simulateObservations()}}}
@@ -72,6 +72,7 @@ Caribou demography functions:
 \code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{estimateBayesianRates}()},
 \code{\link{estimateNationalRate}()},

@@ -2,7 +2,7 @@
 % Please edit documentation in R/betaNationalPriors.R
 \name{betaNationalPriors}
 \alias{betaNationalPriors}
-\title{Get prior parameters for Bayesian beta population model}
+\title{Get prior parameters for Bayesian Beta demographic rate models}
 \usage{
 betaNationalPriors(
   modList = NULL,
@@ -18,11 +18,11 @@ betaNationalPriors(
   rNuMin = 0.01,
   rNuMax = 0.7,
   qMin = 0,
-  qMax = 0.6,
+  qMax = 0,
   uMin = 0,
-  uMax = 0.2,
+  uMax = 0,
   zMin = 0,
-  zMax = 0.2,
+  zMax = 0,
   cowMult = 6,
   populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
   modelVersion = "Johnson",
@@ -36,7 +36,7 @@ modifier is supplied here the corresponding argument below is ignored.}
 \item{survivalModelNumber, recruitmentModelNumber}{character. Which model
 number to use see \link{popGrowthTableJohnsonECCC} for options.}
 
-\item{rAnthroSlopeSE}{Standard deviation of effect of disturbance on recruitment.}
+\item{rAnthroSlopeSE}{Standard deviation of effect of anthropogenic disturbance on recruitment.}
 
 \item{rFireSlopeSE}{Standard deviation of effect of fire on recruitment.}
 
@@ -44,11 +44,11 @@ number to use see \link{popGrowthTableJohnsonECCC} for options.}
 
 \item{sIntSE}{Standard deviation of survival intercept.}
 
-\item{sNuMin, sNuMax}{Uniform prior for coefficient of variation among years.}
+\item{sNuMin, sNuMax}{Uniform prior for coefficient of variation among years for recruitment.}
 
 \item{rIntSE}{Standard deviation of recruitment intercept.}
 
-\item{rNuMin, rNuMax}{Uniform prior for coefficient of variation among years.}
+\item{rNuMin, rNuMax}{Uniform prior for coefficient of variation among years for recruitment.}
 
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition
 survey groups.}
@@ -88,34 +88,30 @@ some values showing the initial values and the modifier ie "0.9 * 1.05"}
 \value{
 a list with values:
 \itemize{
-\item l.R.Prior1: Recruitment intercept
-\item l.R.Prior2: Recruitment intercept standard error times modifier,
-\item beta.Rec.anthro.Prior1: Recruitment anthropogenic disturbance slope,
-\item beta.Rec.anthro.Prior2: Recruitment anthropogenic disturbance standard
-error times modifier,
-\item beta.Rec.fire.Prior1: Recruitment fire excluding anthropogenic disturbance
+\item R_b0_mu: Recruitment intercept
+\item R_b0_sd: Recruitment intercept standard deviation,
+\item R_b1_mu: Recruitment anthropogenic disturbance slope,
+\item R_b1_sd: Recruitment anthropogenic disturbance standard deviation,
+\item R_b2_mu: Recruitment fire excluding anthropogenic disturbance
 slope,
-\item beta.Rec.fire.Prior2: Recruitment fire excluding anthropogenic disturbance
-standard error,
-\item sig.R.Prior1: Mean of the prior distribution of the random effect of year
+\item R_b2_sd: Recruitment fire excluding anthropogenic disturbance standard deviation,
+\item R_cv_min: Min of the prior distribution of the random effect of year
 on recruitment,
-\item sig.R.Prior2: Standard deviation of the prior distribution of the random
-effect of year on recruitment,
-\item l.Saf.Prior1: Adult female survival intercept,
-\item l.Saf.Prior2: Adult female survival intercept standard error times modifier,
-\item beta.Saf.Prior1: Adult female survival anthropogenic disturbance slope,
-\item beta.Saf.Prior2: Adult female survival anthropogenic disturbance standard
-error times modifier,
-\item sig.Saf.Prior1: Mean of the prior distribution of the random effect of year
+\item R_cv_max: Max of the prior distribution of the random effect of year on recruitment,
+\item S_b0_mu: Adult female survival intercept,
+\item S_b0_sd: Adult female survival intercept standard error times modifier,
+\item S_b1_mu: Adult female survival anthropogenic disturbance slope,
+\item S_b1_sd: Adult female survival anthropogenic disturbance standard deviation,
+\item S_cv_min: Min of the prior distribution of the random effect of year
 on adult female survival,
-\item sig.Saf.Prior2: Standard deviation of the prior distribution of the random
+\item S_cv_max: Max of the prior distribution of the random
 effect of year on adult female survival,
 \item qMin,qMax,uMin,uMax,zMin,zMax,cowMult: Composition bias parameters.
 }
 }
 \description{
-Returns prior parameter values for the Bayesian beta population model. The
-starting point is estimated coefficients from national
+Returns prior parameter values for Bayesian Beta demographic rate models described by \href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. (2025)}.
+The starting point is estimated coefficients from national
 demographic-disturbance relationships in the table
 \code{popGrowthTableJohnsonECCC}.
 }
@@ -152,6 +148,7 @@ Caribou demography functions:
 \code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{estimateBayesianRates}()},
 \code{\link{estimateNationalRate}()},
