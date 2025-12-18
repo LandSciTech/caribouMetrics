@@ -199,6 +199,7 @@ Caribou demography functions:
 \code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{estimateBayesianRates}()},
 \code{\link{getNationalCoefficients}()},

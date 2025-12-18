@@ -1,13 +1,25 @@
-#' Demographic data from google sheet
+#' Demographic data from Google sheet
+#' 
+#' Download data from Google sheets stored in bboutools format. See the
+#' [bboutools website](https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data) 
+#' and this [template sheet](https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing)
+#' for more details on the format of the data.
 #' 
 #' @param survey_url character. Google Sheet url.
 #' @param shiny_progress logical. Is this inside a shiny app and called with `shiny::withProgress`?
 #' @param i18n shiny.i18n translator, or NULL
-#'
+#' 
+#' @return a list containing:
+#'  - survey_surv: survey data for survival
+#'  - survey_recruit: survey data for recruitment
+#'  - N0: Initial population data 
+#'  - pops_run: a vector of population names that are present in all the sheets
+#' 
 #' @examples
 #'  
 #' dataFromSheets("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
 #' 
+#' @family demography
 #' @export
 dataFromSheets <- function(survey_url, shiny_progress = FALSE, i18n = NULL){
   if(!googlesheets4::gs4_has_token()){

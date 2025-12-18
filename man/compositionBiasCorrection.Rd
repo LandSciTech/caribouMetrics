@@ -73,6 +73,7 @@ Caribou demography functions:
 \code{\link{caribouPopGrowth}()},
 \code{\link{compareTrajectories}()},
 \code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{estimateBayesianRates}()},
 \code{\link{estimateNationalRate}()},

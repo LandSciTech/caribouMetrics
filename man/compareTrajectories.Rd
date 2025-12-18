@@ -28,7 +28,7 @@ records the true population metrics of the population that observations
 were simulated from.}
 
 \item{simInitial}{Initial simulation results, produced by calling
-\code{\link[=trajectoriesFromAny]{trajectoriesFromAny()}}}
+\code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}} or \code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}}}
 }
 \value{
 a list of tables:
@@ -72,6 +72,7 @@ Caribou demography functions:
 \code{\link{caribouPopGrowth}()},
 \code{\link{compositionBiasCorrection}()},
 \code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{estimateBayesianRates}()},
 \code{\link{estimateNationalRate}()},
