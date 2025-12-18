@@ -28,7 +28,7 @@ dataFromSheets <- function(survey_url, shiny_progress = FALSE, i18n = NULL){
     googlesheets4::gs4_deauth()
     
     sh_name <- tryCatch(
-      googlesheets4::gs4_get(input$survey_url)$name,
+      googlesheets4::gs4_get(survey_url)$name,
       error = function(e) e
     )
     

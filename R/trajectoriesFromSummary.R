@@ -30,6 +30,21 @@ trajectoriesFromSummary <- function(numSteps, replicates, N0, R_bar, S_bar, R_sd
                   R_iv_mean, R_iv_shape, S_iv_mean, S_iv_shape,  
                   scn_nm, type = "logistic", addl_params = list(), doSummary = F, returnSamples = T){
   #type="logistic"
+  
+  # Check numeric with length 1
+  num_to_chk <- lst(numSteps, replicates, R_bar, S_bar, R_sd, S_sd, R_iv_mean, 
+                    R_iv_shape, S_iv_mean, S_iv_shape) 
+  
+  num_chk_res <- num_to_chk %>% purrr::map_lgl(\(x)is.numeric(x) & length(x) == 1)
+  
+  if(!all(num_chk_res)){
+    stop("the arguments ", paste0(names(num_chk_res)[which(!num_chk_res)], collapse = ", "),
+         " must be numerics with length one")
+  }
+  
+  if(!is.numeric(N0) || !length(N0) %in% c(1,2)){
+    stop("N0 is not a numeric with length 1 or 2")
+  }
 
   if(type=="beta"){
     varSample <- do.call(caribouPopGrowth,
@@ -146,7 +161,7 @@ simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynami
       
       outBit <- out
     } else {
-      if(length(outBit$N) != length(R_use)){
+      if(length(outBit$N) != nrow(R_use)){
         if(length(unique(N0)) > 1){
           stop("Range of N0 only supported for static rates when there are NAs in R_samp")
         }
