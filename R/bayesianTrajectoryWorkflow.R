@@ -126,7 +126,6 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   bboudata::bbd_chk_data_survival(surv_data, allow_missing = TRUE, multi_pops = TRUE)
   bboudata::bbd_chk_data_recruitment(recruit_data, multi_pops = TRUE)
   
-  
   # Get start and end years from data
   if(is.null(inp$startYear)){
     inp$startYear <- min(surv_data$Year)
@@ -197,7 +196,6 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   
   #dups = table(subset(surv_data,select=c(Year,Month,PopulationName)))
   
-
   ###################
   # Recruitment data checking and fill missing yrs
   recruit_data <- recruit_data
@@ -228,8 +226,10 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
 
   #add missing recruit yrs
   recruit_data_add = expand.grid(Year=union(distYrs,recruit_data$Year),PopulationName=unique(recruit_data$PopulationName))
+  sMonth = unique(recruit_data$Month,na.rm=T);if(is.na(sMonth)){sMonth=3}
+  sDay = unique(recruit_data$Day,na.rm=T);if(is.na(sDay)){sDay=15}
   recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
-  recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
+  recruit_data$Month[is.na(recruit_data$Month)]=sMonth[1];recruit_data$Day[is.na(recruit_data$Day)]=sDay[1]
 
   ##################
   #fit models

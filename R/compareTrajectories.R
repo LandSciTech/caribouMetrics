@@ -112,7 +112,8 @@ compareTrajectories <- function(caribouBayesDemogMod,
       if(!is.element("Year",names(summaries))&!is.element("Anthro",names(dist_params))){
         stop("Set disturbance in bayesianTrajectoryWorkflow function call in order to compare to national model simulations.", call. = FALSE)
       }
-      if(!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
+      #only fill in national sims if simInitial is from national model
+      if(!(is.element("surv_data",names(simInitial)))&!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
         message("recalculating initial sims to match anthropogenic distubance scenario")
         simInitial <- trajectoriesFromNational(cPars=paramTable)
         summaries <- simInitial$summary

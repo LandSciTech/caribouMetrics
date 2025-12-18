@@ -70,7 +70,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   popInfo <- merge(data.frame(id=seq(1:nr)),N0)
   popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),ccPars$qMin,ccPars$qMax),w=ccPars$cowMult,u=runif(nr,ccPars$uMin,ccPars$uMax),
                                          z=runif(nr,ccPars$zMin,ccPars$zMax))
-  
+
   parsBar <- simulateTrajectoriesFromPosterior(popInfo,
                                bayesianResults$recruit_fit,
                                bayesianResults$surv_fit,

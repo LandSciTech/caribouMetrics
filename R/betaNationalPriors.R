@@ -97,7 +97,7 @@ betaNationalPriors <- function(modList = NULL,
                       cowMult = 6,
                       populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                       modelVersion = "Johnson",
-                      
+                      r.inv.link="exp",
                       returnValues = TRUE) {
   # modList=paramTable
 
@@ -172,7 +172,8 @@ betaNationalPriors <- function(modList = NULL,
       S_b1_mu = sPriorCoefs$Anthro,
       S_b1_sd = modList$sAnthroSlopeSE,
       S_cv_min = modList$sNuMin,
-      S_cv_max = modList$sNuMax
+      S_cv_max = modList$sNuMax,
+      R_inv_link =modList$r.inv.link
     )
 
     # replace NULL values with 0 for when anthro or fire is not included
