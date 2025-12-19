@@ -66,7 +66,6 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 \seealso{
 Caribou demography functions:
 \code{\link{bayesianTrajectoryWorkflow}()},
-\code{\link{bbouNationalPriors}()},
 \code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compareTrajectories}()},
@@ -80,6 +79,7 @@ Caribou demography functions:
 \code{\link{getScenarioDefaults}()},
 \code{\link{plotCompareTrajectories}()},
 \code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},

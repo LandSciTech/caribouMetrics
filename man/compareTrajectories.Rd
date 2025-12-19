@@ -67,7 +67,6 @@ str(outTables, max.level = 2, give.attr = FALSE)
 Caribou demography functions:
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
-\code{\link{bbouNationalPriors}()},
 \code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compositionBiasCorrection}()},
@@ -80,6 +79,7 @@ Caribou demography functions:
 \code{\link{getScenarioDefaults}()},
 \code{\link{plotCompareTrajectories}()},
 \code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},

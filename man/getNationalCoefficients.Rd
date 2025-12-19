@@ -121,7 +121,6 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 Caribou demography functions:
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
-\code{\link{bbouNationalPriors}()},
 \code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compareTrajectories}()},
@@ -134,6 +133,7 @@ Caribou demography functions:
 \code{\link{getScenarioDefaults}()},
 \code{\link{plotCompareTrajectories}()},
 \code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},

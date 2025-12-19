@@ -13,18 +13,10 @@ test_that("results are as expected", {
     expect_true()
 })
 
-test_that("bbouNationalPriors works", {
-  #lowA <- bbouNationalPriors(Anthro = 1:6, fire_excl_anthro = 1:6*5/10)
+test_that("bbouNationalPriors works",{
+  bbou_pr <- bbouNationalPriors(5, 6, month = "both")
   
- # highA <- bbouNationalPriors(Anthro = 91:96, fire_excl_anthro = 1:6*5/10)
-  
-  # survival is lower when anthro is high
-  #expect_gt(lowA$priors_survival["b0_mu"], highA$priors_survival["b0_mu"])
-  
-  # annual survival is lower than monthly
-  #annual <- bbouNationalPriors(Anthro = 1:6, fire_excl_anthro = 1:6*5/10, 
-  #                                         month = FALSE)
-  
-  #expect_gt(lowA$priors_survival["b0_mu"], annual$priors_survival["b0_mu"])
-  
+  expect_named(bbou_pr, c("priors_recruitment", "priors_survival"))
+  expect_named(bbou_pr$priors_survival, paste0(c("", "", "monthly_", "monthly_"),
+                                               c("b0_mu", "b0_sd")))
 })

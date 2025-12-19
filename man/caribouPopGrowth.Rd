@@ -138,7 +138,6 @@ Applications, 33(3), p.e2816. \url{https://doi.org/10.1002/eap.2816}
 Caribou demography functions:
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
-\code{\link{bbouNationalPriors}()},
 \code{\link{betaNationalPriors}()},
 \code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},
@@ -151,6 +150,7 @@ Caribou demography functions:
 \code{\link{getScenarioDefaults}()},
 \code{\link{plotCompareTrajectories}()},
 \code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},

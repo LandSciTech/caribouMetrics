@@ -110,11 +110,13 @@ Suggests:
     patchwork,
     bookdown
 Remotes: LandSciTech/pfocal,
+    LandSciTech/bbouNationalPriors,
     bboudata=github::LandSciTech/bboudata,
     bboutools=github::LandSciTech/bboutoolsMultiPop
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
     nimble,
+    bbouNationalPriors,
     R (>= 3.5)
 URL: https://landscitech.github.io/caribouMetrics, https://github.com/LandSciTech/caribouMetrics

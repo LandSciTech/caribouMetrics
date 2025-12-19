@@ -26,6 +26,7 @@ betaNationalPriors(
   cowMult = 6,
   populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
   modelVersion = "Johnson",
+  r.inv.link = "exp",
   returnValues = TRUE
 )
 }
@@ -140,10 +141,12 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 \url{https://doi.org/10.1016/j.ecoinf.2025.103095}
 }
 \seealso{
+\code{\link[bbouNationalPriors:bbouNationalPriors]{bbouNationalPriors::bbouNationalPriors()}} for priors for bboutools
+models from national demographic-disturbance relationships.
+
 Caribou demography functions:
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
-\code{\link{bbouNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
 \code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},
@@ -156,6 +159,7 @@ Caribou demography functions:
 \code{\link{getScenarioDefaults}()},
 \code{\link{plotCompareTrajectories}()},
 \code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},
