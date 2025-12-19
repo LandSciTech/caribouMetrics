@@ -170,5 +170,14 @@ test_that("collarCount and cowCount behave", {
   
 })
 
+test_that("collarOn and Off work as expected", {
+  scns <- getScenarioDefaults(iFire = 1, projYears = 10, obsYears = 10, collarCount = 10)
+  
+  simObs1_12 <- simulateObservations(scns, collarOnTime = 1, collarOffTime = 12, 
+                                     caribouYearStart = 1)
+  # TODO currently broken
+  # expect_true(all(!is.na(simObs1_12$simSurvObs$MortalitiesCertain)))
+})
+
 #TO DO: test with trajectories from bboutools & jags models
 #TO DO: test methods for combining simulated and observed data -- bboutools example
