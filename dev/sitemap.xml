@@ -11,7 +11,6 @@
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/DisturbanceMetrics-class.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.html</loc></url>
-<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/bbouNationalPriors.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/caribouMetrics-package.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.html</loc></url>
@@ -28,6 +27,7 @@
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/loadSpatialInputs.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.html</loc></url>
+<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/rasterizeLineDensity.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/reclassDist.html</loc></url>

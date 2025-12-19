@@ -31,6 +31,7 @@ betaNationalPriors(
   cowMult = 6,
   populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
   modelVersion = "Johnson",
+  r.inv.link = "exp",
   returnValues = TRUE
 )
 ```
@@ -204,10 +205,13 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 
 ## See also
 
+[`bbouNationalPriors::bbouNationalPriors()`](https://rdrr.io/pkg/bbouNationalPriors/man/bbouNationalPriors.html)
+for priors for bboutools models from national demographic-disturbance
+relationships.
+
 Caribou demography functions:
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
-[`bbouNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/bbouNationalPriors.md),
 [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md),
 [`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md),
 [`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md),
@@ -220,6 +224,7 @@ Caribou demography functions:
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
+[`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
@@ -271,6 +276,9 @@ betaNationalPriors()
 #> 
 #> $S_cv_max
 #> [1] 0.13
+#> 
+#> $R_inv_link
+#> [1] "exp"
 #> 
 #> $cowMult
 #> [1] 6

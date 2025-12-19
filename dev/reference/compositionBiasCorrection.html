@@ -115,7 +115,6 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
     <div class="dont-index"><p>Caribou demography functions:
 <code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>,
 <code><a href="bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow()</a></code>,
-<code><a href="bbouNationalPriors.html">bbouNationalPriors()</a></code>,
 <code><a href="betaNationalPriors.html">betaNationalPriors()</a></code>,
 <code><a href="caribouPopGrowth.html">caribouPopGrowth()</a></code>,
 <code><a href="compareTrajectories.html">compareTrajectories()</a></code>,
@@ -128,6 +127,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code>,
 <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
 <code><a href="plotSurvivalSeries.html">plotSurvivalSeries()</a></code>,
+<code><a href="plotTrajectories.html">plotTrajectories()</a></code>,
 <code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code>,
 <code><a href="simulateObservations.html">simulateObservations()</a></code>,
 <code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>,
@@ -145,8 +145,8 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-in"><span>                          u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          approx <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.1293332 0.9640143 1.0364324 1.0977277 1.0060370 1.0576166 1.0882358</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.0502036 1.0389134 0.9758568</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.2150190 1.0570418 1.0422778 1.0979069 0.9537854 1.0058571 1.0196445</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.0646096 0.9410457 0.9437515</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">compositionBiasCorrection</span><span class="op">(</span>w <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>                          q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.6</span><span class="op">)</span>,</span></span>
@@ -156,7 +156,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       w     m       v    sig2     mu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.05 0.008<span style="text-decoration: underline;">26</span> 0.007<span style="text-decoration: underline;">40</span> 0.049<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.05 0.006<span style="text-decoration: underline;">25</span> 0.005<span style="text-decoration: underline;">67</span> 0.045<span style="text-decoration: underline;">0</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

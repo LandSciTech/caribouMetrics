@@ -14,6 +14,7 @@ library(caribouMetrics)
 #> The following object is masked from 'package:base':
 #> 
 #>     declare
+#> Loading required package: bbouNationalPriors
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'

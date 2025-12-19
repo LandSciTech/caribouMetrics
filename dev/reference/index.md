@@ -18,8 +18,6 @@ population growth
   : Run the Bayesian population model for multiple parameter sets
 - [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md)
   : Bayesian population model for boreal caribou
-- [`bbouNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/bbouNationalPriors.md)
-  : Get informative priors for bboutools logistic models
 - [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md)
   : Get prior parameters for Bayesian Beta demographic rate models
 - [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md)
@@ -49,6 +47,8 @@ population growth
   : Plot Bayesian population model results
 - [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md)
   : Plot survival time series
+- [`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.md)
+  : TO DO: document plotTrajectories
 - [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md)
   : Population growth model table for Johnson models
 - [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md)

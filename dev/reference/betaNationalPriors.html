@@ -76,6 +76,7 @@ demographic-disturbance relationships in the table
 <span>  cowMult <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>  populationGrowthTable <span class="op">=</span> <span class="fu">caribouMetrics</span><span class="fu">::</span><span class="va"><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></span>,</span>
 <span>  modelVersion <span class="op">=</span> <span class="st">"Johnson"</span>,</span>
+<span>  r.inv.link <span class="op">=</span> <span class="st">"exp"</span>,</span>
 <span>  returnValues <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -223,10 +224,11 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Caribou demography functions:
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/bbouNationalPriors/man/bbouNationalPriors.html" class="external-link">bbouNationalPriors::bbouNationalPriors()</a></code> for priors for bboutools
+models from national demographic-disturbance relationships.</p>
+<p>Caribou demography functions:
 <code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>,
 <code><a href="bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow()</a></code>,
-<code><a href="bbouNationalPriors.html">bbouNationalPriors()</a></code>,
 <code><a href="caribouPopGrowth.html">caribouPopGrowth()</a></code>,
 <code><a href="compareTrajectories.html">compareTrajectories()</a></code>,
 <code><a href="compositionBiasCorrection.html">compositionBiasCorrection()</a></code>,
@@ -239,6 +241,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code>,
 <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
 <code><a href="plotSurvivalSeries.html">plotSurvivalSeries()</a></code>,
+<code><a href="plotTrajectories.html">plotTrajectories()</a></code>,
 <code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code>,
 <code><a href="simulateObservations.html">simulateObservations()</a></code>,
 <code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>,
@@ -290,6 +293,9 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $S_cv_max</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $R_inv_link</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "exp"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $cowMult</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>

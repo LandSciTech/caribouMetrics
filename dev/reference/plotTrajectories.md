@@ -1,28 +1,17 @@
-# Get trajectories from a Bayesian model result
+# TO DO: document plotTrajectories
 
-Get trajectories from a Bayesian model result
+TO DO: document plotTrajectories
 
 ## Usage
 
 ``` r
-trajectoriesFromBayesian(
-  bayesianResults,
-  N0 = NULL,
-  cPars = subset(getScenarioDefaults(), select = -iAnthro),
-  returnSamples = TRUE,
-  doSummary = TRUE,
-  ...
+plotTrajectories(
+  popMetrics,
+  reps = 35,
+  metrics = c("Anthro", "Sbar", "survival", "Rbar", "recruitment", "lambda_bar",
+    "lambda")
 )
 ```
-
-## Arguments
-
-- bayesianResults:
-- N0:
-- cPars:
-- returnSamples:
-- doSummary:
-- ...:
 
 ## See also
 
@@ -42,8 +31,8 @@ Caribou demography functions:
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
-[`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
+[`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)
