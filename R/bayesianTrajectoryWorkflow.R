@@ -226,10 +226,11 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
 
   #add missing recruit yrs
   recruit_data_add = expand.grid(Year=union(distYrs,recruit_data$Year),PopulationName=unique(recruit_data$PopulationName))
-  sMonth = unique(recruit_data$Month,na.rm=T);if(is.na(sMonth)){sMonth=3}
-  sDay = unique(recruit_data$Day,na.rm=T);if(is.na(sDay)){sDay=15}
+  sMonth = unique(recruit_data$Month,na.rm=T);if(all(is.na(sMonth))){sMonth=3}
+  sDay = unique(recruit_data$Day,na.rm=T);if(all(is.na(sDay))){sDay=15}
   recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
-  recruit_data$Month[is.na(recruit_data$Month)]=sMonth[1];recruit_data$Day[is.na(recruit_data$Day)]=sDay[1]
+  recruit_data$Month[is.na(recruit_data$Month)]=sMonth[1]
+  recruit_data$Day[is.na(recruit_data$Day)]=sDay[1]
 
   ##################
   #fit models
