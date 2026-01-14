@@ -43,16 +43,12 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   nb <- ni / 2    # number of samples to discard as burnin
   
   if(!is.null(disturbance)){
-    parTab = N0
-    if(is.element("PopulationName",names(parTab))){
-      names(parTab)[names(parTab)=="PopulationName"]= "pop_name"  
-    }
     if(is.null(priors)){
       priors=betaNationalPriors()
     }
     ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb) 
-    parTab <- merge(parTab,disturbance)
-    ret$parTab <- parTab
+    
+    ret$parTab <- merge(ret$parTab,N0)
     
     return(ret)
   }
@@ -131,13 +127,13 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     
     if (i == 1) {
       parTab <- data.frame(
-        pop_name = p,
+        PopulationName = p,
         R_bar = R_bar, R_sd = R_sd, R_iv_mean = R_annual_mean,R_iv_shape = R_annual_shape, R_bar_lower = R_qt[1], R_bar_upper = R_qt[2],
         S_bar = S_bar, S_sd = S_sd, S_iv_mean = S_annual_mean,S_iv_shape = S_annual_shape, S_bar_lower = S_qt[1], S_bar_upper = S_qt[2]
       )
     } else {
       parTab <- rbind(parTab, data.frame(
-        pop_name = p,
+        PopulationName = p,
         R_bar = R_bar, R_sd = R_sd, R_iv_mean = R_annual_mean,R_iv_shape = R_annual_shape, R_bar_lower = R_qt[1], R_bar_upper = R_qt[2],
         S_bar = S_bar, S_sd = S_sd, S_iv_mean = S_annual_mean,S_iv_shape = S_annual_shape, S_bar_lower = S_qt[1], S_bar_upper = S_qt[2]
       ))
@@ -145,23 +141,23 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   }
   # dplyr version, not using but might want to some day...
   # R_samp %>% as_tibble(rownames = "id") %>%
-  #   # move pop_name from column name to value
-  #   pivot_longer(-id, names_to = "pop_name", values_to = "R") %>%
+  #   # move PopulationName from column name to value
+  #   pivot_longer(-id, names_to = "PopulationName", values_to = "R") %>%
   #   # do the same to S and add it
   #   full_join(
   #     S_samp %>% as_tibble(rownames = "id") %>%
-  #       pivot_longer(-id, names_to = "pop_name", values_to = "S"),
-  #     by = c("id", "pop_name")
+  #       pivot_longer(-id, names_to = "PopulationName", values_to = "S"),
+  #     by = c("id", "PopulationName")
   #   ) %>%
   #   # calculate mean and sd of recruitment and survival for each pop
-  #   group_by(pop_name) %>%
+  #   group_by(PopulationName) %>%
   #   summarise(across(c(R, S), .fns = list(bar = \(x)inv.logit(mean(logit(x))),
   #                                         sd = \(x)sd(logit(x))))) %>%
   #   # add annual columns
   #   mutate(N0 = N0, R_iv_par = R_Annual,
   #          S_iv_par = S_Annual) %>%
   #   # reorder columns
-  #   select(pop_name, N0, matches("^R"), matches("^S"))
+  #   select(PopulationName, N0, matches("^R"), matches("^S"))
   
   # data amount summary
   surv_data_amt <- surv_data %>% group_by(PopulationName, Year) %>%
@@ -175,14 +171,8 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
               nRecruitYears = n_distinct(Year))
   
   data_amt <- merge(surv_data_amt, recruit_data_amt)
-  
-  if(is.element("PopulationName",names(N0))){
-    parTab = merge(parTab,N0, by.x = "pop_name", by.y = "PopulationName")
-  }else{
-    parTab = merge(parTab,N0)
-  }
-  
-  parTab = merge(parTab, data_amt, by.x = "pop_name", by.y = "PopulationName")
+  parTab = merge(parTab,N0)
+  parTab = merge(parTab, data_amt)
   
   if(return_mcmc){
     if(length(unique(surv_fit$data$Month))>1){

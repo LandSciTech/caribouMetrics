@@ -509,3 +509,24 @@ savePersistentCache <- function(env = cacheEnv){
   })
   return(invisible())
 }
+
+summarizeMonitoredNode <- function(parameter_stats,node,data){
+  Rpred <- parameter_stats[grep(node, rownames(parameter_stats)),]
+  Rpred <- cbind(rownames(Rpred), data.frame(Rpred, row.names = NULL)) # convert row names as first column
+  
+  Rpred <- Rpred %>%
+    rename("node"="rownames(Rpred)",
+           "mean"="statistics.Mean",
+           "sd"="statistics.SD",
+           "lower"="quantiles.2.5.",
+           "upper"="quantiles.97.5.") %>%
+    select(c("node","mean","sd","lower","upper"))
+  data$node <- paste0(node,"[",as.integer(data$Annual),",",as.integer(data$PopulationID),"]")
+  Rpred <- merge(Rpred,subset(data,select=intersect(names(data),c("node","Year","PopulationName","Annual","Anthro","fire_excl_anthro"))))
+  Rpred <- Rpred[order(Rpred$Year,Rpred$PopulationName),]
+  if(length(unique(data$PopulationName))>1){
+    stop("ensure labeling is correct in multipop case")
+  }
+  Rpred$MetricTypeID = node
+  return(Rpred)
+}
