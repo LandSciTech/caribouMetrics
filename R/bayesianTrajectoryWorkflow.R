@@ -236,11 +236,11 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   #fit models
   bbouResults = estimateBayesianRates(surv_data, recruit_data,N0,disturbance,priors=priors,
                                      return_mcmc=T,shiny_progress=F,niters=niters,nthin=nthin)
-  
   #get output trajectories
   rr <- trajectoriesFromBayesian(bbouResults, cPars = priors,
                                     returnSamples = returnSamples, ...)
   
   return(list(result = rr, 
-              inData = list(disturbanceIn = disturbance)))
+              inData = list(disturbanceIn = disturbance),
+              parTab = bbouResults$parTab))
 }

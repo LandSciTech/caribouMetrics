@@ -32,7 +32,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     }
   }
   
-  if(!is.element("pop_name",names(bayesianResults$parTab))){bayesianResults$parTab$pop_name=NA}
+  if(!is.element("PopulationName",names(bayesianResults$parTab))){bayesianResults$parTab$PopulationName=NA}
   
   ccPars = unique(subset(cPars,select=c(qMin,qMax,uMin,uMax,zMin,zMax,cowMult,correlateRates)))
   if(nrow(ccPars)>1){
@@ -41,7 +41,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   
   if(is.null(N0)){
     if(is.element("N0",names(bayesianResults$parTab))){
-      N0 <- unique(subset(bayesianResults$parTab,select=c(pop_name,N0)))
+      N0 <- unique(subset(bayesianResults$parTab,select=c(PopulationName,N0)))
     }else{
       N0 <- eval(formals(trajectoriesFromNational)$N0)
     }
@@ -52,10 +52,9 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
       bayesianResults$parTab <- as.data.frame(bayesianResults$parTab)
     }
     N0 = merge(data.frame(N0=N0),
-               unique(subset(bayesianResults$parTab, select=c(pop_name))))
+               unique(subset(bayesianResults$parTab, select=c(PopulationName))))
   }
-  N0$PopulationName = N0$pop_name
-  
+
   if(is.element("bboufit",class(bayesianResults$surv_fit))){
     nr <- dim(bayesianResults$surv_fit$samples$b0)[1]*dim(bayesianResults$surv_fit$samples$b0)[2]
   }else{
@@ -89,8 +88,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   nrow(pars)
   
   pi <- bayesianResults$parTab
-  pi$PopulationName <- pi$pop_name
-  pi$R_bar=NULL;pi$S_bar=NULL;pi$N0=NULL;pi$pop_name=NULL
+  pi$R_bar=NULL;pi$S_bar=NULL;pi$N0=NULL
   pars <- merge(pars,pi)
   
   if(doSummary){

@@ -136,8 +136,8 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
 
   if(length(popInfo)>1){
     popInfo=merge(popInfo,data.frame(id=1:dim(rec)[2]))
-    popInfo = popInfo[order(popInfo$id,popInfo$pop_name),]
-    for(nn in setdiff(names(popInfo),c("pop_name","id"))){
+    popInfo = popInfo[order(popInfo$id,popInfo$PopulationName),]
+    for(nn in setdiff(names(popInfo),c("PopulationName","id"))){
       txt  = paste0(nn," = popInfo[['",nn,"']]")
       eval(parse(text=txt))
     }
@@ -217,7 +217,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
       out <- rbind(out, outBit)
     }
   }
-  
+
   if(min(out$Year)==0){
     out$Year=NULL
     out=merge(out,data.frame(Year=inyears))

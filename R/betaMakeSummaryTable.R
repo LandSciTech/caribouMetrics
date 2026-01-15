@@ -10,7 +10,9 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
   recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb)
   
-  return(list(parTab=NULL,surv_fit=surv_fit,recruit_fit=recruit_fit))
+  parTab <- rbind(recruit_fit$summaries,surv_fit$summaries)
+  
+  return(list(parTab=parTab,surv_fit=surv_fit,recruit_fit=recruit_fit))
 }
 
 betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
@@ -20,6 +22,7 @@ betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
   data$Annual <- as.factor(as.character(data$Annual))
   disturbance <- merge(disturbance,unique(select(data, any_of(c("Annual", "Year", "PopulationName","PopulationID")))))
   anthro <- spread(subset(disturbance,select=c(Annual,PopulationID,Anthro)), PopulationID, Anthro)
+  data <- merge(data,disturbance)
   
   if(any(is.na(anthro))){
     filter(anthro, if_any(-Annual, \(x)is.na(x))) %>% 
@@ -103,6 +106,7 @@ model {
     for (k in 1:nPops) {
       mu.S[i,k] <- max(0.01,min(0.99,(46*exp(b0[k] + b1[k]*anthro[i,k])-0.5)/45))
       Sbar[i,k] <- mu.S[i,k]
+      sig.S <- 0
       Survival[i,k] <- mu.S[i,k]
       AnnualSurvival[i,k] <- pow(Survival[i,k],1/nMonths)
     }
@@ -119,7 +123,7 @@ model {
     sink()
   
   # Setting parameters - setting parameters that you want to monitor
-  params = c("Sbar","Survival")
+  params = c("Sbar","Survival","sig.S")
   
   # Setting initial values - not assigned
   inits1 <- list(b0 = rnorm(datal$nPops, 3, 2),b1 = rnorm(datal$nPops, 0, 2)) 
@@ -140,7 +144,26 @@ model {
   model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt)
   surv_data <- subset(data,is.element(Year,disturbance$Year))
   
-  return(list(data=data,samples=model.samples)) 
+  ### Output data preparation
+  # Summary statistics of mcmc
+  stats <- summary(model.samples)
+  
+  # Preparing projected data
+  parameter_stats <-cbind(as.data.frame(stats[1]),as.data.frame(stats[2])) # append chains of mcmc.list into a data frame (add stats[3] if use 3 chains)
+  
+  # Split node by monitored variables
+  Survival <- summarizeMonitoredNode(parameter_stats,"Survival",data)
+  Sbar <- summarizeMonitoredNode(parameter_stats,"Sbar",data)
+  Siv <- summarizeMonitoredNode(parameter_stats,"sig.S",data)
+  
+  summaries <- rbind(Survival,Sbar,Siv)
+  summaries$node <- NULL
+  
+  for(i in 1:length(model.samples)){
+    model.samples[[i]] <- model.samples[[i]][,c(Sbar$node,Survival$node)]
+  }
+  return(list(data=data,samples=model.samples,summaries=summaries)) 
+  
 }
 
 betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
@@ -278,6 +301,7 @@ model {
   for (i in 1:nAnnual) {
     for (k in 1:nPops) {
       mu.R[i,k] <- max(0.01,min(0.99,_Rinvlink_(b0[k] + b1[k]*anthro[i,k] + b2[k]*fire[i,k])))
+      sig.R[i,k] <- 0
       Rbar[i,k] <- mu.R[i,k]
       Recruitment[i,k] <- mu.R[i,k]
     }
@@ -297,7 +321,7 @@ model {
   
   ######## Define data, parameters, initials and settings #####
   # Setting parameters - setting parameters that you want to monitor
-  params = c("Rbar","Recruitment")
+  params = c("Rbar","Recruitment","sig.R")
 
   # Setting initial values
   inits1 <- list(b0 = rnorm(datal$nPops,-1, 2)) 
@@ -318,7 +342,27 @@ model {
   update(model.fit, n.iter=ni)
   model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt) #"bYear",
   rec_data <- subset(rec_data,is.element(Year,disturbance$Year))
-  return(list(data=rec_data,samples=model.samples)) 
+  
+  #summarize
+  ### Output data preparation
+  # Summary statistics of mcmc
+  stats <- summary(model.samples)
+  
+  # Preparing projected data
+  parameter_stats <-cbind(as.data.frame(stats[1]),as.data.frame(stats[2])) # append chains of mcmc.list into a data frame (add stats[3] if use 3 chains)
+  
+  # Split node by monitored variables
+  Recruitment <- summarizeMonitoredNode(parameter_stats,"Recruitment",data)
+  Rbar <- summarizeMonitoredNode(parameter_stats,"Rbar",data)
+  Riv <- summarizeMonitoredNode(parameter_stats,"sig.R",data)
+  
+  summaries <- rbind(Recruitment,Rbar,Riv)
+  summaries$node <- NULL
+
+  for(i in 1:length(model.samples)){
+    model.samples[[i]] <- model.samples[[i]][,c(Rbar$node,Recruitment$node)]
+  }
+  return(list(data=rec_data,samples=model.samples,summaries=summaries)) 
   
 }
 
