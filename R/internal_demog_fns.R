@@ -524,9 +524,212 @@ summarizeMonitoredNode <- function(parameter_stats,node,data){
   data$node <- paste0(node,"[",as.integer(data$Annual),",",as.integer(data$PopulationID),"]")
   Rpred <- merge(Rpred,subset(data,select=intersect(names(data),c("node","Year","PopulationName","Annual","Anthro","fire_excl_anthro"))))
   Rpred <- Rpred[order(Rpred$Year,Rpred$PopulationName),]
-  if(length(unique(data$PopulationName))>1){
-    stop("ensure labeling is correct in multipop case")
-  }
   Rpred$MetricTypeID = node
   return(Rpred)
+}
+
+jagsRunAndSummarize <- function(data,datal,params,fname,inits,nc,ni,nb,nt){
+  #################################################################################################################
+  ### Running JAGS
+  # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed
+  model.fit <- jags.model(file=fname, data=datal, n.adapt=nb, n.chains = nc,inits = inits)
+  
+  # To get samples from the posterior distribution of the parameters
+  update(model.fit, n.iter=ni)
+  model.samples <- coda.samples(model.fit, params, n.iter=ni, thin = nt)
+  
+  ### Output data preparation
+  # Summary statistics of mcmc
+  stats <- summary(model.samples)
+  
+  # Preparing projected data
+  parameter_stats <-cbind(as.data.frame(stats[1]),as.data.frame(stats[2])) # append chains of mcmc.list into a data frame (add stats[3] if use 3 chains)
+  
+  # Split node by monitored variables
+  for(p in 1:length(params)){
+    pp <- summarizeMonitoredNode(parameter_stats,params[p],data)
+    if(p==1){
+      summaries <- pp
+    }else{
+      summaries <- rbind(summaries,pp)
+    }
+  }
+  summaries$node <- NULL
+  return(list(data=data,samples=model.samples,summaries=summaries)) 
+}
+
+survivalFromBetaSummary<- function(S_bar,S_iv_mean,addl_params,fname="PopDynMod.txt"){
+  #####
+  # Model - assign model file name (needed to match with the file name in the model object in jags.model())
+  sink(fname)
+  cat("
+
+model {
+
+for (t in 1:nAnnual) {
+  pm.period[t]<-ifelse(t > pm.start && t <= pm.end, 1,0) # pm treated period (to set return 1, to turn off return 0)
+  for (k in 1:nPops) {
+	  mu.S[t,k]<- min(S[t,k] + pm.s[t]*pm.period[t],0.99) # Anything above 1 will be replaced by 1 (min-max truncation)
+    sig.S[t,k] <- min(cv.S[k]*mu.S[t,k],0.99*pow(mu.S[t,k]*(1-mu.S[t,k]),0.5)) 
+    alpha[t,k] <- ((1-mu.S[t,k])/pow(sig.S[t,k],2) - 1/mu.S[t,k]) * pow(mu.S[t,k],2)
+    beta[t,k] <- alpha[t,k] * (1/mu.S[t,k] - 1)
+    Sbar[t,k] <- alpha[t,k]/(alpha[t,k]+beta[t,k])
+    Survival[t,k] ~ dbeta(alpha[t,k],beta[t,k])T(0.01,0.99)
+}}
+
+for(i in 1:nObs) {
+  S[Annual[i],PopulationID[i]]<-max(s[i],0.01)
+  s[i]~dnorm(smu[i], stau[i]) 
+	stau[i]<-1/pow(ssd[i],2) 
+}
+
+for (t in 1:nAnnual) {
+	pm.s[t]~dnorm(pms.mu[t], pms.tau[t])
+	pms.tau[t]<-1/pow(pms.sd[t],2)
+}
+
+for (k in 1:nPops) {
+  cv.S[k]~dunif(cv_min,cv_max)
+}
+
+}
+
+", fill = TRUE)
+  sink()
+  
+  ### Define data, parameters, initials and settings
+  # Setting the data that you want to pass the model objects
+  data <- S_bar
+  data <- data[order(data$Annual,data$PopulationName),]
+  data$PopulationID <- as.factor(data$PopulationName)
+  #TO DO: add interannual variation
+  nAnnual <- length(unique(data$Annual))
+  
+  datal = list(
+    nObs = nrow(data),
+    nAnnual=nAnnual,
+    Annual = as.integer(data$Annual),
+    nPops=length(unique(data$PopulationName)),
+    PopulationID = as.integer(data$PopulationID),
+    smu=data$mean,
+    ssd=data$sd,
+    pm.start=addl_params$pm.start,
+    pm.end=addl_params$pm.end,
+    pms.mu = rep(addl_params$pm.s[,2],nAnnual),
+    pms.sd = rep(addl_params$pm.s[,3],nAnnual))
+  surv_priors <- priors[c("S_cv_min","S_cv_max")] 
+  names(surv_priors)<- gsub("S_","",names(surv_priors),fixed=T)
+  datal <- c(datal,surv_priors)
+
+  # Setting parameters that you want to monitor
+  params = c("Sbar","Survival") 
+  
+  # option2: seed setting
+  inits = parallel.seeds("base::BaseRNG", 2) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
+  
+  # MCMC settings
+  #TO DO: set # of output replicates
+  nc <- 2       # number of chains
+  ni <- 3000    # number of samples for each chain (10000)
+  nb <- 500    # number of samples to discard (1000)
+  nt <- 10      # thinning rate
+  
+  return(jagsRunAndSummarize(data,datal,params,fname,inits,nc,ni,nb,nt))
+}
+
+recFromBetaSummary<- function(R_bar,R_iv_mean,addl_params,fname="PopDynMod.txt"){
+  #####
+  # Model - assign model file name (needed to match with the file name in the model object in jags.model())
+  sink(fname)
+  cat("
+
+model {
+
+for (t in 1:nAnnual) {
+  pm.period[t]<-ifelse(t > pm.start && t <= pm.end, 1,0) # pm treated period (to set return 1, to turn off return 0)
+  for (k in 1:nPops) {
+	  mu.R[t,k]<- min(R[t,k] + pm.r[t]*pm.period[t],0.99) # Anything above 1 will be replaced by 1 (min-max truncation)
+    sig.R[t,k] <- min(cv.R[k]*mu.R[t,k],0.99*pow(mu.R[t,k]*(1-mu.R[t,k]),0.5)) 
+    alpha[t,k] <- ((1-mu.R[t,k])/pow(sig.R[t,k],2) - 1/mu.R[t,k]) * pow(mu.R[t,k],2)
+    beta[t,k] <- alpha[t,k] * (1/mu.R[t,k] - 1)
+    Rbar[t,k] <- alpha[t,k]/(alpha[t,k]+beta[t,k])
+    Recruitment[t,k] ~ dbeta(alpha[t,k],beta[t,k])T(0.01,0.99)
+}}
+
+for(i in 1:nObs) {
+  R[Annual[i],PopulationID[i]]<-max(r[i],0.01)
+  r[i]~dnorm(rmu[i], rtau[i]) 
+	rtau[i]<-1/pow(rsd[i],2) 
+}
+
+for (t in 1:nAnnual) {
+	pm.r[t]~dnorm(pmr.mu[t], pmr.tau[t])
+	pmr.tau[t]<-1/pow(pmr.sd[t],2)
+}
+
+for (k in 1:nPops) {
+  cv.R[k]~dunif(cv_min,cv_max)
+}
+
+}
+
+", fill = TRUE)
+  sink()
+  
+  ### Define data, parameters, initials and settings
+  # Setting the data that you want to pass the model objects
+  data <- R_bar
+  data <- data[order(data$Annual,data$PopulationName),]
+  data$PopulationID <- as.factor(data$PopulationName)
+  #TO DO: add interannual variation
+  nAnnual <- length(unique(data$Annual))
+  
+  datal = list(
+    nObs = nrow(data),
+    nAnnual=nAnnual,
+    Annual = as.integer(data$Annual),
+    nPops=length(unique(data$PopulationName)),
+    PopulationID = as.integer(data$PopulationID),
+    rmu=data$mean,
+    rsd=data$sd,
+    pm.start=addl_params$pm.start,
+    pm.end=addl_params$pm.end,
+    pmr.mu = rep(addl_params$pm.r[,2],nAnnual),
+    pmr.sd = rep(addl_params$pm.r[,3],nAnnual))
+  surv_priors <- priors[c("R_cv_min","R_cv_max")] 
+  names(surv_priors)<- gsub("R_","",names(surv_priors),fixed=T)
+  datal <- c(datal,surv_priors)
+  
+  # Setting parameters that you want to monitor
+  params = c("Rbar","Recruitment") 
+
+  inits = parallel.seeds("base::BaseRNG", 2) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
+  
+  # MCMC settings
+  #TO DO: set # of output replicates
+  nc <- 2       # number of chains
+  ni <- 3000    # number of samples for each chain (10000)
+  nb <- 500    # number of samples to discard (1000)
+  nt <- 10      # thinning rate
+  
+  return(jagsRunAndSummarize(data,datal,params,fname,inits,nc,ni,nb,nt))
+}
+
+ratesFromBetaSummary <- function(numSteps, replicates, N0, R_bar, S_bar,
+                     R_iv_mean, S_iv_mean,  scn_nm, addl_params){
+  #Assumes time-varying covariates, gaussian distributed variation in means, beta distributed interannual variation
+  #Adapted from Shimoda QC workflow
+
+  surv_fit <- survivalFromBetaSummary(S_bar,S_iv_mean,addl_params)
+  recruit_fit <- survivalFromBetaSummary(R_bar,R_iv_mean,addl_params)
+  
+  stop()
+
+  
+  #RESUME HERE
+  #then use trajectoriesFromBayesian method for the rest
+  #Allowing running without pop mgmt params
+  #Check to confirm results match expectations without pop mgmt.
+  #Compare results with pop mgmt to Shimoda
+  
 }

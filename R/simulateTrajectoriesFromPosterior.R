@@ -76,7 +76,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
   data_rec = rec_pred$data
   
   S_lookup = unique(subset(data_sur,select=c(Annual,PopulationID)))
-  R_lookup =  subset(data_rec,select=c(Annual,PopulationID))
+  R_lookup =  unique(subset(data_rec,select=c(Annual,PopulationID)))
   
   if(class(surv_pred$samples)=="mcmc.list"){
     nns <- colnames(surv_pred$samples[[1]])
@@ -112,7 +112,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
     rec[1,1:nrow(rec2),1:ncol(rec2)]<-rec2[1:nrow(rec2),1:ncol(rec2)]
     R_lookup = R_lookup[order(R_lookup$PopulationID,R_lookup$Annual),]
   }
-
+  
   years = sort(unique(rec_pred$data$Annual))
   
   #force correlation between mean recruitment and mean survival

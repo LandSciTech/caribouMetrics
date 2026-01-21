@@ -41,7 +41,11 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   
   if(is.null(N0)){
     if(is.element("N0",names(bayesianResults$parTab))){
-      N0 <- unique(subset(bayesianResults$parTab,select=c(PopulationName,N0)))
+      if(class(bayesianResults$parTab)=="list"){
+        N0 <- unique(subset(bayesianResults$parTab$N0,select=c(PopulationName,N0)))
+      }else{
+        N0 <- unique(subset(bayesianResults$parTab,select=c(PopulationName,N0)))
+      }
     }else{
       N0 <- eval(formals(trajectoriesFromNational)$N0)
     }
@@ -87,7 +91,11 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   pars <- merge(pars,parsBar)
   nrow(pars)
   
-  pi <- bayesianResults$parTab
+  if(class(bayesianResults$parTab)=="list"){
+    pi <- bayesianResults$parTab$N0
+  }else{
+    pi <- bayesianResults$parTab
+  }
   pi$R_bar=NULL;pi$S_bar=NULL;pi$N0=NULL
   pars <- merge(pars,pi)
   

@@ -48,7 +48,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     }
     ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb) 
     
-    ret$parTab <- merge(ret$parTab,N0)
+    ret$parTab$N0 <- merge(N0,disturbance)
     
     return(ret)
   }

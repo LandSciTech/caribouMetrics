@@ -10,7 +10,21 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
   recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb)
   
-  parTab <- rbind(recruit_fit$summaries,surv_fit$summaries)
+  
+  summaries <- rbind(recruit_fit$summaries,surv_fit$summaries)
+  
+  parTab <- list(numSteps=1)
+  parTab$Recruitment <- subset(summaries,MetricTypeID=="Recruitment")
+  parTab$Survival <- subset(summaries,MetricTypeID=="Survival")
+  parTab$Rbar <- subset(summaries,MetricTypeID=="Rbar")
+  parTab$Sbar <- subset(summaries,MetricTypeID=="Sbar")
+  parTab$Siv <- priors#subset(summaries,MetricTypeID=="sig.R")
+  parTab$Riv <- priors#subset(summaries,MetricTypeID=="sig.R")
+  parTab$type <- "betaTime"
+
+  #numSteps, replicates, N0, R_bar, S_bar, R_sd, S_sd,
+  #R_iv_mean, R_iv_shape, S_iv_mean, S_iv_shape,  
+  #scn_nm, type = "logistic"
   
   return(list(parTab=parTab,surv_fit=surv_fit,recruit_fit=recruit_fit))
 }
@@ -123,7 +137,7 @@ model {
     sink()
   
   # Setting parameters - setting parameters that you want to monitor
-  params = c("Sbar","Survival","sig.S")
+  params = c("Sbar","Survival")
   
   # Setting initial values - not assigned
   inits1 <- list(b0 = rnorm(datal$nPops, 3, 2),b1 = rnorm(datal$nPops, 0, 2)) 
@@ -131,39 +145,8 @@ model {
   inits3 <- list(b0 = rnorm(datal$nPops, 3, 2),b1 = rnorm(datal$nPops, 0, 2)) 
   inits <- list(inits1,inits2,inits3)
   
-  # option2: seed setting
-  # inits = parallel.seeds("base::BaseRNG", 2) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
-  
-  #################################################################################################################
-  ### Running JAGS
-  # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed)
-  model.fit <- rjags::jags.model(file=surv_mod_fl, data=datal, n.adapt=nb, n.chains = nc)
-  
-  # To get samples from the posterior distribution of the parameters
-  update(model.fit, n.iter=ni)
-  model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt)
-  surv_data <- subset(data,is.element(Year,disturbance$Year))
-  
-  ### Output data preparation
-  # Summary statistics of mcmc
-  stats <- summary(model.samples)
-  
-  # Preparing projected data
-  parameter_stats <-cbind(as.data.frame(stats[1]),as.data.frame(stats[2])) # append chains of mcmc.list into a data frame (add stats[3] if use 3 chains)
-  
-  # Split node by monitored variables
-  Survival <- summarizeMonitoredNode(parameter_stats,"Survival",data)
-  Sbar <- summarizeMonitoredNode(parameter_stats,"Sbar",data)
-  Siv <- summarizeMonitoredNode(parameter_stats,"sig.S",data)
-  
-  summaries <- rbind(Survival,Sbar,Siv)
-  summaries$node <- NULL
-  
-  for(i in 1:length(model.samples)){
-    model.samples[[i]] <- model.samples[[i]][,c(Sbar$node,Survival$node)]
-  }
-  return(list(data=data,samples=model.samples,summaries=summaries)) 
-  
+  return(jagsRunAndSummarize(data,datal,params,fname=surv_mod_fl,inits=inits,nc=nc,ni=ni,nb=nb,nt=nt))
+
 }
 
 betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
@@ -321,7 +304,7 @@ model {
   
   ######## Define data, parameters, initials and settings #####
   # Setting parameters - setting parameters that you want to monitor
-  params = c("Rbar","Recruitment","sig.R")
+  params = c("Rbar","Recruitment")
 
   # Setting initial values
   inits1 <- list(b0 = rnorm(datal$nPops,-1, 2)) 
@@ -329,40 +312,7 @@ model {
   inits3 <- list(b0 = rnorm(datal$nPops,-1, 2)) 
   inits <- list(inits1,inits2,inits3)
   
-  # option2: seed setting
-  # inits = parallel.seeds("base::BaseRNG", 2) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
-  
-  ########################## Running JAGS ########################################################################
-  ### Running JAGS
-  # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed)
-
-  model.fit <- rjags::jags.model(file=rec_mod_fl, data=datal, n.adapt=nb, n.chains = nc)
-  
-  # To get samples from the posterior distribution of the parameters
-  update(model.fit, n.iter=ni)
-  model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt) #"bYear",
-  rec_data <- subset(rec_data,is.element(Year,disturbance$Year))
-  
-  #summarize
-  ### Output data preparation
-  # Summary statistics of mcmc
-  stats <- summary(model.samples)
-  
-  # Preparing projected data
-  parameter_stats <-cbind(as.data.frame(stats[1]),as.data.frame(stats[2])) # append chains of mcmc.list into a data frame (add stats[3] if use 3 chains)
-  
-  # Split node by monitored variables
-  Recruitment <- summarizeMonitoredNode(parameter_stats,"Recruitment",data)
-  Rbar <- summarizeMonitoredNode(parameter_stats,"Rbar",data)
-  Riv <- summarizeMonitoredNode(parameter_stats,"sig.R",data)
-  
-  summaries <- rbind(Recruitment,Rbar,Riv)
-  summaries$node <- NULL
-
-  for(i in 1:length(model.samples)){
-    model.samples[[i]] <- model.samples[[i]][,c(Rbar$node,Recruitment$node)]
-  }
-  return(list(data=rec_data,samples=model.samples,summaries=summaries)) 
+  return(jagsRunAndSummarize(data,datal,params,fname=rec_mod_fl,inits=inits,nc=nc,ni=ni,nb=nb,nt=nt))
   
 }
 
