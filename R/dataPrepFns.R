@@ -111,6 +111,10 @@ dataFromSheets <- function(survey_url, shiny_progress = FALSE, i18n = NULL){
   
   dat_desc <- googlesheets4::read_sheet(survey_url, desc_sh)
   
+  if(nrow(dat_desc) > 1){
+    stop(i18n$t("There is more than one row in the data description sheet. Please modify the sheet to have only one row."))
+  }
+  
   # desc_nms <- colnames(dat_desc)
   # 
   # if(length(desc_nms) > 1){
