@@ -681,7 +681,6 @@ for (k in 1:nPops) {
   data <- R_bar
   data <- data[order(data$Annual,data$PopulationName),]
   data$PopulationID <- as.factor(data$PopulationName)
-  #TO DO: add interannual variation
   nAnnual <- length(unique(data$Annual))
   
   datal = list(
@@ -723,13 +722,8 @@ ratesFromBetaSummary <- function(numSteps, replicates, N0, R_bar, S_bar,
   surv_fit <- survivalFromBetaSummary(S_bar,S_iv_mean,addl_params)
   recruit_fit <- survivalFromBetaSummary(R_bar,R_iv_mean,addl_params)
   
-  stop()
-
+  results <- list(parTab=N0,surv_fit=surv_fit,recruit_fit=recruit_fit)
   
-  #RESUME HERE
-  #then use trajectoriesFromBayesian method for the rest
-  #Allowing running without pop mgmt params
-  #Check to confirm results match expectations without pop mgmt.
-  #Compare results with pop mgmt to Shimoda
+  return(results)
   
 }

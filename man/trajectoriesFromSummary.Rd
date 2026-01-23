@@ -20,7 +20,8 @@ trajectoriesFromSummary(
   type = "logistic",
   addl_params = list(),
   doSummary = F,
-  returnSamples = T
+  returnSamples = T,
+  ...
 )
 }
 \arguments{
