@@ -2,74 +2,47 @@
 % Please edit documentation in R/trajectoriesFromSummary.R
 \name{trajectoriesFromSummary}
 \alias{trajectoriesFromSummary}
-\title{Do multiple caribouPopGrowth runs}
+\title{Projections of population growth from demographic model summaries.}
 \usage{
 trajectoriesFromSummary(
-  numSteps,
   replicates,
   N0,
-  R_bar,
-  S_bar,
-  R_sd,
-  S_sd,
-  R_iv_mean,
-  R_iv_shape,
-  S_iv_mean,
-  S_iv_shape,
-  scn_nm,
-  type = "logistic",
+  Rbar,
+  Sbar,
+  Riv,
+  Siv,
+  type = "beta",
   addl_params = list(),
-  doSummary = F,
+  doSummary = T,
   returnSamples = T,
+  nthin = formals(bboutools::bb_fit_survival)$nthin,
   ...
 )
 }
 \arguments{
-\item{numSteps}{Number. Number of years to project.}
-
 \item{replicates}{}
 
-\item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
+\item{Rbar, Sbar}{Mean and standard deviation of R_bar and S_bar over time. See \code{estimateBayesianRates()$parList} for expected form.}
 
-\item{R_bar}{Number or vector of numbers. Expected recruitment rate (calf:cow
-ratio) for one or more sample populations.}
+\item{Riv, Siv}{Parameters defining the distribution of interannual variation. See \code{estimateBayesianRates()$parList} for expected form.}
 
-\item{S_bar}{Number or vector of numbers. Expected adult female survival for
-one or more sample populations.}
+\item{type}{The distribution of interannual variation varies between "beta" or "bbou" model types.}
 
-\item{R_sd, S_sd}{standard deviation of R_bar and S_bar}
-
-\item{R_iv_mean, R_iv_shape, S_iv_mean, S_iv_shape}{define the mean and shape of the interannual variation}
-
-\item{scn_nm}{Sceanrio name}
-
-\item{type}{"logistic" or "beta" defines how demographic rates are sampled from the given mean and standard deviation.}
-
-\item{addl_params}{a list of additional parameters for \code{caribouPopGrowth}}
+\item{addl_params}{TO DO explain population mgmt parameters}
 
 \item{doSummary}{logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth.
 If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.}
 
 \item{returnSamples}{logical. If FALSE returns only summaries. If TRUE
 returns example trajectories as well.}
+
+\item{...}{Additional arguments passed to \code{caribouPopGrowth}}
 }
 \value{
 a data.frame
 }
 \description{
-Do multiple caribouPopGrowth runs
-}
-\examples{
- outParTab <- trajectoriesFromSummary(
-   numSteps = 5, replicates = 2, N0 = NA, R_bar = 0.18, S_bar = 0.87,
-   R_sd = 0.085, S_sd = 0.16,
-   R_iv_mean = 0.34, S_iv_mean = 0.31,
-   R_iv_shape = 18, S_iv_shape = 3.3,
-   scn_nm = "base", addl_params = NULL, type = "logistic"
- )
- outParTab
-
+Projections of population growth from demographic model summaries.
 }
 \seealso{
 Caribou demography functions:
@@ -92,6 +65,7 @@ Caribou demography functions:
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},
-\code{\link{trajectoriesFromNational}()}
+\code{\link{trajectoriesFromNational}()},
+\code{\link{trajectoriesFromSummaryForApp}()}
 }
 \concept{demography}

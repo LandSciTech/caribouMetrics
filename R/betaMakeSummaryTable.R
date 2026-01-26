@@ -13,20 +13,16 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   
   summaries <- rbind(recruit_fit$summaries,surv_fit$summaries)
   
-  parTab <- list(numSteps=1)
-  parTab$Recruitment <- subset(summaries,MetricTypeID=="Recruitment")
-  parTab$Survival <- subset(summaries,MetricTypeID=="Survival")
-  parTab$Rbar <- subset(summaries,MetricTypeID=="Rbar")
-  parTab$Sbar <- subset(summaries,MetricTypeID=="Sbar")
-  parTab$Siv <- priors#subset(summaries,MetricTypeID=="sig.R")
-  parTab$Riv <- priors#subset(summaries,MetricTypeID=="sig.R")
-  parTab$type <- "betaTime"
-
-  #numSteps, replicates, N0, R_bar, S_bar, R_sd, S_sd,
-  #R_iv_mean, R_iv_shape, S_iv_mean, S_iv_shape,  
-  #scn_nm, type = "logistic"
+  parList <- list()
+  parList$Recruitment <- subset(summaries,MetricTypeID=="Recruitment")
+  parList$Survival <- subset(summaries,MetricTypeID=="Survival")
+  parList$Rbar <- subset(summaries,MetricTypeID=="Rbar")
+  parList$Sbar <- subset(summaries,MetricTypeID=="Sbar")
+  parList$Siv <- priors#subset(summaries,MetricTypeID=="sig.R")
+  parList$Riv <- priors#subset(summaries,MetricTypeID=="sig.R")
+  parList$type <- "beta"
   
-  return(list(parTab=parTab,surv_fit=surv_fit,recruit_fit=recruit_fit))
+  return(list(parList=parList,surv_fit=surv_fit,recruit_fit=recruit_fit))
 }
 
 betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){

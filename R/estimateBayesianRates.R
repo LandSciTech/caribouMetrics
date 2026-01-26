@@ -16,7 +16,7 @@
 #'   `bboutools::bb_fit_recruitment`.
 #'
 #' @return If `return_mcmc` is TRUE then a list with results and fitted models,
-#'   if FALSE just the results table is returned.
+#'   if FALSE just the results summaries are returned.
 #' @export
 #' @family demography
 #'
@@ -39,7 +39,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
 
   # MCMC settings - (bboutools default: 1000 MCMC samples from 3 chains, number of )
   nc <- 3      # number of chains
-  ni <- niters * nthin * 2   # number of samples for each chain
+  ni <- niters * nthin   # number of samples for each chain
   nb <- ni / 2    # number of samples to discard as burnin
   
   if(!is.null(disturbance)){
@@ -48,8 +48,15 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     }
     ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb) 
     
-    ret$parTab$N0 <- merge(N0,disturbance)
+    ret$parList$N0 <- merge(N0,disturbance)
     
+    if(nrow(unique(subset(disturbance,select=c(-Year))))==1){
+      stop("Make parTab for this case")
+      
+    }else{
+       ret$parTab <- merge(N0,disturbance)
+    }
+
     return(ret)
   }
   
@@ -139,6 +146,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
       ))
     }
   }
+
   # dplyr version, not using but might want to some day...
   # R_samp %>% as_tibble(rownames = "id") %>%
   #   # move PopulationName from column name to value
@@ -173,6 +181,8 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   data_amt <- merge(surv_data_amt, recruit_data_amt)
   parTab = merge(parTab,N0)
   parTab = merge(parTab, data_amt)
+  
+  stop("Make parList for this case.")
   
   if(return_mcmc){
     if(length(unique(surv_fit$data$Month))>1){

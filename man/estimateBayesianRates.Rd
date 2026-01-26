@@ -45,7 +45,7 @@ models. Default FALSE.}
 }
 \value{
 If \code{return_mcmc} is TRUE then a list with results and fitted models,
-if FALSE just the results table is returned.
+if FALSE just the results summaries are returned.
 }
 \description{
 Create summary table of demographic rates from survival and recruitment surveys
@@ -76,6 +76,7 @@ Caribou demography functions:
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},
 \code{\link{trajectoriesFromNational}()},
-\code{\link{trajectoriesFromSummary}()}
+\code{\link{trajectoriesFromSummary}()},
+\code{\link{trajectoriesFromSummaryForApp}()}
 }
 \concept{demography}

@@ -242,5 +242,6 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   
   return(list(result = rr, 
               inData = list(disturbanceIn = disturbance),
-              parTab = bbouResults$parTab))
+              parTab = bbouResults$parTab,
+              parList = bbouResults$parList))
 }

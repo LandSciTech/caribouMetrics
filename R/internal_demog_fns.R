@@ -558,7 +558,7 @@ jagsRunAndSummarize <- function(data,datal,params,fname,inits,nc,ni,nb,nt){
   return(list(data=data,samples=model.samples,summaries=summaries)) 
 }
 
-survivalFromBetaSummary<- function(S_bar,S_iv_mean,addl_params,fname="PopDynMod.txt"){
+betaSurvivalFromSummary<- function(Sbar,Siv,addl_params,nc,nt,ni,nb,fname="SurvPopDynMod.txt"){
   #####
   # Model - assign model file name (needed to match with the file name in the model object in jags.model())
   sink(fname)
@@ -599,11 +599,15 @@ for (k in 1:nPops) {
   
   ### Define data, parameters, initials and settings
   # Setting the data that you want to pass the model objects
-  data <- S_bar
+  data <- Sbar
   data <- data[order(data$Annual,data$PopulationName),]
   data$PopulationID <- as.factor(data$PopulationName)
   #TO DO: add interannual variation
   nAnnual <- length(unique(data$Annual))
+  
+  # Setting the population management timing and duration
+  pm.start <- addl_params$pm.startYear-min(data$Year) # vector location
+  pm.end <- addl_params$pm.endYear-min(data$Year)  # vector location
   
   datal = list(
     nObs = nrow(data),
@@ -613,11 +617,11 @@ for (k in 1:nPops) {
     PopulationID = as.integer(data$PopulationID),
     smu=data$mean,
     ssd=data$sd,
-    pm.start=addl_params$pm.start,
-    pm.end=addl_params$pm.end,
+    pm.start=pm.start,
+    pm.end=pm.end,
     pms.mu = rep(addl_params$pm.s[,2],nAnnual),
     pms.sd = rep(addl_params$pm.s[,3],nAnnual))
-  surv_priors <- priors[c("S_cv_min","S_cv_max")] 
+  surv_priors <- Siv[c("S_cv_min","S_cv_max")] 
   names(surv_priors)<- gsub("S_","",names(surv_priors),fixed=T)
   datal <- c(datal,surv_priors)
 
@@ -625,19 +629,12 @@ for (k in 1:nPops) {
   params = c("Sbar","Survival") 
   
   # option2: seed setting
-  inits = parallel.seeds("base::BaseRNG", 2) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
-  
-  # MCMC settings
-  #TO DO: set # of output replicates
-  nc <- 2       # number of chains
-  ni <- 3000    # number of samples for each chain (10000)
-  nb <- 500    # number of samples to discard (1000)
-  nt <- 10      # thinning rate
+  inits = parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
   
   return(jagsRunAndSummarize(data,datal,params,fname,inits,nc,ni,nb,nt))
 }
 
-recFromBetaSummary<- function(R_bar,R_iv_mean,addl_params,fname="PopDynMod.txt"){
+betaRecruitmentFromSummary<- function(Rbar,Riv,addl_params,nc,nt,ni,nb,fname="RecPopDynMod.txt"){
   #####
   # Model - assign model file name (needed to match with the file name in the model object in jags.model())
   sink(fname)
@@ -678,10 +675,14 @@ for (k in 1:nPops) {
   
   ### Define data, parameters, initials and settings
   # Setting the data that you want to pass the model objects
-  data <- R_bar
+  data <- Rbar
   data <- data[order(data$Annual,data$PopulationName),]
   data$PopulationID <- as.factor(data$PopulationName)
   nAnnual <- length(unique(data$Annual))
+  
+  # Setting the population management timing and duration
+  pm.start <- addl_params$pm.startYear-min(data$Year) # vector location
+  pm.end <- addl_params$pm.endYear-min(data$Year)  # vector location
   
   datal = list(
     nObs = nrow(data),
@@ -691,39 +692,35 @@ for (k in 1:nPops) {
     PopulationID = as.integer(data$PopulationID),
     rmu=data$mean,
     rsd=data$sd,
-    pm.start=addl_params$pm.start,
-    pm.end=addl_params$pm.end,
+    pm.start=pm.start,
+    pm.end=pm.end,
     pmr.mu = rep(addl_params$pm.r[,2],nAnnual),
     pmr.sd = rep(addl_params$pm.r[,3],nAnnual))
-  surv_priors <- priors[c("R_cv_min","R_cv_max")] 
-  names(surv_priors)<- gsub("R_","",names(surv_priors),fixed=T)
-  datal <- c(datal,surv_priors)
+  rec_priors <- Riv[c("R_cv_min","R_cv_max")] 
+  names(rec_priors)<- gsub("R_","",names(rec_priors),fixed=T)
+  datal <- c(datal,rec_priors)
   
   # Setting parameters that you want to monitor
   params = c("Rbar","Recruitment") 
 
-  inits = parallel.seeds("base::BaseRNG", 2) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
-  
-  # MCMC settings
-  #TO DO: set # of output replicates
-  nc <- 2       # number of chains
-  ni <- 3000    # number of samples for each chain (10000)
-  nb <- 500    # number of samples to discard (1000)
-  nt <- 10      # thinning rate
+  inits = parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
   
   return(jagsRunAndSummarize(data,datal,params,fname,inits,nc,ni,nb,nt))
 }
 
-ratesFromBetaSummary <- function(numSteps, replicates, N0, R_bar, S_bar,
-                     R_iv_mean, S_iv_mean,  scn_nm, addl_params){
-  #Assumes time-varying covariates, gaussian distributed variation in means, beta distributed interannual variation
+ratesFromBetaSummary <- function(N0, Rbar, Sbar, Riv, Siv, addl_params, replicates, nthin){
+  #Assumes gaussian distributed variation in means, beta distributed interannual variation
   #Adapted from Shimoda QC workflow
+  
+  nc <- 2      # number of chains
+  niters <- round(replicates/nc)
+  ni <- niters * nthin   # number of samples for each chain
+  nb <- ni / 2    # number of samples to discard as burnin
 
-  surv_fit <- survivalFromBetaSummary(S_bar,S_iv_mean,addl_params)
-  recruit_fit <- survivalFromBetaSummary(R_bar,R_iv_mean,addl_params)
+  surv_fit <- betaSurvivalFromSummary(Sbar,Siv,addl_params,nc,nthin,ni,nb)
+  recruit_fit <- betaRecruitmentFromSummary(Rbar,Riv,addl_params,nc,nthin,ni,nb)
   
   results <- list(parTab=N0,surv_fit=surv_fit,recruit_fit=recruit_fit)
   
   return(results)
-  
 }

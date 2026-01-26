@@ -95,6 +95,7 @@ Caribou demography functions:
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},
-\code{\link{trajectoriesFromSummary}()}
+\code{\link{trajectoriesFromSummary}()},
+\code{\link{trajectoriesFromSummaryForApp}()}
 }
 \concept{demography}

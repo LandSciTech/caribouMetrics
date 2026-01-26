@@ -41,6 +41,7 @@ Caribou demography functions:
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},
 \code{\link{trajectoriesFromNational}()},
-\code{\link{trajectoriesFromSummary}()}
+\code{\link{trajectoriesFromSummary}()},
+\code{\link{trajectoriesFromSummaryForApp}()}
 }
 \concept{demography}
