@@ -579,8 +579,7 @@ for (t in 1:nAnnual) {
 
 for(i in 1:nObs) {
   S[Annual[i],PopulationID[i]]<-max(s[i],0.01)
-  s[i]~dnorm(smu[i], stau[i]) 
-	stau[i]<-1/pow(ssd[i],2) 
+  s[i]<- smu[i] + ssd[i]*qq[PopulationID[i]] #for each replicate, variation in expected survival is consistent over time.
 }
 
 for (t in 1:nAnnual) {
@@ -589,6 +588,7 @@ for (t in 1:nAnnual) {
 }
 
 for (k in 1:nPops) {
+  qq[k]~dnorm(0,1)
   cv.S[k]~dunif(cv_min,cv_max)
 }
 
@@ -655,8 +655,7 @@ for (t in 1:nAnnual) {
 
 for(i in 1:nObs) {
   R[Annual[i],PopulationID[i]]<-max(r[i],0.01)
-  r[i]~dnorm(rmu[i], rtau[i]) 
-	rtau[i]<-1/pow(rsd[i],2) 
+  r[i] <- rmu[i] + rsd[i]*qq[PopulationID[i]]  
 }
 
 for (t in 1:nAnnual) {
@@ -665,6 +664,7 @@ for (t in 1:nAnnual) {
 }
 
 for (k in 1:nPops) {
+  qq[k]~dnorm(0,1)
   cv.R[k]~dunif(cv_min,cv_max)
 }
 
