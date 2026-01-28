@@ -312,3 +312,53 @@ model {
   
 }
 
+jagsRunAndSummarize <- function(data,datal,params,fname,inits,nc,ni,nb,nt){
+  #################################################################################################################
+  ### Running JAGS
+  # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed
+  if(!file.exists(fname)){stop()}
+  model.fit <- rjags::jags.model(file=fname, data=datal, n.adapt=nb, n.chains = nc,inits = inits)
+  
+  # To get samples from the posterior distribution of the parameters
+  update(model.fit, n.iter=ni)
+  model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt)
+  
+  ### Output data preparation
+  # Summary statistics of mcmc
+  stats <- summary(model.samples)
+  
+  # Preparing projected data
+  parameter_stats <-cbind(as.data.frame(stats[1]),as.data.frame(stats[2])) # append chains of mcmc.list into a data frame (add stats[3] if use 3 chains)
+  
+  # Split node by monitored variables
+  for(p in 1:length(params)){
+    pp <- summarizeMonitoredNode(parameter_stats,params[p],data)
+    if(p==1){
+      summaries <- pp
+    }else{
+      summaries <- rbind(summaries,pp)
+    }
+  }
+  summaries$node <- NULL
+  return(list(data=data,samples=model.samples,summaries=summaries)) 
+}
+
+summarizeMonitoredNode <- function(parameter_stats,node,data){
+  Rpred <- parameter_stats[grep(node, rownames(parameter_stats)),]
+  Rpred <- cbind(rownames(Rpred), data.frame(Rpred, row.names = NULL)) # convert row names as first column
+  
+  Rpred <- Rpred %>%
+    rename("node"="rownames(Rpred)",
+           "mean"="statistics.Mean",
+           "sd"="statistics.SD",
+           "lower"="quantiles.2.5.",
+           "upper"="quantiles.97.5.") %>%
+    select(c("node","mean","sd","lower","upper"))
+  data$node <- paste0(node,"[",as.integer(data$Annual),",",as.integer(data$PopulationID),"]")
+  Rpred <- merge(Rpred,subset(data,select=intersect(names(data),c("node","Year","PopulationName","Annual","Anthro","fire_excl_anthro"))))
+  Rpred <- Rpred[order(Rpred$Year,Rpred$PopulationName),]
+  Rpred$MetricTypeID = node
+  return(Rpred)
+}
+
+
