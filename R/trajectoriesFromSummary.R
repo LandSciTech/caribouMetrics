@@ -23,7 +23,12 @@ trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv,
                   nthin=formals(bboutools::bb_fit_survival)$nthin,...){
 
   # TO DO: check for expected elements of input args
-
+  #Finish documenting trajectoriesFromSummary
+  #Tests for trajectoriesFromSummary
+  #Update vignettes to use trajectoriesFromSummary, and add variation over time + population mgmt example to vignettes.
+  #Think about reducing compute requirements for disturbance projection updating.
+  #Eventually - update app to include disturbance, and remove trajectoriesFromSummaryForApp and associated parTab.
+  
   if(type=="beta"){
     results <- ratesFromBetaSummary(N0, Rbar, Sbar, Riv, Siv, addl_params, replicates, nthin)
   }else{

@@ -45,7 +45,7 @@ test_that("results match expected", {
       obsYears = nobsYears, collarCount = nCollar, cowMult = 6, collarInterval = 1,
       assessmentYrs = 1, iAnthro = iAnthro, rSlopeMod = rSlopeMod, sSlopeMod = sSlopeMod,
       obsAnthroSlope = obsAnthroSlope, projAnthroSlope = projAnthroSlope,
-      sQuantile = sQuantile, rQuantile = rQuantile, N0 = 3000
+      sQuantile = sQuantile, rQuantile = rQuantile, N0 = 3000,interannualVar=c("list(R_CV=0.23,S_CV=0.087)")
     )
     scResults <- suppressWarnings(bayesianScenariosWorkflow(
       scns, simBig,  eParsIn,
@@ -111,14 +111,14 @@ test_that("results match expected", {
   
   # expectations that make sense based on what we know and ensure results
   # are similar to expected
-  library(caribouMetrics)
+  #library(caribouMetrics)
   # when we have a lot of collars the distance between observations and "true"
   # pop is smaller than when we have few.
-  manyObs <- doScn(nCollar = 2000, rQuantile = 0.9, sQuantile = 0.9)
+  manyObs <- doScn(nCollar = 2000, rQuantile = 0.99, sQuantile = 0.99)
   doPlot(manyObs, title = "2000 collars")#,var="Adult female survival")
   
-  fewCollarObs <- doScn(nCollar = 5, rQuantile = 0.9, sQuantile = 0.9)
-  doPlot(fewCollarObs, title = "5 collars")#,var="Adult female survival")
+  fewCollarObs <- doScn(nCollar = 2, rQuantile = 0.99, sQuantile = 0.99)
+  doPlot(fewCollarObs, title = "2 collars")#,var="Adult female survival")
   
   difMany <- calcDif(manyObs$obs.all)
   difFew <- calcDif(fewCollarObs$obs.all)

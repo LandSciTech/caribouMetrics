@@ -23,7 +23,8 @@ caribouPopGrowth(
   c = 1,
   interannualVar = list(R_CV = 0.46, S_CV = 0.08696),
   probOption = "binomial",
-  progress = interactive()
+  progress = interactive(),
+  warn = T
 )
 }
 \arguments{

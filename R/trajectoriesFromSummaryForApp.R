@@ -78,7 +78,7 @@ trajectoriesFromSummaryForApp <- function(numSteps, replicates, N0, R_bar, S_bar
       N0 = N0, numSteps = numSteps, R_samp = varSample$R_t, S_samp = varSample$S_t,
       interannualVar = interannualVar,
       # using simplified model version but keeping discrete animals
-      l_S = 0, h_R = 1,...),
+      l_S = 0, h_R = 1),
     addl_params)) %>%
     mutate(type = "samp", scn = scn_nm)
   
@@ -87,7 +87,7 @@ trajectoriesFromSummaryForApp <- function(numSteps, replicates, N0, R_bar, S_bar
     list(
       N0 = mean(N0), numSteps = numSteps, R_samp = R_bar, S_samp = S_bar,
       # using simplified model version with no stochasticity
-      interannualVar = NA, probOption = "continuous", l_S = 0, h_R = 1,...),
+      interannualVar = NA, probOption = "continuous", l_S = 0, h_R = 1),
     addl_params)) %>%
     mutate(type = "mean", scn = scn_nm)
   
@@ -150,7 +150,7 @@ simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynami
       out <- caribouPopGrowth(N0,
                               numSteps = stepLength,
                               interannualVar = interannualVar,
-                              R_bar = R_use[,1], S_bar = S_use[,1], ...
+                              R_bar = R_use[,1], S_bar = S_use[,1],warn=F, ...
       )
       
       if(is.null(rownames(R_use))){
@@ -176,7 +176,7 @@ simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynami
       }
       outBit <- caribouPopGrowth(outBit$N,
                                  numSteps = stepLength, interannualVar = interannualVar,
-                                 R_bar = R_use[,1], S_bar = S_use[,1], ...
+                                 R_bar = R_use[,1], S_bar = S_use[,1],warn=F, ...
       )
       if(is.null(rownames(R_use))){
         outBit$id <- seq(1, nrow(outBit))

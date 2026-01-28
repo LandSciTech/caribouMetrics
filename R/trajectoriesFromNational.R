@@ -200,7 +200,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
                   caribouPopGrowth(pars$N0, R_bar = pars$R_bar,
                                    S_bar = pars$S_bar, numSteps = numSteps,
                                    K = FALSE, c = pars$c,
-                                   interannualVar=interannualVar, progress = FALSE))
+                                   interannualVar=interannualVar, progress = FALSE,warn=FALSE))
   }
   
   

@@ -55,6 +55,7 @@ test_that("Error if trajs does not include the selected disturbance scenario, an
 })
 
 test_that("The trajectory can include disturbance", {
+  #devtools::document();devtools::load_all()
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 100)
   mod_reald <- estimateBayesianRates(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 

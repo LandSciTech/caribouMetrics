@@ -484,12 +484,12 @@ To allow for the possibility of using fitted Bayesian models as a starting point
 ```{r,trajectoriesFromSummary,message=F, warning=T}
 pt <- bbouInformative$parTab;pt
 
-popMetricsBase <- trajectoriesFromSummary(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
+popMetricsBase <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
                                              R_sd=pt$R_sd,S_sd=pt$S_sd,
                                              R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
                                              S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,
                                              scn_nm="base",doSummary=T)
-popMetricsS85 <- trajectoriesFromSummary(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=0.85,
+popMetricsS85 <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=0.85,
                                              R_sd=pt$R_sd,S_sd=pt$S_sd,
                                              R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
                                              S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,

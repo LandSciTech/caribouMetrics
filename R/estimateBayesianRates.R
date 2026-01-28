@@ -35,7 +35,6 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   if(is.null(i18n)){
     i18n <- list(t = function(x)paste0(x))
   }
-  
 
   # MCMC settings - (bboutools default: 1000 MCMC samples from 3 chains, number of )
   nc <- 3      # number of chains
@@ -51,12 +50,17 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     ret$parList$N0 <- merge(N0,disturbance)
     
     if(nrow(unique(subset(disturbance,select=c(-Year))))==1){
-      stop("Make parTab for this case")
       
+      rbar <- unique(subset(ret$parList$Rbar,select=c(mean,sd,lower,upper,PopulationName,Anthro,fire_excl_anthro)))
+      names(rbar)[1:4] <- c("R_bar","R_sd","R_bar_lower","R_bar_upper")
+      sbar <- unique(subset(ret$parList$Sbar,select=c(mean,sd,lower,upper,PopulationName)))
+      names(sbar)[1:4] <- c("S_bar","S_sd","S_bar_lower","S_bar_upper")
+      ivs <- data.frame(R_iv_mean=(ret$parList$Riv$R_cv_min+ret$parList$Riv$R_cv_max)/2,R_iv_shape=NA,
+                        S_iv_mean=(ret$parList$Siv$S_cv_min+ret$parList$Siv$S_cv_max)/2,S_iv_shape=NA)
+      ret$parTab <- merge(merge(merge(rbar,sbar),N0),ivs)
     }else{
        ret$parTab <- merge(N0,disturbance)
     }
-
     return(ret)
   }
   
@@ -181,8 +185,15 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   data_amt <- merge(surv_data_amt, recruit_data_amt)
   parTab = merge(parTab,N0)
   parTab = merge(parTab, data_amt)
-  
-  stop("Make parList for this case.")
+
+  parList = list()
+  parList$Rbar <- subset(parTab,select=c(R_bar,R_sd,R_bar_lower,R_bar_upper,PopulationName))
+  names(parList$Rbar)[1:4] = c("mean","sd","lower","upper")
+  parList$Sbar <- subset(parTab,select=c(S_bar,S_sd,S_bar_lower,S_bar_upper,PopulationName))
+  names(parList$Rbar)[1:4] = c("mean","sd","lower","upper")
+  parList$Siv <- subset(parTab,select=c(S_iv_mean,S_iv_shape))
+  parList$Riv <- subset(parTab,select=c(R_iv_mean,R_iv_shape))
+  parList$type <- "bbou"
   
   if(return_mcmc){
     if(length(unique(surv_fit$data$Month))>1){
@@ -191,7 +202,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
         newYr[(surv_fit$data$Year==surv_fit$data$Annual)&(as.numeric(as.character(surv_fit$data$Month))<formals(bboutools::bb_fit_survival)$year_start)]+1
       surv_fit$data$Year = newYr
     }
-    return(list(parTab=parTab,surv_fit=surv_fit,recruit_fit=recruit_fit))
+    return(list(parTab=parTab,oarList=parList,surv_fit=surv_fit,recruit_fit=recruit_fit))
   }else{
     return(parTab)
   }
