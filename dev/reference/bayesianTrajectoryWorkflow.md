@@ -130,7 +130,8 @@ Caribou demography functions:
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
-[`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)
+[`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
+[`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
 
 ## Examples
 
@@ -260,14 +261,34 @@ Caribou demography functions:
 #> warning: problem initializing stochastic node Calves[4]: logProb is NA or NaN.
 #> Warning: no non-missing arguments to max; returning -Inf
   str(mod, max.level = 2)
-#> List of 2
-#>  $ result:List of 4
+#> List of 4
+#>  $ result :List of 4
 #>   ..$ summary     :'data.frame': 310 obs. of  8 variables:
 #>   ..$ surv_data   :'data.frame': 372 obs. of  9 variables:
 #>   ..$ recruit_data: tibble [31 × 9] (S3: tbl_df/tbl/data.frame)
-#>   ..$ popInfo     :'data.frame': 3000 obs. of  5 variables:
-#>  $ inData:List of 1
+#>   ..$ popInfo     :'data.frame': 3000 obs. of  4 variables:
+#>  $ inData :List of 1
 #>   ..$ disturbanceIn: NULL
+#>  $ parTab :'data.frame': 1 obs. of  18 variables:
+#>   ..$ PopulationName: chr "A"
+#>   ..$ R_bar         : num 0.189
+#>   ..$ R_sd          : num 0.0843
+#>   ..$ R_iv_mean     : num 0.345
+#>   ..$ R_iv_shape    : num 18.8
+#>   ..$ R_bar_lower   : num 0.164
+#>   ..$ R_bar_upper   : num 0.215
+#>   ..$ S_bar         : num 0.872
+#>   ..$ S_sd          : num 0.168
+#>   ..$ S_iv_mean     : num 0.338
+#>   ..$ S_iv_shape    : num 3.74
+#>   ..$ S_bar_lower   : num 0.834
+#>   ..$ S_bar_upper   : num 0.907
+#>   ..$ N0            : logi NA
+#>   ..$ nCollarYears  : num 900
+#>   ..$ nSurvYears    : int 31
+#>   ..$ nCowsAllYears : int NA
+#>   ..$ nRecruitYears : int 31
+#>  $ parList: NULL
   
   # Using simulated observation data
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10,

@@ -135,7 +135,8 @@ failed to run.</p>
 <code><a href="simulateObservations.html">simulateObservations()</a></code>,
 <code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>,
 <code><a href="trajectoriesFromNational.html">trajectoriesFromNational()</a></code>,
-<code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code></p></div>
+<code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code>,
+<code><a href="trajectoriesFromSummaryForApp.html">trajectoriesFromSummaryForApp()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -149,7 +150,6 @@ failed to run.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">eParsIn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>collarOnTime <span class="op">=</span> <span class="fl">4</span>, collarOffTime <span class="op">=</span> <span class="fl">4</span>, collarNumYears <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">simsIn</span> <span class="op">&lt;-</span> <span class="fu"><a href="trajectoriesFromNational.html">trajectoriesFromNational</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Setting expected survival S_bar to be between l_S and h_S.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Updating cached initial simulations.</span>
 <span class="r-in"><span><span class="va">scResults</span> <span class="op">&lt;-</span> <span class="fu">bayesianScenariosWorkflow</span><span class="op">(</span><span class="va">scns</span>, <span class="va">simsIn</span>, <span class="va">eParsIn</span>,</span></span>
 <span class="r-in"><span>                       niters <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="co"># only set to speed up example. Normally keep defaults.</span></span></span>
@@ -163,6 +163,10 @@ failed to run.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Adaptation incomplete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NOTE: Stopping adaptation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
@@ -172,6 +176,10 @@ failed to run.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 666</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Adaptation incomplete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NOTE: Stopping adaptation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
@@ -184,6 +192,10 @@ failed to run.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Adaptation incomplete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NOTE: Stopping adaptation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
@@ -193,6 +205,10 @@ failed to run.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 806</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Adaptation incomplete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NOTE: Stopping adaptation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
@@ -205,6 +221,10 @@ failed to run.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Adaptation incomplete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NOTE: Stopping adaptation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
@@ -214,6 +234,10 @@ failed to run.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 666</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Adaptation incomplete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NOTE: Stopping adaptation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
@@ -226,6 +250,10 @@ failed to run.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Adaptation incomplete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NOTE: Stopping adaptation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
@@ -235,6 +263,10 @@ failed to run.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 806</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Adaptation incomplete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NOTE: Stopping adaptation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
 </code></pre></div>

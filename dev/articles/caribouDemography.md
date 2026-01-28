@@ -580,19 +580,19 @@ Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp).
 
 ``` r
 pt <- bbouInformative$parTab;pt
-#>   pop_name    R_bar      R_sd R_iv_mean R_iv_shape R_bar_lower R_bar_upper
-#> 1        A 0.194056 0.2165262  0.367511   1.890141   0.1342273   0.2642005
-#>       S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper N0
-#> 1 0.9425775 0.5557561 0.5544629   1.323514   0.8679028   0.9828818 NA
-#>   nCollarYears nSurvYears nCowsAllYears nRecruitYears
-#> 1          185         12            NA            12
+#>   PopulationName    R_bar      R_sd R_iv_mean R_iv_shape R_bar_lower
+#> 1              A 0.194056 0.2165262  0.367511   1.890141   0.1342273
+#>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
+#> 1   0.2642005 0.9425775 0.5557561 0.5544629   1.323514   0.8679028   0.9828818
+#>   N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
+#> 1 NA          185         12            NA            12
 
-popMetricsBase <- trajectoriesFromSummary(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
+popMetricsBase <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
                                              R_sd=pt$R_sd,S_sd=pt$S_sd,
                                              R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
                                              S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,
                                              scn_nm="base",doSummary=T)
-popMetricsS85 <- trajectoriesFromSummary(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=0.85,
+popMetricsS85 <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=0.85,
                                              R_sd=pt$R_sd,S_sd=pt$S_sd,
                                              R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
                                              S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,

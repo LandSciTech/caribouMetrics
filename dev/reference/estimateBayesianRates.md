@@ -80,7 +80,7 @@ estimateBayesianRates(
 ## Value
 
 If `return_mcmc` is TRUE then a list with results and fitted models, if
-FALSE just the results table is returned.
+FALSE just the results summaries are returned.
 
 ## See also
 
@@ -104,7 +104,8 @@ Caribou demography functions:
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
-[`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)
+[`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
+[`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
 
 ## Examples
 
@@ -112,13 +113,13 @@ Caribou demography functions:
 s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 estimateBayesianRates(s_data, r_data, N0 = 500)
-#>   pop_name     R_bar      R_sd R_iv_mean R_iv_shape R_bar_lower R_bar_upper
-#> 1        A 0.1894454 0.0822449  0.316822   25.44025   0.1647722   0.2153382
-#> 2        B 0.2029319 0.1042741  0.316822   25.44025   0.1697316   0.2373699
-#>       S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper  N0
-#> 1 0.8823937 0.2436550 0.4984453    13.3848   0.8225120   0.9242374 500
-#> 2 0.9075133 0.2877739 0.4984453    13.3848   0.8497344   0.9463621 500
-#>   nCollarYears nSurvYears nCowsAllYears nRecruitYears
-#> 1          900         31          2353            27
-#> 2          519         18          2001            15
+#>   PopulationName     R_bar      R_sd R_iv_mean R_iv_shape R_bar_lower
+#> 1              A 0.1895989 0.0821025  0.315511   27.11336   0.1653715
+#> 2              B 0.2045645 0.1033416  0.315511   27.11336   0.1728957
+#>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
+#> 1   0.2147126 0.8830418 0.2321874  0.498315   13.59432   0.8293791   0.9234499
+#> 2   0.2389366 0.9082626 0.3102495  0.498315   13.59432   0.8495611   0.9506993
+#>    N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
+#> 1 500          900         31          2353            27
+#> 2 500          519         18          2001            15
 ```

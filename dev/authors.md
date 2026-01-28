@@ -34,14 +34,14 @@ Source:
 [`DESCRIPTION`](https://github.com/LandSciTech/caribouMetrics/blob/BbouIntegration/DESCRIPTION)
 
 Hughes J, Endicott S, Shimoda Y, Simpkins C, Michelleti T, McIntire E
-(2025). *caribouMetrics: Models and Metrics of Boreal Caribou Demography
+(2026). *caribouMetrics: Models and Metrics of Boreal Caribou Demography
 and Habitat Selection*. R package version 0.4.0.9002,
 <https://landscitech.github.io/caribouMetrics>.
 
     @Manual{,
       title = {caribouMetrics: Models and Metrics of Boreal Caribou Demography and Habitat Selection},
       author = {Josie Hughes and Sarah Endicott and Yuko Shimoda and Craig Simpkins and Tati Michelleti and Eliot McIntire},
-      year = {2025},
+      year = {2026},
       note = {R package version 0.4.0.9002},
       url = {https://landscitech.github.io/caribouMetrics},
     }

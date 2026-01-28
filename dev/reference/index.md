@@ -62,7 +62,12 @@ population growth
 - [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md)
   : Get a set of simulation results from the national demographic model
 - [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)
-  : Do multiple caribouPopGrowth runs
+  : Projections of population growth from demographic model summaries.
+- [`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
+  : Demographic projections for cases with no change in demographic
+  rates over time. This is the method used (so far) in the demography
+  app. TO DO: Consider removing and replacing with call to
+  trajectoriesFromSummary.
 
 ## Summarizing disturbance
 

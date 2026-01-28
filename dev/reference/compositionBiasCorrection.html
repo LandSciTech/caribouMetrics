@@ -132,7 +132,8 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <code><a href="simulateObservations.html">simulateObservations()</a></code>,
 <code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>,
 <code><a href="trajectoriesFromNational.html">trajectoriesFromNational()</a></code>,
-<code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code></p></div>
+<code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code>,
+<code><a href="trajectoriesFromSummaryForApp.html">trajectoriesFromSummaryForApp()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -145,8 +146,8 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-in"><span>                          u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          approx <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.1947544 1.1795466 1.1043295 0.9755068 1.0849416 1.1550419 1.0974694</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.0527473 1.0575538 1.1519263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.0334553 1.1936783 1.0306422 1.0565646 1.0387698 0.9997904 1.2215399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.0445733 1.0110852 0.9537428</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">compositionBiasCorrection</span><span class="op">(</span>w <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>                          q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.6</span><span class="op">)</span>,</span></span>
@@ -156,7 +157,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       w     m       v    sig2     mu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.03 0.007<span style="text-decoration: underline;">29</span> 0.006<span style="text-decoration: underline;">82</span> 0.028<span style="text-decoration: underline;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.05 0.008<span style="text-decoration: underline;">72</span> 0.007<span style="text-decoration: underline;">91</span> 0.042<span style="text-decoration: underline;">8</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

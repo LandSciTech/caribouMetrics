@@ -94,7 +94,8 @@ discrete numbers of animals used by <a href="https://doi.org/10.1002/eap.2816" c
 <span>  c <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  interannualVar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>R_CV <span class="op">=</span> <span class="fl">0.46</span>, S_CV <span class="op">=</span> <span class="fl">0.08696</span><span class="op">)</span>,</span>
 <span>  probOption <span class="op">=</span> <span class="st">"binomial"</span>,</span>
-<span>  progress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  progress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  warn <span class="op">=</span> <span class="cn">T</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -250,16 +251,17 @@ Applications, 33(3), p.e2816. <a href="https://doi.org/10.1002/eap.2816" class="
 <code><a href="simulateObservations.html">simulateObservations()</a></code>,
 <code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>,
 <code><a href="trajectoriesFromNational.html">trajectoriesFromNational()</a></code>,
-<code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code></p></div>
+<code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code>,
+<code><a href="trajectoriesFromSummaryForApp.html">trajectoriesFromSummaryForApp()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">caribouPopGrowth</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">2</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    N0    lambda lambdaE  N      R_t      X_t       S_t n_recruits</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 100 0.9273618   0.875 86 0.511978 0.255989 0.6863657         18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    N0    lambda lambdaE  N       R_t       X_t       S_t n_recruits</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 100 0.8774964   0.875 77 0.3815916 0.1907958 0.6881655         13</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   surviving_adFemales</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  64</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

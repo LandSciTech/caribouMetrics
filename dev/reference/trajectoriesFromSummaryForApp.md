@@ -1,48 +1,77 @@
-# Projections of population growth from demographic model summaries.
+# Demographic projections for cases with no change in demographic rates over time. This is the method used (so far) in the demography app. TO DO: Consider removing and replacing with call to trajectoriesFromSummary.
 
-Projections of population growth from demographic model summaries.
+Demographic projections for cases with no change in demographic rates
+over time. This is the method used (so far) in the demography app. TO
+DO: Consider removing and replacing with call to
+trajectoriesFromSummary.
 
 ## Usage
 
 ``` r
-trajectoriesFromSummary(
+trajectoriesFromSummaryForApp(
+  numSteps,
   replicates,
   N0,
-  Rbar,
-  Sbar,
-  Riv,
-  Siv,
-  type = "beta",
+  R_bar,
+  S_bar,
+  R_sd,
+  S_sd,
+  R_iv_mean,
+  R_iv_shape,
+  S_iv_mean,
+  S_iv_shape,
+  scn_nm,
+  type = "logistic",
   addl_params = list(),
-  doSummary = T,
-  returnSamples = T,
-  nthin = formals(bboutools::bb_fit_survival)$nthin,
-  ...
+  doSummary = F,
+  returnSamples = T
 )
 ```
 
 ## Arguments
 
+- numSteps:
+
+  Number. Number of years to project.
+
 - replicates:
 
-- Rbar, Sbar:
+- N0:
 
-  Mean and standard deviation of R_bar and S_bar over time. See
-  `estimateBayesianRates()$parList` for expected form.
+  Number or vector of numbers. Initial population size for one or more
+  sample populations. If NA then population growth rate is
+  \$\_t=S_t\*(1+cR_t)/s\$.
 
-- Riv, Siv:
+- R_bar:
 
-  Parameters defining the distribution of interannual variation. See
-  `estimateBayesianRates()$parList` for expected form.
+  Number or vector of numbers. Expected recruitment rate (calf:cow
+  ratio) for one or more sample populations.
+
+- S_bar:
+
+  Number or vector of numbers. Expected adult female survival for one or
+  more sample populations.
+
+- R_sd, S_sd:
+
+  standard deviation of R_bar and S_bar
+
+- R_iv_mean, R_iv_shape, S_iv_mean, S_iv_shape:
+
+  define the mean and shape of the interannual variation
+
+- scn_nm:
+
+  Scenario name
 
 - type:
 
-  The distribution of interannual variation varies between "beta" or
-  "bbou" model types.
+  "logistic" or "beta" defines how demographic rates are sampled from
+  the given mean and standard deviation.
 
 - addl_params:
 
-  TO DO explain population mgmt parameters
+  a list of additional parameters for `caribouPopGrowth`
 
 - doSummary:
 
@@ -54,10 +83,6 @@ trajectoriesFromSummary(
 
   logical. If FALSE returns only summaries. If TRUE returns example
   trajectories as well.
-
-- ...:
-
-  Additional arguments passed to `caribouPopGrowth`
 
 ## Value
 
@@ -86,4 +111,19 @@ Caribou demography functions:
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
-[`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
+[`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)
+
+## Examples
+
+``` r
+ outParTab <- trajectoriesFromSummaryForApp(
+   numSteps = 5, replicates = 2, N0 = NA, R_bar = 0.18, S_bar = 0.87,
+   R_sd = 0.085, S_sd = 0.16,
+   R_iv_mean = 0.34, S_iv_mean = 0.31,
+   R_iv_shape = 18, S_iv_shape = 3.3,
+   scn_nm = "base", addl_params = NULL, type = "logistic"
+ )
+#> Error in trajectoriesFromSummaryForApp(numSteps = 5, replicates = 2, N0 = NA,     R_bar = 0.18, S_bar = 0.87, R_sd = 0.085, S_sd = 0.16, R_iv_mean = 0.34,     S_iv_mean = 0.31, R_iv_shape = 18, S_iv_shape = 3.3, scn_nm = "base",     addl_params = NULL, type = "logistic"): N0 is not a numeric with length 1 or 2
+ outParTab
+#> Error: object 'outParTab' not found
+```

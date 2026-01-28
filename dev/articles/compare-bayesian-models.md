@@ -69,7 +69,7 @@ library(patchwork)
 figWidth <- 8
 figHeight <- 10
 
-useSaved <- T # option to skip slow step of fitting bboutools model
+useSaved <- F # option to skip slow step of fitting bboutools model
 bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
 bbouLimitedFile <- here::here("results/vignetteBbbouExample2.rds")
 bbouPriorFile <- here::here("results/vignetteBbbouExample1.rds")

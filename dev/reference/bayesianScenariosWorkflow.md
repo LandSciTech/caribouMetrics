@@ -109,7 +109,8 @@ Caribou demography functions:
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
-[`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)
+[`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
+[`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
 
 ## Examples
 
@@ -123,7 +124,6 @@ scns <- expand.grid(
 
 eParsIn <- list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 3)
 simsIn <- trajectoriesFromNational()
-#> Warning: Setting expected survival S_bar to be between l_S and h_S.
 #> Updating cached initial simulations.
 scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.
@@ -137,6 +137,10 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #> 
 #> Initializing model
 #> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -146,6 +150,10 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Total graph size: 666
 #> 
 #> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
 #> 
 #> Warning: no non-missing arguments to max; returning -Inf
 #> Compiling model graph
@@ -158,6 +166,10 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #> 
 #> Initializing model
 #> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -167,6 +179,10 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Total graph size: 806
 #> 
 #> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
 #> 
 #> Warning: no non-missing arguments to max; returning -Inf
 #> Compiling model graph
@@ -179,6 +195,10 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #> 
 #> Initializing model
 #> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -188,6 +208,10 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Total graph size: 666
 #> 
 #> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
 #> 
 #> Warning: no non-missing arguments to max; returning -Inf
 #> Compiling model graph
@@ -200,6 +224,10 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #> 
 #> Initializing model
 #> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -209,6 +237,10 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Total graph size: 806
 #> 
 #> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
 #> 
 #> Warning: no non-missing arguments to max; returning -Inf
 ```
