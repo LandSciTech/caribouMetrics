@@ -12,10 +12,11 @@ trajectoriesFromSummary(
   Riv,
   Siv,
   type = "beta",
-  addl_params = list(),
+  cPars = subset(getScenarioDefaults(), select = -iAnthro),
   doSummary = T,
   returnSamples = T,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
+  varPersists = T,
   ...
 )
 }
@@ -27,8 +28,6 @@ trajectoriesFromSummary(
 \item{Riv, Siv}{Parameters defining the distribution of interannual variation. See \code{estimateBayesianRates()$parList} for expected form.}
 
 \item{type}{The distribution of interannual variation varies between "beta" or "bbou" model types.}
-
-\item{addl_params}{TO DO explain population mgmt parameters}
 
 \item{doSummary}{logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth.
 If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.}

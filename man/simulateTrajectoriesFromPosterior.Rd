@@ -19,6 +19,7 @@ simulateTrajectoriesFromPosterior(
   correlateRates = FALSE,
   returnExpected = FALSE,
   c = formals(caribouPopGrowth)$c,
+  K = FALSE,
   ...
 )
 }
@@ -40,6 +41,8 @@ simulateTrajectoriesFromPosterior(
 \item{returnExpected}{logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are \code{\link[bboutools:bb_predict_calf_cow_ratio]{bboutools::bb_predict_calf_cow_ratio()}}/\code{\link[bboutools:bb_predict_survival]{bboutools::bb_predict_survival()}} results.}
 
 \item{c}{Number. Bias correction term.}
+
+\item{K}{Number. Carrying capacity.}
 }
 \value{
 convertTrajectories: formatted tables

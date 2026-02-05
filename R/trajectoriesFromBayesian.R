@@ -58,7 +58,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     N0 = merge(data.frame(N0=N0),
                unique(subset(bayesianResults$parTab, select=c(PopulationName))))
   }
-
+  
   if(is.element("bboufit",class(bayesianResults$surv_fit))){
     nr <- dim(bayesianResults$surv_fit$samples$b0)[1]*dim(bayesianResults$surv_fit$samples$b0)[2]
   }else{
@@ -70,20 +70,37 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     nr <- dim(bayesianResults$surv_fit$samples[[1]])[1]*dim(bayesianResults$surv_fit$samples[[1]])[2]*length(bayesianResults$surv_fit$samples)/divBy
   }
   
-  popInfo <- merge(data.frame(id=seq(1:nr)),N0)
+  Nnames <- intersect(c("N0","N.sd","N.lower","N.upper"),names(N0))
+  Nuse <- unique(subset(N0,select=Nnames))
+  if(nrow(Nuse)>1){
+    stop("Handle this case - variation in initial N among populations")
+  }else{
+    popInfo <- merge(data.frame(id=seq(1:nr)),Nuse)
+  }
+  
+  if(length(intersect(c("N.sd","N.lower"),names(Nuse)))>0){
+    #model variation in N0
+    popInfo$mean = popInfo$N0
+    if(is.element("N.sd",names(popInfo))){popInfo$N0 = rnorm(nrow(popInfo),mean=popInfo$mean,sd=popInfo$N.sd)}
+    if(is.element("N.lower",names(popInfo))){popInfo$N0=pmax(popInfo$N.lower,popInfo$N0)}
+    if(is.element("N.upper",names(popInfo))){popInfo$N0=pmin(popInfo$N.upper,popInfo$N0)}
+    popInfo$N0 <- round(popInfo$N0)
+    popInfo <- subset(popInfo,select=setdiff(names(popInfo),c("mean","N.sd","N.lower","N.upper")))
+  }
+  
   popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),ccPars$qMin,ccPars$qMax),w=ccPars$cowMult,u=runif(nr,ccPars$uMin,ccPars$uMax),
                                          z=runif(nr,ccPars$zMin,ccPars$zMax))
 
-  parsBar <- simulateTrajectoriesFromPosterior(popInfo,
-                               bayesianResults$recruit_fit,
-                               bayesianResults$surv_fit,
+  parsBar <- simulateTrajectoriesFromPosterior(popInfo=popInfo,
+                               rec_pred=bayesianResults$recruit_fit,
+                               surv_pred=bayesianResults$surv_fit,
                                progress=F,
                                correlateRates=ccPars$correlateRates,
                                returnExpected=T,
                                ...)
-  pars <- simulateTrajectoriesFromPosterior(popInfo,
-                            bayesianResults$recruit_fit,
-                            bayesianResults$surv_fit,
+  pars <- simulateTrajectoriesFromPosterior(popInfo=popInfo,
+                            rec_pred=bayesianResults$recruit_fit,
+                            surv_pred=bayesianResults$surv_fit,
                             progress=F,
                             correlateRates=ccPars$correlateRates,
                             ...)

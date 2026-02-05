@@ -32,7 +32,7 @@
 #' }
 #' 
 #'
-simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,returnExpected=FALSE,c=formals(caribouPopGrowth)$c,...) {
+simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,returnExpected=FALSE,c=formals(caribouPopGrowth)$c,K=FALSE,...) {
   #TO DO: checks to ensure assumptions about form of rec_pred and surv_pred are correct
 
   inyears<-unique(c(rec_pred$data$Year,surv_pred$data$Year))
@@ -136,6 +136,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
 
   if(length(popInfo)>1){
     popInfo=merge(popInfo,data.frame(id=1:dim(rec)[2]))
+    if(!is.element("PopulationName",names(popInfo))){popInfo$PopulationName="A"}
     popInfo = popInfo[order(popInfo$id,popInfo$PopulationName),]
     for(nn in setdiff(names(popInfo),c("PopulationName","id"))){
       txt  = paste0(nn," = popInfo[['",nn,"']]")
@@ -199,7 +200,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
       out <- caribouPopGrowth(N0=N0,
                               numSteps = 1,
                               interannualVar = F,
-                              R_bar = R_samp_long, S_bar = S_samp_long,c=c, l_S = 0, h_R = 1,K=FALSE,...
+                              R_bar = R_samp_long, S_bar = S_samp_long,c=c, l_S = 0, h_R = 1,K=K,...
       )
       out$lab <- labs 
       out$Year <- yr
@@ -209,7 +210,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
     } else {
       outBit <- caribouPopGrowth(outBit$N,
                                  numSteps = 1, interannualVar = F,
-                                 R_bar = R_samp_long, S_bar = S_samp_long,c=c, l_S = 0, h_R = 1,K=FALSE,...)
+                                 R_bar = R_samp_long, S_bar = S_samp_long,c=c, l_S = 0, h_R = 1,K=K,...)
       
       outBit$lab <- labs
       outBit$Year <- yr

@@ -3,7 +3,6 @@
 #' @param replicates 
 #' @param Rbar,Sbar Mean and standard deviation of R_bar and S_bar over time. See `estimateBayesianRates()$parList` for expected form.
 #' @param Riv,Siv Parameters defining the distribution of interannual variation. See `estimateBayesianRates()$parList` for expected form.
-#' @param addl_params TO DO explain population mgmt parameters
 #' @param type The distribution of interannual variation varies between "beta" or "bbou" model types. 
 #' @param doSummary logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth. 
 #'  If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.
@@ -18,31 +17,28 @@
 #' @examples
 #'
 #'
-trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv,  
-                  type = "beta", addl_params = list(), doSummary = T, returnSamples = T,
-                  nthin=formals(bboutools::bb_fit_survival)$nthin,...){
+trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv, 
+                  type = "beta", cPars = subset(getScenarioDefaults(),select=-iAnthro), 
+                  doSummary = T, returnSamples = T,
+                  nthin=formals(bboutools::bb_fit_survival)$nthin,varPersists=T,...){
 
-  # TO DO: check for expected elements of input args
-  #Finish documenting trajectoriesFromSummary
-  #Tests for trajectoriesFromSummary
-  #Update vignettes to use trajectoriesFromSummary, and add variation over time + population mgmt example to vignettes.
-  #Think about reducing compute requirements for disturbance projection updating.
-  #Eventually - update app to include disturbance, and remove trajectoriesFromSummaryForApp and associated parTab.
-  
+  # TO DO:
+  # See https://github.com/LandSciTech/caribouMetrics/issues/146
+
   if(type=="beta"){
-    results <- ratesFromBetaSummary(N0, Rbar, Sbar, Riv, Siv, addl_params, replicates, nthin)
+      results <- ratesFromBetaSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists)
   }else{
     stop("Handle bbou case")
   }
   
-  rr <- trajectoriesFromBayesian(results, cPars = addl_params,returnSamples = returnSamples, 
-                                 doSummary = doSummary, ...)
+  rr <- trajectoriesFromBayesian(results, N0 = N0,returnSamples = returnSamples, 
+                                 doSummary = doSummary,cPars=cPars, ...)
   
   return(rr)
   
 }
 
-ratesFromBetaSummary <- function(N0, Rbar, Sbar, Riv, Siv, addl_params, replicates, nthin){
+ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPersists){
   #Assumes gaussian distributed variation in means, beta distributed interannual variation
   #Adapted from Shimoda QC workflow
   
@@ -51,39 +47,44 @@ ratesFromBetaSummary <- function(N0, Rbar, Sbar, Riv, Siv, addl_params, replicat
   ni <- niters * nthin   # number of samples for each chain
   nb <- ni / 2    # number of samples to discard as burnin
 
-  r_priors <- c(cv_min= Siv$S_cv_min,cv_max = Siv$S_cv_max)
-  pm.r = addl_params$pm.s
-  params = c("Sbar","Survival") 
-  surv_fit <- rateFromBetaSummary(Sbar,Siv,addl_params,r_priors,pm.r,params,nc,nthin,ni,nb)
-  r_priors <- c(cv_min= Riv$R_cv_min,cv_max = Riv$R_cv_max)
-  pm.r = addl_params$pm.r
+  s_priors <- list(cv_min= Siv$S_cv_min,cv_max = Siv$S_cv_max)
+  sparams = c("Sbar","Survival") 
+  r_priors <- list(cv_min= Riv$R_cv_min,cv_max = Riv$R_cv_max)
   params = c("Rbar","Recruitment") 
-  recruit_fit <- rateFromBetaSummary(Rbar,Riv,addl_params,r_priors,pm.r,params,nc,nthin,ni,nb)
-
-  results <- list(parTab=N0,surv_fit=surv_fit,recruit_fit=recruit_fit)
+  if(varPersists){
+    surv_fit <- rateFromBetaSummary(Sbar,s_priors,sparams,nc,nthin,ni,nb)
+    recruit_fit <- rateFromBetaSummary(Rbar,r_priors,params,nc,nthin,ni,nb)
+  }else{
+    #treats all variation as interannual variation
+    surv_fit <- rateFromBetaSummaryYS(Sbar,s_priors,sparams,nc,nthin,ni,nb)
+    recruit_fit <- rateFromBetaSummaryYS(Rbar,r_priors,params,nc,nthin,ni,nb)
+  }
+  
+  parTab <- subset(Rbar,select=intersect(c("Year","PopulationName","Anthro","fire_excl_anthro","PopulationID"),names(Rbar)))
+  results <- list(parTab=parTab,surv_fit=surv_fit,recruit_fit=recruit_fit)
   
   return(results)
 }
 
-rateFromBetaSummary<- function(Rbar,Riv,addl_params,r_priors,pm.r,params,nc,nt,ni,nb,fname="PopDynMod_"){
+rateFromBetaSummary<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="PopDynMod_"){
   #####
   # Model - assign model file name (needed to match with the file name in the model object in jags.model())
   
   ffname = tempfile(pattern = fname, fileext = ".txt")
   sink(ffname)
-  cat("
+  if(r_priors$cv_max>0){
+    cat("
 
 model {
 
 for (t in 1:nAnnual) {
-  pm.period[t]<-ifelse(t > pm.start && t <= pm.end, 1,0) # pm treated period (to set return 1, to turn off return 0)
   for (k in 1:nPops) {
-	  mu.R[t,k]<- min(R[t,k] + pm.r[t]*pm.period[t],0.99) # Anything above 1 will be replaced by 1 (min-max truncation)
-    sig.R[t,k] <- min(cv.R[k]*mu.R[t,k],0.99*pow(mu.R[t,k]*(1-mu.R[t,k]),0.5)) 
+	  mu.R[t,k]<- min(R[t,k] + pm.r[t,k],0.999) # Anything above 1 will be replaced by 1 (min-max truncation)
+    sig.R[t,k] <- min(cv.R[k]*mu.R[t,k],0.999*pow(mu.R[t,k]*(1-mu.R[t,k]),0.5)) 
     alpha[t,k] <- ((1-mu.R[t,k])/pow(sig.R[t,k],2) - 1/mu.R[t,k]) * pow(mu.R[t,k],2)
     beta[t,k] <- alpha[t,k] * (1/mu.R[t,k] - 1)
     Rbar[t,k] <- alpha[t,k]/(alpha[t,k]+beta[t,k])
-    Recruitment[t,k] ~ dbeta(alpha[t,k],beta[t,k])T(0.01,0.99)
+    Recruitment[t,k] ~ dbeta(alpha[t,k],beta[t,k])T(0.001,0.999)
     Sbar[t,k] <- Rbar[t,k]
     Survival[t,k] <- Recruitment[t,k]
 }}
@@ -91,11 +92,9 @@ for (t in 1:nAnnual) {
 for(i in 1:nObs) {
   R[Annual[i],PopulationID[i]]<-max(r[i],0.01)
   r[i] <- rmu[i] + rsd[i]*qq[PopulationID[i]]  
-}
-
-for (t in 1:nAnnual) {
-	pm.r[t]~dnorm(pmr.mu[t], pmr.tau[t])
-	pmr.tau[t]<-1/pow(pmr.sd[t],2)
+  pm.r[Annual[i],PopulationID[i]]<-pm.rr[i]*ifelse(max(pmr.mu[i],pmr.sd[i]) > 0, 1,0)
+  pm.rr[i]~dnorm(pmr.mu[i], pmr.tau[i])
+	pmr.tau[i]<-1/pow(max(pmr.sd[i],0.0000000001),2)
 }
 
 for (k in 1:nPops) {
@@ -106,6 +105,140 @@ for (k in 1:nPops) {
 }
 
 ", fill = TRUE)
+  }else{
+    cat("
+
+model {
+
+for (t in 1:nAnnual) {
+  for (k in 1:nPops) {
+	  Rbar[t,k]<- min(R[t,k] + pm.r[t,k],1) # Anything above 1 will be replaced by 1 (min-max truncation)
+    Recruitment[t,k] <- Rbar[t,k]
+    Sbar[t,k] <- Rbar[t,k]
+    Survival[t,k] <- Recruitment[t,k]
+}}
+
+for(i in 1:nObs) {
+  R[Annual[i],PopulationID[i]]<-max(r[i],0.01)
+  r[i] <- rmu[i] + rsd[i]*qq[PopulationID[i]]  
+  pm.r[Annual[i],PopulationID[i]]<-pm.rr[i]*ifelse(max(pmr.mu[i],pmr.sd[i]) > 0, 1,0)
+  pm.rr[i]~dnorm(pmr.mu[i], pmr.tau[i])
+	pmr.tau[i]<-1/pow(max(pmr.sd[i],0.0000000001),2)
+}
+
+for (k in 1:nPops) {
+  qq[k]~dnorm(0,1)
+}
+
+}
+
+", fill = TRUE)
+    
+  }
+sink()
+
+### Define data, parameters, initials and settings
+# Setting the data that you want to pass the model objects
+data <- Rbar
+data <- data[order(data$Annual,data$PopulationName),]
+data$PopulationID <- as.factor(data$PopulationName)
+nAnnual <- length(unique(data$Annual))
+if(min(as.integer(data$Annual))>1){
+  data$Annual = as.factor(data$Year)
+}
+
+datal = list(
+  nObs = nrow(data),
+  nAnnual=nAnnual,
+  Annual = as.integer(data$Annual),
+  nPops=length(unique(data$PopulationName)),
+  PopulationID = as.integer(data$PopulationID),
+  rmu=data$mean,
+  rsd=data$sd,
+  pmr.mu = data$adjust.mu,
+  pmr.sd = data$adjust.sd)
+if(r_priors$cv_max>0){
+  datal <- c(datal,r_priors)
+}
+inits = parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
+
+return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt))
+}
+
+
+rateFromBetaSummaryYS<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="PopDynMod_"){
+  #####
+  # Model - assign model file name (needed to match with the file name in the model object in jags.model())
+  
+  ffname = tempfile(pattern = fname, fileext = ".txt")
+  sink(ffname)
+  if(r_priors$cv_max>0){
+  cat("
+
+model {
+
+for (t in 1:nAnnual) {
+  for (k in 1:nPops) {
+	  mu.R[t,k]<- min(R[t,k] + pm.r[t,k],0.999) # Anything above 1 will be replaced by 1 (min-max truncation)
+    sig.R[t,k] <- min(cv.R[k]*mu.R[t,k],0.999*pow(mu.R[t,k]*(1-mu.R[t,k]),0.5)) 
+    alpha[t,k] <- ((1-mu.R[t,k])/pow(sig.R[t,k],2) - 1/mu.R[t,k]) * pow(mu.R[t,k],2)
+    beta[t,k] <- alpha[t,k] * (1/mu.R[t,k] - 1)
+    Rbar[t,k] <- alpha[t,k]/(alpha[t,k]+beta[t,k])
+    Recruitment[t,k] ~ dbeta(alpha[t,k],beta[t,k])T(0.001,0.999)
+    Sbar[t,k] <- Rbar[t,k]
+    Survival[t,k] <- Recruitment[t,k]
+}}
+
+for(i in 1:nObs) {
+  R[Annual[i],PopulationID[i]]<-max(r[i],0.01)
+  #r[i] <- rmu[i] + rsd[i]*qq[PopulationID[i]]  
+  r[i]~dnorm(rmu[i],rtau[i])
+  rtau[i]<-1/pow(rsd[i],2)
+  pm.r[Annual[i],PopulationID[i]]<-pm.rr[i]*ifelse(max(pmr.mu[i],pmr.sd[i]) > 0, 1,0)
+  pm.rr[i]~dnorm(pmr.mu[i], pmr.tau[i])
+	pmr.tau[i]<-1/pow(max(pmr.sd[i],0.0000000001),2)
+}
+
+for (k in 1:nPops) {
+  qq[k]~dnorm(0,1)
+  cv.R[k]~dunif(cv_min,cv_max)
+}
+
+}
+
+", fill = TRUE)
+  }else{
+    cat("
+
+model {
+
+for (t in 1:nAnnual) {
+  for (k in 1:nPops) {
+	  Rbar[t,k]<- min(R[t,k] + pm.r[t,k],1) # Anything above 1 will be replaced by 1 (min-max truncation)
+    Recruitment[t,k] <- Rbar[t,k]
+    Sbar[t,k] <- Rbar[t,k]
+    Survival[t,k] <- Recruitment[t,k]
+}}
+
+for(i in 1:nObs) {
+  R[Annual[i],PopulationID[i]]<-max(r[i],0.01)
+  #r[i] <- rmu[i] + rsd[i]*qq[PopulationID[i]]  
+  r[i]~dnorm(rmu[i],rtau[i])
+  rtau[i]<-1/pow(rsd[i],2)
+  pm.r[Annual[i],PopulationID[i]]<-pm.rr[i]*ifelse(max(pmr.mu[i],pmr.sd[i]) > 0, 1,0)
+  pm.rr[i]~dnorm(pmr.mu[i], pmr.tau[i])
+	pmr.tau[i]<-1/pow(max(pmr.sd[i],0.0000000001),2)
+}
+
+for (k in 1:nPops) {
+  qq[k]~dnorm(0,1)
+}
+
+}
+
+", fill = TRUE)
+    
+  }
   sink()
   
   ### Define data, parameters, initials and settings
@@ -114,10 +247,9 @@ for (k in 1:nPops) {
   data <- data[order(data$Annual,data$PopulationName),]
   data$PopulationID <- as.factor(data$PopulationName)
   nAnnual <- length(unique(data$Annual))
-  
-  # Setting the population management timing and duration
-  pm.start <- addl_params$pm.startYear-min(data$Year) # vector location
-  pm.end <- addl_params$pm.endYear-min(data$Year)  # vector location
+  if(min(as.integer(data$Annual))>1){
+    data$Annual = as.factor(data$Year)
+  }
   
   datal = list(
     nObs = nrow(data),
@@ -127,12 +259,11 @@ for (k in 1:nPops) {
     PopulationID = as.integer(data$PopulationID),
     rmu=data$mean,
     rsd=data$sd,
-    pm.start=pm.start,
-    pm.end=pm.end,
-    pmr.mu = rep(pm.r[,2],nAnnual),
-    pmr.sd = rep(pm.r[,3],nAnnual))
-  datal <- c(datal,r_priors)
-  
+    pmr.mu = data$adjust.mu,
+    pmr.sd = data$adjust.sd)
+  if(r_priors$cv_max>0){
+    datal <- c(datal,r_priors)
+  }
   inits = parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
   
   return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt))
