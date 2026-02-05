@@ -53,10 +53,11 @@
 <span>  <span class="va">Riv</span>,</span>
 <span>  <span class="va">Siv</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"beta"</span>,</span>
-<span>  addl_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  cPars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="fu"><a href="getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span><span class="op">)</span>, select <span class="op">=</span> <span class="op">-</span><span class="va">iAnthro</span><span class="op">)</span>,</span>
 <span>  doSummary <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>  returnSamples <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>  nthin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="fu">bboutools</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bb_fit_survival</a></span><span class="op">)</span><span class="op">$</span><span class="va">nthin</span>,</span>
+<span>  varPersists <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -79,10 +80,6 @@
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>The distribution of interannual variation varies between "beta" or "bbou" model types.</p></dd>
-
-
-<dt id="arg-addl-params">addl_params<a class="anchor" aria-label="anchor" href="#arg-addl-params"></a></dt>
-<dd><p>TO DO explain population mgmt parameters</p></dd>
 
 
 <dt id="arg-dosummary">doSummary<a class="anchor" aria-label="anchor" href="#arg-dosummary"></a></dt>

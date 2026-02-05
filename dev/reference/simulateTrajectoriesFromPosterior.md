@@ -25,6 +25,7 @@ simulateTrajectoriesFromPosterior(
   correlateRates = FALSE,
   returnExpected = FALSE,
   c = formals(caribouPopGrowth)$c,
+  K = FALSE,
   ...
 )
 ```
@@ -80,6 +81,10 @@ simulateTrajectoriesFromPosterior(
 - c:
 
   Number. Bias correction term.
+
+- K:
+
+  Number. Carrying capacity.
 
 ## Value
 
@@ -178,7 +183,7 @@ Caribou demography functions:
 #>   ..$ PopulationName  : chr [1:567000] "A" "A" "A" "A" ...
 #>   ..$ Timestep        : num [1:567000] 1989 1989 1989 1989 1989 ...
 #>   ..$ MetricTypeID    : chr [1:567000] "c" "survival" "recruitment" "X" ...
-#>   ..$ Amount          : num [1:567000] NA 0.8998 0.103 0.0515 NA ...
+#>   ..$ Amount          : num [1:567000] NA 0.811 0.24 0.12 NA ...
 # }
 
 ```

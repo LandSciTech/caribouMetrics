@@ -13,10 +13,11 @@ trajectoriesFromSummary(
   Riv,
   Siv,
   type = "beta",
-  addl_params = list(),
+  cPars = subset(getScenarioDefaults(), select = -iAnthro),
   doSummary = T,
   returnSamples = T,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
+  varPersists = T,
   ...
 )
 ```
@@ -39,10 +40,6 @@ trajectoriesFromSummary(
 
   The distribution of interannual variation varies between "beta" or
   "bbou" model types.
-
-- addl_params:
-
-  TO DO explain population mgmt parameters
 
 - doSummary:
 
