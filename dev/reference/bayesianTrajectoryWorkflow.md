@@ -266,23 +266,23 @@ Caribou demography functions:
 #>   ..$ summary     :'data.frame': 310 obs. of  8 variables:
 #>   ..$ surv_data   :'data.frame': 372 obs. of  9 variables:
 #>   ..$ recruit_data: tibble [31 × 9] (S3: tbl_df/tbl/data.frame)
-#>   ..$ popInfo     :'data.frame': 3000 obs. of  3 variables:
+#>   ..$ popInfo     :'data.frame': 3000 obs. of  4 variables:
 #>  $ inData :List of 1
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
 #>   ..$ R_bar         : num 0.189
-#>   ..$ R_sd          : num 0.0844
-#>   ..$ R_iv_mean     : num 0.339
-#>   ..$ R_iv_shape    : num 19.1
-#>   ..$ R_bar_lower   : num 0.164
+#>   ..$ R_sd          : num 0.0843
+#>   ..$ R_iv_mean     : num 0.341
+#>   ..$ R_iv_shape    : num 18.9
+#>   ..$ R_bar_lower   : num 0.165
 #>   ..$ R_bar_upper   : num 0.215
-#>   ..$ S_bar         : num 0.87
-#>   ..$ S_sd          : num 0.163
-#>   ..$ S_iv_mean     : num 0.295
-#>   ..$ S_iv_shape    : num 2.32
-#>   ..$ S_bar_lower   : num 0.832
-#>   ..$ S_bar_upper   : num 0.904
+#>   ..$ S_bar         : num 0.872
+#>   ..$ S_sd          : num 0.167
+#>   ..$ S_iv_mean     : num 0.331
+#>   ..$ S_iv_shape    : num 1.68
+#>   ..$ S_bar_lower   : num 0.834
+#>   ..$ S_bar_upper   : num 0.906
 #>   ..$ N0            : logi NA
 #>   ..$ nCollarYears  : num 900
 #>   ..$ nSurvYears    : int 31
