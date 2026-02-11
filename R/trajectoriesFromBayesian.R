@@ -70,14 +70,12 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     nr <- dim(bayesianResults$surv_fit$samples[[1]])[1]*dim(bayesianResults$surv_fit$samples[[1]])[2]*length(bayesianResults$surv_fit$samples)/divBy
   }
   
-  Nnames <- intersect(c("N0","N.sd","N.lower","N.upper"),names(N0))
+  Nnames <- intersect(c("N0","N.sd","N.lower","N.upper","PopulationName"),names(N0))
   Nuse <- unique(subset(N0,select=Nnames))
-  if(nrow(Nuse)>1){
-    stop("Handle this case - variation in initial N among populations")
-  }else{
-    popInfo <- merge(data.frame(id=seq(1:nr)),Nuse)
-  }
+  if(!is.element("PopulationName",names(Nuse))){Nuse$PopulationName="A"}
   
+  popInfo <- merge(data.frame(id=seq(1:nr/length(unique(Nuse$PopulationName)))),Nuse)
+
   if(length(intersect(c("N.sd","N.lower"),names(Nuse)))>0){
     #model variation in N0
     popInfo$mean = popInfo$N0
@@ -88,9 +86,10 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     popInfo <- subset(popInfo,select=setdiff(names(popInfo),c("mean","N.sd","N.lower","N.upper")))
   }
   
-  popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),ccPars$qMin,ccPars$qMax),w=ccPars$cowMult,u=runif(nr,ccPars$uMin,ccPars$uMax),
-                                         z=runif(nr,ccPars$zMin,ccPars$zMax))
-
+  popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),ccPars$qMin,ccPars$qMax),w=ccPars$cowMult,
+                                         u=runif(nrow(popInfo),ccPars$uMin,ccPars$uMax),
+                                         z=runif(nrow(popInfo),ccPars$zMin,ccPars$zMax))
+  
   parsBar <- simulateTrajectoriesFromPosterior(popInfo=popInfo,
                                rec_pred=bayesianResults$recruit_fit,
                                surv_pred=bayesianResults$surv_fit,
@@ -106,7 +105,6 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
                             ...)
 
   pars <- merge(pars,parsBar)
-  nrow(pars)
   
   if(class(bayesianResults$parTab)=="list"){
     pi <- bayesianResults$parTab$N0
@@ -115,6 +113,8 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   }
   pi$R_bar=NULL;pi$S_bar=NULL;pi$N0=NULL
   pars <- merge(pars,pi)
+  
+  if(max(table(subset(pars,select=c("PopulationName","Year","id"))))>1){stop("Error in trajectoriesFromBayesian: trajectories are not uniquely id'd")}
   
   if(doSummary){
     simBig <- prepareTrajectories(pars, returnSamples = returnSamples)

@@ -138,6 +138,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
     popInfo=merge(popInfo,data.frame(id=1:dim(rec)[2]))
     if(!is.element("PopulationName",names(popInfo))){popInfo$PopulationName="A"}
     popInfo = popInfo[order(popInfo$id,popInfo$PopulationName),]
+    
     for(nn in setdiff(names(popInfo),c("PopulationName","id"))){
       txt  = paste0(nn," = popInfo[['",nn,"']]")
       eval(parse(text=txt))
@@ -195,7 +196,6 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
     
     if(length(N0)==1){N0=rep(N0,length(S_samp_long))}
     
-
     if (first) {
       out <- caribouPopGrowth(N0=N0,
                               numSteps = 1,
@@ -237,6 +237,8 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
   out$id=as.numeric(out$id)
   out$time=NULL
   
+  if(max(table(subset(out,select=c(Year,PopulationName,id))))>1){stop("Error in simulateTrajectoriesFromPosterior: trajectories are not uniquely identified.")}
+
   if(returnExpected){
     changeNames <- names(out)
     changeNames[!is.element(changeNames,c("Year","lab","id","PopulationName"))] <-

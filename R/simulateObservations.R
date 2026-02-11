@@ -217,9 +217,11 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   
   includeYears = unique(popMetrics$Year)
   
+  popMetrics$LambdaPercentile=NULL
   exData <- tidyr::pivot_wider(popMetrics, id_cols = c("Replicate", "Year","Timestep","PopulationName"),
                                names_from = "MetricTypeID",
                                values_from = "Amount")
+  if(class(exData$N)=="list"){stop("Cannot extract example trajectory due to duplication. Check for errors in trajectoriesFromBayesian.")}
 
   if(!is.null(recruit_data)){
     recruitYrs <- sort(setdiff(includeYears,subset(recruit_data,!is.na(Calves))$Annual))

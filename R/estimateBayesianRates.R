@@ -183,7 +183,9 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
               nRecruitYears = n_distinct(Year))
   
   data_amt <- merge(surv_data_amt, recruit_data_amt)
+  nr <- nrow(parTab)
   parTab = merge(parTab,N0)
+  if(nrow(parTab)>nr){stop("Unexpected columns in N0")}
   parTab = merge(parTab, data_amt)
 
   parList = list()
