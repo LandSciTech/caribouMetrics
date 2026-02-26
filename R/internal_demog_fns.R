@@ -233,7 +233,11 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
     y = sy
     cMonth = caribouYearStart
     if(nMonths==1){prevMonth=cMonth}else{prevMonth = cMonth-1}
-    prevYear = y
+    if(prevMonth==0){
+      prevMonth=12;prevYear=y-1      
+    }else{
+      prevYear = y
+    }
     for (yId in seq(sy,min(sy+collarNumYears,max(survivalSeries$Year)))){
       if ((y == sy+collarNumYears)&(cMonth==collarOffTime)){break}
       for(mId in 1:nMonths){
@@ -276,7 +280,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
           cInfo$StartTotal=cInfo$Prevs
           #if(sum(cInfo$StartTotal)==0){break}
         }
-        
+
         if(any(cInfo$StartTotal[!is.na(cInfo$N)]>cInfo$N[!is.na(cInfo$N)])){
           warning("Target number of collars exceeds population size. Adjusting number of collars for consistency.")
           cInfo$StartTotal[cInfo$StartTotal>cInfo$N] = cInfo$N[cInfo$StartTotal>cInfo$N]

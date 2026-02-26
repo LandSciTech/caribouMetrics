@@ -171,12 +171,15 @@ test_that("collarCount and cowCount behave", {
 })
 
 test_that("collarOn and Off work as expected", {
+  #devtools::document();devtools::load_all()
   scns <- getScenarioDefaults(iFire = 1, projYears = 10, obsYears = 10, collarCount = 10)
   
   simObs1_12 <- simulateObservations(scns, collarOnTime = 1, collarOffTime = 12, 
                                      caribouYearStart = 1)
-  # TODO currently broken
-  # expect_true(all(!is.na(simObs1_12$simSurvObs$MortalitiesCertain)))
+  #plotSurvivalSeries(simObs1_12$simSurvObs)
+  expect_true(all(simObs1_12$simSurvObs$StartTotal<=scns$collarCount))
+  expect_true(max(simObs1_12$simSurvObs$StartTotal)==scns$collarCount)
+  expect_true(all(!is.na(simObs1_12$simSurvObs$MortalitiesCertain)))
 })
 
 #TO DO: test with trajectories from bboutools & jags models
