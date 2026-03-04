@@ -3,7 +3,7 @@
 ``` r
 library(caribouMetrics)
 #> Loading required package: nimble
-#> nimble version 1.4.0 is loaded.
+#> nimble version 1.4.1 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
 #> 
@@ -15,7 +15,7 @@ library(caribouMetrics)
 #> 
 #>     declare
 #> Loading required package: bbouNationalPriors
-library(dplyr)
+#> Loading required package: dplyr
 #> 
 #> Attaching package: 'dplyr'
 #> The following objects are masked from 'package:stats':
@@ -24,6 +24,7 @@ library(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
+library(dplyr)
 library(terra)
 #> terra 1.8.93
 #> 
