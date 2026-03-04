@@ -35,7 +35,7 @@
 #'                        niters = 10)# only set to speed up example. Normally keep defaults.
 
 
-bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=4,collarNumYears=4),Rep=NULL,
+bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=3,collarNumYears=4),Rep=NULL,
                       printProgress = FALSE,priors="default",
                       niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,
                       returnSamples=F,...) {

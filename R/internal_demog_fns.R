@@ -202,7 +202,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   
   options(dplyr.summarise.inform = FALSE)
   
-  if(!forceMonths&&(collarOnTime==caribouYearStart)&&(collarOffTime==caribouYearStart)){
+  if(!forceMonths&&(collarOnTime==caribouYearStart)&&(collarOffTime==caribouYearStart-1)){
     nMonths = 1
   }else{
     nMonths = 12
@@ -462,6 +462,8 @@ testPopGrowthTable <- function(df) {
 #' @param df data.frame. The table to test
 #' @param req_col_names character. Required column names. A vector of column
 #'   names that must be present in `df`. Other columns are allowed
+#' @param or_col_names character. Substitutable column names. A vector of column
+#'   names - as least one of these columns must be present in `df`. Other columns are allowed.     
 #' @param req_vals list.  A named list where the name is a column name and the
 #'   value is a vector of required values. Values in the list and not in the
 #'   column will throw an error
@@ -472,14 +474,21 @@ testPopGrowthTable <- function(df) {
 #' @return throws an error if failed otherwise invisible NULL
 #'
 #' @noRd
-testTable <- function(df, req_col_names, req_vals = NULL, acc_vals = NULL){
+testTable <- function(df, req_col_names, or_col_names = NULL, req_vals = NULL, acc_vals = NULL){
   df_name <- deparse(substitute(df))
   missing_cols <- setdiff(req_col_names, colnames(df))
   if(length(missing_cols) > 0){
     stop(df_name, " is missing expected columns: ",
          paste0(missing_cols, collapse = ", "), call. = FALSE)
   }
-
+  if(!is.null(or_col_names)){
+    or_cols <- intersect(or_col_names,colnames(df))
+    if(length(or_cols) == 0){
+      stop(df_name, " is missing expected columns: ",
+           paste0(or_cols, collapse = " or "), call. = FALSE)
+    }
+  }
+  
   if(!is.null(req_vals)){
     Map(function(x, nm){
       missing_vals <- setdiff(x, df[[nm]])

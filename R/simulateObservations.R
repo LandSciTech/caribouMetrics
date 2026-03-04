@@ -24,8 +24,8 @@
 #'   each year. If NULL `paramTable$collarCount` is used as the target number of
 #'   collars and each year that collars are deployed they will be topped up to
 #'   this number. If a data.frame is provided it must have 2 columns "Year" and
-#'   "numStarts" and the "numStarts" is the absolute number of collars deployed
-#'   in that year.
+#'   "numStarts" or "numTarget" (but not both). "numStarts" is the absolute number of collars deployed
+#'   in that year, and "numTarget" is the target number of collars.
 #' @param collarNumYears integer. Number of years until collar falls off
 #' @param collarOffTime integer. Month that collars fall off. A number from 1
 #'   (January) to 12 (December)
@@ -73,9 +73,10 @@
 simulateObservations <- function(paramTable, trajectories=NULL,
          cowCounts = NULL,
          freqStartsByYear = NULL,
-         collarNumYears = 4, collarOffTime = 4,
+         collarNumYears = 4, collarOffTime = 3,
          collarOnTime = 4,
          caribouYearStart = 4,
+         topUp = F,
          recSurveyMonth = 3,
          recSurveyDay = 15,
          distScen = NULL,
@@ -258,7 +259,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     survYrs <- intersect(survYrs, freqStartsByYear$Year) 
                          
     freqStartsByYear <- subset(freqStartsByYear,is.element(Year,survYrs))
-    testTable(freqStartsByYear, c("Year","numStarts"),
+    testTable(freqStartsByYear, c("Year"),or_col_names = c("numStarts","numTarget"),
               acc_vals = list(Year = survYrs))
   } else if(!is.null(paramTable$collarCount)){
     freqStartsByYear <- expand.grid(Year = survYrs,numStarts = paramTable$collarCount)
@@ -292,8 +293,14 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime,
                                     collarOnTime, caribouYearStart,topUp = T,forceMonths=forceMonths)
     } else {
+      if(is.element("numTarget", names(freqStartsByYr))){
+        if(is.element("numStarts", names(freqStartsByYear))){stop("In freqStartsByYear, specify numTarget or numStarts, but not both.")}
+        names(freqStartsByYear)[names(freqStartsByYear)=="numTarget"] = "numStarts"; topUp = T
+      }else{
+        topUp = F
+      }
       simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears,
-                                    collarOffTime, collarOnTime,caribouYearStart,forceMonths=forceMonths)
+                                    collarOffTime, collarOnTime,caribouYearStart,topUp = topUp, forceMonths=forceMonths)
     }
     simSurvObs$survival=NULL
     simSurvObs$Annual <- simSurvObs$Year
