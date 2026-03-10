@@ -114,11 +114,11 @@ test_that("results match expected", {
   #library(caribouMetrics)
   # when we have a lot of collars the distance between observations and "true"
   # pop is smaller than when we have few.
-  manyObs <- doScn(nCollar = 2000, rQuantile = 0.99, sQuantile = 0.99)
-  doPlot(manyObs, title = "2000 collars")#,var="Adult female survival")
+  manyObs <- doScn(nCollar = 2000, rQuantile = 0.99, sQuantile = 0.01)
+  doPlot(manyObs, title = "2000 collars",var="Adult female survival")
   
-  fewCollarObs <- doScn(nCollar = 2, rQuantile = 0.99, sQuantile = 0.99)
-  doPlot(fewCollarObs, title = "2 collars")#,var="Adult female survival")
+  fewCollarObs <- doScn(nCollar = 2, rQuantile = 0.99, sQuantile = 0.01)
+  doPlot(fewCollarObs, title = "2 collars",var="Adult female survival")
   
   difMany <- calcDif(manyObs$obs.all)
   difFew <- calcDif(fewCollarObs$obs.all)

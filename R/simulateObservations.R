@@ -293,7 +293,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime,
                                     collarOnTime, caribouYearStart,topUp = T,forceMonths=forceMonths)
     } else {
-      if(is.element("numTarget", names(freqStartsByYr))){
+      if(is.element("numTarget", names(freqStartsByYear))){
         if(is.element("numStarts", names(freqStartsByYear))){stop("In freqStartsByYear, specify numTarget or numStarts, but not both.")}
         names(freqStartsByYear)[names(freqStartsByYear)=="numTarget"] = "numStarts"; topUp = T
       }else{

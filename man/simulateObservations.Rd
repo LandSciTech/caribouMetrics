@@ -10,9 +10,10 @@ simulateObservations(
   cowCounts = NULL,
   freqStartsByYear = NULL,
   collarNumYears = 4,
-  collarOffTime = 4,
+  collarOffTime = 3,
   collarOnTime = 4,
   caribouYearStart = 4,
+  topUp = F,
   recSurveyMonth = 3,
   recSurveyDay = 15,
   distScen = NULL,
@@ -40,8 +41,8 @@ is provided it must have columns "Year"  and "Cows".}
 each year. If NULL \code{paramTable$collarCount} is used as the target number of
 collars and each year that collars are deployed they will be topped up to
 this number. If a data.frame is provided it must have 2 columns "Year" and
-"numStarts" and the "numStarts" is the absolute number of collars deployed
-in that year.}
+"numStarts" or "numTarget" (but not both). "numStarts" is the absolute number of collars deployed
+in that year, and "numTarget" is the target number of collars.}
 
 \item{collarNumYears}{integer. Number of years until collar falls off}
 

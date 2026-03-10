@@ -7,7 +7,7 @@
 bayesianScenariosWorkflow(
   scns,
   simInitial,
-  ePars = list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 4),
+  ePars = list(collarOnTime = 4, collarOffTime = 3, collarNumYears = 4),
   Rep = NULL,
   printProgress = FALSE,
   priors = "default",
