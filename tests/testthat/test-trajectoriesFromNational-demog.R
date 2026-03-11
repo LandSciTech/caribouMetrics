@@ -13,7 +13,7 @@ test_that("sample trajectories are not returned when the national model is used"
 
 test_that("Can set constant Anthro", {
   scnsConst <- getScenarioDefaults()
-  distScn <- data.frame(Anthro = 20, fire_excl_anthro = 0, Year = 1:10+2000)
+  distScn <- data.frame(Anthro = 20, Fire_excl_anthro = 0, Year = 1:10+2000)
   scnsConst <- merge(scnsConst, distScn)
   scnsConst$iAnthro <- NULL
   distConst <- trajectoriesFromNational(cPars = scnsConst, forceUpdate = TRUE)$summary
@@ -35,7 +35,7 @@ test_that("can specify multiple disturbance scenarios", {
 })
 
 test_that("get samples by default and projects over time when Year supplied",{
-  disturbance <- data.frame(Anthro = 40, fire_excl_anthro = 2)
+  disturbance <- data.frame(Anthro = 40, Fire_excl_anthro = 2)
   disturbance <-  data.frame(step = 0:4) %>% bind_cols(disturbance) %>% 
     mutate(Anthro = Anthro + 10 * step, 
            Year = step * 10+2000)

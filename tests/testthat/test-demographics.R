@@ -5,7 +5,7 @@ covTableSim <- expand.grid(Anthro = seq(1, 90, by = 20),
 covTableSim$polygon = paste0("Missisa_", covTableSim$Anthro + 1)
 covTableSim$area = "FarNorth"
 covTableSim$Total_dist = covTableSim$Anthro + covTableSim$Fire
-covTableSim$fire_excl_anthro = covTableSim$Fire - 1
+covTableSim$Fire_excl_anthro = covTableSim$Fire - 1
 covTableSim$fire_prop_dist = covTableSim$Fire/covTableSim$Total_dist
 # these are just dummies for testing
 covTableSim$ln_nn <- 1

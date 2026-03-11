@@ -130,7 +130,7 @@ betaNationalPriors <- function(modList = NULL,
   # check for variables not programmed in jags
   diff_pars <- setdiff(
     names(rPriorCoefs),
-    c("Intercept", "Precision", "Anthro", "fire_excl_anthro")
+    c("Intercept", "Precision", "Anthro", "Fire_excl_anthro")
   )
   if (length(diff_pars) > 0) {
     stop(
@@ -141,7 +141,7 @@ betaNationalPriors <- function(modList = NULL,
 
   diff_pars <- setdiff(
     names(sPriorCoefs),
-    c("Intercept", "Precision", "Anthro", "fire_excl_anthro")
+    c("Intercept", "Precision", "Anthro", "Fire_excl_anthro")
   )
   if (length(diff_pars) > 0) {
     stop(
@@ -166,7 +166,7 @@ betaNationalPriors <- function(modList = NULL,
       R_b0_sd = modList$rIntSE,
       R_b1_mu = rPriorCoefs$Anthro,
       R_b1_sd = modList$rAnthroSlopeSE,
-      R_b2_mu = rPriorCoefs$fire_excl_anthro,
+      R_b2_mu = rPriorCoefs$Fire_excl_anthro,
       R_b2_sd = modList$rFireSlopeSE,
       R_cv_min = modList$rNuMin,
       R_cv_max = modList$rNuMax,
@@ -194,7 +194,7 @@ betaNationalPriors <- function(modList = NULL,
       R_b0_sd = round(modList$rIntSE, 4),
       R_b1_mu = rPriorCoefs$Anthro,
       R_b1_sd = round(modList$rAnthroSlopeSE, 4),
-      R_b2_mu = rPriorCoefs$fire_excl_anthro,
+      R_b2_mu = rPriorCoefs$Fire_excl_anthro,
       R_b2_sd = round(modList$rFireSlopeSE,4),
       R_cv_min = modList$rNuMin,
       R_cv_max = modList$rNuMax,
@@ -218,12 +218,12 @@ simCovariates <- function(initAnthro, initFire, numYears, anthroSlope,
   if(length(iv)!=5){
     covariates <- data.frame(time=NA)
     covariates$Anthro <- NA
-    covariates$fire_excl_anthro <- NA
+    covariates$Fire_excl_anthro <- NA
     covariates$Total_dist <- NA
     covariates <- subset(covariates,!is.na(time))
     return(covariates)
   }
-  covInit <- data.frame(Anthro = initAnthro, fire_excl_anthro = initFire)
+  covInit <- data.frame(Anthro = initAnthro, Fire_excl_anthro = initFire)
   for (t in 1:numYears) {
     # t=1s
     if (t == 1) {
@@ -240,9 +240,9 @@ simCovariates <- function(initAnthro, initFire, numYears, anthroSlope,
     }
     covPrev <- cov
     if (fireSlope == 0) {
-      cov$fire_excl_anthro <- pmax(0, rnorm(1, cov$fire_excl_anthro, 0.0001))
+      cov$Fire_excl_anthro <- pmax(0, rnorm(1, cov$Fire_excl_anthro, 0.0001))
     } else {
-      cov$fire_excl_anthro <- cov$fire_excl_anthro + fireSlope * (t - 1)
+      cov$Fire_excl_anthro <- cov$Fire_excl_anthro + fireSlope * (t - 1)
     }
     cov$time <- t
     if (t == 1) {
@@ -252,8 +252,8 @@ simCovariates <- function(initAnthro, initFire, numYears, anthroSlope,
     }
   }
   covariates$Anthro <- pmin(100, pmax(0, covariates$Anthro))
-  covariates$fire_excl_anthro <- pmin(100, pmax(0, covariates$fire_excl_anthro))
-  covariates$Total_dist <- pmin(100, covariates$Anthro + covariates$fire_excl_anthro)
+  covariates$Fire_excl_anthro <- pmin(100, pmax(0, covariates$Fire_excl_anthro))
+  covariates$Total_dist <- pmin(100, covariates$Anthro + covariates$Fire_excl_anthro)
 
   return(covariates)
 }

@@ -125,16 +125,16 @@ processAnthroDM <- function(anthroDist, linFeat, landCover,
 }
 
 calcDMSpatial <- function(anthroDist, natDist, landCover, inData){
-  fire_excl_anthro <- terra::lapp(c(natDist, anthroDist),
+  Fire_excl_anthro <- terra::lapp(c(natDist, anthroDist),
                                   fun = function(x, y){
                                     (x - y) > 0 
                                   })
   
   all <- (anthroDist + natDist) > 0
   
-  outStack <- c(anthroDist, natDist, all, fire_excl_anthro)
+  outStack <- c(anthroDist, natDist, all, Fire_excl_anthro)
   
-  rm(anthroDist, natDist, all, fire_excl_anthro)
+  rm(anthroDist, natDist, all, Fire_excl_anthro)
   
   pp = terra::rasterize(inData@projectPoly, outStack[[1]])
   
@@ -150,7 +150,7 @@ calcDMSpatial <- function(anthroDist, natDist, landCover, inData){
   names(outStack) = c("Anthro", 
                       "Fire", 
                       "Total_dist",
-                      "fire_excl_anthro")
+                      "Fire_excl_anthro")
   return(outStack)
 }
 
@@ -167,7 +167,7 @@ calcDM <- function(inData, isPercent){
     rr$Anthro <- rr$Anthro * 100
     rr$Fire <- rr$Fire * 100
     rr$Total_dist <- rr$Total_dist * 100
-    rr$fire_excl_anthro <- rr$fire_excl_anthro * 100
+    rr$Fire_excl_anthro <- rr$Fire_excl_anthro * 100
   }
   return(rr)
 }

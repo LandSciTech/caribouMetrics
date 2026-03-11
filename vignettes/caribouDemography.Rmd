@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Caribou Demographic Rates and Trajectories}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: references.bib
+bibliography: caribouMetricsPackageRefs.bib
 pkgdown:
   as_is: true
 link-citations: yes
@@ -27,7 +27,7 @@ if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork'
 # Demographic rates and trajectories from the national model
 
 ## Overview
-Here we describe a demographic model with density dependence and interannual variability following @johnson2020 with modifications noted in  @hughes2025 and [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates vary with disturbance as estimated by @johnson2020. A detailed description of the model is provided in [@hughes2025 Section 2.4].
+Here we describe a demographic model with density dependence and interannual variability following @johnson2020 with modifications noted in @hughes2025 and @dyson2026. Demographic rates vary with disturbance as estimated by @johnson2020. A detailed description of the model is provided in [@hughes2025 Section 2.4].
 
 `getNationalCoefficients()` selects the regression coefficient values and standard errors for the desired model version (see `popGrowthTableJohnsonECCC` for options) and then samples coefficients from these Gaussian distributions for each replicate population.  
 
@@ -55,7 +55,7 @@ figWidth <- 8; figHeight <- 10
 
 A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. First we define a disturbance scenario with 40% anthropogenic disturbance and 2% fire disturbance. If we had spatial data for the disturbance in our area of interest we could use `disturbanceMetrics()` to directly calculate the disturbance. (See [Disturbance Metrics](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html) vignette for an example).
 ```{r make-dist}
-disturbance <- data.frame(Anthro = 40, fire_excl_anthro = 2)
+disturbance <- data.frame(Anthro = 40, Fire_excl_anthro = 2)
 ```
 
 We begin by sampling coefficients for 500 replicate populations using default Johnson et al. (2020) models "M1" and "M4". The returned object is a list containing the coefficients and standard errors from the national model as well as the sampled coefficients and the quantiles that they have been assigned to.
@@ -91,7 +91,7 @@ demography <- cbind(rateSamples,
 fds <- pivot_longer(demography, !(scnID:replicate) & !N0, names_to = "Metric",
                     values_to = "Amount")
 d1 <- ggplot(fds, aes(x = as.factor(round(Anthro, 2)), y = Amount, 
-                      colour = fire_excl_anthro)) +
+                      colour = Fire_excl_anthro)) +
   geom_violin(alpha = 0.4, color = "black") +
   geom_point(shape = 21, size = 2, position = position_jitterdodge()) +
   facet_wrap(~Metric, scales = "free") +
@@ -111,8 +111,8 @@ We can project demographic rates over a range of landscape conditions to recreat
 
 ```{r disturbanceCovariates, results='hide',message=F, warning=T}
 covTableSim <- expand.grid(Anthro = seq(0, 90, by = 2), 
-                           fire_excl_anthro = seq(0, 70, by = 10)) 
-covTableSim$Total_dist = covTableSim$Anthro + covTableSim$fire_excl_anthro
+                           Fire_excl_anthro = seq(0, 70, by = 10)) 
+covTableSim$Total_dist = covTableSim$Anthro + covTableSim$Fire_excl_anthro
 ```
 
 We again sample coefficients from default models M1 and M4. The sample of 500 is used to calculate averages, while the sample of 35 is used to show variability among populations.
@@ -172,7 +172,7 @@ rateSummariesIgnorePrecision <- estimateNationalRates(
 rateSamples$rep = as.factor(rateSamples$replicate)
 levels(rateSamples$rep) = sample(unique(rateSamples$replicate), replace = FALSE)
 rateSamples$rep = as.character(rateSamples$rep)
-rateSamples$fullGrp = paste(rateSamples$rep, rateSamples$fire_excl_anthro)
+rateSamples$fullGrp = paste(rateSamples$rep, rateSamples$Fire_excl_anthro)
 
 base1 <- ggplot(data = rateSummariesIgnorePrecision, 
                 aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh))+
@@ -186,8 +186,8 @@ base1 <- ggplot(data = rateSummariesIgnorePrecision,
 
 plot_recruitment3 <- ggplot(
   data = rateSummariesIgnorePrecision, 
-  aes(x = Anthro, y = R_bar * 100, group = fire_excl_anthro, colour = fire_excl_anthro, type = fire_excl_anthro, 
-      ymin = R_PIlow * 100, ymax = R_PIhigh * 100, fill = fire_excl_anthro)
+  aes(x = Anthro, y = R_bar * 100, group = Fire_excl_anthro, colour = Fire_excl_anthro, type = Fire_excl_anthro, 
+      ymin = R_PIlow * 100, ymax = R_PIhigh * 100, fill = Fire_excl_anthro)
   )+
   geom_line(linewidth = 2)+
   geom_ribbon(alpha = 0.15, colour = NA)+
@@ -203,7 +203,7 @@ base1 / plot_recruitment3
 ```{r withPrecision, echo=F, fig.width=figWidth,fig.height=5,fig.cap="Variation in expected survival and recruitment with disturbance. Bands (2.5% and 97.5% quantiles of 500 samples) include both uncertainty about the regression coefficients and additional variation summarized by the precision parameter of Johnson et al's [-@johnson2020] Beta regression models. Faint coloured lines show example trajectories of expected demographic rates in sample populations, assuming each sample population is randomly distributed among quantiles of the beta distribution, and each population remains in the same quantile of the Beta distribution as disturbance changes."}
 base1 <- ggplot(data = rateSummaries, 
                 aes(x = Anthro, y = S_bar, ymin = S_PIlow, ymax = S_PIhigh))+
-  geom_line(data = subset(rateSamples, fire_excl_anthro == 0), linewidth = 0.5, 
+  geom_line(data = subset(rateSamples, Fire_excl_anthro == 0), linewidth = 0.5, 
             aes(x = Anthro, y = S_bar, group = rep, colour = rep), inherit.aes = FALSE)+
   geom_line(colour = "black", linewidth = 2)+
   geom_ribbon(alpha = 0.25)+
@@ -214,10 +214,10 @@ base1 <- ggplot(data = rateSummaries,
   scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))
 
 plot_recruitment3 <- ggplot(data = rateSummaries, 
-                            aes(x = Anthro, y = R_bar * 100,  group = fire_excl_anthro,
-                                colour = fire_excl_anthro, type = fire_excl_anthro))+
+                            aes(x = Anthro, y = R_bar * 100,  group = Fire_excl_anthro,
+                                colour = Fire_excl_anthro, type = Fire_excl_anthro))+
   geom_line(data = rateSamples,  
-            aes(x = Anthro, y = R_bar * 100, group = fullGrp, colour = fire_excl_anthro),
+            aes(x = Anthro, y = R_bar * 100, group = fullGrp, colour = Fire_excl_anthro),
             linewidth = 0.5, alpha = 0.2, inherit.aes = FALSE)+
   geom_line(linewidth = 2)+
   scale_colour_gradient(low = "green", high = "red")+
@@ -303,16 +303,16 @@ natTraj <- trajectoriesFromNational(replicates = 500,
 # add year to return samples
 natTraj35 <- trajectoriesFromNational(replicates = 35, 
                                     disturbance = covTableSim %>% 
-                                      mutate(Year = Anthro+100*fire_excl_anthro), 
+                                      mutate(Year = Anthro+100*Fire_excl_anthro), 
                                     returnSamples = TRUE, interannualVar = FALSE, 
                                     useQuantiles = TRUE)
 ```
 
 ```{r withPrecisionWrapper, echo=F, fig.width=figWidth,fig.height=5,fig.cap="Variation in expected survival and recruitment with disturbance, obtained using the trajectoriesFromNational wrapper function. See Figure 1.3 for details."}
-base2 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "survival", fire_excl_anthroID == 0) ,
+base2 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "survival", Fire_excl_anthroID == 0) ,
                 aes(x = AnthroID, y = Mean, ymin = lower, ymax = upper))+
    geom_line(data = natTraj35$samples%>% 
-               filter(MetricTypeID == "survival", fire_excl_anthroID == 0),
+               filter(MetricTypeID == "survival", Fire_excl_anthroID == 0),
              linewidth = 0.5,
             aes(x = AnthroID, y = Amount, group = Replicate, colour = Replicate),
             inherit.aes = FALSE)+
@@ -324,12 +324,12 @@ base2 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "survival", fi
   theme(legend.position = "none")+
   scale_x_continuous(limits = c(0, 90), breaks = c(0, 20, 40, 60, 80))
 plot_recruitment4 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "recruitment"),
-                            aes(x = AnthroID, y = Mean * 100,  group = fire_excl_anthroID,
-                                colour = fire_excl_anthroID, type = fire_excl_anthroID))+
+                            aes(x = AnthroID, y = Mean * 100,  group = Fire_excl_anthroID,
+                                colour = Fire_excl_anthroID, type = Fire_excl_anthroID))+
   geom_line(data = natTraj35$samples%>% 
                filter(MetricTypeID == "recruitment"),
-            aes(x = AnthroID, y = Amount*100, group =interaction(Replicate, fire_excl_anthroID),
-                colour = fire_excl_anthroID),
+            aes(x = AnthroID, y = Amount*100, group =interaction(Replicate, Fire_excl_anthroID),
+                colour = Fire_excl_anthroID),
             linewidth = 0.5, alpha = 0.2, inherit.aes = FALSE)+
   geom_line(linewidth = 2)+
   scale_colour_gradient(low = "green", high = "red")+
@@ -339,12 +339,12 @@ plot_recruitment4 <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "r
   xlab("Anthropogenic disturbance (%)")+
   ylab("Recruitment (calves per 100 cows)")
 plot_lambda <- ggplot(data = natTraj$summary %>% filter(MetricTypeID == "recruitment"),
-                            aes(x = AnthroID, y = Mean * 100,  group = fire_excl_anthroID,
-                                colour = fire_excl_anthroID, type = fire_excl_anthroID))+
+                            aes(x = AnthroID, y = Mean * 100,  group = Fire_excl_anthroID,
+                                colour = Fire_excl_anthroID, type = Fire_excl_anthroID))+
   geom_line(data = natTraj35$samples%>% 
                filter(MetricTypeID == "recruitment"),
-            aes(x = AnthroID, y = Amount*100, group =interaction(Replicate, fire_excl_anthroID),
-                colour = fire_excl_anthroID),
+            aes(x = AnthroID, y = Amount*100, group =interaction(Replicate, Fire_excl_anthroID),
+                colour = Fire_excl_anthroID),
             linewidth = 0.5, alpha = 0.2, inherit.aes = FALSE)+
   geom_line(linewidth = 2)+
   scale_colour_gradient(low = "green", high = "red")+
@@ -445,7 +445,7 @@ Note no density dependence or demographic stochasticity...
 
 ## Using the trajectoriesFromBayesian wrapper function to project population growth
 
-For convenience, to enable comparisons (e.g. [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html) vignette), and to integrate with other methods and workflows, we can use the `trajectoriesFromBayesian` wrapper function to get sample trajectories and summaries from our fitted bboutools model. Note that if we use only the information in the fitted model (that does not include initial population size) then the summary results (bands in Figure X) are identical to the bboutools projections (Figs X). The returned example trajectories are derived from the MCMC samples. If we also provide initial population size information then the projection (by default) includes density dependence and demographic stochasticity [@dyson2022; @hughes2025] (Fig X); . Note that in this case the form of the growth model (density dependence & demographic stochasticity, but not interannual variability) can be changed by setting `caribouPopGrowth` function parameters (e.g. Fig X no demographic stochasticity); see XX for details, but note that the Bayesian MCMC samples include interannual variation in recruitment and survival, so no additional interannual variation is added by `caribouPopGrowth` in this case.
+For convenience, to enable comparisons (e.g. [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html) vignette), and to integrate with other methods and workflows, we can use the `trajectoriesFromBayesian` wrapper function to get sample trajectories and summaries from our fitted bboutools model. Note that if we use only the information in the fitted model (that does not include initial population size) then the summary results (bands in Figure X) are identical to the bboutools projections (Figs X). The returned example trajectories are derived from the MCMC samples. If we also provide initial population size information then the projection (by default) includes density dependence and demographic stochasticity [@dyson2026; @hughes2025] (Fig X); . Note that in this case the form of the growth model (density dependence & demographic stochasticity, but not interannual variability) can be changed by setting `caribouPopGrowth` function parameters (e.g. Fig X no demographic stochasticity); see XX for details, but note that the Bayesian MCMC samples include interannual variation in recruitment and survival, so no additional interannual variation is added by `caribouPopGrowth` in this case.
 
 TO DO: add trajectoriesFromBayesian workflow diagram
 
@@ -515,15 +515,5 @@ proj
 
 
 ## References
-  Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
-  Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
-  Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (2022). Existing
-  caribou habitat and demographic models need improvement for Ring of Fire
-  impact assessment: A roadmap for improving the usefulness, transparency,
-  and availability of models for conservation.
-  <https://doi.org/10.1101/2022.06.01.494350>
-  
-  Novomestky F, Nadarajah S (2016) Package ‘truncdist.’ Version 1.0-2URL
-  <https://CRAN.R-project.org/package=truncdist>
 
   

@@ -35,7 +35,7 @@
 #' @param recSurveyMonth integer. The month of simulated recruitment surveys.
 #' @param recSurveyDay integer. The day for simulated recruitment surveys.
 #' @param distScen data.frame. Disturbance scenario. Must have columns "Year",
-#'   "Anthro", and "fire_excl_anthro" containing the year, percentage of the
+#'   "Anthro", and "Fire_excl_anthro" containing the year, percentage of the
 #'   landscape covered by anthropogenic disturbance buffered by 500 m, and the
 #'   percentage covered by fire that does not overlap anthropogenic disturbance.
 #'   See [disturbanceMetrics()]. If NULL the disturbance scenario is simulated
@@ -48,7 +48,7 @@
 #' @return a list with elements:
 #'   * minYr: first year in the simulations,
 #'   * maxYr: last year in the simulations,
-#'   * simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
+#'   * simDisturbance: a data frame with columns Anthro, Fire_excl_anthro, Total_dist, and  Year,
 #'   * simSurvObs: a data frame of survival data in bboutools format,
 #'   * simRecruitObs: a data frame of recruitment data in bboutools format,
 #'   * exData: a tibble of expected population metrics based on the initial model,
@@ -154,24 +154,24 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     trajectories$PopulationName<-'A'
   }else{
     names(trajectories)<-gsub("AnthroID","Anthro",names(trajectories),fixed=T)
-    names(trajectories)<-gsub("fire_excl_anthroID","fire_excl_anthro",names(trajectories),fixed=T)
+    names(trajectories)<-gsub("Fire_excl_anthroID","Fire_excl_anthro",names(trajectories),fixed=T)
     
     #remove irrelevant disturbance combinations from the example trajectory.
     if(nrow(simDisturbance)>0){
-      if(!is.null(trajectories[["Anthro"]]) && !is.null(trajectories[["fire_excl_anthro"]])){
+      if(!is.null(trajectories[["Anthro"]]) && !is.null(trajectories[["Fire_excl_anthro"]])){
         if(!any(!is.na(trajectories$Anthro))){trajectories$Anthro=NULL}
-        if(!any(!is.na(trajectories$fire_excl_anthro))){trajectories$fire_excl_anthro=NULL}
+        if(!any(!is.na(trajectories$Fire_excl_anthro))){trajectories$Fire_excl_anthro=NULL}
       }
       
-      distMerge <- subset(simDisturbance, select=c(Anthro,fire_excl_anthro,Year))
-      distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
+      distMerge <- subset(simDisturbance, select=c(Anthro,Fire_excl_anthro,Year))
+      distMerge$Fire_excl_anthro=round(distMerge$Fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
       distMerge=unique(distMerge)
-      names(distMerge) <- c("Anthro","fire_excl_anthro","Year")
+      names(distMerge) <- c("Anthro","Fire_excl_anthro","Year")
       tt<- merge(trajectories,distMerge)
       check <- unique(subset(tt,select=names(distMerge)))
       if(nrow(check)!=nrow(distMerge)){
         if(is.element("Anthro",names(trajectories))){
-          simDisturbance <- unique(subset(trajectories,select=c(Anthro,fire_excl_anthro,Year)))
+          simDisturbance <- unique(subset(trajectories,select=c(Anthro,Fire_excl_anthro,Year)))
           if(max(table(simDisturbance$Year))>1){
             stop("The example trajectories do not include the disturbance scenario specified, and they include more than one disturbance scenario. Either provide a trajectory that does not include multiple disturbance scnenario, or specify a disturbance scenario that is included in the trajectories.")
           }else{
@@ -188,7 +188,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       }
     }
   }
-  trajectories$Anthro=NULL;trajectories$fire_excl_anthro=NULL
+  trajectories$Anthro=NULL;trajectories$Fire_excl_anthro=NULL
   
   #table(subset(trajectories,Replicate=="xV1")$Year)
   #subset(trajectories,Replicate=="xV1"&Year==2023&MetricTypeID=="N")

@@ -51,7 +51,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     
     if(nrow(unique(subset(disturbance,select=c(-Year))))==1){
       
-      rbar <- unique(subset(ret$parList$Rbar,select=c(mean,sd,lower,upper,PopulationName,Anthro,fire_excl_anthro)))
+      rbar <- unique(subset(ret$parList$Rbar,select=c(mean,sd,lower,upper,PopulationName,Anthro,Fire_excl_anthro)))
       names(rbar)[1:4] <- c("R_bar","R_sd","R_bar_lower","R_bar_upper")
       sbar <- unique(subset(ret$parList$Sbar,select=c(mean,sd,lower,upper,PopulationName)))
       names(sbar)[1:4] <- c("S_bar","S_sd","S_bar_lower","S_bar_upper")

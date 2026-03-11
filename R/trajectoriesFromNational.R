@@ -23,8 +23,8 @@ if(file.exists("results/simsInitial.rds")){
 #' If a disturbance scenario containing Years is supplied trajectories will show
 #' growth of a population over time based on the National demographic - disturbance model
 #'
-#' @param disturbance data frame with Anthro, fire_excl_anthro and Year numeric
-#'   columns. Anthro and fire_excl_anthro are vectors of numbers between 0 and 100
+#' @param disturbance data frame with Anthro, Fire_excl_anthro and Year numeric
+#'   columns. Anthro and Fire_excl_anthro are vectors of numbers between 0 and 100
 #'   representing the percentage of the landscape covered by anthropogenic
 #'   disturbance buffered by 500 m, and the percentage covered by fire that does
 #'   not overlap anthropogenic disturbance.
@@ -58,7 +58,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
                             doSummary = TRUE,
                             returnSamples = "default",
                             numSteps = 1) {
-  # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);fire_excl_anthro=0;
+  # replicates=1000;N0=1000;Anthro=seq(0,100,by=1);Fire_excl_anthro=0;
   # useQuantiles =NULL
 
   # from trajectoriesFromAny #===========================================
@@ -99,7 +99,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
                                     cr$obsAnthroSlope, cr$projAnthroSlope,
                                     cr$obsYears + cr$preYears + 1)
         covariates$Year <- cr$startYear + covariates$time - 1
-        covariates$fire_excl_anthro=round(covariates$fire_excl_anthro)
+        covariates$Fire_excl_anthro=round(covariates$Fire_excl_anthro)
         covariates$distID <- cr$ID
         if(first){
           covTableObs <- covariates
@@ -110,11 +110,11 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
       }
     }else{
       if(!is.element("Anthro",names(cPars))){
-        covTableObs <- expand.grid(Anthro=seq(0,100,by=1),fire_excl_anthro=0,Year=NA)
+        covTableObs <- expand.grid(Anthro=seq(0,100,by=1),Fire_excl_anthro=0,Year=NA)
         covTableObs$Year <- covTableObs$Anthro
         hasYear <- F
       }else{
-        covTableObs <- unique(subset(cPars, select = c("Year","Anthro","fire_excl_anthro")))
+        covTableObs <- unique(subset(cPars, select = c("Year","Anthro","Fire_excl_anthro")))
       }
     }
   }else {
@@ -122,7 +122,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
       hasYear <- F
       disturbance$Year <- disturbance$Anthro
     }
-    covTableObs <- disturbance %>% select(Year, Anthro, fire_excl_anthro)
+    covTableObs <- disturbance %>% select(Year, Anthro, Fire_excl_anthro)
   }
   
   if(!is.element("distID",names(covTableObs))){
@@ -139,7 +139,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
 
   # original trajectoriesFromNational #============================================
 
-  covTableObs$Total_dist <- covTableObs$Anthro + covTableObs$fire_excl_anthro
+  covTableObs$Total_dist <- covTableObs$Anthro + covTableObs$Fire_excl_anthro
 
   if (is.null(populationGrowthTable )) {
     populationGrowthTable  <- caribouMetrics::popGrowthTableJohnsonECCC

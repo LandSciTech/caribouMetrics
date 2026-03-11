@@ -129,8 +129,8 @@ test_that("results are different without disturbances",{
   expect_false(identical(dm_noDist,  dm))
 })
 
-test_that("fire_excl_anthro lt fire",
-          expect_lt(dm@disturbanceMetrics$fire_excl_anthro, 
+test_that("Fire_excl_anthro lt fire",
+          expect_lt(dm@disturbanceMetrics$Fire_excl_anthro, 
                     dm@disturbanceMetrics$Fire)
 )
 

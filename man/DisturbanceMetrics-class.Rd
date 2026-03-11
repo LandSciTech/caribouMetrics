@@ -15,7 +15,7 @@ include:
 \item Fire: Percent fire
 \item Anthro: Percent non-overlapping buffered anthropogenic disturbance.
 \item Total_dist: Percent total non-overlapping fire and anthropogenic disturbance.
-\item fire_excl_anthro: Percent fire not overlapping with anthropogenic disturbance.
+\item Fire_excl_anthro: Percent fire not overlapping with anthropogenic disturbance.
 }
 }
 \details{

@@ -80,7 +80,7 @@ include:
 \item Fire: \% fire
 \item Anthro: \% non-overlapping anthropogenic disturbance.
 \item Total_dist: Percent total non-overlapping fire and anthropogenic disturbance.
-\item fire_excl_anthro: \% fire not overlapping with anthropogenic disturbance.
+\item Fire_excl_anthro: \% fire not overlapping with anthropogenic disturbance.
 }
 }
 \details{

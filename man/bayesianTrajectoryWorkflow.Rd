@@ -25,7 +25,7 @@ bayesianTrajectoryWorkflow(
 \item{recruit_data}{either a path to a csv file or a recruitment data table in bboutools format.}
 
 \item{disturbance}{either a path to a csv file or a dataframe containing the
-columns "Anthro","fire_excl_anthro", and "Year".}
+columns "Anthro","Fire_excl_anthro", and "Year".}
 
 \item{priors}{a list of model priors. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see \code{bboutools::bb_priors_survival} and \code{bboutools::bb_priors_recruitment} for details.
 If disturbance is not NA, see \code{\link[=betaNationalPriors]{betaNationalPriors()}} for details.}
@@ -53,7 +53,7 @@ a list with elements:
 \item summary: a data.frame
 \item samples: a tibble providing the full range of MCMC trajectories from the model.
 It is in a long format where "Amount" gives the value for
-each metric in Anthro, fire_excl_anthro, c, survival, recruitment, X, N,
+each metric in Anthro, Fire_excl_anthro, c, survival, recruitment, X, N,
 lambda, Sbar, Rbar, Xbar, Nbar, and lambda_bar, with a row for each
 combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"
 \item surv_data: a data.frame

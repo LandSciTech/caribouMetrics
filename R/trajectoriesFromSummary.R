@@ -60,7 +60,7 @@ ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPer
     recruit_fit <- rateFromBetaSummaryYS(Rbar,r_priors,params,nc,nthin,ni,nb)
   }
   
-  parTab <- subset(Rbar,select=intersect(c("Year","PopulationName","Anthro","fire_excl_anthro","PopulationID"),names(Rbar)))
+  parTab <- subset(Rbar,select=intersect(c("Year","PopulationName","Anthro","Fire_excl_anthro","PopulationID"),names(Rbar)))
   results <- list(parTab=parTab,surv_fit=surv_fit,recruit_fit=recruit_fit)
   
   return(results)

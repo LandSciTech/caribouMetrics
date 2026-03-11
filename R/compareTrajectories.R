@@ -120,26 +120,26 @@ compareTrajectories <- function(caribouBayesDemogMod,
       }
       #remove irrelevant disturbance combinations from the summaries
       distMerge <- subset(dist_params, 
-                          select=c(Anthro,fire_excl_anthro,Year))
+                          select=c(Anthro,Fire_excl_anthro,Year))
       if(is.element("Year", names(summaries))){
         if(!all(dist_params$Year %in% summaries$Year)){
           distMerge <- filter(distMerge, Year %in% summaries$Year)
         }  
       }
       
-      distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);
+      distMerge$Fire_excl_anthro=round(distMerge$Fire_excl_anthro);
       distMerge$Anthro=round(distMerge$Anthro)
       distMerge=unique(distMerge)
-      names(distMerge) <- c("AnthroID","fire_excl_anthroID","Year")
+      names(distMerge) <- c("AnthroID","Fire_excl_anthroID","Year")
       tt<- merge(summaries,distMerge)
       check <- unique(subset(tt,select=names(distMerge)))
       if(nrow(check)!=nrow(distMerge)){
         stop("Handle this case")
       }
       simBigO<-tt
-      simBigO$AnthroID=NULL;simBigO$fire_excl_anthroID=NULL
+      simBigO$AnthroID=NULL;simBigO$Fire_excl_anthroID=NULL
     }else{
-      summaries$AnthroID=NULL;summaries$fire_excl_anthroID=NULL
+      summaries$AnthroID=NULL;summaries$Fire_excl_anthroID=NULL
       by_col <- intersect(names(summaries), names(dist_params))
       if(length(by_col) == 0){
         if(any(table(summaries$Year[summaries$MetricTypeID=="recruitment"])>length(unique(summaries$PopulationName)))){

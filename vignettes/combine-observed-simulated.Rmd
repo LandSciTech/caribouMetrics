@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Simulation of monitoring scenarios informed by local data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: references.bib
+bibliography: caribouMetricsPackageRefs.bib
 pkgdown:
   as_is: true
 link-citations: yes
@@ -66,8 +66,8 @@ recruit_dataNone <- recruit_data %>% filter(Year > 2017)
 surv_dataLimited <- surv_data %>% filter(Year > 2014)
 recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
 
-disturbance = data.frame(Year = unique(surv_data$Year), Anthro = 5, fire_excl_anthro = 5)
-disturbanceHigh <- data.frame(Year = disturbance$Year,Anthro = 80,fire_excl_anthro = 10)
+disturbance = data.frame(Year = unique(surv_data$Year), Anthro = 5, Fire_excl_anthro = 5)
+disturbanceHigh <- data.frame(Year = disturbance$Year,Anthro = 80,Fire_excl_anthro = 10)
 
 betaLimited <- estimateBayesianRates(surv_dataLimited, recruit_dataLimited, disturbance=disturbance,niters=niters)
 betaInformative <- estimateBayesianRates(surv_data, recruit_data, disturbance=disturbance,niters=niters)

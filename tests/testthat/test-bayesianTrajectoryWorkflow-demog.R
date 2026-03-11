@@ -65,7 +65,7 @@ test_that("results match expected", {
   # difference between observed and true simulated observations
   calcDif <- function(obs, var){
     obs %>%
-      filter(!MetricTypeID %in% c("Anthro", "fire_excl_anthro")) %>% 
+      filter(!MetricTypeID %in% c("Anthro", "Fire_excl_anthro")) %>% 
       select(Year, Mean, Type, Parameter) %>% 
       tidyr::pivot_wider(names_from = "Type", values_from = "Mean") %>% 
       filter(!is.na(observed)) %>% 
@@ -78,7 +78,7 @@ test_that("results match expected", {
   calcDifMod <- function(mod, var){
     #mod = manyObs
     obs_true <- mod$obs.all %>% 
-      filter(!MetricTypeID %in% c("Anthro", "fire_excl_anthro", "c"),
+      filter(!MetricTypeID %in% c("Anthro", "Fire_excl_anthro", "c"),
              Type == "true") %>% 
       select(Year, Mean, Type, Parameter) 
     mod_proj <- mod$rr.summary.all %>% 

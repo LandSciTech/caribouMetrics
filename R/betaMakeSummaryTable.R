@@ -157,7 +157,7 @@ betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
   data$Yearlings[is.na(data$Yearlings)]=0
   
   anthro <- spread(subset(data,select=c(Annual,PopulationID,Anthro)), PopulationID, Anthro)
-  fire <- spread(subset(data,select=c(Annual,PopulationID,fire_excl_anthro)), PopulationID, fire_excl_anthro)
+  fire <- spread(subset(data,select=c(Annual,PopulationID,Fire_excl_anthro)), PopulationID, Fire_excl_anthro)
   
   if(any(is.na(anthro))){
     filter(anthro, if_any(-Annual, \(x)is.na(x))) %>% 
@@ -355,7 +355,7 @@ summarizeMonitoredNode <- function(parameter_stats,node,data){
            "upper"="quantiles.97.5.") %>%
     select(c("node","mean","sd","lower","upper"))
   data$node <- paste0(node,"[",as.integer(data$Annual),",",as.integer(data$PopulationID),"]")
-  Rpred <- merge(Rpred,subset(data,select=intersect(names(data),c("node","Year","PopulationName","Annual","Anthro","fire_excl_anthro"))))
+  Rpred <- merge(Rpred,subset(data,select=intersect(names(data),c("node","Year","PopulationName","Annual","Anthro","Fire_excl_anthro"))))
   Rpred <- Rpred[order(Rpred$Year,Rpred$PopulationName),]
   Rpred$MetricTypeID = node
   return(Rpred)

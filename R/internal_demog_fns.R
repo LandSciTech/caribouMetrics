@@ -19,10 +19,10 @@ convertTrajectories<-function(pars){
   }
   if(!is.element("c",names(pars))){pars$c=NA}
 
-  nameChange <- data.frame(inName=c("id","lamPercentile", "Year","PopulationName","Anthro", "fire_excl_anthro","c",
+  nameChange <- data.frame(inName=c("id","lamPercentile", "Year","PopulationName","Anthro", "Fire_excl_anthro","c",
                                     "S_t", "R_t", "X_t", "N",
                                     "lambda","S_bar","R_bar","X_bar","N_bar","lambdaE_bar"),
-                           outName=c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "fire_excl_anthro","c", 
+                           outName=c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "Fire_excl_anthro","c", 
                                      "survival","recruitment","X", "N", "lambda","Sbar","Rbar","Xbar","Nbar","lambda_bar"))
   
   if(!is.element("lambdaE_bar",names(pars))){
@@ -33,12 +33,12 @@ convertTrajectories<-function(pars){
   names(fds) <- nameChange$outName
   
   if(is.element("Anthro", colnames(fds))){
-    fds$AnthroID = round(fds$Anthro);fds$fire_excl_anthroID=round(fds$fire_excl_anthro)
+    fds$AnthroID = round(fds$Anthro);fds$Fire_excl_anthroID=round(fds$Fire_excl_anthro)
   }
 
   fds$Timestep = as.numeric(fds$Year)
   fds$Year=as.numeric(as.character(fds$Year))
-  fds <- tidyr::pivot_longer(fds, !any_of(c("Replicate","LambdaPercentile","Year","Timestep","PopulationName","AnthroID","fire_excl_anthroID")), names_to = "MetricTypeID",
+  fds <- tidyr::pivot_longer(fds, !any_of(c("Replicate","LambdaPercentile","Year","Timestep","PopulationName","AnthroID","Fire_excl_anthroID")), names_to = "MetricTypeID",
                              values_to = "Amount")
   fds$MetricTypeID <- as.character(fds$MetricTypeID)
   fds$Replicate <- paste0("x", fds$Replicate)
@@ -63,7 +63,7 @@ summarizeTrajectories <- function(pars,returnSamples=T){
 
   if(is.element("AnthroID",names(pars))){  
     simSum <- pars  %>%
-      group_by(Year,PopulationName,MetricTypeID,AnthroID,fire_excl_anthroID) %>%
+      group_by(Year,PopulationName,MetricTypeID,AnthroID,Fire_excl_anthroID) %>%
       summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
                 upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
   }else{
@@ -426,7 +426,7 @@ testPopGrowthTable <- function(df) {
 
   diff_coef <- setdiff(unique(df$Coefficient), c(
     "Intercept", "Precision",
-    "Anthro", "fire_excl_anthro"
+    "Anthro", "Fire_excl_anthro"
   ))
 
   if (length(diff_coef) > 0) {

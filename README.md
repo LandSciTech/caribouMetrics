@@ -140,7 +140,7 @@ demRates <- estimateNationalRates(covTable = disturb_tbl,
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
-#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar   S_stdErr
+#>   zone   Anthro     Fire Total_dist Fire_excl_anthro FID     S_bar   S_stdErr
 #> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05024037
 #>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
 #> 1 0.7625781 0.9198247 0.1813372 0.09842164 0.03913806 0.3782637

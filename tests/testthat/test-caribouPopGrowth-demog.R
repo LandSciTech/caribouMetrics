@@ -61,10 +61,10 @@ test_that("pop Growth matches Johnson figures", {
   
   covTableSim <- data.frame(Anthro = c(0, 10, 20, 30, 40, 50, 
                                        60, 70, 80, 90, 100), 
-                            fire_excl_anthro = 4.27)
+                            Fire_excl_anthro = 4.27)
   covTableSim$polygon <- paste0("Missisa_", covTableSim$Anthro + 1)
   covTableSim$area <- "FarNorth"
-  covTableSim$Total_dist <- covTableSim$Anthro + covTableSim$fire_excl_anthro
+  covTableSim$Total_dist <- covTableSim$Anthro + covTableSim$Fire_excl_anthro
   
   popGrowthPars <- getNationalCoefficients(500,
                                            modelVersion = "Johnson",

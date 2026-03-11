@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models }
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: references.bib
+bibliography: caribouMetricsPackageRefs.bib
 pkgdown:
   as_is: true
 link-citations: yes
@@ -97,7 +97,7 @@ As shown by @hughes2025 the prior means and 95% prior predictive intervals from 
 
 ```{r compare beta prior to national model, results='hide'}
 disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 5,
-                          fire_excl_anthro = 1)
+                          Fire_excl_anthro = 1)
 betaPrior <- bayesianTrajectoryWorkflow(surv_dataNone, recruit_dataNone, disturbance)
 simNational <- trajectoriesFromNational(disturbance = disturbance)
 out_tbls <- compareTrajectories(betaPrior, simInitial = simNational)
@@ -146,7 +146,7 @@ rec / surv / lam
 The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar prior predictions of expected demographic rates. The bbou model assumes more prior uncertainty about interannual variation, so prior predictions of the distribution of observed demographic rates in each year continue to differ. TODO explain what expected demographic parameters are and how they are different from the plots shown on the right.
 
 ```{r compare beta and bbou with informative priors., results='hide'}
-b0Priors <- bbouNationalPriors(Anthro = unique(disturbance$Anthro), fire_excl_anthro = unique(disturbance$fire_excl_anthro), month = TRUE)
+b0Priors <- bbouNationalPriors(Anthro = unique(disturbance$Anthro), Fire_excl_anthro = unique(disturbance$Fire_excl_anthro), month = TRUE)
 if (useSaved & file.exists(bbouPriorNationalFile)) {
   bbouPriorNational <- readRDS(bbouPriorNationalFile)
 } else {
@@ -214,7 +214,7 @@ The bbou model does not include disturbance covariates, so we expect the models 
 ```{r compare beta and bbou with changing disturbance, results='hide'}
 disturbance <- data.frame(Year = seq(2011, 2051),
                           Anthro = seq(20, 2 * 40 + 20, length.out = 41),
-                          fire_excl_anthro = 1)
+                          Fire_excl_anthro = 1)
 if (useSaved & file.exists(betaAnthroFile)){
   betaAnthroChange <- readRDS(betaAnthroFile)
 } else {
@@ -255,7 +255,7 @@ rec / surv / lam
 If local data is limited the bbou model with default (less informative) priors and the Beta model with disturbance covariates and informative priors may also give different results, particularly if observations are inconsistent with expectations from the observed distribution of outcomes across the country. For example (Figure \@ref(fig:fig-plotLimitedLocal)) when disturbance is high the prior expectation from the Beta model is that recruitment and survival will be low. In this example there are a couple of observations of survival and recruitment that are higher than expected given knowledge of disturbance. Both models acknowledge high uncertainty about the true state of the population given limited local data. The Beta model predicts lower growth than the bbou model in this case because it is combining the limited local information with a prior expectation that demographic rates will be low when disturbance is high.
 
 ```{r compare beta and bbou with limited data., results='hide'}
-disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 90, fire_excl_anthro = 5)
+disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 90, Fire_excl_anthro = 5)
 betaLimited <- bayesianTrajectoryWorkflow(surv_dataLimited, recruit_dataLimited, disturbance)
 if (useSaved & file.exists(bbouLimitedFile)) {
   bbouLimited <- readRDS(bbouLimitedFile)

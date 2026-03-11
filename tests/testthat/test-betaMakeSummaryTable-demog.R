@@ -9,7 +9,7 @@ test_that("Basic inputs works", {
   out <- betaMakeSummaryTable(
     surv_data = bboudata::bbousurv_a %>% filter(Year > 2010),
     recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
-    disturbance = data.frame(Year = 2010:2020, Anthro = 10:20, fire_excl_anthro = 10:20),
+    disturbance = data.frame(Year = 2010:2020, Anthro = 10:20, Fire_excl_anthro = 10:20),
     priors = betaNationalPriors(), 
     nc, nthin, ni, nb
   )
@@ -21,7 +21,7 @@ test_that("multiple populations works", {
     out <- betaMakeSummaryTable(
       surv_data = bboudata::bbousurv_a %>% bind_rows(bboudata::bbousurv_b) %>% filter(Year > 2010),
       recruit_data = bboudata::bbourecruit_a %>% bind_rows(bboudata::bbourecruit_b) %>% filter(Year > 2010),
-      disturbance = data.frame(Year = 2010:2020, Anthro = 10:20, fire_excl_anthro = 10:20),
+      disturbance = data.frame(Year = 2010:2020, Anthro = 10:20, Fire_excl_anthro = 10:20),
       priors = betaNationalPriors(), 
       nc, nthin, ni, nb
     )
@@ -31,8 +31,8 @@ test_that("multiple populations works", {
       surv_data = bboudata::bbousurv_a %>% bind_rows(bboudata::bbousurv_b) %>% filter(Year > 2010),
       recruit_data = bboudata::bbourecruit_a %>% bind_rows(bboudata::bbourecruit_b) %>% filter(Year > 2010),
       disturbance = bind_rows(
-        data.frame(PopulationName = "A", Year = 2010:2020, Anthro = 10:20, fire_excl_anthro = 10:20),
-        data.frame(PopulationName = "B", Year = 2010:2020, Anthro = 10:20, fire_excl_anthro = 10:20)
+        data.frame(PopulationName = "A", Year = 2010:2020, Anthro = 10:20, Fire_excl_anthro = 10:20),
+        data.frame(PopulationName = "B", Year = 2010:2020, Anthro = 10:20, Fire_excl_anthro = 10:20)
       ),
       priors = betaNationalPriors(), 
       nc, nthin, ni, nb

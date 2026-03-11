@@ -7,7 +7,7 @@
 #' @param surv_data either a path to a csv file or a survival data table in bboutools format.
 #' @param recruit_data either a path to a csv file or a recruitment data table in bboutools format.
 #' @param disturbance either a path to a csv file or a dataframe containing the
-#'   columns "Anthro","fire_excl_anthro", and "Year".
+#'   columns "Anthro","Fire_excl_anthro", and "Year".
 #' @param priors a list of model priors. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see `bboutools::bb_priors_survival` and `bboutools::bb_priors_recruitment` for details.
 #'               If disturbance is not NA, see [betaNationalPriors()] for details.
 #' @param startYear,endYear year defining the beginning of the observation
@@ -25,7 +25,7 @@
 #'     * summary: a data.frame
 #'     * samples: a tibble providing the full range of MCMC trajectories from the model. 
 #'     It is in a long format where "Amount" gives the value for 
-#'     each metric in Anthro, fire_excl_anthro, c, survival, recruitment, X, N, 
+#'     each metric in Anthro, Fire_excl_anthro, c, survival, recruitment, X, N, 
 #'     lambda, Sbar, Rbar, Xbar, Nbar, and lambda_bar, with a row for each 
 #'     combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"
 #'     * surv_data: a data.frame
@@ -120,7 +120,7 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
 
   # if decide to error when Year ranges don't match could use testTable
   if(!is.null(disturbance)){
-    testTable(disturbance, c("Year", "Anthro", "fire_excl_anthro"))
+    testTable(disturbance, c("Year", "Anthro", "Fire_excl_anthro"))
   }
   #TO DO: use bboutools data test functions for survival and recruitment
   bboudata::bbd_chk_data_survival(surv_data, allow_missing = TRUE, multi_pops = TRUE)
@@ -142,10 +142,10 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   if(!is.null(disturbance)){
     disturbance <- merge(data.frame(Year = seq(inp$startYear, inp$endYear)),
                          disturbance, by = "Year", all.x = T)
-    if (anyNA(select(disturbance, "Anthro", "fire_excl_anthro"))) {
+    if (anyNA(select(disturbance, "Anthro", "Fire_excl_anthro"))) {
       warning(
         "Years ",
-        filter(disturbance, if_any(c(Anthro, fire_excl_anthro), is.na)) %>%
+        filter(disturbance, if_any(c(Anthro, Fire_excl_anthro), is.na)) %>%
           pull(Year) %>% paste0(collapse = ", "),
         " have missing disturbance data. ",
         "Anthro will be filled from the next year with data and fire will be fill with 0s"
@@ -153,10 +153,10 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
       
       disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup") %>%
         mutate(
-          fire_excl_anthro = tidyr::replace_na(fire_excl_anthro, 0),
-          Total_dist = fire_excl_anthro + Anthro
+          Fire_excl_anthro = tidyr::replace_na(Fire_excl_anthro, 0),
+          Total_dist = Fire_excl_anthro + Anthro
         )
-      if(anyNA(select(disturbance, "Anthro", "fire_excl_anthro"))){
+      if(anyNA(select(disturbance, "Anthro", "Fire_excl_anthro"))){
         #stop("None of the disturbance data is within the requested year range",
         #     call. = FALSE)
         disturbance=NULL

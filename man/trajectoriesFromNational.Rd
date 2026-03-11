@@ -47,8 +47,8 @@ variability parameters. These can be either coefficients of variation
 or random effects parameters from a logistic glmm (R_annual, S_annual).
 Set to \code{FALSE} to ignore interannual variability.}
 
-\item{disturbance}{data frame with Anthro, fire_excl_anthro and Year numeric
-columns. Anthro and fire_excl_anthro are vectors of numbers between 0 and 100
+\item{disturbance}{data frame with Anthro, Fire_excl_anthro and Year numeric
+columns. Anthro and Fire_excl_anthro are vectors of numbers between 0 and 100
 representing the percentage of the landscape covered by anthropogenic
 disturbance buffered by 500 m, and the percentage covered by fire that does
 not overlap anthropogenic disturbance.}

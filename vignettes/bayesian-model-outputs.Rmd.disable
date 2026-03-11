@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Options for using Bayesian model results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: references.bib
+bibliography: caribouMetricsPackageRefs.bib
 pkgdown:
   as_is: true
 link-citations: yes

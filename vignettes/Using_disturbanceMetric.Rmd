@@ -30,7 +30,7 @@ The `disturbanceMetrics()` function is used to calculate the metrics described i
 * Fire: % non-overlapping fire 
 * Anthro: % non-overlapping anthropogenic disturbance
 * Total_dist: % total non-overlapping fire and anthropogenic disturbance
-* fire_excl_anthro: % fire not overlapping with anthropogenic disturbance
+* Fire_excl_anthro: % fire not overlapping with anthropogenic disturbance
 
 `disturbanceMetrics()` uses several spatial data layers to calculate the percentage disturbance in an area: 
 

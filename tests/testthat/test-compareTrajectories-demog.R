@@ -70,7 +70,7 @@ if(file.exists(mod_flb)){
   disturbance <- unique(subset(bboudata::bbourecruit_a %>% filter(Year > 2010), 
                                select = Year))
   disturbance$Anthro <- 0
-  disturbance$fire_excl_anthro <- 0
+  disturbance$Fire_excl_anthro <- 0
   mod_realb <- bayesianTrajectoryWorkflow(
     surv_data = bboudata::bbousurv_a %>% filter(Year > 2010),
     recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
