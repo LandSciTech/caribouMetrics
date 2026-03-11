@@ -63,7 +63,6 @@ dm_lflist <- disturbanceMetrics(
   bufferWidth = 500
 )
 
-
 test_that("results match when input is paths or data",{
   expect_equal(dm@disturbanceMetrics, dm_path@disturbanceMetrics)
 })
@@ -179,7 +178,6 @@ test_that("RasterLayer input works",{
     bufferWidth = 500,
     linBuffMethod = "sf"
   )
-  
   expect_s4_class(dm_rast, "DisturbanceMetrics")
 })
 
@@ -220,8 +218,7 @@ test_that("NAs handled correctly", {
 resultCompare <- readRDS(file.path(test_path("data"), "dm_resultCompare.rds"))
 
 # To update
-# saveRDS(dm@disturbanceMetrics, file.path("tests/testthat/data", "dm_resultCompare.rds"),
-# version = 2)
+# saveRDS(dm@disturbanceMetrics, file.path("tests/testthat/data", "dm_resultCompare.rds"),version = 2)
 
 testthat::test_that("results match previous results",{
   testthat::expect_equal(dm@disturbanceMetrics, resultCompare)
