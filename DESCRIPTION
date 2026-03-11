@@ -109,7 +109,8 @@ Suggests:
     shiny,
     here,
     patchwork,
-    bookdown
+    bookdown,
+    googlesheets4
 Remotes: LandSciTech/pfocal,
     LandSciTech/bbouNationalPriors,
     bboudata=github::LandSciTech/bboudata,

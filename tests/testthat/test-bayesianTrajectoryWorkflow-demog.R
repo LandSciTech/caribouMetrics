@@ -53,10 +53,10 @@ test_that("results match expected", {
     ))
   }
   
-  doPlot <- function(scResults, var = "Recruitment", title = ""){
+  doPlot <- function(scResults, var = "Recruitment", title = "",highBound = 1){
     if (interactive()) {
       return(plotCompareTrajectories(scResults, var,
-                                     lowBound = 0,  facetVars = NULL
+                                     lowBound = 0,  highBound = highBound,facetVars = NULL
       )+
         ggplot2::ggtitle(title))
     }
@@ -76,6 +76,7 @@ test_that("results match expected", {
   
   # difference between modeled and true simulated observations
   calcDifMod <- function(mod, var){
+    #mod = manyObs
     obs_true <- mod$obs.all %>% 
       filter(!MetricTypeID %in% c("Anthro", "fire_excl_anthro", "c"),
              Type == "true") %>% 
@@ -114,10 +115,10 @@ test_that("results match expected", {
   #library(caribouMetrics)
   # when we have a lot of collars the distance between observations and "true"
   # pop is smaller than when we have few.
-  manyObs <- doScn(nCollar = 2000, rQuantile = 0.99, sQuantile = 0.01)
-  doPlot(manyObs, title = "2000 collars",var="Adult female survival")
+  manyObs <- doScn(nCollar = 2000, rQuantile = 0.01, sQuantile = 0.01)
+  doPlot(manyObs, title = "2000 collars",var="Expected growth rate",highBound=1.5)
   
-  fewCollarObs <- doScn(nCollar = 2, rQuantile = 0.99, sQuantile = 0.01)
+  fewCollarObs <- doScn(nCollar = 2, rQuantile = 0.01, sQuantile = 0.01)
   doPlot(fewCollarObs, title = "2 collars",var="Adult female survival")
   
   difMany <- calcDif(manyObs$obs.all)
