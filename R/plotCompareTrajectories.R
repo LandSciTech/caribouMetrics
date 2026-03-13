@@ -186,8 +186,8 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
                                      col = "black", fill = "black", inherit.aes = FALSE,
                                      show.legend = TRUE) +
         ggplot2::scale_shape_manual(values = c(16, 2), 
-                                    labels = c(`TRUE` = "observed", 
-                                               `FALSE` = "true\nsimulated"), 
+                                    labels = c(`TRUE` = "observation", 
+                                               `FALSE` = "trajectory"), 
                                     name = NULL)
     }
   }

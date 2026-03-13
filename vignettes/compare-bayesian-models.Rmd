@@ -3,6 +3,7 @@ title: "Comparing the caribouMetrics Beta model to bboutools models"
 output: 
     bookdown::html_document2:
         base_format: rmarkdown::html_vignette
+        toc: true
 vignette: >
   %\VignetteIndexEntry{Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models }
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,7 +27,7 @@ if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork'
 
 ## Similarities and differences between the caribouMetrics Beta model and the bboutools model
 
-@hughes2025 described a Beta model with disturbance covariates and informative priors for analysis of a single boreal caribou population with survival data aggregated by year and only cows and calves reported in the composition survey. To align with and allow comparison to the models implemented in bboutools [@dalgarno2025] we extended the @hughes2025 models as follows:
+@hughes_integration_2025 described a Beta model with disturbance covariates and informative priors for analysis of a single boreal caribou population with survival data aggregated by year and only cows and calves reported in the composition survey. To align with and allow comparison to the models implemented in bboutools [@dalgarno_bbousuite_2025] we extended the @hughes_integration_2025 models as follows:
 
 -   Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
 -   Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
@@ -93,7 +94,7 @@ recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
 
 ## Comparison of the Beta and national models
 
-As shown by @hughes2025 the prior means and 95% prior predictive intervals from the Beta model are similar to the means and ranges between the 2.5% and 97.5% quantiles of 3000 simulated survival and recruitment trajectories from the national model (Figure \@ref(fig:fig-plot1)).
+As shown by @hughes_integration_2025 the prior means and 95% prior predictive intervals from the Beta model are similar to the means and ranges between the 2.5% and 97.5% quantiles of 3000 simulated survival and recruitment trajectories from the national model (Figure \@ref(fig:fig-plot1)).
 
 ```{r compare beta prior to national model, results='hide'}
 disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 5,
@@ -146,7 +147,7 @@ rec / surv / lam
 The bbou priors can be set to (approximately) match the Beta model priors. When disturbance is constant, the models with informative priors make similar prior predictions of expected demographic rates. The bbou model assumes more prior uncertainty about interannual variation, so prior predictions of the distribution of observed demographic rates in each year continue to differ. TODO explain what expected demographic parameters are and how they are different from the plots shown on the right.
 
 ```{r compare beta and bbou with informative priors., results='hide'}
-b0Priors <- bbouNationalPriors(Anthro = unique(disturbance$Anthro), Fire_excl_anthro = unique(disturbance$Fire_excl_anthro), month = TRUE)
+b0Priors <- bbouNationalPriors(anthro = unique(disturbance$Anthro), fire_excl_anthro = unique(disturbance$Fire_excl_anthro), month = TRUE)
 if (useSaved & file.exists(bbouPriorNationalFile)) {
   bbouPriorNational <- readRDS(bbouPriorNationalFile)
 } else {

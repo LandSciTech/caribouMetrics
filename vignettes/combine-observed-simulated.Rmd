@@ -3,6 +3,7 @@ title: "Simulation of monitoring scenarios informed by local data"
 output: 
     bookdown::html_document2:
         base_format: rmarkdown::html_vignette
+        toc: true
 vignette: >
   %\VignetteIndexEntry{Simulation of monitoring scenarios informed by local data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -80,7 +81,7 @@ simLimitedHigh <- trajectoriesFromBayesian(betaLimitedHigh)
 
 ## Simulating additional monitoring of plausible example trajectories from fitted Bayesian models
 
-We begin by specifying monitoring scenario parameters, and selecting an example trajectory with a relatively low expected growth rate (i.e. in the 1st percentile of the distribution of mcmc samples from the initial model). In this example, we specify 5 additional years of monitoring, with a target of 30 collars per year, and 6 cows per collared cow in the composition surveys. We then simulate additional years of monitoring, combine the simulated and observed data, and reanalyze the combined data. Methods for simulating monitoring of example trajectories are described in @hughes2025.
+We begin by specifying monitoring scenario parameters, and selecting an example trajectory with a relatively low expected growth rate (i.e. in the 1st percentile of the distribution of mcmc samples from the initial model). In this example, we specify 5 additional years of monitoring, with a target of 30 collars per year, and 6 cows per collared cow in the composition surveys. We then simulate additional years of monitoring, combine the simulated and observed data, and reanalyze the combined data. Methods for simulating monitoring of example trajectories are described in @hughes_integration_2025.
 
 ```{r Example monitoring scenario, results='hide'}
 scns=list()
@@ -107,8 +108,7 @@ limitedMoreMonitoring = bayesianScenariosWorkflow(scns,simLimited,niters=niters)
 typeLabsL <- c("More", "Limited")
 
 limitedMoreHigh = bayesianScenariosWorkflow(scns,simLimitedHigh,niters=niters) 
-#TO DO: fix discrepancies between these two methods.
-#TO DO: change dot labels. "True simulated" should be "trajectory", and "observed" should be "observation".
+#TO DO: observation points in fig 2?
 ```
 
 ```{r fig-plot1, fig.width=figWidth,fig.height=10,fig.cap="Observed (2010-2017) and simulated (2018-2022) survival data for an example trajectory with a relatively low expected growth rate (i.e. in the 1st percentile of the distribution of mcmc samples from the initial model)."}
@@ -142,7 +142,7 @@ rec / surv / lam
 
 In these examples, an additional 5 years of monitoring of a plausible low growth rate trajectory with 5 intial years of data does not provide additional clarity about whether the population is likely to decline or not in future (Figure \@ref(fig:fig-plot2)). In contrast, an additional 5 years of monitoring does substantially reduce uncertainty when there is less initial data and disturbance is low (Figure \@ref(fig:fig-plot3)). When disturbance is high, additional monitoring does less to reduce uncertainty because we have clearer prior expectations from the national model even when local data is limited (Figure \@ref(fig:fig-plot4)).
 
-Examining multiple example trajectories clarifies that there are a range of possible outcomes from additional monitoring.In the case where true growth rate is plausibly high (99th percentile of the distribution of expected growth rate) 5 years of additional monitoring clarifies that the population is likely viable. In the case where true growth rate is plausibly low (1st percentile of the distribution of expected growth rate) 5 years of additional monitoring does not clarify whether the population is stable or declining. Additional collars do help distinguish the cases from one another, but additional benefits of that information should be weighed against additional costs. More formal and thorough analyses of the value of additional monitoring can be done by examining outcomes from a larger representative sample of plausible trajectories from the initial model (as @hughes2025).
+Examining multiple example trajectories clarifies that there are a range of possible outcomes from additional monitoring.In the case where true growth rate is plausibly high (99th percentile of the distribution of expected growth rate) 5 years of additional monitoring clarifies that the population is likely viable. In the case where true growth rate is plausibly low (1st percentile of the distribution of expected growth rate) 5 years of additional monitoring does not clarify whether the population is stable or declining. Additional collars do help distinguish the cases from one another, but additional benefits of that information should be weighed against additional costs. More formal and thorough analyses of the value of additional monitoring can be done by examining outcomes from a larger representative sample of plausible trajectories from the initial model [as in @hughes_integration_2025].
 
 ```{r Multiple trajectories and monitoring scenarios, results='hide'}
 #Add rows to the scenario table to examine multiple monitoring scenarios and example trajectories
