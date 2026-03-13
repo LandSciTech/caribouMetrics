@@ -22,7 +22,7 @@ bayesianScenariosWorkflow(
 \code{\link[=getScenarioDefaults]{getScenarioDefaults()}} for details.}
 
 \item{simInitial}{Initial simulation results, produced by calling
-\code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}} or \code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}}}
+\code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}}, \code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}}, or \code{\link[=trajectoriesFromSummary]{trajectoriesFromSummary()}}}
 
 \item{ePars}{list. Additional parameters passed on to
 \code{\link[=simulateObservations]{simulateObservations()}}}

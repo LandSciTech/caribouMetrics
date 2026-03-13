@@ -3,6 +3,7 @@ title: "Caribou Demographic Rates and Trajectories"
 output: 
     bookdown::html_document2:
         base_format: rmarkdown::html_vignette
+        toc: true
 vignette: >
   %\VignetteIndexEntry{Caribou Demographic Rates and Trajectories}
   %\VignetteEngine{knitr::rmarkdown}
@@ -36,6 +37,7 @@ Next `estimateNationalRates()` is used to apply the sampled coefficients to the 
 Finally, we can use the estimated demographic rates to project population dynamics using a simple model with two age classes. Interannual variation in survival and recruitment is modelled using truncated Beta distributions.
 
 ```{r setup, results='hide',message=F, warning=T}
+library(bboutools)
 library(caribouMetrics)
 # use local version on local and installed on GH
 if (requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
@@ -250,7 +252,7 @@ base1 / plot_recruitment3
 
 ## Projection of population growth over time on a changing landscape: workflow details
 
-In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade (Figure \@ref(fig:changeOverTime)). Note the form of the growth model (density dependence, interannual variation, demographic stochasticity etc) can be changed by setting `caribouPopGrowth()` function parameters; see XX for details.
+In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade (Figure \@ref(fig:changeOverTime)). Note the form of the growth model (density dependence, interannual variation, demographic stochasticity etc) can be changed by setting `caribouPopGrowth()` function parameters.
 
 ```{r projectionOverTime, results='hide',message=F, warning=T}
 numTimesteps <- 50
@@ -311,8 +313,6 @@ base1
 ## Using the trajectoriesFromNational wrapper function to project population growth
 
 The examples above show steps in the demographic modeling workflow. We also provide a `trajectoriesFromNational` wrapper function that samples the coefficients from the National model, calculates demographic rates given those coefficients and the level of disturbance, projects population growth using `caribouPopGrowth`, and returns summaries of the demographic rates (ref workflow diagram). If the disturbance scenario includes a Year column `trajectoriesFromNational` projects population growth over time, and also returns sample demographic trajectories. If year is not provided, population growth is projected for one year, and sample trajectories are not returned.  
-
-TO DO: add trajectoriesFromNational workflow diagram
 
 ```{r results='hide',message=F, warning=T}
 natTraj <- trajectoriesFromNational(replicates = 500, 
@@ -412,7 +412,7 @@ proj <- ggplot(data = popMetrics2$summary,
 
 proj
 ```
-# Demographic rates and trajectories from bboutools Bayesian models
+# Demographic rates and trajectories from Bayesian models
 
 NOTE: To enable the QC app project and others we made several changes to bboutools. At present these examples only work with our modified version of bboutools. bboutools developers are integrating the changes into their main package, with an update to be released in spring 2026. Once they have finalized their methods and workflows we will update our code, tests, and documentation to be consistent with their updated package. Until all that is done these tools remain a work in progress - they should only be used by people who won't be surprised or upset when we make changes. It is also important to note that we have very little capacity for user support at this time; time we spend supporting users will will delay progress on building, documenting, testing and publishing the tools.
 
@@ -449,35 +449,43 @@ if (useSaved & file.exists(bbouInformativeFile)) {
 
 ## Using bboutools to project population growth
 
-The bboutools R package includes methods for projecting calf:cow ratios, recruitment, survival, and population growth rate.
+The bboutools R package includes methods for projecting calf:cow ratios, recruitment, survival, and population growth rate. Note there is no population size, demographic stochasticity or density dependence in these projections.
 
-```{r bboutoolsProjection}
-
-
-
-
+```{r bboutoolsCalfcow, echo=T, fig.width=figWidth,fig.height=2,fig.cap="Calf:cow ratio projection from bboutools."}
+predict_calfcow <- bboutools::bb_predict_calf_cow_ratio(bbouInformative$recruit_fit, year = TRUE)
+bboutools::bb_plot_year_calf_cow_ratio(predict_calfcow)
 ```
 
-Note pop growth rate reported by bboutools is...
+```{r bboutoolsRecruitment, echo=T, fig.width=figWidth,fig.height=2,fig.cap="Recruitment projection from bboutools."}
+predict_recruitment <- bboutools::bb_predict_recruitment(bbouInformative$recruit_fit, year = TRUE)
+bboutools::bb_plot_year_recruitment(predict_recruitment)
+```
 
-Note no density dependence or demographic stochasticity...
+```{r bboutoolsSurvival, echo=T, fig.width=figWidth,fig.height=2,fig.cap="Survival projection from bboutools."}
+predict_survival <- bboutools::bb_predict_survival(bbouInformative$surv_fit, year = TRUE, month = FALSE)
+bboutools::bb_plot_year_survival(predict_survival)
+```
+
+```{r bboutoolsLambda, echo=T, fig.width=figWidth,fig.height=2,fig.cap="Population growth rate from bboutools."}
+predict_lambda <- bboutools::bb_predict_growth(survival = bbouInformative$surv_fit, recruitment = bbouInformative$recruit_fit)
+bboutools::bb_plot_year_growth(predict_lambda) +
+  ggplot2::scale_y_continuous(labels = scales::percent)+
+  ggplot2::ylab("Population growth rate")
+```
 
 ## Using the trajectoriesFromBayesian wrapper function to project population growth
 
-For convenience, to enable comparisons (e.g. [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html) vignette), and to integrate with other methods and workflows, we can use the `trajectoriesFromBayesian` wrapper function to get sample trajectories and summaries from our fitted bboutools model. Note that if we use only the information in the fitted model (that does not include initial population size) then the summary results (bands in Figure X) are identical to the bboutools projections (Figs X). The returned example trajectories are derived from the MCMC samples. If we also provide initial population size information then the projection (by default) includes density dependence and demographic stochasticity [@dyson_effective_2026; @hughes_integration_2025] (Fig X); . Note that in this case the form of the growth model (density dependence & demographic stochasticity, but not interannual variability) can be changed by setting `caribouPopGrowth` function parameters (e.g. Fig X no demographic stochasticity); see XX for details, but note that the Bayesian MCMC samples include interannual variation in recruitment and survival, so no additional interannual variation is added by `caribouPopGrowth` in this case.
-
-TO DO: add trajectoriesFromBayesian workflow diagram
+For convenience, to enable comparisons (e.g. [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html) vignette), and to integrate with other methods and workflows, we can use the `trajectoriesFromBayesian` wrapper function to get sample trajectories and summaries from our fitted bboutools model. Note that if we use only the information in the fitted model (that does not include initial population size) then the summary results (bands for Adult female survival, Recruitment and Population growth rate in Figure \@ref(fig:bayesTrajectoryPlot)) are identical to the bboutools projections (Figures \@ref(fig:bboutoolsCalfcow),\@ref(fig:bboutoolsSurvival), and \@ref(fig:bboutoolsLambda)). The returned example trajectories are derived from the MCMC samples. If we also provide initial population size information then the projection (by default) includes density dependence and demographic stochasticity [@dyson_effective_2026; @hughes_integration_2025] and populations can go extinct (Fig \@{fig:bayesTrajectoryPlotN}). Note that in this case the form of the growth model (density dependence & demographic stochasticity, but not interannual variability) can be changed by setting `caribouPopGrowth` function parameters (e.g. Fig X no demographic stochasticity); note that the Bayesian MCMC samples include interannual variation in recruitment and survival, so no additional interannual variation is added by `caribouPopGrowth` in this case.
 
 ```{r,trajectoriesFromBayesian,message=F, warning=T}
-
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
 popMetricsBayes$summary <- popMetricsBayes$summary %>% 
-  filter(MetricTypeID %in% c("Anthro", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
+  filter(MetricTypeID %in% c("Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
 names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique()
 names
 
 popMetricsBayes$samples <- popMetricsBayes$samples %>% 
-  filter(MetricTypeID %in% c("Anthro", "Sbar","survival","Rbar",
+  filter(MetricTypeID %in% c("Sbar","survival","Rbar",
                              "recruitment", "lambda_bar", "lambda")) %>% 
   merge(names) %>% 
   filter(as.numeric(as.factor(Replicate))<=35)
@@ -496,11 +504,96 @@ proj <- ggplot(data = popMetricsBayes$summary,
 proj
 ```
 
+```{r,trajectoriesFromBayesianN,message=F, warning=T}
+popMetricsBayes <- trajectoriesFromBayesian(bbouInformative,N0=100)
+popMetricsBayes$summary <- popMetricsBayes$summary %>% 
+  filter(MetricTypeID %in% c("survival","recruitment", "lambda_bar", "lambda","N"))
+names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique()
+names
+
+popMetricsBayes$samples <- popMetricsBayes$samples %>% 
+  filter(MetricTypeID %in% c("survival","recruitment", "lambda_bar", "lambda","N")) %>% 
+  merge(names) %>% 
+  filter(as.numeric(as.factor(Replicate))<=35)
+```
+
+```{r bayesTrajectoryPlotN, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Example demographic trajectories from a fitted bboutools model, obtained using the trajectoriesFromBayesian wrapper function, with initial population size of 100. Bands are 95% predictive intervals."}
+proj <- ggplot(data = popMetricsBayes$summary,
+               aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
+  geom_ribbon(fill="grey") +
+  geom_line(colour="black",linewidth=2)+
+  geom_line(data=popMetricsBayes$samples,
+            aes(x=Year,y=Amount,colour=Replicate,group=Replicate), inherit.aes = FALSE) +
+  facet_wrap(~Parameter, scales = "free") +
+  ylab("")+
+  theme(legend.position = "none")
+proj
+```
+
 ## Using the trajectoriesFromSummaries wrapper function to project population growth
 
-To allow for the possibility of using fitted Bayesian models as a starting point for exploring demographic scenarios, the `estimateBayesianRates` function also returns a table of model parameters. The `trajectoriesFromSummary` projects outcomes from a model defined by these parameters. When parameters from a fitted Bayesian model are used, outcomes from `trajectoriesFromSummary` and `trajectoriesFromBayesian` are the same (compare Figs X and X) (though note we don't yet have this working for dynamic disturbance scenarios). `trajectoriesFromSummary` allow us to explore the implications of changing model parameters (Fig X), and enables the scenario exploration in our [Boreal Caribou Demographic Projection Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp).  
+To allow for the possibility of using fitted Bayesian models as a starting point for exploring demographic scenarios, the `estimateBayesianRates` function also returns a list of model parameters. The `trajectoriesFromSummary` projects outcomes from a model defined by these parameters. When parameters from a fitted Bayesian model are used, expected outcomes from `trajectoriesFromSummary` and `trajectoriesFromBayesian` are the same (Figure \@{fig:summaryTrajectoryBaseEPlot}), but `trajectoriesFromSummary` projections do not include variation in interannual variation over time  (Figure \@{fig:summaryTrajectoryBasePlot}). `trajectoriesFromSummary` allows us to explore the implications of changing model parameters (Fig \@{fig:summaryTrajectoryAdjustPlot}).  
 
 ```{r,trajectoriesFromSummary,message=F, warning=T}
+pt <- bbouInformative$parList
+trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rbar,
+                                               Sbar=pt$Sbar, Riv=pt$Riv,Siv=pt$Siv,
+                                               type=pt$type)
+out_tbls <- compareTrajectories(trajFromSummaryBase, simInitial = popMetricsBayes)
+typeLabs <- c("Summary", "Bayes")
+```
+
+```{r summaryTrajectoryBaseEPlot, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Comparison of expected demographic projections obtained using the trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes) wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
+recE <- plotCompareTrajectories(out_tbls, "Expected recruitment", typeLabels = typeLabs)
+survE <- plotCompareTrajectories(out_tbls, "Expected survival", typeLabels = typeLabs)
+lamE <- plotCompareTrajectories(out_tbls, "Expected growth rate", typeLabels = typeLabs,
+                               lowBound = 0.5, highBound = 1.5)
+recE /survE / lamE
+```
+
+```{r summaryTrajectoryBasePlot, echo=T, fig.width=figWidth,fig.height=9,fig.cap="Comparison of demographic projections obtained using the trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes) wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
+rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
+surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
+lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
+                               lowBound = 0.5, highBound = 1.5)
+N <- plotCompareTrajectories(out_tbls, "Female population size", typeLabels = typeLabs,
+                             lowBound = 0, highBound = 500)
+rec /surv / lam / N
+```
+
+```{r,trajectoriesFromSummaryAdjust,message=F, warning=T}
+pm.startYear <- 2015; pm.endYear <- 2022
+RbarAdjust <- pt$Rbar
+RbarAdjust$adjust.mu <- 0.1; RbarAdjust$adjust.sd <- 0.01
+RbarAdjust$adjust.mu[(RbarAdjust$Year<pm.startYear)|(RbarAdjust$Year>=pm.endYear)]=0
+RbarAdjust$adjust.sd[(RbarAdjust$Year<pm.startYear)|(RbarAdjust$Year>=pm.endYear)]=0
+NAdjust <- data.frame(PopulationName <- unique(RbarAdjust$PopulationName))
+NAdjust$N0 <- 100
+NAdjust$N.sd <- 0.3*NAdjust$N0
+NAdjust$N.lower <- 50
+NAdjust$N.upper <- 200
+trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar=RbarAdjust,
+                                               Sbar=pt$Sbar,
+                                               Riv=pt$Riv,Siv=pt$Siv,
+                                               type=pt$type)
+out_tbls <- compareTrajectories(trajFromSummaryAdjust, simInitial = trajFromSummaryBase)
+typeLabs <- c("Adjust", "Base")
+```
+
+```{r summaryTrajectoryAdjustPlot, echo=T, fig.width=figWidth,fig.height=9,fig.cap="Effects of increasing recruitment after 2015 and increasing variation in initial population size on demographic projections obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
+rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
+surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
+lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
+                               lowBound = 0.5, highBound = 1.5)
+N <- plotCompareTrajectories(out_tbls, "Female population size", typeLabels = typeLabs,
+                             lowBound = 0, highBound = 700)
+rec /surv / lam / N
+```
+
+## Using the trajectoriesFromSummariesForApp wrapper function to project population growth
+The `trajectoriesFromSummaryForApp` wrapper function is less flexible than  `trajectoriesFromSummary`, and does not allow changes in demographic rates over time. It is used to enable scenario exploration in our [Boreal Caribou Demographic Projection Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp). 
+
+```{r,trajectoriesFromSummaryForApp,message=F, warning=T}
 pt <- bbouInformative$parTab;pt
 
 popMetricsBase <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
@@ -521,7 +614,7 @@ names <- scnCompare$summary %>% select(MetricTypeID,Parameter) %>% unique();name
 scnCompare$samples <- merge(scnCompare$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=25)
 ```
 
-```{r summaryTrajectoryPlot, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Comparison of demographic trajectories from a fitted bboutools model (base) and a scenario in which expected survival is increased to 85% (S85), obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
+```{r summaryTrajectoryForAppPlot, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Comparison of demographic trajectories from a fitted bboutools model (base) and a scenario in which expected survival is increased to 85% (S85), obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
 proj <- ggplot(data = scnCompare$summary,
                aes(x=Year,y=Mean,ymin=lower,ymax=upper,fill=PopulationName,group=PopulationName))+
   geom_ribbon(alpha=0.2) +

@@ -189,10 +189,14 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   parTab = merge(parTab, data_amt)
 
   parList = list()
+  yrs <- data.frame(Annual = intersect(as.numeric(as.character(surv_fit$data$Annual)),as.numeric(as.character(recruit_fit$data$Annual))))
+  yrs$Year <- yrs$Annual
   parList$Rbar <- subset(parTab,select=c(R_bar,R_sd,R_bar_lower,R_bar_upper,PopulationName))
   names(parList$Rbar)[1:4] = c("mean","sd","lower","upper")
+  parList$Rbar <- merge(parList$Rbar,yrs)
   parList$Sbar <- subset(parTab,select=c(S_bar,S_sd,S_bar_lower,S_bar_upper,PopulationName))
-  names(parList$Rbar)[1:4] = c("mean","sd","lower","upper")
+  names(parList$Sbar)[1:4] = c("mean","sd","lower","upper")
+  parList$Sbar <- merge(parList$Sbar,yrs)
   parList$Siv <- subset(parTab,select=c(S_iv_mean,S_iv_shape))
   parList$Riv <- subset(parTab,select=c(R_iv_mean,R_iv_shape))
   parList$type <- "bbou"
@@ -204,7 +208,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
         newYr[(surv_fit$data$Year==surv_fit$data$Annual)&(as.numeric(as.character(surv_fit$data$Month))<formals(bboutools::bb_fit_survival)$year_start)]+1
       surv_fit$data$Year = newYr
     }
-    return(list(parTab=parTab,oarList=parList,surv_fit=surv_fit,recruit_fit=recruit_fit))
+    return(list(parTab=parTab,parList=parList,surv_fit=surv_fit,recruit_fit=recruit_fit))
   }else{
     return(parTab)
   }

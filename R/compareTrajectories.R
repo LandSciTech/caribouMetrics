@@ -4,7 +4,7 @@
 #' results. 
 #'
 #' @param caribouBayesDemogMod caribou Bayesian demographic model results
-#'   produced by calling [bayesianTrajectoryWorkflow()]
+#'   produced by calling [bayesianTrajectoryWorkflow()], [trajectoriesFromNational()], [trajectoriesFromBayesian()], or [trajectoriesFromSummary()]
 #' @inheritParams bayesianTrajectoryWorkflow
 #' @param paramTable data.frame. Optional. Scenario parameters see
 #'   [simulateObservations()]
@@ -12,7 +12,7 @@
 #'   records the true population metrics of the population that observations
 #'   were simulated from.
 #' @param simInitial Initial simulation results, produced by calling
-#'   [trajectoriesFromNational()] or [trajectoriesFromBayesian()]
+#'   [trajectoriesFromNational()], [trajectoriesFromBayesian()], or [trajectoriesFromSummary()]
 #'
 #' @return a list of tables:
 #' * rr.summary.all: Mean parameter values for each year and standard deviation,
@@ -52,28 +52,48 @@ compareTrajectories <- function(caribouBayesDemogMod,
   # caribouBayesDemogMod = out; startYear = oo$minYr;endYear = oo$maxYr; simInitial = simInitial
   # exData = oo$exData; paramTable = oo$paramTable
   
-  result <- caribouBayesDemogMod$result
-  survInput <- caribouBayesDemogMod$result$surv_data
-  recInput <- caribouBayesDemogMod$result$recruit_data
+  if(is.element("result",names(caribouBayesDemogMod))){
+    result <- caribouBayesDemogMod$result
+  }else{
+    result <- caribouBayesDemogMod
+  }
+  survInput <- result$surv_data
+  recInput <- result$recruit_data
   distInput <- caribouBayesDemogMod$inData$disturbanceIn
-  
+
+  if(is.null(distInput)){
+    startYear <- min(intersect(survInput$Year,recInput$Year))
+    endYear <- max(intersect(survInput$Year,recInput$Year))
+  }
+
   # get summary info for plots
-  rr.summary <- caribouBayesDemogMod$result$summary
+  rr.summary <- result$summary
 
   survInput$Year=as.numeric(as.character(survInput$Annual))
   recInput$Year=as.numeric(as.character(recInput$Annual))
   
-  obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(AnyNA=sum(!is.na(Mortalities)),Mortalities = sum(MortalitiesCertain,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
-  obsSurv$Mean <- 1-obsSurv$Mortalities/obsSurv$StartTotal
-  obsSurv$Mean[obsSurv$AnyNA==0]=NA
+  if(is.element("Mortalities",names(survInput))){
+    obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(AnyNA=sum(!is.na(Mortalities)),Mortalities = sum(MortalitiesCertain,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
+    obsSurv$Mean <- 1-obsSurv$Mortalities/obsSurv$StartTotal
+    obsSurv$Mean[obsSurv$AnyNA==0]=NA
+  }else{
+    obsSurv <- subset(survInput,select=c(PopulationName,Year,mean))
+    names(obsSurv)[names(obsSurv)=="mean"]="Mean"
+  }
   obsSurv$Parameter <- "Adult female survival"
   obsSurv$MetricTypeID <- "S"
-  obsSurv$Type <- "observed"
-
-  obsRec <- subset(recInput, 
-                select = intersect(names(recInput), c("PopulationName","Year", "Cows", "Calves","UnknownAdults","Yearlings")))
-  adult_female_proportion = 0.65; sex_ratio=0.5 #TO DO: get from model object
-  obsRec$Mean <- obsRec$Calves / (obsRec$Cows + obsRec$UnknownAdults*adult_female_proportion+obsRec$Yearlings*sex_ratio)
+  obsSurv$Type <- "observed"    
+  
+  
+  if(is.element("Cows",names(recInput))){
+    obsRec <- subset(recInput, 
+                     select = intersect(names(recInput), c("PopulationName","Year", "Cows", "Calves","UnknownAdults","Yearlings")))
+    adult_female_proportion = 0.65; sex_ratio=0.5 #TO DO: get from model object
+    obsRec$Mean <- obsRec$Calves / (obsRec$Cows + obsRec$UnknownAdults*adult_female_proportion+obsRec$Yearlings*sex_ratio)
+  }else{
+    obsRec <- subset(recInput,select=c(PopulationName,Year,mean))
+    names(obsRec)[names(obsRec)=="mean"]="Mean"
+  }
   obsRec$Parameter <- "Recruitment"
   obsRec$MetricTypeID <- "R"
   obsRec$Type <- "observed"

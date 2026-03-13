@@ -15,7 +15,7 @@ compareTrajectories(
 }
 \arguments{
 \item{caribouBayesDemogMod}{caribou Bayesian demographic model results
-produced by calling \code{\link[=bayesianTrajectoryWorkflow]{bayesianTrajectoryWorkflow()}}}
+produced by calling \code{\link[=bayesianTrajectoryWorkflow]{bayesianTrajectoryWorkflow()}}, \code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}}, \code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}}, or \code{\link[=trajectoriesFromSummary]{trajectoriesFromSummary()}}}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
@@ -28,7 +28,7 @@ records the true population metrics of the population that observations
 were simulated from.}
 
 \item{simInitial}{Initial simulation results, produced by calling
-\code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}} or \code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}}}
+\code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}}, \code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}}, or \code{\link[=trajectoriesFromSummary]{trajectoriesFromSummary()}}}
 }
 \value{
 a list of tables:

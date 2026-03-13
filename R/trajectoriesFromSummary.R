@@ -24,19 +24,139 @@ trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv,
 
   # TO DO:
   # See https://github.com/LandSciTech/caribouMetrics/issues/146
-
-  if(type=="beta"){
-      results <- ratesFromBetaSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists)
-  }else{
-    stop("Handle bbou case")
-  }
   
+  if(type=="beta"){
+    results <- ratesFromBetaSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists)
+  }else{
+    results <- ratesFromLogisticSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists)
+  }
   rr <- trajectoriesFromBayesian(results, N0 = N0,returnSamples = returnSamples, 
                                  doSummary = doSummary,cPars=cPars, ...)
-  
   return(rr)
-  
 }
+
+ratesFromLogisticSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPersists){
+  #Assumes gaussian distributed variation in means, gaussian random effect of year and log link.
+  #Adapted from Shimoda QC workflow
+  
+  nc <- 2      # number of chains
+  niters <- round(replicates/nc)
+  ni <- niters * nthin   # number of samples for each chain
+  nb <- ni / 2    # number of samples to discard as burnin
+  
+  s_priors <- list(iv_mean= Siv$S_iv_mean,iv_shape = Siv$S_iv_shape)
+  sparams = c("Sbar","Survival") 
+  r_priors <- list(iv_mean= Riv$R_iv_mean,iv_shape = Riv$R_iv_shape)
+  params = c("Rbar","Recruitment") 
+  if(varPersists){
+    surv_fit <- rateFromLogisticSummary(Sbar,s_priors,sparams,nc,nthin,ni,nb)
+    recruit_fit <- rateFromLogisticSummary(Rbar,r_priors,params,nc,nthin,ni,nb)
+  }else{
+    stop("varPersists = F is not an option for bbou logistic models")
+  }
+  
+  parTab <- subset(Rbar,select=intersect(c("Year","PopulationName","Anthro","Fire_excl_anthro","PopulationID"),names(Rbar)))
+  results <- list(parTab=parTab,surv_fit=surv_fit,recruit_fit=recruit_fit)
+  
+  return(results)
+}
+
+rateFromLogisticSummary<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="RatesLogistic_"){
+  
+  if(!is.element("adjust.mu",names(Rbar))){Rbar$adjust.mu = 0}
+  if(!is.element("adjust.sd",names(Rbar))){Rbar$adjust.sd = 0}
+      
+  #####
+  # Model - assign model file name (needed to match with the file name in the model object in jags.model())
+  
+  ffname = tempfile(pattern = fname, fileext = ".txt")
+  sink(ffname)
+  if(r_priors$iv_mean>0){
+    cat("
+
+model {
+
+for (t in 1:nAnnual) {
+  for (k in 1:nPops) {
+    Sbar[t,k] <- Rbar[t,k]
+    Survival[t,k] <- Recruitment[t,k]
+}}
+
+for(i in 1:nObs) {
+  logit(Rbar[Annual[i],PopulationID[i]]) <- logit(rmu[i]+pm.r[i]) + rsd[i]*qq[PopulationID[i]]
+  logit(Recruitment[Annual[i],PopulationID[i]]) <- logit(rmu[i]+pm.r[i]) + rsd[i]*qq[PopulationID[i]] + iv[i]  
+  iv[i] ~ dnorm(0,1/pow(iv.sd[PopulationID[i]],2))
+  pm.r[i]<-pm.rr[i]*ifelse(max(pmr.mu[i],pmr.sd[i]) > 0, 1,0)
+  pm.rr[i]~dnorm(pmr.mu[i], pmr.tau[i])
+	pmr.tau[i]<-1/pow(max(pmr.sd[i],0.0000000001),2)
+}
+
+for (k in 1:nPops) {
+  qq[k]~dnorm(0,1)
+  iv.sd[k]~dgamma(iv_shape,iv_shape/iv_mean)
+}
+
+}
+
+", fill = TRUE)
+  }else{
+    cat("
+
+model {
+
+for (t in 1:nAnnual) {
+  for (k in 1:nPops) {
+    Sbar[t,k] <- Rbar[t,k]
+    Survival[t,k] <- Recruitment[t,k]
+}}
+
+for(i in 1:nObs) {
+  logit(Rbar[Annual[i],PopulationID[i]]) <- logit(rmu[i]+pm.r[i]) + rsd[i]*qq[PopulationID[i]]
+  logit(Recruitment[Annual[i],PopulationID[i]]) <- logit(rmu[i]+pm.r[i]) + rsd[i]*qq[PopulationID[i]]  
+  pm.r[i]<-pm.rr[i]*ifelse(max(pmr.mu[i],pmr.sd[i]) > 0, 1,0)
+  pm.rr[i]~dnorm(pmr.mu[i], pmr.tau[i])
+	pmr.tau[i]<-1/pow(max(pmr.sd[i],0.0000000001),2)
+}
+
+for (k in 1:nPops) {
+  qq[k]~dnorm(0,1)
+}
+
+}
+
+", fill = TRUE)
+    
+  }
+sink()
+
+### Define data, parameters, initials and settings
+# Setting the data that you want to pass the model objects
+data <- Rbar
+data <- data[order(data$Annual,data$PopulationName),]
+data$PopulationID <- as.factor(data$PopulationName)
+nAnnual <- length(unique(data$Annual))
+if(min(as.integer(data$Annual))>1){
+  data$Annual = as.factor(data$Year)
+}
+
+datal = list(
+  nObs = nrow(data),
+  nAnnual=nAnnual,
+  Annual = as.integer(data$Annual),
+  nPops=length(unique(data$PopulationName)),
+  PopulationID = as.integer(data$PopulationID),
+  rmu=data$mean,
+  rsd=data$sd,
+  pmr.mu = data$adjust.mu,
+  pmr.sd = data$adjust.sd)
+if(r_priors$iv_mean>0){
+  datal <- c(datal,r_priors)
+}
+inits = rjags::parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
+
+return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt))
+}
+
 
 ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPersists){
   #Assumes gaussian distributed variation in means, beta distributed interannual variation
@@ -66,7 +186,16 @@ ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPer
   return(results)
 }
 
-rateFromBetaSummary<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="PopDynMod_"){
+rateFromBetaSummary<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="RatesBeta_"){
+  
+  if(!is.element("adjust.mu",names(Rbar))){
+    Rbar$adjust.mu = 0
+  }
+  
+  if(!is.element("adjust.sd",names(Rbar))){
+    Rbar$adjust.sd = 0
+  }
+  
   #####
   # Model - assign model file name (needed to match with the file name in the model object in jags.model())
   
@@ -264,7 +393,7 @@ for (k in 1:nPops) {
   if(r_priors$cv_max>0){
     datal <- c(datal,r_priors)
   }
-  inits = parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
+  inits = rjags::parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
   
   return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt))
 }
