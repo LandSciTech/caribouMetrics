@@ -2,13 +2,13 @@
 
 ## 0.1 Similarities and differences between the caribouMetrics Beta model and the bboutools model
 
-Hughes et al. ([2025](#ref-hughes2025)) described a Beta model with
-disturbance covariates and informative priors for analysis of a single
-boreal caribou population with survival data aggregated by year and only
-cows and calves reported in the composition survey. To align with and
-allow comparison to the models implemented in bboutools ([Dalgarno et
-al. 2025](#ref-dalgarno2025)) we extended the Hughes et al.
-([2025](#ref-hughes2025)) models as follows:
+Hughes et al. ([2025](#ref-hughes_integration_2025)) described a Beta
+model with disturbance covariates and informative priors for analysis of
+a single boreal caribou population with survival data aggregated by year
+and only cows and calves reported in the composition survey. To align
+with and allow comparison to the models implemented in bboutools
+([Dalgarno et al. 2025](#ref-dalgarno_bbousuite_2025)) we extended the
+Hughes et al. ([2025](#ref-hughes_integration_2025)) models as follows:
 
 - Allow analysis of composition survey data in bboutools form that
   includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods
@@ -97,15 +97,15 @@ recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
 
 ## 0.3 Comparison of the Beta and national models
 
-As shown by Hughes et al. ([2025](#ref-hughes2025)) the prior means and
-95% prior predictive intervals from the Beta model are similar to the
-means and ranges between the 2.5% and 97.5% quantiles of 3000 simulated
-survival and recruitment trajectories from the national model (Figure
-[1](#fig:fig-plot1)).
+As shown by Hughes et al. ([2025](#ref-hughes_integration_2025)) the
+prior means and 95% prior predictive intervals from the Beta model are
+similar to the means and ranges between the 2.5% and 97.5% quantiles of
+3000 simulated survival and recruitment trajectories from the national
+model (Figure [1](#fig:fig-plot1)).
 
 ``` r
 disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 5,
-                          fire_excl_anthro = 1)
+                          Fire_excl_anthro = 1)
 betaPrior <- bayesianTrajectoryWorkflow(surv_dataNone, recruit_dataNone, disturbance)
 simNational <- trajectoriesFromNational(disturbance = disturbance)
 out_tbls <- compareTrajectories(betaPrior, simInitial = simNational)
@@ -182,7 +182,7 @@ parameters are and how they are different from the plots shown on the
 right.
 
 ``` r
-b0Priors <- bbouNationalPriors(Anthro = unique(disturbance$Anthro), fire_excl_anthro = unique(disturbance$fire_excl_anthro), month = TRUE)
+b0Priors <- bbouNationalPriors(anthro = unique(disturbance$Anthro), fire_excl_anthro = unique(disturbance$Fire_excl_anthro), month = TRUE)
 if (useSaved & file.exists(bbouPriorNationalFile)) {
   bbouPriorNational <- readRDS(bbouPriorNationalFile)
 } else {
@@ -273,7 +273,7 @@ over time.
 ``` r
 disturbance <- data.frame(Year = seq(2011, 2051),
                           Anthro = seq(20, 2 * 40 + 20, length.out = 41),
-                          fire_excl_anthro = 1)
+                          Fire_excl_anthro = 1)
 if (useSaved & file.exists(betaAnthroFile)){
   betaAnthroChange <- readRDS(betaAnthroFile)
 } else {
@@ -336,7 +336,7 @@ combining the limited local information with a prior expectation that
 demographic rates will be low when disturbance is high.
 
 ``` r
-disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 90, fire_excl_anthro = 5)
+disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 90, Fire_excl_anthro = 5)
 betaLimited <- bayesianTrajectoryWorkflow(surv_dataLimited, recruit_dataLimited, disturbance)
 if (useSaved & file.exists(bbouLimitedFile)) {
   bbouLimited <- readRDS(bbouLimitedFile)

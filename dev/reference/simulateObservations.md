@@ -15,9 +15,10 @@ simulateObservations(
   cowCounts = NULL,
   freqStartsByYear = NULL,
   collarNumYears = 4,
-  collarOffTime = 4,
+  collarOffTime = 3,
   collarOnTime = 4,
   caribouYearStart = 4,
+  topUp = F,
   recSurveyMonth = 3,
   recSurveyDay = 15,
   distScen = NULL,
@@ -56,8 +57,9 @@ simulateObservations(
   `paramTable$collarCount` is used as the target number of collars and
   each year that collars are deployed they will be topped up to this
   number. If a data.frame is provided it must have 2 columns "Year" and
-  "numStarts" and the "numStarts" is the absolute number of collars
-  deployed in that year.
+  "numStarts" or "numTarget" (but not both). "numStarts" is the absolute
+  number of collars deployed in that year, and "numTarget" is the target
+  number of collars.
 
 - collarNumYears:
 
@@ -88,7 +90,7 @@ simulateObservations(
 - distScen:
 
   data.frame. Disturbance scenario. Must have columns "Year", "Anthro",
-  and "fire_excl_anthro" containing the year, percentage of the
+  and "Fire_excl_anthro" containing the year, percentage of the
   landscape covered by anthropogenic disturbance buffered by 500 m, and
   the percentage covered by fire that does not overlap anthropogenic
   disturbance. See
@@ -118,7 +120,7 @@ a list with elements:
 
 - maxYr: last year in the simulations,
 
-- simDisturbance: a data frame with columns Anthro, fire_excl_anthro,
+- simDisturbance: a data frame with columns Anthro, Fire_excl_anthro,
   Total_dist, and Year,
 
 - simSurvObs: a data frame of survival data in bboutools format,

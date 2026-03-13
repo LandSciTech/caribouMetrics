@@ -54,8 +54,6 @@
 </nav><div class="container template-article">
 
 
-
-
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
@@ -94,7 +92,7 @@
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; terra 1.8.93</span></span>
+<span><span class="co">#&gt; terra 1.9.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'terra'</span></span>
 <span><span class="co">#&gt; The following objects are masked from 'package:nimble':</span></span>
@@ -111,21 +109,16 @@
 <span><span class="co">#&gt;     extract</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span></code></pre></div>
-<div class="section level2">
+<div class="section level2" number="1">
 <h2 id="disturbancemetrics">
-<code>disturbanceMetrics()</code><a class="anchor" aria-label="anchor" href="#disturbancemetrics"></a>
+<span class="header-section-number">1</span> <code>disturbanceMetrics()</code><a class="anchor" aria-label="anchor" href="#disturbancemetrics"></a>
 </h2>
-<p>The <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> function is used to calculate
-the metrics described in Table 52 of Environment Canada Scientific
-Assessment to Inform the Identification of Critical Habitat for Woodland
-Caribou (<em>Rangifer tarandus caribou</em>), Boreal Population, in
-Canada 2011 Update. The metrics included are: * Fire: % non-overlapping
-fire * Anthro: % non-overlapping anthropogenic disturbance * Total_dist:
-% total non-overlapping fire and anthropogenic disturbance *
-fire_excl_anthro: % fire not overlapping with anthropogenic
-disturbance</p>
-<p><code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> uses several spatial data layers to
-calculate the percentage disturbance in an area:</p>
+<p>The <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> function is used to calculate the metrics described in Table 52 of Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (<em>Rangifer tarandus caribou</em>), Boreal Population, in Canada <span class="citation">(<a href="#ref-eccc_scientific_2011">ECCC 2011</a>)</span>. The metrics included are:
+* Fire: % non-overlapping fire
+* Anthro: % non-overlapping anthropogenic disturbance
+* Total_dist: % total non-overlapping fire and anthropogenic disturbance
+* Fire_excl_anthro: % fire not overlapping with anthropogenic disturbance</p>
+<p><code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> uses several spatial data layers to calculate the percentage disturbance in an area:</p>
 <table class="table">
 <colgroup>
 <col width="45%">
@@ -138,18 +131,15 @@ calculate the percentage disturbance in an area:</p>
 <tbody>
 <tr class="odd">
 <td>Land cover (landCover)</td>
-<td>A raster where 0 and NA values are assumed to be water and are
-omitted from the total area, defines the raster grid</td>
+<td>A raster where 0 and NA values are assumed to be water and are omitted from the total area, defines the raster grid</td>
 </tr>
 <tr class="even">
 <td>Linear features (linFeat)</td>
-<td>a raster, sf object, or list of these identifying the location of
-linear features (e.g. roads, rail)</td>
+<td>a raster, sf object, or list of these identifying the location of linear features (e.g. roads, rail)</td>
 </tr>
 <tr class="odd">
 <td>Natural disturbance (natDist)</td>
-<td>Cumulative natural disturbance (mostly fire) over the past 40
-years</td>
+<td>Cumulative natural disturbance (mostly fire) over the past 40 years</td>
 </tr>
 <tr class="even">
 <td>Anthropogenic disturbance (anthroDist)</td>
@@ -161,13 +151,7 @@ years</td>
 </tr>
 </tbody>
 </table>
-<p>The example data set loaded below includes a small area in the
-Nipigon caribou range that we will use as an example. Disturbance data
-sets can be converted from polygons of year of disturbance or time since
-disturbance using (<code>reclassDist</code>). In the example below fire
-data with polygons containing year of disturbance are converted to a
-presence absence raster of cumulative disturbance over the past 40
-years.</p>
+<p>The example data set loaded below includes a small area in the Nipigon caribou range that we will use as an example. Disturbance data sets can be converted from polygons of year of disturbance or time since disturbance using (<code>reclassDist</code>). In the example below fire data with polygons containing year of disturbance are converted to a presence absence raster of cumulative disturbance over the past 40 years.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load example data and classify cumulative natural disturbance</span></span>
 <span><span class="va">landCoverD</span> <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"landCover.tif"</span><span class="op">)</span><span class="op">)</span> </span>
@@ -183,10 +167,7 @@ years.</p>
 <span><span class="va">roadsD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"roads.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">railD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"rail.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">utilitiesD</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">pthBase</span>, <span class="st">"utilities.shp"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><code>disturbanceMetrics</code> will prepare the data and then
-calculate disturbance metrics used as predictor variables by Johnson et
-al. (2020). The function can be run in several different ways, and the
-simplest is to provide spatial objects for each input.</p>
+<p><code>disturbanceMetrics</code> will prepare the data and then calculate disturbance metrics used as predictor variables by <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span>. The function can be run in several different ways, and the simplest is to provide spatial objects for each input.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">disturbance</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span></span>
 <span>  landCover<span class="op">=</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span>,</span>
@@ -195,9 +176,7 @@ simplest is to provide spatial objects for each input.</p>
 <span>  linFeat <span class="op">=</span> <span class="va">linFeatDras</span>,</span>
 <span>  projectPoly <span class="op">=</span> <span class="va">projectPolyD</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>The <code>disturbanceMetrics</code> function returns an S4 object
-with the class <code>DisturbanceMetrics</code>. To access a data.frame
-with one column per metric use the <code>results</code> function.</p>
+<p>The <code>disturbanceMetrics</code> function returns an S4 object with the class <code>DisturbanceMetrics</code>. To access a data.frame with one column per metric use the <code>results</code> function.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">disturbance</span>, max.level <span class="op">=</span> <span class="fl">2</span>, give.attr <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Formal class 'DisturbanceMetrics' [package "caribouMetrics"] with 8 slots</span></span>
@@ -210,14 +189,12 @@ with one column per metric use the <code>results</code> function.</p>
 <span><span class="co">#&gt;   ..@ disturbanceMetrics:'data.frame':   1 obs. of  6 variables:</span></span>
 <span><span class="co">#&gt;   ..@ attributes        :List of 3</span></span>
 <span><span class="fu"><a href="../reference/results.html">results</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   zone   Anthro     Fire Total_dist fire_excl_anthro FID</span></span>
+<span><span class="co">#&gt;   zone   Anthro     Fire Total_dist Fire_excl_anthro FID</span></span>
 <span><span class="co">#&gt; 1    1 46.74151 1.726477   47.29954        0.5580347   0</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Using_disturbanceMetric_files/figure-html/plotDisturbance-1.png" class="r-plt" alt="" width="768"></p>
-<p>Multiple linear feature inputs can also be provided in vector form.
-See <code>vignette("caribouHabitat", package = "caribouMetrics")</code>
-for other data processing and input options.</p>
+<p><img src="Using_disturbanceMetric_files/figure-html/plotDisturbance-1.png"><!-- --></p>
+<p>Multiple linear feature inputs can also be provided in vector form. See <code>vignette("caribouHabitat", package = "caribouMetrics")</code> for other data processing and input options.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">disturbanceV</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disturbanceMetrics.html">disturbanceMetrics</a></span><span class="op">(</span></span>
 <span>  landCover<span class="op">=</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">landCoverD</span><span class="op">)</span>,</span>
@@ -228,7 +205,15 @@ for other data processing and input options.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbanceV</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Using_disturbanceMetric_files/figure-html/plotDisturbanceVector-1.png" class="r-plt" alt="" width="768"></p>
+<p><img src="Using_disturbanceMetric_files/figure-html/plotDisturbanceVector-1.png"><!-- --></p>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-eccc_scientific_2011" class="csl-entry">
+ECCC. 2011. <span>“Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (<span>Rangifer</span> Tarandus Caribou), Boreal Population, in <span>Canada</span>.”</span> Ottawa: Canadian Wildlife Service. <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="external-link">http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf</a>.
+</div>
+<div id="ref-johnson_science_2020" class="csl-entry">
+Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, Mathieu Leblond, Patrick Kirby, Clara Superbie, and Philip D. McLoughlin. 2020. <span>“Science to Inform Policy: <span>Linking</span> Population Dynamics to Habitat for a Threatened Species in <span>Canada</span>.”</span> <em>Journal of Applied Ecology</em> 57 (7): 1314–27. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link">https://doi.org/10.1111/1365-2664.13637</a>.
+</div>
+</div>
 </div>
   </main>
 </div>

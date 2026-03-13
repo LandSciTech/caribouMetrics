@@ -26,7 +26,7 @@ library(caribouMetrics)
 #>     intersect, setdiff, setequal, union
 library(dplyr)
 library(terra)
-#> terra 1.8.93
+#> terra 1.9.1
 #> 
 #> Attaching package: 'terra'
 #> The following objects are masked from 'package:nimble':
@@ -45,18 +45,18 @@ theme_set(theme_bw())
 pthBase <- system.file("extdata", package = "caribouMetrics")
 ```
 
-## `disturbanceMetrics()`
+## 1 `disturbanceMetrics()`
 
 The
 [`disturbanceMetrics()`](https://landscitech.github.io/caribouMetrics/dev/reference/disturbanceMetrics.md)
 function is used to calculate the metrics described in Table 52 of
 Environment Canada Scientific Assessment to Inform the Identification of
 Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*),
-Boreal Population, in Canada 2011 Update. The metrics included are: \*
-Fire: % non-overlapping fire \* Anthro: % non-overlapping anthropogenic
-disturbance \* Total_dist: % total non-overlapping fire and
-anthropogenic disturbance \* fire_excl_anthro: % fire not overlapping
-with anthropogenic disturbance
+Boreal Population, in Canada ([ECCC 2011](#ref-eccc_scientific_2011)).
+The metrics included are: \* Fire: % non-overlapping fire \* Anthro: %
+non-overlapping anthropogenic disturbance \* Total_dist: % total
+non-overlapping fire and anthropogenic disturbance \* Fire_excl_anthro:
+% fire not overlapping with anthropogenic disturbance
 
 [`disturbanceMetrics()`](https://landscitech.github.io/caribouMetrics/dev/reference/disturbanceMetrics.md)
 uses several spatial data layers to calculate the percentage disturbance
@@ -95,9 +95,10 @@ utilitiesD = st_read(file.path(pthBase, "utilities.shp"), quiet = TRUE)
 ```
 
 `disturbanceMetrics` will prepare the data and then calculate
-disturbance metrics used as predictor variables by Johnson et
-al. (2020). The function can be run in several different ways, and the
-simplest is to provide spatial objects for each input.
+disturbance metrics used as predictor variables by Johnson et al.
+([2020](#ref-johnson_science_2020)). The function can be run in several
+different ways, and the simplest is to provide spatial objects for each
+input.
 
 ``` r
 disturbance <- disturbanceMetrics(
@@ -125,7 +126,7 @@ str(disturbance, max.level = 2, give.attr = FALSE)
 #>   ..@ disturbanceMetrics:'data.frame':   1 obs. of  6 variables:
 #>   ..@ attributes        :List of 3
 results(disturbance)
-#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID
+#>   zone   Anthro     Fire Total_dist Fire_excl_anthro FID
 #> 1    1 46.74151 1.726477   47.29954        0.5580347   0
 ```
 
@@ -154,3 +155,14 @@ plot(disturbanceV@processedData)
 ```
 
 ![](Using_disturbanceMetric_files/figure-html/plotDisturbanceVector-1.png)
+
+ECCC. 2011. “Scientific Assessment to Inform the Identification of
+Critical Habitat for Woodland Caribou (Rangifer Tarandus Caribou),
+Boreal Population, in Canada.” Ottawa: Canadian Wildlife Service.
+<http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf>.
+
+Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, Mathieu Leblond,
+Patrick Kirby, Clara Superbie, and Philip D. McLoughlin. 2020. “Science
+to Inform Policy: Linking Population Dynamics to Habitat for a
+Threatened Species in Canada.” *Journal of Applied Ecology* 57 (7):
+1314–27. <https://doi.org/10.1111/1365-2664.13637>.

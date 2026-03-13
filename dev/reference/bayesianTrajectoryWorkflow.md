@@ -36,7 +36,7 @@ bayesianTrajectoryWorkflow(
 - disturbance:
 
   either a path to a csv file or a dataframe containing the columns
-  "Anthro","fire_excl_anthro", and "Year".
+  "Anthro","Fire_excl_anthro", and "Year".
 
 - priors:
 
@@ -89,7 +89,7 @@ a list with elements:
 
   - samples: a tibble providing the full range of MCMC trajectories from
     the model. It is in a long format where "Amount" gives the value for
-    each metric in Anthro, fire_excl_anthro, c, survival, recruitment,
+    each metric in Anthro, Fire_excl_anthro, c, survival, recruitment,
     X, N, lambda, Sbar, Rbar, Xbar, Nbar, and lambda_bar, with a row for
     each combination of "MetricTypeID", "Replicate", "Year" and
     "LambdaPercentile"
@@ -271,24 +271,29 @@ Caribou demography functions:
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
-#>   ..$ R_bar         : num 0.189
-#>   ..$ R_sd          : num 0.0871
-#>   ..$ R_iv_mean     : num 0.342
-#>   ..$ R_iv_shape    : num 17.2
+#>   ..$ R_bar         : num 0.188
+#>   ..$ R_sd          : num 0.0885
+#>   ..$ R_iv_mean     : num 0.344
+#>   ..$ R_iv_shape    : num 17.7
 #>   ..$ R_bar_lower   : num 0.164
 #>   ..$ R_bar_upper   : num 0.216
-#>   ..$ S_bar         : num 0.873
-#>   ..$ S_sd          : num 0.172
-#>   ..$ S_iv_mean     : num 0.366
-#>   ..$ S_iv_shape    : num 5.6
+#>   ..$ S_bar         : num 0.872
+#>   ..$ S_sd          : num 0.165
+#>   ..$ S_iv_mean     : num 0.306
+#>   ..$ S_iv_shape    : num 2.15
 #>   ..$ S_bar_lower   : num 0.835
-#>   ..$ S_bar_upper   : num 0.908
+#>   ..$ S_bar_upper   : num 0.905
 #>   ..$ N0            : logi NA
 #>   ..$ nCollarYears  : num 900
 #>   ..$ nSurvYears    : int 31
 #>   ..$ nCowsAllYears : int NA
 #>   ..$ nRecruitYears : int 31
-#>  $ parList: NULL
+#>  $ parList:List of 5
+#>   ..$ Rbar:'data.frame': 31 obs. of  7 variables:
+#>   ..$ Sbar:'data.frame': 31 obs. of  7 variables:
+#>   ..$ Siv :'data.frame': 1 obs. of  2 variables:
+#>   ..$ Riv :'data.frame': 1 obs. of  2 variables:
+#>   ..$ type: chr "bbou"
   
   # Using simulated observation data
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10,

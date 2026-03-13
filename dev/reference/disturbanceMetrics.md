@@ -13,7 +13,7 @@ calculated by this function include:
 - Total_dist: Percent total non-overlapping fire and anthropogenic
   disturbance.
 
-- fire_excl_anthro: % fire not overlapping with anthropogenic
+- Fire_excl_anthro: % fire not overlapping with anthropogenic
   disturbance.
 
 ## Usage
@@ -224,12 +224,12 @@ disturbanceMetrics(landCover = lc,
 #> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)
 #> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
 #> source(s)   : memory
-#> names       : Anthro, Fire, Total_dist, fire_excl_anthro 
+#> names       : Anthro, Fire, Total_dist, Fire_excl_anthro 
 #> min values  :      0,    0,          0,                0 
 #> max values  :      1,    1,          1,                1 
 #> 
 #> Slot "disturbanceMetrics":
-#>   zone Anthro Fire Total_dist fire_excl_anthro
+#>   zone Anthro Fire Total_dist Fire_excl_anthro
 #> 1    1     52    9         58                6
 #> 
 #> Slot "attributes":

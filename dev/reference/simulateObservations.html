@@ -57,9 +57,10 @@ trajectory can be specified with <code><a href="getScenarioDefaults.html">getSce
 <span>  cowCounts <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  freqStartsByYear <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  collarNumYears <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  collarOffTime <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  collarOffTime <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  collarOnTime <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  caribouYearStart <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  topUp <span class="op">=</span> <span class="cn">F</span>,</span>
 <span>  recSurveyMonth <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  recSurveyDay <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>  distScen <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -98,8 +99,8 @@ is provided it must have columns "Year"  and "Cows".</p></dd>
 each year. If NULL <code>paramTable$collarCount</code> is used as the target number of
 collars and each year that collars are deployed they will be topped up to
 this number. If a data.frame is provided it must have 2 columns "Year" and
-"numStarts" and the "numStarts" is the absolute number of collars deployed
-in that year.</p></dd>
+"numStarts" or "numTarget" (but not both). "numStarts" is the absolute number of collars deployed
+in that year, and "numTarget" is the target number of collars.</p></dd>
 
 
 <dt id="arg-collarnumyears">collarNumYears<a class="anchor" aria-label="anchor" href="#arg-collarnumyears"></a></dt>
@@ -130,7 +131,7 @@ in that year.</p></dd>
 
 <dt id="arg-distscen">distScen<a class="anchor" aria-label="anchor" href="#arg-distscen"></a></dt>
 <dd><p>data.frame. Disturbance scenario. Must have columns "Year",
-"Anthro", and "fire_excl_anthro" containing the year, percentage of the
+"Anthro", and "Fire_excl_anthro" containing the year, percentage of the
 landscape covered by anthropogenic disturbance buffered by 500 m, and the
 percentage covered by fire that does not overlap anthropogenic disturbance.
 See <code><a href="disturbanceMetrics.html">disturbanceMetrics()</a></code>. If NULL the disturbance scenario is simulated
@@ -154,7 +155,7 @@ results will be saved to csv files in the directory provided</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a list with elements:</p><ul><li><p>minYr: first year in the simulations,</p></li>
 <li><p>maxYr: last year in the simulations,</p></li>
-<li><p>simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,</p></li>
+<li><p>simDisturbance: a data frame with columns Anthro, Fire_excl_anthro, Total_dist, and  Year,</p></li>
 <li><p>simSurvObs: a data frame of survival data in bboutools format,</p></li>
 <li><p>simRecruitObs: a data frame of recruitment data in bboutools format,</p></li>
 <li><p>exData: a tibble of expected population metrics based on the initial model,</p></li>

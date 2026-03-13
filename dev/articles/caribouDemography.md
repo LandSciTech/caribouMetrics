@@ -6,12 +6,13 @@
 
 Here we describe a demographic model with density dependence and
 interannual variability following Johnson et al.
-([2020](#ref-johnson2020)) with modifications noted in Hughes et al.
-([2025](#ref-hughes2025)) and [Dyson et
-al. (2022)](https://doi.org/10.1101/2022.06.01.494350). Demographic
-rates vary with disturbance as estimated by Johnson et al.
-([2020](#ref-johnson2020)). A detailed description of the model is
-provided in ([Hughes et al. 2025, sec. 2.4](#ref-hughes2025)).
+([2020](#ref-johnson_science_2020)) with modifications noted in Hughes
+et al. ([2025](#ref-hughes_integration_2025)) and Dyson et al.
+([2026](#ref-dyson_effective_2026)). Demographic rates vary with
+disturbance as estimated by Johnson et al.
+([2020](#ref-johnson_science_2020)). A detailed description of the model
+is provided in ([Hughes et al. 2025, sec.
+2.4](#ref-hughes_integration_2025)).
 
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md)
 selects the regression coefficient values and standard errors for the
@@ -24,11 +25,11 @@ Next
 is used to apply the sampled coefficients to the disturbance covariates
 to calculate expected recruitment and survival according to the beta
 regression models estimated by Johnson et al.
-([2020](#ref-johnson2020)). Each population is optionally assigned to
-quantiles of the Beta error distributions for survival and recruitment.
-Using quantiles means that the population will stay in these quantiles
-as disturbance changes over time, so there is persistent variation in
-recruitment and survival among example populations.
+([2020](#ref-johnson_science_2020)). Each population is optionally
+assigned to quantiles of the Beta error distributions for survival and
+recruitment. Using quantiles means that the population will stay in
+these quantiles as disturbance changes over time, so there is persistent
+variation in recruitment and survival among example populations.
 
 Finally, we can use the estimated demographic rates to project
 population dynamics using a simple model with two age classes.
@@ -36,6 +37,7 @@ Interannual variation in survival and recruitment is modelled using
 truncated Beta distributions.
 
 ``` r
+library(bboutools)
 library(caribouMetrics)
 # use local version on local and installed on GH
 if (requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
@@ -58,19 +60,19 @@ First we define a disturbance scenario with 40% anthropogenic
 disturbance and 2% fire disturbance. If we had spatial data for the
 disturbance in our area of interest we could use
 [`disturbanceMetrics()`](https://landscitech.github.io/caribouMetrics/dev/reference/disturbanceMetrics.md)
-to directly calculate the disturbance. (See [Disturbance
+to directly calculate the disturbance. See [Disturbance
 Metrics](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html)
-vignette for an example).
+vignette for an example.
 
 ``` r
-disturbance <- data.frame(Anthro = 40, fire_excl_anthro = 2)
+disturbance <- data.frame(Anthro = 40, Fire_excl_anthro = 2)
 ```
 
 We begin by sampling coefficients for 500 replicate populations using
-default Johnson et al. (2020) models “M1” and “M4”. The returned object
-is a list containing the coefficients and standard errors from the
-national model as well as the sampled coefficients and the quantiles
-that they have been assigned to.
+default Johnson et al. ([2020](#ref-johnson_science_2020)) models “M1”
+and “M4”. The returned object is a list containing the coefficients and
+standard errors from the national model as well as the sampled
+coefficients and the quantiles that they have been assigned to.
 
 ``` r
 popGrowthPars <- getNationalCoefficients(500)
@@ -104,7 +106,11 @@ years using the `caribouPopGrowth` function with default parameter
 values. Anthropogenic disturbance is high on this example landscape, so
 the projected population growth rate for most sample populations is
 below 1, but there is variability in the model so few sample populations
-persist.
+persist (Figure [1.1](#fig:plotSimpleDemography)). If no initial
+population size is provided, the projections do not include population
+size, and realized population growth rate includes interannual variation
+but not density dependence or demographic stochasticity (Figure
+[1.2](#fig:plotSimpleDemographyNoN)).
 
 ``` r
 rateSamples <- estimateNationalRates(
@@ -132,8 +138,8 @@ previous year. 'R_bar/S_bar' are the expected recruitment (calf:cow
 ratio) and survival rates, 'R_t/S_t' are the recruitment and survival
 rates in the final year, which are more variable because they include
 interannual variation. 'X_t' is the recruitment rate adjusted for sex
-ratio and (optionally) composition survey bias - see Hughes et al.
-(2025) for
+ratio and (optionally) composition survey bias - see
+@hughes_integration_2025 for
 details.](caribouDemography_files/figure-html/plotSimpleDemography-1.png)
 
 Figure 1.1: Variation in demographic rates and outcomes among 500 sample
@@ -147,26 +153,40 @@ previous year. ‘R_bar/S_bar’ are the expected recruitment (calf:cow
 ratio) and survival rates, ‘R_t/S_t’ are the recruitment and survival
 rates in the final year, which are more variable because they include
 interannual variation. ‘X_t’ is the recruitment rate adjusted for sex
-ratio and (optionally) composition survey bias - see Hughes et
-al. (2025) for details.
+ratio and (optionally) composition survey bias - see Hughes et al.
+([2025](#ref-hughes_integration_2025)) for details.
 
-TO DO: Use consistent labels for outcomes throughout
+``` r
+rateSamples$N0 <- NA
+demography <- cbind(rateSamples,
+                    caribouPopGrowth(N = rateSamples$N0,
+                                     numSteps = 20,
+                                     R_bar = rateSamples$R_bar,
+                                     S_bar = rateSamples$S_bar))
+```
 
-TO DO: show and explain outcome if no N0 provided.
+![Variation in demographic rates and outcomes among 500 sample
+populations after a 20 year projection with no initial population size.
+See Figure \\ref(fig:plotSimpleDemography) for other
+details.](caribouDemography_files/figure-html/plotSimpleDemographyNoN-1.png)
+
+Figure 1.2: Variation in demographic rates and outcomes among 500 sample
+populations after a 20 year projection with no initial population size.
+See Figure [1.1](#fig:plotSimpleDemography) for other details.
 
 ### 1.3 Expected recruitment and survival: effects of disturbance and variation among populations
 
 We can project demographic rates over a range of landscape conditions to
-recreate figures 3 and 5 from Johnson et al. ([Johnson et al.
-2020](#ref-johnson2020)) and see the effects of changing disturbance on
-expected recruitment and survival. First we create a table of
-disturbance scenarios across a range of different levels of fire and
-anthropogenic disturbance.
+recreate figures 3 and 5 from Johnson et al.
+([2020](#ref-johnson_science_2020)) and see the effects of changing
+disturbance on expected recruitment and survival. First we create a
+table of disturbance scenarios across a range of different levels of
+fire and anthropogenic disturbance.
 
 ``` r
 covTableSim <- expand.grid(Anthro = seq(0, 90, by = 2), 
-                           fire_excl_anthro = seq(0, 70, by = 10)) 
-covTableSim$Total_dist = covTableSim$Anthro + covTableSim$fire_excl_anthro
+                           Fire_excl_anthro = seq(0, 70, by = 10)) 
+covTableSim$Total_dist = covTableSim$Anthro + covTableSim$Fire_excl_anthro
 ```
 
 We again sample coefficients from default models M1 and M4. The sample
@@ -203,19 +223,19 @@ and recruitment, allowing variation among populations to persist as
 disturbance changes. For the larger sample we set `returnSample = FALSE`
 to get summaries of mean and variation across the samples.
 
-Johnson et al’s ([2020](#ref-johnson2020)) Beta regression models
-estimate uncertainty about intercept and slope coefficients, and a
-precision parameter that describes variation among observations
-([Ferrari and Cribari-Neto 2004](#ref-ferrari2004)). To show the
+Johnson et al’s ([2020](#ref-johnson_science_2020)) Beta regression
+models estimate uncertainty about intercept and slope coefficients, and
+a precision parameter that describes variation among observations
+([Ferrari and Cribari-Neto 2004](#ref-ferrari_beta_2004)). To show the
 importance of considering both these sources of variation we compare
 results with `ignorePrecision = TRUE` and `ignorePrecision = FALSE`. If
 the goal is to estimate and visualize nationally applicable
 demographic-disturbance relationships then the precision parameter may
-not be of interest (Figure [1.2](#fig:parameterUncertaintyOnly)). If we
+not be of interest (Figure [1.3](#fig:parameterUncertaintyOnly)). If we
 are interested in the distribution of variation across the country it is
 essential to include both uncertainty about the regression coefficients
 and additional variation summarized by the precision parameter of the
-Beta regression model (Figure [1.3](#fig:withPrecision)).
+Beta regression model (Figure [1.4](#fig:withPrecision)).
 
 ``` r
 rateSamples <- estimateNationalRates(
@@ -246,44 +266,46 @@ rateSummariesIgnorePrecision <- estimateNationalRates(
 ![Variation in expected survival and recruitment with disturbance. Bands
 (2.5% and 97.5% quantiles of 500 samples) show variation due to
 uncertainty about intercept and slope coefficients in Johnson et al's
-\[-@johnson2020\] Beta regression
+\[-@johnson_science_2020\] Beta regression
 models.](caribouDemography_files/figure-html/parameterUncertaintyOnly-1.png)
 
-Figure 1.2: Variation in expected survival and recruitment with
+Figure 1.3: Variation in expected survival and recruitment with
 disturbance. Bands (2.5% and 97.5% quantiles of 500 samples) show
 variation due to uncertainty about intercept and slope coefficients in
-Johnson et al’s ([2020](#ref-johnson2020)) Beta regression models.
+Johnson et al’s ([2020](#ref-johnson_science_2020)) Beta regression
+models.
 
 ![Variation in expected survival and recruitment with disturbance. Bands
 (2.5% and 97.5% quantiles of 500 samples) include both uncertainty about
 the regression coefficients and additional variation summarized by the
-precision parameter of Johnson et al's \[-@johnson2020\] Beta regression
-models. Faint coloured lines show example trajectories of expected
-demographic rates in sample populations, assuming each sample population
-is randomly distributed among quantiles of the beta distribution, and
-each population remains in the same quantile of the Beta distribution as
-disturbance
+precision parameter of Johnson et al's \[-@johnson_science_2020\] Beta
+regression models. Faint coloured lines show example trajectories of
+expected demographic rates in sample populations, assuming each sample
+population is randomly distributed among quantiles of the beta
+distribution, and each population remains in the same quantile of the
+Beta distribution as disturbance
 changes.](caribouDemography_files/figure-html/withPrecision-1.png)
 
-Figure 1.3: Variation in expected survival and recruitment with
+Figure 1.4: Variation in expected survival and recruitment with
 disturbance. Bands (2.5% and 97.5% quantiles of 500 samples) include
 both uncertainty about the regression coefficients and additional
 variation summarized by the precision parameter of Johnson et al’s
-([2020](#ref-johnson2020)) Beta regression models. Faint coloured lines
-show example trajectories of expected demographic rates in sample
-populations, assuming each sample population is randomly distributed
-among quantiles of the beta distribution, and each population remains in
-the same quantile of the Beta distribution as disturbance changes.
+([2020](#ref-johnson_science_2020)) Beta regression models. Faint
+coloured lines show example trajectories of expected demographic rates
+in sample populations, assuming each sample population is randomly
+distributed among quantiles of the beta distribution, and each
+population remains in the same quantile of the Beta distribution as
+disturbance changes.
 
 ### 1.4 Projection of population growth over time on a changing landscape: workflow details
 
 In this example, we project 35 sample populations for 50 years on a
 landscape where the anthropogenic disturbance footprint is increasing by
-5% per decade (Figure [1.4](#fig:changeOverTime)). Note the form of the
+5% per decade (Figure [1.5](#fig:changeOverTime)). Note the form of the
 growth model (density dependence, interannual variation, demographic
 stochasticity etc) can be changed by setting
 [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md)
-function parameters; see XX for details.
+function parameters.
 
 ``` r
 numTimesteps <- 50
@@ -340,7 +362,7 @@ recruitment (calf:cow ratio) and survival rates, ‘R_t/S_t’ are the
 recruitment and survival
 rates.](caribouDemography_files/figure-html/changeOverTime-1.png)
 
-Figure 1.4: Example demographic trajectories from the national model on
+Figure 1.5: Example demographic trajectories from the national model on
 a changing landscape. ‘lambda’ is realized population growth rate in the
 final year, and ‘lambdaE’ is expected population growth rate without
 interannual variation, density dependence or demographic stochasticity.
@@ -361,8 +383,6 @@ growth over time, and also returns sample demographic trajectories. If
 year is not provided, population growth is projected for one year, and
 sample trajectories are not returned.
 
-TO DO: add trajectoriesFromNational workflow diagram
-
 ``` r
 natTraj <- trajectoriesFromNational(replicates = 500, 
                                     disturbance = covTableSim, interannualVar = FALSE, 
@@ -371,7 +391,7 @@ natTraj <- trajectoriesFromNational(replicates = 500,
 # add year to return samples
 natTraj35 <- trajectoriesFromNational(replicates = 35, 
                                     disturbance = covTableSim %>% 
-                                      mutate(Year = Anthro+100*fire_excl_anthro), 
+                                      mutate(Year = Anthro+100*Fire_excl_anthro), 
                                     returnSamples = TRUE, interannualVar = FALSE, 
                                     useQuantiles = TRUE)
 ```
@@ -381,7 +401,7 @@ obtained using the trajectoriesFromNational wrapper function. See Figure
 1.3 for
 details.](caribouDemography_files/figure-html/withPrecisionWrapper-1.png)
 
-Figure 1.5: Variation in expected survival and recruitment with
+Figure 1.6: Variation in expected survival and recruitment with
 disturbance, obtained using the trajectoriesFromNational wrapper
 function. See Figure 1.3 for details.
 
@@ -430,13 +450,13 @@ population size is shown separately with a log scaled y axis to allow
 comparison of divergent
 trajectories.](caribouDemography_files/figure-html/changeOverTime2-1.png)
 
-Figure 1.6: Example demographic trajectories and from the national model
+Figure 1.7: Example demographic trajectories and from the national model
 on a changing landscape, obtained using the trajectoriesFromNational
 wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples.
 Female population size is shown separately with a log scaled y axis to
 allow comparison of divergent trajectories.
 
-## 2 Demographic rates and trajectories from bboutools Bayesian models
+## 2 Demographic rates and trajectories from Bayesian models
 
 NOTE: To enable the QC app project and others we made several changes to
 bboutools. At present these examples only work with our modified version
@@ -487,11 +507,51 @@ if (useSaved & file.exists(bbouInformativeFile)) {
 ### 2.2 Using bboutools to project population growth
 
 The bboutools R package includes methods for projecting calf:cow ratios,
-recruitment, survival, and population growth rate.
+recruitment, survival, and population growth rate. Note there is no
+population size, demographic stochasticity or density dependence in
+these projections.
 
-Note pop growth rate reported by bboutools is…
+``` r
+predict_calfcow <- bboutools::bb_predict_calf_cow_ratio(bbouInformative$recruit_fit, year = TRUE)
+bboutools::bb_plot_year_calf_cow_ratio(predict_calfcow)
+```
 
-Note no density dependence or demographic stochasticity…
+![Calf:cow ratio projection from
+bboutools.](caribouDemography_files/figure-html/bboutoolsCalfCow-1.png)
+
+Figure 2.1: Calf:cow ratio projection from bboutools.
+
+``` r
+predict_recruitment <- bboutools::bb_predict_recruitment(bbouInformative$recruit_fit, year = TRUE)
+bboutools::bb_plot_year_recruitment(predict_recruitment)
+```
+
+![Recruitment projection from
+bboutools.](caribouDemography_files/figure-html/bboutoolsRecruitment-1.png)
+
+Figure 2.2: Recruitment projection from bboutools.
+
+``` r
+predict_survival <- bboutools::bb_predict_survival(bbouInformative$surv_fit, year = TRUE, month = FALSE)
+bboutools::bb_plot_year_survival(predict_survival)
+```
+
+![Survival projection from
+bboutools.](caribouDemography_files/figure-html/bboutoolsSurvival-1.png)
+
+Figure 2.3: Survival projection from bboutools.
+
+``` r
+predict_lambda <- bboutools::bb_predict_growth(survival = bbouInformative$surv_fit, recruitment = bbouInformative$recruit_fit)
+bboutools::bb_plot_year_growth(predict_lambda) +
+  ggplot2::scale_y_continuous(labels = scales::percent)+
+  ggplot2::ylab("Population growth rate")
+```
+
+![Population growth rate from
+bboutools.](caribouDemography_files/figure-html/bboutoolsLambda-1.png)
+
+Figure 2.4: Population growth rate from bboutools.
 
 ### 2.3 Using the trajectoriesFromBayesian wrapper function to project population growth
 
@@ -502,28 +562,29 @@ vignette), and to integrate with other methods and workflows, we can use
 the `trajectoriesFromBayesian` wrapper function to get sample
 trajectories and summaries from our fitted bboutools model. Note that if
 we use only the information in the fitted model (that does not include
-initial population size) then the summary results (bands in Figure X)
-are identical to the bboutools projections (Figs X). The returned
-example trajectories are derived from the MCMC samples. If we also
-provide initial population size information then the projection (by
-default) includes density dependence and demographic stochasticity
-([**dyson2022?**](#ref-dyson2022); [Hughes et al.
-2025](#ref-hughes2025)) (Fig X); . Note that in this case the form of
-the growth model (density dependence & demographic stochasticity, but
-not interannual variability) can be changed by setting
-`caribouPopGrowth` function parameters (e.g. Fig X no demographic
-stochasticity); see XX for details, but note that the Bayesian MCMC
-samples include interannual variation in recruitment and survival, so no
-additional interannual variation is added by `caribouPopGrowth` in this
-case.
-
-TO DO: add trajectoriesFromBayesian workflow diagram
+initial population size) then the summary results (bands for Adult
+female survival, Recruitment and Population growth rate in Figure
+[2.5](#fig:bayesTrajectoryPlot)) are identical to the bboutools
+projections (Figures
+[2.1](#fig:bboutoolsCalfCow),[2.3](#fig:bboutoolsSurvival), and
+[2.4](#fig:bboutoolsLambda)). The returned example trajectories are
+derived from the MCMC samples. If we also provide initial population
+size information then the projection (by default) includes density
+dependence and demographic stochasticity ([Dyson et al.
+2026](#ref-dyson_effective_2026); [Hughes et al.
+2025](#ref-hughes_integration_2025)) and populations can go extinct (Fig
+@ref{fig:bayesTrajectoryPlotN}). Note that in this case the form of the
+growth model (density dependence & demographic stochasticity, but not
+interannual variability) can be changed by setting `caribouPopGrowth`
+function parameters (e.g. Fig X no demographic stochasticity); note that
+the Bayesian MCMC samples include interannual variation in recruitment
+and survival, so no additional interannual variation is added by
+`caribouPopGrowth` in this case.
 
 ``` r
-
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
 popMetricsBayes$summary <- popMetricsBayes$summary %>% 
-  filter(MetricTypeID %in% c("Anthro", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
+  filter(MetricTypeID %in% c("Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
 names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique()
 names
 #>    MetricTypeID              Parameter
@@ -535,7 +596,7 @@ names
 #> 61     survival  Adult female survival
 
 popMetricsBayes$samples <- popMetricsBayes$samples %>% 
-  filter(MetricTypeID %in% c("Anthro", "Sbar","survival","Rbar",
+  filter(MetricTypeID %in% c("Sbar","survival","Rbar",
                              "recruitment", "lambda_bar", "lambda")) %>% 
   merge(names) %>% 
   filter(as.numeric(as.factor(Replicate))<=35)
@@ -559,22 +620,196 @@ obtained using the trajectoriesFromBayesian wrapper function. Bands are
 95% predictive
 intervals.](caribouDemography_files/figure-html/bayesTrajectoryPlot-1.png)
 
-Figure 2.1: Example demographic trajectories from a fitted bboutools
+Figure 2.5: Example demographic trajectories from a fitted bboutools
 model, obtained using the trajectoriesFromBayesian wrapper function.
 Bands are 95% predictive intervals.
+
+``` r
+popMetricsBayes <- trajectoriesFromBayesian(bbouInformative,N0=100)
+popMetricsBayes$summary <- popMetricsBayes$summary %>% 
+  filter(MetricTypeID %in% c("survival","recruitment", "lambda_bar", "lambda","N"))
+names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique()
+names
+#>    MetricTypeID              Parameter
+#> 1        lambda Population growth rate
+#> 13   lambda_bar   Expected growth rate
+#> 25            N Female population size
+#> 37  recruitment            Recruitment
+#> 49     survival  Adult female survival
+
+popMetricsBayes$samples <- popMetricsBayes$samples %>% 
+  filter(MetricTypeID %in% c("survival","recruitment", "lambda_bar", "lambda","N")) %>% 
+  merge(names) %>% 
+  filter(as.numeric(as.factor(Replicate))<=35)
+```
+
+``` r
+proj <- ggplot(data = popMetricsBayes$summary,
+               aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
+  geom_ribbon(fill="grey") +
+  geom_line(colour="black",linewidth=2)+
+  geom_line(data=popMetricsBayes$samples,
+            aes(x=Year,y=Amount,colour=Replicate,group=Replicate), inherit.aes = FALSE) +
+  facet_wrap(~Parameter, scales = "free") +
+  ylab("")+
+  theme(legend.position = "none")
+proj
+```
+
+![Example demographic trajectories from a fitted bboutools model,
+obtained using the trajectoriesFromBayesian wrapper function, with
+initial population size of 100. Bands are 95% predictive
+intervals.](caribouDemography_files/figure-html/bayesTrajectoryPlotN-1.png)
+
+Figure 2.6: Example demographic trajectories from a fitted bboutools
+model, obtained using the trajectoriesFromBayesian wrapper function,
+with initial population size of 100. Bands are 95% predictive intervals.
 
 ### 2.4 Using the trajectoriesFromSummaries wrapper function to project population growth
 
 To allow for the possibility of using fitted Bayesian models as a
 starting point for exploring demographic scenarios, the
-`estimateBayesianRates` function also returns a table of model
+`estimateBayesianRates` function also returns a list of model
 parameters. The `trajectoriesFromSummary` projects outcomes from a model
 defined by these parameters. When parameters from a fitted Bayesian
-model are used, outcomes from `trajectoriesFromSummary` and
-`trajectoriesFromBayesian` are the same (compare Figs X and X) (though
-note we don’t yet have this working for dynamic disturbance scenarios).
-`trajectoriesFromSummary` allow us to explore the implications of
-changing model parameters (Fig X), and enables the scenario exploration
+model are used, expected outcomes from `trajectoriesFromSummary` and
+`trajectoriesFromBayesian` are the same (Figure
+@ref{fig:summaryTrajectoryBaseEPlot}), but `trajectoriesFromSummary`
+projections do not include variation in interannual variation over time
+(Figure @ref{fig:summaryTrajectoryBasePlot}). `trajectoriesFromSummary`
+allows us to explore the implications of changing model parameters (Fig
+@ref{fig:summaryTrajectoryAdjustPlot}).
+
+``` r
+pt <- bbouInformative$parList
+trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rbar,
+                                               Sbar=pt$Sbar, Riv=pt$Riv,Siv=pt$Siv,
+                                               type=pt$type)
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 0
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 201
+#> 
+#> Initializing model
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 0
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 201
+#> 
+#> Initializing model
+out_tbls <- compareTrajectories(trajFromSummaryBase, simInitial = popMetricsBayes)
+typeLabs <- c("Summary", "Bayes")
+```
+
+``` r
+recE <- plotCompareTrajectories(out_tbls, "Expected recruitment", typeLabels = typeLabs)
+survE <- plotCompareTrajectories(out_tbls, "Expected survival", typeLabels = typeLabs)
+lamE <- plotCompareTrajectories(out_tbls, "Expected growth rate", typeLabels = typeLabs,
+                               lowBound = 0.5, highBound = 1.5)
+recE /survE / lamE
+```
+
+![Comparison of expected demographic projections obtained using the
+trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes)
+wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500
+samples.](caribouDemography_files/figure-html/summaryTrajectoryBaseEPlot-1.png)
+
+Figure 2.7: Comparison of expected demographic projections obtained
+using the trajectoriesFromSummary (Summary) and trajectoriesFromBayesian
+(Bayes) wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500
+samples.
+
+``` r
+rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
+surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
+lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
+                               lowBound = 0.5, highBound = 1.5)
+N <- plotCompareTrajectories(out_tbls, "Female population size", typeLabels = typeLabs,
+                             lowBound = 0, highBound = 500)
+rec /surv / lam / N
+```
+
+![Comparison of demographic projections obtained using the
+trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes)
+wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500
+samples.](caribouDemography_files/figure-html/summaryTrajectoryBasePlot-1.png)
+
+Figure 2.8: Comparison of demographic projections obtained using the
+trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes)
+wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500
+samples.
+
+``` r
+pm.startYear <- 2015; pm.endYear <- 2022
+RbarAdjust <- pt$Rbar
+RbarAdjust$adjust.mu <- 0.1; RbarAdjust$adjust.sd <- 0.01
+RbarAdjust$adjust.mu[(RbarAdjust$Year<pm.startYear)|(RbarAdjust$Year>=pm.endYear)]=0
+RbarAdjust$adjust.sd[(RbarAdjust$Year<pm.startYear)|(RbarAdjust$Year>=pm.endYear)]=0
+NAdjust <- data.frame(PopulationName <- unique(RbarAdjust$PopulationName))
+NAdjust$N0 <- 100
+NAdjust$N.sd <- 0.3*NAdjust$N0
+NAdjust$N.lower <- 50
+NAdjust$N.upper <- 200
+trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar=RbarAdjust,
+                                               Sbar=pt$Sbar,
+                                               Riv=pt$Riv,Siv=pt$Siv,
+                                               type=pt$type)
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 0
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 201
+#> 
+#> Initializing model
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 0
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 207
+#> 
+#> Initializing model
+out_tbls <- compareTrajectories(trajFromSummaryAdjust, simInitial = trajFromSummaryBase)
+typeLabs <- c("Adjust", "Base")
+```
+
+``` r
+rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
+surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
+lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
+                               lowBound = 0.5, highBound = 1.5)
+N <- plotCompareTrajectories(out_tbls, "Female population size", typeLabels = typeLabs,
+                             lowBound = 0, highBound = 700)
+rec /surv / lam / N
+```
+
+![Effects of increasing recruitment after 2015 and increasing variation
+in initial population size on demographic projections obtained using the
+trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5%
+quantiles of 500
+samples.](caribouDemography_files/figure-html/summaryTrajectoryAdjustPlot-1.png)
+
+Figure 2.9: Effects of increasing recruitment after 2015 and increasing
+variation in initial population size on demographic projections obtained
+using the trajectoriesFromSummary wrapper function. Bands are the 2.5%
+and 97.5% quantiles of 500 samples.
+
+### 2.5 Using the trajectoriesFromSummariesForApp wrapper function to project population growth
+
+The `trajectoriesFromSummaryForApp` wrapper function is less flexible
+than `trajectoriesFromSummary`, and does not allow changes in
+demographic rates over time. It is used to enable scenario exploration
 in our [Boreal Caribou Demographic Projection
 Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp).
 
@@ -626,25 +861,20 @@ proj
 (base) and a scenario in which expected survival is increased to 85%
 (S85), obtained using the trajectoriesFromSummary wrapper function.
 Bands are the 2.5% and 97.5% quantiles of 500
-samples.](caribouDemography_files/figure-html/summaryTrajectoryPlot-1.png)
+samples.](caribouDemography_files/figure-html/summaryTrajectoryForAppPlot-1.png)
 
-Figure 2.2: Comparison of demographic trajectories from a fitted
+Figure 2.10: Comparison of demographic trajectories from a fitted
 bboutools model (base) and a scenario in which expected survival is
 increased to 85% (S85), obtained using the trajectoriesFromSummary
 wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples.
 
-### 2.5 References
+### References
 
-Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
-Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
-Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (2022). Existing caribou
-habitat and demographic models need improvement for Ring of Fire impact
-assessment: A roadmap for improving the usefulness, transparency, and
-availability of models for conservation.
-<https://doi.org/10.1101/2022.06.01.494350>
-
-Novomestky F, Nadarajah S (2016) Package ‘truncdist.’ Version 1.0-2URL
-<https://CRAN.R-project.org/package=truncdist>
+Dyson, Matt, Sarah Endicott, Craig Simpkins, Julie W. Turner, Stephanie
+Avery-Gomm, Cheryl A. Johnson, Mathieu Leblond, et al. 2026. “Effective
+Conservation Decisions Require Models Designed for Purpose: A Case Study
+of Boreal Caribou in Ontario’s Ring of Fire.” *Ecology and Evolution* In
+press. <https://doi.org/10.1101/2022.06.01.494350>.
 
 Ferrari, Silvia, and Francisco Cribari-Neto. 2004. “Beta Regression for
 Modelling Rates and Proportions.” *Journal of Applied Statistics* 31

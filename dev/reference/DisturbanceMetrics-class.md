@@ -13,7 +13,7 @@ Ontario. Output variables include:
 - Total_dist: Percent total non-overlapping fire and anthropogenic
   disturbance.
 
-- fire_excl_anthro: Percent fire not overlapping with anthropogenic
+- Fire_excl_anthro: Percent fire not overlapping with anthropogenic
   disturbance.
 
 ## Details

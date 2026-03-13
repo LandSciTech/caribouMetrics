@@ -14,7 +14,7 @@ for each scenario.
 bayesianScenariosWorkflow(
   scns,
   simInitial,
-  ePars = list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 4),
+  ePars = list(collarOnTime = 4, collarOffTime = 3, collarNumYears = 4),
   Rep = NULL,
   printProgress = FALSE,
   priors = "default",
@@ -36,9 +36,10 @@ bayesianScenariosWorkflow(
 - simInitial:
 
   Initial simulation results, produced by calling
-  [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md)
+  [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
+  [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
   or
-  [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md)
+  [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)
 
 - ePars:
 
@@ -131,8 +132,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 120
-#>    Unobserved stochastic nodes: 465
+#>    Observed stochastic nodes: 108
+#>    Unobserved stochastic nodes: 477
 #>    Total graph size: 2377
 #> 
 #> Initializing model
@@ -145,8 +146,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 54
-#>    Unobserved stochastic nodes: 170
+#>    Observed stochastic nodes: 53
+#>    Unobserved stochastic nodes: 171
 #>    Total graph size: 666
 #> 
 #> Initializing model
@@ -160,8 +161,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 216
-#>    Unobserved stochastic nodes: 499
+#>    Observed stochastic nodes: 240
+#>    Unobserved stochastic nodes: 475
 #>    Total graph size: 2897
 #> 
 #> Initializing model
@@ -174,8 +175,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 72
-#>    Unobserved stochastic nodes: 202
+#>    Observed stochastic nodes: 74
+#>    Unobserved stochastic nodes: 200
 #>    Total graph size: 806
 #> 
 #> Initializing model

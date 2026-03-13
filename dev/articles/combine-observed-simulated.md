@@ -52,8 +52,8 @@ recruit_dataNone <- recruit_data %>% filter(Year > 2017)
 surv_dataLimited <- surv_data %>% filter(Year > 2014)
 recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
 
-disturbance = data.frame(Year = unique(surv_data$Year), Anthro = 5, fire_excl_anthro = 5)
-disturbanceHigh <- data.frame(Year = disturbance$Year,Anthro = 80,fire_excl_anthro = 10)
+disturbance = data.frame(Year = unique(surv_data$Year), Anthro = 5, Fire_excl_anthro = 5)
+disturbanceHigh <- data.frame(Year = disturbance$Year,Anthro = 80,Fire_excl_anthro = 10)
 
 betaLimited <- estimateBayesianRates(surv_dataLimited, recruit_dataLimited, disturbance=disturbance,niters=niters)
 betaInformative <- estimateBayesianRates(surv_data, recruit_data, disturbance=disturbance,niters=niters)
@@ -74,7 +74,7 @@ with a target of 30 collars per year, and 6 cows per collared cow in the
 composition surveys. We then simulate additional years of monitoring,
 combine the simulated and observed data, and reanalyze the combined
 data. Methods for simulating monitoring of example trajectories are
-described in Hughes et al. ([2025](#ref-hughes2025)).
+described in Hughes et al. ([2025](#ref-hughes_integration_2025)).
 
 ``` r
 scns=list()
@@ -101,8 +101,7 @@ limitedMoreMonitoring = bayesianScenariosWorkflow(scns,simLimited,niters=niters)
 typeLabsL <- c("More", "Limited")
 
 limitedMoreHigh = bayesianScenariosWorkflow(scns,simLimitedHigh,niters=niters) 
-#TO DO: fix discrepancies between these two methods.
-#TO DO: change dot labels. "True simulated" should be "trajectory", and "observed" should be "observation".
+#TO DO: observation points in fig 2?
 ```
 
 ``` r
@@ -202,8 +201,8 @@ distinguish the cases from one another, but additional benefits of that
 information should be weighed against additional costs. More formal and
 thorough analyses of the value of additional monitoring can be done by
 examining outcomes from a larger representative sample of plausible
-trajectories from the initial model (as Hughes et al.
-([2025](#ref-hughes2025))).
+trajectories from the initial model (as in [Hughes et al.
+2025](#ref-hughes_integration_2025)).
 
 ``` r
 #Add rows to the scenario table to examine multiple monitoring scenarios and example trajectories
