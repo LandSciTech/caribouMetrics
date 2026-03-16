@@ -23,7 +23,8 @@ caribouPopGrowth(
   c = 1,
   interannualVar = list(R_CV = 0.46, S_CV = 0.08696),
   probOption = "binomial",
-  progress = interactive()
+  progress = interactive(),
+  warn = T
 )
 }
 \arguments{
@@ -130,29 +131,32 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 
 Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty, A.M.,
 Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and Hughes, J.,
-2023. Climate‐informed forecasts reveal dramatic local habitat shifts and
+2023. Climate-informed forecasts reveal dramatic local habitat shifts and
 population uncertainty for northern boreal caribou. Ecological
 Applications, 33(3), p.e2816. \url{https://doi.org/10.1002/eap.2816}
 }
 \seealso{
 Caribou demography functions:
-\code{\link{bbouMakeSummaryTable}()},
-\code{\link{caribouBayesianPM}()},
-\code{\link{caribouPopSimMCMC}()},
+\code{\link{bayesianScenariosWorkflow}()},
+\code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{betaNationalPriors}()},
+\code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{demographicCoefficients}()},
+\code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
 \code{\link{demographicProjectionApp}()},
-\code{\link{demographicRates}()},
-\code{\link{doSim}()},
-\code{\link{getBBNationalInformativePriors}()},
-\code{\link{getOutputTables}()},
-\code{\link{getPriors}()},
+\code{\link{estimateBayesianRates}()},
+\code{\link{estimateNationalRate}()},
+\code{\link{getNationalCoefficients}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsInitial}()},
-\code{\link{getSimsNational}()},
-\code{\link{plotRes}()},
+\code{\link{plotCompareTrajectories}()},
+\code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{runScnSet}()},
-\code{\link{simulateObservations}()}
+\code{\link{simulateObservations}()},
+\code{\link{trajectoriesFromBayesian}()},
+\code{\link{trajectoriesFromNational}()},
+\code{\link{trajectoriesFromSummary}()},
+\code{\link{trajectoriesFromSummaryForApp}()}
 }
 \concept{demography}

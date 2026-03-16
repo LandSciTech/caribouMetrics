@@ -1,0 +1,186 @@
+#' Summarize results of Bayesian demographic model in tables
+#'
+#' Produces summary tables for Bayesian caribou population model
+#' results. 
+#'
+#' @param caribouBayesDemogMod caribou Bayesian demographic model results
+#'   produced by calling [bayesianTrajectoryWorkflow()], [trajectoriesFromNational()], [trajectoriesFromBayesian()], or [trajectoriesFromSummary()]
+#' @inheritParams bayesianTrajectoryWorkflow
+#' @param paramTable data.frame. Optional. Scenario parameters see
+#'   [simulateObservations()]
+#' @param exData data.frame. Optional. Output of [simulateObservations()] that
+#'   records the true population metrics of the population that observations
+#'   were simulated from.
+#' @param simInitial Initial simulation results, produced by calling
+#'   [trajectoriesFromNational()], [trajectoriesFromBayesian()], or [trajectoriesFromSummary()]
+#'
+#' @return a list of tables:
+#' * rr.summary.all: Mean parameter values for each year and standard deviation,
+#'   upper and lower credible intervals projected by the Bayesian model, as well
+#'   as scenario input parameters.
+#' * sim.all: Mean parameter values and upper and lower credible intervals from
+#'   the initial model for each year, as well as scenario input parameters.
+#' * obs.all: Observed parameter values with column "Type" identifying if it is
+#'   the "true" value of the simulated population or the "observed" value
+#'   simulated based on the collaring program parameters.
+#' 
+#' @family demography
+#' @export
+#'
+#' @examples
+#' scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
+#'                             obsAnthroSlope = 1, projAnthroSlope = 5,
+#'                             collarCount = 20, cowMult = 5)
+#'
+#' simO <- simulateObservations(scns)
+#'
+#' out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
+#'                           disturbance = simO$simDisturbance,
+#'                           niters=10)
+#'
+#' outTables <- compareTrajectories(out, exData = simO$exData, paramTable = simO$paramTable,
+#'                              simInitial = trajectoriesFromNational())
+#'                              
+#' str(outTables, max.level = 2, give.attr = FALSE)
+                             
+compareTrajectories <- function(caribouBayesDemogMod, 
+                            startYear = min(caribouBayesDemogMod$inData$disturbanceIn$Year), 
+                            endYear = max(caribouBayesDemogMod$inData$disturbanceIn$Year), 
+                            paramTable = data.frame(param = "observed"),
+                            exData = NULL,
+                            simInitial = NULL) {
+  # caribouBayesDemogMod = out; startYear = oo$minYr;endYear = oo$maxYr; simInitial = simInitial
+  # exData = oo$exData; paramTable = oo$paramTable
+  
+  if(is.element("result",names(caribouBayesDemogMod))){
+    result <- caribouBayesDemogMod$result
+  }else{
+    result <- caribouBayesDemogMod
+  }
+  survInput <- result$surv_data
+  recInput <- result$recruit_data
+  distInput <- caribouBayesDemogMod$inData$disturbanceIn
+
+  if(is.null(distInput)){
+    startYear <- min(intersect(survInput$Year,recInput$Year))
+    endYear <- max(intersect(survInput$Year,recInput$Year))
+  }
+
+  # get summary info for plots
+  rr.summary <- result$summary
+
+  survInput$Year=as.numeric(as.character(survInput$Annual))
+  recInput$Year=as.numeric(as.character(recInput$Annual))
+  
+  if(is.element("Mortalities",names(survInput))){
+    obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(AnyNA=sum(!is.na(Mortalities)),Mortalities = sum(MortalitiesCertain,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
+    obsSurv$Mean <- 1-obsSurv$Mortalities/obsSurv$StartTotal
+    obsSurv$Mean[obsSurv$AnyNA==0]=NA
+  }else{
+    obsSurv <- subset(survInput,select=c(PopulationName,Year,mean))
+    names(obsSurv)[names(obsSurv)=="mean"]="Mean"
+  }
+  obsSurv$Parameter <- "Adult female survival"
+  obsSurv$MetricTypeID <- "S"
+  obsSurv$Type <- "observed"    
+  
+  
+  if(is.element("Cows",names(recInput))){
+    obsRec <- subset(recInput, 
+                     select = intersect(names(recInput), c("PopulationName","Year", "Cows", "Calves","UnknownAdults","Yearlings")))
+    adult_female_proportion = 0.65; sex_ratio=0.5 #TO DO: get from model object
+    obsRec$Mean <- obsRec$Calves / (obsRec$Cows + obsRec$UnknownAdults*adult_female_proportion+obsRec$Yearlings*sex_ratio)
+  }else{
+    obsRec <- subset(recInput,select=c(PopulationName,Year,mean))
+    names(obsRec)[names(obsRec)=="mean"]="Mean"
+  }
+  obsRec$Parameter <- "Recruitment"
+  obsRec$MetricTypeID <- "R"
+  obsRec$Type <- "observed"
+
+  #hist(subset(rr.summary,Parameter=="Recruitment")$Mean)
+  
+  obsAll <- rbind(subset(obsRec, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                                            "Type")),
+                  subset(obsSurv, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                                             "Type")))
+  
+  if(!is.null(exData)){
+    
+    exData <- merge(exData,unique(subset(rr.summary,select=c(MetricTypeID,Parameter))),all.x=T)
+    names(exData)[names(exData)=="Amount"] = "Mean"
+    exData$Type = "true"
+    
+    obsAll <- rbind(obsAll,
+                    subset(exData, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                                              "Type")))
+  } 
+
+  
+  if(!is.null(distInput)){
+    # combine paramTable and simDisturbance and add to all output tables, nest params in a list
+    dist_params <- merge(distInput, paramTable)
+  }else{
+    dist_params <- paramTable
+  }
+  
+  if(!is.null(simInitial)){
+    summaries <- simInitial$summary
+
+    if(is.element("AnthroID",names(summaries))&&any(!is.na(summaries$AnthroID))){
+      
+      if(!is.element("Year",names(summaries))&!is.element("Anthro",names(dist_params))){
+        stop("Set disturbance in bayesianTrajectoryWorkflow function call in order to compare to national model simulations.", call. = FALSE)
+      }
+      #only fill in national sims if simInitial is from national model
+      if(!(is.element("surv_data",names(simInitial)))&!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
+        message("recalculating initial sims to match anthropogenic distubance scenario")
+        simInitial <- trajectoriesFromNational(cPars=paramTable)
+        summaries <- simInitial$summary
+      }
+      #remove irrelevant disturbance combinations from the summaries
+      distMerge <- subset(dist_params, 
+                          select=c(Anthro,Fire_excl_anthro,Year))
+      if(is.element("Year", names(summaries))){
+        if(!all(dist_params$Year %in% summaries$Year)){
+          distMerge <- filter(distMerge, Year %in% summaries$Year)
+        }  
+      }
+      
+      distMerge$Fire_excl_anthro=round(distMerge$Fire_excl_anthro);
+      distMerge$Anthro=round(distMerge$Anthro)
+      distMerge=unique(distMerge)
+      names(distMerge) <- c("AnthroID","Fire_excl_anthroID","Year")
+      tt<- merge(summaries,distMerge)
+      check <- unique(subset(tt,select=names(distMerge)))
+      if(nrow(check)!=nrow(distMerge)){
+        stop("Handle this case")
+      }
+      simBigO<-tt
+      simBigO$AnthroID=NULL;simBigO$Fire_excl_anthroID=NULL
+    }else{
+      summaries$AnthroID=NULL;summaries$Fire_excl_anthroID=NULL
+      by_col <- intersect(names(summaries), names(dist_params))
+      if(length(by_col) == 0){
+        if(any(table(summaries$Year[summaries$MetricTypeID=="recruitment"])>length(unique(summaries$PopulationName)))){
+          stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no columns shared between them", call. = FALSE)
+        }
+        simBigO <- summaries
+      }else{
+        matches <- intersect(summaries[[by_col]], dist_params[[by_col]])
+        if(length(matches) == 0){
+          stop("Cannot merge caribouBayesDemogMod$inData$disturbanceIn and simInitial$summary because there are no overlapping values in ", by_col, call. = FALSE)
+        }
+        simBigO <- merge(summaries, dist_params)
+      }
+    }
+  } else {
+    simBigO <- NULL
+  }
+  
+  rr.summary <- merge(rr.summary, dist_params)
+  obsAll <- merge(obsAll, dist_params)
+
+  return(list(rr.summary.all = rr.summary, sim.all = simBigO,
+              obs.all = obsAll))
+}

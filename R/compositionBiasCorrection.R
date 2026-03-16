@@ -22,8 +22,8 @@
 #'   `u`, and `z`
 #'   
 #' @return number or tibble. If `approx = FALSE` a vector of composition bias
-#'   correction values (c) of the same length as `q`, `u`, and `z`. If `approx =
-#'   TRUE` a tibble with on row per unique value of `w` and columns `w`, `m`,
+#'   correction values (c) of the same length as `q`, `u`, and `z`. If `approx = TRUE` 
+#'   a tibble with one row per unique value of `w` and columns `w`, `m`,
 #'   `v`, `sig2`, `mu` representing `w`, mean `c`, variance of `c`, and parameters for a
 #'   log-normal approximation of the distribution of `c`.
 #' @export
@@ -38,7 +38,7 @@
 #'   <https://doi.org/10.1016/j.ecoinf.2025.103095>
 #'   
 #' @examples
-#' # number or reps
+#' # number of reps
 #' nr <- 10
 #'
 #' compositionBiasCorrection(w = 6,

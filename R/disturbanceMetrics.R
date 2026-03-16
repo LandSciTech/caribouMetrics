@@ -26,7 +26,7 @@ setMethod(f = "initialize", signature = "DisturbanceMetrics",
 #'* Fire: % fire
 #'* Anthro: % non-overlapping anthropogenic disturbance.
 #'* Total_dist: Percent total non-overlapping fire and anthropogenic disturbance.
-#'* fire_excl_anthro: % fire not overlapping with anthropogenic disturbance.
+#'* Fire_excl_anthro: % fire not overlapping with anthropogenic disturbance.
 #'
 #'Note assume natDist and anthroDist include 40 years of cumulative disturbance.
 #'Note that locations where landCover is NA or 0 are omitted from the tabulated

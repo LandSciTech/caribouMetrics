@@ -1,10 +1,17 @@
 ---
 title: "Disturbance Metrics"
-output: rmarkdown::html_vignette
+output: 
+    bookdown::html_document2:
+        base_format: rmarkdown::html_vignette
+        toc: true
 vignette: >
   %\VignetteIndexEntry{Disturbance Metrics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: caribouMetricsPackageRefs.bib
+pkgdown:
+  as_is: true
+link-citations: yes
 ---
 
 ```{r, include = FALSE}
@@ -26,11 +33,11 @@ pthBase <- system.file("extdata", package = "caribouMetrics")
 ```
 
 # `disturbanceMetrics()`
-The `disturbanceMetrics()` function is used to calculate the metrics described in Table 52 of Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada 2011 Update. The metrics included are:
+The `disturbanceMetrics()` function is used to calculate the metrics described in Table 52 of Environment Canada Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (*Rangifer tarandus caribou*), Boreal Population, in Canada [@eccc_scientific_2011]. The metrics included are:
 * Fire: % non-overlapping fire 
 * Anthro: % non-overlapping anthropogenic disturbance
 * Total_dist: % total non-overlapping fire and anthropogenic disturbance
-* fire_excl_anthro: % fire not overlapping with anthropogenic disturbance
+* Fire_excl_anthro: % fire not overlapping with anthropogenic disturbance
 
 `disturbanceMetrics()` uses several spatial data layers to calculate the percentage disturbance in an area: 
 
@@ -61,7 +68,7 @@ railD = st_read(file.path(pthBase, "rail.shp"), quiet = TRUE)
 utilitiesD = st_read(file.path(pthBase, "utilities.shp"), quiet = TRUE)
 ```
 
-`disturbanceMetrics` will prepare the data and then calculate disturbance metrics used as predictor variables by Johnson et al. (2020). The function can be run in several different ways, and the simplest is to provide spatial objects for each input. 
+`disturbanceMetrics` will prepare the data and then calculate disturbance metrics used as predictor variables by @johnson_science_2020. The function can be run in several different ways, and the simplest is to provide spatial objects for each input. 
 
 ```{r disturbanceMetricsRaster, results='hide',message=F, warning=T}
 disturbance <- disturbanceMetrics(

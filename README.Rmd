@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/LandSciTech/caribouMetrics/graph/badge.svg)](https://app.codecov.io/gh/LandSciTech/caribouMetrics)
 <!-- badges: end -->
 
 The `caribouMetrics` R package provides implementations of models of Boreal woodland caribou (_Rangifer tarandus caribou_) demography described in [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095). These include: 
@@ -56,13 +57,8 @@ if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
 # load example data
-landCoverD <- terra::rast(file.path(pthBase, "landCover.tif")) 
-  # convert PLC classes to resource types used in the model 
-landCoverD <- reclassPLC(landCoverD)
-eskerDras <- terra::rast(file.path(pthBase, "eskerTif.tif"))
-eskerDshp <- sf::read_sf(file.path(pthBase, "esker.shp"))
+landCoverD <- terra::rast(file.path(pthBase, "landCover.tif"))
 natDistD <- terra::rast(file.path(pthBase, "natDist.tif"))
-anthroDistD <-terra::rast(file.path(pthBase, "anthroDist.tif"))
 linFeatDras <- terra::rast(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD <- sf::read_sf(file.path(pthBase, "projectPoly.shp"))
 
@@ -75,9 +71,9 @@ disturb <- disturbanceMetrics(landCover = landCoverD,
 disturb_tbl <- results(disturb)
 
 # Calculate demographic rates
-demCoefs <- demographicCoefficients(replicates = 10)
+demCoefs <- getNationalCoefficients(replicates = 10)
 
-demRates <- demographicRates(covTable = disturb_tbl,
+demRates <- estimateNationalRates(covTable = disturb_tbl,
                              popGrowthPars = demCoefs)
 demRates
 
@@ -96,29 +92,17 @@ params <- getScenarioDefaults(
 simObs <- simulateObservations(params)
 
 #devtools::load_all()
-pm <- caribouBayesianPM(simObs$simSurvObs, simObs$simRecruitObs, 
+pm <- bayesianTrajectoryWorkflow(simObs$simSurvObs, simObs$simRecruitObs, 
                          simObs$simDisturbance,
                          # only set to speed up vignette. Normally keep defaults.
                          niters=100)
 
-natSim <- getSimsInitial(simObs$simDisturbance)
+natSim <- trajectoriesFromNational(disturbance = simObs$simDisturbance)
 
-pmTbls <- getOutputTables(pm, simInitial=natSim)
-plotRes(pmTbls, c("Recruitment", "Adult female survival"))
+pmTbls <- compareTrajectories(pm, simInitial=natSim)
+plotCompareTrajectories(pmTbls, c("Recruitment", "Adult female survival"))
 
-# Calculate habitat RSF in Ontario's Churchill range
-carHab1 <- caribouHabitat(
-  landCover = landCoverD,
-  esker = eskerDras, 
-  natDist = natDistD, 
-  anthroDist = anthroDistD, 
-  linFeat = linFeatDras, 
-  projectPoly = projectPolyD,
-  caribouRange = "Churchill"
-)
 
-# plot the results
-plot(carHab1)
 ```
 
 ## Resources

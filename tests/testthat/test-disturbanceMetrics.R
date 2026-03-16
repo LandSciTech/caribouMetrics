@@ -63,7 +63,6 @@ dm_lflist <- disturbanceMetrics(
   bufferWidth = 500
 )
 
-
 test_that("results match when input is paths or data",{
   expect_equal(dm@disturbanceMetrics, dm_path@disturbanceMetrics)
 })
@@ -129,8 +128,8 @@ test_that("results are different without disturbances",{
   expect_false(identical(dm_noDist,  dm))
 })
 
-test_that("fire_excl_anthro lt fire",
-          expect_lt(dm@disturbanceMetrics$fire_excl_anthro, 
+test_that("Fire_excl_anthro lt fire",
+          expect_lt(dm@disturbanceMetrics$Fire_excl_anthro, 
                     dm@disturbanceMetrics$Fire)
 )
 
@@ -179,7 +178,6 @@ test_that("RasterLayer input works",{
     bufferWidth = 500,
     linBuffMethod = "sf"
   )
-  
   expect_s4_class(dm_rast, "DisturbanceMetrics")
 })
 
@@ -220,8 +218,7 @@ test_that("NAs handled correctly", {
 resultCompare <- readRDS(file.path(test_path("data"), "dm_resultCompare.rds"))
 
 # To update
-# saveRDS(dm@disturbanceMetrics, file.path("tests/testthat/data", "dm_resultCompare.rds"),
-# version = 2)
+# saveRDS(dm@disturbanceMetrics, file.path("tests/testthat/data", "dm_resultCompare.rds"),version = 2)
 
 testthat::test_that("results match previous results",{
   testthat::expect_equal(dm@disturbanceMetrics, resultCompare)

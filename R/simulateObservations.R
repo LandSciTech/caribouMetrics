@@ -24,8 +24,8 @@
 #'   each year. If NULL `paramTable$collarCount` is used as the target number of
 #'   collars and each year that collars are deployed they will be topped up to
 #'   this number. If a data.frame is provided it must have 2 columns "Year" and
-#'   "numStarts" and the "numStarts" is the absolute number of collars deployed
-#'   in that year.
+#'   "numStarts" or "numTarget" (but not both). "numStarts" is the absolute number of collars deployed
+#'   in that year, and "numTarget" is the target number of collars.
 #' @param collarNumYears integer. Number of years until collar falls off
 #' @param collarOffTime integer. Month that collars fall off. A number from 1
 #'   (January) to 12 (December)
@@ -35,7 +35,7 @@
 #' @param recSurveyMonth integer. The month of simulated recruitment surveys.
 #' @param recSurveyDay integer. The day for simulated recruitment surveys.
 #' @param distScen data.frame. Disturbance scenario. Must have columns "Year",
-#'   "Anthro", and "fire_excl_anthro" containing the year, percentage of the
+#'   "Anthro", and "Fire_excl_anthro" containing the year, percentage of the
 #'   landscape covered by anthropogenic disturbance buffered by 500 m, and the
 #'   percentage covered by fire that does not overlap anthropogenic disturbance.
 #'   See [disturbanceMetrics()]. If NULL the disturbance scenario is simulated
@@ -48,7 +48,7 @@
 #' @return a list with elements:
 #'   * minYr: first year in the simulations,
 #'   * maxYr: last year in the simulations,
-#'   * simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
+#'   * simDisturbance: a data frame with columns Anthro, Fire_excl_anthro, Total_dist, and  Year,
 #'   * simSurvObs: a data frame of survival data in bboutools format,
 #'   * simRecruitObs: a data frame of recruitment data in bboutools format,
 #'   * exData: a tibble of expected population metrics based on the initial model,
@@ -73,9 +73,10 @@
 simulateObservations <- function(paramTable, trajectories=NULL,
          cowCounts = NULL,
          freqStartsByYear = NULL,
-         collarNumYears = 4, collarOffTime = 4,
+         collarNumYears = 4, collarOffTime = 3,
          collarOnTime = 4,
          caribouYearStart = 4,
+         topUp = F,
          recSurveyMonth = 3,
          recSurveyDay = 15,
          distScen = NULL,
@@ -153,24 +154,24 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     trajectories$PopulationName<-'A'
   }else{
     names(trajectories)<-gsub("AnthroID","Anthro",names(trajectories),fixed=T)
-    names(trajectories)<-gsub("fire_excl_anthroID","fire_excl_anthro",names(trajectories),fixed=T)
+    names(trajectories)<-gsub("Fire_excl_anthroID","Fire_excl_anthro",names(trajectories),fixed=T)
     
     #remove irrelevant disturbance combinations from the example trajectory.
     if(nrow(simDisturbance)>0){
-      if(!is.null(trajectories[["Anthro"]]) && !is.null(trajectories[["fire_excl_anthro"]])){
+      if(!is.null(trajectories[["Anthro"]]) && !is.null(trajectories[["Fire_excl_anthro"]])){
         if(!any(!is.na(trajectories$Anthro))){trajectories$Anthro=NULL}
-        if(!any(!is.na(trajectories$fire_excl_anthro))){trajectories$fire_excl_anthro=NULL}
+        if(!any(!is.na(trajectories$Fire_excl_anthro))){trajectories$Fire_excl_anthro=NULL}
       }
       
-      distMerge <- subset(simDisturbance, select=c(Anthro,fire_excl_anthro,Year))
-      distMerge$fire_excl_anthro=round(distMerge$fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
+      distMerge <- subset(simDisturbance, select=c(Anthro,Fire_excl_anthro,Year))
+      distMerge$Fire_excl_anthro=round(distMerge$Fire_excl_anthro);distMerge$Anthro=round(distMerge$Anthro)
       distMerge=unique(distMerge)
-      names(distMerge) <- c("Anthro","fire_excl_anthro","Year")
+      names(distMerge) <- c("Anthro","Fire_excl_anthro","Year")
       tt<- merge(trajectories,distMerge)
       check <- unique(subset(tt,select=names(distMerge)))
       if(nrow(check)!=nrow(distMerge)){
         if(is.element("Anthro",names(trajectories))){
-          simDisturbance <- unique(subset(trajectories,select=c(Anthro,fire_excl_anthro,Year)))
+          simDisturbance <- unique(subset(trajectories,select=c(Anthro,Fire_excl_anthro,Year)))
           if(max(table(simDisturbance$Year))>1){
             stop("The example trajectories do not include the disturbance scenario specified, and they include more than one disturbance scenario. Either provide a trajectory that does not include multiple disturbance scnenario, or specify a disturbance scenario that is included in the trajectories.")
           }else{
@@ -187,7 +188,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       }
     }
   }
-  trajectories$Anthro=NULL;trajectories$fire_excl_anthro=NULL
+  trajectories$Anthro=NULL;trajectories$Fire_excl_anthro=NULL
   
   #table(subset(trajectories,Replicate=="xV1")$Year)
   #subset(trajectories,Replicate=="xV1"&Year==2023&MetricTypeID=="N")
@@ -217,9 +218,11 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   
   includeYears = unique(popMetrics$Year)
   
+  popMetrics$LambdaPercentile=NULL
   exData <- tidyr::pivot_wider(popMetrics, id_cols = c("Replicate", "Year","Timestep","PopulationName"),
                                names_from = "MetricTypeID",
                                values_from = "Amount")
+  if(class(exData$N)=="list"){stop("Cannot extract example trajectory due to duplication. Check for errors in trajectoriesFromBayesian.")}
 
   if(!is.null(recruit_data)){
     recruitYrs <- sort(setdiff(includeYears,subset(recruit_data,!is.na(Calves))$Annual))
@@ -256,7 +259,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     survYrs <- intersect(survYrs, freqStartsByYear$Year) 
                          
     freqStartsByYear <- subset(freqStartsByYear,is.element(Year,survYrs))
-    testTable(freqStartsByYear, c("Year","numStarts"),
+    testTable(freqStartsByYear, c("Year"),or_col_names = c("numStarts","numTarget"),
               acc_vals = list(Year = survYrs))
   } else if(!is.null(paramTable$collarCount)){
     freqStartsByYear <- expand.grid(Year = survYrs,numStarts = paramTable$collarCount)
@@ -290,8 +293,14 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime,
                                     collarOnTime, caribouYearStart,topUp = T,forceMonths=forceMonths)
     } else {
+      if(is.element("numTarget", names(freqStartsByYear))){
+        if(is.element("numStarts", names(freqStartsByYear))){stop("In freqStartsByYear, specify numTarget or numStarts, but not both.")}
+        names(freqStartsByYear)[names(freqStartsByYear)=="numTarget"] = "numStarts"; topUp = T
+      }else{
+        topUp = F
+      }
       simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears,
-                                    collarOffTime, collarOnTime,caribouYearStart,forceMonths=forceMonths)
+                                    collarOffTime, collarOnTime,caribouYearStart,topUp = topUp, forceMonths=forceMonths)
     }
     simSurvObs$survival=NULL
     simSurvObs$Annual <- simSurvObs$Year
@@ -439,6 +448,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   if(!is.element("Bulls",names(simRecruitObs))){
     simRecruitObs$Bulls <- simRecruitObs$CowsBulls-simRecruitObs$Cows
   }
+
+  simSurvObs$StartTotal[(simSurvObs$StartTotal==0)&is.na(simSurvObs$MortalitiesCertain)]<-1
   retList = list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
                 simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
                  exData = trajectories, paramTable = paramTable)

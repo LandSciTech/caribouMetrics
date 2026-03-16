@@ -8,21 +8,21 @@
 #' @returns convertTrajectories: formatted tables
 #' @export
 #'
-#' @rdname caribouPopSimMCMC
+#' @rdname simulateTrajectoriesFromPosterior
 #' 
 
 convertTrajectories<-function(pars){
-  #converts output from caribouPopSim to alternate form
+  #converts output from simPopsOverTime to alternate form
   #pars = trajectories
   if(!is.element("lamPercentile",names(pars))){
     pars$lamPercentile=NA
   }
   if(!is.element("c",names(pars))){pars$c=NA}
-  
-  nameChange <- data.frame(inName=c("id","lamPercentile", "Year","PopulationName","Anthro", "fire_excl_anthro","c",
+
+  nameChange <- data.frame(inName=c("id","lamPercentile", "Year","PopulationName","Anthro", "Fire_excl_anthro","c",
                                     "S_t", "R_t", "X_t", "N",
                                     "lambda","S_bar","R_bar","X_bar","N_bar","lambdaE_bar"),
-                           outName=c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "fire_excl_anthro","c", 
+                           outName=c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "Fire_excl_anthro","c", 
                                      "survival","recruitment","X", "N", "lambda","Sbar","Rbar","Xbar","Nbar","lambda_bar"))
   
   if(!is.element("lambdaE_bar",names(pars))){
@@ -33,12 +33,12 @@ convertTrajectories<-function(pars){
   names(fds) <- nameChange$outName
   
   if(is.element("Anthro", colnames(fds))){
-    fds$AnthroID = round(fds$Anthro);fds$fire_excl_anthroID=round(fds$fire_excl_anthro)
+    fds$AnthroID = round(fds$Anthro);fds$Fire_excl_anthroID=round(fds$Fire_excl_anthro)
   }
-  
+
   fds$Timestep = as.numeric(fds$Year)
   fds$Year=as.numeric(as.character(fds$Year))
-  fds <- tidyr::pivot_longer(fds, !any_of(c("Replicate","LambdaPercentile","Year","Timestep","PopulationName","AnthroID","fire_excl_anthroID")), names_to = "MetricTypeID",
+  fds <- tidyr::pivot_longer(fds, !any_of(c("Replicate","LambdaPercentile","Year","Timestep","PopulationName","AnthroID","Fire_excl_anthroID")), names_to = "MetricTypeID",
                              values_to = "Amount")
   fds$MetricTypeID <- as.character(fds$MetricTypeID)
   fds$Replicate <- paste0("x", fds$Replicate)
@@ -54,16 +54,16 @@ convertTrajectories<-function(pars){
 #' @param pars 
 #' @param returnSamples 
 #'
-#' @returns summarizeCaribouPopSim:
+#' @returns summarizeTrajectories:
 #' @export
 #' @family demography
 #'
-#' @rdname caribouPopSimMCMC
-summarizeCaribouPopSim <- function(pars,returnSamples=T){
+#' @rdname simulateTrajectoriesFromPosterior
+summarizeTrajectories <- function(pars,returnSamples=T){
 
   if(is.element("AnthroID",names(pars))){  
     simSum <- pars  %>%
-      group_by(Year,PopulationName,MetricTypeID,AnthroID,fire_excl_anthroID) %>%
+      group_by(Year,PopulationName,MetricTypeID,AnthroID,Fire_excl_anthroID) %>%
       summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
                 upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
   }else{
@@ -79,12 +79,43 @@ summarizeCaribouPopSim <- function(pars,returnSamples=T){
                                    "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
                                    ))
   simSum=merge(simSum,names)
-  
-  simBig <- list(summary = simSum, samples = pars)
+  if (returnSamples){
+    simBig <- list(summary = simSum, samples = pars)
+  } else {
+    simBig <- list(summary = simSum)
+  }
+
   return(simBig)
 }
 
 # Helpers for simulateObservations -----------------------------------------
+
+#' Dynamically simulate a trajectory over time based on the national model
+#' 
+#' 
+#' 
+#' @param numYears 
+#' @param covariates 
+#' @param survivalModelNumber 
+#' @param recruitmentModelNumber 
+#' @param popGrowthTable 
+#' @param recSlopeMultiplier 
+#' @param sefSlopeMultiplier 
+#' @param rQuantile 
+#' @param sQuantile 
+#' @param stepLength 
+#' @param N0 
+#' @param cowMult 
+#' @param qMin 
+#' @param qMax 
+#' @param uMin 
+#' @param uMax 
+#' @param zMin 
+#' @param zMax 
+#' @param interannualVar 
+#' @family demography
+#' 
+#' @noRd
 
 simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           recruitmentModelNumber = "M4",
@@ -92,7 +123,8 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
                           recSlopeMultiplier = 1, sefSlopeMultiplier = 1,
                           rQuantile = NULL, sQuantile = NULL,
                           stepLength = 1, N0 = 1000,cowMult=1,
-                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,interannualVar = formals(caribouPopGrowth)$interannualVar) {
+                          qMin=0,qMax=0,uMin=0,uMax=0,zMin=0,zMax=0,
+                          interannualVar = eval(formals(caribouPopGrowth)$interannualVar)) {
   # survivalModelNumber = "M1";recruitmentModelNumber = "M4";
   # recSlopeMultiplier=1;sefSlopeMultiplier=1;recQuantile=0.5;sefQuantile=0.5
   # stepLength=1;N0=1000
@@ -113,7 +145,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
     sefSlopeMultiplier * growthTab$Value[(growthTab$Coefficient == "Anthro") &
                                            (growthTab$responseVariable == "femaleSurvival")]
   
-  popGrowthParsSmall <- demographicCoefficients(
+  popGrowthParsSmall <- getNationalCoefficients(
     2,
     modelVersion = "Johnson",
     survivalModelNumber = survivalModelNumber,
@@ -129,50 +161,36 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   usePrec <- "Precision" %in% names(popGrowthParsSmall$coefSamples_Survival$coefValues) &
     "Precision" %in% names(popGrowthParsSmall$coefSamples_Recruitment$coefValues)
   # at each time,  sample demographic rates and project, save results
-  # TODO: SE thinks this can be done all at once with a table of demographic rates 
+  
+  
   pars <- data.frame(N0 = N0)
-  for (t in 1:numYears) {
-    # t=1
-    covs <- subset(covariates, time == t)
-    
-    rateSamples <- demographicRates(
-      covTable = covs,
-      popGrowthPars = popGrowthParsSmall,
-      ignorePrecision = !usePrec,
-      returnSample = TRUE
-    )[1,]
-    
-    if(t ==1){
-      #set bias correction term for each example population - constant over time.
-      bc = unique(subset(rateSamples,select=replicate));nr=nrow(bc)
-      bc$c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
-    }
-    rateSamples$c = NULL; rateSamples = merge(rateSamples, bc)
-    
-    if (is.element("N", names(pars))) {
-      pars <- subset(pars, select = c("replicate", "N"))
-      names(pars)[names(pars) == "N"] <- "N0"
-    }
-    pars <- merge(pars, rateSamples)
-    
-    pars <- cbind(
-      pars,
-      caribouPopGrowth(pars$N0,
-                       R_bar = pars$R_bar, S_bar = pars$S_bar,
-                       numSteps = stepLength, K = FALSE, l_R = 1e-06, c=pars$c,
-                       interannualVar=interannualVar,
-                       progress = FALSE
-      )
-    )
-    pars$id <-pars$replicate
-    
-    fds<-convertTrajectories(pars)
-    if (t == 1) {
-      popMetrics <- fds
-    } else {
-      popMetrics <- rbind(popMetrics, fds)
-    }
-  }
+  
+  # sample rates with covariates from each timestep
+  rateSamples <- estimateNationalRates(
+    covTable = covariates,
+    popGrowthPars = popGrowthParsSmall,
+    ignorePrecision = !usePrec,
+    returnSample = TRUE
+  )[1:nrow(covariates),] # only using the first replicate but doesn't work with just 1
+  
+  #set bias correction term for each example population - constant over time.
+  bc = unique(subset(rateSamples,select=replicate))
+  nr=nrow(bc)
+  c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,
+                                   u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
+
+  popMetrics <- simPopsOverTime(N0, numSteps = numYears, R_samp = rateSamples$R_bar,
+                              S_samp = rateSamples$S_bar, 
+                              interannualVar = interannualVar,
+                              dynamicRates = TRUE,
+                              stepLength = stepLength,
+                              K = FALSE,
+                              l_R = 1e-06,
+                              c = c, 
+                              progress = FALSE)
+  popMetrics <- merge(popMetrics, rateSamples, by.x = "time", by.y = "scnID")
+  
+  popMetrics <- convertTrajectories(popMetrics)
   return(popMetrics)
 }
 
@@ -184,7 +202,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   
   options(dplyr.summarise.inform = FALSE)
   
-  if(!forceMonths&&(collarOnTime==caribouYearStart)&&(collarOffTime==caribouYearStart)){
+  if(!forceMonths&&(collarOnTime==caribouYearStart)&&(collarOffTime==caribouYearStart-1)){
     nMonths = 1
   }else{
     nMonths = 12
@@ -215,7 +233,11 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
     y = sy
     cMonth = caribouYearStart
     if(nMonths==1){prevMonth=cMonth}else{prevMonth = cMonth-1}
-    prevYear = y
+    if(prevMonth==0){
+      prevMonth=12;prevYear=y-1      
+    }else{
+      prevYear = y
+    }
     for (yId in seq(sy,min(sy+collarNumYears,max(survivalSeries$Year)))){
       if ((y == sy+collarNumYears)&(cMonth==collarOffTime)){break}
       for(mId in 1:nMonths){
@@ -258,10 +280,10 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
           cInfo$StartTotal=cInfo$Prevs
           #if(sum(cInfo$StartTotal)==0){break}
         }
-        
-        if(any(cInfo$StartTotal>cInfo$N)){
+
+        if(any(cInfo$StartTotal[!is.na(cInfo$N)]>cInfo$N[!is.na(cInfo$N)])){
           warning("Target number of collars exceeds population size. Adjusting number of collars for consistency.")
-          cInfo$StartTotal = pmin(cInfo$N,cInfo$StartTotal,na.rm=TRUE)
+          cInfo$StartTotal[cInfo$StartTotal>cInfo$N] = cInfo$N[cInfo$StartTotal>cInfo$N]
         }
         
         cInfo$MortalitiesCertain = rbinom(nrow(cInfo),cInfo$StartTotal,prob=(1-cInfo$survival^(1/nMonths)))
@@ -302,26 +324,6 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   simSurvs$MortalitiesCertain[simSurvs$StartTotal==0]=NA
   
   return(simSurvs)
-}
-
-plotSurvivalSeries<-function(surv_data_show){
-  #surv_data_show = subset(outObs$simSurvObs,Replicate==outObs$simSurvObs$Replicate[1])
-  
-  surv_data_show$MortalitiesCertain[surv_data_show$MortalitiesCertain==0]=NA
-  surv_data_show$Malfunctions[surv_data_show$Malfunctions==0]=NA
-  surv_data_show$Month=factor(surv_data_show$Month,levels=seq(1:12))
-  if(length(unique(surv_data_show$Month))==1){
-    base = ggplot(surv_data_show,aes(x=Year,y=StartTotal,group=PopulationName,colour=PopulationName))+geom_line()+
-      geom_point(aes(x=Year,y=MortalitiesCertain,group=PopulationName,colour=PopulationName),shape=4)+
-      geom_col(aes(x=Year,y=Malfunctions,group=PopulationName,colour=PopulationName,fill=PopulationName),alpha=0.2)+
-      ylab("Number of Animals")+theme_bw()
-  }else{
-    base = ggplot(surv_data_show,aes(x=Month,y=StartTotal,group=PopulationName,colour=PopulationName))+geom_line()+facet_wrap(~Year)+
-      geom_point(aes(x=Month,y=MortalitiesCertain,group=PopulationName,colour=PopulationName),shape=4)+
-      geom_col(aes(x=Month,y=Malfunctions,group=PopulationName,colour=PopulationName,fill=PopulationName),alpha=0.2)+
-      ylab("Number of Animals")+theme_bw()
-  }
-  return(base)
 }
 
 simCalfCowRatios <- function(cowCounts, exData) {
@@ -424,7 +426,7 @@ testPopGrowthTable <- function(df) {
 
   diff_coef <- setdiff(unique(df$Coefficient), c(
     "Intercept", "Precision",
-    "Anthro", "fire_excl_anthro"
+    "Anthro", "Fire_excl_anthro"
   ))
 
   if (length(diff_coef) > 0) {
@@ -460,6 +462,8 @@ testPopGrowthTable <- function(df) {
 #' @param df data.frame. The table to test
 #' @param req_col_names character. Required column names. A vector of column
 #'   names that must be present in `df`. Other columns are allowed
+#' @param or_col_names character. Substitutable column names. A vector of column
+#'   names - as least one of these columns must be present in `df`. Other columns are allowed.     
 #' @param req_vals list.  A named list where the name is a column name and the
 #'   value is a vector of required values. Values in the list and not in the
 #'   column will throw an error
@@ -470,14 +474,21 @@ testPopGrowthTable <- function(df) {
 #' @return throws an error if failed otherwise invisible NULL
 #'
 #' @noRd
-testTable <- function(df, req_col_names, req_vals = NULL, acc_vals = NULL){
+testTable <- function(df, req_col_names, or_col_names = NULL, req_vals = NULL, acc_vals = NULL){
   df_name <- deparse(substitute(df))
   missing_cols <- setdiff(req_col_names, colnames(df))
   if(length(missing_cols) > 0){
     stop(df_name, " is missing expected columns: ",
          paste0(missing_cols, collapse = ", "), call. = FALSE)
   }
-
+  if(!is.null(or_col_names)){
+    or_cols <- intersect(or_col_names,colnames(df))
+    if(length(or_cols) == 0){
+      stop(df_name, " is missing expected columns: ",
+           paste0(or_cols, collapse = " or "), call. = FALSE)
+    }
+  }
+  
   if(!is.null(req_vals)){
     Map(function(x, nm){
       missing_vals <- setdiff(x, df[[nm]])
@@ -507,7 +518,9 @@ savePersistentCache <- function(env = cacheEnv){
   obj_nms <- ls(envir = env)
   lapply(obj_nms, function(x){
     obj <- get(x, envir=env)
-    saveRDS(obj, paste0("inst/extdata/", x, ".rds"))
+    saveRDS(obj, paste0("results/", x, ".rds"))
   })
   return(invisible())
 }
+
+

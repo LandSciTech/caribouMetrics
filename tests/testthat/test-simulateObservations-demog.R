@@ -1,10 +1,10 @@
 test_that("default works", {
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowMult = 3,
                               collarCount = 50)
-  ss <- getSimsInitial(cPars=scns)
+  ss <- trajectoriesFromNational(cPars=scns)
   
   expect_is(ss,"list")
-  #see test-getOutputTables-demog.R for more thorough check that outputs are as expected.
+  #see test-compareTrajectories-demog.R for more thorough check that outputs are as expected.
 })
 
 test_that("multiple scenarios not allowed",{
@@ -18,11 +18,14 @@ test_that("multiple scenarios not allowed",{
 })
 
 # TODO: add test for non-default popGrow table should use testPopGrowTable
-# internally, do same in getPriors
+# internally, do same in betaNationalPriors
 
 test_that("collarCount and cowCount behave", {
   scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 1)
   simObs <- simulateObservations(scns)
+  
+  surv_plt <- plotSurvivalSeries(simObs$simSurvObs)
+  expect_is(surv_plt, "ggplot2::ggplot")
   
   # if cowCount is 100 we observe 100
   expect_true(all(simObs$simRecruitObs$Cows == 100))
@@ -165,6 +168,18 @@ test_that("collarCount and cowCount behave", {
   simObs7$simRecruitObs %>% filter(Cows != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
+})
+
+test_that("collarOn and Off work as expected", {
+  #devtools::document();devtools::load_all()
+  scns <- getScenarioDefaults(iFire = 1, projYears = 10, obsYears = 10, collarCount = 10)
+  
+  simObs1_12 <- simulateObservations(scns, collarOnTime = 1, collarOffTime = 12, 
+                                     caribouYearStart = 1)
+  #plotSurvivalSeries(simObs1_12$simSurvObs)
+  expect_true(all(simObs1_12$simSurvObs$StartTotal<=scns$collarCount))
+  expect_true(max(simObs1_12$simSurvObs$StartTotal)==scns$collarCount)
+  expect_true(all(!is.na(simObs1_12$simSurvObs$MortalitiesCertain)))
 })
 
 #TO DO: test with trajectories from bboutools & jags models

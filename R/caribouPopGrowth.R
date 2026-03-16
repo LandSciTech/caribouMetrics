@@ -79,7 +79,7 @@
 #'
 #'   Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty, A.M.,
 #'   Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and Hughes, J.,
-#'   2023. Climate‐informed forecasts reveal dramatic local habitat shifts and
+#'   2023. Climate-informed forecasts reveal dramatic local habitat shifts and
 #'   population uncertainty for northern boreal caribou. Ecological
 #'   Applications, 33(3), p.e2816. <https://doi.org/10.1002/eap.2816>
 #' @examples
@@ -105,9 +105,10 @@ caribouPopGrowth <- function(N0,
                              c=1,
                              interannualVar = list(R_CV=0.46,S_CV=0.08696),
                              probOption="binomial",
-                             progress = interactive()){
-  if(is.character(interannualVar)){
-    interannualVar = eval(parse(text=interannualVar))
+                             progress = interactive(),
+                             warn=T){
+  if(is.character(interannualVar)|is.factor(interannualVar)){
+    interannualVar = eval(parse(text=as.character(interannualVar)))
   }
   rr=data.frame(N0=N0)
   
@@ -119,8 +120,8 @@ caribouPopGrowth <- function(N0,
   #Warn if S_bar outside of range l_S,h_S, or R_bar outside of range
   #l_R,h_R.
   if(any(S_bar < l_S) || any(S_bar > h_S)){
-    warning("Setting expected survival S_bar to be between l_S and h_S.",
-            call. = FALSE)
+    if(warn){warning("Setting expected survival S_bar to be between l_S and h_S.",
+            call. = FALSE)}
     S_bar = pmax(S_bar,l_S);S_bar=pmin(S_bar,h_S)
   }
 

@@ -10,9 +10,10 @@ simulateObservations(
   cowCounts = NULL,
   freqStartsByYear = NULL,
   collarNumYears = 4,
-  collarOffTime = 4,
+  collarOffTime = 3,
   collarOnTime = 4,
   caribouYearStart = 4,
+  topUp = F,
   recSurveyMonth = 3,
   recSurveyDay = 15,
   distScen = NULL,
@@ -40,8 +41,8 @@ is provided it must have columns "Year"  and "Cows".}
 each year. If NULL \code{paramTable$collarCount} is used as the target number of
 collars and each year that collars are deployed they will be topped up to
 this number. If a data.frame is provided it must have 2 columns "Year" and
-"numStarts" and the "numStarts" is the absolute number of collars deployed
-in that year.}
+"numStarts" or "numTarget" (but not both). "numStarts" is the absolute number of collars deployed
+in that year, and "numTarget" is the target number of collars.}
 
 \item{collarNumYears}{integer. Number of years until collar falls off}
 
@@ -58,7 +59,7 @@ in that year.}
 \item{recSurveyDay}{integer. The day for simulated recruitment surveys.}
 
 \item{distScen}{data.frame. Disturbance scenario. Must have columns "Year",
-"Anthro", and "fire_excl_anthro" containing the year, percentage of the
+"Anthro", and "Fire_excl_anthro" containing the year, percentage of the
 landscape covered by anthropogenic disturbance buffered by 500 m, and the
 percentage covered by fire that does not overlap anthropogenic disturbance.
 See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}}. If NULL the disturbance scenario is simulated
@@ -76,7 +77,7 @@ a list with elements:
 \itemize{
 \item minYr: first year in the simulations,
 \item maxYr: last year in the simulations,
-\item simDisturbance: a data frame with columns Anthro, fire_excl_anthro, Total_dist, and  Year,
+\item simDisturbance: a data frame with columns Anthro, Fire_excl_anthro, Total_dist, and  Year,
 \item simSurvObs: a data frame of survival data in bboutools format,
 \item simRecruitObs: a data frame of recruitment data in bboutools format,
 \item exData: a tibble of expected population metrics based on the initial model,
@@ -110,23 +111,26 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 }
 \seealso{
 Caribou demography functions:
-\code{\link{bbouMakeSummaryTable}()},
-\code{\link{caribouBayesianPM}()},
+\code{\link{bayesianScenariosWorkflow}()},
+\code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
-\code{\link{caribouPopSimMCMC}()},
+\code{\link{compareTrajectories}()},
 \code{\link{compositionBiasCorrection}()},
-\code{\link{demographicCoefficients}()},
+\code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
 \code{\link{demographicProjectionApp}()},
-\code{\link{demographicRates}()},
-\code{\link{doSim}()},
-\code{\link{getBBNationalInformativePriors}()},
-\code{\link{getOutputTables}()},
-\code{\link{getPriors}()},
+\code{\link{estimateBayesianRates}()},
+\code{\link{estimateNationalRate}()},
+\code{\link{getNationalCoefficients}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsInitial}()},
-\code{\link{getSimsNational}()},
-\code{\link{plotRes}()},
+\code{\link{plotCompareTrajectories}()},
+\code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{runScnSet}()}
+\code{\link{trajectoriesFromBayesian}()},
+\code{\link{trajectoriesFromNational}()},
+\code{\link{trajectoriesFromSummary}()},
+\code{\link{trajectoriesFromSummaryForApp}()}
 }
 \concept{demography}

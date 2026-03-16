@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/LandSciTech/caribouMetrics/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/LandSciTech/caribouMetrics/graph/badge.svg)](https://app.codecov.io/gh/LandSciTech/caribouMetrics)
 <!-- badges: end -->
 
 The `caribouMetrics` R package provides implementations of models of
@@ -83,7 +85,7 @@ package.
 ``` r
 library(caribouMetrics)
 #> Loading required package: nimble
-#> Warning: package 'nimble' was built under R version 4.3.3
+#> Warning: package 'nimble' was built under R version 4.4.3
 #> nimble version 1.3.0 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
@@ -97,24 +99,23 @@ library(caribouMetrics)
 #> The following object is masked from 'package:stats':
 #> 
 #>     simulate
+#> The following object is masked from 'package:base':
+#> 
+#>     declare
 # use local version on local and installed on GH
 if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
 #> ℹ Loading caribouMetrics
-#> Registered S3 method overwritten by 'mcmcr':
+#> Registered S3 methods overwritten by 'mcmcr':
 #>   method               from 
+#>   as.mcmc.nlists       nlist
 #>   as.mcmc.list.mcarray rjags
-#> Warning: package 'testthat' was built under R version 4.3.3
+#> Warning: package 'testthat' was built under R version 4.4.3
 
 pthBase <- system.file("extdata", package = "caribouMetrics")
 
 # load example data
-landCoverD <- terra::rast(file.path(pthBase, "landCover.tif")) 
-  # convert PLC classes to resource types used in the model 
-landCoverD <- reclassPLC(landCoverD)
-eskerDras <- terra::rast(file.path(pthBase, "eskerTif.tif"))
-eskerDshp <- sf::read_sf(file.path(pthBase, "esker.shp"))
+landCoverD <- terra::rast(file.path(pthBase, "landCover.tif"))
 natDistD <- terra::rast(file.path(pthBase, "natDist.tif"))
-anthroDistD <-terra::rast(file.path(pthBase, "anthroDist.tif"))
 linFeatDras <- terra::rast(file.path(pthBase, "linFeatTif.tif"))
 projectPolyD <- sf::read_sf(file.path(pthBase, "projectPoly.shp"))
 
@@ -132,27 +133,27 @@ disturb <- disturbanceMetrics(landCover = landCoverD,
 disturb_tbl <- results(disturb)
 
 # Calculate demographic rates
-demCoefs <- demographicCoefficients(replicates = 10)
+demCoefs <- getNationalCoefficients(replicates = 10)
 
-demRates <- demographicRates(covTable = disturb_tbl,
+demRates <- estimateNationalRates(covTable = disturb_tbl,
                              popGrowthPars = demCoefs)
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
-#>   zone   Anthro     Fire Total_dist fire_excl_anthro FID     S_bar S_stdErr
-#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.050644
-#>     S_PIlow  S_PIhigh     R_bar   R_stdErr   R_PIlow  R_PIhigh
-#> 1 0.7690494 0.9321272 0.1813372 0.09859156 0.0538864 0.3760678
+#>   zone   Anthro     Fire Total_dist Fire_excl_anthro FID     S_bar   S_stdErr
+#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05024037
+#>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
+#> 1 0.7625781 0.9198247 0.1813372 0.09842164 0.03913806 0.3782637
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
 popGrow
-#>     N0   lambda   lambdaE   N      R_t      X_t       S_t n_recruits
-#> 1 2000 0.945426 0.9247487 651 0.216816 0.108408 0.8930332         64
+#>     N0    lambda   lambdaE   N       R_t        X_t       S_t n_recruits
+#> 1 2000 0.9071743 0.9247487 285 0.1865682 0.09328412 0.8584614         23
 #>   surviving_adFemales
-#> 1                 587
+#> 1                 262
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(
@@ -163,7 +164,7 @@ params <- getScenarioDefaults(
 simObs <- simulateObservations(params)
 
 #devtools::load_all()
-pm <- caribouBayesianPM(simObs$simSurvObs, simObs$simRecruitObs, 
+pm <- bayesianTrajectoryWorkflow(simObs$simSurvObs, simObs$simRecruitObs, 
                          simObs$simDisturbance,
                          # only set to speed up vignette. Normally keep defaults.
                          niters=100)
@@ -186,12 +187,13 @@ pm <- caribouBayesianPM(simObs$simSurvObs, simObs$simRecruitObs,
 #>    Total graph size: 505
 #> 
 #> Initializing model
+#> Warning in max(simBig$samples$Year): no non-missing arguments to max; returning
+#> -Inf
 
-natSim <- getSimsInitial(simObs$simDisturbance)
-#> Warning: Setting expected survival S_bar to be between l_S and h_S.
+natSim <- trajectoriesFromNational(disturbance = simObs$simDisturbance)
 
-pmTbls <- getOutputTables(pm, simInitial=natSim)
-plotRes(pmTbls, c("Recruitment", "Adult female survival"))
+pmTbls <- compareTrajectories(pm, simInitial=natSim)
+plotCompareTrajectories(pmTbls, c("Recruitment", "Adult female survival"))
 #> $Recruitment
 ```
 
@@ -201,34 +203,6 @@ plotRes(pmTbls, c("Recruitment", "Adult female survival"))
     #> $`Adult female survival`
 
 <img src="man/figures/README-example-2.png" width="100%" />
-
-``` r
-
-# Calculate habitat RSF in Ontario's Churchill range
-carHab1 <- caribouHabitat(
-  landCover = landCoverD,
-  esker = eskerDras, 
-  natDist = natDistD, 
-  anthroDist = anthroDistD, 
-  linFeat = linFeatDras, 
-  projectPoly = projectPolyD,
-  caribouRange = "Churchill"
-)
-#> cropping landCover to extent of projectPoly
-#> cropping linFeat to extent of projectPoly
-#> cropping natDist to extent of projectPoly
-#> cropping anthroDist to extent of projectPoly
-#> cropping esker to extent of projectPoly
-#> resampling linFeat to match landCover resolution
-#> resampling esker to match landCover resolution
-#> Applying moving window.
-
-# plot the results
-plot(carHab1)
-#> tmap must be attached with library(tmap) to be used. Using terra instead.
-```
-
-<img src="man/figures/README-example-3.png" width="100%" />
 
 ## Resources
 
@@ -318,6 +292,6 @@ Unless otherwise noted, source code of the `caribouMetrics` R package is
 covered under Crown Copyright, Government of Canada, and distributed
 under the GPL3 license.
 
-Copyright (C) Her Majesty the Queen in Right of Canada as represented by
-the Minister of the Environment 2021/(C) Sa Majesté la Reine du chef du
-Canada représentée par le ministre de l’Environnement 2021.
+Copyright (C) His Majesty the King in Right of Canada as represented by
+the Minister of the Environment 2025/(C) Sa Majesté le Roi du chef du
+Canada représentée par le ministre de l’Environnement 2025.

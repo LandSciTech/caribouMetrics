@@ -29,10 +29,10 @@
 #' @param cowMult number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use `cowCount`.
 #' @param collarCount number >= 1. The target number of collars active each year. Set to NA to use `freqStartsPerYear` in `simulateObservations()`
 #' @inheritParams caribouPopGrowth
-#' @inheritParams caribouBayesianPM
+#' @inheritParams bayesianTrajectoryWorkflow
 #' @param collarInterval number. Optional. Number of years between collar deployments. If
 #'   missing assumed to be every year
-#' @param cowCount Optional. Only used in `runScnSet()` to set the number of cows per
+#' @param cowCount Optional. Only used in `bayesianScenariosWorkflow()` to set the number of cows per
 #'   year in recruitment survey
 #' @param curYear year. The current year. All years before are part of the
 #'   observation period and years after are part of the projection period.
@@ -87,6 +87,7 @@ getScenarioDefaults <- function(paramTable = NULL,
 
   if(hasName(paramTable, "collarCount") && 
      hasName(paramTable, "cowMult") && 
+     hasName(paramTable, "N0") && 
      sum(paramTable$collarCount*paramTable$cowMult>paramTable$N0)>0){
     warning("Set cowMult, collarCount and N0 so the expected number of cows in composition surveys does not exceed initial population size N0.")
   }

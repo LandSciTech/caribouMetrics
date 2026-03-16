@@ -80,7 +80,7 @@ include:
 \item Fire: \% fire
 \item Anthro: \% non-overlapping anthropogenic disturbance.
 \item Total_dist: Percent total non-overlapping fire and anthropogenic disturbance.
-\item fire_excl_anthro: \% fire not overlapping with anthropogenic disturbance.
+\item Fire_excl_anthro: \% fire not overlapping with anthropogenic disturbance.
 }
 }
 \details{
@@ -123,6 +123,8 @@ DisturbanceMetrics object.
 
 Functions for calculating disturbance:
 \code{\link{DisturbanceMetrics-class}},
+\code{\link{loadSpatialInputs}()},
+\code{\link{rasterizeLineDensity}()},
 \code{\link{reclassDist}()},
 \code{\link{results}()},
 \code{\link{updateDisturbance}()}

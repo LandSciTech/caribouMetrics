@@ -26,7 +26,8 @@ composition bias correction value (c) is returned for each value of \code{q},
 }
 \value{
 number or tibble. If \code{approx = FALSE} a vector of composition bias
-correction values (c) of the same length as \code{q}, \code{u}, and \code{z}. If \code{approx = TRUE} a tibble with on row per unique value of \code{w} and columns \code{w}, \code{m},
+correction values (c) of the same length as \code{q}, \code{u}, and \code{z}. If \code{approx = TRUE}
+a tibble with one row per unique value of \code{w} and columns \code{w}, \code{m},
 \code{v}, \code{sig2}, \code{mu} representing \code{w}, mean \code{c}, variance of \code{c}, and parameters for a
 log-normal approximation of the distribution of \code{c}.
 }
@@ -39,7 +40,7 @@ model of the recruitment survey observation process. See
 for a detailed description of the model.
 }
 \examples{
-# number or reps
+# number of reps
 nr <- 10
 
 compositionBiasCorrection(w = 6,
@@ -65,23 +66,26 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 }
 \seealso{
 Caribou demography functions:
-\code{\link{bbouMakeSummaryTable}()},
-\code{\link{caribouBayesianPM}()},
+\code{\link{bayesianScenariosWorkflow}()},
+\code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},
-\code{\link{caribouPopSimMCMC}()},
-\code{\link{demographicCoefficients}()},
+\code{\link{compareTrajectories}()},
+\code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
 \code{\link{demographicProjectionApp}()},
-\code{\link{demographicRates}()},
-\code{\link{doSim}()},
-\code{\link{getBBNationalInformativePriors}()},
-\code{\link{getOutputTables}()},
-\code{\link{getPriors}()},
+\code{\link{estimateBayesianRates}()},
+\code{\link{estimateNationalRate}()},
+\code{\link{getNationalCoefficients}()},
 \code{\link{getScenarioDefaults}()},
-\code{\link{getSimsInitial}()},
-\code{\link{getSimsNational}()},
-\code{\link{plotRes}()},
+\code{\link{plotCompareTrajectories}()},
+\code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{runScnSet}()},
-\code{\link{simulateObservations}()}
+\code{\link{simulateObservations}()},
+\code{\link{trajectoriesFromBayesian}()},
+\code{\link{trajectoriesFromNational}()},
+\code{\link{trajectoriesFromSummary}()},
+\code{\link{trajectoriesFromSummaryForApp}()}
 }
 \concept{demography}
