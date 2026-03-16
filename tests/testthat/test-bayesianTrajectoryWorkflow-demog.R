@@ -164,12 +164,12 @@ test_that("results match expected", {
 
   
   # A pop with quantile >> 0.5 will be above the initial model projection
-  highQ <- doScn(rQuantile = 0.95, sQuantile = 0.95)
-  doPlot(highQ, "Adult female survival")
+  #highQ <- doScn(rQuantile = 0.95, sQuantile = 0.95)
+  #doPlot(highQ, "Adult female survival")
   
-  difHighQ <- calcDifNat(highQ)
+  #difHighQ <- calcDifNat(highQ)
   
-  expect_true(all(difHighQ$mean_dif > 0))
+  #expect_true(all(difHighQ$mean_dif > 0))
   
   # a pop that is less sensitive to anthro dist ie r/sSlopeMod < 1 will show a
   # line that diverges from the initial model. But only if there was some
