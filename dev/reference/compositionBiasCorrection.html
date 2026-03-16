@@ -45,7 +45,7 @@ for a detailed description of the model."><meta name="robots" content="noindex">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Calculate bias correction term for calf:cow composition survey.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/BbouIntegration/R/compositionBiasCorrection.R" class="external-link"><code>R/compositionBiasCorrection.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/R/compositionBiasCorrection.R" class="external-link"><code>R/compositionBiasCorrection.R</code></a></small>
       <div class="d-none name"><code>compositionBiasCorrection.Rd</code></div>
     </div>
 
@@ -146,8 +146,8 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-in"><span>                          u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          approx <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.0861156 0.9965845 1.1672218 1.1085768 1.1261870 1.1205652 1.0043591</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.0923071 1.1735372 1.0950962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.0222073 1.0571783 0.9318088 1.1107944 0.9195725 1.0469473 1.0637629</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.9016983 1.1343648 1.1373727</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">compositionBiasCorrection</span><span class="op">(</span>w <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>                          q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.6</span><span class="op">)</span>,</span></span>
@@ -157,7 +157,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       w     m       v    sig2     mu</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.09 0.005<span style="text-decoration: underline;">39</span> 0.004<span style="text-decoration: underline;">54</span> 0.081<span style="text-decoration: underline;">8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.05 0.007<span style="text-decoration: underline;">23</span> 0.006<span style="text-decoration: underline;">54</span> 0.045<span style="text-decoration: underline;">1</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
