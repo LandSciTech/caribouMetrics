@@ -61,7 +61,7 @@ dataFromSheets <- function(survey_url, shiny_progress = FALSE, i18n = NULL){
                                               na = "NA") %>%
     select(any_of(nms)) %>%
     filter(if_all(everything(), \(x)!is.na(x))) %>%
-    bboudata::bbd_chk_data_recruitment(multi_pops = TRUE)
+    bboudata::bbd_chk_data_recruitment(multi_population = TRUE)
   
   # Error in make bbouSummary table if only 1 year
   #survey_recruit <- survey_recruit %>% group_by(PopulationName) %>%
@@ -73,7 +73,7 @@ dataFromSheets <- function(survey_url, shiny_progress = FALSE, i18n = NULL){
   }
   survey_surv <- googlesheets4::read_sheet(survey_url, surv_sh,
                                            na = "NA") %>%
-    bboudata::bbd_chk_data_survival(multi_pops = TRUE, allow_missing = TRUE)
+    bboudata::bbd_chk_data_survival(multi_population = TRUE, allow_missing = TRUE)
   
   #survey_surv <- survey_surv %>% group_by(PopulationName) %>%
   #  filter(n_distinct(Year) > 1)

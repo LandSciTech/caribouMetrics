@@ -52,7 +52,7 @@ compareTrajectories <- function(caribouBayesDemogMod,
   # caribouBayesDemogMod = out; startYear = oo$minYr;endYear = oo$maxYr; simInitial = simInitial
   # exData = oo$exData; paramTable = oo$paramTable
   
-  if(is.element("result",names(caribouBayesDemogMod))){
+  if(hasName(caribouBayesDemogMod,"result")){
     result <- caribouBayesDemogMod$result
   }else{
     result <- caribouBayesDemogMod
@@ -72,8 +72,8 @@ compareTrajectories <- function(caribouBayesDemogMod,
   survInput$Year=as.numeric(as.character(survInput$Annual))
   recInput$Year=as.numeric(as.character(recInput$Annual))
   
-  if(is.element("Mortalities",names(survInput))){
-    obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(AnyNA=sum(!is.na(Mortalities)),Mortalities = sum(MortalitiesCertain,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
+  if(hasName(survInput,"Mortalities")){
+    obsSurv <- survInput %>% group_by(PopulationName,Year)%>% summarize(AnyNA=sum(!is.na(Mortalities)),Mortalities = sum(Mortalities,na.rm=T),StartTotal = max(StartTotal,na.rm=T)) 
     obsSurv$Mean <- 1-obsSurv$Mortalities/obsSurv$StartTotal
     obsSurv$Mean[obsSurv$AnyNA==0]=NA
   }else{
@@ -127,13 +127,13 @@ compareTrajectories <- function(caribouBayesDemogMod,
   if(!is.null(simInitial)){
     summaries <- simInitial$summary
 
-    if(is.element("AnthroID",names(summaries))&&any(!is.na(summaries$AnthroID))){
+    if(hasName(summaries,"AnthroID")&&any(!is.na(summaries$AnthroID))){
       
-      if(!is.element("Year",names(summaries))&!is.element("Anthro",names(dist_params))){
+      if(!hasName(summaries,"Year")&!is.element("Anthro",names(dist_params))){
         stop("Set disturbance in bayesianTrajectoryWorkflow function call in order to compare to national model simulations.", call. = FALSE)
       }
       #only fill in national sims if simInitial is from national model
-      if(!(is.element("surv_data",names(simInitial)))&!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
+      if(!(hasName(simInitial,"surv_data"))&!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
         message("recalculating initial sims to match anthropogenic distubance scenario")
         simInitial <- trajectoriesFromNational(cPars=paramTable)
         summaries <- simInitial$summary
@@ -141,7 +141,7 @@ compareTrajectories <- function(caribouBayesDemogMod,
       #remove irrelevant disturbance combinations from the summaries
       distMerge <- subset(dist_params, 
                           select=c(Anthro,Fire_excl_anthro,Year))
-      if(is.element("Year", names(summaries))){
+      if(hasName(summaries,"Year")){
         if(!all(dist_params$Year %in% summaries$Year)){
           distMerge <- filter(distMerge, Year %in% summaries$Year)
         }  

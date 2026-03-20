@@ -14,10 +14,10 @@
 convertTrajectories<-function(pars){
   #converts output from simPopsOverTime to alternate form
   #pars = trajectories
-  if(!is.element("lamPercentile",names(pars))){
+  if(!hasName(pars,"lamPercentile")){
     pars$lamPercentile=NA
   }
-  if(!is.element("c",names(pars))){pars$c=NA}
+  if(!hasName(pars,"c")){pars$c=NA}
 
   nameChange <- data.frame(inName=c("id","lamPercentile", "Year","PopulationName","Anthro", "Fire_excl_anthro","c",
                                     "S_t", "R_t", "X_t", "N",
@@ -25,14 +25,14 @@ convertTrajectories<-function(pars){
                            outName=c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "Fire_excl_anthro","c", 
                                      "survival","recruitment","X", "N", "lambda","Sbar","Rbar","Xbar","Nbar","lambda_bar"))
   
-  if(!is.element("lambdaE_bar",names(pars))){
+  if(!hasName(pars,"lambdaE_bar")){
     pars$lambdaE_bar = pars$lambdaE
   }
   nameChange <-subset(nameChange,is.element(inName,names(pars)))
   fds <- subset(pars, select = nameChange$inName)
   names(fds) <- nameChange$outName
   
-  if(is.element("Anthro", colnames(fds))){
+  if(hasName(fds,"Anthro")){
     fds$AnthroID = round(fds$Anthro);fds$Fire_excl_anthroID=round(fds$Fire_excl_anthro)
   }
 
@@ -43,7 +43,7 @@ convertTrajectories<-function(pars){
   fds$MetricTypeID <- as.character(fds$MetricTypeID)
   fds$Replicate <- paste0("x", fds$Replicate)
   
-  if(!is.element("lamPercentile",names(pars))){
+  if(!hasName(pars,"lamPercentile")){
     fds$LambdaPercentile=NULL
   }
   return(fds)
@@ -61,7 +61,7 @@ convertTrajectories<-function(pars){
 #' @rdname simulateTrajectoriesFromPosterior
 summarizeTrajectories <- function(pars,returnSamples=T){
 
-  if(is.element("AnthroID",names(pars))){  
+  if(hasName(pars,"AnthroID")){  
     simSum <- pars  %>%
       group_by(Year,PopulationName,MetricTypeID,AnthroID,Fire_excl_anthroID) %>%
       summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
@@ -322,6 +322,8 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   }
   
   simSurvs$MortalitiesCertain[simSurvs$StartTotal==0]=NA
+  simSurvs$MortalitiesUncertain[simSurvs$StartTotal==0]=NA
+  simSurvs$Malfunctions[simSurvs$StartTotal==0]=NA
   
   return(simSurvs)
 }
@@ -338,10 +340,10 @@ simCalfCowRatios <- function(cowCounts, exData) {
     simRecruitObs$Cows = pmin(simRecruitObs$Cows,simRecruitObs$N)
   }
   apparentCows <- simRecruitObs$Cows
-  if(is.element("UnknownAdults",names(simRecruitObs))){
+  if(hasName(simRecruitObs,"UnknownAdults")){
     apparentCows = apparentCows + simRecruitObs$UnknownAdults*0.65
   }
-  if(is.element("Yearlings",names(simRecruitObs))){
+  if(hasName(simRecruitObs,"Yearlings")){
     apparentCows = apparentCows + simRecruitObs$Yearlings*0.5
   }
   
@@ -522,5 +524,32 @@ savePersistentCache <- function(env = cacheEnv){
   })
   return(invisible())
 }
+
+#add missing and change names to make data from bboutools models useable.
+convertBbouData<-function(dat){
+  if(!hasName(dat,"CaribouYear")){
+    return(dat)
+  }
+  dat <- as.data.frame(dat)
+  if(hasName(dat,"StartTotal")){
+    dat_add <- expand.grid(PopulationName=levels(dat$PopulationName),
+                            Annual=setdiff(levels(dat$Annual),unique(as.character(dat$Annual))),
+                            Month=levels(dat$Month),
+                            StartTotal=1)
+  }
+  if(hasName(dat,"Cows")){
+    dat_add <- expand.grid(PopulationName=levels(dat$PopulationName),
+                            Annual=setdiff(levels(dat$Annual),unique(as.character(dat$Annual))))
+  }
+  dat <- merge(dat,dat_add,all.x=T,all.y=T)
+  newYr =  as.numeric(as.character(dat$Annual))
+  newYr[(as.numeric(as.character(dat$Month))<formals(bboutools::bb_fit_survival)$year_start)]=
+    newYr[(as.numeric(as.character(dat$Month))<formals(bboutools::bb_fit_survival)$year_start)]+1
+  dat$Year = newYr
+
+  dat$CaribouYear <- NULL
+  return(dat)
+}
+  
 
 

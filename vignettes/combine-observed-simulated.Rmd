@@ -54,12 +54,10 @@ useSaved <- T #option to skip slow step of fitting bboutools model
 surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
 surv_data_add = expand.grid(Year=seq(2017,2025),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
 surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
-surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
 
 recruit_data=bboudata::bbourecruit_a %>% filter(Year > 2010)
 recruit_data_add = expand.grid(Year=seq(2017,2025),PopulationName=unique(recruit_data$PopulationName))
 recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
-recruit_data$Month[is.na(recruit_data$Month)]=3;recruit_data$Day[is.na(recruit_data$Day)]=15
 
 surv_dataNone <- surv_data %>% filter(Year > 2017)
 recruit_dataNone <- recruit_data %>% filter(Year > 2017)

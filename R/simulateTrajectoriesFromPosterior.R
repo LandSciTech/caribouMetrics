@@ -35,7 +35,7 @@
 simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,returnExpected=FALSE,c=formals(caribouPopGrowth)$c,K=FALSE,...) {
   #TO DO: checks to ensure assumptions about form of rec_pred and surv_pred are correct
 
-  inyears<-unique(c(rec_pred$data$Year,surv_pred$data$Year))
+  inyears<-unique(c(levels(rec_pred$data$Annual),levels(surv_pred$data$Annual)))
   if(!is.null(initYear)){
     inyears<-inyears[inyears>=initYear]
   }
@@ -45,9 +45,9 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
   }
   if(is.element("bboufit",class(rec_pred))){
     if(returnExpected){
-      rec_pred <- bboutools::bb_predict_calf_cow_ratio(rec_pred,year=F,conf_level=F)
+      rec_pred <- bboutools::bb_predict_calf_cow_ratio_samples(rec_pred,year=F)
     }else{
-      rec_pred <- bboutools::bb_predict_calf_cow_ratio(rec_pred,year=T,conf_level=F)
+      rec_pred <- bboutools::bb_predict_calf_cow_ratio_samples(rec_pred,year=T)
     }
   }else{
     if(!is.element("list",class(rec_pred))){
@@ -57,14 +57,17 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
   
   if(is.element("bboufit",class(surv_pred))){
     if(returnExpected){
-      surv_pred <- bboutools::bb_predict_survival(surv_pred,year=F,conf_level=F)
+      surv_pred <- bboutools::bb_predict_survival_samples(surv_pred,year=F)
     }else{
-      surv_pred <- bboutools::bb_predict_survival(surv_pred,year=T,conf_level=F)
+      surv_pred <- bboutools::bb_predict_survival_samples(surv_pred,year=T)
     }
   }
-  
+
   if(is.element(NA,rec_pred$data$Annual)){
     rec_pred$data$Annual=0
+    years = 0
+  }else{
+    years = levels(rec_pred$data$Annual)
   }
   if(is.element(NA,surv_pred$data$Annual)){
     surv_pred$data$Annual=0
@@ -74,9 +77,9 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
   rec_pred$data$Annual = as.numeric(as.character(rec_pred$data$Annual))  
   data_sur = surv_pred$data
   data_rec = rec_pred$data
-  
-  S_lookup = unique(subset(data_sur,select=c(Annual,PopulationID)))
-  R_lookup =  unique(subset(data_rec,select=c(Annual,PopulationID)))
+
+  S_lookup = unique(subset(data_sur,select=c(Annual,PopulationName)))
+  R_lookup =  unique(subset(data_rec,select=c(Annual,PopulationName)))
   
   if(class(surv_pred$samples)=="mcmc.list"){
     nns <- colnames(surv_pred$samples[[1]])
@@ -101,7 +104,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
     sur2 <- as.matrix(data.table::rbindlist(lapply(surv_pred$samples, as.data.frame)))
     sur <- array(0,dim=c(1,dim(sur2)))
     sur[1,1:nrow(sur2),1:ncol(sur2)]<-sur2[1:nrow(sur2),1:ncol(sur2)]
-    S_lookup = S_lookup[order(S_lookup$PopulationID,S_lookup$Annual),]
+    S_lookup = S_lookup[order(S_lookup$PopulationName,S_lookup$Annual),]
   }
   
   if(class(rec_pred$samples)=="mcmcarray"){
@@ -110,22 +113,20 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
     rec2 <- as.matrix(data.table::rbindlist(lapply(rec_pred$samples, as.data.frame)))
     rec <- array(0,dim=c(1,dim(rec2)))
     rec[1,1:nrow(rec2),1:ncol(rec2)]<-rec2[1:nrow(rec2),1:ncol(rec2)]
-    R_lookup = R_lookup[order(R_lookup$PopulationID,R_lookup$Annual),]
+    R_lookup = R_lookup[order(R_lookup$PopulationName,R_lookup$Annual),]
   }
-  
-  years = sort(unique(rec_pred$data$Annual))
   
   #force correlation between mean recruitment and mean survival
   if(correlateRates){
-    recMeans = matrix(0,nrow=dim(rec)[2],ncol=length(unique(R_lookup$PopulationID)))
-    surMeans = matrix(0,nrow=dim(sur)[2],ncol=length(unique(S_lookup$PopulationID)))
+    recMeans = matrix(0,nrow=dim(rec)[2],ncol=length(unique(R_lookup$PopulationName)))
+    surMeans = matrix(0,nrow=dim(sur)[2],ncol=length(unique(S_lookup$PopulationName)))
     for(j in 1:ncol(recMeans)){
       if(length(years)>1){
-        recMeans[,j] = recMeans[,j] + rowSums(rec[,,as.numeric(R_lookup$PopulationID) %in% j])
-        surMeans[,j] = surMeans[,j] + rowSums(sur[,,as.numeric(S_lookup$PopulationID) %in% j])
+        recMeans[,j] = recMeans[,j] + rowSums(rec[,,as.numeric(R_lookup$PopulationName) %in% j])
+        surMeans[,j] = surMeans[,j] + rowSums(sur[,,as.numeric(S_lookup$PopulationName) %in% j])
       }else{
-        recMeans[,j] = recMeans[,j] + rec[,,as.numeric(R_lookup$PopulationID) %in% j]
-        surMeans[,j] = surMeans[,j] + sur[,,as.numeric(S_lookup$PopulationID) %in% j]
+        recMeans[,j] = recMeans[,j] + rec[,,as.numeric(R_lookup$PopulationName) %in% j]
+        surMeans[,j] = surMeans[,j] + sur[,,as.numeric(S_lookup$PopulationName) %in% j]
       }
     }
   }
@@ -175,20 +176,20 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
       if(minDim==0){next}
       S_samp_long <- S_samp[1:minDim]
       R_samp_long <- R_samp[1:minDim]
-      #lab <- paste(levels(data_sur$PopulationID),seq(1:length(S_samp_long)))
-      labs <- paste(levels(data_rec$PopulationID),seq(1:length(R_samp_long)))
+      #lab <- paste(levels(data_sur$PopulationName),seq(1:length(S_samp_long)))
+      labs <- paste(levels(data_rec$PopulationName),seq(1:length(R_samp_long)))
     }else{
       minDim = min(dim(R_samp)[1],dim(S_samp)[1])
       if(minDim==0){next}
 
       S_samp <- as.matrix(S_samp[1:minDim,],ncol=ncol(S_samp))
       rownames(S_samp)=seq(1,nrow(S_samp))
-      colnames(S_samp)=levels(data_sur$PopulationID)
+      colnames(S_samp)=levels(data_sur$PopulationName)
       S_samp_long = matrix(S_samp,dimnames=list(t(outer(colnames(S_samp), rownames(S_samp), FUN=paste)), NULL))
 
       R_samp <- as.matrix(R_samp[1:minDim,],ncol=ncol(R_samp))
       rownames(R_samp)=seq(1:nrow(R_samp))
-      colnames(R_samp)=levels(data_rec$PopulationID)
+      colnames(R_samp)=levels(data_rec$PopulationName)
       R_samp_long = matrix(R_samp,dimnames=list(t(outer(colnames(R_samp), rownames(R_samp), FUN=paste)), NULL))
       
       labs <- matrix(rownames(R_samp_long),ncol=1)

@@ -109,7 +109,7 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
         }
       }
     }else{
-      if(!is.element("Anthro",names(cPars))){
+      if(!hasName(cPars,"Anthro")){
         covTableObs <- expand.grid(Anthro=seq(0,100,by=1),Fire_excl_anthro=0,Year=NA)
         covTableObs$Year <- covTableObs$Anthro
         hasYear <- F
@@ -118,14 +118,14 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
       }
     }
   }else {
-    if(!is.element("Year",names(disturbance))){
+    if(!hasName(disturbance,"Year")){
       hasYear <- F
       disturbance$Year <- disturbance$Anthro
     }
     covTableObs <- disturbance %>% select(Year, Anthro, Fire_excl_anthro)
   }
   
-  if(!is.element("distID",names(covTableObs))){
+  if(!hasName(covTableObs,"distID")){
     covTableObs$distID <- 1
   }
   

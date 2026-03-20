@@ -64,6 +64,9 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     return(ret)
   }
   
+  surv_data$Month[is.na(surv_data$StartTotal)] <- NA
+  surv_data <- unique(surv_data)
+  
   if(length(unique(surv_data$Year))<5){
     stop("At least 5 years of survival data are needed to estimate interannual variation using bboutools")
   }
@@ -78,35 +81,38 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   }
   if(shiny_progress) shiny::setProgress(0.2, message = i18n$t("Fitting survival"))
 
-  if(is.element("priors_survival",names(priors))){
-    surv_fit <- bboutools::bb_fit_survival(surv_data, priors=priors$priors_survival, multi_pops = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
+  if(hasName(priors,"priors_survival")){
+    surv_fit <- bboutools::bb_fit_survival(surv_data, priors=priors$priors_survival, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, min_random_year=0, ...)
   }else{
-    surv_fit <- bboutools::bb_fit_survival(surv_data, multi_pops = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
+    surv_fit <- bboutools::bb_fit_survival(surv_data, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, min_random_year=0, ...)
   }
-  
+
   if(shiny_progress) shiny::setProgress(0.4, message = i18n$t("Fitting recruitment"))
-  if(is.element("priors_recruitment",names(priors))){
-    recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, priors=priors$priors_recruitment, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
+  if(hasName(priors,"priors_recruitment")){
+    recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, priors=priors$priors_recruitment, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, min_random_year=0, ...)
   }else{
-    recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, ...)
+    recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, min_random_year=0, ...)
   }
   
-  surv_pred_bar <- bboutools::bb_predict_survival(surv_fit, year = FALSE, month = FALSE, conf_level = FALSE)
-  rec_pred_bar <- bboutools::bb_predict_calf_cow_ratio(recruit_fit,year = FALSE, conf_level = FALSE)
-  
+  surv_pred_bar <- bboutools::bb_predict_survival(surv_fit, year = FALSE, month = FALSE)
+  rec_pred_bar <- bboutools::bb_predict_calf_cow_ratio(recruit_fit,year = FALSE)
+
   # summarize model output
-  data_sur <- surv_pred_bar$data
-  data_rec <- rec_pred_bar$data
+  surv_samples <- bboutools::bb_predict_survival_samples(surv_fit, year = FALSE, month = FALSE)
+  rec_samples <- bboutools::bb_predict_calf_cow_ratio_samples(recruit_fit,year = FALSE)
   
+  data_sur <- surv_samples$data
+  data_rec <- rec_samples$data
+
   # Force matrix b/c if only one it is numeric
-  S_samp <- mcmcr::collapse_chains(surv_pred_bar$samples)[, , ] %>% as.matrix()
-  R_samp <- mcmcr::collapse_chains(rec_pred_bar$samples)[, , ] %>% as.matrix()
+  S_samp <- mcmcr::collapse_chains(surv_samples$samples)[, , ] %>% as.matrix()
+  R_samp <- mcmcr::collapse_chains(rec_samples$samples)[, , ] %>% as.matrix()
   rownames(S_samp) <- seq(1, nrow(S_samp))
-  colnames(S_samp) <- levels(data_sur$PopulationID)
+  colnames(S_samp) <- levels(data_sur$PopulationName)
   rownames(R_samp) <- seq(1:nrow(R_samp))
-  colnames(R_samp) <- levels(data_rec$PopulationID)
+  colnames(R_samp) <- levels(data_rec$PopulationName)
   
-  pops <- levels(data_sur$PopulationID)
+  pops <- levels(data_sur$PopulationName)
 
   #characterize distribution of sAnnual
   x = mcmcr::collapse_chains(surv_fit$samples$sAnnual)[, , ]
@@ -205,7 +211,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     if(length(unique(surv_fit$data$Month))>1){
       newYr =  surv_fit$data$Year
       newYr[(surv_fit$data$Year==surv_fit$data$Annual)&(as.numeric(as.character(surv_fit$data$Month))<formals(bboutools::bb_fit_survival)$year_start)]=
-        newYr[(surv_fit$data$Year==surv_fit$data$Annual)&(as.numeric(as.character(surv_fit$data$Month))<formals(bboutools::bb_fit_survival)$year_start)]+1
+      newYr[(surv_fit$data$Year==surv_fit$data$Annual)&(as.numeric(as.character(surv_fit$data$Month))<formals(bboutools::bb_fit_survival)$year_start)]+1
       surv_fit$data$Year = newYr
     }
     return(list(parTab=parTab,parList=parList,surv_fit=surv_fit,recruit_fit=recruit_fit))

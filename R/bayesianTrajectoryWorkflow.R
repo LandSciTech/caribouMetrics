@@ -122,9 +122,12 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   if(!is.null(disturbance)){
     testTable(disturbance, c("Year", "Anthro", "Fire_excl_anthro"))
   }
-  #TO DO: use bboutools data test functions for survival and recruitment
-  bboudata::bbd_chk_data_survival(surv_data, allow_missing = TRUE, multi_pops = TRUE)
-  bboudata::bbd_chk_data_recruitment(recruit_data, multi_pops = TRUE)
+
+  surv_data$Month[is.na(surv_data$StartTotal)]<-NA;surv_data<-unique(surv_data)
+  recruit_data$Month[is.na(recruit_data$Cows)]<-NA;recruit_data$Day[is.na(recruit_data$Cows)]<-NA;recruit_data<-unique(recruit_data)
+  
+  bboudata::bbd_chk_data_survival(surv_data, allow_missing = TRUE, multi_population = TRUE)
+  bboudata::bbd_chk_data_recruitment(recruit_data, allow_missing=TRUE, multi_population = TRUE)
   
   # Get start and end years from data
   if(is.null(inp$startYear)){
@@ -192,8 +195,7 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   #add missing surv yrs
   surv_data_add = expand.grid(Year=union(distYrs,surv_data$Year),Month=unique(surv_data$Month),PopulationName=unique(surv_data$PopulationName))
   surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
-  surv_data$StartTotal[is.na(surv_data$StartTotal)]=1
-  
+
   #dups = table(subset(surv_data,select=c(Year,Month,PopulationName)))
   
   ###################
@@ -226,11 +228,7 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
 
   #add missing recruit yrs
   recruit_data_add = expand.grid(Year=union(distYrs,recruit_data$Year),PopulationName=unique(recruit_data$PopulationName))
-  sMonth = unique(recruit_data$Month,na.rm=T);if(all(is.na(sMonth))){sMonth=3}
-  sDay = unique(recruit_data$Day,na.rm=T);if(all(is.na(sDay))){sDay=15}
   recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
-  recruit_data$Month[is.na(recruit_data$Month)]=sMonth[1]
-  recruit_data$Day[is.na(recruit_data$Day)]=sDay[1]
 
   ##################
   #fit models

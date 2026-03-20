@@ -144,7 +144,7 @@ caribouPopGrowth <- function(N0,
     stop("S_bar  must have length = 1 or the same length as N0", call. = FALSE)
   }
 
-  if(is.element("R_CV",names(interannualVar))){
+  if(hasName(interannualVar,"R_CV")){
     R_bar=s*R_bar
   }else{
     #Phi is precision of calf cow ratio, not recruitment.
@@ -185,7 +185,7 @@ caribouPopGrowth <- function(N0,
       R_t = addInterannualVar(R_bar,interannualVar,type="R",minV =l_R,maxV=h_R)
       S_t = addInterannualVar(S_bar,interannualVar,type="S",minV =l_S,maxV=h_S)
     }
-    if(!is.element("R_CV",names(interannualVar))){
+    if(!hasName(interannualVar,"R_CV")){
       R_t=s*R_t
     }
     

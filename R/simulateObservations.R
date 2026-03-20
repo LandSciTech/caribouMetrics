@@ -95,18 +95,18 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   
   
   if(!is.null(surv_data)){
-    if(!is.element("Annual",names(surv_data))){
-      surv_data <- bboutools::bb_fit_survival(surv_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)$data
+    if(!hasName(surv_data,"Annual")){
+      surv_data <- bboutools::bb_fit_survival(surv_data, allow_missing = TRUE, quiet = TRUE, niters=0, min_random_year=0)$data
     }
-    
+    surv_data <- convertBbouData(surv_data)
     surv_data <- subset(surv_data,as.numeric(as.character(Annual))<=max(includeTimes))
     surv_data$Month <- as.numeric(as.character(surv_data$Month))
   }
   if(!is.null(recruit_data)){
-    if(!is.element("Annual",names(recruit_data))){
-      recruit_data <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)$data
+    if(!hasName(recruit_data,"Annual")){
+      recruit_data <- bboutools::bb_fit_recruitment(recruit_data, allow_missing = TRUE, quiet = TRUE, niters=0, min_random_year=0)$data
     }
-    
+    recruit_data <- convertBbouData(recruit_data)
     recruit_data <- subset(recruit_data,as.numeric(as.character(Annual))<=max(includeTimes))
   }
   # Simulate covariate table
@@ -136,8 +136,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   
   if(is.null(trajectories)){
     # simulate true population trajectory
-    if(!is.element("rQuantile",names(paramTable))){paramTable$rQuantile=NA}
-    if(!is.element("sQuantile",names(paramTable))){paramTable$sQuantile=NA}
+    if(!hasName(paramTable,"rQuantile")){paramTable$rQuantile=NA}
+    if(!hasName(paramTable,"sQuantile")){paramTable$sQuantile=NA}
     suppressMessages(
       trajectories <- simTrajectory(
         numYears = paramTable$preYears + paramTable$obsYears + paramTable$projYears, 
@@ -145,7 +145,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
         recSlopeMultiplier = paramTable$rSlopeMod,
         sefSlopeMultiplier = paramTable$sSlopeMod, rQuantile = paramTable$rQuantile,
         sQuantile = paramTable$sQuantile,
-        N0 = paramTable$N0, cowMult = ifelse(!is.element("cowMult", names(paramTable)), 1, paramTable$cowMult),
+        N0 = paramTable$N0, cowMult = ifelse(!hasName(paramTable,"cowMult"), 1, paramTable$cowMult),
         qMin = paramTable$qMin, qMax = paramTable$qMax, uMin = paramTable$uMin,
         uMax = paramTable$uMax, zMin = paramTable$zMin, zMax = paramTable$zMax,
         interannualVar=paramTable$interannualVar[[1]]
@@ -170,7 +170,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       tt<- merge(trajectories,distMerge)
       check <- unique(subset(tt,select=names(distMerge)))
       if(nrow(check)!=nrow(distMerge)){
-        if(is.element("Anthro",names(trajectories))){
+        if(hasName(trajectories,"Anthro")){
           simDisturbance <- unique(subset(trajectories,select=c(Anthro,Fire_excl_anthro,Year)))
           if(max(table(simDisturbance$Year))>1){
             stop("The example trajectories do not include the disturbance scenario specified, and they include more than one disturbance scenario. Either provide a trajectory that does not include multiple disturbance scnenario, or specify a disturbance scenario that is included in the trajectories.")
@@ -268,7 +268,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
          call. = FALSE)
   }
   
-  if(!is.element("PopulationName",names(freqStartsByYear))){
+  if(!hasName(freqStartsByYear,"PopulationName")){
     freqStartsByYear=merge(freqStartsByYear,data.frame(PopulationName=unique(exData$PopulationName)))
     if(!is.null(cowCounts)){
       cowCounts=merge(cowCounts,data.frame(PopulationName=unique(exData$PopulationName)))
@@ -276,7 +276,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   }
   
   # simulate survival data from survival probability.
-  if (is.element("collarInterval", names(paramTable)) & is.null(freqStartsByYearIn)) {
+  if (hasName(paramTable,"collarInterval") & is.null(freqStartsByYearIn)) {
     renewYrs <- intersect(min(exData$Year) + seq(0, 100) * paramTable$collarInterval,
                           unique(exData$Year))
     freqStartsByYear$numStarts[!is.element(freqStartsByYear$Year, renewYrs)] <- 0
@@ -293,8 +293,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime,
                                     collarOnTime, caribouYearStart,topUp = T,forceMonths=forceMonths)
     } else {
-      if(is.element("numTarget", names(freqStartsByYear))){
-        if(is.element("numStarts", names(freqStartsByYear))){stop("In freqStartsByYear, specify numTarget or numStarts, but not both.")}
+      if(hasName(freqStartsByYear,"numTarget")){
+        if(hasName(freqStartsByYear,"numStarts")){stop("In freqStartsByYear, specify numTarget or numStarts, but not both.")}
         names(freqStartsByYear)[names(freqStartsByYear)=="numTarget"] = "numStarts"; topUp = T
       }else{
         topUp = F
@@ -310,7 +310,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     # if cowMult is provided, set cows as a function of number of surviving cows at
     # year start
 
-    if (is.element("cowMult", names(paramTable)) & all(paramTable[["cowMult"]] != 1) & is.null(cowCountsIn)) {
+    if (hasName(paramTable,"cowMult") & all(paramTable[["cowMult"]] != 1) & is.null(cowCountsIn)) {
       
       # if multiple months filter to the start of caribou year
       # if only one subtract all the mortalities for the year
@@ -325,7 +325,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       }
       survsCalving <- survsCalving %>% 
         mutate(surviving = StartTotal - MortalitiesCertain)
-      if(is.element("Annual",names(survsCalving))){
+      if(hasName(survsCalving,"Annual")){
         survsCalving$Year = survsCalving$Annual
       }else{
         survsCalving$Year[survsCalving$Month<caribouYearStart]=survsCalving$Year[survsCalving$Month<caribouYearStart]-1
@@ -381,7 +381,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
         }
       }else{
         simRecruitObs <- recruit_data
-        if(!is.element("Month",names(simRecruitObs))){
+        if(!hasName(simRecruitObs,"Month")){
           if(recSurveyMonth<caribouYearStart){
             simRecruitObs$Year = simRecruitObs$Year+1
             simRecruitObs$Month = recSurveyMonth
@@ -398,6 +398,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       if(nrow(simSurvObs>0)){
         surv_data <- merge(surv_data,data.frame(Replicate=unique(simSurvObs$Replicate)))
         surv_data$Month=as.numeric(as.character(surv_data$Month))
+        if(!hasName(surv_data,"Malfunctions")){simSurvObs$Malfunctions=NULL}
         missing = setdiff(names(simSurvObs),names(surv_data))
         if(length(missing)>0){
           add= unique(subset(simSurvObs,select=missing))
@@ -426,7 +427,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   }else{
     simSurvObs <- surv_data
     simRecruitObs <- recruit_data
-    if(!is.element("Month",names(simRecruitObs))){
+    if(!hasName(simRecruitObs,"Month")){
       if(recSurveyMonth<caribouYearStart){
         simRecruitObs$Year = simRecruitObs$Year+1
         simRecruitObs$Month = recSurveyMonth
@@ -439,17 +440,24 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     simRecruitObs$Calves[!is.na(simRecruitObs$Calves)] = NA
   }
   
-  if(!is.element("UnknownAdults",names(simRecruitObs))){simRecruitObs$UnknownAdults <- 0}
-  if(!is.element("Yearlings",names(simRecruitObs))){simRecruitObs$Yearlings <- 0}
+  if(!hasName(simRecruitObs,"UnknownAdults")){simRecruitObs$UnknownAdults <- 0}
+  if(!hasName(simRecruitObs,"Yearlings")){simRecruitObs$Yearlings <- 0}
   
-  if(!is.element("CowsBulls",names(simRecruitObs))){
+  if(!hasName(simRecruitObs,"CowsBulls")){
     simRecruitObs$CowsBulls <- simRecruitObs$Cows
   }
-  if(!is.element("Bulls",names(simRecruitObs))){
+  if(!hasName(simRecruitObs,"Bulls")){
     simRecruitObs$Bulls <- simRecruitObs$CowsBulls-simRecruitObs$Cows
   }
 
-  simSurvObs$StartTotal[(simSurvObs$StartTotal==0)&is.na(simSurvObs$MortalitiesCertain)]<-1
+  simSurvObs$StartTotal[simSurvObs$StartTotal==0]<-NA
+  simSurvObs$MortalitiesCertain[is.na(simSurvObs$StartTotal)]<-NA
+  simSurvObs$MortalitiesUncertain[is.na(simSurvObs$StartTotal)]<-NA
+  simRecruitObs$Cows[is.na(simRecruitObs$Calves)]<-NA
+  simRecruitObs$Bulls[is.na(simRecruitObs$Calves)]<-NA
+  simRecruitObs$UnknownAdults[is.na(simRecruitObs$Calves)]<-NA
+  simRecruitObs$Yearlings[is.na(simRecruitObs$Calves)]<-NA
+
   retList = list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
                 simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
                  exData = trajectories, paramTable = paramTable)

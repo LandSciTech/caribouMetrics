@@ -55,7 +55,7 @@ ratesFromLogisticSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, va
     stop("varPersists = F is not an option for bbou logistic models")
   }
   
-  parTab <- subset(Rbar,select=intersect(c("Year","PopulationName","Anthro","Fire_excl_anthro","PopulationID"),names(Rbar)))
+  parTab <- subset(Rbar,select=intersect(c("Year","PopulationName","Anthro","Fire_excl_anthro"),names(Rbar)))
   results <- list(parTab=parTab,surv_fit=surv_fit,recruit_fit=recruit_fit)
   
   return(results)
@@ -63,8 +63,8 @@ ratesFromLogisticSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, va
 
 rateFromLogisticSummary<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="RatesLogistic_"){
   
-  if(!is.element("adjust.mu",names(Rbar))){Rbar$adjust.mu = 0}
-  if(!is.element("adjust.sd",names(Rbar))){Rbar$adjust.sd = 0}
+  if(!hasName(Rbar,"adjust.mu")){Rbar$adjust.mu = 0}
+  if(!hasName(Rbar,"adjust.sd")){Rbar$adjust.sd = 0}
       
   #####
   # Model - assign model file name (needed to match with the file name in the model object in jags.model())
@@ -133,7 +133,7 @@ sink()
 # Setting the data that you want to pass the model objects
 data <- Rbar
 data <- data[order(data$Annual,data$PopulationName),]
-data$PopulationID <- as.factor(data$PopulationName)
+data$PopulationName <- as.factor(data$PopulationName)
 nAnnual <- length(unique(data$Annual))
 if(min(as.integer(data$Annual))>1){
   data$Annual = as.factor(data$Year)
@@ -144,7 +144,7 @@ datal = list(
   nAnnual=nAnnual,
   Annual = as.integer(data$Annual),
   nPops=length(unique(data$PopulationName)),
-  PopulationID = as.integer(data$PopulationID),
+  PopulationID = as.integer(data$PopulationName),
   rmu=data$mean,
   rsd=data$sd,
   pmr.mu = data$adjust.mu,
@@ -180,7 +180,7 @@ ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPer
     recruit_fit <- rateFromBetaSummaryYS(Rbar,r_priors,params,nc,nthin,ni,nb)
   }
   
-  parTab <- subset(Rbar,select=intersect(c("Year","PopulationName","Anthro","Fire_excl_anthro","PopulationID"),names(Rbar)))
+  parTab <- subset(Rbar,select=intersect(c("Year","PopulationName","Anthro","Fire_excl_anthro"),names(Rbar)))
   results <- list(parTab=parTab,surv_fit=surv_fit,recruit_fit=recruit_fit)
   
   return(results)
@@ -188,11 +188,11 @@ ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPer
 
 rateFromBetaSummary<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="RatesBeta_"){
   
-  if(!is.element("adjust.mu",names(Rbar))){
+  if(!hasName(Rbar,"adjust.mu")){
     Rbar$adjust.mu = 0
   }
   
-  if(!is.element("adjust.sd",names(Rbar))){
+  if(!hasName(Rbar,"adjust.sd")){
     Rbar$adjust.sd = 0
   }
   
@@ -270,7 +270,7 @@ sink()
 # Setting the data that you want to pass the model objects
 data <- Rbar
 data <- data[order(data$Annual,data$PopulationName),]
-data$PopulationID <- as.factor(data$PopulationName)
+data$PopulationName <- as.factor(data$PopulationName)
 nAnnual <- length(unique(data$Annual))
 if(min(as.integer(data$Annual))>1){
   data$Annual = as.factor(data$Year)
@@ -281,7 +281,7 @@ datal = list(
   nAnnual=nAnnual,
   Annual = as.integer(data$Annual),
   nPops=length(unique(data$PopulationName)),
-  PopulationID = as.integer(data$PopulationID),
+  PopulationID = as.integer(data$PopulationName),
   rmu=data$mean,
   rsd=data$sd,
   pmr.mu = data$adjust.mu,
@@ -374,7 +374,7 @@ for (k in 1:nPops) {
   # Setting the data that you want to pass the model objects
   data <- Rbar
   data <- data[order(data$Annual,data$PopulationName),]
-  data$PopulationID <- as.factor(data$PopulationName)
+  data$PopulationName <- as.factor(data$PopulationName)
   nAnnual <- length(unique(data$Annual))
   if(min(as.integer(data$Annual))>1){
     data$Annual = as.factor(data$Year)
@@ -385,7 +385,7 @@ for (k in 1:nPops) {
     nAnnual=nAnnual,
     Annual = as.integer(data$Annual),
     nPops=length(unique(data$PopulationName)),
-    PopulationID = as.integer(data$PopulationID),
+    PopulationID = as.integer(data$PopulationName),
     rmu=data$mean,
     rsd=data$sd,
     pmr.mu = data$adjust.mu,

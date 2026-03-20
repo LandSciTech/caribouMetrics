@@ -77,13 +77,10 @@ surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
 surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
                              PopulationName = unique(surv_data$PopulationName))
 surv_data <- merge(surv_data, surv_data_add, all.x = TRUE, all.y = TRUE)
-surv_data$StartTotal[is.na(surv_data$StartTotal)] <- 1
 
 recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
 recruit_data_add <- expand.grid(Year = seq(2017, 2022), PopulationName = unique(recruit_data$PopulationName))
 recruit_data <- merge(recruit_data, recruit_data_add, all.x = TRUE, all.y = TRUE)
-recruit_data$Month[is.na(recruit_data$Month)] <- 3
-recruit_data$Day[is.na(recruit_data$Day)] <- 15
 
 surv_dataNone <- surv_data %>% filter(Year > 2017)
 recruit_dataNone <- recruit_data %>% filter(Year > 2017)
@@ -278,7 +275,7 @@ rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
 surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
 
 lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
-               lowBound = 0.45, highBound = 1.55)
+               lowBound = 0.4, highBound = 1.6)
 rec / surv / lam
 ```
 

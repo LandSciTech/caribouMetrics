@@ -112,9 +112,7 @@ Suggests:
     bookdown,
     googlesheets4
 Remotes: LandSciTech/pfocal,
-    LandSciTech/bbouNationalPriors,
-    bboudata=github::LandSciTech/bboudata,
-    bboutools=github::LandSciTech/bboutoolsMultiPop
+    LandSciTech/bbouNationalPriors
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
