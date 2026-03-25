@@ -4,7 +4,7 @@ template:
 url: https://landscitech.github.io/caribouMetrics
 
 development:
-  mode: auto
+  mode: release
 
 navbar:
   structure:
