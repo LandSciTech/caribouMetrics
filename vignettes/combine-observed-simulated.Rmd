@@ -154,7 +154,7 @@ lmmView <- subset(limitedMoreMulti$rr.summary.all,(Parameter=="Expected growth r
 base <- ggplot(lmmView,aes(x=collarCount,y=Mean,ymax=upper,ymin=lower,group=lQuantile,colour=probViable))+geom_point()+geom_errorbar()+ylab("Expected growth rate")
 ```
 
-```{r fig-plot5, fig.width=figWidth,fig.height=5,fig.cap="Outcomes of additional monitoring vary among example trajectories (points), and with monitoring effort (collarCount). In these examples there is 5 years additional monitoring, limited initial data (2 years), and low disturbance. Example trajectories are from the 99th, 50th, and 1st percentiles of the distribution of expected growth rate in the initial model informed by 2 years of local data."}
+```{r fig-plot5, fig.width=figWidth,fig.height=5,fig.cap="Outcomes of additional monitoring vary among example trajectories (points), and with monitoring effort (collarCount). In these examples there is 5 years additional monitoring, limited initial data (2 years), and low disturbance. Example trajectories are from the 99th, 50th, and 1st percentiles of the distribution of expected growth rate in the initial model informed by 2 years of local data. probViable is the posterior probability of viability (i.e. the proportion of the estimated posterior predictive distribution of expected population growth rate that is greater than 0.99)."}
 base
 ```
 
