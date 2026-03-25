@@ -51,6 +51,7 @@ test_that("collarCount and cowCount behave", {
   expect_equal(scns2$curYear+1, simObs2$simRecruitObs$Year %>% max())
 
   # Test with months
+  # devtools::document();devtools::load_all()
   scns10 <- getScenarioDefaults(collarCount = 15, cowMult = 2)
   simObs_mon <- simulateObservations(scns10,  
                        surv_data = bboudata::bbousurv_a,
@@ -126,7 +127,7 @@ test_that("collarCount and cowCount behave", {
       simObs4c$simRecruitObs %>% pull(Cows))) 
   
   # for collarInterval 
-  scns3 <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = NA,
+  scns3 <- getScenarioDefaults(collarCount = 30, cowCount = 50, cowMult = NA,
                                collarInterval = 3)
   
   simObs5 <- simulateObservations(scns3)
@@ -138,7 +139,7 @@ test_that("collarCount and cowCount behave", {
     {. == 30} %>% all() %>% 
     expect_true()
   
-  simObs5$simRecruitObs %>% filter(Cows != 100) %>% nrow() %>% 
+  simObs5$simRecruitObs %>% filter(Cows != 50) %>% nrow() %>% 
     {expect_true(. == 0)} 
   
   # collarInterval doesn't affect tables

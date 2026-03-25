@@ -8,6 +8,7 @@ plotSurvivalSeries <- function(surv_data_show) {
   # surv_data_show = subset(outObs$simSurvObs,Replicate==outObs$simSurvObs$Replicate[1])
 
   surv_data_show$MortalitiesCertain[surv_data_show$MortalitiesCertain == 0] <- NA
+  if(!hasName(surv_data_show,"Malfunctions")){surv_data_show$Malfunctions<-NA}
   surv_data_show$Malfunctions[surv_data_show$Malfunctions == 0] <- NA
   surv_data_show$Month <- factor(surv_data_show$Month, levels = seq(1:12))
   

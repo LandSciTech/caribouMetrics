@@ -15,7 +15,8 @@ test_that("real and simulated data work", {
                               collarCount = 20, cowMult = 5)
   
   simO <- simulateObservations(scns)
-  
+
+  #devtools::document();devtools::load_all()
   out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                            disturbance = simO$simDisturbance,
                            startYear = 2014)
@@ -189,7 +190,7 @@ test_that("results match expected", {
   
   doPlot(lowSensNtrain)
   doPlot(lowSensNtrain, "Adult female survival")
-  doPlot(lowSensNtrain, "Population growth rate")
+  doPlot(lowSensNtrain, "Population growth rate",highBound=1.5)
   difLowSensNtrain <- calcDifNat(lowSensNtrain, min_year = 2040)
   
   # expect differences to be small

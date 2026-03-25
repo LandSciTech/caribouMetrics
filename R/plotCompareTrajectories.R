@@ -118,10 +118,6 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
     df$Type <- typeLabels[1]
     simRange$Type <- typeLabels[2]
     
-    if(!is.element("Year",names(simRange))){
-      
-    }
-    
     missing=setdiff(facetVars,names(simRange))
     if(length(missing)>0){
       mergeBit <- unique(subset(df,select=missing))

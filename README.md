@@ -19,7 +19,7 @@ include:
 - a national demographic model with density dependence and interannual
   variability follows [Johnson et.
   al. (2020)](doi:10.1111/1365-2664.13637) with modifications described
-  in [Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350).
+  in [Dyson et al. (in press)](https://doi.org/10.1101/2022.06.01.494350).
   Demographic rates vary with disturbance as estimated by [Johnson et.
   al. (2020)](doi:10.1111/1365-2664.13637).
 - a Bayesian Beta model for integrating prior information from Johnson
@@ -60,7 +60,7 @@ al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095)).
 `caribouMetrics` also contains an implementation of [Hornseth and
 Rempel’s (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal
 caribou resource selection model described in [Dyson et
-al. (2022)](https://doi.org/10.1101/2022.06.01.494350).
+al. (in press)](https://doi.org/10.1101/2022.06.01.494350).
 
 Model implementation is intended to be modular and flexible, allowing
 reuse of components in a variety of contexts including projections of

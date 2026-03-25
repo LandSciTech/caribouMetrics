@@ -85,9 +85,9 @@ A caribou demographic model with density dependence and interannual
 variability following \href{doi:10.1111/1365-2664.13637}{Johnson et. al. (2020)}
 with modifications described in
 \href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. (2025)} and
-\href{https://doi.org/10.1101/2022.06.01.494350}{Dyson et al. (2022)}.
+\href{https://doi.org/10.1101/2022.06.01.494350}{Dyson et al. (in press)}.
 Default parameter values give the model
-in Dyson et al. (2022). Set \code{probOption = "matchJohnson2020"} to reproduce
+in Dyson et al. (in press). Set \code{probOption = "matchJohnson2020"} to reproduce
 the model used in Johnson et al. 2020. Set \code{probOption = "continuous"},
 \code{interannualVar = FALSE}, and \code{K = FALSE} to reproduce the simpler 2-stage
 demographic model without interannual variability, density dependence, or
@@ -111,11 +111,10 @@ caribouPopGrowth(100, 2, 0.5, 0.7)
 \references{
 Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
 Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
-Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (2022). Existing
-caribou habitat and demographic models need improvement for Ring of Fire
-impact assessment: A roadmap for improving the usefulness, transparency,
-and availability of models for conservation.
-\url{https://doi.org/10.1101/2022.06.01.494350}
+Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press).
+Effective conservation decisions require models designed for purpose:
+a case study of boreal caribou in Ontario’s Ring of Fire.
+Ecology and Evolution In press: \url{https://doi.org/10.1101/2022.06.01.494350}
 
 Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
 Integration of national demographic-disturbance relationships and local

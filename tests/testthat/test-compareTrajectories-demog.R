@@ -1,11 +1,16 @@
 test_that("works with defaults", {
+  # save to speed up tests
+  # simBig <- suppressWarnings(trajectoriesFromNational(N0 = 3000, forceUpdate=T))
+  # saveRDS(simBig, "tests/testthat/data/simBig3000.rds", version = 2)
+  
   #devtools::load_all()
   
   scns <- getScenarioDefaults(projYears = 0, obsYears = 10, collarCount = 0,
                               cowMult = 3)
   simIni <-trajectoriesFromNational() 
+  #devtools::load_all()
   simO <- simulateObservations(scns)
-  
+
   out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, 
                            recruit_data = simO$simRecruitObs,
                            disturbance = simO$simDisturbance,

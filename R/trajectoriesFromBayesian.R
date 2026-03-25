@@ -18,7 +18,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
                                      returnSamples = TRUE, doSummary = TRUE, ...){
   cPars <- getScenarioDefaults(cPars)
   
-  if(is.element("Anthro",names(bayesianResults))){
+  if(hasName(bayesianResults,"Anthro")){
     message("Anthro from bayesianResults")
     bayesianResults=list(parTab=bayesianResults)
   }
@@ -32,7 +32,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     }
   }
   
-  if(!is.element("PopulationName",names(bayesianResults$parTab))){bayesianResults$parTab$PopulationName=NA}
+  if(!hasName(bayesianResults$parTab,"PopulationName")){bayesianResults$parTab$PopulationName=NA}
   
   ccPars = unique(subset(cPars,select=c(qMin,qMax,uMin,uMax,zMin,zMax,cowMult,correlateRates)))
   if(nrow(ccPars)>1){
@@ -40,7 +40,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   }
   
   if(is.null(N0)){
-    if(is.element("N0",names(bayesianResults$parTab))){
+    if(hasName(bayesianResults$parTab,"N0")){
       if(class(bayesianResults$parTab)=="list"){
         N0 <- unique(subset(bayesianResults$parTab$N0,select=c(PopulationName,N0)))
       }else{
@@ -72,16 +72,16 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   
   Nnames <- intersect(c("N0","N.sd","N.lower","N.upper","PopulationName"),names(N0))
   Nuse <- unique(subset(N0,select=Nnames))
-  if(!is.element("PopulationName",names(Nuse))){Nuse$PopulationName="A"}
+  if(!hasName(Nuse,"PopulationName")){Nuse$PopulationName="A"}
   
   popInfo <- merge(data.frame(id=seq(1:nr/length(unique(Nuse$PopulationName)))),Nuse)
 
   if(length(intersect(c("N.sd","N.lower"),names(Nuse)))>0){
     #model variation in N0
     popInfo$mean = popInfo$N0
-    if(is.element("N.sd",names(popInfo))){popInfo$N0 = rnorm(nrow(popInfo),mean=popInfo$mean,sd=popInfo$N.sd)}
-    if(is.element("N.lower",names(popInfo))){popInfo$N0=pmax(popInfo$N.lower,popInfo$N0)}
-    if(is.element("N.upper",names(popInfo))){popInfo$N0=pmin(popInfo$N.upper,popInfo$N0)}
+    if(hasName(popInfo,"N.sd")){popInfo$N0 = rnorm(nrow(popInfo),mean=popInfo$mean,sd=popInfo$N.sd)}
+    if(hasName(popInfo,"N.lower")){popInfo$N0=pmax(popInfo$N.lower,popInfo$N0)}
+    if(hasName(popInfo,"N.upper")){popInfo$N0=pmin(popInfo$N.upper,popInfo$N0)}
     popInfo$N0 <- round(popInfo$N0)
     popInfo <- subset(popInfo,select=setdiff(names(popInfo),c("mean","N.sd","N.lower","N.upper")))
   }
@@ -126,9 +126,9 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     simBig <- pars
   }
   
-  if(is.element("surv_fit",names(bayesianResults))){
-    simBig$surv_data = bayesianResults$surv_fit$data
-    simBig$recruit_data = bayesianResults$recruit_fit$data
+  if(hasName(bayesianResults,"surv_fit")){
+    simBig$surv_data = convertBbouData(bayesianResults$surv_fit$data)
+    simBig$recruit_data = convertBbouData(bayesianResults$recruit_fit$data)
     simBig$popInfo = popInfo
   }
   return(simBig)

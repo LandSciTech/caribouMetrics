@@ -4,12 +4,16 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   #             req_vals = unique(surv_data$PopulationName))
   # }
   #Note: using bboutools to check and structure the data without fitting the models...0
-  surv_fit_in <- bboutools::bb_fit_survival(surv_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
+  library(bboutools)
+  
+  surv_data$Month[is.na(surv_data$StartTotal)]<-NA;surv_data<-unique(surv_data)
+  recruit_data$Month[is.na(recruit_data$Cows)]<-NA;recruit_data$Day[is.na(recruit_data$Cows)]<-NA;recruit_data<-unique(recruit_data)
+  
+  surv_fit_in <- bboutools::bb_fit_survival(surv_data, allow_missing = TRUE, quiet = TRUE, niters=0,min_random_year=0)
   surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb)
   
-  recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, multi_pop = TRUE, allow_missing = TRUE, quiet = TRUE, do_fit=FALSE)
+  recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, allow_missing = TRUE, quiet = TRUE, niters=0,min_random_year=0)
   recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb)
-  
   
   summaries <- rbind(recruit_fit$summaries,surv_fit$summaries)
   
@@ -26,13 +30,19 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
 }
 
 betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
-  data <- surv_fit$data
-  data <- as.data.frame(data)
-  data <- subset(data,is.element(Annual,disturbance$Year))
+  data <- convertBbouData(surv_fit$data)
+  if(hasName(disturbance,"Annual")){
+    disturbance$Year = NULL
+  }else{
+    disturbance$Annual = disturbance$Year
+    disturbance$Year = NULL
+  }
+  data <- subset(data,is.element(Annual,disturbance$Annual))
   data$Annual <- as.factor(as.character(data$Annual))
-  disturbance <- merge(disturbance,unique(select(data, any_of(c("Annual", "Year", "PopulationName","PopulationID")))))
-  anthro <- spread(subset(disturbance,select=c(Annual,PopulationID,Anthro)), PopulationID, Anthro)
+  disturbance <- merge(disturbance,unique(select(data, any_of(c("Annual", "Year", "PopulationName")))))
+  anthro <- spread(unique(subset(disturbance,select=c(Annual,PopulationName,Anthro))), PopulationName, Anthro)
   data <- merge(data,disturbance)
+  
   
   if(any(is.na(anthro))){
     filter(anthro, if_any(-Annual, \(x)is.na(x))) %>% 
@@ -62,7 +72,7 @@ betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
                 nAnnual = length(unique(data$Annual)),
                 Annual = as.integer(data$Annual),
                 nPops = length(unique(data$PopulationName)),
-                PopulationID = as.integer(data$PopulationID),
+                PopulationID = as.integer(as.factor(data$PopulationName)),
                 anthro = anthro,
                 nMonths = length(unique(data$Month))
   )
@@ -146,18 +156,15 @@ model {
 }
 
 betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
-  rec_data <- rec_fit$data
-  data <- as.data.frame(rec_data)
+  data <- convertBbouData(rec_fit$data)
+  data$CowsBulls[is.na(data$CowsBulls)]=0
+  data$UnknownAdults[is.na(data$UnknownAdults)]=0
+  data$Yearlings[is.na(data$Yearlings)]=0
   data <- merge(data,disturbance)
   data$Annual <- as.factor(as.character(data$Annual))
   
-  data$Cows[is.na(data$Cows)]=0
-  data$CowsBulls[is.na(data$CowsBull)]=0
-  data$UnknownAdults[is.na(data$UnknownAdults)]=0
-  data$Yearlings[is.na(data$Yearlings)]=0
-  
-  anthro <- spread(subset(data,select=c(Annual,PopulationID,Anthro)), PopulationID, Anthro)
-  fire <- spread(subset(data,select=c(Annual,PopulationID,Fire_excl_anthro)), PopulationID, Fire_excl_anthro)
+  anthro <- spread(subset(data,select=c(Annual,PopulationName,Anthro)), PopulationName, Anthro)
+  fire <- spread(subset(data,select=c(Annual,PopulationName,Fire_excl_anthro)), PopulationName, Fire_excl_anthro)
   
   if(any(is.na(anthro))){
     filter(anthro, if_any(-Annual, \(x)is.na(x))) %>% 
@@ -211,7 +218,7 @@ betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
     Yearlings = data$Yearlings,
     Calves = data$Calves,
     Annual = as.integer(data$Annual),
-    PopulationID = as.integer(data$PopulationID),
+    PopulationID = as.integer(as.factor(data$PopulationName)),
     anthro = anthro,
     fire = fire,
     adult_female_proportion =0.65,
@@ -354,7 +361,7 @@ summarizeMonitoredNode <- function(parameter_stats,node,data){
            "lower"="quantiles.2.5.",
            "upper"="quantiles.97.5.") %>%
     select(c("node","mean","sd","lower","upper"))
-  data$node <- paste0(node,"[",as.integer(data$Annual),",",as.integer(data$PopulationID),"]")
+  data$node <- paste0(node,"[",as.integer(data$Annual),",",as.integer(as.factor(data$PopulationName)),"]")
   Rpred <- merge(Rpred,subset(data,select=intersect(names(data),c("node","Year","PopulationName","Annual","Anthro","Fire_excl_anthro"))))
   Rpred <- Rpred[order(Rpred$Year,Rpred$PopulationName),]
   Rpred$MetricTypeID = node

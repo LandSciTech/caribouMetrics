@@ -90,7 +90,10 @@ test_that("bboutools scnenario with no disturbance and no additional monitoring 
   scns$collarCount <- 0
 
   # devtools::load_all(path = "../caribouMetrics/")
-  posteriorResult <- bayesianScenariosWorkflow(scns, simBig, niters = 3000)
+  posteriorResult <- bayesianScenariosWorkflow(scns, simBig, niters = 3000,returnSamples=T)
+
+  expect_identical(simBig$surv_data,posteriorResult$out$result$surv_data)
+    
   posteriorResult$obs.all <- NULL
   recPosterior <- plotCompareTrajectories(posteriorResult, "Recruitment")
 
