@@ -28,6 +28,7 @@
 estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = NULL, priors = NULL, shiny_progress = FALSE,
                                 return_mcmc=FALSE,i18n = NULL, niters = formals(bboutools::bb_fit_survival)$niters, nthin = formals(bboutools::bb_fit_survival)$nthin,...){
   #shiny_progress = FALSE;return_mcmc=FALSE;i18n = NULL
+  library(bboutools)
   
   if(length(N0)==1){
     N0= expand.grid(PopulationName=unique(surv_data$PopulationName),N0=N0)

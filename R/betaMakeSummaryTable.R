@@ -4,6 +4,7 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   #             req_vals = unique(surv_data$PopulationName))
   # }
   #Note: using bboutools to check and structure the data without fitting the models...0
+  library(bboutools)
   
   surv_data$Month[is.na(surv_data$StartTotal)]<-NA;surv_data<-unique(surv_data)
   recruit_data$Month[is.na(recruit_data$Cows)]<-NA;recruit_data$Day[is.na(recruit_data$Cows)]<-NA;recruit_data<-unique(recruit_data)
@@ -30,11 +31,18 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
 
 betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
   data <- convertBbouData(surv_fit$data)
-  data <- subset(data,is.element(Annual,disturbance$Year))
+  if(hasName(disturbance,"Annual")){
+    disturbance$Year = NULL
+  }else{
+    disturbance$Annual = disturbance$Year
+    disturbance$Year = NULL
+  }
+  data <- subset(data,is.element(Annual,disturbance$Annual))
   data$Annual <- as.factor(as.character(data$Annual))
   disturbance <- merge(disturbance,unique(select(data, any_of(c("Annual", "Year", "PopulationName")))))
   anthro <- spread(unique(subset(disturbance,select=c(Annual,PopulationName,Anthro))), PopulationName, Anthro)
   data <- merge(data,disturbance)
+  
   
   if(any(is.na(anthro))){
     filter(anthro, if_any(-Annual, \(x)is.na(x))) %>% 

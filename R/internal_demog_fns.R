@@ -536,17 +536,20 @@ convertBbouData<-function(dat){
                             Annual=setdiff(levels(dat$Annual),unique(as.character(dat$Annual))),
                             Month=levels(dat$Month),
                             StartTotal=1)
+    
   }
   if(hasName(dat,"Cows")){
     dat_add <- expand.grid(PopulationName=levels(dat$PopulationName),
                             Annual=setdiff(levels(dat$Annual),unique(as.character(dat$Annual))))
   }
+  
   dat <- merge(dat,dat_add,all.x=T,all.y=T)
+
   newYr =  as.numeric(as.character(dat$Annual))
   newYr[(as.numeric(as.character(dat$Month))<formals(bboutools::bb_fit_survival)$year_start)]=
     newYr[(as.numeric(as.character(dat$Month))<formals(bboutools::bb_fit_survival)$year_start)]+1
   dat$Year = newYr
-
+  
   dat$CaribouYear <- NULL
   return(dat)
 }

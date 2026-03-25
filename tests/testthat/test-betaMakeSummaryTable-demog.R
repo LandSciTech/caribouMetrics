@@ -6,6 +6,7 @@ ni <- niters * nthin * 2   # number of samples for each chain
 nb <- ni / 2 
 
 test_that("Basic inputs works", {
+  #devtools::document();devtools::load_all()
   out <- betaMakeSummaryTable(
     surv_data = bboudata::bbousurv_a %>% filter(Year > 2010),
     recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
