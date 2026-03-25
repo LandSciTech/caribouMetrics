@@ -1,0 +1,260 @@
+# Run the Bayesian population model for multiple parameter sets
+
+Define scenarios in a table and
+[`simulateObservations()`](https://landscitech.github.io/caribouMetrics/reference/simulateObservations.md),
+run the
+[`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/reference/bayesianTrajectoryWorkflow.md)
+model and
+[`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/reference/compareTrajectories.md)
+for each scenario.
+
+## Usage
+
+``` r
+bayesianScenariosWorkflow(
+  scns,
+  simInitial,
+  ePars = list(collarOnTime = 4, collarOffTime = 3, collarNumYears = 4),
+  Rep = NULL,
+  printProgress = FALSE,
+  priors = "default",
+  niters = formals(bboutools::bb_fit_survival)$niters,
+  nthin = formals(bboutools::bb_fit_survival)$nthin,
+  returnSamples = F,
+  ...
+)
+```
+
+## Arguments
+
+- scns:
+
+  data.frame. Parameters for the simulations. See
+  [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/reference/getScenarioDefaults.md)
+  for details.
+
+- simInitial:
+
+  Initial simulation results, produced by calling
+  [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/reference/trajectoriesFromNational.md),
+  [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/reference/trajectoriesFromBayesian.md),
+  or
+  [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/reference/trajectoriesFromSummary.md)
+
+- ePars:
+
+  list. Additional parameters passed on to
+  [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/reference/simulateObservations.md)
+
+- Rep:
+
+  integer. Optional. If specified, select specified replicate
+  trajectory.
+
+- printProgress:
+
+  logical. Should the scenario number and parameters be printed at each
+  step?
+
+- priors:
+
+  a list of model priors. If disturbance is NA, this should be
+  list(priors_survival=c(...),priors_recruitment=c(...)); see
+  [`bboutools::bb_priors_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html)
+  and
+  [`bboutools::bb_priors_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html)
+  for details. If disturbance is not NA, see
+  [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/reference/betaNationalPriors.md)
+  for details.
+
+- niters:
+
+  A whole number of the number of iterations per chain after thinning
+  and burn-in.
+
+- nthin:
+
+  integer. The number of the thinning rate.
+
+- returnSamples:
+
+  logical. Optional. If true, return full results from
+  [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/reference/bayesianTrajectoryWorkflow.md).
+
+## Value
+
+A list similar to
+[`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/reference/compareTrajectories.md)
+where tables for each scenario have been appended together. Plus an
+error log for any scenarios that failed to run.
+
+## See also
+
+Caribou demography functions:
+[`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/reference/bayesianTrajectoryWorkflow.md),
+[`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/reference/betaNationalPriors.md),
+[`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/reference/caribouPopGrowth.md),
+[`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/reference/compareTrajectories.md),
+[`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/reference/compositionBiasCorrection.md),
+[`convertTrajectories()`](https://landscitech.github.io/caribouMetrics/reference/simulateTrajectoriesFromPosterior.md),
+[`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/reference/dataFromSheets.md),
+[`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/reference/demographicProjectionApp.md),
+[`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/reference/estimateBayesianRates.md),
+[`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/reference/estimateNationalRates.md),
+[`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/reference/getNationalCoefficients.md),
+[`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/reference/getScenarioDefaults.md),
+[`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/reference/plotCompareTrajectories.md),
+[`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/reference/plotSurvivalSeries.md),
+[`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/reference/plotTrajectories.md),
+[`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/reference/popGrowthTableJohnsonECCC.md),
+[`simulateObservations()`](https://landscitech.github.io/caribouMetrics/reference/simulateObservations.md),
+[`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/reference/trajectoriesFromBayesian.md),
+[`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/reference/trajectoriesFromNational.md),
+[`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/reference/trajectoriesFromSummary.md),
+[`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/reference/trajectoriesFromSummaryForApp.md)
+
+## Examples
+
+``` r
+scns <- expand.grid(
+  obsYears =c(10, 20), collarCount = c(30, 300), cowMult = 2, collarInterval = 2,
+  iAnthro = 0,
+  obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.9,
+  rQuantile = 0.7, N0 = 1000
+)
+
+eParsIn <- list(collarOnTime = 4, collarOffTime = 4, collarNumYears = 3)
+simsIn <- trajectoriesFromNational()
+#> Updating cached initial simulations.
+scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
+                       niters = 10)# only set to speed up example. Normally keep defaults.
+#> Loading required package: nimbleQuad
+#> 
+#> Attaching package: ‘nimbleQuad’
+#> The following objects are masked from ‘package:nimble’:
+#> 
+#>     buildAGHQ, buildLaplace, runAGHQ, runLaplace, summaryAGHQ,
+#>     summaryLaplace
+#> Registered S3 method overwritten by 'mcmcr':
+#>   method         from 
+#>   as.mcmc.nlists nlist
+#> Registered S3 method overwritten by 'rjags':
+#>   method               from 
+#>   as.mcmc.list.mcarray mcmcr
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 108
+#>    Unobserved stochastic nodes: 480
+#>    Total graph size: 2389
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 18
+#>    Unobserved stochastic nodes: 201
+#>    Total graph size: 652
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Warning: no non-missing arguments to max; returning -Inf
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 240
+#>    Unobserved stochastic nodes: 478
+#>    Total graph size: 2909
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 40
+#>    Unobserved stochastic nodes: 234
+#>    Total graph size: 806
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Warning: no non-missing arguments to max; returning -Inf
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 120
+#>    Unobserved stochastic nodes: 468
+#>    Total graph size: 2389
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 20
+#>    Unobserved stochastic nodes: 204
+#>    Total graph size: 666
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Warning: no non-missing arguments to max; returning -Inf
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 240
+#>    Unobserved stochastic nodes: 478
+#>    Total graph size: 2909
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 40
+#>    Unobserved stochastic nodes: 234
+#>    Total graph size: 806
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Warning: no non-missing arguments to max; returning -Inf
+```

@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Combine observed and simulated caribou data • caribouMetrics</title>
+<title>Simulation of monitoring scenarios informed by local data • caribouMetrics</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Combine observed and simulated caribou data">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simulation of monitoring scenarios informed by local data">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">caribouMetrics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,12 +33,10 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demography</a></li>
-    <li><a class="dropdown-item" href="../articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
-    <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Combine observed and simulated caribou data</a></li>
+<li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demographic Rates and Trajectories</a></li>
+    <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Simulation of monitoring scenarios informed by local data</a></li>
     <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul>
 </li>
       </ul>
@@ -55,12 +53,10 @@
 </nav><div class="container template-article">
 
 
-
-
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Combine observed and simulated caribou data</h1>
+      <h1>Simulation of monitoring scenarios informed by local data</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/vignettes/combine-observed-simulated.Rmd" class="external-link"><code>vignettes/combine-observed-simulated.Rmd</code></a></small>
@@ -69,26 +65,167 @@
 
     
     
+<div class="section level2" number="0.1">
+<h2 id="examples-of-initial-bayesian-models-informed-by-local-data-and-national-demographic-disturbance-relationships">
+<span class="header-section-number">0.1</span> Examples of initial Bayesian models informed by local data and national-demographic disturbance relationships<a class="anchor" aria-label="anchor" href="#examples-of-initial-bayesian-models-informed-by-local-data-and-national-demographic-disturbance-relationships"></a>
+</h2>
+<p>We simulate monitoring scenarios informed by example data from the <code><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bboudata::bbousurv_a</a></code> and <code><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bboudata::bbourecruit_a</a></code> data sets:</p>
+<ul>
+<li>Informative local data: Observations from 2010 to 2016.</li>
+<li>Limited local data: Observations from 2014 to 2016.</li>
+</ul>
+<p>To examine and compare predictions for unobserved years (2018 to 2021) we add missing data.</p>
+<p>Our starting points for analysis of monitoring scenarios are Bayesian Beta models informed by local data and prior knowledge of national demographic-disturbance relationships. See compare vignette for details. We examine the influence of prior information from national-demographic disturbance relationships in low disturbance (3% anthropogenic, 5% fire) and high disturbance (80% anthropogenic, 10% fire) scenarios.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: nimble</span></span>
-<span><span class="co">#&gt; nimble version 1.3.0 is loaded.</span></span>
-<span><span class="co">#&gt; For more information on NIMBLE and a User Manual,</span></span>
-<span><span class="co">#&gt; please visit https://R-nimble.org.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Note for advanced users who have written their own MCMC samplers:</span></span>
-<span><span class="co">#&gt;   As of version 0.13.0, NIMBLE's protocol for handling posterior</span></span>
-<span><span class="co">#&gt;   predictive nodes has changed in a way that could affect user-defined</span></span>
-<span><span class="co">#&gt;   samplers in some situations. Please see Section 15.5.1 of the User Manual.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'nimble'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     simulate</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     declare</span></span></code></pre></div>
-  </main>
+<span><span class="co"># use local version on local and installed on GH</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/" class="external-link">bboudata</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/poissonconsulting/bboutools" class="external-link">bboutools</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">figWidth</span> <span class="op">&lt;-</span> <span class="fl">8</span></span>
+<span><span class="va">figHeight</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span></span>
+<span><span class="co">#Note - set niters to 100 to run quickly when testing. Set to 1000 for complete results.</span></span>
+<span><span class="va">niters</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
+<span></span>
+<span><span class="va">surv_data</span> <span class="op">=</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bbousurv_a</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2010</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">surv_data_add</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2017</span>,<span class="fl">2024</span><span class="op">)</span>,Month<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,PopulationName<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">surv_data</span><span class="op">$</span><span class="va">PopulationName</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">surv_data</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">surv_data</span>,<span class="va">surv_data_add</span>,all.x<span class="op">=</span><span class="cn">T</span>,all.y<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">recruit_data</span><span class="op">=</span><span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2010</span><span class="op">)</span></span>
+<span><span class="va">recruit_data_add</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Year<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2017</span>,<span class="fl">2024</span><span class="op">)</span>,PopulationName<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">recruit_data</span><span class="op">$</span><span class="va">PopulationName</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">recruit_data</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">recruit_data</span>,<span class="va">recruit_data_add</span>,all.x<span class="op">=</span><span class="cn">T</span>,all.y<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">surv_dataNone</span> <span class="op">&lt;-</span> <span class="va">surv_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2017</span><span class="op">)</span></span>
+<span><span class="va">recruit_dataNone</span> <span class="op">&lt;-</span> <span class="va">recruit_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2017</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">surv_dataLimited</span> <span class="op">&lt;-</span> <span class="va">surv_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2014</span><span class="op">)</span></span>
+<span><span class="va">recruit_dataLimited</span> <span class="op">&lt;-</span> <span class="va">recruit_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2014</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">disturbance</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">surv_data</span><span class="op">$</span><span class="va">Year</span><span class="op">)</span>, Anthro <span class="op">=</span> <span class="fl">3</span>, Fire_excl_anthro <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">disturbanceHigh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Year <span class="op">=</span> <span class="va">disturbance</span><span class="op">$</span><span class="va">Year</span>,Anthro <span class="op">=</span> <span class="fl">80</span>,Fire_excl_anthro <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">betaLimited</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateBayesianRates.html">estimateBayesianRates</a></span><span class="op">(</span><span class="va">surv_dataLimited</span>, <span class="va">recruit_dataLimited</span>, disturbance<span class="op">=</span><span class="va">disturbance</span>,niters<span class="op">=</span><span class="va">niters</span><span class="op">)</span></span>
+<span><span class="va">betaInformative</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateBayesianRates.html">estimateBayesianRates</a></span><span class="op">(</span><span class="va">surv_data</span>, <span class="va">recruit_data</span>, disturbance<span class="op">=</span><span class="va">disturbance</span>,niters<span class="op">=</span><span class="va">niters</span><span class="op">)</span></span>
+<span><span class="va">betaLimitedHigh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateBayesianRates.html">estimateBayesianRates</a></span><span class="op">(</span><span class="va">surv_dataLimited</span>, <span class="va">recruit_dataLimited</span>, disturbance<span class="op">=</span><span class="va">disturbanceHigh</span>,niters<span class="op">=</span><span class="va">niters</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">simInformative</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromBayesian.html">trajectoriesFromBayesian</a></span><span class="op">(</span><span class="va">betaInformative</span><span class="op">)</span></span>
+<span><span class="va">simLimited</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromBayesian.html">trajectoriesFromBayesian</a></span><span class="op">(</span><span class="va">betaLimited</span><span class="op">)</span></span>
+<span><span class="va">simLimitedHigh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromBayesian.html">trajectoriesFromBayesian</a></span><span class="op">(</span><span class="va">betaLimitedHigh</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2" number="0.2">
+<h2 id="simulating-additional-monitoring-of-plausible-example-trajectories-from-fitted-bayesian-models">
+<span class="header-section-number">0.2</span> Simulating additional monitoring of plausible example trajectories from fitted Bayesian models<a class="anchor" aria-label="anchor" href="#simulating-additional-monitoring-of-plausible-example-trajectories-from-fitted-bayesian-models"></a>
+</h2>
+<p>We begin by specifying monitoring scenario parameters, and selecting an example trajectory with a relatively low expected growth rate (i.e. in the 1st percentile of the distribution of mcmc samples from the initial model). In this example, we specify 5 additional years of monitoring, with a target of 30 collars per year, and 6 cows per collared cow in the composition surveys. Default settings specify that deployed collars last 4 years, and lost collars are replaced in April of each year. We then simulate additional years of monitoring, combine the simulated and observed data (Figure <a href="#fig:fig-plot1">1</a>), and reanalyze the combined data. Methods for simulating monitoring of example trajectories are described in <span class="citation">Hughes et al. (<a href="#ref-hughes_integration_2025">2025</a>)</span>.</p>
+<p>In these examples, an additional 5 years of monitoring of a plausible low growth rate trajectory with 5 intial years of data does not provide additional clarity about whether the population is likely to decline or not in future (Figure <a href="#fig:fig-plot2">2</a>). An additional 5 years of monitoring is more likely to reduce uncertainty when there is limited initial data (e.g. Figures <a href="#fig:fig-plot3">3</a> and <a href="#fig:fig-plot4">4</a>), but outcomes of single trajectory analysis are stochastic. Thorough analysis of the value of additional monitoring requires examining outcomes from a larger representative sample of plausible trajectories from the initial model <span class="citation">(as in <a href="#ref-hughes_integration_2025">Hughes et al. 2025</a>)</span>.</p>
+<p>Thorough analysis of representative samples of plausible trajectories is time consuming, and beyond the scope of this vignette. Here we show an example workflow with three example trajectories for each case (Figure <a href="#fig:fig-plot5">5</a>). This example clarifies that there are a range of possible outcomes from additional monitoring. In the case where true growth rate is plausibly high (99th percentile of the distribution of expected growth rate) 5 years of additional monitoring clarifies that this population is likely viable. In the case where true growth rate is plausibly low (1st percentile of the distribution of expected growth rate) 5 years of additional monitoring does not clarify whether the population is stable or declining. Additional collars do help distinguish the cases from one another, but additional benefits of that information should be weighed against additional costs.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scns</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">scns</span><span class="op">$</span><span class="va">lQuantile</span><span class="op">=</span><span class="fl">0.01</span> <span class="co">#select example trajectories with low growth rate</span></span>
+<span><span class="va">correlateRates</span> <span class="op">=</span> <span class="cn">T</span> <span class="co">#Force correlation among demographic rates to examine extreme cases</span></span>
+<span><span class="va">scns</span><span class="op">$</span><span class="va">N0</span> <span class="op">=</span> <span class="cn">NA</span></span>
+<span><span class="va">scns</span><span class="op">$</span><span class="va">projYears</span> <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="va">scns</span><span class="op">$</span><span class="va">curYear</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">simInformative</span><span class="op">$</span><span class="va">recruit_data</span><span class="op">$</span><span class="va">Year</span><span class="op">)</span><span class="op">-</span> <span class="va">scns</span><span class="op">$</span><span class="va">projYears</span></span>
+<span><span class="va">scns</span><span class="op">$</span><span class="va">obsYears</span> <span class="op">=</span> <span class="va">scns</span><span class="op">$</span><span class="va">curYear</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">simInformative</span><span class="op">$</span><span class="va">recruit_data</span><span class="op">$</span><span class="va">Year</span><span class="op">)</span></span>
+<span><span class="va">scns</span><span class="op">$</span><span class="va">cowMult</span> <span class="op">=</span> <span class="fl">6</span></span>
+<span><span class="va">scns</span><span class="op">$</span><span class="va">collarCount</span> <span class="op">=</span> <span class="fl">30</span></span>
+<span></span>
+<span><span class="va">trajectories</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">simInformative</span><span class="op">$</span><span class="va">samples</span>,<span class="va">LambdaPercentile</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">scns</span><span class="op">$</span><span class="va">lQuantile</span><span class="op">*</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">trajectories</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">trajectories</span>,<span class="va">Replicate</span><span class="op">==</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">trajectories</span><span class="op">$</span><span class="va">Replicate</span><span class="op">)</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">oo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulateObservations.html">simulateObservations</a></span><span class="op">(</span><span class="fu"><a href="../reference/getScenarioDefaults.html">getScenarioDefaults</a></span><span class="op">(</span><span class="va">scns</span><span class="op">)</span>, <span class="va">trajectories</span>,</span>
+<span>                           surv_data <span class="op">=</span> <span class="va">simInformative</span><span class="op">$</span><span class="va">surv_data</span>,</span>
+<span>                           recruit_data<span class="op">=</span><span class="va">simInformative</span><span class="op">$</span><span class="va">recruit_data</span><span class="op">)</span></span>
+<span><span class="va">informativeMoreMonitoring</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow</a></span><span class="op">(</span>surv_data <span class="op">=</span> <span class="va">oo</span><span class="op">$</span><span class="va">simSurvObs</span>, recruit_data <span class="op">=</span> <span class="va">oo</span><span class="op">$</span><span class="va">simRecruitObs</span>, disturbance<span class="op">=</span><span class="va">disturbance</span>,niters<span class="op">=</span><span class="va">niters</span><span class="op">)</span></span>
+<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compareTrajectories.html">compareTrajectories</a></span><span class="op">(</span><span class="va">informativeMoreMonitoring</span>, simInitial <span class="op">=</span> <span class="va">simInformative</span><span class="op">)</span></span>
+<span><span class="va">typeLabsI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"More"</span>, <span class="st">"Informative"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#Use bayesianScenariosWorkflow to select trajectory, simulate observations, fit new model and summarize results for the case when initial data is limited. In this case, we can see both the "true" population trajectory and the observations in result plots.</span></span>
+<span><span class="va">limitedMoreMonitoring</span> <span class="op">=</span> <span class="fu"><a href="../reference/bayesianScenariosWorkflow.html">bayesianScenariosWorkflow</a></span><span class="op">(</span><span class="va">scns</span>,<span class="va">simLimited</span>,niters<span class="op">=</span><span class="va">niters</span><span class="op">)</span> </span>
+<span><span class="va">typeLabsL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"More"</span>, <span class="st">"Limited"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">limitedMoreHigh</span> <span class="op">=</span> <span class="fu"><a href="../reference/bayesianScenariosWorkflow.html">bayesianScenariosWorkflow</a></span><span class="op">(</span><span class="va">scns</span>,<span class="va">simLimitedHigh</span>,niters<span class="op">=</span><span class="va">niters</span><span class="op">)</span> </span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSurvivalSeries.html">plotSurvivalSeries</a></span><span class="op">(</span><span class="va">oo</span><span class="op">$</span><span class="va">simSurvObs</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:fig-plot1"></span>
+<img src="combine-observed-simulated_files/figure-html/fig-plot1-1.png" alt="Observed (2011-2016) and simulated (2017-2022) survival data for an example trajectory with a relatively low expected growth rate (i.e. in the 1st percentile of the distribution of mcmc samples from the initial model). X's indicate mortalities, and lines indicate the number of deployed collars. Each simulated collar lasts for 4 years. In April of each year, collars lost throughout the year are replaced."><p class="caption">
+Figure 1: Observed (2011-2016) and simulated (2017-2022) survival data for an example trajectory with a relatively low expected growth rate (i.e. in the 1st percentile of the distribution of mcmc samples from the initial model). X’s indicate mortalities, and lines indicate the number of deployed collars. Each simulated collar lasts for 4 years. In April of each year, collars lost throughout the year are replaced.
+</p>
+</div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#TO DO: fix data gap</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabsI</span><span class="op">)</span></span>
+<span><span class="va">surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabsI</span><span class="op">)</span></span>
+<span><span class="va">lam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Expected growth rate"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabsI</span>,</span>
+<span>               lowBound <span class="op">=</span> <span class="fl">0.7</span>, highBound <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="va">rec</span> <span class="op">/</span> <span class="va">surv</span> <span class="op">/</span> <span class="va">lam</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:fig-plot2"></span>
+<img src="combine-observed-simulated_files/figure-html/fig-plot2-1.png" alt="95% predictive intervals from Beta models with and without additional monitoring (5 years) of an example trajectory with informative initial data (5 years), low disturbance, and a relatively low expected growth rate (Figure 1). In this example, additional monitoring does not substantially reduce uncertainty about population growth rate."><p class="caption">
+Figure 2: 95% predictive intervals from Beta models with and without additional monitoring (5 years) of an example trajectory with informative initial data (5 years), low disturbance, and a relatively low expected growth rate (Figure 1). In this example, additional monitoring does not substantially reduce uncertainty about population growth rate.
+</p>
+</div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">limitedMoreMonitoring</span>, <span class="st">"Recruitment"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabsL</span><span class="op">)</span></span>
+<span><span class="va">surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">limitedMoreMonitoring</span>, <span class="st">"Adult female survival"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabsL</span><span class="op">)</span></span>
+<span><span class="va">lam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">limitedMoreMonitoring</span>, <span class="st">"Expected growth rate"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabsL</span>,</span>
+<span>               lowBound <span class="op">=</span> <span class="fl">0.7</span>, highBound <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="va">rec</span> <span class="op">/</span> <span class="va">surv</span> <span class="op">/</span> <span class="va">lam</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:fig-plot3"></span>
+<img src="combine-observed-simulated_files/figure-html/fig-plot3-1.png" alt="95% predictive intervals from Beta models with and without additional monitoring (5 years) of an example trajectory with limited initial data (2 years), low disturbance, and a relatively low expected growth rate (Figure 1)."><p class="caption">
+Figure 3: 95% predictive intervals from Beta models with and without additional monitoring (5 years) of an example trajectory with limited initial data (2 years), low disturbance, and a relatively low expected growth rate (Figure 1).
+</p>
+</div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">limitedMoreHigh</span>, <span class="st">"Recruitment"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabsL</span><span class="op">)</span></span>
+<span><span class="va">surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">limitedMoreHigh</span>, <span class="st">"Adult female survival"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabsL</span><span class="op">)</span></span>
+<span><span class="va">lam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">limitedMoreHigh</span>, <span class="st">"Expected growth rate"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabsL</span>,</span>
+<span>               lowBound <span class="op">=</span> <span class="fl">0.7</span>, highBound <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="va">rec</span> <span class="op">/</span> <span class="va">surv</span> <span class="op">/</span> <span class="va">lam</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:fig-plot4"></span>
+<img src="combine-observed-simulated_files/figure-html/fig-plot4-1.png" alt="95% predictive intervals from Beta models with and without additional monitoring (5 years) of an example trajectory with limited initial data (2 years), high disturbance, and a relatively low expected growth rate (Figure 1)."><p class="caption">
+Figure 4: 95% predictive intervals from Beta models with and without additional monitoring (5 years) of an example trajectory with limited initial data (2 years), high disturbance, and a relatively low expected growth rate (Figure 1).
+</p>
+</div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Add rows to the scenario table to examine multiple monitoring scenarios and example trajectories</span></span>
+<span><span class="va">scnsMulti</span><span class="op">=</span><span class="va">scns</span>;<span class="va">scnsMulti</span><span class="op">$</span><span class="va">lQuantile</span><span class="op">=</span><span class="cn">NULL</span>;<span class="va">scnsMulti</span><span class="op">$</span><span class="va">collarCount</span><span class="op">=</span><span class="cn">NULL</span></span>
+<span><span class="va">scnsMulti</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">scnsMulti</span>,<span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>lQuantile<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>,<span class="fl">0.5</span>,<span class="fl">0.99</span><span class="op">)</span>,collarCount<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">limitedMoreMulti</span> <span class="op">=</span> <span class="fu"><a href="../reference/bayesianScenariosWorkflow.html">bayesianScenariosWorkflow</a></span><span class="op">(</span><span class="va">scnsMulti</span>,<span class="va">simLimited</span>,niters<span class="op">=</span><span class="va">niters</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">lmmView</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">limitedMoreMulti</span><span class="op">$</span><span class="va">rr.summary.all</span>,<span class="op">(</span><span class="va">Parameter</span><span class="op">==</span><span class="st">"Expected growth rate"</span><span class="op">)</span><span class="op">&amp;</span><span class="op">(</span><span class="va">Year</span><span class="op">==</span><span class="fl">2021</span><span class="op">)</span>,select<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">lQuantile</span>,<span class="va">collarCount</span>,<span class="va">Mean</span>,<span class="va">lower</span>,<span class="va">upper</span>,<span class="va">probViable</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">base</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">lmmView</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">collarCount</span>,y<span class="op">=</span><span class="va">Mean</span>,ymax<span class="op">=</span><span class="va">upper</span>,ymin<span class="op">=</span><span class="va">lower</span>,group<span class="op">=</span><span class="va">lQuantile</span>,colour<span class="op">=</span><span class="va">probViable</span><span class="op">)</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_errorbar</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Expected growth rate"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">base</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:fig-plot5"></span>
+<img src="combine-observed-simulated_files/figure-html/fig-plot5-1.png" alt="Outcomes of additional monitoring vary among example trajectories (points), and with monitoring effort (collarCount). In these examples there is 5 years additional monitoring, limited initial data (2 years), and low disturbance. Example trajectories are from the 99th, 50th, and 1st percentiles of the distribution of expected growth rate in the initial model informed by 2 years of local data."><p class="caption">
+Figure 5: Outcomes of additional monitoring vary among example trajectories (points), and with monitoring effort (collarCount). In these examples there is 5 years additional monitoring, limited initial data (2 years), and low disturbance. Example trajectories are from the 99th, 50th, and 1st percentiles of the distribution of expected growth rate in the initial model informed by 2 years of local data.
+</p>
+</div>
+<p>TO DO: As in Hughes et al we can also explore monitoring scenarios using simulated trajectories from the national model instead of trajectories from a fitted Bayesian model.</p>
+</div>
+<div class="section level2 unnumbered">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-hughes_integration_2025" class="csl-entry">
+Hughes, Josie, Sarah Endicott, Anna M. Calvert, and Cheryl A. Johnson. 2025. <span>“Integration of National Demographic-Disturbance Relationships and Local Data Can Improve Caribou Population Viability Projections and Inform Monitoring Decisions.”</span> <em>Ecological Informatics</em> 87 (July): 103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">https://doi.org/10.1016/j.ecoinf.2025.103095</a>.
+</div>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
@@ -98,7 +235,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

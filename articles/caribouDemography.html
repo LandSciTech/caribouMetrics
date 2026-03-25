@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Caribou Demography • caribouMetrics</title>
+<title>Caribou Demographic Rates and Trajectories • caribouMetrics</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Caribou Demography">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Caribou Demographic Rates and Trajectories">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">caribouMetrics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,12 +33,10 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demography</a></li>
-    <li><a class="dropdown-item" href="../articles/bayesian-model-outputs.html">Options for using Bayesian model results</a></li>
-    <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Combine observed and simulated caribou data</a></li>
+<li><a class="dropdown-item" href="../articles/caribouDemography.html">Caribou Demographic Rates and Trajectories</a></li>
+    <li><a class="dropdown-item" href="../articles/combine-observed-simulated.html">Simulation of monitoring scenarios informed by local data</a></li>
     <li><a class="dropdown-item" href="../articles/compare-bayesian-models.html">Comparing the caribouMetrics Beta model to bboutools models</a></li>
     <li><a class="dropdown-item" href="../articles/Using_disturbanceMetric.html">Disturbance Metrics</a></li>
-    <li><a class="dropdown-item" href="../articles/Using_caribouHabitat.html">Using caribouHabitat</a></li>
   </ul>
 </li>
       </ul>
@@ -55,12 +53,10 @@
 </nav><div class="container template-article">
 
 
-
-
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Caribou Demography</h1>
+      <h1>Caribou Demographic Rates and Trajectories</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/vignettes/caribouDemography.Rmd" class="external-link"><code>vignettes/caribouDemography.Rmd</code></a></small>
@@ -69,62 +65,43 @@
 
     
     
-<div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<div class="section level2" number="1">
+<h2 id="demographic-rates-and-trajectories-from-the-national-model">
+<span class="header-section-number">1</span> Demographic rates and trajectories from the national model<a class="anchor" aria-label="anchor" href="#demographic-rates-and-trajectories-from-the-national-model"></a>
 </h2>
-<p>Here we describe a two-stage demographic model with density
-dependence and interannual variability following <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a> with
-modifications noted in <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et
-al. (2025)</a> and <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et
-al. (2022)</a>. Demographic rates vary with disturbance as estimated by
-<a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>. A
-detailed description of the model is provided in <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. (2025)
-Section 2.4</a>.</p>
-<p><code><a href="../reference/demographicCoefficients.html">demographicCoefficients()</a></code> selects the regression
-coefficient values and standard errors for the desired model version
-(see <code>popGrowthTableJohnsonECCC</code> for options) and then
-samples coefficients from these Gaussian distributions for each
-replicate population.</p>
-<p>Next <code><a href="../reference/demographicRates.html">demographicRates()</a></code> is used to apply the sampled
-coefficients to the disturbance covariates to calculate expected
-recruitment and survival according to the beta regression models
-estimated by Johnson et al. (2020). Each population is optionally
-assigned to quantiles of the Beta error distributions for survival and
-recruitment. Using quantiles means that the population will stay in
-these quantiles as disturbance changes over time, so there is persistent
-variation in recruitment and survival among example populations.</p>
-<p>Finally, we can use the estimated demographic rates to project
-population dynamics using a simple model with two age classes.
-Interannual variation in survival and recruitment is modelled using
-truncated beta distributions.</p>
+<div class="section level3" number="1.1">
+<h3 id="overview">
+<span class="header-section-number">1.1</span> Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h3>
+<p>Here we describe a demographic model with density dependence and interannual variability following <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span> with modifications noted in <span class="citation">Hughes et al. (<a href="#ref-hughes_integration_2025">2025</a>)</span> and <span class="citation">Dyson et al. (<a href="#ref-dyson_effective_2026">2026</a>)</span>. Demographic rates vary with disturbance as estimated by <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span>. A detailed description of the model is provided in <span class="citation">(<a href="#ref-hughes_integration_2025">Hughes et al. 2025, sec. 2.4</a>)</span>.</p>
+<p><code><a href="../reference/getNationalCoefficients.html">getNationalCoefficients()</a></code> selects the regression coefficient values and standard errors for the desired model version (see <code>popGrowthTableJohnsonECCC</code> for options) and then samples coefficients from these Gaussian distributions for each replicate population.</p>
+<p>Next <code><a href="../reference/estimateNationalRates.html">estimateNationalRates()</a></code> is used to apply the sampled coefficients to the disturbance covariates to calculate expected recruitment and survival according to the beta regression models estimated by <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span>. Each population is optionally assigned to quantiles of the Beta error distributions for survival and recruitment. Using quantiles means that the population will stay in these quantiles as disturbance changes over time, so there is persistent variation in recruitment and survival among example populations.</p>
+<p>Finally, we can use the estimated demographic rates to project population dynamics using a simple model with two age classes. Interannual variation in survival and recruitment is modelled using truncated Beta distributions.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/poissonconsulting/bboutools" class="external-link">bboutools</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
+<span><span class="co"># use local version on local and installed on GH</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"devtools"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pthBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"caribouMetrics"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">figWidth</span> <span class="op">&lt;-</span> <span class="fl">8</span>; <span class="va">figHeight</span> <span class="op">&lt;-</span> <span class="fl">10</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="simple-demographic-projection-for-a-single-example-landscape">Simple demographic projection for a single example landscape<a class="anchor" aria-label="anchor" href="#simple-demographic-projection-for-a-single-example-landscape"></a>
-</h2>
-<p>A simple case for demographic projection is multiple stochastic
-projections from a single landscape that does not change over time.
-First we define a disturbance scenario with 40% anthropogenic
-disturbance and 2% fire disturbance. If we had spatial data for the
-disturbance in our area of interest we could use
-<code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> to directly calculate the disturbance.
-(See <a href="https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html">Disturbance
-Metrics</a> vignette for an example).</p>
+<div class="section level3" number="1.2">
+<h3 id="demographic-outcomes-in-a-simple-case-no-variation-in-disturbance-over-time-or-among-populations">
+<span class="header-section-number">1.2</span> Demographic outcomes in a simple case no variation in disturbance over time or among populations<a class="anchor" aria-label="anchor" href="#demographic-outcomes-in-a-simple-case-no-variation-in-disturbance-over-time-or-among-populations"></a>
+</h3>
+<p>A simple case for demographic projection is multiple stochastic projections from a single landscape that does not change over time. First we define a disturbance scenario with 40% anthropogenic disturbance and 2% fire disturbance. If we had spatial data for the disturbance in our area of interest we could use <code><a href="../reference/disturbanceMetrics.html">disturbanceMetrics()</a></code> to directly calculate the disturbance. See <a href="https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetrics.html">Disturbance Metrics</a> vignette for an example.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">disturbance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fl">40</span>, fire_excl_anthro <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p>We begin by sampling coefficients for 500 replicate populations using
-default Johnson et al. (2020) models “M1” and “M4”. The returned object
-is a list containing the coefficients and standard errors from the
-national model as well as the sampled coefficients and the quantiles
-that they have been assigned to.</p>
+<code class="sourceCode R"><span><span class="va">disturbance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fl">40</span>, Fire_excl_anthro <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p>We begin by sampling coefficients for 500 replicate populations using default <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span> models “M1” and “M4”. The returned object is a list containing the coefficients and standard errors from the national model as well as the sampled coefficients and the quantiles that they have been assigned to.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getNationalCoefficients.html">getNationalCoefficients</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">coefSamples</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       Intercept        Anthro Precision</span></span>
@@ -144,18 +121,9 @@ that they have been assigned to.</p>
 <span><span class="co">#&gt; 1: 0.007908163 0.000127551  8.272731</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">popGrowthPars</span><span class="op">$</span><span class="va">coefSamples_Survival</span><span class="op">$</span><span class="va">quantiles</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.25345691 0.02880762 0.89123246 0.36007014 0.55806613 0.19063126</span></span></code></pre></div>
-<p>Next we calculate sample demographic rates given sampled model
-coefficients and disturbance metrics for our example landscape, setting
-<code>returnSample = TRUE</code> so that the results returned contain a
-row for each sample in each scenario. We set the initial population size
-for each sample population to 100, and project population dynamics for
-20 years using the <code>caribouPopGrowth</code> function with default
-parameter values. Anthropogenic disturbance is high on this example
-landscape, so the projected population growth rate for most sample
-populations is below 1, but uncertainty in the model means that a few
-sample populations persist.</p>
+<p>Next we calculate sample demographic rates given sampled model coefficients and disturbance metrics for our example landscape, setting <code>returnSample = TRUE</code> so that the results returned contain a row for each sample in each scenario. We set the initial population size for each sample population to 100, and project population dynamics for 20 years using the <code>caribouPopGrowth</code> function with default parameter values. Anthropogenic disturbance is high on this example landscape, so the projected population growth rate for most sample populations is below 1, but there is variability in the model so few sample populations persist (Figure <a href="#fig:plotSimpleDemography">1.1</a>). If no initial population size is provided, the projections do not include population size, and realized population growth rate includes interannual variation but not density dependence or demographic stochasticity (Figure <a href="#fig:plotSimpleDemographyNoN">1.2</a>).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">disturbance</span>,</span>
 <span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,</span>
 <span>  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -167,38 +135,41 @@ sample populations persist.</p>
 <span>                                     numSteps <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>                                     R_bar <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">R_bar</span>,</span>
 <span>                                     S_bar <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">demography</span>, <span class="op">!</span><span class="op">(</span><span class="va">scnID</span><span class="op">:</span><span class="va">replicate</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="va">N0</span>, names_to <span class="op">=</span> <span class="st">"Metric"</span>,</span>
-<span>                    values_to <span class="op">=</span> <span class="st">"Amount"</span><span class="op">)</span></span>
-<span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">fds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">Anthro</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">Amount</span>, </span>
-<span>                      colour <span class="op">=</span> <span class="va">fire_excl_anthro</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">2</span>, position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_jitterdodge.html" class="external-link">position_jitterdodge</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Metric</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Anthro"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="caribouDemography_files/figure-html/plotSimpleDemography-1.png" width="768"></p>
+<div class="figure">
+<span style="display:block;" id="fig:plotSimpleDemography"></span>
+<img src="caribouDemography_files/figure-html/plotSimpleDemography-1.png" alt="Variation in demographic rates and outcomes among 500 sample populations after a 20 year projection. Anthropogenic disturbance is 40%, fire disturbance is 2%. 'lambda' is realized population growth rate in the final year, and 'lambdaE' is expected population growth rate without interannual variation, density dependence or demographic stochasticity. 'N' is the number of adult females, which includes new recruits 'n_recruits' and survivors 'surviving_adFemales' from the previous year. 'R_bar/S_bar' are the expected recruitment (calf:cow ratio) and survival rates, 'R_t/S_t' are the recruitment and survival rates in the final year, which are more variable because they include interannual variation. 'X_t' is the recruitment rate adjusted for sex ratio and (optionally) composition survey bias - see @hughes_integration_2025 for details."><p class="caption">
+Figure 1.1: Variation in demographic rates and outcomes among 500 sample populations after a 20 year projection. Anthropogenic disturbance is 40%, fire disturbance is 2%. ‘lambda’ is realized population growth rate in the final year, and ‘lambdaE’ is expected population growth rate without interannual variation, density dependence or demographic stochasticity. ‘N’ is the number of adult females, which includes new recruits ‘n_recruits’ and survivors ‘surviving_adFemales’ from the previous year. ‘R_bar/S_bar’ are the expected recruitment (calf:cow ratio) and survival rates, ‘R_t/S_t’ are the recruitment and survival rates in the final year, which are more variable because they include interannual variation. ‘X_t’ is the recruitment rate adjusted for sex ratio and (optionally) composition survey bias - see <span class="citation">Hughes et al. (<a href="#ref-hughes_integration_2025">2025</a>)</span> for details.
+</p>
 </div>
-<div class="section level2">
-<h2 id="effects-of-disturbance-on-demographic-rates">Effects of disturbance on demographic rates<a class="anchor" aria-label="anchor" href="#effects-of-disturbance-on-demographic-rates"></a>
-</h2>
-<p>We can project demographic rates over a range of landscape conditions
-to recreate figures 3 and 5 from Johnson et al. (2020) and see the
-effects of changing disturbance on model behaviour. First we create a
-table of disturbance scenarios across a range of different levels of
-fire and anthropogenic disturbance.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rateSamples</span><span class="op">$</span><span class="va">N0</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
+<span><span class="va">demography</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">rateSamples</span>,</span>
+<span>                    <span class="fu"><a href="../reference/caribouPopGrowth.html">caribouPopGrowth</a></span><span class="op">(</span>N <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">N0</span>,</span>
+<span>                                     numSteps <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>                                     R_bar <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">R_bar</span>,</span>
+<span>                                     S_bar <span class="op">=</span> <span class="va">rateSamples</span><span class="op">$</span><span class="va">S_bar</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:plotSimpleDemographyNoN"></span>
+<img src="caribouDemography_files/figure-html/plotSimpleDemographyNoN-1.png" alt="Variation in demographic rates and outcomes among 500 sample populations after a 20 year projection with no initial population size. See Figure \@ref(fig:plotSimpleDemography) for other details."><p class="caption">
+Figure 1.2: Variation in demographic rates and outcomes among 500 sample populations after a 20 year projection with no initial population size. See Figure <a href="#fig:plotSimpleDemography">1.1</a> for other details.
+</p>
+</div>
+</div>
+<div class="section level3" number="1.3">
+<h3 id="expected-recruitment-and-survival-effects-of-disturbance-and-variation-among-populations">
+<span class="header-section-number">1.3</span> Expected recruitment and survival: effects of disturbance and variation among populations<a class="anchor" aria-label="anchor" href="#expected-recruitment-and-survival-effects-of-disturbance-and-variation-among-populations"></a>
+</h3>
+<p>We can project demographic rates over a range of landscape conditions to recreate figures 3 and 5 from <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span> and see the effects of changing disturbance on expected recruitment and survival. First we create a table of disturbance scenarios across a range of different levels of fire and anthropogenic disturbance.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">covTableSim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, </span>
-<span>                           fire_excl_anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span>, by <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="va">covTableSim</span><span class="op">$</span><span class="va">Total_dist</span> <span class="op">=</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">fire_excl_anthro</span></span></code></pre></div>
-<p>We again sample coefficients from default models M1 and M4. The
-sample of 500 is used to calculate averages, while the sample of 35 is
-used to show variability among populations.</p>
+<span>                           Fire_excl_anthro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span>, by <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="va">covTableSim</span><span class="op">$</span><span class="va">Total_dist</span> <span class="op">=</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">covTableSim</span><span class="op">$</span><span class="va">Fire_excl_anthro</span></span></code></pre></div>
+<p>We again sample coefficients from default models M1 and M4. The sample of 500 is used to calculate averages, while the sample of 35 is used to show variability among populations.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="co"># set seed so vignette looks the same each time</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">34533</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">popGrowthPars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getNationalCoefficients.html">getNationalCoefficients</a></span><span class="op">(</span></span>
 <span>  <span class="fl">500</span>,</span>
 <span>  modelVersion <span class="op">=</span> <span class="st">"Johnson"</span>,</span>
 <span>  survivalModelNumber <span class="op">=</span> <span class="st">"M1"</span>,</span>
@@ -206,28 +177,17 @@ used to show variability among populations.</p>
 <span>  populationGrowthTable <span class="op">=</span> <span class="va">popGrowthTableJohnsonECCC</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">popGrowthParsSmall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicCoefficients.html">demographicCoefficients</a></span><span class="op">(</span></span>
+<span><span class="va">popGrowthParsSmall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getNationalCoefficients.html">getNationalCoefficients</a></span><span class="op">(</span></span>
 <span>  <span class="fl">35</span>,</span>
 <span>  modelVersion <span class="op">=</span> <span class="st">"Johnson"</span>,</span>
 <span>  survivalModelNumber <span class="op">=</span> <span class="st">"M1"</span>,</span>
 <span>  recruitmentModelNumber <span class="op">=</span> <span class="st">"M4"</span>,</span>
 <span>  populationGrowthTable <span class="op">=</span> <span class="va">popGrowthTableJohnsonECCC</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Next we calculate demographic rates given sampled model coefficients.
-For the smaller sample we set <code>returnSample = TRUE</code> so that
-the results returned contain a row for each sample in each scenario.
-Setting <code>useQuantiles = TRUE</code> assigns each sample population
-to a quantile of the regression model error distributions for survival
-and recruitment, which allows us to see how demographic rates change.
-For the larger sample we set <code>returnSample = FALSE</code> and the
-result has one row for each scenario and includes summary statistics of
-the uncertainty across the samples. We do this twice, once with
-<code>ignorePrecision = TRUE</code> and once with
-<code>ignorePrecision = FALSE</code> to demonstrate the effect of
-considering the variance among populations around the National mean in
-addition to the uncertainty about the coefficient estimates.</p>
+<p>Next we calculate expected survival and recruitment rates given sampled model coefficients. For the smaller sample we set <code>returnSample = TRUE</code> so that the results returned contain a row for each sample in each scenario. Setting <code>useQuantiles = TRUE</code> assigns each sample population to a quantile of the regression model error distributions for survival and recruitment, allowing variation among populations to persist as disturbance changes. For the larger sample we set <code>returnSample = FALSE</code> to get summaries of mean and variation across the samples.</p>
+<p>Johnson et al’s <span class="citation">(<a href="#ref-johnson_science_2020">2020</a>)</span> Beta regression models estimate uncertainty about intercept and slope coefficients, and a precision parameter that describes variation among observations <span class="citation">(<a href="#ref-ferrari_beta_2004">Ferrari and Cribari-Neto 2004</a>)</span>. To show the importance of considering both these sources of variation we compare results with <code>ignorePrecision = TRUE</code> and <code>ignorePrecision = FALSE</code>. If the goal is to estimate and visualize nationally applicable demographic-disturbance relationships then the precision parameter may not be of interest (Figure <a href="#fig:parameterUncertaintyOnly">1.3</a>). If we are interested in the distribution of variation across the country it is essential to include both uncertainty about the regression coefficients and additional variation summarized by the precision parameter of the Beta regression model (Figure <a href="#fig:withPrecision">1.4</a>).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
 <span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthParsSmall</span>,</span>
 <span>  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -235,7 +195,7 @@ addition to the uncertainty about the coefficient estimates.</p>
 <span>  useQuantiles <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">rateSummaries</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span><span class="va">rateSummaries</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
 <span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,</span>
 <span>  ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -243,58 +203,36 @@ addition to the uncertainty about the coefficient estimates.</p>
 <span>  useQuantiles <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">rateSummariesIgnorePrecision</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span><span class="va">rateSummariesIgnorePrecision</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>  covTable <span class="op">=</span> <span class="va">covTableSim</span>,</span>
 <span>  popGrowthPars <span class="op">=</span> <span class="va">popGrowthPars</span>,</span>
 <span>  ignorePrecision <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  returnSample <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  useQuantiles <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="parameter-uncertainty">Parameter uncertainty<a class="anchor" aria-label="anchor" href="#parameter-uncertainty"></a>
+<div class="figure">
+<span style="display:block;" id="fig:parameterUncertaintyOnly"></span>
+<img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-1.png" alt="Variation in expected survival and recruitment with disturbance. Bands (2.5% and 97.5% quantiles of 500 samples) show variation due to uncertainty about intercept and slope coefficients in Johnson et al's [-@johnson_science_2020] Beta regression models."><p class="caption">
+Figure 1.3: Variation in expected survival and recruitment with disturbance. Bands (2.5% and 97.5% quantiles of 500 samples) show variation due to uncertainty about intercept and slope coefficients in Johnson et al’s <span class="citation">(<a href="#ref-johnson_science_2020">2020</a>)</span> Beta regression models.
+</p>
+</div>
+<div class="figure">
+<span style="display:block;" id="fig:withPrecision"></span>
+<img src="caribouDemography_files/figure-html/withPrecision-1.png" alt="Variation in expected survival and recruitment with disturbance. Bands (2.5% and 97.5% quantiles of 500 samples) include both uncertainty about the regression coefficients and additional variation summarized by the precision parameter of Johnson et al's [-@johnson_science_2020] Beta regression models. Faint coloured lines show example trajectories of expected demographic rates in sample populations, assuming each sample population is randomly distributed among quantiles of the beta distribution, and each population remains in the same quantile of the Beta distribution as disturbance changes."><p class="caption">
+Figure 1.4: Variation in expected survival and recruitment with disturbance. Bands (2.5% and 97.5% quantiles of 500 samples) include both uncertainty about the regression coefficients and additional variation summarized by the precision parameter of Johnson et al’s <span class="citation">(<a href="#ref-johnson_science_2020">2020</a>)</span> Beta regression models. Faint coloured lines show example trajectories of expected demographic rates in sample populations, assuming each sample population is randomly distributed among quantiles of the beta distribution, and each population remains in the same quantile of the Beta distribution as disturbance changes.
+</p>
+</div>
+</div>
+<div class="section level3" number="1.4">
+<h3 id="projection-of-population-growth-over-time-on-a-changing-landscape-workflow-details">
+<span class="header-section-number">1.4</span> Projection of population growth over time on a changing landscape: workflow details<a class="anchor" aria-label="anchor" href="#projection-of-population-growth-over-time-on-a-changing-landscape-workflow-details"></a>
 </h3>
-<p>Variation in demographic rates from model that includes uncertainty
-about the regression coefficients, and does not include additional
-variation captured by the precision parameter of the Beta regression
-model <a href="https://doi.org/10.1080/0266476042000214501" class="external-link">Ferrari and
-Cribari-Neto 2004</a>. The bands are the 2.5% and 97.5% quantiles of 500
-sample parameter values.
-<img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-1.png" width="768"><img src="caribouDemography_files/figure-html/parameterUncertaintyOnly-2.png" width="768"></p>
-</div>
-<div class="section level3">
-<h3 id="parameter-uncertainty-and-precision">Parameter uncertainty and precision<a class="anchor" aria-label="anchor" href="#parameter-uncertainty-and-precision"></a>
-</h3>
-<p>Variation in demographic rates from model that includes uncertainty
-about the regression coefficients and additional variation captured by
-the precision parameter of the Beta regression model <a href="https://doi.org/10.1080/0266476042000214501" class="external-link">Ferrari and
-Cribari-Neto 2004</a>. Faint coloured lines show example trajectories of
-expected demographic rates in sample populations, assuming each sample
-population is randomly distributed among quantiles of the beta
-distribution, and each population remains in the same quantile of the
-beta distribution as disturbance changes.</p>
-<pre><code><span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre>
-<p><img src="caribouDemography_files/figure-html/withPrecision-1.png" width="768"><img src="caribouDemography_files/figure-html/withPrecision-2.png" width="768"></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="projection-of-population-growth-over-time-on-a-changing-landscape">Projection of population growth over time on a changing
-landscape<a class="anchor" aria-label="anchor" href="#projection-of-population-growth-over-time-on-a-changing-landscape"></a>
-</h2>
-<p>In this example, we project 35 sample populations for 50 years on a
-landscape where the anthropogenic disturbance footprint is increasing by
-5% per decade. We set <code>interannualVar = FALSE</code>,
-<code>K = FALSE</code>, and <code>probOption = "continuous"</code> to
-use a simpler model without interannual variability, density dependence,
-or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816" class="external-link">Stewart et al. 2023</a>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">numTimesteps</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
-<span><span class="va">stepLength</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<p>In this example, we project 35 sample populations for 50 years on a landscape where the anthropogenic disturbance footprint is increasing by 5% per decade (Figure <a href="#fig:changeOverTime">1.5</a>). Note the form of the growth model (density dependence, interannual variation, demographic stochasticity etc) can be changed by setting <code><a href="../reference/caribouPopGrowth.html">caribouPopGrowth()</a></code> function parameters.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">numTimesteps</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
+<span><span class="va">stepLength</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span><span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
-<span><span class="va">AnthroChange</span> <span class="op">&lt;-</span> <span class="fl">5</span> <span class="co">#For illustration assume 5% increase in anthropogenic disturbance footprint each decade</span></span>
+<span><span class="va">AnthroChange</span> <span class="op">&lt;-</span> <span class="fl">5</span><span class="op">/</span><span class="fl">10</span> <span class="co">#For illustration assume 5% increase in anthropogenic disturbance footprint each decade</span></span>
 <span></span>
 <span><span class="co"># at each time,  sample demographic rates and project, save results</span></span>
 <span><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>N0 <span class="op">=</span> <span class="va">N0</span><span class="op">)</span></span>
@@ -302,14 +240,14 @@ or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816"
 <span>  <span class="va">covariates</span> <span class="op">&lt;-</span> <span class="va">disturbance</span></span>
 <span>  <span class="va">covariates</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">&lt;-</span> <span class="va">covariates</span><span class="op">$</span><span class="va">Anthro</span> <span class="op">+</span> <span class="va">AnthroChange</span> <span class="op">*</span> <span class="op">(</span><span class="va">t</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/demographicRates.html">demographicRates</a></span><span class="op">(</span></span>
+<span>  <span class="va">rateSamples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateNationalRates.html">estimateNationalRates</a></span><span class="op">(</span></span>
 <span>    covTable <span class="op">=</span> <span class="va">covariates</span>,</span>
 <span>    popGrowthPars <span class="op">=</span> <span class="va">popGrowthParsSmall</span>,</span>
 <span>    ignorePrecision <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    returnSample <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    useQuantiles <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">is.element</a></span><span class="op">(</span><span class="st">"N"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/hasName.html" class="external-link">hasName</a></span><span class="op">(</span><span class="va">pars</span>,<span class="st">"N"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pars</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">replicate</span>, <span class="va">N</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pars</span><span class="op">)</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"N0"</span></span>
 <span>  <span class="op">}</span></span>
@@ -317,14 +255,12 @@ or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816"
 <span>  <span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">pars</span>, </span>
 <span>                <span class="fu"><a href="../reference/caribouPopGrowth.html">caribouPopGrowth</a></span><span class="op">(</span><span class="va">pars</span><span class="op">$</span><span class="va">N0</span>,</span>
 <span>                                 R_bar <span class="op">=</span> <span class="va">pars</span><span class="op">$</span><span class="va">R_bar</span>, S_bar <span class="op">=</span> <span class="va">pars</span><span class="op">$</span><span class="va">S_bar</span>,</span>
-<span>                                 numSteps <span class="op">=</span> <span class="va">stepLength</span>, interannualVar <span class="op">=</span> <span class="cn">FALSE</span>, </span>
-<span>                                 K <span class="op">=</span> <span class="cn">FALSE</span>, probOption <span class="op">=</span> <span class="st">"continuous"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                                 numSteps <span class="op">=</span> <span class="va">stepLength</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># add results to output set</span></span>
-<span>  <span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pars</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">replicate</span>, <span class="va">Anthro</span>, <span class="va">S_bar</span>, <span class="va">R_bar</span>, <span class="va">N</span>, <span class="va">lambda</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pars</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">replicate</span>, <span class="va">Anthro</span>, <span class="va">N</span>, <span class="va">S_bar</span>,<span class="va">S_t</span>, <span class="va">R_bar</span>,<span class="va">R_t</span>,<span class="va">lambdaE</span>,<span class="va">lambda</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">fds</span><span class="op">$</span><span class="va">replicate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="st">""</span>, <span class="va">fds</span><span class="op">$</span><span class="va">replicate</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">fds</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Replicate"</span>, <span class="st">"anthro"</span>, <span class="st">"survival"</span>, <span class="st">"recruitment"</span>, <span class="st">"N"</span>, <span class="st">"lambda"</span><span class="op">)</span></span>
-<span>  <span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">fds</span>, <span class="op">!</span><span class="va">Replicate</span>, names_to <span class="op">=</span> <span class="st">"MetricTypeID"</span>, values_to <span class="op">=</span> <span class="st">"Amount"</span><span class="op">)</span></span>
+<span>  <span class="va">fds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">fds</span>, <span class="op">!</span><span class="va">replicate</span>, names_to <span class="op">=</span> <span class="st">"MetricTypeID"</span>, values_to <span class="op">=</span> <span class="st">"Amount"</span><span class="op">)</span></span>
 <span>  <span class="va">fds</span><span class="op">$</span><span class="va">Timestep</span> <span class="op">&lt;-</span> <span class="va">t</span> <span class="op">*</span> <span class="va">stepLength</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">t</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="va">fds</span></span>
@@ -334,36 +270,406 @@ or discrete numbers of animals, as in <a href="https://doi.org/10.1002/eap.2816"
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">popMetrics</span><span class="op">$</span><span class="va">MetricTypeID</span><span class="op">)</span></span>
-<span><span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span><span class="op">)</span></span>
-<span><span class="va">popMetrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">popMetrics</span>, <span class="op">!</span><span class="va">MetricTypeID</span> <span class="op">==</span> <span class="st">"N"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="caribouDemography_files/figure-html/changeOverTime-1.png" width="768"></p>
+<span><span class="va">popMetrics</span><span class="op">$</span><span class="va">Replicate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="va">popMetrics</span><span class="op">$</span><span class="va">replicate</span><span class="op">)</span></span>
+<span><span class="co"># popMetrics &lt;- subset(popMetrics, !MetricTypeID == "N")</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:changeOverTime"></span>
+<img src="caribouDemography_files/figure-html/changeOverTime-1.png" alt="Example demographic trajectories from the national model on a changing landscape. ‘lambda’ is realized population growth rate in the final year, and ‘lambdaE’ is expected population growth rate without interannual variation, density dependence or demographic stochasticity. ‘N’ is the number of adult females. ‘R_bar/S_bar’ are the expected recruitment (calf:cow ratio) and survival rates, ‘R_t/S_t’ are the recruitment and survival rates."><p class="caption">
+Figure 1.5: Example demographic trajectories from the national model on a changing landscape. ‘lambda’ is realized population growth rate in the final year, and ‘lambdaE’ is expected population growth rate without interannual variation, density dependence or demographic stochasticity. ‘N’ is the number of adult females. ‘R_bar/S_bar’ are the expected recruitment (calf:cow ratio) and survival rates, ‘R_t/S_t’ are the recruitment and survival rates.
+</p>
 </div>
-<div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</div>
+<div class="section level3" number="1.5">
+<h3 id="using-the-trajectoriesfromnational-wrapper-function-to-project-population-growth">
+<span class="header-section-number">1.5</span> Using the trajectoriesFromNational wrapper function to project population growth<a class="anchor" aria-label="anchor" href="#using-the-trajectoriesfromnational-wrapper-function-to-project-population-growth"></a>
+</h3>
+<p>The examples above show steps in the demographic modeling workflow. We also provide a <code>trajectoriesFromNational</code> wrapper function that samples the coefficients from the National model, calculates demographic rates given those coefficients and the level of disturbance, projects population growth using <code>caribouPopGrowth</code>, and returns summaries of the demographic rates (ref workflow diagram). If the disturbance scenario includes a Year column <code>trajectoriesFromNational</code> projects population growth over time, and also returns sample demographic trajectories. If year is not provided, population growth is projected for one year, and sample trajectories are not returned.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">natTraj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromNational.html">trajectoriesFromNational</a></span><span class="op">(</span>replicates <span class="op">=</span> <span class="fl">500</span>, </span>
+<span>                                    disturbance <span class="op">=</span> <span class="va">covTableSim</span>, interannualVar <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>                                    useQuantiles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># add year to return samples</span></span>
+<span><span class="va">natTraj35</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromNational.html">trajectoriesFromNational</a></span><span class="op">(</span>replicates <span class="op">=</span> <span class="fl">35</span>, </span>
+<span>                                    disturbance <span class="op">=</span> <span class="va">covTableSim</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>                                      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Year <span class="op">=</span> <span class="va">Anthro</span><span class="op">+</span><span class="fl">100</span><span class="op">*</span><span class="va">Fire_excl_anthro</span><span class="op">)</span>, </span>
+<span>                                    returnSamples <span class="op">=</span> <span class="cn">TRUE</span>, interannualVar <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>                                    useQuantiles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:withPrecisionWrapper"></span>
+<img src="caribouDemography_files/figure-html/withPrecisionWrapper-1.png" alt="Variation in expected survival and recruitment with disturbance, obtained using the trajectoriesFromNational wrapper function. See Figure 1.3 for details."><p class="caption">
+Figure 1.6: Variation in expected survival and recruitment with disturbance, obtained using the trajectoriesFromNational wrapper function. See Figure 1.3 for details.
+</p>
+</div>
+<p>Using the same scenario with anthropogenic disturbance footprint increasing by 5% per decade, we can also produce projections over a changing landscape with <code>trajectoriesFromNational</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">disturbance2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>step <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">40</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">disturbance</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Anthro <span class="op">=</span> <span class="va">Anthro</span> <span class="op">+</span> <span class="va">AnthroChange</span> <span class="op">*</span> <span class="va">step</span>, </span>
+<span>         Year <span class="op">=</span> <span class="va">step</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># set seed so vignette looks the same each time</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">popMetrics2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromNational.html">trajectoriesFromNational</a></span><span class="op">(</span>disturbance <span class="op">=</span> <span class="va">disturbance2</span>, replicates <span class="op">=</span> <span class="fl">500</span>, </span>
+<span>                                        useQuantiles <span class="op">=</span> <span class="cn">TRUE</span>,N0 <span class="op">=</span> <span class="fl">100</span>, numSteps <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">popMetrics2</span><span class="op">$</span><span class="va">summary</span> <span class="op">&lt;-</span> <span class="va">popMetrics2</span><span class="op">$</span><span class="va">summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MetricTypeID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Anthro"</span>, <span class="st">"N"</span>, <span class="st">"Sbar"</span>,<span class="st">"survival"</span>,<span class="st">"Rbar"</span>,<span class="st">"recruitment"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"lambda"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">names</span> <span class="op">&lt;-</span> <span class="va">popMetrics2</span><span class="op">$</span><span class="va">summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">MetricTypeID</span>,<span class="va">Parameter</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">popMetrics2</span><span class="op">$</span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">popMetrics2</span><span class="op">$</span><span class="va">samples</span>,<span class="va">names</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Replicate</span><span class="op">)</span><span class="op">)</span><span class="op">&lt;=</span><span class="fl">35</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">proj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">popMetrics2</span><span class="op">$</span><span class="va">summary</span>,</span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Year</span>,y<span class="op">=</span><span class="va">Mean</span>,ymin<span class="op">=</span><span class="va">lower</span>,ymax<span class="op">=</span><span class="va">upper</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"black"</span>,linewidth<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">popMetrics2</span><span class="op">$</span><span class="va">samples</span>,</span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Year</span>,y<span class="op">=</span><span class="va">Amount</span>,colour<span class="op">=</span><span class="va">Replicate</span>, group<span class="op">=</span><span class="va">Replicate</span><span class="op">)</span>,</span>
+<span>            inherit.aes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Parameter</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">proj</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:changeOverTime2"></span>
+<img src="caribouDemography_files/figure-html/changeOverTime2-1.png" alt="Example demographic trajectories and from the national model on a changing landscape, obtained using the trajectoriesFromNational wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples. Female population size is shown separately with a log scaled y axis to allow comparison of divergent trajectories."><p class="caption">
+Figure 1.7: Example demographic trajectories and from the national model on a changing landscape, obtained using the trajectoriesFromNational wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples. Female population size is shown separately with a log scaled y axis to allow comparison of divergent trajectories.
+</p>
+</div>
+</div>
+</div>
+<div class="section level2" number="2">
+<h2 id="demographic-rates-and-trajectories-from-bayesian-models">
+<span class="header-section-number">2</span> Demographic rates and trajectories from Bayesian models<a class="anchor" aria-label="anchor" href="#demographic-rates-and-trajectories-from-bayesian-models"></a>
 </h2>
-<p>Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
-Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
-Baltzer, J. L., Stewart, F. E. C., &amp; Hughes, J. (2022). Existing
-caribou habitat and demographic models need improvement for Ring of Fire
-impact assessment: A roadmap for improving the usefulness, transparency,
-and availability of models for conservation. <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link uri">https://doi.org/10.1101/2022.06.01.494350</a></p>
-<p>Ferrari S, Cribari-Neto F (2004) Beta Regression for Modelling Rates
-and Proportions. Journal of Applied Statistics 31:799–815. <a href="https://doi.org/10.1080/0266476042000214501" class="external-link uri">https://doi.org/10.1080/0266476042000214501</a></p>
-<p>Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
-Integration of national demographic-disturbance relationships and local
-data can improve caribou population viability projections and inform
-monitoring decisions. Ecological Informatics, 87, p.103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link uri">https://doi.org/10.1016/j.ecoinf.2025.103095</a></p>
-<p>Johnson, C.A., Sutherland, G.D., Neave, E., Leblond, M., Kirby, P.,
-Superbie, C. and McLoughlin, P.D., 2020. Science to inform policy:
-linking population dynamics to habitat for a threatened species in
-Canada. Journal of Applied Ecology, 57(7), pp.1314-1327. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link uri">https://doi.org/10.1111/1365-2664.13637</a></p>
-<p>Novomestky F, Nadarajah S (2016) Package ‘truncdist.’ Version
-1.0-2URL <a href="https://CRAN.R-project.org/package=truncdist" class="external-link uri">https://CRAN.R-project.org/package=truncdist</a></p>
-<p>Stewart, F.E., Micheletti, T., Cumming, S.G., Barros, C., Chubaty,
-A.M., Dookie, A.L., Duclos, I., Eddy, I., Haché, S., Hodson, J. and
-Hughes, J., 2023. Climate‐informed forecasts reveal dramatic local
-habitat shifts and population uncertainty for northern boreal caribou.
-Ecological Applications 33:e2816.<br><a href="https://doi.org/10.1002/eap.2816" class="external-link uri">https://doi.org/10.1002/eap.2816</a></p>
+<div class="section level3" number="2.1">
+<h3 id="getting-a-fitted-bboutools-logistic-model">
+<span class="header-section-number">2.1</span> Getting a fitted bboutools logistic model<a class="anchor" aria-label="anchor" href="#getting-a-fitted-bboutools-logistic-model"></a>
+</h3>
+<p>See <a href="https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html">Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models</a> vignette for an overview of the Bayesian models.
+For this example we use a bboutools logistic model and example data.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/" class="external-link">bboudata</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/poissonconsulting/bboutools" class="external-link">bboutools</a></span><span class="op">)</span></span>
+<span><span class="va">useSaved</span> <span class="op">&lt;-</span> <span class="cn">T</span> <span class="co"># option to skip slow step of fitting bboutools model</span></span>
+<span><span class="va">bbouInformativeFile</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"results/vignetteBbbouExample.rds"</span><span class="op">)</span></span>
+<span><span class="va">surv_data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bbousurv_a</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2010</span><span class="op">)</span></span>
+<span><span class="va">surv_data_add</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2017</span>, <span class="fl">2022</span><span class="op">)</span>, Month <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
+<span>                             PopulationName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">surv_data</span><span class="op">$</span><span class="va">PopulationName</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">surv_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">surv_data</span>, <span class="va">surv_data_add</span>, all.x <span class="op">=</span> <span class="cn">TRUE</span>, all.y <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">recruit_data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2010</span><span class="op">)</span></span>
+<span><span class="va">recruit_data_add</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>Year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2017</span>, <span class="fl">2022</span><span class="op">)</span>, PopulationName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">recruit_data</span><span class="op">$</span><span class="va">PopulationName</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">recruit_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">recruit_data</span>, <span class="va">recruit_data_add</span>, all.x <span class="op">=</span> <span class="cn">TRUE</span>, all.y <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="va">useSaved</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">bbouInformativeFile</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">bbouInformative</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">bbouInformativeFile</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">bbouInformative</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimateBayesianRates.html">estimateBayesianRates</a></span><span class="op">(</span><span class="va">surv_data</span>, <span class="va">recruit_data</span>,</span>
+<span>                                          return_mcmc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">dirname</a></span><span class="op">(</span><span class="va">bbouInformativeFile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">bbouInformative</span>, <span class="va">bbouInformativeFile</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level3" number="2.2">
+<h3 id="using-bboutools-to-project-population-growth">
+<span class="header-section-number">2.2</span> Using bboutools to project population growth<a class="anchor" aria-label="anchor" href="#using-bboutools-to-project-population-growth"></a>
+</h3>
+<p>The bboutools R package includes methods for projecting calf:cow ratios, recruitment, survival, and population growth rate. Note there is no population size, demographic stochasticity or density dependence in these projections.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">predict_calfcow</span> <span class="op">&lt;-</span> <span class="fu">bboutools</span><span class="fu">::</span><span class="fu"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_calf_cow_ratio.html" class="external-link">bb_predict_calf_cow_ratio</a></span><span class="op">(</span><span class="va">bbouInformative</span><span class="op">$</span><span class="va">recruit_fit</span>, year <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">bboutools</span><span class="fu">::</span><span class="fu"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_calf_cow_ratio.html" class="external-link">bb_plot_year_calf_cow_ratio</a></span><span class="op">(</span><span class="va">predict_calfcow</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:bboutoolsCalfCow"></span>
+<img src="caribouDemography_files/figure-html/bboutoolsCalfCow-1.png" alt="Calf:cow ratio projection from bboutools."><p class="caption">
+Figure 2.1: Calf:cow ratio projection from bboutools.
+</p>
+</div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">predict_recruitment</span> <span class="op">&lt;-</span> <span class="fu">bboutools</span><span class="fu">::</span><span class="fu"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_recruitment.html" class="external-link">bb_predict_recruitment</a></span><span class="op">(</span><span class="va">bbouInformative</span><span class="op">$</span><span class="va">recruit_fit</span>, year <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">bboutools</span><span class="fu">::</span><span class="fu"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_recruitment.html" class="external-link">bb_plot_year_recruitment</a></span><span class="op">(</span><span class="va">predict_recruitment</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:bboutoolsRecruitment"></span>
+<img src="caribouDemography_files/figure-html/bboutoolsRecruitment-1.png" alt="Recruitment projection from bboutools."><p class="caption">
+Figure 2.2: Recruitment projection from bboutools.
+</p>
+</div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">predict_survival</span> <span class="op">&lt;-</span> <span class="fu">bboutools</span><span class="fu">::</span><span class="fu"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival.html" class="external-link">bb_predict_survival</a></span><span class="op">(</span><span class="va">bbouInformative</span><span class="op">$</span><span class="va">surv_fit</span>, year <span class="op">=</span> <span class="cn">TRUE</span>, month <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">bboutools</span><span class="fu">::</span><span class="fu"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_survival.html" class="external-link">bb_plot_year_survival</a></span><span class="op">(</span><span class="va">predict_survival</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:bboutoolsSurvival"></span>
+<img src="caribouDemography_files/figure-html/bboutoolsSurvival-1.png" alt="Survival projection from bboutools."><p class="caption">
+Figure 2.3: Survival projection from bboutools.
+</p>
+</div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">predict_lambda</span> <span class="op">&lt;-</span> <span class="fu">bboutools</span><span class="fu">::</span><span class="fu"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_growth.html" class="external-link">bb_predict_growth</a></span><span class="op">(</span>survival <span class="op">=</span> <span class="va">bbouInformative</span><span class="op">$</span><span class="va">surv_fit</span>, recruitment <span class="op">=</span> <span class="va">bbouInformative</span><span class="op">$</span><span class="va">recruit_fit</span><span class="op">)</span></span>
+<span><span class="fu">bboutools</span><span class="fu">::</span><span class="fu"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_plot_year_growth.html" class="external-link">bb_plot_year_growth</a></span><span class="op">(</span><span class="va">predict_lambda</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Population growth rate"</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:bboutoolsLambda"></span>
+<img src="caribouDemography_files/figure-html/bboutoolsLambda-1.png" alt="Population growth rate from bboutools."><p class="caption">
+Figure 2.4: Population growth rate from bboutools.
+</p>
+</div>
+</div>
+<div class="section level3" number="2.3">
+<h3 id="using-the-trajectoriesfrombayesian-wrapper-function-to-project-population-growth">
+<span class="header-section-number">2.3</span> Using the trajectoriesFromBayesian wrapper function to project population growth<a class="anchor" aria-label="anchor" href="#using-the-trajectoriesfrombayesian-wrapper-function-to-project-population-growth"></a>
+</h3>
+<p>For convenience, to enable comparisons (e.g. <a href="https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html">Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models</a> vignette), and to integrate with other methods and workflows, we can use the <code>trajectoriesFromBayesian</code> wrapper function to get sample trajectories and summaries from our fitted bboutools model. Note that if we use only the information in the fitted model (that does not include initial population size) then the summary results (bands for Adult female survival, Recruitment and Population growth rate in Figure <a href="#fig:bayesTrajectoryPlot">2.5</a>) are identical to the bboutools projections (Figures <a href="#fig:bboutoolsCalfCow">2.1</a>, <a href="#fig:bboutoolsSurvival">2.3</a>, and <a href="#fig:bboutoolsLambda">2.4</a>). The returned example trajectories are derived from the MCMC samples. If we also provide initial population size information then the projection (by default) includes density dependence and demographic stochasticity <span class="citation">(<a href="#ref-dyson_effective_2026">Dyson et al. 2026</a>; <a href="#ref-hughes_integration_2025">Hughes et al. 2025</a>)</span> and populations can go extinct (Fig <a href="#fig:bayesTrajectoryPlotN">2.6</a>). Note that in this case the form of the growth model (density dependence &amp; demographic stochasticity, but not interannual variability) can be changed by setting <code>caribouPopGrowth</code> function parameters. The Bayesian MCMC samples include interannual variation in recruitment and survival, so no additional interannual variation is added by <code>caribouPopGrowth</code> in this case.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">popMetricsBayes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromBayesian.html">trajectoriesFromBayesian</a></span><span class="op">(</span><span class="va">bbouInformative</span><span class="op">)</span></span>
+<span><span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">summary</span> <span class="op">&lt;-</span> <span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MetricTypeID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sbar"</span>,<span class="st">"survival"</span>,<span class="st">"Rbar"</span>,<span class="st">"recruitment"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"lambda"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">names</span> <span class="op">&lt;-</span> <span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">MetricTypeID</span>,<span class="va">Parameter</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">names</span></span>
+<span><span class="co">#&gt;    MetricTypeID              Parameter</span></span>
+<span><span class="co">#&gt; 1        lambda Population growth rate</span></span>
+<span><span class="co">#&gt; 13   lambda_bar   Expected growth rate</span></span>
+<span><span class="co">#&gt; 25         Rbar   Expected recruitment</span></span>
+<span><span class="co">#&gt; 37  recruitment            Recruitment</span></span>
+<span><span class="co">#&gt; 49         Sbar      Expected survival</span></span>
+<span><span class="co">#&gt; 61     survival  Adult female survival</span></span>
+<span></span>
+<span><span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">samples</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MetricTypeID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sbar"</span>,<span class="st">"survival"</span>,<span class="st">"Rbar"</span>,</span>
+<span>                             <span class="st">"recruitment"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"lambda"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">names</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Replicate</span><span class="op">)</span><span class="op">)</span><span class="op">&lt;=</span><span class="fl">35</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">proj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">summary</span>,</span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Year</span>,y<span class="op">=</span><span class="va">Mean</span>,ymin<span class="op">=</span><span class="va">lower</span>,ymax<span class="op">=</span><span class="va">upper</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"black"</span>,linewidth<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">samples</span>,</span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Year</span>,y<span class="op">=</span><span class="va">Amount</span>,colour<span class="op">=</span><span class="va">Replicate</span>,group<span class="op">=</span><span class="va">Replicate</span><span class="op">)</span>, inherit.aes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Parameter</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="va">proj</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:bayesTrajectoryPlot"></span>
+<img src="caribouDemography_files/figure-html/bayesTrajectoryPlot-1.png" alt="Example demographic trajectories from a fitted bboutools model, obtained using the trajectoriesFromBayesian wrapper function. Bands are 95% predictive intervals."><p class="caption">
+Figure 2.5: Example demographic trajectories from a fitted bboutools model, obtained using the trajectoriesFromBayesian wrapper function. Bands are 95% predictive intervals.
+</p>
+</div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">popMetricsBayes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromBayesian.html">trajectoriesFromBayesian</a></span><span class="op">(</span><span class="va">bbouInformative</span>,N0<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">summary</span> <span class="op">&lt;-</span> <span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MetricTypeID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"survival"</span>,<span class="st">"recruitment"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"lambda"</span>,<span class="st">"N"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">names</span> <span class="op">&lt;-</span> <span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">MetricTypeID</span>,<span class="va">Parameter</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">names</span></span>
+<span><span class="co">#&gt;    MetricTypeID              Parameter</span></span>
+<span><span class="co">#&gt; 1        lambda Population growth rate</span></span>
+<span><span class="co">#&gt; 13   lambda_bar   Expected growth rate</span></span>
+<span><span class="co">#&gt; 25            N Female population size</span></span>
+<span><span class="co">#&gt; 37  recruitment            Recruitment</span></span>
+<span><span class="co">#&gt; 49     survival  Adult female survival</span></span>
+<span></span>
+<span><span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">samples</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MetricTypeID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"survival"</span>,<span class="st">"recruitment"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"lambda"</span>,<span class="st">"N"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">names</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Replicate</span><span class="op">)</span><span class="op">)</span><span class="op">&lt;=</span><span class="fl">35</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">proj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">summary</span>,</span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Year</span>,y<span class="op">=</span><span class="va">Mean</span>,ymin<span class="op">=</span><span class="va">lower</span>,ymax<span class="op">=</span><span class="va">upper</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>colour<span class="op">=</span><span class="st">"black"</span>,linewidth<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">popMetricsBayes</span><span class="op">$</span><span class="va">samples</span>,</span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Year</span>,y<span class="op">=</span><span class="va">Amount</span>,colour<span class="op">=</span><span class="va">Replicate</span>,group<span class="op">=</span><span class="va">Replicate</span><span class="op">)</span>, inherit.aes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Parameter</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="va">proj</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:bayesTrajectoryPlotN"></span>
+<img src="caribouDemography_files/figure-html/bayesTrajectoryPlotN-1.png" alt="Example demographic trajectories from a fitted bboutools model, obtained using the trajectoriesFromBayesian wrapper function, with initial population size of 100. Bands are 95% predictive intervals."><p class="caption">
+Figure 2.6: Example demographic trajectories from a fitted bboutools model, obtained using the trajectoriesFromBayesian wrapper function, with initial population size of 100. Bands are 95% predictive intervals.
+</p>
+</div>
+</div>
+<div class="section level3" number="2.4">
+<h3 id="using-the-trajectoriesfromsummaries-wrapper-function-to-project-population-growth">
+<span class="header-section-number">2.4</span> Using the trajectoriesFromSummaries wrapper function to project population growth<a class="anchor" aria-label="anchor" href="#using-the-trajectoriesfromsummaries-wrapper-function-to-project-population-growth"></a>
+</h3>
+<p>To allow for the possibility of using fitted Bayesian models as a starting point for exploring demographic scenarios, the <code>estimateBayesianRates</code> function also returns a list of model parameters. The <code>trajectoriesFromSummary</code> projects outcomes from a model defined by these parameters. When parameters from a fitted Bayesian model are used, expected outcomes from <code>trajectoriesFromSummary</code> and <code>trajectoriesFromBayesian</code> are the same (Figure <a href="#fig:summaryTrajectoryBaseEPlot">2.7</a>), but <code>trajectoriesFromSummary</code> projections do not include variation in interannual variation over time (Figure <a href="#fig:summaryTrajectoryBasePlot">2.8</a>). <code>trajectoriesFromSummary</code> allows us to explore the implications of changing model parameters (Fig <a href="#fig:summaryTrajectoryAdjustPlot">2.9</a>).</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pt</span> <span class="op">&lt;-</span> <span class="va">bbouInformative</span><span class="op">$</span><span class="va">parList</span></span>
+<span><span class="va">trajFromSummaryBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromSummary.html">trajectoriesFromSummary</a></span><span class="op">(</span>replicates<span class="op">=</span><span class="fl">1000</span>,N0<span class="op">=</span><span class="fl">100</span>,Rbar<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">Rbar</span>,</span>
+<span>                                               Sbar<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">Sbar</span>, Riv<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">Riv</span>,Siv<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">Siv</span>,</span>
+<span>                                               type<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">type</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Compiling model graph</span></span>
+<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
+<span><span class="co">#&gt;    Allocating nodes</span></span>
+<span><span class="co">#&gt; Graph information:</span></span>
+<span><span class="co">#&gt;    Observed stochastic nodes: 0</span></span>
+<span><span class="co">#&gt;    Unobserved stochastic nodes: 14</span></span>
+<span><span class="co">#&gt;    Total graph size: 111</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Initializing model</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Compiling model graph</span></span>
+<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
+<span><span class="co">#&gt;    Allocating nodes</span></span>
+<span><span class="co">#&gt; Graph information:</span></span>
+<span><span class="co">#&gt;    Observed stochastic nodes: 0</span></span>
+<span><span class="co">#&gt;    Unobserved stochastic nodes: 14</span></span>
+<span><span class="co">#&gt;    Total graph size: 111</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Initializing model</span></span>
+<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compareTrajectories.html">compareTrajectories</a></span><span class="op">(</span><span class="va">trajFromSummaryBase</span>, simInitial <span class="op">=</span> <span class="va">popMetricsBayes</span><span class="op">)</span></span>
+<span><span class="va">typeLabs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Summary"</span>, <span class="st">"Bayes"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">recE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Expected recruitment"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span><span class="op">)</span></span>
+<span><span class="va">survE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Expected survival"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span><span class="op">)</span></span>
+<span><span class="va">lamE</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Expected growth rate"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span>,</span>
+<span>                               lowBound <span class="op">=</span> <span class="fl">0.5</span>, highBound <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="va">recE</span> <span class="op">/</span><span class="va">survE</span> <span class="op">/</span> <span class="va">lamE</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:summaryTrajectoryBaseEPlot"></span>
+<img src="caribouDemography_files/figure-html/summaryTrajectoryBaseEPlot-1.png" alt="Comparison of expected demographic projections obtained using the trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes) wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500 samples."><p class="caption">
+Figure 2.7: Comparison of expected demographic projections obtained using the trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes) wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500 samples.
+</p>
+</div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span><span class="op">)</span></span>
+<span><span class="va">surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span><span class="op">)</span></span>
+<span><span class="va">lam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span>,</span>
+<span>                               lowBound <span class="op">=</span> <span class="fl">0.5</span>, highBound <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Female population size"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span>,</span>
+<span>                             lowBound <span class="op">=</span> <span class="fl">0</span>, highBound <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span><span class="va">rec</span> <span class="op">/</span><span class="va">surv</span> <span class="op">/</span> <span class="va">lam</span> <span class="op">/</span> <span class="va">N</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:summaryTrajectoryBasePlot"></span>
+<img src="caribouDemography_files/figure-html/summaryTrajectoryBasePlot-1.png" alt="Comparison of demographic projections obtained using the trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes) wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500 samples."><p class="caption">
+Figure 2.8: Comparison of demographic projections obtained using the trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes) wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500 samples.
+</p>
+</div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pm.startYear</span> <span class="op">&lt;-</span> <span class="fl">2015</span>; <span class="va">pm.endYear</span> <span class="op">&lt;-</span> <span class="fl">2022</span></span>
+<span><span class="va">RbarAdjust</span> <span class="op">&lt;-</span> <span class="va">pt</span><span class="op">$</span><span class="va">Rbar</span></span>
+<span><span class="va">RbarAdjust</span><span class="op">$</span><span class="va">adjust.mu</span> <span class="op">&lt;-</span> <span class="fl">0.1</span>; <span class="va">RbarAdjust</span><span class="op">$</span><span class="va">adjust.sd</span> <span class="op">&lt;-</span> <span class="fl">0.01</span></span>
+<span><span class="va">RbarAdjust</span><span class="op">$</span><span class="va">adjust.mu</span><span class="op">[</span><span class="op">(</span><span class="va">RbarAdjust</span><span class="op">$</span><span class="va">Year</span><span class="op">&lt;</span><span class="va">pm.startYear</span><span class="op">)</span><span class="op">|</span><span class="op">(</span><span class="va">RbarAdjust</span><span class="op">$</span><span class="va">Year</span><span class="op">&gt;=</span><span class="va">pm.endYear</span><span class="op">)</span><span class="op">]</span><span class="op">=</span><span class="fl">0</span></span>
+<span><span class="va">RbarAdjust</span><span class="op">$</span><span class="va">adjust.sd</span><span class="op">[</span><span class="op">(</span><span class="va">RbarAdjust</span><span class="op">$</span><span class="va">Year</span><span class="op">&lt;</span><span class="va">pm.startYear</span><span class="op">)</span><span class="op">|</span><span class="op">(</span><span class="va">RbarAdjust</span><span class="op">$</span><span class="va">Year</span><span class="op">&gt;=</span><span class="va">pm.endYear</span><span class="op">)</span><span class="op">]</span><span class="op">=</span><span class="fl">0</span></span>
+<span><span class="va">NAdjust</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">PopulationName</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">RbarAdjust</span><span class="op">$</span><span class="va">PopulationName</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">NAdjust</span><span class="op">$</span><span class="va">N0</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">NAdjust</span><span class="op">$</span><span class="va">N.sd</span> <span class="op">&lt;-</span> <span class="fl">0.3</span><span class="op">*</span><span class="va">NAdjust</span><span class="op">$</span><span class="va">N0</span></span>
+<span><span class="va">NAdjust</span><span class="op">$</span><span class="va">N.lower</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
+<span><span class="va">NAdjust</span><span class="op">$</span><span class="va">N.upper</span> <span class="op">&lt;-</span> <span class="fl">200</span></span>
+<span><span class="va">trajFromSummaryAdjust</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromSummary.html">trajectoriesFromSummary</a></span><span class="op">(</span>replicates<span class="op">=</span><span class="fl">1000</span>,N0<span class="op">=</span><span class="va">NAdjust</span>,Rbar<span class="op">=</span><span class="va">RbarAdjust</span>,</span>
+<span>                                               Sbar<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">Sbar</span>,</span>
+<span>                                               Riv<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">Riv</span>,Siv<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">Siv</span>,</span>
+<span>                                               type<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">type</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Compiling model graph</span></span>
+<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
+<span><span class="co">#&gt;    Allocating nodes</span></span>
+<span><span class="co">#&gt; Graph information:</span></span>
+<span><span class="co">#&gt;    Observed stochastic nodes: 0</span></span>
+<span><span class="co">#&gt;    Unobserved stochastic nodes: 14</span></span>
+<span><span class="co">#&gt;    Total graph size: 111</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Initializing model</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Compiling model graph</span></span>
+<span><span class="co">#&gt;    Resolving undeclared variables</span></span>
+<span><span class="co">#&gt;    Allocating nodes</span></span>
+<span><span class="co">#&gt; Graph information:</span></span>
+<span><span class="co">#&gt;    Observed stochastic nodes: 0</span></span>
+<span><span class="co">#&gt;    Unobserved stochastic nodes: 14</span></span>
+<span><span class="co">#&gt;    Total graph size: 117</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Initializing model</span></span>
+<span><span class="va">out_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compareTrajectories.html">compareTrajectories</a></span><span class="op">(</span><span class="va">trajFromSummaryAdjust</span>, simInitial <span class="op">=</span> <span class="va">trajFromSummaryBase</span><span class="op">)</span></span>
+<span><span class="va">typeLabs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Adjust"</span>, <span class="st">"Base"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Recruitment"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span><span class="op">)</span></span>
+<span><span class="va">surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Adult female survival"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span><span class="op">)</span></span>
+<span><span class="va">lam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Population growth rate"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span>,</span>
+<span>                               lowBound <span class="op">=</span> <span class="fl">0.5</span>, highBound <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotCompareTrajectories.html">plotCompareTrajectories</a></span><span class="op">(</span><span class="va">out_tbls</span>, <span class="st">"Female population size"</span>, typeLabels <span class="op">=</span> <span class="va">typeLabs</span>,</span>
+<span>                             lowBound <span class="op">=</span> <span class="fl">0</span>, highBound <span class="op">=</span> <span class="fl">700</span><span class="op">)</span></span>
+<span><span class="va">rec</span> <span class="op">/</span><span class="va">surv</span> <span class="op">/</span> <span class="va">lam</span> <span class="op">/</span> <span class="va">N</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:summaryTrajectoryAdjustPlot"></span>
+<img src="caribouDemography_files/figure-html/summaryTrajectoryAdjustPlot-1.png" alt="Effects of increasing recruitment after 2015 and increasing variation in initial population size on demographic projections obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."><p class="caption">
+Figure 2.9: Effects of increasing recruitment after 2015 and increasing variation in initial population size on demographic projections obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples.
+</p>
+</div>
+</div>
+<div class="section level3" number="2.5">
+<h3 id="using-the-trajectoriesfromsummariesforapp-wrapper-function-to-project-population-growth">
+<span class="header-section-number">2.5</span> Using the trajectoriesFromSummariesForApp wrapper function to project population growth<a class="anchor" aria-label="anchor" href="#using-the-trajectoriesfromsummariesforapp-wrapper-function-to-project-population-growth"></a>
+</h3>
+<p>The <code>trajectoriesFromSummaryForApp</code> wrapper function is less flexible than <code>trajectoriesFromSummary</code>, and does not allow changes in demographic rates over time. It is used to enable scenario exploration in our <a href="https://github.com/LandSciTech/CaribouDemographyBasicApp" class="external-link">Boreal Caribou Demographic Projection Explorer</a>.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pt</span> <span class="op">&lt;-</span> <span class="va">bbouInformative</span><span class="op">$</span><span class="va">parTab</span>;<span class="va">pt</span></span>
+<span><span class="co">#&gt;   PopulationName     R_bar     R_sd R_iv_mean R_iv_shape R_bar_lower</span></span>
+<span><span class="co">#&gt; 1              A 0.1957146 0.223214 0.3769658   2.237384   0.1357969</span></span>
+<span><span class="co">#&gt;   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper</span></span>
+<span><span class="co">#&gt; 1   0.2780221 0.9404699 0.5481804 0.5339908   1.141895   0.8566462   0.9804958</span></span>
+<span><span class="co">#&gt;   N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears</span></span>
+<span><span class="co">#&gt; 1 NA           NA         12            NA            12</span></span>
+<span></span>
+<span><span class="va">popMetricsBase</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromSummaryForApp.html">trajectoriesFromSummaryForApp</a></span><span class="op">(</span>numSteps<span class="op">=</span><span class="fl">10</span>,replicates<span class="op">=</span><span class="fl">500</span>,N0<span class="op">=</span><span class="fl">500</span>,R_bar<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">R_bar</span>,S_bar<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">S_bar</span>,</span>
+<span>                                             R_sd<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">R_sd</span>,S_sd<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">S_sd</span>,</span>
+<span>                                             R_iv_mean<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">R_iv_mean</span>,R_iv_shape<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">R_iv_shape</span>,</span>
+<span>                                             S_iv_mean<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">S_iv_mean</span>,S_iv_shape<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">S_iv_shape</span>,</span>
+<span>                                             scn_nm<span class="op">=</span><span class="st">"base"</span>,doSummary<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span><span class="va">popMetricsS85</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromSummaryForApp.html">trajectoriesFromSummaryForApp</a></span><span class="op">(</span>numSteps<span class="op">=</span><span class="fl">10</span>,replicates<span class="op">=</span><span class="fl">500</span>,N0<span class="op">=</span><span class="fl">500</span>,R_bar<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">R_bar</span>,S_bar<span class="op">=</span><span class="fl">0.85</span>,</span>
+<span>                                             R_sd<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">R_sd</span>,S_sd<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">S_sd</span>,</span>
+<span>                                             R_iv_mean<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">R_iv_mean</span>,R_iv_shape<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">R_iv_shape</span>,</span>
+<span>                                             S_iv_mean<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">S_iv_mean</span>,S_iv_shape<span class="op">=</span><span class="va">pt</span><span class="op">$</span><span class="va">S_iv_shape</span>,</span>
+<span>                                             scn_nm<span class="op">=</span><span class="st">"S85"</span>,doSummary<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span><span class="va">scnCompare</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>summary<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">popMetricsBase</span><span class="op">$</span><span class="va">summary</span>,<span class="va">popMetricsS85</span><span class="op">$</span><span class="va">summary</span><span class="op">)</span>,</span>
+<span>                   samples<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">popMetricsBase</span><span class="op">$</span><span class="va">samples</span>,<span class="va">popMetricsS85</span><span class="op">$</span><span class="va">samples</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">scnCompare</span><span class="op">$</span><span class="va">summary</span> <span class="op">&lt;-</span> <span class="va">scnCompare</span><span class="op">$</span><span class="va">summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">MetricTypeID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Anthro"</span>, <span class="st">"N"</span>, <span class="st">"Sbar"</span>,<span class="st">"survival"</span>,<span class="st">"Rbar"</span>,<span class="st">"recruitment"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"lambda"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">names</span> <span class="op">&lt;-</span> <span class="va">scnCompare</span><span class="op">$</span><span class="va">summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">MetricTypeID</span>,<span class="va">Parameter</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span>;<span class="va">names</span></span>
+<span><span class="co">#&gt;    MetricTypeID              Parameter</span></span>
+<span><span class="co">#&gt; 1        lambda Population growth rate</span></span>
+<span><span class="co">#&gt; 11   lambda_bar   Expected growth rate</span></span>
+<span><span class="co">#&gt; 21            N Female population size</span></span>
+<span><span class="co">#&gt; 31  recruitment            Recruitment</span></span>
+<span><span class="co">#&gt; 41     survival  Adult female survival</span></span>
+<span><span class="va">scnCompare</span><span class="op">$</span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">scnCompare</span><span class="op">$</span><span class="va">samples</span>,<span class="va">names</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Replicate</span><span class="op">)</span><span class="op">)</span><span class="op">&lt;=</span><span class="fl">25</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">proj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">scnCompare</span><span class="op">$</span><span class="va">summary</span>,</span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Year</span>,y<span class="op">=</span><span class="va">Mean</span>,ymin<span class="op">=</span><span class="va">lower</span>,ymax<span class="op">=</span><span class="va">upper</span>,fill<span class="op">=</span><span class="va">PopulationName</span>,group<span class="op">=</span><span class="va">PopulationName</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth<span class="op">=</span><span class="fl">2</span>,colour<span class="op">=</span><span class="st">"black"</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">scnCompare</span><span class="op">$</span><span class="va">samples</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Year</span>,y<span class="op">=</span><span class="va">Amount</span>,colour<span class="op">=</span><span class="va">PopulationName</span>,group<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">Replicate</span>,<span class="va">PopulationName</span><span class="op">)</span>,ymin<span class="op">=</span><span class="va">Amount</span>,ymax<span class="op">=</span><span class="va">Amount</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Parameter</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">proj</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:summaryTrajectoryForAppPlot"></span>
+<img src="caribouDemography_files/figure-html/summaryTrajectoryForAppPlot-1.png" alt="Comparison of demographic trajectories from a fitted bboutools model (base) and a scenario in which expected survival is increased to 85% (S85), obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."><p class="caption">
+Figure 2.10: Comparison of demographic trajectories from a fitted bboutools model (base) and a scenario in which expected survival is increased to 85% (S85), obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples.
+</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-dyson_effective_2026" class="csl-entry">
+Dyson, Matt, Sarah Endicott, Craig Simpkins, Julie W. Turner, Stephanie Avery-Gomm, Cheryl A. Johnson, Mathieu Leblond, et al. 2026. <span>“Effective Conservation Decisions Require Models Designed for Purpose: A Case Study of Boreal Caribou in <span>Ontario</span>’s <span>Ring</span> of <span>Fire</span>.”</span> <em>Ecology and Evolution</em> In press. <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">https://doi.org/10.1101/2022.06.01.494350</a>.
+</div>
+<div id="ref-ferrari_beta_2004" class="csl-entry">
+Ferrari, Silvia, and Francisco Cribari-Neto. 2004. <span>“Beta <span>Regression</span> for <span>Modelling</span> <span>Rates</span> and <span>Proportions</span>.”</span> <em>Journal of Applied Statistics</em> 31 (7): 799–815. <a href="https://doi.org/10.1080/0266476042000214501" class="external-link">https://doi.org/10.1080/0266476042000214501</a>.
+</div>
+<div id="ref-hughes_integration_2025" class="csl-entry">
+Hughes, Josie, Sarah Endicott, Anna M. Calvert, and Cheryl A. Johnson. 2025. <span>“Integration of National Demographic-Disturbance Relationships and Local Data Can Improve Caribou Population Viability Projections and Inform Monitoring Decisions.”</span> <em>Ecological Informatics</em> 87 (July): 103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">https://doi.org/10.1016/j.ecoinf.2025.103095</a>.
+</div>
+<div id="ref-johnson_science_2020" class="csl-entry">
+Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, Mathieu Leblond, Patrick Kirby, Clara Superbie, and Philip D. McLoughlin. 2020. <span>“Science to Inform Policy: <span>Linking</span> Population Dynamics to Habitat for a Threatened Species in <span>Canada</span>.”</span> <em>Journal of Applied Ecology</em> 57 (7): 1314–27. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link">https://doi.org/10.1111/1365-2664.13637</a>.
+</div>
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -376,7 +682,7 @@ Ecological Applications 33:e2816.<br><a href="https://doi.org/10.1002/eap.2816" 
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

@@ -1,0 +1,79 @@
+# Extract results
+
+Extract results from CaribouHabitat or DisturbanceMetrics object.
+
+## Usage
+
+``` r
+results(x, ...)
+
+# S4 method for class 'DisturbanceMetrics'
+results(x, type = "disturbanceMetrics")
+```
+
+## Arguments
+
+- x:
+
+  A CaribouHabitat or DisturbanceMetrics object.
+
+- ...:
+
+  arguments passed to methods
+
+- type:
+
+  string. The name of the slot to return. If x is a CaribouHabitat
+  object the default is "both" and the habitatUse and processedData will
+  be returned as a RasterStack.
+
+## Value
+
+By default a multi-layer SpatRaster if x is a CaribouHabitat object and
+a data.frame if x is a DisturbanceMetrics object.
+
+## See also
+
+Functions for calculating disturbance:
+[`DisturbanceMetrics-class`](https://landscitech.github.io/caribouMetrics/reference/DisturbanceMetrics-class.md),
+[`disturbanceMetrics()`](https://landscitech.github.io/caribouMetrics/reference/disturbanceMetrics.md),
+[`loadSpatialInputs()`](https://landscitech.github.io/caribouMetrics/reference/loadSpatialInputs.md),
+[`rasterizeLineDensity()`](https://landscitech.github.io/caribouMetrics/reference/rasterizeLineDensity.md),
+[`reclassDist()`](https://landscitech.github.io/caribouMetrics/reference/reclassDist.md),
+[`updateDisturbance()`](https://landscitech.github.io/caribouMetrics/reference/updateDisturbance.md)
+
+## Examples
+
+``` r
+# create example rasters for disturbance metrics
+lc <- terra::rast(nrows = 10, ncols = 10, xmin = 0, xmax = 10, ymin = 0,
+                  ymax = 10, crs = "EPSG:5070")
+nd <- lc
+nd[1:3, 1:3] <- 1
+ad <- lc
+ad[3:5, 3:5] <- 1
+lc[] <- 1
+
+# create sf objects
+lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10, 10), 
+                                                            ncol = 2, byrow = TRUE))),
+                              crs = 5070))
+projPol <- sf::st_sf(sf::st_as_sfc(sf::st_bbox(ad)))
+
+# calculate disturbance
+dm <- disturbanceMetrics(landCover = lc,
+                         linFeat = lf,
+                         natDist = nd,
+                         anthroDist = ad,
+                         projectPoly = projPol,
+                         padFocal = TRUE,
+                         bufferWidth = 1)
+#> buffering anthropogenic disturbance
+#> calculating disturbance metrics
+
+# default is disturbance metrics table
+resDM <- results(dm)
+
+# can get other slots as well
+resDMrasters <- results(dm, type = "processedData")
+```
