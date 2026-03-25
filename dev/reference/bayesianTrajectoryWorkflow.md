@@ -147,150 +147,38 @@ Caribou demography functions:
   )
 #> Warning: requested year range: 1986 - 2016 does not match recruitment data year range:  1990 - 2016
 #> Warning: missing years of recruitment data: 1986, 1987, 1988, 1989
-#> Registered S3 methods overwritten by 'mcmcr':
-#>   method               from 
-#>   as.mcmc.nlists       nlist
-#>   as.mcmc.list.mcarray rjags
-#> warning: value of stochastic node FemaleYearlings[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[1]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[2]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[3]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[4]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[1]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[2]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[3]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[4]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[1]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[2]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[3]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[4]: logProb is NA or NaN.
-#> warning: value of deterministic node AdultsFemales[1]: value is NA or NaN even after trying to calculate.
-#> warning: value of deterministic node AdultsFemales[2]: value is NA or NaN even after trying to calculate.
-#> warning: value of deterministic node AdultsFemales[3]: value is NA or NaN even after trying to calculate.
-#> warning: value of deterministic node AdultsFemales[4]: value is NA or NaN even after trying to calculate.
-#> warning: value of stochastic node Calves[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[1]: logProb is NA or NaN.
-#> warning: value of stochastic node Calves[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[2]: logProb is NA or NaN.
-#> warning: value of stochastic node Calves[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[3]: logProb is NA or NaN.
-#> warning: value of stochastic node Calves[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[4]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[1]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[2]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[3]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[4]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[1]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[2]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[3]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[4]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[1]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[2]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[3]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[4]: logProb is NA or NaN.
-#> warning: value of deterministic node AdultsFemales[1]: value is NA or NaN even after trying to calculate.
-#> warning: value of deterministic node AdultsFemales[2]: value is NA or NaN even after trying to calculate.
-#> warning: value of deterministic node AdultsFemales[3]: value is NA or NaN even after trying to calculate.
-#> warning: value of deterministic node AdultsFemales[4]: value is NA or NaN even after trying to calculate.
-#> warning: value of stochastic node Calves[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[1]: logProb is NA or NaN.
-#> warning: value of stochastic node Calves[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[2]: logProb is NA or NaN.
-#> warning: value of stochastic node Calves[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[3]: logProb is NA or NaN.
-#> warning: value of stochastic node Calves[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[4]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[1]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[2]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[3]: logProb is NA or NaN.
-#> warning: value of stochastic node FemaleYearlings[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node FemaleYearlings[4]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[1]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[2]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[3]: logProb is NA or NaN.
-#> warning: value of stochastic node Cows[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Cows[4]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[1]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[2]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[3]: logProb is NA or NaN.
-#> warning: value of stochastic node OtherAdultsFemales[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node OtherAdultsFemales[4]: logProb is NA or NaN.
-#> warning: value of deterministic node AdultsFemales[1]: value is NA or NaN even after trying to calculate.
-#> warning: value of deterministic node AdultsFemales[2]: value is NA or NaN even after trying to calculate.
-#> warning: value of deterministic node AdultsFemales[3]: value is NA or NaN even after trying to calculate.
-#> warning: value of deterministic node AdultsFemales[4]: value is NA or NaN even after trying to calculate.
-#> warning: value of stochastic node Calves[1]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[1]: logProb is NA or NaN.
-#> warning: value of stochastic node Calves[2]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[2]: logProb is NA or NaN.
-#> warning: value of stochastic node Calves[3]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[3]: logProb is NA or NaN.
-#> warning: value of stochastic node Calves[4]: value is NA or NaN even after trying to simulate.
-#> warning: problem initializing stochastic node Calves[4]: logProb is NA or NaN.
 #> Warning: no non-missing arguments to max; returning -Inf
   str(mod, max.level = 2)
 #> List of 4
 #>  $ result :List of 4
-#>   ..$ summary     :'data.frame': 310 obs. of  8 variables:
-#>   ..$ surv_data   :'data.frame': 372 obs. of  9 variables:
-#>   ..$ recruit_data: tibble [31 × 9] (S3: tbl_df/tbl/data.frame)
+#>   ..$ summary     :'data.frame': 300 obs. of  8 variables:
+#>   ..$ surv_data   :'data.frame': 363 obs. of  8 variables:
+#>   ..$ recruit_data:'data.frame': 30 obs. of  8 variables:
 #>   ..$ popInfo     :'data.frame': 3000 obs. of  4 variables:
 #>  $ inData :List of 1
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
-#>   ..$ R_bar         : num 0.189
-#>   ..$ R_sd          : num 0.086
-#>   ..$ R_iv_mean     : num 0.339
-#>   ..$ R_iv_shape    : num 17.2
-#>   ..$ R_bar_lower   : num 0.164
-#>   ..$ R_bar_upper   : num 0.215
-#>   ..$ S_bar         : num 0.871
-#>   ..$ S_sd          : num 0.163
-#>   ..$ S_iv_mean     : num 0.317
-#>   ..$ S_iv_shape    : num 2.61
-#>   ..$ S_bar_lower   : num 0.833
-#>   ..$ S_bar_upper   : num 0.904
+#>   ..$ R_bar         : num 0.198
+#>   ..$ R_sd          : num 0.0847
+#>   ..$ R_iv_mean     : num 0.319
+#>   ..$ R_iv_shape    : num 14.4
+#>   ..$ R_bar_lower   : num 0.171
+#>   ..$ R_bar_upper   : num 0.224
+#>   ..$ S_bar         : num 0.873
+#>   ..$ S_sd          : num 0.171
+#>   ..$ S_iv_mean     : num 0.346
+#>   ..$ S_iv_shape    : num 4.09
+#>   ..$ S_bar_lower   : num 0.832
+#>   ..$ S_bar_upper   : num 0.908
 #>   ..$ N0            : logi NA
-#>   ..$ nCollarYears  : num 900
+#>   ..$ nCollarYears  : int NA
 #>   ..$ nSurvYears    : int 31
 #>   ..$ nCowsAllYears : int NA
 #>   ..$ nRecruitYears : int 31
 #>  $ parList:List of 5
-#>   ..$ Rbar:'data.frame': 31 obs. of  7 variables:
-#>   ..$ Sbar:'data.frame': 31 obs. of  7 variables:
+#>   ..$ Rbar:'data.frame': 27 obs. of  7 variables:
+#>   ..$ Sbar:'data.frame': 27 obs. of  7 variables:
 #>   ..$ Siv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ Riv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ type: chr "bbou"
@@ -319,8 +207,8 @@ Caribou demography functions:
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 29
-#>    Unobserved stochastic nodes: 70
+#>    Observed stochastic nodes: 20
+#>    Unobserved stochastic nodes: 79
 #>    Total graph size: 694
 #> 
 #> Initializing model

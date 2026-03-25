@@ -326,7 +326,7 @@ for (t in 1:numTimesteps) {
     returnSample = TRUE,
     useQuantiles = TRUE
   )
-  if (is.element("N", names(pars))) {
+  if (hasName(pars,"N")) {
     pars <- subset(pars, select = c(replicate, N))
     names(pars)[names(pars) == "N"] <- "N0"
   }
@@ -458,19 +458,6 @@ allow comparison of divergent trajectories.
 
 ## 2 Demographic rates and trajectories from Bayesian models
 
-NOTE: To enable the QC app project and others we made several changes to
-bboutools. At present these examples only work with our modified version
-of bboutools. bboutools developers are integrating the changes into
-their main package, with an update to be released in spring 2026. Once
-they have finalized their methods and workflows we will update our code,
-tests, and documentation to be consistent with their updated package.
-Until all that is done these tools remain a work in progress - they
-should only be used by people who won’t be surprised or upset when we
-make changes. It is also important to note that we have very little
-capacity for user support at this time; time we spend supporting users
-will will delay progress on building, documenting, testing and
-publishing the tools.
-
 ### 2.1 Getting a fitted bboutools logistic model
 
 See [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian
@@ -487,12 +474,9 @@ surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
 surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
                              PopulationName = unique(surv_data$PopulationName))
 surv_data <- merge(surv_data, surv_data_add, all.x = TRUE, all.y = TRUE)
-surv_data$StartTotal[is.na(surv_data$StartTotal)] <- 1
 recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
 recruit_data_add <- expand.grid(Year = seq(2017, 2022), PopulationName = unique(recruit_data$PopulationName))
 recruit_data <- merge(recruit_data, recruit_data_add, all.x = TRUE, all.y = TRUE)
-recruit_data$Month[is.na(recruit_data$Month)] <- 3
-recruit_data$Day[is.na(recruit_data$Day)] <- 15
 if (useSaved & file.exists(bbouInformativeFile)) {
   bbouInformative <- readRDS(bbouInformativeFile)
 } else {
@@ -565,21 +549,20 @@ we use only the information in the fitted model (that does not include
 initial population size) then the summary results (bands for Adult
 female survival, Recruitment and Population growth rate in Figure
 [2.5](#fig:bayesTrajectoryPlot)) are identical to the bboutools
-projections (Figures
-[2.1](#fig:bboutoolsCalfCow),[2.3](#fig:bboutoolsSurvival), and
-[2.4](#fig:bboutoolsLambda)). The returned example trajectories are
-derived from the MCMC samples. If we also provide initial population
-size information then the projection (by default) includes density
-dependence and demographic stochasticity ([Dyson et al.
-2026](#ref-dyson_effective_2026); [Hughes et al.
+projections (Figures [2.1](#fig:bboutoolsCalfCow),
+[2.3](#fig:bboutoolsSurvival), and [2.4](#fig:bboutoolsLambda)). The
+returned example trajectories are derived from the MCMC samples. If we
+also provide initial population size information then the projection (by
+default) includes density dependence and demographic stochasticity
+([Dyson et al. 2026](#ref-dyson_effective_2026); [Hughes et al.
 2025](#ref-hughes_integration_2025)) and populations can go extinct (Fig
-@ref{fig:bayesTrajectoryPlotN}). Note that in this case the form of the
-growth model (density dependence & demographic stochasticity, but not
-interannual variability) can be changed by setting `caribouPopGrowth`
-function parameters (e.g. Fig X no demographic stochasticity); note that
-the Bayesian MCMC samples include interannual variation in recruitment
-and survival, so no additional interannual variation is added by
-`caribouPopGrowth` in this case.
+[2.6](#fig:bayesTrajectoryPlotN)). Note that in this case the form of
+the growth model (density dependence & demographic stochasticity, but
+not interannual variability) can be changed by setting
+`caribouPopGrowth` function parameters. The Bayesian MCMC samples
+include interannual variation in recruitment and survival, so no
+additional interannual variation is added by `caribouPopGrowth` in this
+case.
 
 ``` r
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
@@ -674,11 +657,11 @@ parameters. The `trajectoriesFromSummary` projects outcomes from a model
 defined by these parameters. When parameters from a fitted Bayesian
 model are used, expected outcomes from `trajectoriesFromSummary` and
 `trajectoriesFromBayesian` are the same (Figure
-@ref{fig:summaryTrajectoryBaseEPlot}), but `trajectoriesFromSummary`
+[2.7](#fig:summaryTrajectoryBaseEPlot)), but `trajectoriesFromSummary`
 projections do not include variation in interannual variation over time
-(Figure @ref{fig:summaryTrajectoryBasePlot}). `trajectoriesFromSummary`
-allows us to explore the implications of changing model parameters (Fig
-@ref{fig:summaryTrajectoryAdjustPlot}).
+(Figure [2.8](#fig:summaryTrajectoryBasePlot)).
+`trajectoriesFromSummary` allows us to explore the implications of
+changing model parameters (Fig [2.9](#fig:summaryTrajectoryAdjustPlot)).
 
 ``` r
 pt <- bbouInformative$parList
@@ -690,8 +673,8 @@ trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rb
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 201
+#>    Unobserved stochastic nodes: 14
+#>    Total graph size: 111
 #> 
 #> Initializing model
 #> 
@@ -700,8 +683,8 @@ trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rb
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 201
+#>    Unobserved stochastic nodes: 14
+#>    Total graph size: 111
 #> 
 #> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryBase, simInitial = popMetricsBayes)
@@ -766,8 +749,8 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 201
+#>    Unobserved stochastic nodes: 14
+#>    Total graph size: 111
 #> 
 #> Initializing model
 #> 
@@ -776,8 +759,8 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 207
+#>    Unobserved stochastic nodes: 14
+#>    Total graph size: 117
 #> 
 #> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryAdjust, simInitial = trajFromSummaryBase)
@@ -815,12 +798,12 @@ Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp).
 
 ``` r
 pt <- bbouInformative$parTab;pt
-#>   PopulationName    R_bar      R_sd R_iv_mean R_iv_shape R_bar_lower
-#> 1              A 0.194056 0.2165262  0.367511   1.890141   0.1342273
+#>   PopulationName     R_bar     R_sd R_iv_mean R_iv_shape R_bar_lower
+#> 1              A 0.1957146 0.223214 0.3769658   2.237384   0.1357969
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
-#> 1   0.2642005 0.9425775 0.5557561 0.5544629   1.323514   0.8679028   0.9828818
+#> 1   0.2780221 0.9404699 0.5481804 0.5339908   1.141895   0.8566462   0.9804958
 #>   N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
-#> 1 NA          185         12            NA            12
+#> 1 NA           NA         12            NA            12
 
 popMetricsBase <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
                                              R_sd=pt$R_sd,S_sd=pt$S_sd,

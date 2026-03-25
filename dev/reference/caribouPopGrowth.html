@@ -3,9 +3,9 @@
 variability following Johnson et. al. (2020)
 with modifications described in
 Hughes et al. (2025) and
-Dyson et al. (2022).
+Dyson et al. (in press).
 Default parameter values give the model
-in Dyson et al. (2022). Set probOption = "matchJohnson2020" to reproduce
+in Dyson et al. (in press). Set probOption = "matchJohnson2020" to reproduce
 the model used in Johnson et al. 2020. Set probOption = "continuous",
 interannualVar = FALSE, and K = FALSE to reproduce the simpler 2-stage
 demographic model without interannual variability, density dependence, or
@@ -13,9 +13,9 @@ discrete numbers of animals used by Stewart et al. (2023).'><meta property="og:d
 variability following Johnson et. al. (2020)
 with modifications described in
 Hughes et al. (2025) and
-Dyson et al. (2022).
+Dyson et al. (in press).
 Default parameter values give the model
-in Dyson et al. (2022). Set probOption = "matchJohnson2020" to reproduce
+in Dyson et al. (in press). Set probOption = "matchJohnson2020" to reproduce
 the model used in Johnson et al. 2020. Set probOption = "continuous",
 interannualVar = FALSE, and K = FALSE to reproduce the simpler 2-stage
 demographic model without interannual variability, density dependence, or
@@ -55,7 +55,7 @@ discrete numbers of animals used by Stewart et al. (2023).'><meta name="robots" 
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Caribou demographic model</h1>
-      <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/R/caribouPopGrowth.R" class="external-link"><code>R/caribouPopGrowth.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/BbouIntegration/R/caribouPopGrowth.R" class="external-link"><code>R/caribouPopGrowth.R</code></a></small>
       <div class="d-none name"><code>caribouPopGrowth.Rd</code></div>
     </div>
 
@@ -64,9 +64,9 @@ discrete numbers of animals used by Stewart et al. (2023).'><meta name="robots" 
 variability following <a href="doi:10.1111/1365-2664.13637">Johnson et. al. (2020)</a>
 with modifications described in
 <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. (2025)</a> and
-<a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (2022)</a>.
+<a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">Dyson et al. (in press)</a>.
 Default parameter values give the model
-in Dyson et al. (2022). Set <code>probOption = "matchJohnson2020"</code> to reproduce
+in Dyson et al. (in press). Set <code>probOption = "matchJohnson2020"</code> to reproduce
 the model used in Johnson et al. 2020. Set <code>probOption = "continuous"</code>,
 <code>interannualVar = FALSE</code>, and <code>K = FALSE</code> to reproduce the simpler 2-stage
 demographic model without interannual variability, density dependence, or
@@ -208,11 +208,10 @@ additional details and examples.</p>
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
 Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
-Baltzer, J. L., Stewart, F. E. C., &amp; Hughes, J. (2022). Existing
-caribou habitat and demographic models need improvement for Ring of Fire
-impact assessment: A roadmap for improving the usefulness, transparency,
-and availability of models for conservation.
-<a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">https://doi.org/10.1101/2022.06.01.494350</a></p>
+Baltzer, J. L., Stewart, F. E. C., &amp; Hughes, J. (in press).
+Effective conservation decisions require models designed for purpose:
+a case study of boreal caribou in Ontario’s Ring of Fire.
+Ecology and Evolution In press: <a href="https://doi.org/10.1101/2022.06.01.494350" class="external-link">https://doi.org/10.1101/2022.06.01.494350</a></p>
 <p>Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
 Integration of national demographic-disturbance relationships and local
 data can improve caribou population viability projections and inform
@@ -258,10 +257,10 @@ Applications, 33(3), p.e2816. <a href="https://doi.org/10.1002/eap.2816" class="
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">caribouPopGrowth</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">2</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    N0    lambda lambdaE  N      R_t       X_t       S_t n_recruits</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 100 0.7681146   0.875 59 0.317875 0.1589375 0.7560915          5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    N0    lambda lambdaE  N       R_t      X_t       S_t n_recruits</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 100 0.8602325   0.875 74 0.3259161 0.162958 0.6982619         16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   surviving_adFemales</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  58</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

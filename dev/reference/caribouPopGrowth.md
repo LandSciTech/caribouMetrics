@@ -4,8 +4,8 @@ A caribou demographic model with density dependence and interannual
 variability following [Johnson et. al.
 (2020)](doi:10.1111/1365-2664.13637) with modifications described in
 [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095) and
-[Dyson et al. (2022)](https://doi.org/10.1101/2022.06.01.494350).
-Default parameter values give the model in Dyson et al. (2022). Set
+[Dyson et al. (in press)](https://doi.org/10.1101/2022.06.01.494350).
+Default parameter values give the model in Dyson et al. (in press). Set
 `probOption = "matchJohnson2020"` to reproduce the model used in Johnson
 et al. 2020. Set `probOption = "continuous"`, `interannualVar = FALSE`,
 and `K = FALSE` to reproduce the simpler 2-stage demographic model
@@ -155,11 +155,10 @@ for additional details and examples.
 
 Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
 Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
-Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (2022). Existing caribou
-habitat and demographic models need improvement for Ring of Fire impact
-assessment: A roadmap for improving the usefulness, transparency, and
-availability of models for conservation.
-<https://doi.org/10.1101/2022.06.01.494350>
+Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Effective
+conservation decisions require models designed for purpose: a case study
+of boreal caribou in Ontario’s Ring of Fire. Ecology and Evolution In
+press: <https://doi.org/10.1101/2022.06.01.494350>
 
 Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
 Integration of national demographic-disturbance relationships and local
@@ -209,8 +208,8 @@ Caribou demography functions:
 
 ``` r
 caribouPopGrowth(100, 2, 0.5, 0.7)
-#>    N0    lambda lambdaE  N      R_t       X_t       S_t n_recruits
-#> 1 100 0.7681146   0.875 59 0.317875 0.1589375 0.7560915          5
+#>    N0    lambda lambdaE  N       R_t      X_t       S_t n_recruits
+#> 1 100 0.8602325   0.875 74 0.3259161 0.162958 0.6982619         16
 #>   surviving_adFemales
-#> 1                  54
+#> 1                  58
 ```
