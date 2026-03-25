@@ -208,8 +208,8 @@ Caribou demography functions:
 
 ``` r
 caribouPopGrowth(100, 2, 0.5, 0.7)
-#>    N0    lambda lambdaE  N       R_t      X_t       S_t n_recruits
-#> 1 100 0.9380832   0.875 88 0.8140661 0.407033 0.6108005         25
+#>    N0   lambda lambdaE   N       R_t       X_t      S_t n_recruits
+#> 1 100 1.019804   0.875 104 0.6446806 0.3223403 0.743209         25
 #>   surviving_adFemales
-#> 1                  63
+#> 1                  79
 ```

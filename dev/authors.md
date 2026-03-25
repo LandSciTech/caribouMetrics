@@ -31,7 +31,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/LandSciTech/caribouMetrics/blob/master/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/LandSciTech/caribouMetrics/blob/BbouIntegration/DESCRIPTION)
 
 Hughes J, Endicott S, Shimoda Y, Simpkins C, Michelleti T, McIntire E
 (2026). *caribouMetrics: Models and Metrics of Boreal Caribou Demography

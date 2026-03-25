@@ -35,7 +35,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Create summary table of demographic rates from survival and recruitment surveys</h1>
-      <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/master/R/estimateBayesianRates.R" class="external-link"><code>R/estimateBayesianRates.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/LandSciTech/caribouMetrics/blob/BbouIntegration/R/estimateBayesianRates.R" class="external-link"><code>R/estimateBayesianRates.R</code></a></small>
       <div class="d-none name"><code>estimateBayesianRates.Rd</code></div>
     </div>
 
@@ -145,11 +145,11 @@ if FALSE just the results summaries are returned.</p>
 <span class="r-in"><span><span class="va">r_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span>, <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_b.html" class="external-link">bbourecruit_b</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">estimateBayesianRates</span><span class="op">(</span><span class="va">s_data</span>, <span class="va">r_data</span>, N0 <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   PopulationName     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1              A 0.1894385 0.08152629 0.3136121   24.20552   0.1645665</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2              B 0.2032934 0.10214380 0.3136121   24.20552   0.1728461</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   R_bar_upper    S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.2142929 0.883654 0.2494475  0.503853   15.41646   0.8221490   0.9263046</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.2373410 0.909003 0.2894148  0.503853   15.41646   0.8520471   0.9463002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1              A 0.1897319 0.08118037 0.3145524   24.17062   0.1662687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2              B 0.2028943 0.10199744 0.3145524   24.17062   0.1719965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.2150934 0.8826292 0.2553544 0.5006175   12.84836   0.8191461   0.9258462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.2364342 0.9081262 0.2846389 0.5006175   12.84836   0.8510608   0.9460326</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 500          900         31          2353            27</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 500          519         18          2001            15</span>
