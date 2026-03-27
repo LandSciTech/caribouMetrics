@@ -40,7 +40,7 @@ lf <- sf::st_as_sf(sf::st_sfc(list(sf::st_linestring(matrix(c(0, 0, 10000, 10000
 
 rastLines <- rasterizeLineDensity(lf, lc)
 
-plot(rastLines)
+terra::plot(rastLines)
 
 }
 \seealso{

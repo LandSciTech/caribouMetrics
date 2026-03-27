@@ -28,7 +28,7 @@
 #'
 #' rastLines <- rasterizeLineDensity(lf, lc)
 #'
-#' plot(rastLines)
+#' terra::plot(rastLines)
 #'
 #' @family disturbance
 #' @export

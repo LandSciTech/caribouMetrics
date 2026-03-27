@@ -38,12 +38,13 @@ trajectoriesFromSummaryForApp <- function(numSteps, replicates, N0, R_bar, S_bar
                     R_iv_shape, S_iv_mean, S_iv_shape) 
   
   num_chk_res <- num_to_chk %>% purrr::map_lgl(\(x)is.numeric(x) & length(x) == 1)
-  
+
   if(!all(num_chk_res)){
     stop("the arguments ", paste0(names(num_chk_res)[which(!num_chk_res)], collapse = ", "),
          " must be numerics with length one")
   }
   
+  if(all(is.na(N0))){N0<-as.numeric(N0)}
   if(!is.numeric(N0) || !length(N0) %in% c(1,2)){
     stop("N0 is not a numeric with length 1 or 2")
   }

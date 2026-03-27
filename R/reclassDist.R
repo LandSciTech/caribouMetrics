@@ -49,7 +49,7 @@
 #'                                template = lc,
 #'                                dateField = "FIRE_YEAR")
 #' 
-#' plot(cumFirePresence)
+#' terra::plot(cumFirePresence)
 #' 
 #' # with time since disturbance
 #' fireYr$FIRE_YEAR <- c(50, 15, 10, 20)
@@ -59,7 +59,7 @@
 #'                                template = lc,
 #'                                dateField = "FIRE_YEAR")
 #'                                
-#' plot(cumFirePresence2)
+#' terra::plot(cumFirePresence)
 #'
 #' @family disturbance
 #' @export

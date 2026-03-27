@@ -27,13 +27,15 @@ The `caribouMetrics` R package provides implementations of models of Boreal wood
     
 To facilitate [comparison with Bayesian logistic models implemented in the `bboutools`](https://landscitech.github.io/caribouMetrics/articles/compare-bayesian-models.html) R package [(Dalgarno et al. 2025)]( https://doi.org/10.21105/joss.07997) `caribouMetrics` also allows for the use of those models. To align with `bboutools` note that the [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095) model has been extended  as follows: 
 
+* Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
 * Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
 * Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
 * Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+* Allow for analysis of groups of populations with shared interannual variation. See [Multi-Population Analysis and Other Extensions](https://poissonconsulting.github.io/bboutools/articles/extensions.html) for details.
 
 Simulated example population trajectories can be created from the national model or fitted Bayesian models, and combined with a simple observation model and the Bayesian population model to explore monitoring scenarios and show how monitoring requirements depend on landscape condition ([Hughes et al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095)). 
 
-`caribouMetrics` also contains an implementation of [Hornseth and Rempel's (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource selection model described in [Dyson et al. (in press)](https://doi.org/10.1101/2022.06.01.494350). 
+The [EcoEvoMissisaPaper](https://github.com/LandSciTech/caribouMetrics/tree/EcoEvoMissisaPaper) branch of `caribouMetrics` also contains an implementation of [Hornseth and Rempel's (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal caribou resource selection model described in [Dyson et al. (in press)](https://doi.org/10.1101/2022.06.01.494350). 
     
 Model implementation is intended to be modular and flexible, allowing reuse of components in a variety of contexts including projections of the cumulative effects of disturbance and climate change [(e.g. Stewart et al. 2023)](https://doi.org/10.1002/eap.2816).
 
@@ -109,10 +111,10 @@ plotCompareTrajectories(pmTbls, c("Recruitment", "Adult female survival"))
 
 The [package website](https://landscitech.github.io/caribouMetrics) contains information on the `caribouMetrics` package. Here you can find [documentation for each function](https://landscitech.github.io/caribouMetrics/reference/index.html) and the following articles/vignettes/tutorials:
 
-* [**Demographic Model**](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html): 
-Simulate demographic rates and population growth using a national model informed by demographic-disturbance relationships. 
-* [**Bayesian Demographic Projection**](https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html): Estimate and project demographic rates and population growth using a Bayesian model informed by national demographic-disturbance relationships and local demographic data.
-* [**Comparing the caribouMetrics Beta model to bboutools models**](https://landscitech.github.io/caribouMetrics/articles/compare-bayesian-models.html): Estimate and project demographic rates and population growth using Bayesian logistic models implemented in the `bboutools` R package, and compare to Beta models informed by national demographic-disturbance relationships and local demographic data.
+* [**Caribou Demographic Rates and Trajectories**](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html): 
+Simulate demographic rates and population growth using a national model informed by demographic-disturbance relationships or Bayesian models. 
+* [**Comparing the caribouMetrics Beta model to bboutools models**](https://landscitech.github.io/caribouMetrics/articles/compare-bayesian-models.html): Estimate and project demographic rates and population growth using Bayesian logistic models implemented in the `bboutools` R package or Beta models informed by national demographic-disturbance relationships and local demographic data, and compare models.
+* [**Simulation of monitoring scenarios informed by local data**](https://landscitech.github.io/caribouMetrics/articles/combine-observed-simulated.html): Assess monitoring strategies by simulating plausible outcomes of additional monitoring.
 * [**Disturbance Metrics**](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetric.html): Calculate buffered anthropogenic disturbance and fire disturbance percentages for a given area.
 <!-- * [**Ontario Habitat Model**](https://landscitech.github.io/caribouMetrics/articles/Using_caribouHabitat.html): Calculate caribou habitat use with Ontario RSF models. -->
 
