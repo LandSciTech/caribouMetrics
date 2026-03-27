@@ -119,7 +119,7 @@ Caribou demography functions:
 scns <- expand.grid(
   obsYears =c(10, 20), collarCount = c(30, 300), cowMult = 2, collarInterval = 2,
   iAnthro = 0,
-  obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.9,
+  obsAnthroSlope = 0, projAnthroSlope = 0, sQuaMntile = 0.9,
   rQuantile = 0.7, N0 = 1000
 )
 
@@ -145,8 +145,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 108
-#>    Unobserved stochastic nodes: 480
+#>    Observed stochastic nodes: 120
+#>    Unobserved stochastic nodes: 468
 #>    Total graph size: 2389
 #> 
 #> Initializing model
@@ -159,9 +159,9 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 18
-#>    Unobserved stochastic nodes: 201
-#>    Total graph size: 652
+#>    Observed stochastic nodes: 20
+#>    Unobserved stochastic nodes: 204
+#>    Total graph size: 666
 #> 
 #> Initializing model
 #> 
@@ -174,8 +174,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 240
-#>    Unobserved stochastic nodes: 478
+#>    Observed stochastic nodes: 228
+#>    Unobserved stochastic nodes: 490
 #>    Total graph size: 2909
 #> 
 #> Initializing model
@@ -188,9 +188,9 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 40
-#>    Unobserved stochastic nodes: 234
-#>    Total graph size: 806
+#>    Observed stochastic nodes: 38
+#>    Unobserved stochastic nodes: 231
+#>    Total graph size: 792
 #> 
 #> Initializing model
 #> 
