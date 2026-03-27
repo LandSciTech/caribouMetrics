@@ -23,7 +23,9 @@ Hughes et al. ([2025](#ref-hughes_integration_2025)) models as follows:
   Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html)
   for details.
 - Allow for analysis of groups of populations with shared interannual
-  variation. TO DO: add link to bboutools documentation when it exists.
+  variation. See [Multi-Population Analysis and Other
+  Extensions](https://poissonconsulting.github.io/bboutools/articles/extensions.html)
+  for details.
 
 Note that bboutools includes a number of different model variants.
 Throughout this document we compare to the Bayesian model with a random

@@ -234,15 +234,21 @@ base
 there is 5 years additional monitoring, limited initial data (2 years),
 and low disturbance. Example trajectories are from the 99th, 50th, and
 1st percentiles of the distribution of expected growth rate in the
-initial model informed by 2 years of local
-data.](combine-observed-simulated_files/figure-html/fig-plot5-1.png)
+initial model informed by 2 years of local data. probViable is the
+posterior probability of viability (i.e. the proportion of the estimated
+posterior predictive distribution of expected population growth rate
+that is greater than
+0.99).](combine-observed-simulated_files/figure-html/fig-plot5-1.png)
 
 Figure 5: Outcomes of additional monitoring vary among example
 trajectories (points), and with monitoring effort (collarCount). In
 these examples there is 5 years additional monitoring, limited initial
 data (2 years), and low disturbance. Example trajectories are from the
 99th, 50th, and 1st percentiles of the distribution of expected growth
-rate in the initial model informed by 2 years of local data.
+rate in the initial model informed by 2 years of local data. probViable
+is the posterior probability of viability (i.e. the proportion of the
+estimated posterior predictive distribution of expected population
+growth rate that is greater than 0.99).
 
 TO DO: As in Hughes et al we can also explore monitoring scenarios using
 simulated trajectories from the national model instead of trajectories
