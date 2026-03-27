@@ -32,7 +32,7 @@ if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork'
 -   Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
 -   Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
 -   Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
--   Allow for analysis of groups of populations with shared interannual variation. TO DO: add link to bboutools documentation when it exists.
+-   Allow for analysis of groups of populations with shared interannual variation. See [Multi-Population Analysis and Other Extensions](https://poissonconsulting.github.io/bboutools/articles/extensions.html) for details.
 
 Note that bboutools includes a number of different model variants. Throughout this document we compare to the Bayesian model with a random effect of year and no annual trend. For brevity, we refer to that as the "bbou" model.
 

@@ -61,7 +61,7 @@ cumFirePresence <- reclassDist(fireYr,
                                template = lc,
                                dateField = "FIRE_YEAR")
 
-plot(cumFirePresence)
+terra::plot(cumFirePresence)
 
 # with time since disturbance
 fireYr$FIRE_YEAR <- c(50, 15, 10, 20)
@@ -71,7 +71,7 @@ cumFirePresence2 <- reclassDist(fireYr,
                                template = lc,
                                dateField = "FIRE_YEAR")
                                
-plot(cumFirePresence2)
+terra::plot(cumFirePresence)
 
 }
 \seealso{

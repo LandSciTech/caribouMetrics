@@ -25,7 +25,7 @@
 #' scns <- expand.grid(
 #'   obsYears =c(10, 20), collarCount = c(30, 300), cowMult = 2, collarInterval = 2,
 #'   iAnthro = 0,
-#'   obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.9,
+#'   obsAnthroSlope = 0, projAnthroSlope = 0, sQuaMntile = 0.9,
 #'   rQuantile = 0.7, N0 = 1000
 #' )
 #' 
