@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Disturbance Metrics • caribouMetrics</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Disturbance Metrics">
 <meta name="robots" content="noindex">
@@ -69,7 +69,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://landscitech.github.io/caribouMetrics">caribouMetrics</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: nimble</span></span>
-<span><span class="co">#&gt; nimble version 1.4.1 is loaded.</span></span>
+<span><span class="co">#&gt; nimble version 1.4.2 is loaded.</span></span>
 <span><span class="co">#&gt; For more information on NIMBLE and a User Manual,</span></span>
 <span><span class="co">#&gt; please visit https://R-nimble.org.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -92,7 +92,7 @@
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; terra 1.9.11</span></span>
+<span><span class="co">#&gt; terra 1.9.27</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'terra'</span></span>
 <span><span class="co">#&gt; The following objects are masked from 'package:nimble':</span></span>
@@ -206,12 +206,12 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">disturbanceV</span><span class="op">@</span><span class="va">processedData</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Using_disturbanceMetric_files/figure-html/plotDisturbanceVector-1.png"><!-- --></p>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-eccc_scientific_2011" class="csl-entry">
-ECCC. 2011. <span>“Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (<span>Rangifer</span> Tarandus Caribou), Boreal Population, in <span>Canada</span>.”</span> Ottawa: Canadian Wildlife Service. <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="external-link">http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf</a>.
+ECCC. 2011. <em>Scientific Assessment to Inform the Identification of Critical Habitat for Woodland Caribou (<span>Rangifer</span> Tarandus Caribou), Boreal Population, in <span>Canada</span>.</em> Canadian Wildlife Service. <a href="http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf" class="external-link">http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf</a>.
 </div>
 <div id="ref-johnson_science_2020" class="csl-entry">
-Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, Mathieu Leblond, Patrick Kirby, Clara Superbie, and Philip D. McLoughlin. 2020. <span>“Science to Inform Policy: <span>Linking</span> Population Dynamics to Habitat for a Threatened Species in <span>Canada</span>.”</span> <em>Journal of Applied Ecology</em> 57 (7): 1314–27. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link">https://doi.org/10.1111/1365-2664.13637</a>.
+Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, et al. 2020. <span>“Science to Inform Policy: <span>Linking</span> Population Dynamics to Habitat for a Threatened Species in <span>Canada</span>.”</span> <em>Journal of Applied Ecology</em> 57 (7): 1314–27. <a href="https://doi.org/10.1111/1365-2664.13637" class="external-link">https://doi.org/10.1111/1365-2664.13637</a>.
 </div>
 </div>
 </div>
@@ -221,7 +221,7 @@ Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, Mathieu Leblond, Patrick Ki
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Josie Hughes, Sarah Endicott, Yuko Shimoda, Craig Simpkins, Tati Michelleti, Eliot McIntire.</p>
+  <p>Developed by Josie Hughes, Sarah Endicott, Yuko Shimoda.</p>
 </div>
 
 <div class="pkgdown-footer-right">

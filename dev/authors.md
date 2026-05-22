@@ -9,13 +9,13 @@
 
 - **Yuko Shimoda**. Author.
 
-- **Craig Simpkins**. Author.
+- **Craig Simpkins**. Contributor.
 
-- **Tati Michelleti**. Author, copyright holder.  
+- **Tati Michelleti**. Contributor, copyright holder.  
   Functions getCoefs and sampleRates are derived from code written by
   Tati Micheletti
 
-- **Eliot McIntire**. Author.
+- **Eliot McIntire**. Contributor.
 
 - **Saralees Nadarajah**. Copyright holder.  
   Author of truncdist package, which function rtrunc and qtrunc were
@@ -33,14 +33,13 @@
 Source:
 [`DESCRIPTION`](https://github.com/LandSciTech/caribouMetrics/blob/BbouIntegration/DESCRIPTION)
 
-Hughes J, Endicott S, Shimoda Y, Simpkins C, Michelleti T, McIntire E
-(2026). *caribouMetrics: Models and Metrics of Boreal Caribou Demography
-and Habitat Selection*. R package version 0.4.0.9002,
-<https://landscitech.github.io/caribouMetrics>.
+Hughes J, Endicott S, Shimoda Y (2026). *caribouMetrics: Models and
+Metrics of Boreal Caribou Demography and Habitat Selection*. R package
+version 0.4.0.9002, <https://landscitech.github.io/caribouMetrics>.
 
     @Manual{,
       title = {caribouMetrics: Models and Metrics of Boreal Caribou Demography and Habitat Selection},
-      author = {Josie Hughes and Sarah Endicott and Yuko Shimoda and Craig Simpkins and Tati Michelleti and Eliot McIntire},
+      author = {Josie Hughes and Sarah Endicott and Yuko Shimoda},
       year = {2026},
       note = {R package version 0.4.0.9002},
       url = {https://landscitech.github.io/caribouMetrics},

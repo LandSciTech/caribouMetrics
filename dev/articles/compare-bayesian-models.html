@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Comparing the caribouMetrics Beta model to bboutools models • caribouMetrics</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Comparing the caribouMetrics Beta model to bboutools models">
 <meta name="robots" content="noindex">
@@ -66,9 +66,9 @@
 
     
     
-<div class="section level2" number="0.1">
+<div class="section level2" number="1">
 <h2 id="similarities-and-differences-between-the-cariboumetrics-beta-model-and-the-bboutools-model">
-<span class="header-section-number">0.1</span> Similarities and differences between the caribouMetrics Beta model and the bboutools model<a class="anchor" aria-label="anchor" href="#similarities-and-differences-between-the-cariboumetrics-beta-model-and-the-bboutools-model"></a>
+<span class="header-section-number">1</span> Similarities and differences between the caribouMetrics Beta model and the bboutools model<a class="anchor" aria-label="anchor" href="#similarities-and-differences-between-the-cariboumetrics-beta-model-and-the-bboutools-model"></a>
 </h2>
 <p><span class="citation">Hughes et al. (<a href="#ref-hughes_integration_2025">2025</a>)</span> described a Beta model with disturbance covariates and informative priors for analysis of a single boreal caribou population with survival data aggregated by year and only cows and calves reported in the composition survey. To align with and allow comparison to the models implemented in bboutools <span class="citation">(<a href="#ref-dalgarno_bbousuite_2025">Dalgarno et al. 2025</a>)</span> we extended the <span class="citation">Hughes et al. (<a href="#ref-hughes_integration_2025">2025</a>)</span> models as follows:</p>
 <ul>
@@ -86,9 +86,9 @@
 <li>The bbou model allows for variation in survival among months.</li>
 </ul>
 </div>
-<div class="section level2" number="0.2">
+<div class="section level2" number="2">
 <h2 id="example-data">
-<span class="header-section-number">0.2</span> Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
+<span class="header-section-number">2</span> Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
 </h2>
 <p>We compare the Beta and bbou models using three examples derived from the <code><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bboudata::bbousurv_a</a></code> and <code><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bboudata::bbourecruit_a</a></code> data sets:</p>
 <ul>
@@ -132,9 +132,9 @@
 <span><span class="va">surv_dataLimited</span> <span class="op">&lt;-</span> <span class="va">surv_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2014</span><span class="op">)</span></span>
 <span><span class="va">recruit_dataLimited</span> <span class="op">&lt;-</span> <span class="va">recruit_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2014</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2" number="0.3">
+<div class="section level2" number="3">
 <h2 id="comparison-of-the-beta-and-national-models">
-<span class="header-section-number">0.3</span> Comparison of the Beta and national models<a class="anchor" aria-label="anchor" href="#comparison-of-the-beta-and-national-models"></a>
+<span class="header-section-number">3</span> Comparison of the Beta and national models<a class="anchor" aria-label="anchor" href="#comparison-of-the-beta-and-national-models"></a>
 </h2>
 <p>As shown by <span class="citation">Hughes et al. (<a href="#ref-hughes_integration_2025">2025</a>)</span> the prior means and 95% prior predictive intervals from the Beta model are similar to the means and ranges between the 2.5% and 97.5% quantiles of 3000 simulated survival and recruitment trajectories from the national model (Figure <a href="#fig:fig-plot1">1</a>).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -158,9 +158,9 @@ Figure 1: 95% prior predictive intervals from Beta model with 5% anthropogenic d
 </p>
 </div>
 </div>
-<div class="section level2" number="0.4">
+<div class="section level2" number="4">
 <h2 id="comparison-of-beta-and-bbou-prior-predictions">
-<span class="header-section-number">0.4</span> Comparison of Beta and bbou prior predictions<a class="anchor" aria-label="anchor" href="#comparison-of-beta-and-bbou-prior-predictions"></a>
+<span class="header-section-number">4</span> Comparison of Beta and bbou prior predictions<a class="anchor" aria-label="anchor" href="#comparison-of-beta-and-bbou-prior-predictions"></a>
 </h2>
 <p>The bbou model default priors are less informative than the Beta model default priors (Figure <a href="#fig:fig-plotPriorsDefault">2</a>). The bbou model assumes that little is known about a population with no local data, whereas when there is no local data the Beta model assumes that local recruitment and survival rates are within the range of variation among boreal caribou populations there were included in the national model.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -228,9 +228,9 @@ Figure 3: Prior means and 95% predictive intervals from Beta and bbou models wit
 </p>
 </div>
 </div>
-<div class="section level2" number="0.5">
+<div class="section level2" number="5">
 <h2 id="comparison-of-beta-and-bbou-models-with-informative-local-data">
-<span class="header-section-number">0.5</span> Comparison of Beta and bbou models with informative local data<a class="anchor" aria-label="anchor" href="#comparison-of-beta-and-bbou-models-with-informative-local-data"></a>
+<span class="header-section-number">5</span> Comparison of Beta and bbou models with informative local data<a class="anchor" aria-label="anchor" href="#comparison-of-beta-and-bbou-models-with-informative-local-data"></a>
 </h2>
 <p>With more informative data, the Beta model with constant disturbance covariates and informative priors often gives results that are comparable to the bbou model with default (less informative) priors. When there is enough local data available differences in the priors are less important.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -304,9 +304,9 @@ Figure 5: Posterior means and 95% posterior predictive intervals from Beta and b
 </p>
 </div>
 </div>
-<div class="section level2" number="0.6">
+<div class="section level2" number="6">
 <h2 id="comparison-of-beta-and-bbou-models-with-limited-local-data">
-<span class="header-section-number">0.6</span> Comparison of Beta and bbou models with limited local data<a class="anchor" aria-label="anchor" href="#comparison-of-beta-and-bbou-models-with-limited-local-data"></a>
+<span class="header-section-number">6</span> Comparison of Beta and bbou models with limited local data<a class="anchor" aria-label="anchor" href="#comparison-of-beta-and-bbou-models-with-limited-local-data"></a>
 </h2>
 <p>If local data is limited the bbou model with default (less informative) priors and the Beta model with disturbance covariates and informative priors may also give different results, particularly if observations are inconsistent with expectations from the observed distribution of outcomes across the country. For example (Figure <a href="#fig:fig-plotLimitedLocal">6</a>) when disturbance is high the prior expectation from the Beta model is that recruitment and survival will be low. In this example there are a couple of observations of survival and recruitment that are higher than expected given knowledge of disturbance. Both models acknowledge high uncertainty about the true state of the population given limited local data. The Beta model predicts lower growth than the bbou model in this case because it is combining the limited local information with a prior expectation that demographic rates will be low when disturbance is high.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -342,9 +342,9 @@ Figure 6: Posterior means and 95% predictive intervals from Beta and bbou models
 <div class="section level2 unnumbered">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-dalgarno_bbousuite_2025" class="csl-entry">
-Dalgarno, Seb, John Boulanger, Ayla Pearson, Joe Thorley, Troy Hegel, Barry Nobert, and Dave Hervieux. 2025. <span>“Bbousuite: <span>A</span> Set of <span>R</span> Packages to Facilitate Analysis of Boreal Caribou Survival and Recruitment Data.”</span> <em>Journal of Open Source Software</em> 10 (109): 7997. <a href="https://doi.org/10.21105/joss.07997" class="external-link">https://doi.org/10.21105/joss.07997</a>.
+Dalgarno, Seb, John Boulanger, Ayla Pearson, et al. 2025. <span>“Bbousuite: <span>A</span> Set of <span>R</span> Packages to Facilitate Analysis of Boreal Caribou Survival and Recruitment Data.”</span> <em>Journal of Open Source Software</em> 10 (109): 7997. <a href="https://doi.org/10.21105/joss.07997" class="external-link">https://doi.org/10.21105/joss.07997</a>.
 </div>
 <div id="ref-hughes_integration_2025" class="csl-entry">
 Hughes, Josie, Sarah Endicott, Anna M. Calvert, and Cheryl A. Johnson. 2025. <span>“Integration of National Demographic-Disturbance Relationships and Local Data Can Improve Caribou Population Viability Projections and Inform Monitoring Decisions.”</span> <em>Ecological Informatics</em> 87 (July): 103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">https://doi.org/10.1016/j.ecoinf.2025.103095</a>.
@@ -358,7 +358,7 @@ Hughes, Josie, Sarah Endicott, Anna M. Calvert, and Cheryl A. Johnson. 2025. <sp
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Josie Hughes, Sarah Endicott, Yuko Shimoda, Craig Simpkins, Tati Michelleti, Eliot McIntire.</p>
+  <p>Developed by Josie Hughes, Sarah Endicott, Yuko Shimoda.</p>
 </div>
 
 <div class="pkgdown-footer-right">

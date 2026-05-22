@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Simulation of monitoring scenarios informed by local data • caribouMetrics</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simulation of monitoring scenarios informed by local data">
 <meta name="robots" content="noindex">
@@ -66,9 +66,9 @@
 
     
     
-<div class="section level2" number="0.1">
+<div class="section level2" number="1">
 <h2 id="examples-of-initial-bayesian-models-informed-by-local-data-and-national-demographic-disturbance-relationships">
-<span class="header-section-number">0.1</span> Examples of initial Bayesian models informed by local data and national-demographic disturbance relationships<a class="anchor" aria-label="anchor" href="#examples-of-initial-bayesian-models-informed-by-local-data-and-national-demographic-disturbance-relationships"></a>
+<span class="header-section-number">1</span> Examples of initial Bayesian models informed by local data and national-demographic disturbance relationships<a class="anchor" aria-label="anchor" href="#examples-of-initial-bayesian-models-informed-by-local-data-and-national-demographic-disturbance-relationships"></a>
 </h2>
 <p>We simulate monitoring scenarios informed by example data from the <code><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bboudata::bbousurv_a</a></code> and <code><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bboudata::bbourecruit_a</a></code> data sets:</p>
 <ul>
@@ -118,9 +118,9 @@
 <span><span class="va">simLimited</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromBayesian.html">trajectoriesFromBayesian</a></span><span class="op">(</span><span class="va">betaLimited</span><span class="op">)</span></span>
 <span><span class="va">simLimitedHigh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromBayesian.html">trajectoriesFromBayesian</a></span><span class="op">(</span><span class="va">betaLimitedHigh</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2" number="0.2">
+<div class="section level2" number="2">
 <h2 id="simulating-additional-monitoring-of-plausible-example-trajectories-from-fitted-bayesian-models">
-<span class="header-section-number">0.2</span> Simulating additional monitoring of plausible example trajectories from fitted Bayesian models<a class="anchor" aria-label="anchor" href="#simulating-additional-monitoring-of-plausible-example-trajectories-from-fitted-bayesian-models"></a>
+<span class="header-section-number">2</span> Simulating additional monitoring of plausible example trajectories from fitted Bayesian models<a class="anchor" aria-label="anchor" href="#simulating-additional-monitoring-of-plausible-example-trajectories-from-fitted-bayesian-models"></a>
 </h2>
 <p>We begin by specifying monitoring scenario parameters, and selecting an example trajectory with a relatively low expected growth rate (i.e. in the 1st percentile of the distribution of mcmc samples from the initial model). In this example, we specify 5 additional years of monitoring, with a target of 30 collars per year, and 6 cows per collared cow in the composition surveys. Default settings specify that deployed collars last 4 years, and lost collars are replaced in April of each year. We then simulate additional years of monitoring, combine the simulated and observed data (Figure <a href="#fig:fig-plot1">1</a>), and reanalyze the combined data. Methods for simulating monitoring of example trajectories are described in <span class="citation">Hughes et al. (<a href="#ref-hughes_integration_2025">2025</a>)</span>.</p>
 <p>In these examples, an additional 5 years of monitoring of a plausible low growth rate trajectory with 5 intial years of data does not provide additional clarity about whether the population is likely to decline or not in future (Figure <a href="#fig:fig-plot2">2</a>). An additional 5 years of monitoring is more likely to reduce uncertainty when there is limited initial data (e.g. Figures <a href="#fig:fig-plot3">3</a> and <a href="#fig:fig-plot4">4</a>), but outcomes of single trajectory analysis are stochastic. Thorough analysis of the value of additional monitoring requires examining outcomes from a larger representative sample of plausible trajectories from the initial model <span class="citation">(as in <a href="#ref-hughes_integration_2025">Hughes et al. 2025</a>)</span>.</p>
@@ -219,7 +219,7 @@ Figure 5: Outcomes of additional monitoring vary among example trajectories (poi
 <div class="section level2 unnumbered">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-hughes_integration_2025" class="csl-entry">
 Hughes, Josie, Sarah Endicott, Anna M. Calvert, and Cheryl A. Johnson. 2025. <span>“Integration of National Demographic-Disturbance Relationships and Local Data Can Improve Caribou Population Viability Projections and Inform Monitoring Decisions.”</span> <em>Ecological Informatics</em> 87 (July): 103095. <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">https://doi.org/10.1016/j.ecoinf.2025.103095</a>.
 </div>
@@ -232,7 +232,7 @@ Hughes, Josie, Sarah Endicott, Anna M. Calvert, and Cheryl A. Johnson. 2025. <sp
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Josie Hughes, Sarah Endicott, Yuko Shimoda, Craig Simpkins, Tati Michelleti, Eliot McIntire.</p>
+  <p>Developed by Josie Hughes, Sarah Endicott, Yuko Shimoda.</p>
 </div>
 
 <div class="pkgdown-footer-right">

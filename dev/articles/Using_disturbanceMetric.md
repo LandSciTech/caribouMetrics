@@ -1,9 +1,10 @@
 # Disturbance Metrics
 
 ``` r
+
 library(caribouMetrics)
 #> Loading required package: nimble
-#> nimble version 1.4.1 is loaded.
+#> nimble version 1.4.2 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
 #> 
@@ -26,7 +27,7 @@ library(caribouMetrics)
 #>     intersect, setdiff, setequal, union
 library(dplyr)
 library(terra)
-#> terra 1.9.11
+#> terra 1.9.27
 #> 
 #> Attaching package: 'terra'
 #> The following objects are masked from 'package:nimble':
@@ -62,13 +63,13 @@ non-overlapping fire and anthropogenic disturbance \* Fire_excl_anthro:
 uses several spatial data layers to calculate the percentage disturbance
 in an area:
 
-| Name (Argument)                        | Description                                                                                                         |
-|----------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| Land cover (landCover)                 | A raster where 0 and NA values are assumed to be water and are omitted from the total area, defines the raster grid |
-| Linear features (linFeat)              | a raster, sf object, or list of these identifying the location of linear features (e.g. roads, rail)                |
-| Natural disturbance (natDist)          | Cumulative natural disturbance (mostly fire) over the past 40 years                                                 |
-| Anthropogenic disturbance (anthroDist) | Cumulative anthropogenic disturbance over the past 40 years                                                         |
-| Project polygon (projPoly)             | An sf object containing polygon(s) of the study area(s)                                                             |
+| Name (Argument) | Description |
+|----|----|
+| Land cover (landCover) | A raster where 0 and NA values are assumed to be water and are omitted from the total area, defines the raster grid |
+| Linear features (linFeat) | a raster, sf object, or list of these identifying the location of linear features (e.g. roads, rail) |
+| Natural disturbance (natDist) | Cumulative natural disturbance (mostly fire) over the past 40 years |
+| Anthropogenic disturbance (anthroDist) | Cumulative anthropogenic disturbance over the past 40 years |
+| Project polygon (projPoly) | An sf object containing polygon(s) of the study area(s) |
 
 The example data set loaded below includes a small area in the Nipigon
 caribou range that we will use as an example. Disturbance data sets can
@@ -78,6 +79,7 @@ polygons containing year of disturbance are converted to a presence
 absence raster of cumulative disturbance over the past 40 years.
 
 ``` r
+
 # load example data and classify cumulative natural disturbance
 landCoverD = rast(file.path(pthBase, "landCover.tif")) 
 natDistD <- sf::st_read(file.path(pthBase, "fireAFFES2020.shp")) %>% 
@@ -101,6 +103,7 @@ different ways, and the simplest is to provide spatial objects for each
 input.
 
 ``` r
+
 disturbance <- disturbanceMetrics(
   landCover=!is.na(landCoverD),
   natDist = natDistD,
@@ -115,6 +118,7 @@ The `disturbanceMetrics` function returns an S4 object with the class
 use the `results` function.
 
 ``` r
+
 str(disturbance, max.level = 2, give.attr = FALSE)
 #> Formal class 'DisturbanceMetrics' [package "caribouMetrics"] with 8 slots
 #>   ..@ landCover         :S4 class 'SpatRaster' [package "terra"]
@@ -131,6 +135,7 @@ results(disturbance)
 ```
 
 ``` r
+
 plot(disturbance@processedData)
 ```
 
@@ -141,6 +146,7 @@ Multiple linear feature inputs can also be provided in vector form. See
 processing and input options.
 
 ``` r
+
 disturbanceV <- disturbanceMetrics(
   landCover=!is.na(landCoverD),
   natDist = natDistD,
@@ -151,18 +157,18 @@ disturbanceV <- disturbanceMetrics(
 ```
 
 ``` r
+
 plot(disturbanceV@processedData)
 ```
 
 ![](Using_disturbanceMetric_files/figure-html/plotDisturbanceVector-1.png)
 
-ECCC. 2011. “Scientific Assessment to Inform the Identification of
+ECCC. 2011. *Scientific Assessment to Inform the Identification of
 Critical Habitat for Woodland Caribou (Rangifer Tarandus Caribou),
-Boreal Population, in Canada.” Ottawa: Canadian Wildlife Service.
+Boreal Population, in Canada.* Canadian Wildlife Service.
 <http://epe.lac-bac.gc.ca/100/200/301/environment_can/2011/scientific_assessment_inform-ef/CW66-296-2011-eng.pdf>.
 
-Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, Mathieu Leblond,
-Patrick Kirby, Clara Superbie, and Philip D. McLoughlin. 2020. “Science
-to Inform Policy: Linking Population Dynamics to Habitat for a
+Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, et al. 2020.
+“Science to Inform Policy: Linking Population Dynamics to Habitat for a
 Threatened Species in Canada.” *Journal of Applied Ecology* 57 (7):
 1314–27. <https://doi.org/10.1111/1365-2664.13637>.

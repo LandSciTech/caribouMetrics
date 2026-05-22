@@ -46,15 +46,15 @@ Authors:
 
 - Yuko Shimoda <shimoday@gmail.com>
 
-- Craig Simpkins <simpkinscraig063@gmail.com>
+Other contributors:
+
+- Craig Simpkins <simpkinscraig063@gmail.com> \[contributor\]
 
 - Tati Michelleti <tati.micheletti@gmail.com> (Functions getCoefs and
   sampleRates are derived from code written by Tati Micheletti)
-  \[copyright holder\]
+  \[contributor, copyright holder\]
 
-- Eliot McIntire <eliot.mcintire@canada.ca>
-
-Other contributors:
+- Eliot McIntire <eliot.mcintire@canada.ca> \[contributor\]
 
 - Saralees Nadarajah (Author of truncdist package, which function rtrunc
   and qtrunc were modified from) \[copyright holder\]

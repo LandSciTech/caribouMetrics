@@ -1,6 +1,6 @@
 # Simulation of monitoring scenarios informed by local data
 
-## 0.1 Examples of initial Bayesian models informed by local data and national-demographic disturbance relationships
+## 1 Examples of initial Bayesian models informed by local data and national-demographic disturbance relationships
 
 We simulate monitoring scenarios informed by example data from the
 [`bboudata::bbousurv_a`](https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html)
@@ -22,6 +22,7 @@ disturbance relationships in low disturbance (3% anthropogenic, 5% fire)
 and high disturbance (80% anthropogenic, 10% fire) scenarios.
 
 ``` r
+
 library(caribouMetrics)
 # use local version on local and installed on GH
 if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
@@ -63,7 +64,7 @@ simLimited <- trajectoriesFromBayesian(betaLimited)
 simLimitedHigh <- trajectoriesFromBayesian(betaLimitedHigh)
 ```
 
-## 0.2 Simulating additional monitoring of plausible example trajectories from fitted Bayesian models
+## 2 Simulating additional monitoring of plausible example trajectories from fitted Bayesian models
 
 We begin by specifying monitoring scenario parameters, and selecting an
 example trajectory with a relatively low expected growth rate (i.e. in
@@ -104,6 +105,7 @@ distinguish the cases from one another, but additional benefits of that
 information should be weighed against additional costs.
 
 ``` r
+
 scns=list()
 scns$lQuantile=0.01 #select example trajectories with low growth rate
 correlateRates = T #Force correlation among demographic rates to examine extreme cases
@@ -132,6 +134,7 @@ limitedMoreHigh = bayesianScenariosWorkflow(scns,simLimitedHigh,niters=niters)
 ```
 
 ``` r
+
 plotSurvivalSeries(oo$simSurvObs)
 ```
 
@@ -151,10 +154,12 @@ of deployed collars. Each simulated collar lasts for 4 years. In April
 of each year, collars lost throughout the year are replaced.
 
 ``` r
+
 #TO DO: fix data gap
 ```
 
 ``` r
+
 rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabsI)
 surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabsI)
 lam <- plotCompareTrajectories(out_tbls, "Expected growth rate", typeLabels = typeLabsI,
@@ -177,6 +182,7 @@ monitoring does not substantially reduce uncertainty about population
 growth rate.
 
 ``` r
+
 rec <- plotCompareTrajectories(limitedMoreMonitoring, "Recruitment", typeLabels = typeLabsL)
 surv <- plotCompareTrajectories(limitedMoreMonitoring, "Adult female survival", typeLabels = typeLabsL)
 lam <- plotCompareTrajectories(limitedMoreMonitoring, "Expected growth rate", typeLabels = typeLabsL,
@@ -196,6 +202,7 @@ initial data (2 years), low disturbance, and a relatively low expected
 growth rate (Figure 1).
 
 ``` r
+
 rec <- plotCompareTrajectories(limitedMoreHigh, "Recruitment", typeLabels = typeLabsL)
 surv <- plotCompareTrajectories(limitedMoreHigh, "Adult female survival", typeLabels = typeLabsL)
 lam <- plotCompareTrajectories(limitedMoreHigh, "Expected growth rate", typeLabels = typeLabsL,
@@ -215,6 +222,7 @@ initial data (2 years), high disturbance, and a relatively low expected
 growth rate (Figure 1).
 
 ``` r
+
 #Add rows to the scenario table to examine multiple monitoring scenarios and example trajectories
 scnsMulti=scns;scnsMulti$lQuantile=NULL;scnsMulti$collarCount=NULL
 scnsMulti = merge(scnsMulti,expand.grid(lQuantile=c(0.01,0.5,0.99),collarCount=c(15,30)))
@@ -226,6 +234,7 @@ base <- ggplot(lmmView,aes(x=collarCount,y=Mean,ymax=upper,ymin=lower,group=lQua
 ```
 
 ``` r
+
 base
 ```
 

@@ -64,6 +64,7 @@ You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("LandSciTech/caribouMetrics")
 ```
@@ -74,6 +75,7 @@ This is a basic example demonstrating all the primary functions of the
 package.
 
 ``` r
+
 library(caribouMetrics)
 #> Loading required package: nimble
 #> Warning: package 'nimble' was built under R version 4.4.3
