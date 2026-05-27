@@ -22,14 +22,14 @@ Useful links:
 Authors:
 \itemize{
   \item Josie Hughes \email{josie.hughes@ec.gc.ca} (\href{https://orcid.org/0000-0001-7875-9015}{ORCID})
-  \item Yuko Shimoda \email{shimoday@gmail.com}
 }
 
 Other contributors:
 \itemize{
-  \item Craig Simpkins \email{simpkinscraig063@gmail.com} [contributor]
-  \item Tati Michelleti \email{tati.micheletti@gmail.com} (Functions getCoefs and sampleRates are derived from code written by Tati Micheletti) [contributor, copyright holder]
-  \item Eliot McIntire \email{eliot.mcintire@canada.ca} [contributor]
+  \item Yuko Shimoda \email{shimoday@gmail.com} [contractor]
+  \item Craig Simpkins \email{simpkinscraig063@gmail.com} [contractor]
+  \item Tati Michelleti \email{tati.micheletti@gmail.com} (Functions getCoefs and sampleRates are derived from code written by Tati Micheletti) [contractor, copyright holder]
+  \item Eliot McIntire \email{eliot.mcintire@canada.ca} [contractor]
   \item Saralees Nadarajah (Author of truncdist package, which function rtrunc and qtrunc were modified from) [copyright holder]
   \item Frederick Novomestky (Author of truncdist package, which function rtrunc and qtrunc were modified from) [copyright holder]
   \item His Majesty the King in Right of Canada, as represented by the Minister of Environment and Climate Change [copyright holder]
