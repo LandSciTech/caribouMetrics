@@ -44,17 +44,17 @@ Authors:
 - Josie Hughes <josie.hughes@ec.gc.ca>
   ([ORCID](https://orcid.org/0000-0001-7875-9015))
 
-- Yuko Shimoda <shimoday@gmail.com>
-
 Other contributors:
 
-- Craig Simpkins <simpkinscraig063@gmail.com> \[contributor\]
+- Yuko Shimoda <shimoday@gmail.com> \[contractor\]
+
+- Craig Simpkins <simpkinscraig063@gmail.com> \[contractor\]
 
 - Tati Michelleti <tati.micheletti@gmail.com> (Functions getCoefs and
   sampleRates are derived from code written by Tati Micheletti)
-  \[contributor, copyright holder\]
+  \[contractor, copyright holder\]
 
-- Eliot McIntire <eliot.mcintire@canada.ca> \[contributor\]
+- Eliot McIntire <eliot.mcintire@canada.ca> \[contractor\]
 
 - Saralees Nadarajah (Author of truncdist package, which function rtrunc
   and qtrunc were modified from) \[copyright holder\]
