@@ -118,12 +118,12 @@ Caribou demography functions:
 s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 estimateBayesianRates(s_data, r_data, N0 = 500)
-#>   PopulationName     R_bar      R_sd R_iv_mean R_iv_shape R_bar_lower
-#> 1              A 0.1896955 0.0819857 0.3189727   26.61962   0.1661284
-#> 2              B 0.2038337 0.1080061 0.3189727   26.61962   0.1692807
+#>   PopulationName     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower
+#> 1              A 0.1897832 0.08206261 0.3170868   27.17348   0.1658439
+#> 2              B 0.2028773 0.10142252 0.3170868   27.17348   0.1722906
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
-#> 1   0.2145392 0.8804662 0.2317276 0.4914707   12.19929   0.8201423   0.9190801
-#> 2   0.2405030 0.9059499 0.2880811 0.4914707   12.19929   0.8493709   0.9461946
+#> 1   0.2152649 0.8828169 0.2522623 0.4990795   12.88285   0.8243890   0.9252331
+#> 2   0.2370010 0.9091063 0.2904343 0.4990795   12.88285   0.8563282   0.9487634
 #>    N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
 #> 1 500          900         31          2353            27
 #> 2 500          519         18          2001            15
