@@ -172,14 +172,19 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 <code><a href="simulateTrajectoriesFromPosterior.html">convertTrajectories()</a></code>,
 <code><a href="dataFromSheets.html">dataFromSheets()</a></code>,
 <code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code>,
+<code><a href="demographyDefaults.html">demographyDefaults()</a></code>,
+<code><a href="disturbanceDefaults.html">disturbanceDefaults()</a></code>,
 <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>,
 <code><a href="estimateNationalRates.html">estimateNationalRate()</a></code>,
 <code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code>,
+<code><a href="monitoringDefaults.html">monitoringDefaults()</a></code>,
+<code><a href="nationalTrajectoryDefaults.html">nationalTrajectoryDefaults()</a></code>,
 <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
 <code><a href="plotSurvivalSeries.html">plotSurvivalSeries()</a></code>,
 <code><a href="plotTrajectories.html">plotTrajectories()</a></code>,
 <code><a href="popGrowthTableJohnsonECCC.html">popGrowthTableJohnsonECCC</a></code>,
 <code><a href="simulateObservations.html">simulateObservations()</a></code>,
+<code><a href="timeDefaults.html">timeDefaults()</a></code>,
 <code><a href="trajectoriesFromBayesian.html">trajectoriesFromBayesian()</a></code>,
 <code><a href="trajectoriesFromNational.html">trajectoriesFromNational()</a></code>,
 <code><a href="trajectoriesFromSummary.html">trajectoriesFromSummary()</a></code>,
@@ -196,16 +201,16 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Survival</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Survival$coefSamples</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Intercept        Anthro Precision</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.1486132 -0.0007487502  64.36299</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -0.1455611 -0.0007446625  72.14417</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.1419595 -0.0009133786  61.97224</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.1418393 -0.0009010120  77.24144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.1339868 -0.0010616621  72.13357</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.1345483 -0.0005471927  72.43857</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.1501806 -0.0008149598  59.99872</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.1406728 -0.0009215622  68.09706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.1475672 -0.0008943765  66.60399</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.1323797 -0.0006463586  76.02826</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.1423065 -0.0006995595  56.32176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -0.1382537 -0.0006027693  55.24700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.1448455 -0.0009009828  81.50344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.1350592 -0.0007669110  65.46994</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.1359158 -0.0007959976  65.30372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.1427276 -0.0006607975  68.75449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.1406482 -0.0007014543  65.44288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.1345227 -0.0005787014  54.92577</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.1384848 -0.0008787968  72.47108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.1440650 -0.0007606156  76.77187</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Survival$coefValues</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Intercept Anthro Precision</span>
@@ -218,23 +223,23 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.007908163 0.000127551  8.272731</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Survival$quantiles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0250000 0.1305556 0.3416667 0.5527778 0.4472222 0.2361111 0.6583333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.7638889 0.9750000 0.8694444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0250000 0.2361111 0.8694444 0.6583333 0.5527778 0.7638889 0.1305556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.9750000 0.4472222 0.3416667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Recruitment</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Recruitment$coefSamples</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Intercept      Anthro Fire_excl_anthro Precision</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.9991065 -0.01356101     -0.007593861  20.42251</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -1.0647612 -0.01713976     -0.005367573  19.18080</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -1.0481467 -0.01749687     -0.011863474  17.21689</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -1.0668326 -0.01464005     -0.007805197  16.49014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.9773248 -0.01843270     -0.010369632  21.72727</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -1.0269990 -0.01593546     -0.007916402  21.24387</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.9848196 -0.01603724     -0.009898223  17.56499</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -1.0070068 -0.01639519     -0.008086825  18.87942</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.8795559 -0.01929365     -0.006848795  16.80359</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -1.0504361 -0.01751780     -0.007943825  17.85963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.9971360 -0.01477191     -0.011564788  20.87141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -1.0700640 -0.01479829     -0.006859065  18.80631</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -1.0696061 -0.01755905     -0.007670275  19.68579</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -1.0694774 -0.02045441     -0.005319006  15.22032</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.9920248 -0.01580562     -0.006486813  25.09567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -1.0012239 -0.01723672     -0.009326529  21.01256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -1.0602176 -0.01747596     -0.009679873  21.07518</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -1.0141678 -0.01802547     -0.009865571  22.94789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.9988883 -0.01741971     -0.006643576  16.74558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -1.0722431 -0.01605920     -0.009520552  19.91371</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Recruitment$coefValues</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Intercept Anthro Fire_excl_anthro Precision</span>
@@ -247,8 +252,8 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.06122449 0.001530612      0.002040816  2.228655</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Recruitment$quantiles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.3416667 0.7638889 0.4472222 0.6583333 0.1305556 0.2361111 0.9750000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.8694444 0.5527778 0.0250000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.3416667 0.9750000 0.1305556 0.2361111 0.5527778 0.4472222 0.7638889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0250000 0.6583333 0.8694444</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
@@ -261,16 +266,16 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Survival</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Survival$coefSamples</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Intercept        Anthro Precision</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.1386675 -0.0007494398  58.56528</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -0.1470608 -0.0007675613  62.19861</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.1474294 -0.0009236249  65.26732</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.1375200 -0.0007738752  74.46755</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.1559594 -0.0005768461  73.58597</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.1434928 -0.0009758119  60.47276</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.1397696 -0.0007178257  58.08636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.1478934 -0.0006393209  65.72207</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.1404629 -0.0009902228  65.23168</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.1478339 -0.0007853519  72.81439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.1370469 -0.0007128045  65.06369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -0.1512367 -0.0009396197  63.47248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.1459214 -0.0006469322  71.34317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.1364825 -0.0009462010  62.69978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.1534675 -0.0009665445  53.39256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.1380327 -0.0008949384  53.08590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.1454968 -0.0008381582  64.25462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.1443248 -0.0007734097  64.86163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.1399836 -0.0009452605  64.16662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.1432657 -0.0006875677  74.48219</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Survival$coefValues</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Intercept Anthro Precision</span>
@@ -283,23 +288,23 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.007908163 0.000127551  8.272731</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Survival$quantiles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.1305556 0.6583333 0.7638889 0.3416667 0.9750000 0.8694444 0.4472222</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0250000 0.2361111 0.5527778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.9750000 0.5527778 0.6583333 0.1305556 0.2361111 0.8694444 0.0250000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.4472222 0.3416667 0.7638889</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Recruitment</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Recruitment$coefSamples</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Intercept  Total_dist</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.8536289 -0.01615182</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -0.9834509 -0.01470408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.9806921 -0.01317176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.8451088 -0.01622049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.9252271 -0.01265784</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.9682123 -0.01473812</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.9826588 -0.01488373</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.9971456 -0.01500729</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.8744230 -0.01330861</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.8977386 -0.01310067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.9448173 -0.01269726</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -1.0785601 -0.01778263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -1.0055234 -0.01825648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.9600842 -0.01645047</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.9465989 -0.01683111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.9555004 -0.01411286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.9133129 -0.01781142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -1.0324356 -0.01343103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.8184428 -0.02045107</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -1.0261582 -0.01518367</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Recruitment$coefValues</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Intercept Total_dist</span>
@@ -312,8 +317,8 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: 0.0619898 0.001530612</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples_Recruitment$quantiles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.9750000 0.5527778 0.0250000 0.7638889 0.1305556 0.3416667 0.8694444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.2361111 0.6583333 0.4472222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.5527778 0.1305556 0.0250000 0.6583333 0.4472222 0.9750000 0.3416667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.8694444 0.2361111 0.7638889</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
@@ -322,16 +327,16 @@ Journal of Applied Ecology, 57(7), pp.1314-1327.
 <span class="r-in"><span><span class="fu">sampleNationalCoefs</span><span class="op">(</span><span class="va">cfs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefSamples</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Intercept  Total_dist</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.9456789 -0.01830368</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -0.9265324 -0.01871025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.9849379 -0.01504732</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.8101058 -0.01404089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.9142894 -0.01332629</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.9663295 -0.01603538</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.9236093 -0.01317944</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -0.9901142 -0.01707855</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.8334773 -0.01853018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.9016228 -0.01533147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,] -0.8936233 -0.01598022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] -0.9738481 -0.01388702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] -0.9380286 -0.01539921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] -0.9393171 -0.01351423</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] -0.9878678 -0.01697006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] -0.9861164 -0.01172049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] -0.9814470 -0.01743911</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] -1.0709697 -0.01440436</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] -0.9187924 -0.01510470</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] -0.9627955 -0.01446897</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $coefValues</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Intercept Total_dist</span>

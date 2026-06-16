@@ -1,17 +1,55 @@
-# TO DO: document plotTrajectories
+# Default parameters for specifying scenario durations.
 
-TO DO: document plotTrajectories
+Returns default parameter values for scenario durations. See
+[`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md)
+for additional details.
 
 ## Usage
 
 ``` r
-plotTrajectories(
-  popMetrics,
-  reps = 35,
-  metrics = c("Anthro", "Sbar", "survival", "Rbar", "recruitment", "lambda_bar",
-    "lambda")
+timeDefaults(
+  paramTable = NULL,
+  projYears = 35,
+  obsYears = 15,
+  preYears = 0,
+  curYear = 2023,
+  startYear = NA,
+  ...
 )
 ```
+
+## Arguments
+
+- paramTable:
+
+  a data.frame with column names matching the arguments below. Any
+  columns that are missing will be filled with the default values.
+
+- projYears:
+
+  Number of years of projections
+
+- obsYears:
+
+  Number of years of observations
+
+- preYears:
+
+  Number of years before monitoring begins
+
+- curYear:
+
+  year. The current year. All years before are part of the observation
+  period and years after are part of the projection period.
+
+- startYear:
+
+  year. First year in observation period. Optional, if not provided it
+  will be calculated from `curYear` and `obsYears`
+
+## Value
+
+a data.frame of parameter values.
 
 ## See also
 
@@ -35,10 +73,20 @@ Caribou demography functions:
 [`nationalTrajectoryDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/nationalTrajectoryDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
+[`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
-[`timeDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/timeDefaults.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
 [`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
+
+## Examples
+
+``` r
+timeDefaults()
+#> # A tibble: 1 × 6
+#>   hasYear projYears obsYears preYears curYear startYear
+#>   <lgl>       <dbl>    <dbl>    <dbl>   <dbl>     <dbl>
+#> 1 FALSE          35       15        0    2023      2009
+```

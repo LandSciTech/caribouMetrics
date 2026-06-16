@@ -30,6 +30,10 @@ population growth
   : Demographic data from Google sheet
 - [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md)
   : Run the Bayesian caribou demographic projection app
+- [`demographyDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographyDefaults.md)
+  : Default parameters for simulating demographic trajectories.
+- [`disturbanceDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/disturbanceDefaults.md)
+  : Default parameters for simulation of disturbance scenarios.
 - [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md)
   : Create summary table of demographic rates from survival and
   recruitment surveys
@@ -41,8 +45,11 @@ population growth
   [`subsetNationalCoefs()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md)
   : Sample demographic regression model coefficients
 - [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md)
-  : Default parameters for simulation of example demographic
-  trajectories.
+  : Default scenario parameters.
+- [`monitoringDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/monitoringDefaults.md)
+  : Default parameters for simulating monitoring.
+- [`nationalTrajectoryDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/nationalTrajectoryDefaults.md)
+  : Default parameters for simulating national demographic trajectories.
 - [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md)
   : Plot Bayesian population model results
 - [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md)
@@ -57,6 +64,8 @@ population growth
   [`summarizeTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md)
   [`simulateTrajectoriesFromPosterior()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md)
   : Format trajectory tables
+- [`timeDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/timeDefaults.md)
+  : Default parameters for specifying scenario durations.
 - [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md)
   : Get trajectories from a Bayesian model result
 - [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md)

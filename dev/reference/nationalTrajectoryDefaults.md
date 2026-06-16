@@ -1,17 +1,52 @@
-# TO DO: document plotTrajectories
+# Default parameters for simulating national demographic trajectories.
 
-TO DO: document plotTrajectories
+Returns default parameter values for national demographic trajectories.
+See
+[`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md)
+and
+[`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md)
+for additional details.
 
 ## Usage
 
 ``` r
-plotTrajectories(
-  popMetrics,
-  reps = 35,
-  metrics = c("Anthro", "Sbar", "survival", "Rbar", "recruitment", "lambda_bar",
-    "lambda")
+nationalTrajectoryDefaults(
+  paramTable = NULL,
+  sQuantile = NA,
+  rQuantile = NA,
+  rSlopeMod = 1,
+  sSlopeMod = 1,
+  interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
+  ...
 )
 ```
+
+## Arguments
+
+- paramTable:
+
+  a data.frame with column names matching the arguments below. Any
+  columns that are missing will be filled with the default values.
+
+- sQuantile:
+
+  number in 0,1. Survival quantile.
+
+- rQuantile:
+
+  number in 0,1. Recruitment quantile.
+
+- rSlopeMod:
+
+  number. Disturbance-recruitment slope multiplier
+
+- sSlopeMod:
+
+  number. Disturbance-survival slope multiplier
+
+## Value
+
+a data.frame of parameter values.
 
 ## See also
 
@@ -32,9 +67,9 @@ Caribou demography functions:
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
 [`monitoringDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/monitoringDefaults.md),
-[`nationalTrajectoryDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/nationalTrajectoryDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
+[`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`timeDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/timeDefaults.md),
@@ -42,3 +77,14 @@ Caribou demography functions:
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
 [`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
+
+## Examples
+
+``` r
+nationalTrajectoryDefaults()
+#> # A tibble: 1 × 13
+#>   rSlopeMod sSlopeMod interannualVar      N0  qMin  qMax  uMin  uMax  zMin  zMax
+#>       <dbl>     <dbl> <list>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1         1         1 <named list [2]>  1000     0     0     0     0     0     0
+#> # ℹ 3 more variables: cowMult <dbl>, lQuantile <lgl>, correlateRates <lgl>
+```

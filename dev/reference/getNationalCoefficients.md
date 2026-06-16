@@ -138,14 +138,19 @@ Caribou demography functions:
 [`convertTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md),
 [`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
+[`demographyDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographyDefaults.md),
+[`disturbanceDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/disturbanceDefaults.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
+[`monitoringDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/monitoringDefaults.md),
+[`nationalTrajectoryDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/nationalTrajectoryDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
 [`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
+[`timeDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/timeDefaults.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
@@ -162,16 +167,16 @@ getNationalCoefficients(10)
 #> $coefSamples_Survival
 #> $coefSamples_Survival$coefSamples
 #>        Intercept        Anthro Precision
-#>  [1,] -0.1486132 -0.0007487502  64.36299
-#>  [2,] -0.1455611 -0.0007446625  72.14417
-#>  [3,] -0.1419595 -0.0009133786  61.97224
-#>  [4,] -0.1418393 -0.0009010120  77.24144
-#>  [5,] -0.1339868 -0.0010616621  72.13357
-#>  [6,] -0.1345483 -0.0005471927  72.43857
-#>  [7,] -0.1501806 -0.0008149598  59.99872
-#>  [8,] -0.1406728 -0.0009215622  68.09706
-#>  [9,] -0.1475672 -0.0008943765  66.60399
-#> [10,] -0.1323797 -0.0006463586  76.02826
+#>  [1,] -0.1423065 -0.0006995595  56.32176
+#>  [2,] -0.1382537 -0.0006027693  55.24700
+#>  [3,] -0.1448455 -0.0009009828  81.50344
+#>  [4,] -0.1350592 -0.0007669110  65.46994
+#>  [5,] -0.1359158 -0.0007959976  65.30372
+#>  [6,] -0.1427276 -0.0006607975  68.75449
+#>  [7,] -0.1406482 -0.0007014543  65.44288
+#>  [8,] -0.1345227 -0.0005787014  54.92577
+#>  [9,] -0.1384848 -0.0008787968  72.47108
+#> [10,] -0.1440650 -0.0007606156  76.77187
 #> 
 #> $coefSamples_Survival$coefValues
 #>    Intercept Anthro Precision
@@ -184,23 +189,23 @@ getNationalCoefficients(10)
 #> 1: 0.007908163 0.000127551  8.272731
 #> 
 #> $coefSamples_Survival$quantiles
-#>  [1] 0.0250000 0.1305556 0.3416667 0.5527778 0.4472222 0.2361111 0.6583333
-#>  [8] 0.7638889 0.9750000 0.8694444
+#>  [1] 0.0250000 0.2361111 0.8694444 0.6583333 0.5527778 0.7638889 0.1305556
+#>  [8] 0.9750000 0.4472222 0.3416667
 #> 
 #> 
 #> $coefSamples_Recruitment
 #> $coefSamples_Recruitment$coefSamples
 #>        Intercept      Anthro Fire_excl_anthro Precision
-#>  [1,] -0.9991065 -0.01356101     -0.007593861  20.42251
-#>  [2,] -1.0647612 -0.01713976     -0.005367573  19.18080
-#>  [3,] -1.0481467 -0.01749687     -0.011863474  17.21689
-#>  [4,] -1.0668326 -0.01464005     -0.007805197  16.49014
-#>  [5,] -0.9773248 -0.01843270     -0.010369632  21.72727
-#>  [6,] -1.0269990 -0.01593546     -0.007916402  21.24387
-#>  [7,] -0.9848196 -0.01603724     -0.009898223  17.56499
-#>  [8,] -1.0070068 -0.01639519     -0.008086825  18.87942
-#>  [9,] -0.8795559 -0.01929365     -0.006848795  16.80359
-#> [10,] -1.0504361 -0.01751780     -0.007943825  17.85963
+#>  [1,] -0.9971360 -0.01477191     -0.011564788  20.87141
+#>  [2,] -1.0700640 -0.01479829     -0.006859065  18.80631
+#>  [3,] -1.0696061 -0.01755905     -0.007670275  19.68579
+#>  [4,] -1.0694774 -0.02045441     -0.005319006  15.22032
+#>  [5,] -0.9920248 -0.01580562     -0.006486813  25.09567
+#>  [6,] -1.0012239 -0.01723672     -0.009326529  21.01256
+#>  [7,] -1.0602176 -0.01747596     -0.009679873  21.07518
+#>  [8,] -1.0141678 -0.01802547     -0.009865571  22.94789
+#>  [9,] -0.9988883 -0.01741971     -0.006643576  16.74558
+#> [10,] -1.0722431 -0.01605920     -0.009520552  19.91371
 #> 
 #> $coefSamples_Recruitment$coefValues
 #>    Intercept Anthro Fire_excl_anthro Precision
@@ -213,8 +218,8 @@ getNationalCoefficients(10)
 #> 1: 0.06122449 0.001530612      0.002040816  2.228655
 #> 
 #> $coefSamples_Recruitment$quantiles
-#>  [1] 0.3416667 0.7638889 0.4472222 0.6583333 0.1305556 0.2361111 0.9750000
-#>  [8] 0.8694444 0.5527778 0.0250000
+#>  [1] 0.3416667 0.9750000 0.1305556 0.2361111 0.5527778 0.4472222 0.7638889
+#>  [8] 0.0250000 0.6583333 0.8694444
 #> 
 #> 
 
@@ -227,16 +232,16 @@ getNationalCoefficients(10, modelVersion = "Johnson", survivalModelNumber = "M1"
 #> $coefSamples_Survival
 #> $coefSamples_Survival$coefSamples
 #>        Intercept        Anthro Precision
-#>  [1,] -0.1386675 -0.0007494398  58.56528
-#>  [2,] -0.1470608 -0.0007675613  62.19861
-#>  [3,] -0.1474294 -0.0009236249  65.26732
-#>  [4,] -0.1375200 -0.0007738752  74.46755
-#>  [5,] -0.1559594 -0.0005768461  73.58597
-#>  [6,] -0.1434928 -0.0009758119  60.47276
-#>  [7,] -0.1397696 -0.0007178257  58.08636
-#>  [8,] -0.1478934 -0.0006393209  65.72207
-#>  [9,] -0.1404629 -0.0009902228  65.23168
-#> [10,] -0.1478339 -0.0007853519  72.81439
+#>  [1,] -0.1370469 -0.0007128045  65.06369
+#>  [2,] -0.1512367 -0.0009396197  63.47248
+#>  [3,] -0.1459214 -0.0006469322  71.34317
+#>  [4,] -0.1364825 -0.0009462010  62.69978
+#>  [5,] -0.1534675 -0.0009665445  53.39256
+#>  [6,] -0.1380327 -0.0008949384  53.08590
+#>  [7,] -0.1454968 -0.0008381582  64.25462
+#>  [8,] -0.1443248 -0.0007734097  64.86163
+#>  [9,] -0.1399836 -0.0009452605  64.16662
+#> [10,] -0.1432657 -0.0006875677  74.48219
 #> 
 #> $coefSamples_Survival$coefValues
 #>    Intercept Anthro Precision
@@ -249,23 +254,23 @@ getNationalCoefficients(10, modelVersion = "Johnson", survivalModelNumber = "M1"
 #> 1: 0.007908163 0.000127551  8.272731
 #> 
 #> $coefSamples_Survival$quantiles
-#>  [1] 0.1305556 0.6583333 0.7638889 0.3416667 0.9750000 0.8694444 0.4472222
-#>  [8] 0.0250000 0.2361111 0.5527778
+#>  [1] 0.9750000 0.5527778 0.6583333 0.1305556 0.2361111 0.8694444 0.0250000
+#>  [8] 0.4472222 0.3416667 0.7638889
 #> 
 #> 
 #> $coefSamples_Recruitment
 #> $coefSamples_Recruitment$coefSamples
 #>        Intercept  Total_dist
-#>  [1,] -0.8536289 -0.01615182
-#>  [2,] -0.9834509 -0.01470408
-#>  [3,] -0.9806921 -0.01317176
-#>  [4,] -0.8451088 -0.01622049
-#>  [5,] -0.9252271 -0.01265784
-#>  [6,] -0.9682123 -0.01473812
-#>  [7,] -0.9826588 -0.01488373
-#>  [8,] -0.9971456 -0.01500729
-#>  [9,] -0.8744230 -0.01330861
-#> [10,] -0.8977386 -0.01310067
+#>  [1,] -0.9448173 -0.01269726
+#>  [2,] -1.0785601 -0.01778263
+#>  [3,] -1.0055234 -0.01825648
+#>  [4,] -0.9600842 -0.01645047
+#>  [5,] -0.9465989 -0.01683111
+#>  [6,] -0.9555004 -0.01411286
+#>  [7,] -0.9133129 -0.01781142
+#>  [8,] -1.0324356 -0.01343103
+#>  [9,] -0.8184428 -0.02045107
+#> [10,] -1.0261582 -0.01518367
 #> 
 #> $coefSamples_Recruitment$coefValues
 #>    Intercept Total_dist
@@ -278,8 +283,8 @@ getNationalCoefficients(10, modelVersion = "Johnson", survivalModelNumber = "M1"
 #> 1: 0.0619898 0.001530612
 #> 
 #> $coefSamples_Recruitment$quantiles
-#>  [1] 0.9750000 0.5527778 0.0250000 0.7638889 0.1305556 0.3416667 0.8694444
-#>  [8] 0.2361111 0.6583333 0.4472222
+#>  [1] 0.5527778 0.1305556 0.0250000 0.6583333 0.4472222 0.9750000 0.3416667
+#>  [8] 0.8694444 0.2361111 0.7638889
 #> 
 #> 
 
@@ -288,16 +293,16 @@ cfs <- subsetNationalCoefs(popGrowthTableJohnsonECCC, "recruitment", "Johnson", 
 sampleNationalCoefs(cfs[[1]], 10)
 #> $coefSamples
 #>        Intercept  Total_dist
-#>  [1,] -0.9456789 -0.01830368
-#>  [2,] -0.9265324 -0.01871025
-#>  [3,] -0.9849379 -0.01504732
-#>  [4,] -0.8101058 -0.01404089
-#>  [5,] -0.9142894 -0.01332629
-#>  [6,] -0.9663295 -0.01603538
-#>  [7,] -0.9236093 -0.01317944
-#>  [8,] -0.9901142 -0.01707855
-#>  [9,] -0.8334773 -0.01853018
-#> [10,] -0.9016228 -0.01533147
+#>  [1,] -0.8936233 -0.01598022
+#>  [2,] -0.9738481 -0.01388702
+#>  [3,] -0.9380286 -0.01539921
+#>  [4,] -0.9393171 -0.01351423
+#>  [5,] -0.9878678 -0.01697006
+#>  [6,] -0.9861164 -0.01172049
+#>  [7,] -0.9814470 -0.01743911
+#>  [8,] -1.0709697 -0.01440436
+#>  [9,] -0.9187924 -0.01510470
+#> [10,] -0.9627955 -0.01446897
 #> 
 #> $coefValues
 #>    Intercept Total_dist

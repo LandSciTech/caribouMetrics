@@ -1,17 +1,50 @@
-# TO DO: document plotTrajectories
+# Default parameters for simulating monitoring.
 
-TO DO: document plotTrajectories
+Returns default parameter values for monitoring. See
+[`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md)
+and
+[`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md)
+for additional details.
 
 ## Usage
 
 ``` r
-plotTrajectories(
-  popMetrics,
-  reps = 35,
-  metrics = c("Anthro", "Sbar", "survival", "Rbar", "recruitment", "lambda_bar",
-    "lambda")
+monitoringDefaults(
+  paramTable = NULL,
+  collarInterval = NA,
+  cowCount = NA,
+  collarCount = NA,
+  ...
 )
 ```
+
+## Arguments
+
+- paramTable:
+
+  a data.frame with column names matching the arguments below. Any
+  columns that are missing will be filled with the default values.
+
+- collarInterval:
+
+  number. Optional. Number of years between collar deployments. If
+  missing assumed to be every year
+
+- cowCount:
+
+  Optional. Only used in
+  [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md)
+  to set the number of cows per year in recruitment survey
+
+- collarCount:
+
+  number \>= 1. The target number of collars active each year. Set to NA
+  to use `freqStartsPerYear` in
+  [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md)
+
+## Value
+
+a data.frame of parameter values.
 
 ## See also
 
@@ -31,10 +64,10 @@ Caribou demography functions:
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
-[`monitoringDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/monitoringDefaults.md),
 [`nationalTrajectoryDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/nationalTrajectoryDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
+[`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
 [`timeDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/timeDefaults.md),
@@ -42,3 +75,13 @@ Caribou demography functions:
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
 [`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
+
+## Examples
+
+``` r
+monitoringDefaults()
+#> # A tibble: 1 × 10
+#>      N0  qMin  qMax  uMin  uMax  zMin  zMax cowMult lQuantile correlateRates
+#>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <lgl>     <lgl>         
+#> 1  1000     0     0     0     0     0     0       6 NA        FALSE         
+```
