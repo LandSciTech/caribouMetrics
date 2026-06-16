@@ -61,7 +61,7 @@ test_that("The trajectory can include disturbance", {
   mod_reald <- estimateBayesianRates(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 
                                  recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),N0=1000,
                                  disturbance = data.frame(Year=seq(2010,2017),Anthro=5,Fire_excl_anthro=0.2),
-                                 niters=10)
+                                 niters=15)
 
   trajs <- trajectoriesFromBayesian(mod_reald)$samples
 

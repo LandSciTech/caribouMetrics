@@ -14,9 +14,9 @@
 #' @family demography
 #' @examples
 trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
-                                     cPars=subset(getScenarioDefaults(),select=-iAnthro),
+                                     cPars=demographyDefaults(),
                                      returnSamples = TRUE, doSummary = TRUE, ...){
-  cPars <- getScenarioDefaults(cPars)
+  cPars <- demographyDefaults(cPars)
   
   if(hasName(bayesianResults,"Anthro")){
     message("Anthro from bayesianResults")

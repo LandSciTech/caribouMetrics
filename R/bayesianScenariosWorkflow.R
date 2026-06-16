@@ -41,7 +41,13 @@ bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4
                       returnSamples=F,...) {
   
   # ePars=eParsIn;simInitial=simBig;printProgress=F;niters = formals(bboutools::bb_fit_survival)$niters)
-  scns <- getScenarioDefaults(scns)
+
+  if(hasName(simInitial,"samples")){
+    scns <- getScenarioDefaults(scns,includeNational=F)
+  }else{
+    scns <- getScenarioDefaults(scns)
+  }
+  
   errorLog <- vector(mode = "list", length = nrow(scns))
   rr.summary.all <- vector(mode = "list", length = nrow(scns))
   sim.all <- vector(mode = "list", length = nrow(scns))
@@ -65,7 +71,7 @@ bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4
                 "supplied as trajectories in simulateObservations and rQuantile ",
                 "and sQuantile will be ignored")
       }
-      if(cs$sSlopeMod !=1 | cs$rSlopeMod != 1){
+      if(any(c("rSlopeMod", "sSlopeMod") %in% names(cs))){
         warning("scns includes parameters for National model trajectories and ",
                 "simInitial includes samples. simInitial$samples will be ",
                 "supplied as trajectories in simulateObservations and rSlopeMod ",

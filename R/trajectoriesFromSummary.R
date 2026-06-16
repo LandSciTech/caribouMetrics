@@ -18,7 +18,7 @@
 #'
 #'
 trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv, 
-                  type = "beta", cPars = subset(getScenarioDefaults(),select=-iAnthro), 
+                  type = "beta", cPars = demographyDefaults(), 
                   doSummary = T, returnSamples = T,
                   nthin=formals(bboutools::bb_fit_survival)$nthin,varPersists=T,...){
 

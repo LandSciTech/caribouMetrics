@@ -50,7 +50,7 @@ if(file.exists("results/simsInitial.rds")){
 trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
                             useQuantiles  = NULL,
                             populationGrowthTable  = NULL,
-                            cPars = subset(getScenarioDefaults(),select=-iAnthro),
+                            cPars = nationalTrajectoryDefaults(),
                             interannualVar = eval(formals(caribouPopGrowth)$interannualVar),
                             disturbance = NULL,
                             skipSave = FALSE,
@@ -65,7 +65,11 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   doSave <- FALSE
 
   hasAnthro <- is.element("iAnthro",names(cPars))
-  cPars <- getScenarioDefaults(cPars)
+  if(!is.null(disturbance)){
+    cPars <- nationalTrajectoryDefaults(cPars)
+  }else{
+    cPars <- getScenarioDefaults(cPars,includeMonitoring=F)
+  }
 
   if(!skipSave){
     check <- as.list(match.call())
