@@ -176,7 +176,7 @@ test_that("collarOn and Off work as expected", {
   scns <- getScenarioDefaults(iFire = 1, projYears = 10, obsYears = 10, collarCount = 10)
   
   simObs1_12 <- simulateObservations(scns, collarOnTime = 1, collarOffTime = 12, 
-                                     caribouYearStart = 1)
+                                     caribouYearStart = 4)
   #plotSurvivalSeries(simObs1_12$simSurvObs)
   expect_true(all(simObs1_12$simSurvObs$StartTotal<=scns$collarCount))
   expect_true(max(simObs1_12$simSurvObs$StartTotal)==scns$collarCount)

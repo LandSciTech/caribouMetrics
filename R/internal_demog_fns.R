@@ -227,10 +227,11 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   startYrs = sort(unique(freqStartsByYear$Year))
   
   firstStep=T
-  
+
   for (sy in startYrs) {
     #sy = startYrs[2]
     y = sy
+    addedNumStarts = F
     cMonth = caribouYearStart
     if(nMonths==1){prevMonth=cMonth}else{prevMonth = cMonth-1}
     if(prevMonth==0){
@@ -241,7 +242,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
     for (yId in seq(sy,min(sy+collarNumYears,max(survivalSeries$Year)))){
       if ((y == sy+collarNumYears)&(cMonth==collarOffTime)){break}
       for(mId in 1:nMonths){
-        #print(paste(sy, y,cMonth))
+        #print(paste(sy, y,cMonth, addedNumStarts))
         cInfo = subset(survivalSeries,(Month==cMonth)&(Year==y))
         if(nrow(cInfo)==0){break}
         cInfo$startYr = sy
@@ -270,12 +271,13 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
         
         if ((y == sy+collarNumYears)&(cMonth==collarOffTime)){break}
         
-        if(y==sy){
+        if(!addedNumStarts&cInfo$numStarts>0){
           if (topUp) {
             cInfo$StartTotal=pmax((cInfo$numStarts-cInfo$PrevsAll),cInfo$Prevs)
           } else {
             cInfo$StartTotal=cInfo$Prevs+cInfo$numStarts
           }
+          addedNumStarts=T
         }else{
           cInfo$StartTotal=cInfo$Prevs
           #if(sum(cInfo$StartTotal)==0){break}
@@ -285,9 +287,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
           warning("Target number of collars exceeds population size. Adjusting number of collars for consistency.")
           cInfo$StartTotal[cInfo$StartTotal>cInfo$N] = cInfo$N[cInfo$StartTotal>cInfo$N]
         }
-        
         cInfo$MortalitiesCertain = rbinom(nrow(cInfo),cInfo$StartTotal,prob=(1-cInfo$survival^(1/nMonths)))
-        
         if(!firstStep){
           cAll = rbind(cAll,cInfo)
         }else{
@@ -306,7 +306,6 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
     }
   }
 
-  
   simSurvs <- cAll %>%
     group_by(PopulationName, Replicate, Year, Month) %>%
     summarise(StartTotal=sum(StartTotal,na.rm=T),MortalitiesCertain=sum(MortalitiesCertain,na.rm=T), survival=mean(survival,na.rm=T))
