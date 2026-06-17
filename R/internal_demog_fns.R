@@ -225,24 +225,23 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   survivalSeries$numStarts[is.na(survivalSeries$numStarts)]=0
   
   startYrs = sort(unique(freqStartsByYear$Year))
-  
+
+  #print(freqStartsByYear)
   firstStep=T
 
   for (sy in startYrs) {
     #sy = startYrs[2]
     y = sy
     addedNumStarts = F
-    cMonth = caribouYearStart
-    if(nMonths==1){prevMonth=cMonth}else{prevMonth = cMonth-1}
+    if(nMonths==1){cMonth = caribouYearStart; prevMonth = cMonth}else{cMonth = 1; prevMonth = cMonth-1}
     if(prevMonth==0){
       prevMonth=12;prevYear=y-1      
     }else{
       prevYear = y
     }
     for (yId in seq(sy,min(sy+collarNumYears,max(survivalSeries$Year)))){
-      if ((y == sy+collarNumYears)&(cMonth==collarOffTime)){break}
+      if ((y == min(sy+collarNumYears,max(survivalSeries$Year)))&(cMonth==collarOffTime)){break}
       for(mId in 1:nMonths){
-        #print(paste(sy, y,cMonth, addedNumStarts))
         cInfo = subset(survivalSeries,(Month==cMonth)&(Year==y))
         if(nrow(cInfo)==0){break}
         cInfo$startYr = sy
@@ -271,16 +270,24 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
         
         if ((y == sy+collarNumYears)&(cMonth==collarOffTime)){break}
         
-        if(!addedNumStarts&cInfo$numStarts>0){
+        if((nMonths==12)&(collarOnTime<caribouYearStart)){yrMatch = sy+1}else{yrMatch = sy}
+        
+        if(!addedNumStarts&(y==sy)&(sum(cInfo$numStarts)>0)){
           if (topUp) {
-            cInfo$StartTotal=pmax((cInfo$numStarts-cInfo$PrevsAll),cInfo$Prevs)
+            cInfo$StartTotal=pmax((cInfo$numStarts-cInfo$PrevsAll),0)
           } else {
             cInfo$StartTotal=cInfo$Prevs+cInfo$numStarts
           }
           addedNumStarts=T
+          
+          #print(paste(sy, y,cMonth))
+          #print(cInfo)
         }else{
-          cInfo$StartTotal=cInfo$Prevs
-          #if(sum(cInfo$StartTotal)==0){break}
+          if((y==sy)&!addedNumStarts){
+            cInfo$StartTotal=0
+          }else{
+            cInfo$StartTotal=cInfo$Prevs
+          }
         }
 
         if(any(cInfo$StartTotal[!is.na(cInfo$N)]>cInfo$N[!is.na(cInfo$N)])){
@@ -293,7 +300,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
         }else{
           cAll = cInfo
         }
-        
+
         prevMonth = cMonth;prevYear = y;firstStep=F
         
         if(nMonths==1){
@@ -301,7 +308,6 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
         }else{
           if(cMonth==12){cMonth=1;y=y+1}else{cMonth=cMonth+1}
         }
-        #print(cInfo)
       }
     }
   }
