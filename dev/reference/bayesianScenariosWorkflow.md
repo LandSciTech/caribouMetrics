@@ -133,5 +133,141 @@ simsIn <- trajectoriesFromNational()
 #> Updating cached initial simulations.
 scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.
-#> Error in simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime,     collarOnTime, caribouYearStart, topUp = T, forceMonths = forceMonths): Error in simSurvivalData: too many collars
+#> Warning: requested year range: 2014 - 2058 does not match survival data year range:  2015 - 2024
+#> Warning: missing years of recruitment data: 2014
+#> Loading required package: nimbleQuad
+#> 
+#> Attaching package: ‘nimbleQuad’
+#> The following objects are masked from ‘package:nimble’:
+#> 
+#>     buildAGHQ, buildLaplace, runAGHQ, runLaplace, summaryAGHQ,
+#>     summaryLaplace
+#> Registered S3 method overwritten by 'mcmcr':
+#>   method         from 
+#>   as.mcmc.nlists nlist
+#> Registered S3 method overwritten by 'rjags':
+#>   method               from 
+#>   as.mcmc.list.mcarray mcmcr
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 96
+#>    Unobserved stochastic nodes: 492
+#>    Total graph size: 2389
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 18
+#>    Unobserved stochastic nodes: 206
+#>    Total graph size: 666
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Warning: no non-missing arguments to max; returning -Inf
+#> Warning: requested year range: 2004 - 2058 does not match survival data year range:  2005 - 2024
+#> Warning: missing years of recruitment data: 2004
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 216
+#>    Unobserved stochastic nodes: 502
+#>    Total graph size: 2909
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 38
+#>    Unobserved stochastic nodes: 236
+#>    Total graph size: 806
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Warning: no non-missing arguments to max; returning -Inf
+#> Warning: requested year range: 2014 - 2058 does not match survival data year range:  2015 - 2024
+#> Warning: missing years of recruitment data: 2014
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 96
+#>    Unobserved stochastic nodes: 492
+#>    Total graph size: 2389
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 18
+#>    Unobserved stochastic nodes: 206
+#>    Total graph size: 666
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Warning: no non-missing arguments to max; returning -Inf
+#> Warning: requested year range: 2004 - 2058 does not match survival data year range:  2005 - 2024
+#> Warning: missing years of recruitment data: 2004
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 216
+#>    Unobserved stochastic nodes: 502
+#>    Total graph size: 2909
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 38
+#>    Unobserved stochastic nodes: 236
+#>    Total graph size: 806
+#> 
+#> Initializing model
+#> 
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
+#> 
+#> 
+#> Warning: no non-missing arguments to max; returning -Inf
 ```
