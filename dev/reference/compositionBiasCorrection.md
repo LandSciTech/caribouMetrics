@@ -100,8 +100,8 @@ compositionBiasCorrection(w = 6,
                           u = runif(nr, 0, 0.2),
                           z = runif(nr, 0, 0.2),
                           approx = FALSE)
-#>  [1] 1.0365652 1.0149571 1.0062373 1.0399730 0.9689127 1.1103187 1.0187479
-#>  [8] 1.2101781 1.1954113 1.1260140
+#>  [1] 1.1120108 1.1514611 0.9671177 0.8955278 1.1750677 0.9867971 0.9328781
+#>  [8] 0.9467810 1.1696872 0.9378975
 
 compositionBiasCorrection(w = 6,
                           q = runif(nr, 0, 0.6),
@@ -109,8 +109,8 @@ compositionBiasCorrection(w = 6,
                           z = runif(nr, 0, 0.2),
                           approx = TRUE)
 #> # A tibble: 1 × 5
-#>       w     m      v   sig2     mu
-#>   <dbl> <dbl>  <dbl>  <dbl>  <dbl>
-#> 1     6  1.02 0.0125 0.0119 0.0168
+#>       w     m       v    sig2       mu
+#>   <dbl> <dbl>   <dbl>   <dbl>    <dbl>
+#> 1     6 0.999 0.00694 0.00692 -0.00404
 
 ```

@@ -27,7 +27,7 @@ library(caribouMetrics)
 #>     intersect, setdiff, setequal, union
 library(dplyr)
 library(terra)
-#> terra 1.9.27
+#> terra 1.9.34
 #> 
 #> Attaching package: 'terra'
 #> The following objects are masked from 'package:nimble':

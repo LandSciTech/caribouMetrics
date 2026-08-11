@@ -1,12 +1,12 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   caribouDemography: caribouDemography.html
   combine-observed-simulated: combine-observed-simulated.html
   compare-bayesian-models: compare-bayesian-models.html
   Using_disturbanceMetric: Using_disturbanceMetric.html
-last_built: 2026-06-17T21:40Z
+last_built: 2026-08-11T17:34Z
 urls:
   reference: https://landscitech.github.io/caribouMetrics/reference
   article: https://landscitech.github.io/caribouMetrics/articles
