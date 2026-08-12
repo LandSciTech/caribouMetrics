@@ -213,13 +213,13 @@ plotTrajectories <- function(popMetrics,reps=35,metrics = c("Anthro", "Sbar","su
   popMetrics$summary <- popMetrics$summary %>%
     filter(MetricTypeID %in% metrics)
   names <- popMetrics$summary %>% select(MetricTypeID,Parameter) %>% unique()
-  proj <- ggplot(data = popMetrics$summary,
-                 aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
-    geom_ribbon(fill="grey") +
-    geom_line(colour="black",linewidth=2)+
-    facet_wrap(~Parameter, scales = "free") +
-    ylab("")+
-    theme(legend.position = "none")
+  proj <- ggplot2::ggplot(data = popMetrics$summary,
+                 ggplot2::aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
+    ggplot2::geom_ribbon(fill="grey") +
+    ggplot2::geom_line(colour="black",linewidth=2)+
+    ggplot2::facet_wrap(~Parameter, scales = "free") +
+    ggplot2::ylab("")+
+    ggplot2::theme(legend.position = "none")
   
   
   if(hasName(popMetrics,"samples")){
@@ -228,8 +228,10 @@ plotTrajectories <- function(popMetrics,reps=35,metrics = c("Anthro", "Sbar","su
       merge(names) %>%
       filter(as.numeric(as.factor(Replicate))<=reps)
 
-    proj<-proj+ geom_line(data=popMetrics$samples,
-                          aes(x=Year,y=Amount,colour=Replicate,group=Replicate), inherit.aes = FALSE)   
+    proj <- proj + 
+      ggplot2::geom_line(data=popMetrics$samples,
+                         ggplot2::aes(x=Year,y=Amount,colour=Replicate,group=Replicate), 
+                         inherit.aes = FALSE)   
   }
   
   proj
