@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotCompareTrajectories.R
 \name{plotCompareTrajectories}
 \alias{plotCompareTrajectories}
-\title{Plot Bayesian population model results}
+\title{Plot and compare Bayesian population model results}
 \usage{
 plotCompareTrajectories(
   modTables,
@@ -18,7 +18,8 @@ plotCompareTrajectories(
 }
 \arguments{
 \item{modTables}{list. A list of model results tables created using
-\verb{[compareTrajectories()]}.}
+\verb{[compareTrajectories()]}.
+#TODO consider changing parameter to metric... but compareTrajectories output has parameter column, while plotTrajectories uses metric}
 
 \item{parameter}{character. Which parameter to plot, if more than one, a list
 of plots is returned.}
@@ -42,7 +43,16 @@ was given.
 }
 \description{
 Plot Bayesian population model results, with (optionally) the
-distribution of outcomes from the initial model, local observations, and true local state for comparison.
+distribution of outcomes from the initial model, local observations,
+and true local state for comparison.
+}
+\details{
+\code{plotCompareTrajectories} and \code{plotTrajectories} both plot Bayesian
+population model results over time but \code{plotCompareTrajectories} can to show
+results of the whole \verb{[bayesianScenariosWorkflow()]} including simulation of
+observations, model fit and comparison to an initial model. See
+\verb{[plotTrajectories()]} the ability to show multiple sample trajectories from
+one model
 }
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,

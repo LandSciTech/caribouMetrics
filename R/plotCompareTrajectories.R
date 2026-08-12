@@ -1,13 +1,22 @@
 # Copyright 2025 His Majesty the King in Right of Canada as represented by the Minister of the Environment
 # License GPL-3
 
-#' Plot Bayesian population model results
+#' Plot and compare Bayesian population model results
 #'
 #' Plot Bayesian population model results, with (optionally) the 
-#' distribution of outcomes from the initial model, local observations, and true local state for comparison. 
+#' distribution of outcomes from the initial model, local observations, 
+#' and true local state for comparison. 
+#' 
+#' `plotCompareTrajectories` and `plotTrajectories` both plot Bayesian
+#' population model results over time but `plotCompareTrajectories` can to show
+#' results of the whole `[bayesianScenariosWorkflow()]` including simulation of
+#' observations, model fit and comparison to an initial model. See
+#' `[plotTrajectories()]` the ability to show multiple sample trajectories from
+#' one model
 #'
 #' @param modTables list. A list of model results tables created using
 #'   `[compareTrajectories()]`.
+#'   #TODO consider changing parameter to metric... but compareTrajectories output has parameter column, while plotTrajectories uses metric
 #' @param parameter character. Which parameter to plot, if more than one, a list
 #'   of plots is returned.
 #' @param lowBound,highBound numeric. Lower and upper y axis limits
@@ -204,35 +213,46 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
   x2
 }
 
+#' Plot Bayesian population model trajectories
+#'
+#' Plot Bayesian population model results including multiple sample trajectories
+#' to show variation within the model. If results include multiple populations
+#' each population is shown with a different colour.
+#'
+#' `plotTrajectories` and `plotCompareTrajectories` both plot Bayesian
+#' population model results over time but `plotTrajectories` creates a faceted
+#' plot of several metrics with the ability to show sample trajectories along
+#' with the overall model prediction. See `[plotCompareTrajectories]` for
+#' displaying the results of `[bayesianScenariosWorkflow()]`.
 #'
 #' @param caribouBayesDemogMod list. Caribou Bayesian demographic model results
 #'   produced by calling [bayesianTrajectoryWorkflow()],
 #'   [trajectoriesFromNational()], [trajectoriesFromBayesian()], or
-#'   [trajectoriesFromSummary()]
+#'   [trajectoriesFromSummary()].
 #' @param replicates integer. Number of replicate populations. Ignored if
 #'   samples not included in `caribouBayesDemogMod`.
 #' @param metrics character. A vector of MetricTypeIDs to be included as facets
-#'   in the plot
+#'   in the plot.
 #'
 #' @export
 #' 
+#' @family demography
+#'
 #' @examples
 #' # trajectories from arbitrary demographic rates
-#' 
-#' traj <- trajectoriesFromSummary(replicates = 35, N0 = 100, 
-#'                         Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13, 
-#'                                           upper = 0.27, Annual = 2010:2015, Year = 2010:2015, 
+#'
+#' traj <- trajectoriesFromSummary(replicates = 35, N0 = 100,
+#'                         Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+#'                                           upper = 0.27, Annual = 2010:2015, Year = 2010:2015,
 #'                                           PopulationName = "A"),
-#'                         Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86, 
-#'                                           upper = 0.98, Annual = 2010:2015, Year = 2010:2015, 
-#'                                           PopulationName = "A"), 
-#'                         Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2), 
-#'                         Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4), 
+#'                         Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+#'                                           upper = 0.98, Annual = 2010:2015, Year = 2010:2015,
+#'                                           PopulationName = "A"),
+#'                         Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
+#'                         Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
 #'                         type = "bbou")
 #' plotTrajectories(traj)
-#' 
-#' 
-#' @family demography
+
 plotTrajectories <- function(caribouBayesDemogMod,
                              replicates = 35,
                              metrics = c("Anthro", "Sbar","survival","Rbar",
