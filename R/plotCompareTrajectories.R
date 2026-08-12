@@ -204,7 +204,6 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
   x2
 }
 
-#' TO DO: document plotTrajectories
 #'
 #' @param caribouBayesDemogMod list. Caribou Bayesian demographic model results
 #'   produced by calling [bayesianTrajectoryWorkflow()],
@@ -250,7 +249,7 @@ plotTrajectories <- function(caribouBayesDemogMod,
     caribouBayesDemogMod$samples <- caribouBayesDemogMod$samples %>%
       filter(MetricTypeID %in% metrics) %>%
       merge(names) %>%
-      filter(as.numeric(as.factor(Replicate))<=reps)
+      filter(as.numeric(as.factor(Replicate))<=replicates)
     
     if(n_distinct(caribouBayesDemogMod$summary$PopulationName) < 2){
       proj_samp <- base+
