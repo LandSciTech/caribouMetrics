@@ -18,10 +18,17 @@ trajectoriesFromBayesian(
 ## Arguments
 
 - bayesianResults:
+
+  A result from `estimateBayesianRates`
+
 - N0:
+
 - cPars:
+
 - returnSamples:
+
 - doSummary:
+
 - ...:
 
 ## See also
@@ -53,3 +60,23 @@ Caribou demography functions:
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
 [`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
+
+## Examples
+
+``` r
+surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
+recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
+bbouInformative <- estimateBayesianRates(surv_data, recruit_data,
+                                         return_mcmc = TRUE)
+
+trajB <- trajectoriesFromBayesian(bbouInformative)
+str(trajB, max.level = 1)
+#> List of 5
+#>  $ summary     :'data.frame':    60 obs. of  8 variables:
+#>  $ samples     : tibble [198,000 × 7] (S3: tbl_df/tbl/data.frame)
+#>  $ surv_data   :'data.frame':    64 obs. of  8 variables:
+#>  $ recruit_data:'data.frame':    6 obs. of  8 variables:
+#>  $ popInfo     :'data.frame':    3000 obs. of  4 variables:
+plotTrajectories(trajB)
+
+```

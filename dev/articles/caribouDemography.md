@@ -417,7 +417,8 @@ function. See Figure 1.3 for details.
 
 Using the same scenario with anthropogenic disturbance footprint
 increasing by 5% per decade, we can also produce projections over a
-changing landscape with `trajectoriesFromNational`.
+changing landscape with `trajectoriesFromNational` and plot them with
+`plotTrajectories`.
 
 ``` r
 
@@ -430,29 +431,14 @@ set.seed(123)
 
 popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates = 500, 
                                         useQuantiles = TRUE,N0 = 100, numSteps = 1)
-
-popMetrics2$summary <- popMetrics2$summary %>% 
-  filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
-names <- popMetrics2$summary %>% select(MetricTypeID,Parameter) %>% unique()
-popMetrics2$samples <- merge(popMetrics2$samples,names) %>%
-  filter(as.numeric(as.factor(Replicate))<=35)
 ```
 
 ``` r
 
-
-proj <- ggplot(data = popMetrics2$summary,
-               aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
-  geom_ribbon(fill="grey") +
-  geom_line(colour="black",linewidth=2)+
-  geom_line(data=popMetrics2$samples,
-            aes(x=Year,y=Amount,colour=Replicate, group=Replicate),
-            inherit.aes = FALSE) +
-  facet_wrap(~Parameter, scales = "free") +
-  ylab("")+
-  theme(legend.position = "none")
-
-proj
+traj <- plotTrajectories(popMetrics2, 
+                         metrics = c("lambda", "lambda_bar", "N", "Rbar", "recruitment", 
+                                     "Sbar", "survival"))
+traj
 ```
 
 ![Example demographic trajectories and from the national model on a
@@ -584,36 +570,13 @@ case.
 ``` r
 
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
-popMetricsBayes$summary <- popMetricsBayes$summary %>% 
-  filter(MetricTypeID %in% c("Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
-names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique()
-names
-#>    MetricTypeID              Parameter
-#> 1        lambda Population growth rate
-#> 13   lambda_bar   Expected growth rate
-#> 25         Rbar   Expected recruitment
-#> 37  recruitment            Recruitment
-#> 49         Sbar      Expected survival
-#> 61     survival  Adult female survival
-
-popMetricsBayes$samples <- popMetricsBayes$samples %>% 
-  filter(MetricTypeID %in% c("Sbar","survival","Rbar",
-                             "recruitment", "lambda_bar", "lambda")) %>% 
-  merge(names) %>% 
-  filter(as.numeric(as.factor(Replicate))<=35)
 ```
 
 ``` r
 
-proj <- ggplot(data = popMetricsBayes$summary,
-               aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
-  geom_ribbon(fill="grey") +
-  geom_line(colour="black",linewidth=2)+
-  geom_line(data=popMetricsBayes$samples,
-            aes(x=Year,y=Amount,colour=Replicate,group=Replicate), inherit.aes = FALSE) +
-  facet_wrap(~Parameter, scales = "free") +
-  ylab("")+
-  theme(legend.position = "none")
+proj <-  plotTrajectories(popMetricsBayes, 
+                          metrics = c("lambda", "lambda_bar", "Rbar", 
+                                      "recruitment", "Sbar", "survival"))
 proj
 ```
 
@@ -629,34 +592,13 @@ Bands are 95% predictive intervals.
 ``` r
 
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative,N0=100)
-popMetricsBayes$summary <- popMetricsBayes$summary %>% 
-  filter(MetricTypeID %in% c("survival","recruitment", "lambda_bar", "lambda","N"))
-names <- popMetricsBayes$summary %>% select(MetricTypeID,Parameter) %>% unique()
-names
-#>    MetricTypeID              Parameter
-#> 1        lambda Population growth rate
-#> 13   lambda_bar   Expected growth rate
-#> 25            N Female population size
-#> 37  recruitment            Recruitment
-#> 49     survival  Adult female survival
-
-popMetricsBayes$samples <- popMetricsBayes$samples %>% 
-  filter(MetricTypeID %in% c("survival","recruitment", "lambda_bar", "lambda","N")) %>% 
-  merge(names) %>% 
-  filter(as.numeric(as.factor(Replicate))<=35)
 ```
 
 ``` r
 
-proj <- ggplot(data = popMetricsBayes$summary,
-               aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
-  geom_ribbon(fill="grey") +
-  geom_line(colour="black",linewidth=2)+
-  geom_line(data=popMetricsBayes$samples,
-            aes(x=Year,y=Amount,colour=Replicate,group=Replicate), inherit.aes = FALSE) +
-  facet_wrap(~Parameter, scales = "free") +
-  ylab("")+
-  theme(legend.position = "none")
+proj <- plotTrajectories(popMetricsBayes,
+                         metrics = c("lambda", "lambda_bar", "N", "Rbar",
+                                     "recruitment", "Sbar", "survival"))
 proj
 ```
 
@@ -674,7 +616,7 @@ with initial population size of 100. Bands are 95% predictive intervals.
 To allow for the possibility of using fitted Bayesian models as a
 starting point for exploring demographic scenarios, the
 `estimateBayesianRates` function also returns a list of model
-parameters. The `trajectoriesFromSummary` projects outcomes from a model
+parameters. `trajectoriesFromSummary` projects outcomes from a model
 defined by these parameters. When parameters from a fitted Bayesian
 model are used, expected outcomes from `trajectoriesFromSummary` and
 `trajectoriesFromBayesian` are the same (Figure
@@ -844,27 +786,14 @@ popMetricsS85 <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500
                                              scn_nm="S85",doSummary=T)
 scnCompare <- list(summary=rbind(popMetricsBase$summary,popMetricsS85$summary),
                    samples=rbind(popMetricsBase$samples,popMetricsS85$samples))
-scnCompare$summary <- scnCompare$summary %>% 
-  filter(MetricTypeID %in% c("Anthro", "N", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
-names <- scnCompare$summary %>% select(MetricTypeID,Parameter) %>% unique();names
-#>    MetricTypeID              Parameter
-#> 1        lambda Population growth rate
-#> 11   lambda_bar   Expected growth rate
-#> 21            N Female population size
-#> 31  recruitment            Recruitment
-#> 41     survival  Adult female survival
-scnCompare$samples <- merge(scnCompare$samples,names) %>% filter(as.numeric(as.factor(Replicate))<=25)
 ```
 
 ``` r
 
-proj <- ggplot(data = scnCompare$summary,
-               aes(x=Year,y=Mean,ymin=lower,ymax=upper,fill=PopulationName,group=PopulationName))+
-  geom_ribbon(alpha=0.2) +
-  geom_line(linewidth=2,colour="black")+
-  geom_line(data=scnCompare$samples,aes(x=Year,y=Amount,colour=PopulationName,group=paste0(Replicate,PopulationName),ymin=Amount,ymax=Amount)) +
-  facet_wrap(~Parameter, scales = "free") +
-  ylab("")
+proj <- plotTrajectories(scnCompare, 
+                         metrics = c("lambda", "lambda_bar", "N", "Rbar", 
+                                     "recruitment", "Sbar", "survival"), 
+                         replicates = 25)
 proj
 ```
 

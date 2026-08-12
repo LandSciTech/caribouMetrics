@@ -60,7 +60,7 @@
 
 
 <dl><dt id="arg-bayesianresults">bayesianResults<a class="anchor" aria-label="anchor" href="#arg-bayesianresults"></a></dt>
-<dd></dd>
+<dd><p>A result from <code>estimateBayesianRates</code></p></dd>
 
 
 <dt id="arg-n-">N0<a class="anchor" aria-label="anchor" href="#arg-n-"></a></dt>
@@ -114,6 +114,26 @@
 <code><a href="trajectoriesFromSummaryForApp.html">trajectoriesFromSummaryForApp()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">surv_data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bbousurv_a</a></span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2010</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">recruit_data</span> <span class="op">&lt;-</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">&gt;</span> <span class="fl">2010</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bbouInformative</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimateBayesianRates.html">estimateBayesianRates</a></span><span class="op">(</span><span class="va">surv_data</span>, <span class="va">recruit_data</span>,</span></span>
+<span class="r-in"><span>                                         return_mcmc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">trajB</span> <span class="op">&lt;-</span> <span class="fu">trajectoriesFromBayesian</span><span class="op">(</span><span class="va">bbouInformative</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">trajB</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ summary     :'data.frame':	60 obs. of  8 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ samples     : tibble [198,000 × 7] (S3: tbl_df/tbl/data.frame)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ surv_data   :'data.frame':	64 obs. of  8 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ recruit_data:'data.frame':	6 obs. of  8 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ popInfo     :'data.frame':	3000 obs. of  4 variables:</span>
+<span class="r-in"><span><span class="fu"><a href="plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">trajB</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="trajectoriesFromBayesian-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

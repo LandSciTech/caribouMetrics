@@ -15,6 +15,13 @@ library(caribouMetrics)
 #> The following object is masked from 'package:base':
 #> 
 #>     declare
+#> Loading required package: nimbleQuad
+#> 
+#> Attaching package: 'nimbleQuad'
+#> The following objects are masked from 'package:nimble':
+#> 
+#>     buildAGHQ, buildLaplace, runAGHQ, runLaplace, summaryAGHQ,
+#>     summaryLaplace
 #> Loading required package: bbouNationalPriors
 #> Loading required package: dplyr
 #> 

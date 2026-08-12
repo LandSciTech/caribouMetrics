@@ -135,13 +135,6 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.
 #> Warning: requested year range: 2014 - 2058 does not match survival data year range:  2015 - 2024
 #> Warning: missing years of recruitment data: 2014
-#> Loading required package: nimbleQuad
-#> 
-#> Attaching package: ‘nimbleQuad’
-#> The following objects are masked from ‘package:nimble’:
-#> 
-#>     buildAGHQ, buildLaplace, runAGHQ, runLaplace, summaryAGHQ,
-#>     summaryLaplace
 #> Registered S3 method overwritten by 'mcmcr':
 #>   method         from 
 #>   as.mcmc.nlists nlist
