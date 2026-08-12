@@ -205,35 +205,85 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
 }
 
 #' TO DO: document plotTrajectories
-#' 
+#'
+#' @param caribouBayesDemogMod list. Caribou Bayesian demographic model results
+#'   produced by calling [bayesianTrajectoryWorkflow()],
+#'   [trajectoriesFromNational()], [trajectoriesFromBayesian()], or
+#'   [trajectoriesFromSummary()]
+#' @param replicates integer. Number of replicate populations. Ignored if
+#'   samples not included in `caribouBayesDemogMod`.
+#' @param metrics character. A vector of MetricTypeIDs to be included as facets
+#'   in the plot
+#'
 #' @export
 #' 
+#' @examples
+#' # trajectories from arbitrary demographic rates
+#' 
+#' traj <- trajectoriesFromSummary(replicates = 35, N0 = 100, 
+#'                         Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13, 
+#'                                           upper = 0.27, Annual = 2010:2015, Year = 2010:2015, 
+#'                                           PopulationName = "A"),
+#'                         Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86, 
+#'                                           upper = 0.98, Annual = 2010:2015, Year = 2010:2015, 
+#'                                           PopulationName = "A"), 
+#'                         Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2), 
+#'                         Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4), 
+#'                         type = "bbou")
+#' plotTrajectories(traj)
+#' 
+#' 
 #' @family demography
-plotTrajectories <- function(popMetrics,reps=35,metrics = c("Anthro", "Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda")){
-  popMetrics$summary <- popMetrics$summary %>%
+plotTrajectories <- function(caribouBayesDemogMod,
+                             replicates = 35,
+                             metrics = c("Anthro", "Sbar","survival","Rbar",
+                                         "recruitment", "lambda_bar", "lambda")){
+  caribouBayesDemogMod$summary <- caribouBayesDemogMod$summary %>%
     filter(MetricTypeID %in% metrics)
-  names <- popMetrics$summary %>% select(MetricTypeID,Parameter) %>% unique()
-  proj <- ggplot2::ggplot(data = popMetrics$summary,
-                 ggplot2::aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
-    ggplot2::geom_ribbon(fill="grey") +
-    ggplot2::geom_line(colour="black",linewidth=2)+
+  names <- caribouBayesDemogMod$summary %>% select(MetricTypeID, Parameter) %>% unique()
+  
+  base <- ggplot2::ggplot(data = caribouBayesDemogMod$summary)+
     ggplot2::facet_wrap(~Parameter, scales = "free") +
-    ggplot2::ylab("")+
-    ggplot2::theme(legend.position = "none")
+    ggplot2::ylab("")
   
-  
-  if(hasName(popMetrics,"samples")){
-    popMetrics$samples <- popMetrics$samples %>%
+  if(hasName(caribouBayesDemogMod,"samples")){
+    caribouBayesDemogMod$samples <- caribouBayesDemogMod$samples %>%
       filter(MetricTypeID %in% metrics) %>%
       merge(names) %>%
       filter(as.numeric(as.factor(Replicate))<=reps)
-
-    proj <- proj + 
-      ggplot2::geom_line(data=popMetrics$samples,
-                         ggplot2::aes(x=Year,y=Amount,colour=Replicate,group=Replicate), 
-                         inherit.aes = FALSE)   
+    
+    if(n_distinct(caribouBayesDemogMod$summary$PopulationName) < 2){
+      proj_samp <- base+
+        ggplot2::geom_line(data=caribouBayesDemogMod$samples,
+                           ggplot2::aes(x=Year,y=Amount,colour=Replicate,group=Replicate), 
+                           inherit.aes = FALSE)   
+    } else {
+      proj_samp <- base+
+        ggplot2::geom_line(data=caribouBayesDemogMod$samples,
+                           ggplot2::aes(x=Year,y=Amount,colour=PopulationName, 
+                                        group=interaction(Replicate, PopulationName)), 
+                           inherit.aes = FALSE, alpha = 0.6) 
+    }
+  } else {
+    proj_samp <- base
+  }
+  
+  if(n_distinct(caribouBayesDemogMod$summary$PopulationName) < 2){
+    proj <- proj_samp+
+      ggplot2::aes(x=Year,y=Mean,ymin=lower,ymax=upper)+
+      ggplot2::geom_ribbon(fill="grey", alpha = 0.4) +
+      ggplot2::geom_line(colour="black",linewidth=2)+
+      ggplot2::theme(legend.position = "none")
+  } else {
+    proj <- proj_samp+
+      ggplot2::aes(x=Year,y=Mean,ymin=lower,ymax=upper, 
+                   group = PopulationName, colour = PopulationName, 
+                   fill = PopulationName)+
+      ggplot2::geom_ribbon(alpha = 0.2) +
+      ggplot2::geom_line(linewidth=2)
   }
   
   proj
+  
 }
 

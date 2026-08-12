@@ -14,7 +14,7 @@ trajectoriesFromBayesian(
 )
 }
 \arguments{
-\item{bayesianResults}{}
+\item{bayesianResults}{A result from \code{estimateBayesianRates}}
 
 \item{N0}{}
 
@@ -28,6 +28,17 @@ trajectoriesFromBayesian(
 }
 \description{
 Get trajectories from a Bayesian model result
+}
+\examples{
+surv_data <- bboudata::bbousurv_a \%>\% filter(Year > 2010)
+recruit_data <- bboudata::bbourecruit_a \%>\% filter(Year > 2010)
+bbouInformative <- estimateBayesianRates(surv_data, recruit_data,
+                                         return_mcmc = TRUE)
+
+trajB <- trajectoriesFromBayesian(bbouInformative)
+str(trajB, max.level = 1)
+plotTrajectories(trajB)
+
 }
 \seealso{
 Caribou demography functions:
