@@ -1,6 +1,8 @@
-# TO DO: document plotTrajectories
+# Plot Bayesian population model trajectories
 
-TO DO: document plotTrajectories
+Plot Bayesian population model results including multiple sample
+trajectories to show variation within the model. If results include
+multiple populations each population is shown with a different colour.
 
 ## Usage
 
@@ -22,7 +24,7 @@ plotTrajectories(
   [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
   [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
   or
-  [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md)
+  [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md).
 
 - replicates:
 
@@ -32,7 +34,16 @@ plotTrajectories(
 - metrics:
 
   character. A vector of MetricTypeIDs to be included as facets in the
-  plot
+  plot.
+
+## Details
+
+`plotTrajectories` and `plotCompareTrajectories` both plot Bayesian
+population model results over time but `plotTrajectories` creates a
+faceted plot of several metrics with the ability to show sample
+trajectories along with the overall model prediction. See
+`[plotCompareTrajectories]` for displaying the results of
+`[bayesianScenariosWorkflow()]`.
 
 ## See also
 
@@ -69,15 +80,15 @@ Caribou demography functions:
 ``` r
 # trajectories from arbitrary demographic rates
 
-traj <- trajectoriesFromSummary(replicates = 35, N0 = 100, 
-                        Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13, 
-                                          upper = 0.27, Annual = 2010:2015, Year = 2010:2015, 
+traj <- trajectoriesFromSummary(replicates = 35, N0 = 100,
+                        Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+                                          upper = 0.27, Annual = 2010:2015, Year = 2010:2015,
                                           PopulationName = "A"),
-                        Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86, 
-                                          upper = 0.98, Annual = 2010:2015, Year = 2010:2015, 
-                                          PopulationName = "A"), 
-                        Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2), 
-                        Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4), 
+                        Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+                                          upper = 0.98, Annual = 2010:2015, Year = 2010:2015,
+                                          PopulationName = "A"),
+                        Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
+                        Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
                         type = "bbou")
 #> Compiling model graph
 #>    Resolving undeclared variables
@@ -100,6 +111,4 @@ traj <- trajectoriesFromSummary(replicates = 35, N0 = 100,
 #> Initializing model
 #> 
 plotTrajectories(traj)
-
-
 ```

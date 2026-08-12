@@ -1,4 +1,4 @@
-# Plot Bayesian population model results
+# Plot and compare Bayesian population model results
 
 Plot Bayesian population model results, with (optionally) the
 distribution of outcomes from the initial model, local observations, and
@@ -25,7 +25,9 @@ plotCompareTrajectories(
 - modTables:
 
   list. A list of model results tables created using
-  `[compareTrajectories()]`.
+  `[compareTrajectories()]`. \#TODO consider changing parameter to
+  metric... but compareTrajectories output has parameter column, while
+  plotTrajectories uses metric
 
 - parameter:
 
@@ -62,6 +64,15 @@ plotCompareTrajectories(
 
 a ggplot object or list of ggplot objects if a vector of parameters was
 given.
+
+## Details
+
+`plotCompareTrajectories` and `plotTrajectories` both plot Bayesian
+population model results over time but `plotCompareTrajectories` can to
+show results of the whole `[bayesianScenariosWorkflow()]` including
+simulation of observations, model fit and comparison to an initial
+model. See `[plotTrajectories()]` the ability to show multiple sample
+trajectories from one model
 
 ## See also
 

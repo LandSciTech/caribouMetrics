@@ -51,11 +51,11 @@ population growth
 - [`nationalTrajectoryDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/nationalTrajectoryDefaults.md)
   : Default parameters for simulating national demographic trajectories.
 - [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md)
-  : Plot Bayesian population model results
+  : Plot and compare Bayesian population model results
 - [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md)
   : Plot survival time series
 - [`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.md)
-  : TO DO: document plotTrajectories
+  : Plot Bayesian population model trajectories
 - [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md)
   : Population growth model table for Johnson models
 - [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md)
