@@ -469,13 +469,17 @@ library(bboudata)
 library(bboutools)
 useSaved <- T # option to skip slow step of fitting bboutools model
 bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
+
 surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
 surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
                              PopulationName = unique(surv_data$PopulationName))
 surv_data <- merge(surv_data, surv_data_add, all.x = TRUE, all.y = TRUE)
+
 recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
-recruit_data_add <- expand.grid(Year = seq(2017, 2022), PopulationName = unique(recruit_data$PopulationName))
+recruit_data_add <- expand.grid(Year = seq(2017, 2022), 
+                                PopulationName = unique(recruit_data$PopulationName))
 recruit_data <- merge(recruit_data, recruit_data_add, all.x = TRUE, all.y = TRUE)
+
 if (useSaved & file.exists(bbouInformativeFile)) {
   bbouInformative <- readRDS(bbouInformativeFile)
 } else {
