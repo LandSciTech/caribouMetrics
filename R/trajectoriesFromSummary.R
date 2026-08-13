@@ -134,11 +134,20 @@ sink()
 data <- Rbar
 data <- data[order(data$Annual,data$PopulationName),]
 data$PopulationName <- as.factor(data$PopulationName)
-nAnnual <- length(unique(data$Annual))
-if(min(as.integer(data$Annual))>1){
+
+if(min(as.integer(data$Annual), na.rm = TRUE)>1){
   data$Annual = as.factor(data$Year)
 }
 
+# filter out years with missing data
+data <- filter(data, !is.na(.data$mean))
+
+# TODO: If want this to produce projections for unsampled years need to figure
+# out how to do that, maybe similar to how bb_fit_survival does with
+# allow_missing?
+
+nAnnual <- length(unique(data$Annual))
+# nAnnual <- length(levels(data$Annual)) # this causes errors from JAGS
 datal = list(
   nObs = nrow(data),
   nAnnual=nAnnual,
