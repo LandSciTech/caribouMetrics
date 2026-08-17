@@ -10,8 +10,9 @@ multiple populations each population is shown with a different colour.
 plotTrajectories(
   caribouBayesDemogMod,
   replicates = 35,
-  metrics = c("Anthro", "Sbar", "survival", "Rbar", "recruitment", "lambda_bar",
-    "lambda")
+  metrics = c("Adult female survival", "Recruitment", "Adjusted recruitment",
+    "Population growth rate", "Female population size", "c", "Expected survival",
+    "Expected recruitment", "Expected adjusted recruitment", "Expected growth rate")
 )
 ```
 
@@ -33,8 +34,7 @@ plotTrajectories(
 
 - metrics:
 
-  character. A vector of MetricTypeIDs to be included as facets in the
-  plot.
+  character. A vector of Metrics to be included as facets in the plot.
 
 ## Details
 
@@ -111,4 +111,10 @@ traj <- trajectoriesFromSummary(replicates = 35, N0 = 100,
 #> Initializing model
 #> 
 plotTrajectories(traj)
+#> Warning: Removed 210 rows containing missing values or values outside the scale range
+#> (`geom_line()`).
+#> Warning: Removed 6 rows containing missing values or values outside the scale range
+#> (`geom_ribbon()`).
+#> Warning: Removed 6 rows containing missing values or values outside the scale range
+#> (`geom_line()`).
 ```

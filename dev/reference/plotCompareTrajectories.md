@@ -9,7 +9,7 @@ true local state for comparison.
 ``` r
 plotCompareTrajectories(
   modTables,
-  parameter,
+  metric,
   lowBound = 0,
   highBound = 1,
   facetVars = NULL,
@@ -25,14 +25,12 @@ plotCompareTrajectories(
 - modTables:
 
   list. A list of model results tables created using
-  `[compareTrajectories()]`. \#TODO consider changing parameter to
-  metric... but compareTrajectories output has parameter column, while
-  plotTrajectories uses metric
+  `[compareTrajectories()]`.
 
-- parameter:
+- metric:
 
-  character. Which parameter to plot, if more than one, a list of plots
-  is returned.
+  character. Which metric to plot, if more than one, a list of plots is
+  returned.
 
 - lowBound, highBound:
 
@@ -62,7 +60,7 @@ plotCompareTrajectories(
 
 ## Value
 
-a ggplot object or list of ggplot objects if a vector of parameters was
+a ggplot object or list of ggplot objects if a vector of metrics was
 given.
 
 ## Details
@@ -150,5 +148,5 @@ out_tbl <- compareTrajectories(out, exData = simO$exData, paramTable = simO$para
                            simInitial = trajectoriesFromNational())
 #> Using saved object
 
-plotCompareTrajectories(out_tbl, parameter = "Recruitment")
+plotCompareTrajectories(out_tbl, metric = "Recruitment")
 ```

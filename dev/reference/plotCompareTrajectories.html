@@ -53,7 +53,7 @@ and true local state for comparison.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotCompareTrajectories</span><span class="op">(</span></span>
 <span>  <span class="va">modTables</span>,</span>
-<span>  <span class="va">parameter</span>,</span>
+<span>  <span class="va">metric</span>,</span>
 <span>  lowBound <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  highBound <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  facetVars <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -70,12 +70,11 @@ and true local state for comparison.</p>
 
 <dl><dt id="arg-modtables">modTables<a class="anchor" aria-label="anchor" href="#arg-modtables"></a></dt>
 <dd><p>list. A list of model results tables created using
-<code>[compareTrajectories()]</code>.
-#TODO consider changing parameter to metric... but compareTrajectories output has parameter column, while plotTrajectories uses metric</p></dd>
+<code>[compareTrajectories()]</code>.</p></dd>
 
 
-<dt id="arg-parameter">parameter<a class="anchor" aria-label="anchor" href="#arg-parameter"></a></dt>
-<dd><p>character. Which parameter to plot, if more than one, a list
+<dt id="arg-metric">metric<a class="anchor" aria-label="anchor" href="#arg-metric"></a></dt>
+<dd><p>character. Which metric to plot, if more than one, a list
 of plots is returned.</p></dd>
 
 
@@ -106,7 +105,7 @@ facets. Font size is 10 pt if facets are used.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a ggplot object or list of ggplot objects if a vector of parameters
+    <p>a ggplot object or list of ggplot objects if a vector of metrics
 was given.</p>
     </div>
     <div class="section level2">
@@ -194,7 +193,7 @@ one model</p>
 <span class="r-in"><span>                           simInitial <span class="op">=</span> <span class="fu"><a href="trajectoriesFromNational.html">trajectoriesFromNational</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using saved object</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">plotCompareTrajectories</span><span class="op">(</span><span class="va">out_tbl</span>, parameter <span class="op">=</span> <span class="st">"Recruitment"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plotCompareTrajectories</span><span class="op">(</span><span class="va">out_tbl</span>, metric <span class="op">=</span> <span class="st">"Recruitment"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotCompareTrajectories-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

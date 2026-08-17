@@ -941,7 +941,7 @@ trajectoriesFromNational()
 #> 907     survival       National       30                  0 0.85454224
 #> 908     survival       National       89                  0 0.81679951
 #> 909     survival       National      100                  0 0.81331850
-#>           lower     upper probViable              Parameter
+#>           lower     upper probViable                 Metric
 #> 102 0.054218076 0.4074933      0.000   Expected recruitment
 #> 103 0.113461739 0.5109438      0.000   Expected recruitment
 #> 104 0.096483038 0.4817734      0.000   Expected recruitment

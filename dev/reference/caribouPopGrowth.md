@@ -157,7 +157,7 @@ Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
 Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
 Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Effective
 conservation decisions require models designed for purpose: a case study
-of boreal caribou in Ontario’s Ring of Fire. Ecology and Evolution In
+of boreal caribou in Ontario's Ring of Fire. Ecology and Evolution In
 press: <https://doi.org/10.1101/2022.06.01.494350>
 
 Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
@@ -213,8 +213,8 @@ Caribou demography functions:
 
 ``` r
 caribouPopGrowth(100, 2, 0.5, 0.7)
-#>    N0    lambda lambdaE  N       R_t       X_t      S_t n_recruits
-#> 1 100 0.8888194   0.875 79 0.4163941 0.2081971 0.719256         13
+#>    N0    lambda lambdaE  N       R_t       X_t       S_t n_recruits
+#> 1 100 0.9591663   0.875 92 0.5914825 0.2957413 0.7238223         19
 #>   surviving_adFemales
-#> 1                  66
+#> 1                  73
 ```

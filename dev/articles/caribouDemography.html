@@ -74,7 +74,7 @@
 <h3 id="overview">
 <span class="header-section-number">1.1</span> Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h3>
-<p>Here we describe a demographic model with density dependence and interannual variability following <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span> with modifications noted in <span class="citation">Hughes et al. (<a href="#ref-hughes_integration_2025">2025</a>)</span> and <span class="citation">Dyson et al. (<a href="#ref-dyson_effective_2026">2026</a>)</span>. Demographic rates vary with disturbance as estimated bdy <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span>. A detailed description of the model is provided in <span class="citation">(<a href="#ref-hughes_integration_2025">Hughes et al. 2025, sec. 2.4</a>)</span>.</p>
+<p>Here we describe a demographic model with density dependence and interannual variability following <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span> with modifications noted in <span class="citation">Hughes et al. (<a href="#ref-hughes_integration_2025">2025</a>)</span> and <span class="citation">Dyson et al. (<a href="#ref-dyson_effective_2026">2026</a>)</span>. Demographic rates vary with disturbance as estimated by <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span>. A detailed description of the model is provided in <span class="citation">(<a href="#ref-hughes_integration_2025">Hughes et al. 2025, sec. 2.4</a>)</span>.</p>
 <p><code><a href="../reference/getNationalCoefficients.html">getNationalCoefficients()</a></code> selects the regression coefficient values and standard errors for the desired model version (see <code>popGrowthTableJohnsonECCC</code> for options) and then samples coefficients from these Gaussian distributions for each replicate population.</p>
 <p>Next <code><a href="../reference/estimateNationalRates.html">estimateNationalRates()</a></code> is used to apply the sampled coefficients to the disturbance covariates to calculate expected recruitment and survival according to the beta regression models estimated by <span class="citation">Johnson et al. (<a href="#ref-johnson_science_2020">2020</a>)</span>. Each population is optionally assigned to quantiles of the Beta error distributions for survival and recruitment. Using quantiles means that the population will stay in these quantiles as disturbance changes over time, so there is persistent variation in recruitment and survival among example populations.</p>
 <p>Finally, we can use the estimated demographic rates to project population dynamics using a simple model with two age classes. Interannual variation in survival and recruitment is modelled using truncated Beta distributions.</p>
@@ -315,8 +315,10 @@ Figure 1.6: Variation in expected survival and recruitment with disturbance, obt
 <span>                                        useQuantiles <span class="op">=</span> <span class="cn">TRUE</span>,N0 <span class="op">=</span> <span class="fl">100</span>, numSteps <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">traj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">popMetrics2</span>, </span>
-<span>                         metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lambda"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"N"</span>, <span class="st">"Rbar"</span>, <span class="st">"recruitment"</span>, </span>
-<span>                                     <span class="st">"Sbar"</span>, <span class="st">"survival"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                         metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Population growth rate"</span>, <span class="st">"Expected growth rate"</span>,</span>
+<span>                                     <span class="st">"Female population size"</span>, </span>
+<span>                                     <span class="st">"Expected recruitment"</span>, <span class="st">"Recruitment"</span>, </span>
+<span>                                     <span class="st">"Expected survival"</span>, <span class="st">"Survival"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">traj</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:changeOverTime2"></span>
@@ -415,8 +417,9 @@ Figure 2.4: Population growth rate from bboutools.
 <code class="sourceCode R"><span><span class="va">popMetricsBayes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromBayesian.html">trajectoriesFromBayesian</a></span><span class="op">(</span><span class="va">bbouInformative</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">proj</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">popMetricsBayes</span>, </span>
-<span>                          metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lambda"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"Rbar"</span>, </span>
-<span>                                      <span class="st">"recruitment"</span>, <span class="st">"Sbar"</span>, <span class="st">"survival"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                          metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Population growth rate"</span>, <span class="st">"Expected growth rate"</span>,</span>
+<span>                                     <span class="st">"Expected recruitment"</span>, <span class="st">"Recruitment"</span>, </span>
+<span>                                     <span class="st">"Expected survival"</span>, <span class="st">"Survival"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">proj</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:bayesTrajectoryPlot"></span>
@@ -428,8 +431,10 @@ Figure 2.5: Example demographic trajectories from a fitted bboutools model, obta
 <code class="sourceCode R"><span><span class="va">popMetricsBayes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trajectoriesFromBayesian.html">trajectoriesFromBayesian</a></span><span class="op">(</span><span class="va">bbouInformative</span>,N0<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">proj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">popMetricsBayes</span>,</span>
-<span>                         metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lambda"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"N"</span>, <span class="st">"Rbar"</span>,</span>
-<span>                                     <span class="st">"recruitment"</span>, <span class="st">"Sbar"</span>, <span class="st">"survival"</span><span class="op">)</span><span class="op">)</span></span>
+<span>                         metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Population growth rate"</span>, <span class="st">"Expected growth rate"</span>,</span>
+<span>                                     <span class="st">"Female population size"</span>, </span>
+<span>                                     <span class="st">"Expected recruitment"</span>, <span class="st">"Recruitment"</span>, </span>
+<span>                                     <span class="st">"Expected survival"</span>, <span class="st">"Survival"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">proj</span></span></code></pre></div>
 <div class="figure">
 <span style="display:block;" id="fig:bayesTrajectoryPlotN"></span>
@@ -574,8 +579,10 @@ Figure 2.9: Effects of increasing recruitment after 2015 and increasing variatio
 <span>                   samples<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">popMetricsBase</span><span class="op">$</span><span class="va">samples</span>,<span class="va">popMetricsS85</span><span class="op">$</span><span class="va">samples</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">proj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotTrajectories.html">plotTrajectories</a></span><span class="op">(</span><span class="va">scnCompare</span>, </span>
-<span>                         metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lambda"</span>, <span class="st">"lambda_bar"</span>, <span class="st">"N"</span>, <span class="st">"Rbar"</span>, </span>
-<span>                                     <span class="st">"recruitment"</span>, <span class="st">"Sbar"</span>, <span class="st">"survival"</span><span class="op">)</span>, </span>
+<span>                         metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Population growth rate"</span>, <span class="st">"Expected growth rate"</span>,</span>
+<span>                                     <span class="st">"Female population size"</span>, </span>
+<span>                                     <span class="st">"Expected recruitment"</span>, <span class="st">"Recruitment"</span>, </span>
+<span>                                     <span class="st">"Expected survival"</span>, <span class="st">"Survival"</span><span class="op">)</span>, </span>
 <span>                         replicates <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span>
 <span><span class="va">proj</span></span></code></pre></div>
 <div class="figure">

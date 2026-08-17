@@ -9,7 +9,7 @@ interannual variability following Johnson et al.
 ([2020](#ref-johnson_science_2020)) with modifications noted in Hughes
 et al. ([2025](#ref-hughes_integration_2025)) and Dyson et al.
 ([2026](#ref-dyson_effective_2026)). Demographic rates vary with
-disturbance as estimated bdy Johnson et al.
+disturbance as estimated by Johnson et al.
 ([2020](#ref-johnson_science_2020)). A detailed description of the model
 is provided in ([Hughes et al. 2025, sec.
 2.4](#ref-hughes_integration_2025)).
@@ -436,8 +436,10 @@ popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates =
 ``` r
 
 traj <- plotTrajectories(popMetrics2, 
-                         metrics = c("lambda", "lambda_bar", "N", "Rbar", "recruitment", 
-                                     "Sbar", "survival"))
+                         metrics = c("Population growth rate", "Expected growth rate",
+                                     "Female population size", 
+                                     "Expected recruitment", "Recruitment", 
+                                     "Expected survival", "Survival"))
 traj
 ```
 
@@ -579,8 +581,9 @@ popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
 ``` r
 
 proj <-  plotTrajectories(popMetricsBayes, 
-                          metrics = c("lambda", "lambda_bar", "Rbar", 
-                                      "recruitment", "Sbar", "survival"))
+                          metrics = c("Population growth rate", "Expected growth rate",
+                                     "Expected recruitment", "Recruitment", 
+                                     "Expected survival", "Survival"))
 proj
 ```
 
@@ -601,8 +604,10 @@ popMetricsBayes <- trajectoriesFromBayesian(bbouInformative,N0=100)
 ``` r
 
 proj <- plotTrajectories(popMetricsBayes,
-                         metrics = c("lambda", "lambda_bar", "N", "Rbar",
-                                     "recruitment", "Sbar", "survival"))
+                         metrics = c("Population growth rate", "Expected growth rate",
+                                     "Female population size", 
+                                     "Expected recruitment", "Recruitment", 
+                                     "Expected survival", "Survival"))
 proj
 ```
 
@@ -795,8 +800,10 @@ scnCompare <- list(summary=rbind(popMetricsBase$summary,popMetricsS85$summary),
 ``` r
 
 proj <- plotTrajectories(scnCompare, 
-                         metrics = c("lambda", "lambda_bar", "N", "Rbar", 
-                                     "recruitment", "Sbar", "survival"), 
+                         metrics = c("Population growth rate", "Expected growth rate",
+                                     "Female population size", 
+                                     "Expected recruitment", "Recruitment", 
+                                     "Expected survival", "Survival"), 
                          replicates = 25)
 proj
 ```
