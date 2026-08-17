@@ -537,6 +537,7 @@ convertBbouData<-function(dat){
     return(dat)
   }
   dat <- as.data.frame(dat)
+  dat_add <- NULL
   if(hasName(dat,"StartTotal")){
     dat_add <- expand.grid(PopulationName=levels(dat$PopulationName),
                             Annual=levels(dat$Annual),
