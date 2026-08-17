@@ -184,17 +184,17 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ parTab :'data.frame':	1 obs. of  18 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName: chr "A"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar         : num 0.198</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_sd          : num 0.0845</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_sd          : num 0.0856</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_iv_mean     : num 0.322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_iv_shape    : num 14.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar_lower   : num 0.173</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar_upper   : num 0.225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_iv_shape    : num 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar_lower   : num 0.172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar_upper   : num 0.226</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar         : num 0.871</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_sd          : num 0.162</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_mean     : num 0.307</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_shape    : num 3.36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_sd          : num 0.157</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_mean     : num 0.275</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_shape    : num 1.15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_lower   : num 0.833</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_upper   : num 0.906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_upper   : num 0.903</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ N0            : logi NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nCollarYears  : int 900</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nSurvYears    : int 31</span>
@@ -217,6 +217,8 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <span class="r-in"><span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">bayesianTrajectoryWorkflow</span><span class="op">(</span>surv_data <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simSurvObs</span>, recruit_data <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simRecruitObs</span>,</span></span>
 <span class="r-in"><span>                           disturbance <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simDisturbance</span>,</span></span>
 <span class="r-in"><span>                           startYear <span class="op">=</span> <span class="fl">2014</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>requested year range: 2014 - 2033 does not match recruitment data year range:  2015 - 2025</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>missing years of recruitment data: 2014</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
@@ -231,8 +233,8 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph information:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 77</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 694</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
