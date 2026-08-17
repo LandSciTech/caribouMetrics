@@ -93,7 +93,6 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   includeTimes = seq((paramTable$startYear+paramTable$preYears),
                        (paramTable$startYear+paramTable$preYears+paramTable$obsYears))
   
-  
   if(!is.null(surv_data)){
     if(!hasName(surv_data,"Annual")){
       surv_data <- bboutools::bb_fit_survival(surv_data, allow_missing = TRUE, quiet = TRUE, niters=0, min_random_year=0)$data
@@ -458,7 +457,13 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   simRecruitObs$UnknownAdults[is.na(simRecruitObs$Calves)]<-NA
   simRecruitObs$Yearlings[is.na(simRecruitObs$Calves)]<-NA
 
-  retList = list(minYr=min(includeYears),maxYr = max(simDisturbance$Year),
+  if(nrow(simDisturbance)>0){
+    maxYr <- max(simDisturbance$Year)
+  }else{
+    maxYr <- max(includeTimes)+paramTable$projYears    
+  }
+  
+  retList = list(minYr=min(includeYears),maxYr = maxYr,
                 simSurvObs = simSurvObs, simRecruitObs = simRecruitObs,
                  exData = trajectories, paramTable = paramTable)
   if(nrow(simDisturbance)>0){names(simDisturbance)<-gsub("ID","",names(simDisturbance),fixed=T);retList$simDisturbance=simDisturbance}

@@ -123,6 +123,7 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
     testTable(disturbance, c("Year", "Anthro", "Fire_excl_anthro"))
   }
 
+  surv_data$StartTotal[is.na(surv_data$MortalitiesCertain)] = NA
   surv_data$Month[is.na(surv_data$StartTotal)]<-NA;surv_data<-unique(surv_data)
   recruit_data$Month[is.na(recruit_data$Cows)]<-NA;recruit_data$Day[is.na(recruit_data$Cows)]<-NA;recruit_data<-unique(recruit_data)
   
@@ -167,12 +168,11 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
     }
     distYrs = disturbance$Year
   }else if(!is.null(inp$endYear) && is.finite(inp$endYear)){
-    distYrs = surv_data$Year
+    distYrs = seq(min(surv_data$Year),inp$endYear)
   }
+  
   ################
   # Survival data checking and fill missing yrs
-  surv_data <- surv_data
-
   # check that year range is within data - model will run either way
   if (inp$endYear < max(surv_data$Year) | inp$startYear < min(surv_data$Year)) {
     warning(c("requested year range: ", inp$startYear, " - ", inp$endYear, " does not match survival data",
@@ -191,11 +191,14 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
             paste0(yrs_surv_missing, collapse = ", "), 
             call. = FALSE) 
   }
-
+  
   #add missing surv yrs
-  surv_data_add = expand.grid(Year=union(distYrs,surv_data$Year),Month=unique(surv_data$Month),PopulationName=unique(surv_data$PopulationName))
+  surv_data <-getCaribouYear(surv_data)
+  surv_data_add = expand.grid(CaribouYear=union(distYrs,surv_data$CaribouYear),
+                              PopulationName=unique(surv_data$PopulationName))
   surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
-
+  surv_data$Year[is.na(surv_data$Year)]<-surv_data$CaribouYear[is.na(surv_data$Year)];   surv_data$CaribouYear=NULL
+  
   #dups = table(subset(surv_data,select=c(Year,Month,PopulationName)))
   
   ###################
@@ -227,8 +230,10 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   }
 
   #add missing recruit yrs
-  recruit_data_add = expand.grid(Year=union(distYrs,recruit_data$Year),PopulationName=unique(recruit_data$PopulationName))
+  recruit_data <- getCaribouYear(recruit_data)
+  recruit_data_add = expand.grid(CaribouYear=union(distYrs,recruit_data$CaribouYear),PopulationName=unique(recruit_data$PopulationName))
   recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
+  recruit_data$Year[is.na(recruit_data$Year)]<-recruit_data$CaribouYear[is.na(recruit_data$Year)]; recruit_data$CaribouYear=NULL
 
   ##################
   #fit models

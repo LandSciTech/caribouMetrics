@@ -87,7 +87,7 @@ test_that("bboutools scnenario with no disturbance and no additional monitoring 
   scns <- data.frame(obsAnthroSlope = NA, projAnthroSlope = NA)
   scns$obsYears <- max(simBig$recruit_data$Year[!is.na(simBig$recruit_data$Calves)]) - min(simBig$recruit_data$Year) + 1
   scns$startYear <- min(simBig$recruit_data$Year)
-  scns$projYears <- max(simBig$summary$Year) - scns$obsYears - scns$startYear
+  scns$projYears <- max(simBig$summary$Year) - scns$obsYears - scns$startYear + 1
   scns$collarCount <- 0
 
   # devtools::load_all(path = "../caribouMetrics/")

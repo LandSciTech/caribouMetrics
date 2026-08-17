@@ -532,24 +532,29 @@ savePersistentCache <- function(env = cacheEnv){
 
 #add missing and change names to make data from bboutools models useable.
 convertBbouData<-function(dat){
-  if(!hasName(dat,"CaribouYear")){
+  
+  if(!hasName(dat,"Annual")){
     return(dat)
   }
   dat <- as.data.frame(dat)
   if(hasName(dat,"StartTotal")){
     dat_add <- expand.grid(PopulationName=levels(dat$PopulationName),
-                            Annual=setdiff(levels(dat$Annual),unique(as.character(dat$Annual))),
-                            Month=levels(dat$Month),
-                            StartTotal=1)
+                            Annual=levels(dat$Annual),
+                            Month=levels(dat$Month))
     
   }
   if(hasName(dat,"Cows")){
     dat_add <- expand.grid(PopulationName=levels(dat$PopulationName),
-                            Annual=setdiff(levels(dat$Annual),unique(as.character(dat$Annual))))
+                            Annual=levels(dat$Annual))
   }
   
-  dat <- merge(dat,dat_add,all.x=T,all.y=T)
-
+  if(!is.null(dat_add)){
+    dat <- merge(dat,dat_add,all.x=T,all.y=T)
+  }  
+  if(hasName(dat,"StartTotal")){
+    dat$StartTotal[is.na(dat$StartTotal)]=1  
+  }
+  
   newYr =  as.numeric(as.character(dat$Annual))
   newYr[(as.numeric(as.character(dat$Month))<formals(bboutools::bb_fit_survival)$year_start)]=
     newYr[(as.numeric(as.character(dat$Month))<formals(bboutools::bb_fit_survival)$year_start)]+1
@@ -559,5 +564,15 @@ convertBbouData<-function(dat){
   return(dat)
 }
   
+getCaribouYear <- function(x,
+                           year_start = formals(bboutools::bb_fit_recruitment)$year_start){
+  x$CaribouYear <- x$Year
+  if(length(unique(x$Month))>1){
+     cMonth <- x$Month
+     cMonth[is.na(cMonth)]=year_start
+     x$CaribouYear[cMonth<year_start] <- x$CaribouYear[cMonth<year_start]-1
+  }
+  return(x)
+}
 
 

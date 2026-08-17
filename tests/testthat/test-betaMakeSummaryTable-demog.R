@@ -27,7 +27,6 @@ test_that("multiple populations works", {
       nc, nthin, ni, nb
     )
   
-  expect_warning(
     out2 <- betaMakeSummaryTable(
       surv_data = bboudata::bbousurv_a %>% bind_rows(bboudata::bbousurv_b) %>% filter(Year > 2010),
       recruit_data = bboudata::bbourecruit_a %>% bind_rows(bboudata::bbourecruit_b) %>% filter(Year > 2010),
@@ -37,9 +36,15 @@ test_that("multiple populations works", {
       ),
       priors = betaNationalPriors(), 
       nc, nthin, ni, nb
-    ),
-    "no data for population"
-  )
+    )
+    
+   #check that missing data added correctly
+   surv_missing <- subset(out2$surv_fit$data,select=c(PopulationName,Year,Month,MortalitiesCertain))
+   surv_missing$missing <- is.na(surv_missing$MortalitiesCertain);surv_missing$MortalitiesCertain=NULL
+   surv_missing <- merge(surv_missing, bboudata::bbousurv_a %>% bind_rows(bboudata::bbousurv_b) %>% filter(Year > 2010),all.y=T)
+   expect_equal(sum(surv_missing$missing),0)
+   expect_equal(sum(!surv_missing$missing),nrow(bboudata::bbousurv_a %>% bind_rows(bboudata::bbousurv_b) %>% filter(Year > 2010)))
+   
 })
 
 test_that("works with simulated data",{
