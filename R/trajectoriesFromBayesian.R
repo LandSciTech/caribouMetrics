@@ -2,7 +2,7 @@
 #' 
 #' 
 #'
-#' @param bayesianResults 
+#' @param bayesianResults A result from `estimateBayesianRates`
 #' @param N0 
 #' @param cPars 
 #' @param returnSamples 
@@ -13,6 +13,15 @@
 #' @export
 #' @family demography
 #' @examples
+#' surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
+#' recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
+#' bbouInformative <- estimateBayesianRates(surv_data, recruit_data,
+#'                                          return_mcmc = TRUE)
+#' 
+#' trajB <- trajectoriesFromBayesian(bbouInformative)
+#' str(trajB, max.level = 1)
+#' plotTrajectories(trajB)
+#' 
 trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
                                      cPars=demographyDefaults(),
                                      returnSamples = TRUE, doSummary = TRUE, ...){
@@ -73,6 +82,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   Nnames <- intersect(c("N0","N.sd","N.lower","N.upper","PopulationName"),names(N0))
   Nuse <- unique(subset(N0,select=Nnames))
   if(!hasName(Nuse,"PopulationName")){Nuse$PopulationName="A"}
+  if(!hasName(Nuse, "N0")){stop("N0 must have a column named 'N0'")}
   
   popInfo <- merge(data.frame(id=seq(1:nr/length(unique(Nuse$PopulationName)))),Nuse)
 

@@ -43,7 +43,7 @@ test_that("testScript still works", {
   }
   
   # test what happens if samples are returned from trajectoriesFromNational
-  simBig2 <- suppressWarnings(trajectoriesFromNational(cPars = scns,                                                      returnSamples = TRUE)) 
+  simBig2 <- suppressWarnings(trajectoriesFromNational(cPars = scns, returnSamples = TRUE)) 
   
   # str(simBig2)
   # max(table(subset(simBig2$samples,select=c(Year,MetricTypeID,Replicate))))
@@ -67,7 +67,7 @@ test_that("testScript still works", {
 })
 
 test_that("bboutools scnenario with no disturbance and no additional monitoring ", {
-  mod_flc <- here::here("results/test_mod_realc.rds")
+  mod_flc <- here::here("results/test_bbou_nodist_nomonitor.rds")
   if (file.exists(mod_flc)) {
     mod_realc <- readRDS(mod_flc)
   } else {

@@ -344,7 +344,13 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     # given observed total animals & proportion calfs/cows from simulation - get
     # calf/cow ratio
     simRecruitObs <- simCalfCowRatios(cowCounts, exData)
-    if(nrow(simRecruitObs)>0){simRecruitObs$Day = recSurveyDay;simRecruitObs$Month = recSurveyMonth}
+    if(nrow(simRecruitObs)>0){
+      simRecruitObs$Day <- recSurveyDay
+      simRecruitObs$Month <- recSurveyMonth
+      if(recSurveyMonth < caribouYearStart){
+        simRecruitObs$Year <- simRecruitObs$Year + 1
+      }
+    }
     if (!is.null(writeFilesDir)) {
       write.csv(simRecruitObs,
                 file.path(writeFilesDir, paste0("simRecruitData", paramTable$label, ".csv")),

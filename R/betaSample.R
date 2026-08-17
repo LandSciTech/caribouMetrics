@@ -72,8 +72,16 @@ estBetaParams <- function(mu, sigma,minMu = 0.000001,maxMu=0.99999,minSd=0.00000
   beta <- alpha * (1/mu - 1)
   
   if(any(sigmaIn>sigma)){
-    warning(paste0("It isn't possible to have a beta distribution with mean ",mu," and sd ",sigmaIn,
-                   ". Standard deviation has been reduced to ",sigma,"."))
+    n_mod <- sum(sigmaIn>sigma)
+    if(n_mod == 1){
+      warning(paste0("It isn't possible to have a beta distribution with mean ",mu," and sd ",sigmaIn,
+                     ". Standard deviation has been reduced to ",sigma,"."))
+    }else{
+      warning(paste0("In ", n_mod, " cases sd was greater than the maximum ",
+                     "possible sd given mu for a beta distribution. Therefore ", 
+                     "sd was reduced to maxSd = 0.99999*(mu*(1-mu))^0.5"))
+    }
+
   }
   return(list(alpha=alpha, beta=beta, mu=mu,sigma=sigma))
   
