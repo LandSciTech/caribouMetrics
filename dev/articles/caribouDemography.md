@@ -9,7 +9,7 @@ interannual variability following Johnson et al.
 ([2020](#ref-johnson_science_2020)) with modifications noted in Hughes
 et al. ([2025](#ref-hughes_integration_2025)) and Dyson et al.
 ([2026](#ref-dyson_effective_2026)). Demographic rates vary with
-disturbance as estimated by Johnson et al.
+disturbance as estimated bdy Johnson et al.
 ([2020](#ref-johnson_science_2020)). A detailed description of the model
 is provided in ([Hughes et al. 2025, sec.
 2.4](#ref-hughes_integration_2025)).
@@ -467,7 +467,7 @@ a bboutools logistic model and example data.
 
 library(bboudata)
 library(bboutools)
-useSaved <- T # option to skip slow step of fitting bboutools model
+useSaved <- F # option to skip slow step of fitting bboutools model
 bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
 
 surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
@@ -641,8 +641,8 @@ trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rb
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 14
-#>    Total graph size: 111
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 201
 #> 
 #> Initializing model
 #> 
@@ -651,8 +651,8 @@ trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rb
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 14
-#>    Total graph size: 111
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 201
 #> 
 #> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryBase, simInitial = popMetricsBayes)
@@ -720,8 +720,8 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 14
-#>    Total graph size: 111
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 201
 #> 
 #> Initializing model
 #> 
@@ -730,8 +730,8 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 14
-#>    Total graph size: 117
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 207
 #> 
 #> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryAdjust, simInitial = trajFromSummaryBase)
@@ -802,15 +802,16 @@ proj
 ```
 
 ![Comparison of demographic trajectories from a fitted bboutools model
-(base) and a scenario in which expected survival is increased to 85%
-(S85), obtained using the trajectoriesFromSummary wrapper function.
-Bands are the 2.5% and 97.5% quantiles of 500
+(base) and a scenario in which expected survival is decreased from 94%
+to 85% (S85), obtained using the trajectoriesFromSummary wrapper
+function. Bands are the 2.5% and 97.5% quantiles of 500
 samples.](caribouDemography_files/figure-html/summaryTrajectoryForAppPlot-1.png)
 
 Figure 2.10: Comparison of demographic trajectories from a fitted
 bboutools model (base) and a scenario in which expected survival is
-increased to 85% (S85), obtained using the trajectoriesFromSummary
-wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples.
+decreased from 94% to 85% (S85), obtained using the
+trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5%
+quantiles of 500 samples.
 
 ### References
 

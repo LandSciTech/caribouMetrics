@@ -156,34 +156,34 @@ Caribou demography functions:
   str(mod, max.level = 2)
 #> List of 4
 #>  $ result :List of 4
-#>   ..$ summary     :'data.frame': 300 obs. of  8 variables:
-#>   ..$ surv_data   :'data.frame': 363 obs. of  8 variables:
-#>   ..$ recruit_data:'data.frame': 30 obs. of  8 variables:
+#>   ..$ summary     :'data.frame': 310 obs. of  8 variables:
+#>   ..$ surv_data   :'data.frame': 384 obs. of  8 variables:
+#>   ..$ recruit_data:'data.frame': 31 obs. of  8 variables:
 #>   ..$ popInfo     :'data.frame': 3000 obs. of  4 variables:
 #>  $ inData :List of 1
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
 #>   ..$ R_bar         : num 0.198
-#>   ..$ R_sd          : num 0.0841
-#>   ..$ R_iv_mean     : num 0.325
-#>   ..$ R_iv_shape    : num 15.3
-#>   ..$ R_bar_lower   : num 0.172
+#>   ..$ R_sd          : num 0.0842
+#>   ..$ R_iv_mean     : num 0.316
+#>   ..$ R_iv_shape    : num 14.5
+#>   ..$ R_bar_lower   : num 0.173
 #>   ..$ R_bar_upper   : num 0.226
-#>   ..$ S_bar         : num 0.872
-#>   ..$ S_sd          : num 0.165
-#>   ..$ S_iv_mean     : num 0.318
-#>   ..$ S_iv_shape    : num 3.15
+#>   ..$ S_bar         : num 0.871
+#>   ..$ S_sd          : num 0.159
+#>   ..$ S_iv_mean     : num 0.292
+#>   ..$ S_iv_shape    : num 2.69
 #>   ..$ S_bar_lower   : num 0.835
-#>   ..$ S_bar_upper   : num 0.907
+#>   ..$ S_bar_upper   : num 0.904
 #>   ..$ N0            : logi NA
-#>   ..$ nCollarYears  : int NA
+#>   ..$ nCollarYears  : int 900
 #>   ..$ nSurvYears    : int 31
 #>   ..$ nCowsAllYears : int NA
-#>   ..$ nRecruitYears : int 31
+#>   ..$ nRecruitYears : int 30
 #>  $ parList:List of 5
-#>   ..$ Rbar:'data.frame': 27 obs. of  7 variables:
-#>   ..$ Sbar:'data.frame': 27 obs. of  7 variables:
+#>   ..$ Rbar:'data.frame': 31 obs. of  7 variables:
+#>   ..$ Sbar:'data.frame': 31 obs. of  7 variables:
 #>   ..$ Siv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ Riv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ type: chr "bbou"
@@ -198,8 +198,6 @@ Caribou demography functions:
   out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                            disturbance = simO$simDisturbance,
                            startYear = 2014)
-#> Warning: requested year range: 2014 - 2033 does not match recruitment data year range:  2015 - 2025
-#> Warning: missing years of recruitment data: 2014
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -214,8 +212,8 @@ Caribou demography functions:
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 22
-#>    Unobserved stochastic nodes: 77
+#>    Observed stochastic nodes: 20
+#>    Unobserved stochastic nodes: 79
 #>    Total graph size: 694
 #> 
 #> Initializing model
