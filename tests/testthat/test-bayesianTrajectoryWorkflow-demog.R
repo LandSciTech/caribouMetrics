@@ -67,11 +67,11 @@ test_that("results match expected", {
   calcDif <- function(obs, var){
     obs %>%
       filter(!MetricTypeID %in% c("Anthro", "Fire_excl_anthro")) %>% 
-      select(Year, Mean, Type, Parameter) %>% 
+      select(Year, Mean, Type, Metric) %>% 
       tidyr::pivot_wider(names_from = "Type", values_from = "Mean") %>% 
       filter(!is.na(observed)) %>% 
       mutate(dif = abs(true - observed)) %>%
-      group_by(Parameter) %>% 
+      group_by(Metric) %>% 
       summarise(mean_dif = mean(dif))
   }
   
@@ -81,17 +81,17 @@ test_that("results match expected", {
     obs_true <- mod$obs.all %>% 
       filter(!MetricTypeID %in% c("Anthro", "Fire_excl_anthro", "c"),
              Type == "true") %>% 
-      select(Year, Mean, Type, Parameter) 
+      select(Year, Mean, Type, Metric) 
     mod_proj <- mod$rr.summary.all %>% 
       mutate(ci_width = upper - lower, .keep = "unused") %>% 
-      select(Year, Mean, Parameter, ci_width)
+      select(Year, Mean, Metric, ci_width)
     
-    comp <- inner_join(obs_true, mod_proj, by = c("Year", "Parameter"),
+    comp <- inner_join(obs_true, mod_proj, by = c("Year", "Metric"),
               suffix = c("_true", "_proj")) %>% 
       # female pop size is done differently so don't compare
-      filter(Parameter != "Female population size") %>% 
+      filter(Metric != "Female population size") %>% 
       mutate(dif = Mean_true - Mean_proj) %>% 
-      group_by(Parameter) %>% 
+      group_by(Metric) %>% 
       summarise(mean_dif = mean(abs(dif)),
                 ci_width = mean(ci_width))
     comp
@@ -99,16 +99,16 @@ test_that("results match expected", {
   
   # difference between initial model and Bayesian model
   calcDifNat <- function(mod, min_year = 0){
-    mod$rr.summary.all %>% select(Parameter, Mean, Year) %>% 
-      filter(Parameter != "c") %>% 
-      inner_join(mod$sim.all %>% select(Parameter, Mean, Year),
-                 by = c("Parameter", "Year"), suffix = c("_PM", "_nat")) %>% 
+    mod$rr.summary.all %>% select(Metric, Mean, Year) %>% 
+      filter(Metric != "c") %>% 
+      inner_join(mod$sim.all %>% select(Metric, Mean, Year),
+                 by = c("Metric", "Year"), suffix = c("_PM", "_nat")) %>% 
       mutate(dif = Mean_PM - Mean_nat) %>% 
       filter(Year >= min_year) %>% 
-      group_by(Parameter) %>% 
+      group_by(Metric) %>% 
       summarise(mean_dif = mean(dif)) %>% 
       # nat model does not do female adult pop in the same way
-      filter(Parameter != "Female population size")
+      filter(Metric != "Female population size")
   }
   
   # expectations that make sense based on what we know and ensure results
@@ -132,9 +132,9 @@ test_that("results match expected", {
   
   # TODO: still not sure if these expectations are exactly right
   # 
-  expect_true(all((modDifFew %>% filter(stringr::str_detect(Parameter, "Expect")) %>% 
+  expect_true(all((modDifFew %>% filter(stringr::str_detect(Metric, "Expect")) %>% 
                      pull(mean_dif)) >
-                (modDifMany %>% filter(stringr::str_detect(Parameter, "Expect")) %>% 
+                (modDifMany %>% filter(stringr::str_detect(Metric, "Expect")) %>% 
                    pull(mean_dif))))
 
 
@@ -212,20 +212,20 @@ test_that("results match expected", {
   # doPlot(noDat, "Adult female survival")
   # 
   # if(interactive()){
-  #   noDat$ksDists %>% filter(Parameter != "Female population size") %>% 
+  #   noDat$ksDists %>% filter(Metric != "Female population size") %>% 
   #     ggplot2::ggplot(ggplot2::aes(Year, KSDistance))+
   #     ggplot2::geom_point()+
-  #     ggplot2::facet_wrap(~Parameter)
+  #     ggplot2::facet_wrap(~Metric)
   # }
   # 
-  # noDatKS <- noDat$ksDists %>% group_by(Parameter) %>% 
-  #   filter(Parameter != "Female population size") %>% 
+  # noDatKS <- noDat$ksDists %>% group_by(Metric) %>% 
+  #   filter(Metric != "Female population size") %>% 
   #   summarise(meanKS = mean(KSDistance))
   
   #expect_true(all(noDatKS$meanKS < 0.15))
   
   # Values on Jan 13 2025 commit
-  #Parameter              meanKS
+  #Metric              meanKS
   #<chr>                   <dbl>
   #1 Adjusted recruitment   0.08154630 
   #2 Adult female survival  0.07131481

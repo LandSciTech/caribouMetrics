@@ -16,8 +16,7 @@
 #'
 #' @param modTables list. A list of model results tables created using
 #'   `[compareTrajectories()]`.
-#'   #TODO consider changing parameter to metric... but compareTrajectories output has parameter column, while plotTrajectories uses metric
-#' @param parameter character. Which parameter to plot, if more than one, a list
+#' @param metric character. Which metric to plot, if more than one, a list
 #'   of plots is returned.
 #' @param lowBound,highBound numeric. Lower and upper y axis limits
 #' @param facetVars character. Optional. Vector of column names to facet by
@@ -27,7 +26,7 @@
 #' @param breakInterval number. How many years between x tick marks?
 #' @param typeLabels vector of two labels. Default c("Bayesian","initial"). Names of models to be compared.
 #'
-#' @return a ggplot object or list of ggplot objects if a vector of parameters
+#' @return a ggplot object or list of ggplot objects if a vector of metrics
 #'   was given.
 #' @export
 #' 
@@ -46,20 +45,20 @@
 #' out_tbl <- compareTrajectories(out, exData = simO$exData, paramTable = simO$paramTable,
 #'                            simInitial = trajectoriesFromNational())
 #'
-#' plotCompareTrajectories(out_tbl, parameter = "Recruitment")
-plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBound = 1,
+#' plotCompareTrajectories(out_tbl, metric = "Recruitment")
+plotCompareTrajectories <- function(modTables, metric, lowBound = 0, highBound = 1,
                    facetVars = NULL, labFontSize = 14, legendPosition="right",breakInterval=1,
                    typeLabels = c("Bayesian","initial")) {
-  # modTables= posteriorResult; parameter = "Recruitment"; lowBound=0; highBound = 0.85
+  # modTables= posteriorResult; metric = "Recruitment"; lowBound=0; highBound = 0.85
   # legendPosition="none";breakInterval=breakInterval;labFontSize=labFontSize
   # facetVars = NULL
   
-  if(length(parameter) > 1){
-    allPlots <- lapply(parameter, function(x) {
+  if(length(metric) > 1){
+    allPlots <- lapply(metric, function(x) {
       plotCompareTrajectories(modTables, x,  lowBound, highBound, facetVars, labFontSize)
     })
     
-    names(allPlots) <- parameter
+    names(allPlots) <- metric
     return(allPlots)
   }
   
@@ -83,14 +82,14 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
     "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
   )
   
-  if(!parameter %in% exp_param_nms){
-    stop("parameter ", parameter, " is not one of the expected values: '",
+  if(!metric %in% exp_param_nms){
+    stop("metric ", metric, " is not one of the expected values: '",
          paste0(exp_param_nms, collapse = "', '"), call. = FALSE)
   }
 
-  testTable(allRes, req_col_names = c("Year", "Parameter", "Mean", 
+  testTable(allRes, req_col_names = c("Year", "Metric", "Mean", 
                                       "lower", "upper"),
-            acc_vals = list(Parameter = exp_param_nms))
+            acc_vals = list(Metric = exp_param_nms))
   
   if (is.null(facetVars)) {
     titleFontSize <- 16*labFontSize/14
@@ -103,20 +102,20 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
     }
   }
 
-  df <- subset(allRes, allRes$Parameter == parameter)
+  df <- subset(allRes, allRes$Metric == metric)
   
   if (nrow(df) < 1) {
-    stop("The parameter: ", parameter, " is not present in the data provided")
+    stop("The metric: ", metric, " is not present in the data provided")
   }
   
   if (!is.null(obs)) {
-    pr <- parameter
-    obs <- subset(obs, Parameter == pr)
+    pr <- metric
+    obs <- subset(obs, Metric == pr)
   }
   
   if(!is.null(simRange)){
-    pr <- parameter
-    simRange <- subset(simRange, Parameter == pr)
+    pr <- metric
+    simRange <- subset(simRange, Metric == pr)
     if(nrow(simRange) == 0){
      simRange <- NULL  
     }
@@ -144,7 +143,7 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
     
     dups <- df %>% count(Year, grp) %>% filter(n > 1)
     if(nrow(dups) > 0){
-      warning("modTables contains duplicate observations of the same parameter,",
+      warning("modTables contains duplicate observations of the same metric,",
               " year and type (eg observed or simulated). If there are multiple",
               " scenarios identify them using the facetVars")
     }
@@ -155,7 +154,7 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
     x1 <- ggplot2::ggplot(df, ggplot2::aes(x = .data[["Year"]], y = .data[["Mean"]]))
   }
   x2 <- x1 + ggplot2::theme_classic() + ggplot2::xlab("Year") +
-    ggplot2::ylab(parameter) +
+    ggplot2::ylab(metric) +
     ggplot2::geom_line(ggplot2::aes(x = .data[["Year"]], y = .data[["Mean"]]), 
                        linewidth = 1.75) +
     ggplot2::scale_color_discrete(type=pal2, name = NULL)+
@@ -206,7 +205,7 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
                                      labeller = "label_both")
     }
   }
-  if (grepl("growth rate",parameter,fixed=T)) {
+  if (grepl("growth rate",metric,fixed=T)) {
     x2 <- x2 + ggplot2::geom_hline(yintercept = 1, color = "black")
   }
   
@@ -231,7 +230,7 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
 #'   [trajectoriesFromSummary()].
 #' @param replicates integer. Number of replicate populations. Ignored if
 #'   samples not included in `caribouBayesDemogMod`.
-#' @param metrics character. A vector of MetricTypeIDs to be included as facets
+#' @param metrics character. A vector of Metrics to be included as facets
 #'   in the plot.
 #'
 #' @export
@@ -255,19 +254,21 @@ plotCompareTrajectories <- function(modTables, parameter, lowBound = 0, highBoun
 
 plotTrajectories <- function(caribouBayesDemogMod,
                              replicates = 35,
-                             metrics = c("Anthro", "Sbar","survival","Rbar",
-                                         "recruitment", "lambda_bar", "lambda")){
+                             metrics = c("Adult female survival","Recruitment","Adjusted recruitment",
+                                         "Population growth rate","Female population size","c",
+                                         "Expected survival","Expected recruitment",
+                                         "Expected adjusted recruitment","Expected growth rate")){
   caribouBayesDemogMod$summary <- caribouBayesDemogMod$summary %>%
-    filter(MetricTypeID %in% metrics)
-  names <- caribouBayesDemogMod$summary %>% select(MetricTypeID, Parameter) %>% unique()
+    filter(Metric %in% metrics)
+  names <- caribouBayesDemogMod$summary %>% select(MetricTypeID, Metric) %>% unique()
   
   base <- ggplot2::ggplot(data = caribouBayesDemogMod$summary)+
-    ggplot2::facet_wrap(~Parameter, scales = "free") +
+    ggplot2::facet_wrap(~Metric, scales = "free") +
     ggplot2::ylab("")
   
   if(hasName(caribouBayesDemogMod,"samples")){
     caribouBayesDemogMod$samples <- caribouBayesDemogMod$samples %>%
-      filter(MetricTypeID %in% metrics) %>%
+      filter(Metric %in% metrics) %>%
       merge(names) %>%
       filter(as.numeric(as.factor(Replicate))<=replicates)
     

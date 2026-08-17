@@ -150,7 +150,7 @@ scnsMulti = merge(scnsMulti,expand.grid(lQuantile=c(0.01,0.5,0.99),collarCount=c
 
 limitedMoreMulti = bayesianScenariosWorkflow(scnsMulti,simLimited,niters=niters) 
 
-lmmView <- subset(limitedMoreMulti$rr.summary.all,(Parameter=="Expected growth rate")&(Year==2021),select=c(lQuantile,collarCount,Mean,lower,upper,probViable))
+lmmView <- subset(limitedMoreMulti$rr.summary.all,(Metric=="Expected growth rate")&(Year==2021),select=c(lQuantile,collarCount,Mean,lower,upper,probViable))
 base <- ggplot(lmmView,aes(x=collarCount,y=Mean,ymax=upper,ymin=lower,group=lQuantile,colour=probViable))+geom_point()+geom_errorbar()+ylab("Expected growth rate")
 ```
 

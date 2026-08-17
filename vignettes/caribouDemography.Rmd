@@ -393,8 +393,10 @@ popMetrics2 <- trajectoriesFromNational(disturbance = disturbance2, replicates =
 
 ```{r changeOverTime2, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Example demographic trajectories and from the national model on a changing landscape, obtained using the trajectoriesFromNational wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples. Female population size is shown separately with a log scaled y axis to allow comparison of divergent trajectories."}
 traj <- plotTrajectories(popMetrics2, 
-                         metrics = c("lambda", "lambda_bar", "N", "Rbar", "recruitment", 
-                                     "Sbar", "survival"))
+                         metrics = c("Population growth rate", "Expected growth rate",
+                                     "Female population size", 
+                                     "Expected recruitment", "Recruitment", 
+                                     "Expected survival", "Survival"))
 traj
 ```
 # Demographic rates and trajectories from Bayesian models
@@ -468,8 +470,9 @@ popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
 
 ```{r bayesTrajectoryPlot, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Example demographic trajectories from a fitted bboutools model, obtained using the trajectoriesFromBayesian wrapper function. Bands are 95% predictive intervals."}
 proj <-  plotTrajectories(popMetricsBayes, 
-                          metrics = c("lambda", "lambda_bar", "Rbar", 
-                                      "recruitment", "Sbar", "survival"))
+                          metrics = c("Population growth rate", "Expected growth rate",
+                                     "Expected recruitment", "Recruitment", 
+                                     "Expected survival", "Survival"))
 proj
 ```
 
@@ -479,8 +482,10 @@ popMetricsBayes <- trajectoriesFromBayesian(bbouInformative,N0=100)
 
 ```{r bayesTrajectoryPlotN, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Example demographic trajectories from a fitted bboutools model, obtained using the trajectoriesFromBayesian wrapper function, with initial population size of 100. Bands are 95% predictive intervals."}
 proj <- plotTrajectories(popMetricsBayes,
-                         metrics = c("lambda", "lambda_bar", "N", "Rbar",
-                                     "recruitment", "Sbar", "survival"))
+                         metrics = c("Population growth rate", "Expected growth rate",
+                                     "Female population size", 
+                                     "Expected recruitment", "Recruitment", 
+                                     "Expected survival", "Survival"))
 proj
 ```
 
@@ -566,8 +571,10 @@ scnCompare <- list(summary=rbind(popMetricsBase$summary,popMetricsS85$summary),
 
 ```{r summaryTrajectoryForAppPlot, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Comparison of demographic trajectories from a fitted bboutools model (base) and a scenario in which expected survival is increased to 85% (S85), obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
 proj <- plotTrajectories(scnCompare, 
-                         metrics = c("lambda", "lambda_bar", "N", "Rbar", 
-                                     "recruitment", "Sbar", "survival"), 
+                         metrics = c("Population growth rate", "Expected growth rate",
+                                     "Female population size", 
+                                     "Expected recruitment", "Recruitment", 
+                                     "Expected survival", "Survival"), 
                          replicates = 25)
 proj
 ```

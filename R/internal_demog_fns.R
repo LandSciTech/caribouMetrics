@@ -74,11 +74,12 @@ summarizeTrajectories <- function(pars,returnSamples=T){
   }  
   names = data.frame(MetricTypeID = c("survival","recruitment","X", "lambda","N","c",
                                       "Sbar","Rbar","Xbar","lambda_bar"),
-                     Parameter = c("Adult female survival","Recruitment","Adjusted recruitment",
+                     Metric = c("Adult female survival","Recruitment","Adjusted recruitment",
                                    "Population growth rate","Female population size","c",
                                    "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
                                    ))
   simSum=merge(simSum,names)
+  pars <- merge(pars, names)
   if (returnSamples){
     simBig <- list(summary = simSum, samples = pars)
   } else {

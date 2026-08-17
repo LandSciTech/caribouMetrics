@@ -80,7 +80,7 @@ compareTrajectories <- function(caribouBayesDemogMod,
     obsSurv <- subset(survInput,select=c(PopulationName,Year,mean))
     names(obsSurv)[names(obsSurv)=="mean"]="Mean"
   }
-  obsSurv$Parameter <- "Adult female survival"
+  obsSurv$Metric <- "Adult female survival"
   obsSurv$MetricTypeID <- "S"
   obsSurv$Type <- "observed"    
   
@@ -94,25 +94,25 @@ compareTrajectories <- function(caribouBayesDemogMod,
     obsRec <- subset(recInput,select=c(PopulationName,Year,mean))
     names(obsRec)[names(obsRec)=="mean"]="Mean"
   }
-  obsRec$Parameter <- "Recruitment"
+  obsRec$Metric <- "Recruitment"
   obsRec$MetricTypeID <- "R"
   obsRec$Type <- "observed"
 
-  #hist(subset(rr.summary,Parameter=="Recruitment")$Mean)
+  #hist(subset(rr.summary,Metric=="Recruitment")$Mean)
   
-  obsAll <- rbind(subset(obsRec, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+  obsAll <- rbind(subset(obsRec, select = c("PopulationName","Year", "Mean", "Metric", "MetricTypeID",
                                             "Type")),
-                  subset(obsSurv, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                  subset(obsSurv, select = c("PopulationName","Year", "Mean", "Metric", "MetricTypeID",
                                              "Type")))
   
   if(!is.null(exData)){
     
-    exData <- merge(exData,unique(subset(rr.summary,select=c(MetricTypeID,Parameter))),all.x=T)
+    exData <- merge(exData,unique(subset(rr.summary,select=c(MetricTypeID, Metric))),all.x=T)
     names(exData)[names(exData)=="Amount"] = "Mean"
     exData$Type = "true"
     
     obsAll <- rbind(obsAll,
-                    subset(exData, select = c("PopulationName","Year", "Mean", "Parameter", "MetricTypeID",
+                    subset(exData, select = c("PopulationName","Year", "Mean", "Metric", "MetricTypeID",
                                               "Type")))
   } 
 
