@@ -6,7 +6,7 @@
 \usage{
 plotCompareTrajectories(
   modTables,
-  parameter,
+  metric,
   lowBound = 0,
   highBound = 1,
   facetVars = NULL,
@@ -18,10 +18,9 @@ plotCompareTrajectories(
 }
 \arguments{
 \item{modTables}{list. A list of model results tables created using
-\verb{[compareTrajectories()]}.
-#TODO consider changing parameter to metric... but compareTrajectories output has parameter column, while plotTrajectories uses metric}
+\verb{[compareTrajectories()]}.}
 
-\item{parameter}{character. Which parameter to plot, if more than one, a list
+\item{metric}{character. Which metric to plot, if more than one, a list
 of plots is returned.}
 
 \item{lowBound, highBound}{numeric. Lower and upper y axis limits}
@@ -38,7 +37,7 @@ facets. Font size is 10 pt if facets are used.}
 \item{typeLabels}{vector of two labels. Default c("Bayesian","initial"). Names of models to be compared.}
 }
 \value{
-a ggplot object or list of ggplot objects if a vector of parameters
+a ggplot object or list of ggplot objects if a vector of metrics
 was given.
 }
 \description{
@@ -68,7 +67,7 @@ out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = si
 out_tbl <- compareTrajectories(out, exData = simO$exData, paramTable = simO$paramTable,
                            simInitial = trajectoriesFromNational())
 
-plotCompareTrajectories(out_tbl, parameter = "Recruitment")
+plotCompareTrajectories(out_tbl, metric = "Recruitment")
 }
 \seealso{
 Caribou demography functions:

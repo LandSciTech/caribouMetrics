@@ -7,8 +7,9 @@
 plotTrajectories(
   caribouBayesDemogMod,
   replicates = 35,
-  metrics = c("Anthro", "Sbar", "survival", "Rbar", "recruitment", "lambda_bar",
-    "lambda")
+  metrics = c("Adult female survival", "Recruitment", "Adjusted recruitment",
+    "Population growth rate", "Female population size", "c", "Expected survival",
+    "Expected recruitment", "Expected adjusted recruitment", "Expected growth rate")
 )
 }
 \arguments{
@@ -20,7 +21,7 @@ produced by calling \code{\link[=bayesianTrajectoryWorkflow]{bayesianTrajectoryW
 \item{replicates}{integer. Number of replicate populations. Ignored if
 samples not included in \code{caribouBayesDemogMod}.}
 
-\item{metrics}{character. A vector of MetricTypeIDs to be included as facets
+\item{metrics}{character. A vector of Metrics to be included as facets
 in the plot.}
 }
 \description{

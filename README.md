@@ -19,8 +19,9 @@ include:
 - a national demographic model with density dependence and interannual
   variability follows [Johnson et.
   al. (2020)](doi:10.1111/1365-2664.13637) with modifications described
-  in [Dyson et al. (in press)](https://doi.org/10.1101/2022.06.01.494350).
-  Demographic rates vary with disturbance as estimated by [Johnson et.
+  in [Dyson et al. (in
+  press)](https://doi.org/10.1101/2022.06.01.494350). Demographic rates
+  vary with disturbance as estimated by [Johnson et.
   al. (2020)](doi:10.1111/1365-2664.13637).
 - a Bayesian Beta model for integrating prior information from Johnson
   et al’s national analysis of demographic-disturbance relationships
@@ -37,6 +38,11 @@ R package [(Dalgarno et al. 2025)](https://doi.org/10.21105/joss.07997)
 al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095) model has been
 extended as follows:
 
+- Allow for calculation of population growth rate without initial
+  population size information. See [Analytic Methods for Estimation of
+  Boreal Caribou Survival, Recruitment and Population
+  Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html)
+  for details.
 - Allow analysis of composition survey data in bboutools form that
   includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods
   for Estimation of Boreal Caribou Survival, Recruitment and Population
@@ -49,6 +55,10 @@ extended as follows:
   Boreal Caribou Survival, Recruitment and Population
   Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html)
   for details.
+- Allow for analysis of groups of populations with shared interannual
+  variation. See [Multi-Population Analysis and Other
+  Extensions](https://poissonconsulting.github.io/bboutools/articles/extensions.html)
+  for details.
 
 Simulated example population trajectories can be created from the
 national model or fitted Bayesian models, and combined with a simple
@@ -57,10 +67,12 @@ monitoring scenarios and show how monitoring requirements depend on
 landscape condition ([Hughes et
 al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095)).
 
-`caribouMetrics` also contains an implementation of [Hornseth and
-Rempel’s (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario boreal
-caribou resource selection model described in [Dyson et
-al. (in press)](https://doi.org/10.1101/2022.06.01.494350).
+The
+[EcoEvoMissisaPaper](https://github.com/LandSciTech/caribouMetrics/tree/EcoEvoMissisaPaper)
+branch of `caribouMetrics` also contains an implementation of [Hornseth
+and Rempel’s (2016)](https://doi.org/10.1139/cjz-2015-0101) Ontario
+boreal caribou resource selection model described in [Dyson et al. (in
+press)](https://doi.org/10.1101/2022.06.01.494350).
 
 Model implementation is intended to be modular and flexible, allowing
 reuse of components in a variety of contexts including projections of
@@ -86,14 +98,9 @@ package.
 library(caribouMetrics)
 #> Loading required package: nimble
 #> Warning: package 'nimble' was built under R version 4.4.3
-#> nimble version 1.3.0 is loaded.
+#> nimble version 1.4.2 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
-#> 
-#> Note for advanced users who have written their own MCMC samplers:
-#>   As of version 0.13.0, NIMBLE's protocol for handling posterior
-#>   predictive nodes has changed in a way that could affect user-defined
-#>   samplers in some situations. Please see Section 15.5.1 of the User Manual.
 #> 
 #> Attaching package: 'nimble'
 #> The following object is masked from 'package:stats':
@@ -102,6 +109,25 @@ library(caribouMetrics)
 #> The following object is masked from 'package:base':
 #> 
 #>     declare
+#> Loading required package: nimbleQuad
+#> Warning: package 'nimbleQuad' was built under R version 4.4.3
+#> 
+#> Attaching package: 'nimbleQuad'
+#> The following objects are masked from 'package:nimble':
+#> 
+#>     buildAGHQ, buildLaplace, runAGHQ, runLaplace, summaryAGHQ,
+#>     summaryLaplace
+#> Loading required package: bbouNationalPriors
+#> Loading required package: dplyr
+#> Warning: package 'dplyr' was built under R version 4.4.3
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 # use local version on local and installed on GH
 if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
 #> ℹ Loading caribouMetrics
@@ -141,19 +167,19 @@ demRates <- estimateNationalRates(covTable = disturb_tbl,
 #> popGrowthPars contains quantiles so they are used instead of the defaults
 demRates
 #>   zone   Anthro     Fire Total_dist Fire_excl_anthro FID     S_bar   S_stdErr
-#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.05024037
-#>     S_PIlow  S_PIhigh     R_bar   R_stdErr    R_PIlow  R_PIhigh
-#> 1 0.7625781 0.9198247 0.1813372 0.09842164 0.03913806 0.3782637
+#> 1    1 39.97933 1.732936   40.56555        0.5862182   0 0.8478733 0.04913926
+#>    S_PIlow S_PIhigh     R_bar  R_stdErr    R_PIlow  R_PIhigh
+#> 1 0.754316 0.918299 0.1813372 0.1123969 0.04907986 0.4345639
 
 # Simulate population growth
 popGrow <- caribouPopGrowth(N = 2000, numSteps = 20, R_bar = demRates$R_bar, 
                             S_bar = demRates$S_bar)
 
 popGrow
-#>     N0    lambda   lambdaE   N       R_t        X_t       S_t n_recruits
-#> 1 2000 0.9071743 0.9247487 285 0.1865682 0.09328412 0.8584614         23
+#>     N0    lambda   lambdaE   N       R_t      X_t       S_t n_recruits
+#> 1 2000 0.9104049 0.9247487 306 0.2524541 0.126227 0.8249857         30
 #>   surviving_adFemales
-#> 1                 262
+#> 1                 276
 
 # simulate caribou collar observations
 params <- getScenarioDefaults(
@@ -182,8 +208,8 @@ pm <- bayesianTrajectoryWorkflow(simObs$simSurvObs, simObs$simRecruitObs,
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 29
-#>    Unobserved stochastic nodes: 70
+#>    Observed stochastic nodes: 20
+#>    Unobserved stochastic nodes: 79
 #>    Total graph size: 505
 #> 
 #> Initializing model
@@ -197,12 +223,12 @@ plotCompareTrajectories(pmTbls, c("Recruitment", "Adult female survival"))
 #> $Recruitment
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" alt="" width="100%" />
 
     #> 
     #> $`Adult female survival`
 
-<img src="man/figures/README-example-2.png" width="100%" />
+<img src="man/figures/README-example-2.png" alt="" width="100%" />
 
 ## Resources
 
@@ -212,21 +238,21 @@ contains information on the `caribouMetrics` package. Here you can find
 function](https://landscitech.github.io/caribouMetrics/reference/index.html)
 and the following articles/vignettes/tutorials:
 
-- [**Demographic
-  Model**](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html):
+- [**Caribou Demographic Rates and
+  Trajectories**](https://landscitech.github.io/caribouMetrics/articles/caribouDemography.html):
   Simulate demographic rates and population growth using a national
-  model informed by demographic-disturbance relationships.
-- [**Bayesian Demographic
-  Projection**](https://landscitech.github.io/caribouMetrics/articles/bayesian-model-outputs.html):
-  Estimate and project demographic rates and population growth using a
-  Bayesian model informed by national demographic-disturbance
-  relationships and local demographic data.
+  model informed by demographic-disturbance relationships or Bayesian
+  models.
 - [**Comparing the caribouMetrics Beta model to bboutools
   models**](https://landscitech.github.io/caribouMetrics/articles/compare-bayesian-models.html):
   Estimate and project demographic rates and population growth using
-  Bayesian logistic models implemented in the `bboutools` R package, and
-  compare to Beta models informed by national demographic-disturbance
-  relationships and local demographic data.
+  Bayesian logistic models implemented in the `bboutools` R package or
+  Beta models informed by national demographic-disturbance relationships
+  and local demographic data, and compare models.
+- [**Simulation of monitoring scenarios informed by local
+  data**](https://landscitech.github.io/caribouMetrics/articles/combine-observed-simulated.html):
+  Assess monitoring strategies by simulating plausible outcomes of
+  additional monitoring.
 - [**Disturbance
   Metrics**](https://landscitech.github.io/caribouMetrics/articles/Using_disturbanceMetric.html):
   Calculate buffered anthropogenic disturbance and fire disturbance
@@ -246,13 +272,12 @@ packages to facilitate analysis of boreal caribou survival and
 recruitment data. Journal of Open Source Software 10:7997.
 <https://doi.org/10.21105/joss.07997>
 
-Dyson, M., Endicott, S., Simpkins C., Turner, J.W., Avery-Gomm S.,
-Johnson, C.A., Leblond, M., Neilson, E.W., Rempel, R., Wiebe, P.A.,
-Baltzer, J.L., Stewart, F.E.C., Hughes, J. 2022. Existing caribou
-habitat and demographic models are poorly suited for Ring of Fire impact
-assessment: A roadmap for improving the usefulness, transparency, and
-availability of models for conservation. bioRxiv 2022.06.01.494350;
-<https://doi.org/10.1101/2022.06.01.494350>
+Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
+Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
+Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Effective
+conservation decisions require models designed for purpose: a case study
+of boreal caribou in Ontario’s Ring of Fire. Ecology and Evolution In
+press: <https://doi.org/10.1101/2022.06.01.494350>
 
 ECCC. 2011. Scientific assessment to inform the identification of
 critical habitat for woodland caribou (*Rangifer tarandus caribou*),

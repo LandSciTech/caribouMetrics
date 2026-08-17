@@ -125,7 +125,7 @@ If you have any questions about the `caribouMetrics` package or suggestions for 
 # References
 Dalgarno S, Boulanger J, Pearson A, et al (2025) bbousuite: A set of R packages to facilitate analysis of boreal caribou survival and recruitment data. Journal of Open Source Software 10:7997. <https://doi.org/10.21105/joss.07997>
 
-Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S., Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A., Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Effective conservation decisions require models designed for purpose: a case study of boreal caribou in Ontario’s Ring of Fire. Ecology and Evolution In press: <https://doi.org/10.1101/2022.06.01.494350>
+Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S., Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A., Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press). Effective conservation decisions require models designed for purpose: a case study of boreal caribou in Ontario's Ring of Fire. Ecology and Evolution In press: <https://doi.org/10.1101/2022.06.01.494350>
 
 ECCC. 2011. Scientific assessment to inform the identification of critical
 habitat for woodland caribou (*Rangifer tarandus caribou*), boreal population, in

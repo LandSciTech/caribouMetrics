@@ -28,7 +28,7 @@ if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork'
 # Demographic rates and trajectories from the national model
 
 ## Overview
-Here we describe a demographic model with density dependence and interannual variability following @johnson_science_2020 with modifications noted in @hughes_integration_2025 and @dyson_effective_2026. Demographic rates vary with disturbance as estimated bdy @johnson_science_2020. A detailed description of the model is provided in [@hughes_integration_2025 Section 2.4].
+Here we describe a demographic model with density dependence and interannual variability following @johnson_science_2020 with modifications noted in @hughes_integration_2025 and @dyson_effective_2026. Demographic rates vary with disturbance as estimated by @johnson_science_2020. A detailed description of the model is provided in [@hughes_integration_2025 Section 2.4].
 
 `getNationalCoefficients()` selects the regression coefficient values and standard errors for the desired model version (see `popGrowthTableJohnsonECCC` for options) and then samples coefficients from these Gaussian distributions for each replicate population.  
 

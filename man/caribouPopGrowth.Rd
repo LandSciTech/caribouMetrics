@@ -113,7 +113,7 @@ Dyson, M., Endicott, S., Simpkins, C., Turner, J. W., Avery-Gomm, S.,
 Johnson, C. A., Leblond, M., Neilson, E. W., Rempel, R., Wiebe, P. A.,
 Baltzer, J. L., Stewart, F. E. C., & Hughes, J. (in press).
 Effective conservation decisions require models designed for purpose:
-a case study of boreal caribou in Ontario’s Ring of Fire.
+a case study of boreal caribou in Ontario's Ring of Fire.
 Ecology and Evolution In press: \url{https://doi.org/10.1101/2022.06.01.494350}
 
 Hughes, J., Endicott, S., Calvert, A.M. and Johnson, C.A., 2025.
