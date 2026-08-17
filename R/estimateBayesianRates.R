@@ -196,7 +196,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   parTab = merge(parTab, data_amt)
 
   parList = list()
-  yrs <- data.frame(Annual = intersect(as.numeric(as.character(surv_fit$data$Annual)),as.numeric(as.character(recruit_fit$data$Annual))))
+  yrs <- data.frame(Annual = intersect(as.numeric(levels(surv_fit$data$Annual)),as.numeric(levels(recruit_fit$data$Annual))))
   yrs$Year <- yrs$Annual
   parList$Rbar <- subset(parTab,select=c(R_bar,R_sd,R_bar_lower,R_bar_upper,PopulationName))
   names(parList$Rbar)[1:4] = c("mean","sd","lower","upper")

@@ -347,9 +347,9 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     if(nrow(simRecruitObs)>0){
       simRecruitObs$Day <- recSurveyDay
       simRecruitObs$Month <- recSurveyMonth
-      if(recSurveyMonth < caribouYearStart){
-        simRecruitObs$Year <- simRecruitObs$Year + 1
-      }
+      #if(recSurveyMonth < caribouYearStart){
+      #  simRecruitObs$Year <- simRecruitObs$Year + 1
+      #}
     }
     if (!is.null(writeFilesDir)) {
       write.csv(simRecruitObs,
