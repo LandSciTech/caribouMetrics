@@ -116,6 +116,8 @@ simO <- simulateObservations(scns)
 out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                           disturbance = simO$simDisturbance,
                           startYear = 2014, niters=10)
+#> Warning: requested year range: 2014 - 2033 does not match recruitment data year range:  2015 - 2025
+#> Warning: missing years of recruitment data: 2014
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -134,8 +136,8 @@ out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = si
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 20
-#>    Unobserved stochastic nodes: 79
+#>    Observed stochastic nodes: 22
+#>    Unobserved stochastic nodes: 77
 #>    Total graph size: 694
 #> 
 #> Initializing model
