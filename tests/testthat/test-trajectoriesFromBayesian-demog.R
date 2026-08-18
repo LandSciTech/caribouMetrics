@@ -59,4 +59,32 @@ test_that("works with disturbance and N0 variation", {
   expect_is(pltDistwN0, "ggplot2::ggplot")
 })
 
-
+test_that("can project into future with missing years in data", {
+  bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
+  
+  surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
+  surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
+                               PopulationName = unique(surv_data$PopulationName))
+  surv_data <- merge(surv_data, surv_data_add, all.x = TRUE, all.y = TRUE)
+  
+  recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
+  recruit_data_add <- expand.grid(Year = seq(2017, 2022), 
+                                  PopulationName = unique(recruit_data$PopulationName))
+  recruit_data <- merge(recruit_data, recruit_data_add, all.x = TRUE, all.y = TRUE)
+  
+  if (file.exists(bbouInformativeFile)) {
+    bbouInformative <- readRDS(bbouInformativeFile)
+  } else {
+    bbouInformative <- estimateBayesianRates(surv_data, recruit_data,
+                                             return_mcmc = TRUE)
+    if (dir.exists(dirname(bbouInformativeFile))) {
+      saveRDS(bbouInformative, bbouInformativeFile)
+    }
+  }
+  
+  expect_true(all(seq(2017, 2022) %in% bbouInformative$parList$Rbar$Year))
+  
+  bbouTraj <- trajectoriesFromBayesian(bbouInformative)
+  
+  expect_true(all(seq(2017, 2022) %in% unique(bbouTraj$summary$Year)))
+})
