@@ -446,8 +446,9 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     simRecruitObs$Calves[!is.na(simRecruitObs$Calves)] = NA
   }
   
-  if(!hasName(simRecruitObs,"UnknownAdults")){simRecruitObs$UnknownAdults <- 0}
-  if(!hasName(simRecruitObs,"Yearlings")){simRecruitObs$Yearlings <- 0}
+  if(nrow(simRecruitObs)==0){addVal <- integer(0)}else{addVal <- 0}
+  if(!hasName(simRecruitObs,"UnknownAdults")){simRecruitObs$UnknownAdults <- addVal}
+  if(!hasName(simRecruitObs,"Yearlings")){simRecruitObs$Yearlings <- addVal}
   
   if(!hasName(simRecruitObs,"CowsBulls")){
     simRecruitObs$CowsBulls <- simRecruitObs$Cows
@@ -455,7 +456,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   if(!hasName(simRecruitObs,"Bulls")){
     simRecruitObs$Bulls <- simRecruitObs$CowsBulls-simRecruitObs$Cows
   }
-
+  
+  
   simSurvObs$StartTotal[simSurvObs$StartTotal==0]<-NA
   simSurvObs$MortalitiesCertain[is.na(simSurvObs$StartTotal)]<-NA
   simSurvObs$MortalitiesUncertain[is.na(simSurvObs$StartTotal)]<-NA
