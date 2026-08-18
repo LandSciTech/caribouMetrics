@@ -86,13 +86,6 @@ dataFromSheets("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIb
 #> ✔ Range ''population_estimates''.
 #> ✔ Reading from bbou_example_data.
 #> ✔ Range ''data_description''.
-#> ✖ Request 1 failed [429: RESOURCE_EXHAUSTED].
-#> ℹ Will retry in 4.1s.
-#> ⠙ Retry happens in  3s
-#> ⠹ Retry happens in  3s
-#> ✔ Request 2 successful!
-#> ⠹ Retry happens in  3s
-#> ⠹ Retry happens in  0s
 #> $survey_surv
 #> # A tibble: 570 × 6
 #>    PopulationName  Year Month StartTotal MortalitiesCertain MortalitiesUncertain
