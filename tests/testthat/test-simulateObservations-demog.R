@@ -38,17 +38,17 @@ test_that("collarCount and cowCount behave", {
   
   simObs2 <- simulateObservations(scns2)
   
-  simObs2$simSurvObs %>% 
-    left_join(simObs2$simRecruitObs, 
-              by = join_by(PopulationName, Replicate, Year)) %>% 
+  simObs2$simSurvObs %>% mutate(CaribouYear = Year) %>% 
+    left_join(simObs2$simRecruitObs %>% mutate(CaribouYear = Year - 1), 
+              by = join_by(PopulationName, Replicate, CaribouYear)) %>% 
     mutate(pass = Cows == (30 - MortalitiesCertain) * 2) %>% 
     pull(pass) %>% all %>% 
     expect_true()
   
   #When survival is annual, simulated survival data does not include months 1-3 of 2024. 
-  #But the 2023 recruitment survey occurs in March 2024.
+  #But the 2024 recruitment survey occurs in March 2025.
   expect_equal(scns2$curYear, simObs2$simSurvObs$Year %>% max())
-  expect_equal(scns2$curYear+1, simObs2$simRecruitObs$Year %>% max())
+  expect_equal(scns2$curYear+1, max(simObs2$simRecruitObs$Year) - 1)
 
   # Test with months
   # devtools::document();devtools::load_all()
@@ -61,36 +61,26 @@ test_that("collarCount and cowCount behave", {
   #2024 that will be included in the 2023 caribou year (April 2023 to March
   #2024)
   expect_equal(scns10$curYear+1, simObs_mon$simSurvObs$Year %>% max())
-  expect_equal(scns10$curYear+1, simObs_mon$simRecruitObs$Year %>% max())
+  expect_equal(scns10$curYear+1, max(simObs_mon$simRecruitObs$Year) - 1)
   
   # should be different cow counts in simulated years
   expect_gt(simObs_mon$simRecruitObs %>% filter(Year < 2016) %>% pull(Cows) %>% mean, 
             simObs_mon$simRecruitObs %>% filter(Year > 2016) %>% pull(Cows) %>% mean)
   
   # Visual:
-  # simObs_mon$simRecruitObs %>% ggplot(aes(Year, Cows, colour = Replicate))+   geom_point()
-  scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
-                                projYears = 100)
-  simObs8 <- simulateObservations(scns10,  
-                                  surv_data = bboudata::bbousurv_a,
-                                  recruit_data = bboudata::bbourecruit_a)
-  simObs8$exData %>% 
-    pivot_wider(id_cols = c("Replicate", "Year","Timestep","PopulationName"),
-                                 names_from = "MetricTypeID",
-                                 values_from = "Amount") %>% 
-  ggplot2::ggplot(ggplot2::aes(Year, N, colour = Replicate))+
-    ggplot2::geom_point()+
-    ggplot2::geom_point(ggplot2::aes(Year, Anthro*1), colour = "black")
+  # simObs_mon$simRecruitObs %>%
+  #   ggplot2::ggplot(ggplot2::aes(Year, Cows, colour = Replicate))+   
+  #   ggplot2::geom_point()
   
-  # if tables are supplied they should not be modified by cowCount or collarCount
+
+  # if tables are supplied they should not be modified by cowCount or collarCount 
   simObs3 <- simulateObservations(scns, 
                        freqStartsByYear = data.frame(Year = 2009:2023,
                                                      numStarts = 10),
                        cowCounts = data.frame(Year = 2009:2023,
                                               Cows = 10))
   
-  simObs3$simRecruitObs %>% filter(Cows != 10) %>% nrow() %>% 
-    {expect_true(. == 0)} 
+  expect_true(all(simObs3$simRecruitObs$Cows == 10))
   
   # Total n collars goes up at first and then balances with mortality
   expect_lt(
@@ -98,9 +88,9 @@ test_that("collarCount and cowCount behave", {
     simObs3$simSurvObs %>% filter(Year == 2020) %>% pull(StartTotal) %>% mean()
   )
   # Visual test
-  # simObs3$simSurvObs %>% 
-  #   ggplot(aes(Year, StartTotal, colour = Replicate)) +
-  #   geom_point()
+  # simObs3$simSurvObs %>%
+  #   ggplot2::ggplot(ggplot2::aes(Year, StartTotal, colour = Replicate)) +
+  #   ggplot2::geom_point()
   
   # cowMult doesn't affect cowCounts table
   simObs4 <- simulateObservations(scns2, 
@@ -109,22 +99,19 @@ test_that("collarCount and cowCount behave", {
                                   cowCounts = data.frame(Year = 2009:2023,
                                                          Cows = 10))
   
-  simObs4$simRecruitObs %>% filter(Cows != 10) %>% nrow() %>% 
-    {expect_true(. == 0)} 
+  expect_true(all(simObs4$simRecruitObs$Cows == 10))
   
   # can supply just freqStartsByYear and cowMult
   simObs4b <- simulateObservations(scns2,
                                   freqStartsByYear = data.frame(Year = 2009:2023,
                                                                 numStarts = 10))
-  scns2$cowMult <- 10
-  simObs4c <- simulateObservations(scns2, 
-                                   freqStartsByYear = data.frame(Year = 2009:2023,
-                                                                 numStarts = 10))
   
   # cowCounts is created from freqStartsByYear and cowMult 
   expect_true(all(
-    simObs4b$simRecruitObs %>% pull(Cows) <
-      simObs4c$simRecruitObs %>% pull(Cows))) 
+    simObs4$simRecruitObs %>% pull(Cows) <
+      simObs4b$simRecruitObs %>% pull(Cows))) 
+  
+  expect_false(all(simObs4b$simRecruitObs$Cows == 10))
   
   # for collarInterval 
   scns3 <- getScenarioDefaults(collarCount = 30, cowCount = 50, cowMult = NA,
@@ -183,22 +170,9 @@ test_that("collarOn and Off work as expected", {
   expect_true(all(!is.na(simObs1_12$simSurvObs$MortalitiesCertain)))
 })
 
-#TO DO: test with trajectories from bboutools & jags models
 
-# Use saved file because this takes a long time. 
-mod_fl <- here::here("results/test_mod_real.rds")
-if(file.exists(mod_fl)){
-  mod_real <- readRDS(mod_fl)
-} else {
-  mod_real <- bayesianTrajectoryWorkflow(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 
-                                         recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
-                                         niters=1,returnSamples=T)
-  if(dir.exists(dirname(mod_fl))){
-    saveRDS(mod_real, mod_fl)
-  }
-}
 
-test_that("exData ok in simple case with one input scenario",{
+test_that("data continues to be simulated after Anthro is 100, but population has collapsed",{
   #exData ok in simple case with one one input scenario
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 200, rSlopeMod = 2, sSlopeMod = 2)
@@ -224,6 +198,20 @@ test_that("exData ok in simple case with one input scenario",{
   }
 })
 
+#TO DO: test with trajectories from bboutools & jags models
+
+# Use saved file because this takes a long time. 
+mod_fl <- here::here("results/test_mod_real.rds")
+if(file.exists(mod_fl)){
+  mod_real <- readRDS(mod_fl)
+} else {
+  mod_real <- bayesianTrajectoryWorkflow(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 
+                                         recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
+                                         niters=1,returnSamples=T)
+  if(dir.exists(dirname(mod_fl))){
+    saveRDS(mod_real, mod_fl)
+  }
+}
 
 test_that("Warning if trajs does not include the selected disturbance scenario, and it is possible to set disturbance from trajs.", {
   scns11 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
