@@ -205,7 +205,6 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #> 
 #> 
 #> Warning: no non-missing arguments to max; returning -Inf
-#> Warning: The expected number of cows in composition survey exceeds population size. Adjusting cows in survey for consistency.
 #> Warning: requested year range: 2014 - 2058 does not match survival data year range:  2015 - 2024
 #> Warning: missing years of recruitment data: 2014
 #> Warning: requested year range: 2014 - 2058 does not match recruitment data year range:  2015 - 2025
