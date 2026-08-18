@@ -49,6 +49,14 @@ test_that("collarCount and cowCount behave", {
   #But the 2024 recruitment survey occurs in March 2025.
   expect_equal(scns2$curYear, simObs2$simSurvObs$Year %>% max())
   expect_equal(scns2$curYear+1, max(simObs2$simRecruitObs$Year) - 1)
+  
+  # cowMult can be one and recruitment is still simulated
+  scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
+                              collarCount = 20, cowMult = 1)
+  
+  simO <- simulateObservations(scns)
+  
+  expect_true(all(simO$simRecruitObs$Cows <= 20))
 })
 
 test_that("Observed and simulated are combined and monthly data works", {
