@@ -79,7 +79,7 @@ summarizeTrajectories <- function(pars,returnSamples=T){
                                    "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
                                    ))
   simSum=merge(simSum,names)
-  pars <- merge(pars, names)
+  pars <- merge(pars, names, all.x = TRUE)
   if (returnSamples){
     simBig <- list(summary = simSum, samples = pars)
   } else {
