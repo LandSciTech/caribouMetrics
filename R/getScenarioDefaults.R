@@ -55,7 +55,7 @@ getScenarioDefaults <- function(paramTable = NULL,
   paramTable$ID <- seq(1:nrow(paramTable))
   paramTable$label <- ""
   for (n in names(paramTable)[(length(names(paramTable)) - 1):1]) {
-    paramTable$label <- paste0(paramTable$label, n, paramTable[[n]], "_")
+    paramTable$label <- paste0(paramTable$label, n, paste0(paramTable[[n]], collapse = "_"), "_")
   }
 
   return(paramTable)
