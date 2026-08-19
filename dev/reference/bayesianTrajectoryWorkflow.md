@@ -152,7 +152,6 @@ Caribou demography functions:
   )
 #> Warning: requested year range: 1986 - 2016 does not match recruitment data year range:  1990 - 2016
 #> Warning: missing years of recruitment data: 1986, 1987, 1988, 1989
-#> Warning: no non-missing arguments to max; returning -Inf
   str(mod, max.level = 2)
 #> List of 4
 #>  $ result :List of 4
@@ -164,19 +163,19 @@ Caribou demography functions:
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
-#>   ..$ R_bar         : num 0.199
-#>   ..$ R_sd          : num 0.0845
-#>   ..$ R_iv_mean     : num 0.325
-#>   ..$ R_iv_shape    : num 16.1
+#>   ..$ R_bar         : num 0.198
+#>   ..$ R_sd          : num 0.0858
+#>   ..$ R_iv_mean     : num 0.324
+#>   ..$ R_iv_shape    : num 15.1
 #>   ..$ R_bar_lower   : num 0.172
 #>   ..$ R_bar_upper   : num 0.226
-#>   ..$ S_bar         : num 0.873
-#>   ..$ S_sd          : num 0.178
-#>   ..$ S_iv_mean     : num 0.319
-#>   ..$ S_iv_shape    : num 2.75
-#>   ..$ S_bar_lower   : num 0.833
-#>   ..$ S_bar_upper   : num 0.909
-#>   ..$ N0            : logi NA
+#>   ..$ S_bar         : num 0.872
+#>   ..$ S_sd          : num 0.162
+#>   ..$ S_iv_mean     : num 0.339
+#>   ..$ S_iv_shape    : num 3.02
+#>   ..$ S_bar_lower   : num 0.835
+#>   ..$ S_bar_upper   : num 0.906
+#>   ..$ y             : logi NA
 #>   ..$ nCollarYears  : int 900
 #>   ..$ nSurvYears    : int 31
 #>   ..$ nCowsAllYears : int NA
@@ -220,6 +219,5 @@ Caribou demography functions:
 #> 
 #> Initializing model
 #> 
-#> Warning: no non-missing arguments to max; returning -Inf
 # }
 ```

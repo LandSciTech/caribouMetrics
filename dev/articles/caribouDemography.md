@@ -780,7 +780,7 @@ pt <- bbouInformative$parTab;pt
 #> 1              A 0.1957146 0.223214 0.3769596   2.237329   0.1357969
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
 #> 1   0.2780221 0.9404699 0.5481804 0.5339889   1.141943   0.8566462   0.9804958
-#>   N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
+#>    y nCollarYears nSurvYears nCowsAllYears nRecruitYears
 #> 1 NA           NA         12            NA            12
 
 popMetricsBase <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,

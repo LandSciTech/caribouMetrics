@@ -171,7 +171,6 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NOTE: Stopping adaptation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">outTables</span> <span class="op">&lt;-</span> <span class="fu">compareTrajectories</span><span class="op">(</span><span class="va">out</span>, exData <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">exData</span>, paramTable <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">paramTable</span>,</span></span>
 <span class="r-in"><span>                             simInitial <span class="op">=</span> <span class="fu"><a href="trajectoriesFromNational.html">trajectoriesFromNational</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -185,10 +184,10 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName    : chr [1:190] "A" "A" "A" "A" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ AnthroID          : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Fire_excl_anthroID: num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean              : num [1:190] NaN 0.628 0.664 0.444 0.869 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower             : Named num [1:190] NA 0.453 0.469 0.362 0.814 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper             : Named num [1:190] NA 0.762 0.802 0.54 0.932 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable        : num [1:190] NaN 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean              : num [1:190] NaN 0.838 0.994 0.447 0.826 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower             : Named num [1:190] NA 0.776 0.912 0.368 0.792 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper             : Named num [1:190] NA 0.893 1.064 0.528 0.862 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable        : num [1:190] NaN 0 0.5 0 0 0 NaN 0.7 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Metric            : chr [1:190] "c" "Adult female survival" "Population growth rate" "Expected recruitment" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Anthro            : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Fire_excl_anthro  : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
@@ -233,7 +232,7 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ obs.all       :'data.frame':	259 obs. of  37 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year            : num [1:259] 2014 2014 2014 2014 2014 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName  : Factor w/ 1 level "A": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean            : num [1:259] 0.06 0.0944 0.1888 0 0.4699 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean            : num [1:259] 0.338 0.184 0.368 0 0.411 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Metric          : chr [1:259] "Recruitment" "Adjusted recruitment" "Recruitment" NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID    : chr [1:259] "R" "X" "recruitment" "Fire_excl_anthro" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Type            : chr [1:259] "observed" "true" "true" "true" ...</span>

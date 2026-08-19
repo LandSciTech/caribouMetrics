@@ -144,7 +144,6 @@ out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = si
 #> NOTE: Stopping adaptation
 #> 
 #> 
-#> Warning: no non-missing arguments to max; returning -Inf
 
 out_tbl <- compareTrajectories(out, exData = simO$exData, paramTable = simO$paramTable,
                            simInitial = trajectoriesFromNational())

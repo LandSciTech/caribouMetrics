@@ -78,11 +78,11 @@ str(trajB, max.level = 1)
 #>  $ recruit_data:'data.frame':    6 obs. of  8 variables:
 #>  $ popInfo     :'data.frame':    3000 obs. of  4 variables:
 plotTrajectories(trajB)
-#> Warning: Removed 420 rows containing missing values or values outside the scale range
+#> Warning: Removed 210 rows containing missing values or values outside the scale range
 #> (`geom_line()`).
-#> Warning: Removed 12 rows containing missing values or values outside the scale range
+#> Warning: Removed 6 rows containing missing values or values outside the scale range
 #> (`geom_ribbon()`).
-#> Warning: Removed 12 rows containing missing values or values outside the scale range
+#> Warning: Removed 6 rows containing missing values or values outside the scale range
 #> (`geom_line()`).
 
 ```
