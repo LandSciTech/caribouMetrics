@@ -30,8 +30,21 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   #shiny_progress = FALSE;return_mcmc=FALSE;i18n = NULL
   library(bboutools)
   
-  if(length(N0)==1){
-    N0= expand.grid(PopulationName=unique(surv_data$PopulationName),N0=N0)
+  if(is.data.frame(N0)){
+    if(nrow(N0) == 1 & !hasName(N0, "PopulationName")){
+      N0 <- merge(N0, data.frame(PopulationName=unique(surv_data$PopulationName)))
+    } else if(!hasName(N0, "PopulationName")){
+      stop("N0 must contain PopulationName when it has multiple rows")
+    }
+    if(hasName(N0, "PopulationName")){
+      if(!setequal(unique(surv_data$PopulationName), N0$PopulationName)){
+        stop("N0$PopulationName does not match unique(surv_data$PopulationName)")
+      }
+    
+    }
+  }
+  if(is.numeric(N0) & length(N0)==1){
+    N0 <- expand.grid(PopulationName = unique(surv_data$PopulationName), N0 = N0)
   }
   if(is.null(i18n)){
     i18n <- list(t = function(x)paste0(x))

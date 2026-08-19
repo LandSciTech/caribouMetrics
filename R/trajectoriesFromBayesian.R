@@ -81,7 +81,14 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   
   Nnames <- intersect(c("N0","N.sd","N.lower","N.upper","PopulationName"),names(N0))
   Nuse <- unique(subset(N0,select=Nnames))
-  if(!hasName(Nuse,"PopulationName")){Nuse$PopulationName="A"}
+  if(!hasName(Nuse,"PopulationName")){
+    popNm <- unique(bayesianResults$parTab$PopulationName)
+    if(length(popNm) == 1){
+      Nuse$PopulationName <- popNm  
+    } else {
+      stop("When bbouResults$parTab contains multiple PopulationNames N0 must contain PopulationNames")
+    }
+  }
   if(!hasName(Nuse, "N0")){stop("N0 must have a column named 'N0'")}
   
   popInfo <- merge(data.frame(id=seq(1:nr/length(unique(Nuse$PopulationName)))),Nuse)
@@ -115,7 +122,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
                             ...)
 
   pars <- merge(pars,parsBar)
-  
+
   if(class(bayesianResults$parTab)=="list"){
     pi <- bayesianResults$parTab$N0
   }else{
