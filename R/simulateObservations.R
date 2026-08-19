@@ -144,7 +144,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
         recSlopeMultiplier = paramTable$rSlopeMod,
         sefSlopeMultiplier = paramTable$sSlopeMod, rQuantile = paramTable$rQuantile,
         sQuantile = paramTable$sQuantile,
-        N0 = paramTable$N0, cowMult = ifelse(!hasName(paramTable,"cowMult"), 1, paramTable$cowMult),
+        # N0 = paramTable$N0, paramTable$N0 is for the output population not the simulated observations
+        cowMult = ifelse(!hasName(paramTable,"cowMult"), 1, paramTable$cowMult),
         qMin = paramTable$qMin, qMax = paramTable$qMax, uMin = paramTable$uMin,
         uMax = paramTable$uMax, zMin = paramTable$zMin, zMax = paramTable$zMax,
         interannualVar=paramTable$interannualVar[[1]]
@@ -253,7 +254,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   inclSurvYrs = survYrs
   inclSurvYrs[survYrs==max(survYrs)]=survYrs[survYrs==max(survYrs)]-1
   inclSurvYrs=unique(inclSurvYrs)
-  
+
   if(!is.null(freqStartsByYear)){
     survYrs <- intersect(survYrs, freqStartsByYear$Year) 
                          
