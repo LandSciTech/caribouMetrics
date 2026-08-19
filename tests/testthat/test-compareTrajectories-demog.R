@@ -30,8 +30,7 @@ test_that("works with defaults", {
     plot(survPrior)
     lamPrior =  plotCompareTrajectories(out_tbls, "Population growth rate",lowBound=0.5,highBound=1.5)
     plot(lamPrior)
-  }  
-  #TO DO: confirm that out bands approximately match simIni bands - see visual checks.
+  } 
 })
 
 #Note: see test-bayesianScenariosWorkflow.R for more output checks.

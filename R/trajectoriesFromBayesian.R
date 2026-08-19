@@ -41,7 +41,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     }
   }
   
-  if(!hasName(bayesianResults$parTab,"PopulationName")){bayesianResults$parTab$PopulationName=NA}
+  if(!hasName(bayesianResults$parTab,"PopulationName")){bayesianResults$parTab$PopulationName="A"}
   
   ccPars = unique(subset(cPars,select=c(qMin,qMax,uMin,uMax,zMin,zMax,cowMult,correlateRates)))
   if(nrow(ccPars)>1){
@@ -137,7 +137,9 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     simBig <- prepareTrajectories(pars, returnSamples = returnSamples)
     
     if(max(simBig$summary$Year)<=100){simBig$summary$Year=NULL}
-    if(max(simBig$samples$Year)<=100){simBig$samples$Year=NULL}
+    if(returnSamples){
+      if(max(simBig$samples$Year)<=100){simBig$samples$Year=NULL}
+    }
     
   }else {
     simBig <- pars
