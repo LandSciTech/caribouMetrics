@@ -5,7 +5,7 @@ test_that("real and simulated data work", {
     recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
     disturbance = NULL
   )
-  str(mod, max.level = 2)
+  # str(mod, max.level = 2)
   
   expect_type(mod, "list")
   
