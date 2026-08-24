@@ -163,9 +163,12 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
     "Precision" %in% names(popGrowthParsSmall$coefSamples_Recruitment$coefValues)
   # at each time,  sample demographic rates and project, save results
   
+  N0 <- unique(getN0Pars(N0))
   
-  pars <- data.frame(N0 = N0)
-  
+  if(nrow(N0)>1){
+    stop("simTrajectory expects a single value for N0.")
+  }
+
   # sample rates with covariates from each timestep
   rateSamples <- estimateNationalRates(
     covTable = covariates,
@@ -175,12 +178,14 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   )[1:nrow(covariates),] # only using the first replicate but doesn't work with just 1
   
   #set bias correction term for each example population - constant over time.
-  bc = unique(subset(rateSamples,select=replicate))
-  nr=nrow(bc)
-  c = compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,
+  bc <- unique(subset(rateSamples,select=replicate))
+  bc <- merge(bc,N0)
+  bc <- addN0Variation(bc)
+  nr <- nrow(bc)
+  c <- compositionBiasCorrection(q=runif(nr,qMin,qMax),w=cowMult,
                                    u=runif(nr,uMin,uMax),z=runif(nr,zMin,zMax))
 
-  popMetrics <- simPopsOverTime(N0, numSteps = numYears, R_samp = rateSamples$R_bar,
+  popMetrics <- simPopsOverTime(bc$N0, numSteps = numYears, R_samp = rateSamples$R_bar,
                               S_samp = rateSamples$S_bar, 
                               interannualVar = interannualVar,
                               dynamicRates = TRUE,
@@ -193,6 +198,74 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   
   popMetrics <- convertTrajectories(popMetrics)
   return(popMetrics)
+}
+
+#TO DO: export and document.
+#add variation to N0 if specified. Use Poisson distribution if N.sd = mean^0.5, truncated normal otherwise
+#Note this variation in N0 should be added at the same point in the workflows that compositionBiasCorrection is called.
+#' @export
+addN0Variation<- function(popInfo,forceDataFrame=F) { 
+  if(class(popInfo)=="list"){
+    popInfo = as.data.frame(popInfo)
+  }
+  if(length(intersect(c("N.sd","N.lower"),names(popInfo)))>0){
+    popInfo$mean = popInfo$N0
+    if(hasName(popInfo,"N.sd")){
+      if(identical(popInfo$N.sd,popInfo$mean^0.5)){
+        popInfo$N0 = rpois(nrow(popInfo),lambda=popInfo$mean)
+      }else{
+        popInfo$N0 = rnorm(nrow(popInfo),mean=popInfo$mean,sd=popInfo$N.sd)
+      }
+    }else{
+      popInfo$N0 <- runif(nrow(popInfo),popInfo$N.lower,popInfo$N.upper)
+    }
+    if(hasName(popInfo,"N.lower")){popInfo$N0=pmax(popInfo$N.lower,popInfo$N0)}
+    if(hasName(popInfo,"N.upper")){popInfo$N0=pmin(popInfo$N.upper,popInfo$N0)}
+    popInfo$N0 <- round(popInfo$N0)
+    popInfo$N0[popInfo$N0<0] <- 0
+    popInfo <- subset(popInfo,select=setdiff(names(popInfo),c("mean","N.sd","N.lower","N.upper")))
+  }
+  
+  if(forceDataFrame & class(popInfo)=="numeric"){
+    popInfo <- data.frame(N0=popInfo)
+  }
+  return(popInfo)
+}    
+
+#Extracts N0 parameters, converts to data frame if needed, and (optionally) adds population names or checks for expected names.
+getN0Pars <- function(N0,popNames = NULL){
+  if(setequal(class(N0),"numeric")|setequal(class(N0),"logical")){
+    N0 <- data.frame(N0=N0)
+  }
+  Nnames <- intersect(c("N0","N.sd","N.lower","N.upper","PopulationName","replicate"),names(N0))
+  if(length(intersect("N0",Nnames))==0){
+    stop("N0 column is required.")
+  }
+  Nuse <- subset(N0,select=Nnames)
+  
+  if(!hasName(N0,"N0")){
+    stop("N0 column expected.")
+  }
+
+  if(is.null(popNames)){return(Nuse)}
+  
+  if(hasName(Nuse,"PopulationName")){
+    if(!setequal(Nuse$PopulationName,popNames)){
+      stop("Unexpected population names in N0.")
+    }
+    return(Nuse)
+  }else{
+    if(length(popNames) == 1){
+      Nuse$PopulationName <- popNames 
+      return(Nuse)
+    } else {
+      if(nrow(Nuse)==1){
+        N0 <- merge(N0,data.frame(PopulationName=popNames))
+        return(Nuse)
+      }
+      stop("N0 must contain PopulationName when it has multiple rows.")
+    }
+  }
 }
 
 simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffTime,

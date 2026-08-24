@@ -22,7 +22,7 @@ trajectoriesFromNational(
 \arguments{
 \item{replicates}{integer. Number of replicate populations.}
 
-\item{N0}{initial population size}
+\item{N0}{Number or dataframe. Initial population size(s). If a data frame N0 column is required. Additional (optional) variation columns will be used by \code{\link[=addN0Variation]{addN0Variation()}}.}
 
 \item{useQuantiles}{logical or numeric. If it is a numeric vector it must be
 length 2 and give the low and high limits of the quantiles to use. If

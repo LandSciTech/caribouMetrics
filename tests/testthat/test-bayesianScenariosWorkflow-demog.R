@@ -8,7 +8,7 @@ test_that("testScript still works", {
     obsYears = c(8, 20), collarCount = 30, cowMult = 2, collarInterval = 2,
     iAnthro = 0,
     tA = 0, obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.960908218594268,
-    rQuantile = 0.744425233039074, N0 = 1000
+    rQuantile = 0.744425233039074, N0 = 1000,N.sd=0.2
   )
 
   ##########

@@ -138,8 +138,8 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
   if(length(popInfo)>1){
     popInfo=merge(popInfo,data.frame(id=1:dim(rec)[2]))
     if(!is.element("PopulationName",names(popInfo))){popInfo$PopulationName="A"}
-    popInfo = popInfo[order(popInfo$id,popInfo$PopulationName),]
-    
+    popInfo <- popInfo[order(popInfo$id,popInfo$PopulationName),]
+    popInfo <- addN0Variation(popInfo)  
     for(nn in setdiff(names(popInfo),c("PopulationName","id"))){
       txt  = paste0(nn," = popInfo[['",nn,"']]")
       eval(parse(text=txt))

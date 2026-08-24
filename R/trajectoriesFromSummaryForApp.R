@@ -49,6 +49,14 @@ trajectoriesFromSummaryForApp <- function(numSteps, replicates, N0, R_bar, S_bar
     stop("N0 is not a numeric with length 1 or 2")
   }
   
+  #Temporary fix: handle older way of specifying variation so that app still works. 
+  #Permanent fix will be changing app to use trajectoriesFromSummary
+  if (length(N0)==2){
+    Nvar <- addN0Variation(data.frame(N0=mean(N0),N.sd=mean(N0)^0.5,N.lower=N0[1],N.upper=N0[2],
+                                      replicate=seq(1:replicates)))
+    N0 <- Nvar$N0
+  }
+  
   if(type=="beta"){
     varSample <- do.call(caribouPopGrowth,
                          c(list(N0 = rep(NA, replicates),
@@ -141,11 +149,13 @@ simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynami
     R_use <- na.omit(R_use)
     S_use <- na.omit(S_use)
     if (ts == 1) {
-      if(length(N0) == 1){
-        N0 <- rep(N0, nrow(R_use))
-      } else if (length(N0) == 2) {
-        N0 <- seq(from = N0[1], to = N0[2], by  = 1) %>% round() %>% 
-          sample(size = nrow(R_use), replace = TRUE)
+      
+      if(length(unique(N0)) == 1){
+        N0 <- rep(unique(N0), nrow(R_use))
+      } else if (length(N0) != nrow(R_use)) {
+        stop("Handle this case. To add N0 variation specify a data frame that addN0Variation() can use.")
+        #N0 <- seq(from = N0[1], to = N0[2], by  = 1) %>% round() %>% 
+        #  sample(size = nrow(R_use), replace = TRUE)
       }
       
       out <- caribouPopGrowth(N0,

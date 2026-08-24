@@ -137,6 +137,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     # simulate true population trajectory
     if(!hasName(paramTable,"rQuantile")){paramTable$rQuantile=NA}
     if(!hasName(paramTable,"sQuantile")){paramTable$sQuantile=NA}
+   
     suppressMessages(
       trajectories <- simTrajectory(
         numYears = paramTable$preYears + paramTable$obsYears + paramTable$projYears, 
@@ -144,7 +145,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
         recSlopeMultiplier = paramTable$rSlopeMod,
         sefSlopeMultiplier = paramTable$sSlopeMod, rQuantile = paramTable$rQuantile,
         sQuantile = paramTable$sQuantile,
-        # N0 = paramTable$N0, paramTable$N0 is for the output population not the simulated observations
+        N0 = getN0Pars(paramTable),
         cowMult = ifelse(!hasName(paramTable,"cowMult"), 1, paramTable$cowMult),
         qMin = paramTable$qMin, qMax = paramTable$qMax, uMin = paramTable$uMin,
         uMax = paramTable$uMax, zMin = paramTable$zMin, zMax = paramTable$zMax,

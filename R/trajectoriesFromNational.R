@@ -30,7 +30,7 @@ if(file.exists("results/simsInitial.rds")){
 #'   not overlap anthropogenic disturbance.
 #' @inheritParams getNationalCoefficients
 #' @inheritParams caribouPopGrowth
-#' @param N0 initial population size
+#' @param N0 Number or dataframe. Initial population size(s). If a data frame N0 column is required. Additional (optional) variation columns will be used by [addN0Variation()].
 #' @param cPars optional. Parameters for calculating composition survey bias term.
 #' @param doSummary logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth. 
 #'  If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.
@@ -137,10 +137,11 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   if(nrow(ccPars)>1){
     stop("Do not include more than one composition bias scenario in cPars")
   }
-  if(length(N0)>1){
-    stop("Specify a single initial population size for trajectories from national model.")
+  
+  N0 <- unique(getN0Pars(N0))
+  if(nrow(N0)>1){
+    stop("Specify a single initial population size or distribution of sizes for trajectories from national model.")
   }
-
   # original trajectoriesFromNational #============================================
 
   covTableObs$Total_dist <- covTableObs$Anthro + covTableObs$Fire_excl_anthro
@@ -169,11 +170,14 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
   bc = unique(subset(rateSamplesAll,select=replicate));nr=nrow(bc)
   bc$c = compositionBiasCorrection(q=runif(nr,cPars$qMin,cPars$qMax),w=cPars$cowMult,u=runif(nr,cPars$uMin,cPars$uMax),
                                    z=runif(nr,cPars$zMin,cPars$zMax))
-  rateSamplesAll$c = NULL; rateSamplesAll= merge(rateSamplesAll, bc)
-
-  #print(paste("trajectoriesFromNational",mean(bc$c)))
-  pars <- merge(data.frame(N0 = N0, PopulationName = "National"), rateSamplesAll)# %>% 
-    # mutate(PopulationName = paste0(PopulationName, distID))
+  
+  bc <- merge(N0, bc)
+  bc <- addN0Variation(bc)
+  bc$PopulationName <- "National"
+  
+  rateSamplesAll$c = NULL; rateSamplesAll$N0 = NULL
+  
+  pars <- merge(rateSamplesAll, bc)
 
   if(hasYear){
     R_dat <- pars %>% select(Year, replicate, distID, R_bar) %>% 
@@ -186,11 +190,12 @@ trajectoriesFromNational <- function(replicates = 1000, N0 = 1000,
       pivot_wider(names_from = Year, values_from = S_bar) %>% 
       tidyr::unite("replicate", replicate, distID) %>% 
       tibble::column_to_rownames("replicate")
-    
+
+    #TO DO: handle case where c or N0 varies among replicates
     out <- simPopsOverTime(
-      N0, numSteps = n_distinct(pars$Year), R_samp = R_dat,
+      bc$N0, numSteps = n_distinct(pars$Year), R_samp = R_dat,
       S_samp = S_dat, dynamicRates = TRUE, stepLength = numSteps,
-      c = unique(pars$c), interannualVar = interannualVar, 
+      c = bc$c, interannualVar = interannualVar, 
       progress = FALSE, K = FALSE
     ) %>%  
       separate_wider_delim(id, delim = "_", names = c("replicate", "distID")) %>% 

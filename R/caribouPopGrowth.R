@@ -24,7 +24,7 @@
 #' additional details and examples.
 #' 
 #' @param N0 Number or vector of numbers. Initial population size for one or
-#'   more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.
+#'   more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. 
 #' @param numSteps Number. Number of years to project.
 #' @param R_bar Number or vector of numbers. Expected recruitment rate (calf:cow
 #'   ratio) for one or more sample populations.

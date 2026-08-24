@@ -40,7 +40,7 @@ test_that("summary gives expected trajectory", {
     tolerance = 0.01
   ) 
   
-  # works with N0 length 2
+  # works with variation in N0
   
   # can't have multiple R_bar because then sample from multiple distributions
   # which is confusing
@@ -51,12 +51,20 @@ test_that("summary gives expected trajectory", {
     scn_nm = "test"), "length one")
   
   trajs_rng <- trajectoriesFromSummaryForApp(
-    numSteps = 10, replicates = 5000, N0 = c(100, 200), R_bar = 0.3,
+    numSteps = 10, replicates = 5000, N0 = c(100,200), R_bar = 0.3,
     S_bar = 0.8, R_sd = 0.05, S_sd = 0.1, R_iv_shape = 0.01, 
     R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
     scn_nm = "test")
   
-  expect_equal(trajs_rng %>% filter(time == 1, type == "samp") %>% pull(N0) %>% n_distinct(), 
-               101)
+  #Expect truncated poisson distribution
+  Ndist <- trajs_rng %>% filter(time == 1, type == "samp") %>% pull(N0)
+
+  expect_true(var(Ndist)-150<1)
+  expect_true(abs(mean(Ndist)-150)<1)  
+  expect_true(min(Ndist)>=100)
+  expect_true(max(Ndist)<=200)
+  
+  #expect_equal(trajs_rng %>% filter(time == 1, type == "samp") %>% pull(N0) %>% n_distinct(), 
+  #             101)
   
 })

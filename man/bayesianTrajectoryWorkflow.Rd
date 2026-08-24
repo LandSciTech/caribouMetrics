@@ -33,8 +33,7 @@ If disturbance is not NA, see \code{\link[=betaNationalPriors]{betaNationalPrior
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
 
-\item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
+\item{N0}{Number or dataframe. Optional. Initial populations size. If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required. Additional (optional) variation columns will be used by \code{\link[=addN0Variation]{addN0Variation()}}.}
 
 \item{returnSamples}{logical. If F returns only summaries. If T returns example trajectories.}
 
