@@ -62,8 +62,9 @@ test_that("Model and input trajectory match", {
   if (file.exists(mod_flc)) {
     mod_realc <- readRDS(mod_flc)
   } else {
-    mod_realc <- estimateBayesianRates(bboudata::bbousurv_a %>% filter(Year > 2010),
-      bboudata::bbourecruit_a %>% filter(Year > 2010),
+    mod_realc <- estimateBayesianRates(
+      bboudata::bbousurv_a %>% getCaribouYear() %>% filter(CaribouYear %>% between(2010, 2015)),
+      bboudata::bbourecruit_a %>% getCaribouYear() %>% filter(CaribouYear %>% between(2010, 2015)),
       N0 = NA, return_mcmc = T, niters = 3000
     )
     if(dir.exists(dirname(mod_flc))){
@@ -81,6 +82,9 @@ test_that("Model and input trajectory match", {
   scns$projYears <- max(simBig$summary$Year) - scns$obsYears - scns$startYear + 1
   scns$collarCount <- 0
 
+  # projecting recruitment into 2016 even though no data. because obsYears?
+  scns$obsYears <- 5
+  
   # devtools::load_all(path = "../caribouMetrics/")
   posteriorResult <- bayesianScenariosWorkflow(scns, simBig, niters = 3000,returnSamples=T)
 

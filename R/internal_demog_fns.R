@@ -642,11 +642,11 @@ convertBbouData<-function(dat){
 getCaribouYear <- function(x,
                            year_start = formals(bboutools::bb_fit_recruitment)$year_start){
   x$CaribouYear <- x$Year
-  if(length(unique(x$Month))>1){
+  # if(length(unique(x$Month))>1){
      cMonth <- x$Month
      cMonth[is.na(cMonth)]=year_start
      x$CaribouYear[cMonth<year_start] <- x$CaribouYear[cMonth<year_start]-1
-  }
+  # }
   return(x)
 }
 

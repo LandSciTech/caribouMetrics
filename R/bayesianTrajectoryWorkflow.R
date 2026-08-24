@@ -132,14 +132,16 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   bboudata::bbd_chk_data_recruitment(recruit_data, allow_missing=TRUE, multi_population = TRUE)
   
   # Get start and end years from data
+  # Use CaribouYear to determine start and end
+  surv_data <-getCaribouYear(surv_data)
   if(is.null(inp$startYear)){
-    inp$startYear <- min(surv_data$Year)
+    inp$startYear <- min(surv_data$CaribouYear)
   }
 
   if(is.null(inp$endYear)||is.infinite(inp$endYear)){
     if(!is.null(disturbance)){
       inp$endYear <- max(disturbance$Year)
-    }else{inp$endYear <- max(surv_data$Year);distYrs =surv_data$Year}
+    }else{inp$endYear <- max(surv_data$CaribouYear);distYrs =surv_data$CaribouYear}
   }else{
     distYrs = seq(startYear,endYear)
   }
@@ -169,60 +171,68 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
     }
     distYrs = disturbance$Year
   }else if(!is.null(inp$endYear) && is.finite(inp$endYear)){
-    distYrs = seq(min(surv_data$Year),inp$endYear)
+    distYrs = seq(min(surv_data$CaribouYear),inp$endYear)
   }
-  
+
   ################
   # Survival data checking and fill missing yrs
   # check that year range is within data - model will run either way
-  if (inp$endYear < max(surv_data$Year) | inp$startYear < min(surv_data$Year)) {
+  
+  if (inp$endYear < max(surv_data$CaribouYear) | inp$startYear > min(surv_data$CaribouYear)) {
     warning(c("requested year range: ", inp$startYear, " - ", inp$endYear, " does not match survival data",
-              c(" year range:", "  ", min(surv_data$Year), " - ", max(surv_data$Year))))
+              c(" year range:", "  ", min(surv_data$CaribouYear), " - ", max(surv_data$CaribouYear))))
   }
-  surv_data <- subset(surv_data, surv_data$Year <= inp$endYear & surv_data$Year >= inp$startYear)
+  surv_data <- subset(surv_data, surv_data$CaribouYear <= inp$endYear & surv_data$CaribouYear >= inp$startYear)
   if(nrow(surv_data) == 0){
     stop("None of the survival data is within the requested year range",
          call. = FALSE)
   }
-  yrs_surv_missing <- setdiff(c(inp$startYear:max(surv_data$Year)),
-                             unique(surv_data$Year))
+  yrs_surv_missing <- setdiff(c(inp$startYear:max(surv_data$CaribouYear)),
+                             unique(surv_data$CaribouYear))
   # check that year range is within data - model will run either way
   if (length(yrs_surv_missing) > 0) {
-    warning("missing years of recruitment data:", " ", 
+    warning("missing years of survival data:", " ", 
             paste0(yrs_surv_missing, collapse = ", "), 
             call. = FALSE) 
   }
   
   #add missing surv yrs
-  surv_data <-getCaribouYear(surv_data)
   surv_data_add = expand.grid(CaribouYear=union(distYrs,surv_data$CaribouYear),
                               PopulationName=unique(surv_data$PopulationName))
   surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
-  surv_data$Year[is.na(surv_data$Year)]<-surv_data$CaribouYear[is.na(surv_data$Year)];   surv_data$CaribouYear=NULL
+  surv_data$Year[is.na(surv_data$Year)]<-surv_data$CaribouYear[is.na(surv_data$Year)]   
+  surv_data$CaribouYear=NULL
   
   #dups = table(subset(surv_data,select=c(Year,Month,PopulationName)))
   
   ###################
   # Recruitment data checking and fill missing yrs
   recruit_data <- recruit_data
-  
+  monthNA <- FALSE
+  if(all(is.na(recruit_data$Month))){
+    recruit_data$Month <- as.numeric(formals(simulateObservations)$recSurveyMonth)
+    monthNA <- TRUE
+  }
+  recruit_data <- getCaribouYear(recruit_data)
   # check that year range is within data - model will run either way
-  if (inp$endYear < max(recruit_data$Year) | inp$startYear < min(recruit_data$Year)) {
+
+  if (inp$endYear < max(recruit_data$CaribouYear) | inp$startYear > min(recruit_data$CaribouYear)) {
     
     warning(c("requested year range: ", inp$startYear, " - ", inp$endYear, " does not match recruitment data",
-              c(" year range:", "  ", min(recruit_data$Year), " - ", max(recruit_data$Year))), 
+              c(" year range:", "  ", min(recruit_data$CaribouYear), " - ", max(recruit_data$CaribouYear))), 
             call. = FALSE)
   }
   
-  recruit_data <- subset(recruit_data, recruit_data$Year <= inp$endYear & recruit_data$Year >= inp$startYear)
+  recruit_data <- subset(recruit_data, recruit_data$CaribouYear <= inp$endYear &
+                           recruit_data$CaribouYear >= inp$startYear)
   
   if(nrow(recruit_data) == 0){
     stop("None of the recruitment data is within the requested year range",
          call. = FALSE)
   }
   
-  yrs_rec_missing <- setdiff(c(inp$startYear:max(recruit_data$Year)),
-                             unique(recruit_data$Year))
+  yrs_rec_missing <- setdiff(c(inp$startYear:max(recruit_data$CaribouYear)),
+                             unique(recruit_data$CaribouYear))
   # check that year range is within data - model will run either way
   if (length(yrs_rec_missing) > 0) {
     warning("missing years of recruitment data:", " ", 
@@ -231,11 +241,15 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   }
 
   #add missing recruit yrs
-  recruit_data <- getCaribouYear(recruit_data)
   recruit_data_add = expand.grid(CaribouYear=union(distYrs,recruit_data$CaribouYear),PopulationName=unique(recruit_data$PopulationName))
   recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
-  recruit_data$Year[is.na(recruit_data$Year)]<-recruit_data$CaribouYear[is.na(recruit_data$Year)]; recruit_data$CaribouYear=NULL
+  recruit_data$Year[is.na(recruit_data$Year)]<-recruit_data$CaribouYear[is.na(recruit_data$Year)]
+  recruit_data$CaribouYear=NULL
 
+  if(monthNA){
+    recruit_data$Month <- NA_integer_
+  }
+  
   ##################
   #fit models
   bbouResults = estimateBayesianRates(surv_data, recruit_data,N0,disturbance,priors=priors,
