@@ -34,7 +34,7 @@ We simulate monitoring scenarios informed by example data from the `bboudata::bb
 
 To examine and compare predictions for unobserved years (2018 to 2021) we add missing data.
 
-Our starting points for analysis of monitoring scenarios are Bayesian Beta models informed by local data and prior knowledge of national demographic-disturbance relationships. See compare vignette for details. We examine the influence of prior information from national-demographic disturbance relationships in low disturbance (3% anthropogenic, 5% fire) and high disturbance (80% anthropogenic, 10% fire) scenarios.
+Our starting points for analysis of monitoring scenarios are Bayesian Beta models informed by local data and prior knowledge of national demographic-disturbance relationships. See compare vignette for details. We examine the influence of prior information from national-demographic disturbance relationships in low disturbance (3% anthropogenic, 5% fire) and high disturbance (80% anthropogenic, 10% fire) scenarios. 
 
 ```{r setup, results='hide'}
 library(caribouMetrics)
