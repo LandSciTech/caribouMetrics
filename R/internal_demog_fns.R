@@ -239,7 +239,7 @@ getN0Pars <- function(N0,popNames = NULL){
   }
   Nnames <- intersect(c("N0","N.sd","N.lower","N.upper","PopulationName","replicate"),names(N0))
   if(length(intersect("N0",Nnames))==0){
-    stop("N0 column is required.")
+    return(data.frame(N0=NA))
   }
   Nuse <- subset(N0,select=Nnames)
   
