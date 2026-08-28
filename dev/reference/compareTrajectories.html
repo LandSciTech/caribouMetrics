@@ -141,8 +141,6 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow</a></span><span class="op">(</span>surv_data <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simSurvObs</span>, recruit_data <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simRecruitObs</span>,</span></span>
 <span class="r-in"><span>                          disturbance <span class="op">=</span> <span class="va">simO</span><span class="op">$</span><span class="va">simDisturbance</span>,</span></span>
 <span class="r-in"><span>                          niters<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>requested year range: 2014 - 2033 does not match recruitment data year range:  2015 - 2025</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>missing years of recruitment data: 2014</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Compiling model graph</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
@@ -161,9 +159,9 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Resolving undeclared variables</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph information:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 77</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 694</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 729</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -178,48 +176,48 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-in"><span>                             </span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">outTables</span>, max.level <span class="op">=</span> <span class="fl">2</span>, give.attr <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ rr.summary.all:'data.frame':	190 obs. of  41 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year              : num [1:190] 2014 2014 2014 2014 2014 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID      : chr [1:190] "c" "survival" "lambda" "Rbar" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName    : chr [1:190] "A" "A" "A" "A" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ AnthroID          : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Fire_excl_anthroID: num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean              : num [1:190] NaN 0.838 0.994 0.447 0.826 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower             : Named num [1:190] NA 0.776 0.912 0.368 0.792 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper             : Named num [1:190] NA 0.893 1.064 0.528 0.862 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable        : num [1:190] NaN 0 0.5 0 0 0 NaN 0.7 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Metric            : chr [1:190] "c" "Adult female survival" "Population growth rate" "Expected recruitment" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Anthro            : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Fire_excl_anthro  : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time              : num [1:190] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Total_dist        : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ collarCount       : num [1:190] 20 20 20 20 20 20 20 20 20 20 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ N0                : num [1:190] 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ qMin              : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ qMax              : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ uMin              : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ uMax              : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ zMin              : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ zMax              : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ cowMult           : num [1:190] 5 5 5 5 5 5 5 5 5 5 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ correlateRates    : logi [1:190] FALSE FALSE FALSE FALSE FALSE FALSE ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rSlopeMod         : num [1:190] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sSlopeMod         : num [1:190] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ interannualVar    :List of 190</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iFire             : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iAnthro           : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ obsAnthroSlope    : num [1:190] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ projAnthroSlope   : num [1:190] 5 5 5 5 5 5 5 5 5 5 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ hasYear           : logi [1:190] FALSE FALSE FALSE FALSE FALSE FALSE ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ projYears         : num [1:190] 10 10 10 10 10 10 10 10 10 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ obsYears          : num [1:190] 10 10 10 10 10 10 10 10 10 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ preYears          : num [1:190] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ curYear           : num [1:190] 2023 2023 2023 2023 2023 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ startYear         : num [1:190] 2014 2014 2014 2014 2014 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ID                : int [1:190] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ label             : chr [1:190] "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rQuantile         : logi [1:190] NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sQuantile         : logi [1:190] NA NA NA NA NA NA ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ rr.summary.all:'data.frame':	200 obs. of  41 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year              : num [1:200] 2014 2014 2014 2014 2014 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID      : chr [1:200] "Xbar" "lambda_bar" "c" "N" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName    : chr [1:200] "A" "A" "A" "A" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ AnthroID          : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Fire_excl_anthroID: num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean              : num [1:200] 0.224 1.16 NaN NaN 0.448 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ lower             : Named num [1:200] 0.171 1.083 NA NA 0.343 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ upper             : Named num [1:200] 0.254 1.228 NA NA 0.508 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable        : num [1:200] 0 1 NaN NaN 0 0 0 0 0 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Metric            : chr [1:200] "Expected adjusted recruitment" "Expected growth rate" "c" "Female population size" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Anthro            : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Fire_excl_anthro  : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time              : num [1:200] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Total_dist        : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ collarCount       : num [1:200] 20 20 20 20 20 20 20 20 20 20 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ N0                : num [1:200] 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ qMin              : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ qMax              : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ uMin              : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ uMax              : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ zMin              : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ zMax              : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ cowMult           : num [1:200] 5 5 5 5 5 5 5 5 5 5 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ correlateRates    : logi [1:200] FALSE FALSE FALSE FALSE FALSE FALSE ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rSlopeMod         : num [1:200] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sSlopeMod         : num [1:200] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ interannualVar    :List of 200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iFire             : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iAnthro           : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ obsAnthroSlope    : num [1:200] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ projAnthroSlope   : num [1:200] 5 5 5 5 5 5 5 5 5 5 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ hasYear           : logi [1:200] FALSE FALSE FALSE FALSE FALSE FALSE ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ projYears         : num [1:200] 10 10 10 10 10 10 10 10 10 10 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ obsYears          : num [1:200] 10 10 10 10 10 10 10 10 10 10 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ preYears          : num [1:200] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ curYear           : num [1:200] 2023 2023 2023 2023 2023 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ startYear         : num [1:200] 2014 2014 2014 2014 2014 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ID                : int [1:200] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ label             : chr [1:200] "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rQuantile         : logi [1:200] NA NA NA NA NA NA ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sQuantile         : logi [1:200] NA NA NA NA NA NA ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ sim.all       :'data.frame':	160 obs. of  8 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID  : chr [1:160] "lambda_bar" "c" "recruitment" "survival" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName: chr [1:160] "National" "National" "National" "National" ...</span>
@@ -229,44 +227,44 @@ simulated based on the collaring program parameters.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ probViable    : num [1:160] 0.735 1 0 0.049 0.619 0 0 0 0 0.068 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Metric        : chr [1:160] "Expected growth rate" "c" "Recruitment" "Adult female survival" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year          : int [1:160] 2014 2014 2014 2014 2014 2014 2014 2014 2015 2015 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ obs.all       :'data.frame':	259 obs. of  37 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year            : num [1:259] 2014 2014 2014 2014 2014 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ obs.all       :'data.frame':	260 obs. of  37 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Year            : num [1:260] 2014 2014 2014 2014 2014 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName  : Factor w/ 1 level "A": 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean            : num [1:259] 0.338 0.184 0.368 0 0.411 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Metric          : chr [1:259] "Recruitment" "Adjusted recruitment" "Recruitment" NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID    : chr [1:259] "R" "X" "recruitment" "Fire_excl_anthro" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Type            : chr [1:259] "observed" "true" "true" "true" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Anthro          : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Fire_excl_anthro: num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time            : num [1:259] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Total_dist      : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ collarCount     : num [1:259] 20 20 20 20 20 20 20 20 20 20 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ N0              : num [1:259] 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ qMin            : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ qMax            : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ uMin            : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ uMax            : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ zMin            : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ zMax            : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ cowMult         : num [1:259] 5 5 5 5 5 5 5 5 5 5 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ correlateRates  : logi [1:259] FALSE FALSE FALSE FALSE FALSE FALSE ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rSlopeMod       : num [1:259] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sSlopeMod       : num [1:259] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ interannualVar  :List of 259</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iFire           : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iAnthro         : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ obsAnthroSlope  : num [1:259] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ projAnthroSlope : num [1:259] 5 5 5 5 5 5 5 5 5 5 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ hasYear         : logi [1:259] FALSE FALSE FALSE FALSE FALSE FALSE ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ projYears       : num [1:259] 10 10 10 10 10 10 10 10 10 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ obsYears        : num [1:259] 10 10 10 10 10 10 10 10 10 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ preYears        : num [1:259] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ curYear         : num [1:259] 2023 2023 2023 2023 2023 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ startYear       : num [1:259] 2014 2014 2014 2014 2014 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ID              : int [1:259] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ label           : chr [1:259] "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rQuantile       : logi [1:259] NA NA NA NA NA NA ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sQuantile       : logi [1:259] NA NA NA NA NA NA ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Mean            : num [1:260] 0.71 0.956 0.351 0.703 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Metric          : chr [1:260] "Recruitment" "Adult female survival" "Adjusted recruitment" "Recruitment" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MetricTypeID    : chr [1:260] "R" "survival" "X" "recruitment" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Type            : chr [1:260] "observed" "true" "true" "true" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Anthro          : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Fire_excl_anthro: num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ time            : num [1:260] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Total_dist      : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ collarCount     : num [1:260] 20 20 20 20 20 20 20 20 20 20 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ N0              : num [1:260] 1000 1000 1000 1000 1000 1000 1000 1000 1000 1000 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ qMin            : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ qMax            : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ uMin            : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ uMax            : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ zMin            : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ zMax            : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ cowMult         : num [1:260] 5 5 5 5 5 5 5 5 5 5 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ correlateRates  : logi [1:260] FALSE FALSE FALSE FALSE FALSE FALSE ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rSlopeMod       : num [1:260] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sSlopeMod       : num [1:260] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ interannualVar  :List of 260</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iFire           : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ iAnthro         : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ obsAnthroSlope  : num [1:260] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ projAnthroSlope : num [1:260] 5 5 5 5 5 5 5 5 5 5 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ hasYear         : logi [1:260] FALSE FALSE FALSE FALSE FALSE FALSE ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ projYears       : num [1:260] 10 10 10 10 10 10 10 10 10 10 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ obsYears        : num [1:260] 10 10 10 10 10 10 10 10 10 10 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ preYears        : num [1:260] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ curYear         : num [1:260] 2023 2023 2023 2023 2023 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ startYear       : num [1:260] 2014 2014 2014 2014 2014 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ID              : int [1:260] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ label           : chr [1:260] "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ "ID1_startYear2014_curYear2023_preYears0_obsYears10_projYears10_hasYearFALSE_projAnthroSlope5_obsAnthroSlope1_iA"| __truncated__ ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rQuantile       : logi [1:260] NA NA NA NA NA NA ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ sQuantile       : logi [1:260] NA NA NA NA NA NA ...</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

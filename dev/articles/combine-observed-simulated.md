@@ -8,10 +8,10 @@ and
 [`bboudata::bbourecruit_a`](https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html)
 data sets:
 
-- Informative local data: Observations from 2010 to 2016.
-- Limited local data: Observations from 2014 to 2016.
+- Informative local data: Observations from 2010 to 2015.
+- Limited local data: Observations from 2014 to 2015.
 
-To examine and compare predictions for unobserved years (2018 to 2021)
+To examine and compare predictions for unobserved years (2016 to 2023)
 we add missing data.
 
 Our starting points for analysis of monitoring scenarios are Bayesian
@@ -37,22 +37,19 @@ figHeight <- 10
 #Note - set niters to 100 to run quickly when testing. Set to 1000 for complete results.
 niters <- 1000
 
-surv_data = bboudata::bbousurv_a %>% filter(Year > 2010)
+#Note need to remove single month of data from April 2016 in order to add simulated data in caribou year 2016.
+surv_data <- addMissingYears(bboudata::bbousurv_a %>% filter((Year > 2010)&!((Year==2016)&(Month==4))),
+                             seq(2016,2022))
+recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% filter(Year > 2010),
+                                seq(2016,2022))
 
-surv_data_add = expand.grid(Year=seq(2017,2024),Month=seq(1:12),PopulationName=unique(surv_data$PopulationName))
-surv_data=merge(surv_data,surv_data_add,all.x=T,all.y=T)
+surv_dataNone <- surv_data %>% filter(CaribouYear>2017)
+recruit_dataNone <- recruit_data %>% filter(CaribouYear>2017)
 
-recruit_data=bboudata::bbourecruit_a %>% filter(Year > 2010)
-recruit_data_add = expand.grid(Year=seq(2017,2024),PopulationName=unique(recruit_data$PopulationName))
-recruit_data=merge(recruit_data,recruit_data_add,all.x=T,all.y=T)
+surv_dataLimited <- surv_data %>% filter(CaribouYear > 2013)
+recruit_dataLimited <- recruit_data %>% filter(CaribouYear > 2013)
 
-surv_dataNone <- surv_data %>% filter(Year > 2017)
-recruit_dataNone <- recruit_data %>% filter(Year > 2017)
-
-surv_dataLimited <- surv_data %>% filter(Year > 2014)
-recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
-
-disturbance = data.frame(Year = unique(surv_data$Year), Anthro = 3, Fire_excl_anthro = 5)
+disturbance = data.frame(Year = unique(surv_data$CaribouYear), Anthro = 3, Fire_excl_anthro = 5)
 disturbanceHigh <- data.frame(Year = disturbance$Year,Anthro = 80,Fire_excl_anthro = 10)
 
 betaLimited <- estimateBayesianRates(surv_dataLimited, recruit_dataLimited, disturbance=disturbance,niters=niters)
@@ -138,7 +135,7 @@ limitedMoreHigh = bayesianScenariosWorkflow(scns,simLimitedHigh,niters=niters)
 plotSurvivalSeries(oo$simSurvObs)
 ```
 
-![Observed (2011-2016) and simulated (2017-2022) survival data for an
+![Observed (2011-2015) and simulated (2016-2020) survival data for an
 example trajectory with a relatively low expected growth rate (i.e. in
 the 1st percentile of the distribution of mcmc samples from the initial
 model). X's indicate mortalities, and lines indicate the number of
@@ -146,17 +143,12 @@ deployed collars. Each simulated collar lasts for 4 years. In April of
 each year, collars lost throughout the year are
 replaced.](combine-observed-simulated_files/figure-html/fig-plot1-1.png)
 
-Figure 1: Observed (2011-2016) and simulated (2017-2022) survival data
+Figure 1: Observed (2011-2015) and simulated (2016-2020) survival data
 for an example trajectory with a relatively low expected growth rate
 (i.e. in the 1st percentile of the distribution of mcmc samples from the
 initial model). X’s indicate mortalities, and lines indicate the number
 of deployed collars. Each simulated collar lasts for 4 years. In April
 of each year, collars lost throughout the year are replaced.
-
-``` r
-
-#TO DO: fix data gap
-```
 
 ``` r
 

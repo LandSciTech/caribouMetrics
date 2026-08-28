@@ -56,9 +56,10 @@ bayesianTrajectoryWorkflow(
 
 - N0:
 
-  Number or vector of numbers. Initial population size for one or more
-  sample populations. If NA then population growth rate is
-  \$\_t=S_t\*(1+cR_t)/s\$.
+  Number or dataframe. Optional. Initial populations size. If NA
+  (default) then population growth rate is \$\_t=S_t\*(1+cR_t)/s\$. If a
+  data frame N0 column is required. Additional (optional) variation
+  columns will be used by `addN0Variation()`.
 
 - returnSamples:
 
@@ -150,39 +151,38 @@ Caribou demography functions:
     recruit_data = bboudata::bbourecruit_a,
     disturbance = NULL
   )
-#> Warning: requested year range: 1986 - 2016 does not match recruitment data year range:  1990 - 2016
-#> Warning: missing years of recruitment data: 1986, 1987, 1988, 1989
+#> Warning: missing years of recruitment data: 1985, 1986, 1987, 1988
   str(mod, max.level = 2)
 #> List of 4
 #>  $ result :List of 4
-#>   ..$ summary     :'data.frame': 310 obs. of  8 variables:
-#>   ..$ surv_data   :'data.frame': 384 obs. of  8 variables:
-#>   ..$ recruit_data:'data.frame': 31 obs. of  8 variables:
+#>   ..$ summary     :'data.frame': 320 obs. of  8 variables:
+#>   ..$ surv_data   :'data.frame': 384 obs. of  9 variables:
+#>   ..$ recruit_data:'data.frame': 32 obs. of  9 variables:
 #>   ..$ popInfo     :'data.frame': 3000 obs. of  4 variables:
 #>  $ inData :List of 1
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
 #>   ..$ R_bar         : num 0.198
-#>   ..$ R_sd          : num 0.0858
-#>   ..$ R_iv_mean     : num 0.324
-#>   ..$ R_iv_shape    : num 15.1
-#>   ..$ R_bar_lower   : num 0.172
-#>   ..$ R_bar_upper   : num 0.226
+#>   ..$ R_sd          : num 0.0851
+#>   ..$ R_iv_mean     : num 0.321
+#>   ..$ R_iv_shape    : num 13.8
+#>   ..$ R_bar_lower   : num 0.173
+#>   ..$ R_bar_upper   : num 0.225
 #>   ..$ S_bar         : num 0.872
-#>   ..$ S_sd          : num 0.162
-#>   ..$ S_iv_mean     : num 0.339
-#>   ..$ S_iv_shape    : num 3.02
-#>   ..$ S_bar_lower   : num 0.835
-#>   ..$ S_bar_upper   : num 0.906
-#>   ..$ y             : logi NA
-#>   ..$ nCollarYears  : int 900
-#>   ..$ nSurvYears    : int 31
+#>   ..$ S_sd          : num 0.163
+#>   ..$ S_iv_mean     : num 0.327
+#>   ..$ S_iv_shape    : num 3.79
+#>   ..$ S_bar_lower   : num 0.834
+#>   ..$ S_bar_upper   : num 0.905
+#>   ..$ N0            : logi NA
+#>   ..$ nCollarYears  : num NA
+#>   ..$ nSurvYears    : int 32
 #>   ..$ nCowsAllYears : int NA
-#>   ..$ nRecruitYears : int 30
+#>   ..$ nRecruitYears : int 31
 #>  $ parList:List of 5
-#>   ..$ Rbar:'data.frame': 31 obs. of  7 variables:
-#>   ..$ Sbar:'data.frame': 31 obs. of  7 variables:
+#>   ..$ Rbar:'data.frame': 32 obs. of  7 variables:
+#>   ..$ Sbar:'data.frame': 32 obs. of  7 variables:
 #>   ..$ Siv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ Riv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ type: chr "bbou"
@@ -197,8 +197,6 @@ Caribou demography functions:
   out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                            disturbance = simO$simDisturbance,
                            startYear = 2014)
-#> Warning: requested year range: 2014 - 2033 does not match recruitment data year range:  2015 - 2025
-#> Warning: missing years of recruitment data: 2014
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -213,9 +211,9 @@ Caribou demography functions:
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 22
-#>    Unobserved stochastic nodes: 77
-#>    Total graph size: 694
+#>    Observed stochastic nodes: 20
+#>    Unobserved stochastic nodes: 84
+#>    Total graph size: 729
 #> 
 #> Initializing model
 #> 

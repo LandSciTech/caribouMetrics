@@ -4,7 +4,7 @@
 
 library(caribouMetrics)
 #> Loading required package: nimble
-#> nimble version 1.4.2 is loaded.
+#> nimble version 1.4.3 is loaded.
 #> For more information on NIMBLE and a User Manual,
 #> please visit https://R-nimble.org.
 #> 
@@ -34,7 +34,7 @@ library(caribouMetrics)
 #>     intersect, setdiff, setequal, union
 library(dplyr)
 library(terra)
-#> terra 1.9.34
+#> terra 1.9.46
 #> 
 #> Attaching package: 'terra'
 #> The following objects are masked from 'package:nimble':

@@ -86,12 +86,12 @@ If NULL the trajectory will be simulated from the national model.</p></dd>
 
 <dt id="arg-cowcounts">cowCounts<a class="anchor" aria-label="anchor" href="#arg-cowcounts"></a></dt>
 <dd><p>data.frame. Optional. Number of cows counted in aerial
-surveys each year. If NULL, and <code>paramTable</code> contains <code>cowMult</code> the number
+surveys each caribou year. If NULL, and <code>paramTable</code> contains <code>cowMult</code> the number
 of cows that survive calving based on the collar data is multiplied by
 <code>cowMult</code> to determine the number of cows counted in aerial surveys. If
 <code>paramTable</code> does not contain <code>cowMult</code> <code>paramTable$cowCount</code> is used to
 set the number of cows counted in aerial surveys each year. If a data.frame
-is provided it must have columns "Year"  and "Cows".</p></dd>
+is provided it must have columns "Year"  and "Cows". Note that the survey will done in the recSurveyMonth of the 12 month period that begins on the caribouYearStart month of the calendar year; if recSurveyMonth is &lt; caribouYearStart then the survey for year X is done in calendar year X+1.</p></dd>
 
 
 <dt id="arg-freqstartsbyyear">freqStartsByYear<a class="anchor" aria-label="anchor" href="#arg-freqstartsbyyear"></a></dt>
@@ -100,7 +100,7 @@ each year. If NULL <code>paramTable$collarCount</code> is used as the target num
 collars and each year that collars are deployed they will be topped up to
 this number. If a data.frame is provided it must have 2 columns "Year" and
 "numStarts" or "numTarget" (but not both). "numStarts" is the absolute number of collars deployed
-in that year, and "numTarget" is the target number of collars.</p></dd>
+in that year, and "numTarget" is the target number of collars. Note that the year will be interpreted as the 12 month period that begins on the caribouYearStart month of the calendar year.</p></dd>
 
 
 <dt id="arg-collarnumyears">collarNumYears<a class="anchor" aria-label="anchor" href="#arg-collarnumyears"></a></dt>
@@ -122,7 +122,7 @@ in that year, and "numTarget" is the target number of collars.</p></dd>
 
 
 <dt id="arg-recsurveymonth">recSurveyMonth<a class="anchor" aria-label="anchor" href="#arg-recsurveymonth"></a></dt>
-<dd><p>integer. The month of simulated recruitment surveys.</p></dd>
+<dd><p>integer. The month of simulated recruitment surveys. Note the survey is done in the recSurveyMonth of the 12 month period that begins on the caribouYearStart month of the calendar year; if recSurveyMonth is &lt; caribouYearStart then the survey for year X is done in calendar year X+1.</p></dd>
 
 
 <dt id="arg-recsurveyday">recSurveyDay<a class="anchor" aria-label="anchor" href="#arg-recsurveyday"></a></dt>

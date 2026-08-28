@@ -72,27 +72,24 @@ library(patchwork)
 figWidth <- 8
 figHeight <- 10
 
-useSaved <- F # option to skip slow step of fitting bboutools model
+useSaved <- T # option to skip slow step of fitting bboutools model
 bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
 bbouLimitedFile <- here::here("results/vignetteBbbouExample2.rds")
 bbouPriorFile <- here::here("results/vignetteBbbouExample1.rds")
 bbouPriorNationalFile <- here::here("results/vignetteBbbouExample1p.rds")
 betaAnthroFile <- here::here("results/betaAnthroExample.rds")
 
-surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
-surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
-                             PopulationName = unique(surv_data$PopulationName))
-surv_data <- merge(surv_data, surv_data_add, all.x = TRUE, all.y = TRUE)
+#Note need to remove single month of data from April 2016 in order to add simulated data in caribou year 2016.
+surv_data <- addMissingYears(bboudata::bbousurv_a %>% filter((Year > 2010)&!((Year==2016)&(Month==4))),
+                             seq(2016,2022))
+recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% filter(Year > 2010),
+                                seq(2016,2022))
 
-recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
-recruit_data_add <- expand.grid(Year = seq(2017, 2022), PopulationName = unique(recruit_data$PopulationName))
-recruit_data <- merge(recruit_data, recruit_data_add, all.x = TRUE, all.y = TRUE)
+surv_dataNone <- surv_data %>% filter(CaribouYear>2017)
+recruit_dataNone <- recruit_data %>% filter(CaribouYear>2017)
 
-surv_dataNone <- surv_data %>% filter(Year > 2017)
-recruit_dataNone <- recruit_data %>% filter(Year > 2017)
-
-surv_dataLimited <- surv_data %>% filter(Year > 2014)
-recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
+surv_dataLimited <- surv_data %>% filter(CaribouYear > 2013)
+recruit_dataLimited <- recruit_data %>% filter(CaribouYear > 2013)
 ```
 
 ## 3 Comparison of the Beta and national models
@@ -105,7 +102,7 @@ model (Figure [1](#fig:fig-plot1)).
 
 ``` r
 
-disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 5,
+disturbance <- data.frame(Year = unique(surv_data$CaribouYear), Anthro = 5,
                           Fire_excl_anthro = 1)
 betaPrior <- bayesianTrajectoryWorkflow(surv_dataNone, recruit_dataNone, disturbance)
 simNational <- trajectoriesFromNational(disturbance = disturbance)
@@ -347,7 +344,7 @@ demographic rates will be low when disturbance is high.
 
 ``` r
 
-disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 90, Fire_excl_anthro = 5)
+disturbance <- data.frame(Year = unique(surv_data$CaribouYear), Anthro = 90, Fire_excl_anthro = 5)
 betaLimited <- bayesianTrajectoryWorkflow(surv_dataLimited, recruit_dataLimited, disturbance)
 if (useSaved & file.exists(bbouLimitedFile)) {
   bbouLimited <- readRDS(bbouLimitedFile)
@@ -370,7 +367,7 @@ rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
 surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
 
 lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
-               lowBound = 0.4, highBound = 1.6)
+               lowBound = 0.3, highBound = 1.6)
 rec / surv / lam
 ```
 

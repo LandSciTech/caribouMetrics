@@ -25,16 +25,19 @@ estimateBayesianRates(
 
 - surv_data:
 
-  dataframe. Survival data in bboudata format
+  dataframe. Survival data in bboudata format.
 
 - recruit_data:
 
-  dataframe. Recruitment data in bboudata format
+  dataframe. Recruitment data in bboudata format.
 
 - N0:
 
-  dataframe. Optional. Initial population estimates, required columns
-  are PopulationName and N0
+  number or dataframe. Optional. Initial population size(s). If NA
+  (default) then population growth rate is \$\_t=S_t\*(1+cR_t)/s\$. If a
+  data frame N0 column is required, and PopulationName column is
+  required if there is more than one row. Additional (optional)
+  variation columns will be used by `addN0Variation()`.
 
 - disturbance:
 
@@ -119,12 +122,12 @@ s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 estimateBayesianRates(s_data, r_data, N0 = 500)
 #>   PopulationName     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower
-#> 1              A 0.1900485 0.08182184 0.3154416   25.83285   0.1662411
-#> 2              B 0.2032712 0.10050771 0.3154416   25.83285   0.1722409
-#>   R_bar_upper     S_bar     S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
-#> 1   0.2146784 0.8809044 0.223287 0.4952266   13.08777   0.8282027   0.9202089
-#> 2   0.2362427 0.9069938 0.307349 0.4952266   13.08777   0.8468059   0.9498290
+#> 1              A 0.1985462 0.07699683  0.282433   20.12993   0.1752645
+#> 2              B 0.2119856 0.09864731  0.282433   20.12993   0.1818023
+#>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
+#> 1   0.2230865 0.8814876 0.2330310 0.4941447   9.607457   0.8259736   0.9217952
+#> 2   0.2473221 0.9071070 0.2883885 0.4941447   9.607457   0.8500941   0.9463984
 #>    N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
-#> 1 500          900         31          2353            27
-#> 2 500          519         18          2001            15
+#> 1 500          900         31          2047            27
+#> 2 500          519         18          1645            15
 ```

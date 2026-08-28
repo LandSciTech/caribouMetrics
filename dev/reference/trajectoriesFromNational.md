@@ -32,7 +32,9 @@ trajectoriesFromNational(
 
 - N0:
 
-  initial population size
+  Number or dataframe. Initial population size(s). If a data frame N0
+  column is required. Additional (optional) variation columns will be
+  used by `addN0Variation()`.
 
 - useQuantiles:
 

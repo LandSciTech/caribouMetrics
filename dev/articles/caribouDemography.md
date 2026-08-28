@@ -472,15 +472,11 @@ library(bboutools)
 useSaved <- F # option to skip slow step of fitting bboutools model
 bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
 
-surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
-surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
-                             PopulationName = unique(surv_data$PopulationName))
-surv_data <- merge(surv_data, surv_data_add, all.x = TRUE, all.y = TRUE)
-
-recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
-recruit_data_add <- expand.grid(Year = seq(2017, 2022), 
-                                PopulationName = unique(recruit_data$PopulationName))
-recruit_data <- merge(recruit_data, recruit_data_add, all.x = TRUE, all.y = TRUE)
+  #Note need to remove single month of data from April 2016 in order to add simulated data in caribou year 2016.
+  surv_data <- addMissingYears(bboudata::bbousurv_a %>% filter((Year > 2010)&!((Year==2016)&(Month==4))),
+                               seq(2016,2022))
+  recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% filter(Year > 2010),
+                                  seq(2016,2022))
 
 if (useSaved & file.exists(bbouInformativeFile)) {
   bbouInformative <- readRDS(bbouInformativeFile)
@@ -646,8 +642,8 @@ trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rb
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 201
+#>    Unobserved stochastic nodes: 28
+#>    Total graph size: 216
 #> 
 #> Initializing model
 #> 
@@ -656,8 +652,8 @@ trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rb
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 201
+#>    Unobserved stochastic nodes: 28
+#>    Total graph size: 216
 #> 
 #> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryBase, simInitial = popMetricsBayes)
@@ -725,8 +721,8 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 201
+#>    Unobserved stochastic nodes: 28
+#>    Total graph size: 216
 #> 
 #> Initializing model
 #> 
@@ -735,8 +731,8 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 207
+#>    Unobserved stochastic nodes: 28
+#>    Total graph size: 222
 #> 
 #> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryAdjust, simInitial = trajFromSummaryBase)
@@ -776,12 +772,12 @@ Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp).
 ``` r
 
 pt <- bbouInformative$parTab;pt
-#>   PopulationName     R_bar     R_sd R_iv_mean R_iv_shape R_bar_lower
-#> 1              A 0.1957146 0.223214 0.3769596   2.237329   0.1357969
+#>   PopulationName     R_bar      R_sd R_iv_mean R_iv_shape R_bar_lower
+#> 1              A 0.2006003 0.1859027 0.2950272   1.573157   0.1445223
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
-#> 1   0.2780221 0.9404699 0.5481804 0.5339889   1.141943   0.8566462   0.9804958
-#>    y nCollarYears nSurvYears nCowsAllYears nRecruitYears
-#> 1 NA           NA         12            NA            12
+#> 1   0.2617138 0.9403158 0.6231178 0.6593313   1.658096    0.840353   0.9840703
+#>   N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
+#> 1 NA           NA         13            NA            12
 
 popMetricsBase <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
                                              R_sd=pt$R_sd,S_sd=pt$S_sd,

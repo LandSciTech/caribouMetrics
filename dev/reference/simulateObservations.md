@@ -44,12 +44,16 @@ simulateObservations(
 - cowCounts:
 
   data.frame. Optional. Number of cows counted in aerial surveys each
-  year. If NULL, and `paramTable` contains `cowMult` the number of cows
-  that survive calving based on the collar data is multiplied by
+  caribou year. If NULL, and `paramTable` contains `cowMult` the number
+  of cows that survive calving based on the collar data is multiplied by
   `cowMult` to determine the number of cows counted in aerial surveys.
   If `paramTable` does not contain `cowMult` `paramTable$cowCount` is
   used to set the number of cows counted in aerial surveys each year. If
-  a data.frame is provided it must have columns "Year" and "Cows".
+  a data.frame is provided it must have columns "Year" and "Cows". Note
+  that the survey will done in the recSurveyMonth of the 12 month period
+  that begins on the caribouYearStart month of the calendar year; if
+  recSurveyMonth is \< caribouYearStart then the survey for year X is
+  done in calendar year X+1.
 
 - freqStartsByYear:
 
@@ -59,7 +63,9 @@ simulateObservations(
   number. If a data.frame is provided it must have 2 columns "Year" and
   "numStarts" or "numTarget" (but not both). "numStarts" is the absolute
   number of collars deployed in that year, and "numTarget" is the target
-  number of collars.
+  number of collars. Note that the year will be interpreted as the 12
+  month period that begins on the caribouYearStart month of the calendar
+  year.
 
 - collarNumYears:
 
@@ -81,7 +87,11 @@ simulateObservations(
 
 - recSurveyMonth:
 
-  integer. The month of simulated recruitment surveys.
+  integer. The month of simulated recruitment surveys. Note the survey
+  is done in the recSurveyMonth of the 12 month period that begins on
+  the caribouYearStart month of the calendar year; if recSurveyMonth is
+  \< caribouYearStart then the survey for year X is done in calendar
+  year X+1.
 
 - recSurveyDay:
 
