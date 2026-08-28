@@ -412,15 +412,11 @@ library(bboutools)
 useSaved <- F # option to skip slow step of fitting bboutools model
 bbouInformativeFile <- here::here("results/vignetteBbbouExample.rds")
 
-surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
-surv_data_add <- expand.grid(Year = seq(2017, 2022), Month = seq(1:12),
-                             PopulationName = unique(surv_data$PopulationName))
-surv_data <- merge(surv_data, surv_data_add, all.x = TRUE, all.y = TRUE)
-
-recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
-recruit_data_add <- expand.grid(Year = seq(2017, 2022), 
-                                PopulationName = unique(recruit_data$PopulationName))
-recruit_data <- merge(recruit_data, recruit_data_add, all.x = TRUE, all.y = TRUE)
+  #Note need to remove single month of data from April 2016 in order to add simulated data in caribou year 2016.
+  surv_data <- addMissingYears(bboudata::bbousurv_a %>% filter((Year > 2010)&!((Year==2016)&(Month==4))),
+                               seq(2016,2022))
+  recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% filter(Year > 2010),
+                                  seq(2016,2022))
 
 if (useSaved & file.exists(bbouInformativeFile)) {
   bbouInformative <- readRDS(bbouInformativeFile)

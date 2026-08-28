@@ -14,25 +14,25 @@
 #' @param trajectories data.frame. Optional example demographic trajectory. 
 #'   If NULL the trajectory will be simulated from the national model.
 #' @param cowCounts data.frame. Optional. Number of cows counted in aerial
-#'   surveys each year. If NULL, and `paramTable` contains `cowMult` the number
+#'   surveys each caribou year. If NULL, and `paramTable` contains `cowMult` the number
 #'   of cows that survive calving based on the collar data is multiplied by
 #'   `cowMult` to determine the number of cows counted in aerial surveys. If
 #'   `paramTable` does not contain `cowMult` `paramTable$cowCount` is used to
 #'   set the number of cows counted in aerial surveys each year. If a data.frame
-#'   is provided it must have columns "Year"  and "Cows".
+#'   is provided it must have columns "Year"  and "Cows". Note that the survey will done in the recSurveyMonth of the 12 month period that begins on the caribouYearStart month of the calendar year; if recSurveyMonth is < caribouYearStart then the survey for year X is done in calendar year X+1.
 #' @param freqStartsByYear data.frame. Optional. Number of collars deployed in
 #'   each year. If NULL `paramTable$collarCount` is used as the target number of
 #'   collars and each year that collars are deployed they will be topped up to
 #'   this number. If a data.frame is provided it must have 2 columns "Year" and
 #'   "numStarts" or "numTarget" (but not both). "numStarts" is the absolute number of collars deployed
-#'   in that year, and "numTarget" is the target number of collars.
+#'   in that year, and "numTarget" is the target number of collars. Note that the year will be interpreted as the 12 month period that begins on the caribouYearStart month of the calendar year.
 #' @param collarNumYears integer. Number of years until collar falls off
 #' @param collarOffTime integer. Month that collars fall off. A number from 1
 #'   (January) to 12 (December)
 #' @param collarOnTime integer. Month that collars are deployed. A number from 1
 #'   (January) to 12 (December)
 #' @param caribouYearStart integer. The first month of the year for caribou.
-#' @param recSurveyMonth integer. The month of simulated recruitment surveys.
+#' @param recSurveyMonth integer. The month of simulated recruitment surveys. Note the survey is done in the recSurveyMonth of the 12 month period that begins on the caribouYearStart month of the calendar year; if recSurveyMonth is < caribouYearStart then the survey for year X is done in calendar year X+1.
 #' @param recSurveyDay integer. The day for simulated recruitment surveys.
 #' @param distScen data.frame. Disturbance scenario. Must have columns "Year",
 #'   "Anthro", and "Fire_excl_anthro" containing the year, percentage of the
@@ -91,7 +91,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   }
   
   includeTimes = seq((paramTable$startYear+paramTable$preYears),
-                       (paramTable$startYear+paramTable$preYears+paramTable$obsYears))
+                       (paramTable$startYear+paramTable$preYears+paramTable$obsYears)-1)
   
   if(!is.null(surv_data)){
     if(!hasName(surv_data,"Annual")){
@@ -108,6 +108,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     recruit_data <- convertBbouData(recruit_data)
     recruit_data <- subset(recruit_data,as.numeric(as.character(Annual))<=max(includeTimes))
   }
+  
   # Simulate covariate table
   if (is.null(distScen)) {
     covariates <- simCovariates(paramTable$iAnthro, paramTable$iFire, 
@@ -215,6 +216,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     includeYears <- sort(intersect(includeYears,iYrs))
   }
 
+  #Note these are caribou years
   popMetrics = subset(trajectories,is.element(Year,includeYears))
   
   includeYears = unique(popMetrics$Year)
@@ -225,6 +227,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
                                values_from = "Amount")
   if(class(exData$N)=="list"){stop("Cannot extract example trajectory due to duplication. Check for errors in trajectoriesFromBayesian.")}
 
+  #Note these are caribou years, not calendar years
   if(!is.null(recruit_data)){
     recruitYrs <- sort(setdiff(includeYears,subset(recruit_data,!is.na(Calves))$Annual))
   }else{
@@ -244,17 +247,13 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     stop("One of cowCounts or paramTable$cowMult must be provided",
          call. = FALSE)
   }
-
-                       
+  
+  #Note these are caribou years, not calendar years
   if(!is.null(surv_data)){
     survYrs <- sort(setdiff(includeYears,subset(surv_data,!is.na(MortalitiesCertain))$Annual))
   }else{
     survYrs <- includeYears
   }
-
-  inclSurvYrs = survYrs
-  inclSurvYrs[survYrs==max(survYrs)]=survYrs[survYrs==max(survYrs)]-1
-  inclSurvYrs=unique(inclSurvYrs)
 
   if(!is.null(freqStartsByYear)){
     survYrs <- intersect(survYrs, freqStartsByYear$Year) 
@@ -288,7 +287,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   }else{forceMonths=F}
 
   if(nrow(freqStartsByYear)>0){
-
+    
     if (is.null(freqStartsByYearIn)) {
       #freqStartsByYear$numStarts=0
       simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears, collarOffTime,
@@ -304,9 +303,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
                                     collarOffTime, collarOnTime,caribouYearStart,topUp = topUp, forceMonths=forceMonths)
     }
     simSurvObs$survival=NULL
-    simSurvObs$Annual <- simSurvObs$Year
-    simSurvObs$Annual[simSurvObs$Month<caribouYearStart] <- simSurvObs$Annual[simSurvObs$Month<caribouYearStart]-1
-    simSurvObs=subset(simSurvObs,is.element(Annual,survYrs))
+    simSurvObs <- getCaribouYear(simSurvObs)
+    simSurvObs=subset(simSurvObs,is.element(CaribouYear,survYrs))
     
     # if cowMult is provided, set cows as a function of number of surviving cows at
     # year start
@@ -326,11 +324,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       }
       survsCalving <- survsCalving %>% 
         mutate(surviving = StartTotal - MortalitiesCertain)
-      if(hasName(survsCalving,"Annual")){
-        survsCalving$Year = survsCalving$Annual
-      }else{
-        survsCalving$Year[survsCalving$Month<caribouYearStart]=survsCalving$Year[survsCalving$Month<caribouYearStart]-1
-      }
+      if(!hasName(survsCalving,"CaribouYear")){survsCalving <- getCaribouYear(survsCalving)}
+      survsCalving$Year <- survsCalving$CaribouYear;survsCalving$Month=NULL
       if (nrow(survsCalving) > 0) {
         cowCounts <- subset(survsCalving, select=c("PopulationName","Replicate","Year","StartTotal", "surviving"))
         cowCounts$Cows <- paramTable$cowMult * cowCounts$surviving
@@ -374,7 +369,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
         
         if(is.element("Month",missing)){
           if(recSurveyMonth<caribouYearStart){
-            recruit_data$Year = recruit_data$Year+1
+           recruit_data$Year = recruit_data$Year+1
           }
         }
         
@@ -399,8 +394,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       }  
     }
     
-    simSurvObs = subset(simSurvObs,is.element(Annual,inclSurvYrs))
-    simSurvObs$Annual <- NULL
+    simSurvObs$CaribouYear <- NULL
     
     if(!is.null(surv_data)){
       if(nrow(simSurvObs>0)){

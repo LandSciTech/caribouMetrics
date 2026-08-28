@@ -6,13 +6,14 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   #Note: using bboutools to check and structure the data without fitting the models...0
   library(bboutools)
   
-  surv_data$Month[is.na(surv_data$StartTotal)]<-NA;surv_data<-unique(surv_data)
-  recruit_data$Month[is.na(recruit_data$Cows)]<-NA;recruit_data$Day[is.na(recruit_data$Cows)]<-NA;recruit_data<-unique(recruit_data)
+  surv_data <- setBbouNAs(surv_data)
+  recruit_data <- setBbouNAs(recruit_data)
   
   surv_fit_in <- bboutools::bb_fit_survival(surv_data, allow_missing = TRUE, quiet = TRUE, niters=0,min_random_year=0)
+  recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, allow_missing = TRUE, quiet = TRUE, niters=0,min_random_year=0)
+
   surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb)
   
-  recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, allow_missing = TRUE, quiet = TRUE, niters=0,min_random_year=0)
   recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb)
   
   summaries <- rbind(recruit_fit$summaries,surv_fit$summaries)
@@ -30,7 +31,7 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
 }
 
 betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
-  data <- convertBbouData(surv_fit$data)
+  data <- convertBbouData(surv_fit$data,StartTotalMissing =1)
   if(hasName(disturbance,"Annual")){
     disturbance$Year = NULL
   }else{
@@ -156,7 +157,7 @@ model {
 }
 
 betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
-  data <- convertBbouData(rec_fit$data)
+  data <- convertBbouData(rec_fit$data,StartTotalMissing=1)
   data$CowsBulls[is.na(data$CowsBulls)]=0
   data$UnknownAdults[is.na(data$UnknownAdults)]=0
   data$Yearlings[is.na(data$Yearlings)]=0

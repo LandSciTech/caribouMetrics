@@ -65,7 +65,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   if(nrow(Nuse)>length(unique(Nuse$PopulationName))){
     stop("Expecting a single value or distribution of N0 for each population.")
   }
-  
+
   if(is.element("bboufit",class(bayesianResults$surv_fit))){
     nr <- dim(bayesianResults$surv_fit$samples$b0)[1]*dim(bayesianResults$surv_fit$samples$b0)[2]
   }else{
@@ -110,7 +110,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   pars <- merge(pars,pi)
   
   if(max(table(subset(pars,select=c("PopulationName","Year","id"))))>1){stop("Error in trajectoriesFromBayesian: trajectories are not uniquely id'd")}
-  
+
   if(doSummary){
     simBig <- prepareTrajectories(pars, returnSamples = returnSamples)
     

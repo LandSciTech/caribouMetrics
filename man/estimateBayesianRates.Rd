@@ -19,9 +19,9 @@ estimateBayesianRates(
 )
 }
 \arguments{
-\item{surv_data}{dataframe. Survival data in bboudata format}
+\item{surv_data}{dataframe. Survival data in bboudata format.}
 
-\item{recruit_data}{dataframe. Recruitment data in bboudata format}
+\item{recruit_data}{dataframe. Recruitment data in bboudata format.}
 
 \item{N0}{number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by \code{\link[=addN0Variation]{addN0Variation()}}.}
 

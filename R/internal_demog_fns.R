@@ -230,7 +230,9 @@ addN0Variation<- function(popInfo,forceDataFrame=F) {
     popInfo <- data.frame(N0=popInfo)
   }
   return(popInfo)
-}    
+}   
+
+  
 
 #Extracts N0 parameters, converts to data frame if needed, and (optionally) adds population names or checks for expected names.
 getN0Pars <- function(N0,popNames = NULL){
@@ -273,6 +275,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   #Note: If collarOffTime and collarOnTime both equal caribouYearStart simulation will be faster because we can ignore variation in number of collars at the start of each month.
   # topUp=T;caribouYearStart=4
   # for simplicity, ignore variation in survival probability among months
+  #Note that the years in freqStartsByYear should be interpreted as the 12 month period that begins on the caribouYearStart month of the calendar year.
   
   options(dplyr.summarise.inform = FALSE)
   
@@ -283,28 +286,35 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   }
   
   survivalSeries <- subset(exData, select = c("survival", "N","Year","PopulationName","Replicate"))
+  
   if(nMonths>1){
-    survivalSeries <- merge(survivalSeries,data.frame(Month=seq(1:nMonths)))
+    names(survivalSeries)[names(survivalSeries)=="Year"]="CaribouYear"
+    allMonths <- expand.grid(Month=seq(1:nMonths),Year=seq(min(survivalSeries$CaribouYear)-1,max(survivalSeries$CaribouYear+1)))
+    allMonths <- getCaribouYear(allMonths, caribouYearStart)
+    survivalSeries <- merge(survivalSeries,allMonths,all.x=T)
   }else{
     survivalSeries$Month=caribouYearStart
+    survivalSeries <- getCaribouYear(survivalSeries)
   }
-  survivalSeries$Year[survivalSeries$Month<caribouYearStart]= survivalSeries$Year[survivalSeries$Month<caribouYearStart]+1
-  
-  initYear <- min(survivalSeries$Year)
+
+  initYear <- min(survivalSeries$CaribouYear)
   freqStartsByYear <- subset(freqStartsByYear,
                              (freqStartsByYear$Year >= initYear))
   freqStartsByYear$Month = collarOnTime
+  #This converts from caribou year to calendar year
+  if(collarOnTime<caribouYearStart){freqStartsByYear$Year=freqStartsByYear$Year+1}
+  freqStartsByYear <- getCaribouYear(freqStartsByYear,caribouYearStart)
   
   survivalSeries = merge(survivalSeries,freqStartsByYear,all.x=T)
   survivalSeries$numStarts[is.na(survivalSeries$numStarts)]=0
   
-  startYrs = sort(unique(freqStartsByYear$Year))
+  startYrs = sort(unique(freqStartsByYear$CaribouYear))
 
   #print(freqStartsByYear)
   firstStep=T
 
   for (sy in startYrs) {
-    #sy = startYrs[2]
+    #sy = startYrs[1]
     y = sy
     addedNumStarts = F
     if(nMonths==1){cMonth = caribouYearStart; prevMonth = cMonth}else{cMonth = 1; prevMonth = cMonth-1}
@@ -316,6 +326,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
     for (yId in seq(sy,min(sy+collarNumYears,max(survivalSeries$Year)))){
       if ((y == min(sy+collarNumYears,max(survivalSeries$Year)))&(cMonth==collarOffTime)){break}
       for(mId in 1:nMonths){
+        #print(paste(sy,y,mId))
         cInfo = subset(survivalSeries,(Month==cMonth)&(Year==y))
         if(nrow(cInfo)==0){break}
         cInfo$startYr = sy
@@ -392,7 +403,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   simSurvs$Malfunctions = 0
   simSurvs$MortalitiesUncertain = 0
   
-  #plot(plotSurvivalSeries(subset(simSurvs,Replicate==simSurvObs$Replicate[1])))
+  #plot(plotSurvivalSeries(simSurvs)))
   if(topUp){
     if(any(simSurvs$StartTotal>max(freqStartsByYear$numStarts))){stop("Error in simSurvivalData: too many collars")}
   }
@@ -605,21 +616,26 @@ savePersistentCache <- function(env = cacheEnv){
 }
 
 #add missing and change names to make data from bboutools models useable.
-convertBbouData<-function(dat){
+convertBbouData<-function(dat,year_start=formals(bboutools::bb_fit_survival)$year_start,StartTotalMissing = NA){
   
   if(!hasName(dat,"Annual")){
     return(dat)
   }
   dat <- as.data.frame(dat)
+  
+  if(is.factor(dat$PopulationName)){pops<-levels(dat$PopulationName)}else{pops<-unique(dat$PopulationName)}
+  
   dat_add <- NULL
   if(hasName(dat,"StartTotal")){
-    dat_add <- expand.grid(PopulationName=levels(dat$PopulationName),
+    if(is.factor(dat$Month)){months<-levels(dat$Month)}else{
+      if(length(unique(dat$Month))>1){months=seq(1,12)}else{months=unique(dat$Month)}
+    }
+    dat_add <- expand.grid(PopulationName=pops,
                             Annual=levels(dat$Annual),
-                            Month=levels(dat$Month))
-    
+                            Month=months)
   }
   if(hasName(dat,"Cows")){
-    dat_add <- expand.grid(PopulationName=levels(dat$PopulationName),
+    dat_add <- expand.grid(PopulationName=pops,
                             Annual=levels(dat$Annual))
   }
   
@@ -627,23 +643,74 @@ convertBbouData<-function(dat){
     dat <- merge(dat,dat_add,all.x=T,all.y=T)
   }  
   if(hasName(dat,"StartTotal")){
-    dat$StartTotal[is.na(dat$StartTotal)]=1  
+    #combine any duplicates
+    sumVars <- intersect(names(dat),c("StartTotal","Malfunctions","Mortalities","MortalitiesUncertain","MortalitiesCertain"))
+    groupVars <- setdiff(names(dat),sumVars)
+    dat <- dat |> group_by(across(groupVars)) |> 
+      summarize_at(sumVars,function(x){ifelse(all(is.na(x)), NA, sum(x, na.rm=TRUE))})
+    dat <- as.data.frame(dat)
+    dat$StartTotal[is.na(dat$StartTotal)]=StartTotalMissing 
+    for(sv in sumVars){
+      dat[[sv]] <- as.numeric(dat[[sv]])
+    }
   }
   
-  newYr =  as.numeric(as.character(dat$Annual))
-  newYr[(as.numeric(as.character(dat$Month))<formals(bboutools::bb_fit_survival)$year_start)]=
-    newYr[(as.numeric(as.character(dat$Month))<formals(bboutools::bb_fit_survival)$year_start)]+1
+  newYr <-  as.numeric(as.character(dat$Annual))
+  monthCheck <- as.numeric(as.character(dat$Month))
+  monthCheck[is.na(monthCheck)]=year_start
+  newYr[monthCheck<year_start]=
+    newYr[monthCheck<year_start]+1
   dat$Year = newYr
   
-  dat$CaribouYear <- NULL
+  if(hasName(dat,"CaribouYear")){
+    dat <- getCaribouYear(dat)
+  }
+  
   return(dat)
 }
+
+setBbouNAs <- function(dat){
   
+  dat <- getCaribouYear(dat)
+  
+  if(hasName(dat,"StartTotal")){
+    dat$Year[is.na(dat$StartTotal)] <- dat$CaribouYear[is.na(dat$StartTotal)]
+    dat$Month[is.na(dat$StartTotal)]<-NA;dat<-unique(dat)
+    return(dat)
+  }
+  
+  if(hasName(dat,"Cows")){
+    dat$Year[is.na(dat$Cows)]<-dat$CaribouYear[is.na(dat$Cows)]
+    dat$Month[is.na(dat$Cows)]<-NA;dat$Day[is.na(dat$Cows)]<-NA;dat<-unique(dat)
+    
+    return(dat)
+  }
+  
+  stop("Expecting survival or recruitment data in bboutools form")
+  
+}
+
+#TO DO: export and document.
+#add missing years to bboutools formatted data.
+#' @export
+addMissingYears<- function(dat, addYears, year_start=formals(bboutools::bb_fit_recruitment)$year_start) {
+  dat <- getCaribouYear(dat,year_start=year_start)
+  inNames <- names(dat)
+  dat$Annual <- as.factor(dat$CaribouYear)
+  levels(dat$Annual) <- sort(union(dat$CaribouYear,addYears))
+  dat <- convertBbouData(dat,year_start,StartTotalMissing=NA)
+  rmNames <- setdiff(names(dat),inNames)
+  for(rm in rmNames){
+    dat[[rm]] <- NULL
+  }
+  return(dat)
+}
+
 getCaribouYear <- function(x,
                            year_start = formals(bboutools::bb_fit_recruitment)$year_start){
   x$CaribouYear <- x$Year
   # if(length(unique(x$Month))>1){
-     cMonth <- x$Month
+     cMonth <- as.numeric(as.character(x$Month))
      cMonth[is.na(cMonth)]=year_start
      x$CaribouYear[cMonth<year_start] <- x$CaribouYear[cMonth<year_start]-1
   # }

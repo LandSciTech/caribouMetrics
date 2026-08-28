@@ -77,19 +77,17 @@ test_that("Model and input trajectory match", {
   ###############
   # Example scenario - no disturbance and no additional monitoring
   scns <- data.frame(obsAnthroSlope = NA, projAnthroSlope = NA)
-  scns$obsYears <- max(simBig$recruit_data$Year[!is.na(simBig$recruit_data$Calves)]) - min(simBig$recruit_data$Year) + 1
-  scns$startYear <- min(simBig$recruit_data$Year)
-  scns$projYears <- max(simBig$summary$Year) - scns$obsYears - scns$startYear + 1
+  inDat <- getCaribouYear(simBig$recruit_data)
+  scns$obsYears <- max(inDat$CaribouYear[!is.na(inDat$Calves)]) - min(inDat$CaribouYear) + 1 
+  scns$startYear <- min(inDat$CaribouYear)
+  scns$projYears <- max(inDat$CaribouYear) - scns$obsYears - scns$startYear + 1
   scns$collarCount <- 0
 
-  # projecting recruitment into 2016 even though no data. because obsYears?
-  scns$obsYears <- 5
-  
   # devtools::load_all(path = "../caribouMetrics/")
   posteriorResult <- bayesianScenariosWorkflow(scns, simBig, niters = 3000,returnSamples=T)
 
   expect_identical(simBig$surv_data,posteriorResult$out$result$surv_data)
-    
+  
   posteriorResult$obs.all <- NULL
   recPosterior <- plotCompareTrajectories(posteriorResult, "Recruitment")
 
