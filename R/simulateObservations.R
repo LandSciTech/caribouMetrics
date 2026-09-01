@@ -97,7 +97,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     if(!hasName(surv_data,"Annual")){
       surv_data <- bboutools::bb_fit_survival(surv_data, allow_missing = TRUE, quiet = TRUE, niters=0, min_random_year=0)$data
     }
-    surv_data <- convertBbouData(surv_data)
+    surv_data <- convertBbouData(surv_data,caribouYearStart)
     surv_data <- subset(surv_data,as.numeric(as.character(Annual))<=max(includeTimes))
     surv_data$Month <- as.numeric(as.character(surv_data$Month))
   }
@@ -105,7 +105,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     if(!hasName(recruit_data,"Annual")){
       recruit_data <- bboutools::bb_fit_recruitment(recruit_data, allow_missing = TRUE, quiet = TRUE, niters=0, min_random_year=0)$data
     }
-    recruit_data <- convertBbouData(recruit_data)
+    recruit_data <- convertBbouData(recruit_data,caribouYearStart)
     recruit_data <- subset(recruit_data,as.numeric(as.character(Annual))<=max(includeTimes))
   }
   
@@ -211,7 +211,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     iYrs <- c(iYrs,cowCounts$Year)
     if(!is.null(recruit_data)){iYrs <- c(iYrs,as.numeric(as.character(recruit_data$Annual)))}
   }
-  
+
   if(length(iYrs)>0){
     includeYears <- sort(intersect(includeYears,iYrs))
   }
@@ -302,8 +302,9 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       simSurvObs <- simSurvivalData(freqStartsByYear, exData, collarNumYears,
                                     collarOffTime, collarOnTime,caribouYearStart,topUp = topUp, forceMonths=forceMonths)
     }
+    
     simSurvObs$survival=NULL
-    simSurvObs <- getCaribouYear(simSurvObs)
+    simSurvObs <- getCaribouYear(simSurvObs,caribouYearStart)
     simSurvObs=subset(simSurvObs,is.element(CaribouYear,survYrs))
     
     # if cowMult is provided, set cows as a function of number of surviving cows at
@@ -324,7 +325,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       }
       survsCalving <- survsCalving %>% 
         mutate(surviving = StartTotal - MortalitiesCertain)
-      if(!hasName(survsCalving,"CaribouYear")){survsCalving <- getCaribouYear(survsCalving)}
+      if(!hasName(survsCalving,"CaribouYear")){survsCalving <- getCaribouYear(survsCalving,caribouYearStart)}
       survsCalving$Year <- survsCalving$CaribouYear;survsCalving$Month=NULL
       if (nrow(survsCalving) > 0) {
         cowCounts <- subset(survsCalving, select=c("PopulationName","Replicate","Year","StartTotal", "surviving"))
@@ -357,7 +358,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
                 file.path(writeFilesDir, paste0("simSurvData", paramTable$label, ".csv")),
                 row.names = FALSE)
     }
-
+    
     if(!is.null(recruit_data)){
       if(nrow(simRecruitObs)>0){
         recruit_data <- merge(recruit_data,data.frame(Replicate=unique(simRecruitObs$Replicate)))
@@ -387,9 +388,9 @@ simulateObservations <- function(paramTable, trajectories=NULL,
         if(!hasName(simRecruitObs,"Month")){
           if(recSurveyMonth<caribouYearStart){
             simRecruitObs$Year = simRecruitObs$Year+1
-            simRecruitObs$Month = recSurveyMonth
-            simRecruitObs$Day = recSurveyDay
           }
+          simRecruitObs$Month = recSurveyMonth
+          simRecruitObs$Day = recSurveyDay
         }
       }  
     }
@@ -432,9 +433,9 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     if(!hasName(simRecruitObs,"Month")){
       if(recSurveyMonth<caribouYearStart){
         simRecruitObs$Year = simRecruitObs$Year+1
-        simRecruitObs$Month = recSurveyMonth
-        simRecruitObs$Day = recSurveyDay
       }
+      simRecruitObs$Month = recSurveyMonth
+      simRecruitObs$Day = recSurveyDay
     }
   }
   if(paramTable$obsYears==0){

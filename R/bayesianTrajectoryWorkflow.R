@@ -125,6 +125,7 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   }
 
   surv_data$StartTotal[is.na(surv_data$MortalitiesCertain)] = NA
+  
   surv_data <- setBbouNAs(surv_data)
   recruit_data <- setBbouNAs(recruit_data)
 
@@ -195,7 +196,7 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
             paste0(yrs_surv_missing, collapse = ", "), 
             call. = FALSE) 
   }
-  
+
   surv_data <- addMissingYears(surv_data,union(distYrs,surv_data$CaribouYear))
   
   #dups = table(subset(surv_data,select=c(Year,Month,PopulationName)))
