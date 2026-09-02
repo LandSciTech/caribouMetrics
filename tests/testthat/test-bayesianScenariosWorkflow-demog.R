@@ -86,6 +86,10 @@ test_that("Model and input trajectory match", {
   # devtools::load_all(path = "../caribouMetrics/")
   posteriorResult <- bayesianScenariosWorkflow(scns, simBig, niters = 3000,returnSamples=T)
 
+  #for(nn in union(names(simBig$surv_data),names(posteriorResult$out$result$surv_data))){
+  #  print(nn)
+  #  expect_identical(simBig$surv_data[[nn]],posteriorResult$out$result$surv_data[[nn]])
+  #}
   expect_identical(simBig$surv_data,posteriorResult$out$result$surv_data)
   
   posteriorResult$obs.all <- NULL

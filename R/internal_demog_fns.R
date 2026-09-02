@@ -668,7 +668,8 @@ convertBbouData<-function(dat,year_start=formals(bboutools::bb_fit_survival)$yea
     dat$newYr[dat$monthCheck<year_start]=
       dat$newYr[dat$monthCheck<year_start]+1
   }
-  dat$Year[is.na(dat$Year)] = dat$newYr[is.na(dat$Year)]
+  dat$Year = dat$newYr
+  dat$newYr = NULL; dat$monthCheck = NULL
   
   if(hasName(dat,"CaribouYear")){
     dat <- getCaribouYear(dat,year_start)
