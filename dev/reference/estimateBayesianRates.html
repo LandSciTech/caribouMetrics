@@ -150,11 +150,11 @@ if FALSE just the results summaries are returned.</p>
 <span class="r-in"><span><span class="va">r_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span>, <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_b.html" class="external-link">bbourecruit_b</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">estimateBayesianRates</span><span class="op">(</span><span class="va">s_data</span>, <span class="va">r_data</span>, N0 <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   PopulationName     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1              A 0.1985462 0.07699683  0.282433   20.12993   0.1752645</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2              B 0.2119856 0.09864731  0.282433   20.12993   0.1818023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.2230865 0.8814876 0.2330310 0.4941447   9.607457   0.8259736   0.9217952</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.2473221 0.9071070 0.2883885 0.4941447   9.607457   0.8500941   0.9463984</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1              A 0.1993004 0.07910869 0.2856726    17.7793   0.1747570</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2              B 0.2116354 0.10100295 0.2856726    17.7793   0.1787178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   R_bar_upper    S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.2248450 0.881993 0.2311713 0.4850703   10.30909   0.8265327   0.9211956</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.2449455 0.908352 0.2873973 0.4850703   10.30909   0.8525851   0.9471378</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 500          900         31          2047            27</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 500          519         18          1645            15</span>

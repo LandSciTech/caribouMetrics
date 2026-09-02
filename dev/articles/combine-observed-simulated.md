@@ -30,6 +30,7 @@ library(bboudata)
 library(bboutools)
 library(dplyr)
 library(ggplot2)
+library(patchwork)
 
 figWidth <- 8
 figHeight <- 10
