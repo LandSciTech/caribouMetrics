@@ -240,7 +240,14 @@ getN0Pars <- function(N0,popNames = NULL){
   if(setequal(class(N0),"numeric")|setequal(class(N0),"logical")){
     N0 <- data.frame(N0=N0)
     if(!is.null(popNames)){
-      N0 <- merge(N0, data.frame(PopulationName = popNames))
+      if(nrow(N0) == 1){
+        popNamesDf <- data.frame(PopulationName = popNames)
+        N0 <- merge(N0, popNamesDf)
+      } else if(nrow(N0)== length(popNames)){
+        N0$PopulationName = popNames
+      }else{
+        stop("N0 must have length one or the same as the PopulationNames")
+      }
     }
   }
   N0 <- as.data.frame(N0)
