@@ -116,7 +116,7 @@ bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4
       surv_data = oo$simSurvObs, recruit_data = oo$simRecruitObs,
       disturbance = oo$simDisturbance,
       priors = priors, startYear = oo$minYr, endYear = oo$maxYr,
-      N0 = cs$N0,niters=niters,nthin=nthin,returnSamples=returnSamples,...))
+      N0 = getN0Pars(cs),niters=niters,nthin=nthin,returnSamples=returnSamples,...))
 
     if (inherits(out, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out)

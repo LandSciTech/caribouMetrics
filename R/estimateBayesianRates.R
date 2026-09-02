@@ -1,8 +1,8 @@
 #' Create summary table of demographic rates from survival and recruitment surveys
 #'
-#' @param surv_data dataframe. Survival data in bboudata format
-#' @param recruit_data dataframe. Recruitment data in bboudata format
-#' @param N0 dataframe. Optional. Initial population estimates, required columns are PopulationName and N0
+#' @param surv_data dataframe. Survival data in bboudata format. 
+#' @param recruit_data dataframe. Recruitment data in bboudata format.
+#' @param N0 number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by [addN0Variation()].
 #' @param disturbance dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.
 #' @param priors list. Optional. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see `bboutools::bb_priors_survival` and `bboutools::bb_priors_recruitment` for details.
 #'               If disturbance is not NA, see `betaNationalPriors` for details.
@@ -30,25 +30,12 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   #shiny_progress = FALSE;return_mcmc=FALSE;i18n = NULL
   library(bboutools)
   
-  if(is.data.frame(N0)){
-    if(nrow(N0) == 1 & !hasName(N0, "PopulationName")){
-      N0 <- merge(N0, data.frame(PopulationName=unique(surv_data$PopulationName)))
-    } else if(!hasName(N0, "PopulationName")){
-      stop("N0 must contain PopulationName when it has multiple rows")
-    }
-    if(hasName(N0, "PopulationName")){
-      if(!setequal(unique(surv_data$PopulationName), N0$PopulationName)){
-        stop("N0$PopulationName does not match unique(surv_data$PopulationName)")
-      }
-    
-    }
-  }
-  if(is.numeric(N0) & length(N0)==1){
-    N0 <- expand.grid(PopulationName = unique(surv_data$PopulationName), N0 = N0)
-  }
+  N0 <- getN0Pars(N0,popNames=unique(surv_data$PopulationName))
+
   if(is.null(i18n)){
     i18n <- list(t = function(x)paste0(x))
   }
+
 
   # MCMC settings - (bboutools default: 1000 MCMC samples from 3 chains, number of )
   nc <- 3      # number of chains
@@ -78,9 +65,9 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     return(ret)
   }
   
-  surv_data$Month[is.na(surv_data$StartTotal)] <- NA
-  surv_data <- unique(surv_data)
-  
+  surv_data <- setBbouNAs(surv_data)
+  recruit_data <- setBbouNAs(recruit_data)
+
   if(length(unique(surv_data$Year))<5){
     stop("At least 5 years of survival data are needed to estimate interannual variation using bboutools")
   }
@@ -107,7 +94,6 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   }else{
     recruit_fit <- bboutools::bb_fit_recruitment(recruit_data, allow_missing = TRUE, quiet = TRUE, niters = niters, nthin = nthin, min_random_year=0, ...)
   }
-  
   surv_pred_bar <- bboutools::bb_predict_survival(surv_fit, year = FALSE, month = FALSE)
   rec_pred_bar <- bboutools::bb_predict_calf_cow_ratio(recruit_fit,year = FALSE)
 
@@ -205,7 +191,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   data_amt <- merge(surv_data_amt, recruit_data_amt)
   nr <- nrow(parTab)
   parTab = merge(parTab,N0)
-  if(nrow(parTab)>nr){stop("Unexpected columns in N0")}
+  if(nrow(parTab)>nr){stop("Unexpected rows in N0")}
   parTab = merge(parTab, data_amt)
 
   parList = list()

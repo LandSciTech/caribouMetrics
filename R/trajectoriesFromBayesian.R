@@ -51,23 +51,21 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   if(is.null(N0)){
     if(hasName(bayesianResults$parTab,"N0")){
       if(class(bayesianResults$parTab)=="list"){
-        N0 <- unique(subset(bayesianResults$parTab$N0,select=c(PopulationName,N0)))
+        N0 <- getN0Pars(bayesianResults$parTab$N0)
       }else{
-        N0 <- unique(subset(bayesianResults$parTab,select=c(PopulationName,N0)))
+        N0 <- getN0Pars(bayesianResults$parTab)
       }
     }else{
       N0 <- eval(formals(trajectoriesFromNational)$N0)
     }
   }
   
-  if(length(N0)==1){
-    if(class(bayesianResults$parTab) == "list"){
-      bayesianResults$parTab <- as.data.frame(bayesianResults$parTab)
-    }
-    N0 = merge(data.frame(N0=N0),
-               unique(subset(bayesianResults$parTab, select=c(PopulationName))))
-  }
+  Nuse <- getN0Pars(unique(N0),popNames = unique(bayesianResults$parTab$PopulationName))
   
+  if(nrow(Nuse)>length(unique(Nuse$PopulationName))){
+    stop("Expecting a single value or distribution of N0 for each population.")
+  }
+
   if(is.element("bboufit",class(bayesianResults$surv_fit))){
     nr <- dim(bayesianResults$surv_fit$samples$b0)[1]*dim(bayesianResults$surv_fit$samples$b0)[2]
   }else{
@@ -79,30 +77,10 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     nr <- dim(bayesianResults$surv_fit$samples[[1]])[1]*dim(bayesianResults$surv_fit$samples[[1]])[2]*length(bayesianResults$surv_fit$samples)/divBy
   }
   
-  Nnames <- intersect(c("N0","N.sd","N.lower","N.upper","PopulationName"),names(N0))
-  Nuse <- unique(subset(N0,select=Nnames))
-  if(!hasName(Nuse,"PopulationName")){
-    popNm <- unique(bayesianResults$parTab$PopulationName)
-    if(length(popNm) == 1){
-      Nuse$PopulationName <- popNm  
-    } else {
-      stop("When bbouResults$parTab contains multiple PopulationNames N0 must contain PopulationNames")
-    }
-  }
-  if(!hasName(Nuse, "N0")){stop("N0 must have a column named 'N0'")}
-  
   popInfo <- merge(data.frame(id=seq(1:nr/length(unique(Nuse$PopulationName)))),Nuse)
 
-  if(length(intersect(c("N.sd","N.lower"),names(Nuse)))>0){
-    #model variation in N0
-    popInfo$mean = popInfo$N0
-    if(hasName(popInfo,"N.sd")){popInfo$N0 = rnorm(nrow(popInfo),mean=popInfo$mean,sd=popInfo$N.sd)}
-    if(hasName(popInfo,"N.lower")){popInfo$N0=pmax(popInfo$N.lower,popInfo$N0)}
-    if(hasName(popInfo,"N.upper")){popInfo$N0=pmin(popInfo$N.upper,popInfo$N0)}
-    popInfo$N0 <- round(popInfo$N0)
-    popInfo <- subset(popInfo,select=setdiff(names(popInfo),c("mean","N.sd","N.lower","N.upper")))
-  }
-  
+  popInfo <- addN0Variation(popInfo)
+
   popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),ccPars$qMin,ccPars$qMax),w=ccPars$cowMult,
                                          u=runif(nrow(popInfo),ccPars$uMin,ccPars$uMax),
                                          z=runif(nrow(popInfo),ccPars$zMin,ccPars$zMax))
@@ -128,11 +106,11 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   }else{
     pi <- bayesianResults$parTab
   }
-  pi$R_bar=NULL;pi$S_bar=NULL;pi$N0=NULL
+  pi$R_bar=NULL;pi$S_bar=NULL;pi$N0=NULL; pi$N.sd=NULL; pi$N.lower=NULL; pi$N.upper=NULL
   pars <- merge(pars,pi)
   
   if(max(table(subset(pars,select=c("PopulationName","Year","id"))))>1){stop("Error in trajectoriesFromBayesian: trajectories are not uniquely id'd")}
-  
+
   if(doSummary){
     simBig <- prepareTrajectories(pars, returnSamples = returnSamples)
     

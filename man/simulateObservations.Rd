@@ -30,19 +30,19 @@ simulateObservations(
 If NULL the trajectory will be simulated from the national model.}
 
 \item{cowCounts}{data.frame. Optional. Number of cows counted in aerial
-surveys each year. If NULL, and \code{paramTable} contains \code{cowMult} the number
+surveys each caribou year. If NULL, and \code{paramTable} contains \code{cowMult} the number
 of cows that survive calving based on the collar data is multiplied by
 \code{cowMult} to determine the number of cows counted in aerial surveys. If
 \code{paramTable} does not contain \code{cowMult} \code{paramTable$cowCount} is used to
 set the number of cows counted in aerial surveys each year. If a data.frame
-is provided it must have columns "Year"  and "Cows".}
+is provided it must have columns "Year"  and "Cows". Note that the survey will done in the recSurveyMonth of the 12 month period that begins on the caribouYearStart month of the calendar year; if recSurveyMonth is < caribouYearStart then the survey for year X is done in calendar year X+1.}
 
 \item{freqStartsByYear}{data.frame. Optional. Number of collars deployed in
 each year. If NULL \code{paramTable$collarCount} is used as the target number of
 collars and each year that collars are deployed they will be topped up to
 this number. If a data.frame is provided it must have 2 columns "Year" and
 "numStarts" or "numTarget" (but not both). "numStarts" is the absolute number of collars deployed
-in that year, and "numTarget" is the target number of collars.}
+in that year, and "numTarget" is the target number of collars. Note that the year will be interpreted as the 12 month period that begins on the caribouYearStart month of the calendar year.}
 
 \item{collarNumYears}{integer. Number of years until collar falls off}
 
@@ -54,7 +54,7 @@ in that year, and "numTarget" is the target number of collars.}
 
 \item{caribouYearStart}{integer. The first month of the year for caribou.}
 
-\item{recSurveyMonth}{integer. The month of simulated recruitment surveys.}
+\item{recSurveyMonth}{integer. The month of simulated recruitment surveys. Note the survey is done in the recSurveyMonth of the 12 month period that begins on the caribouYearStart month of the calendar year; if recSurveyMonth is < caribouYearStart then the survey for year X is done in calendar year X+1.}
 
 \item{recSurveyDay}{integer. The day for simulated recruitment surveys.}
 

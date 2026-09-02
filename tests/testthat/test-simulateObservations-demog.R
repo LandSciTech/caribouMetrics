@@ -45,10 +45,11 @@ test_that("collarCount and cowCount behave", {
     pull(pass) %>% all %>% 
     expect_true()
   
+  plotSurvivalSeries(simObs2$simSurvObs)
   #When survival is annual, simulated survival data does not include months 1-3 of 2024. 
-  #But the 2024 recruitment survey occurs in March 2025.
+  #But the 2023 recruitment survey occurs in March 2024.
   expect_equal(scns2$curYear, simObs2$simSurvObs$Year %>% max())
-  expect_equal(scns2$curYear+1, max(simObs2$simRecruitObs$Year) - 1)
+  expect_equal(scns2$curYear+1, max(simObs2$simRecruitObs$Year))
   
   # cowMult can be one and recruitment is still simulated
   scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
@@ -71,7 +72,7 @@ test_that("Observed and simulated are combined and monthly data works", {
   #2024 that will be included in the 2023 caribou year (April 2023 to March
   #2024)
   expect_equal(scns10$curYear+1, simObs_mon$simSurvObs$Year %>% max())
-  expect_equal(scns10$curYear+1, max(simObs_mon$simRecruitObs$Year) - 1)
+  expect_equal(scns10$curYear+1, max(simObs_mon$simRecruitObs$Year))
   
   # should be different cow counts in simulated years
   expect_gt(simObs_mon$simRecruitObs %>% filter(Year < 2016) %>% pull(Cows) %>% mean, 
