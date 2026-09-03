@@ -120,20 +120,15 @@ Caribou demography functions:
 [`convertTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateTrajectoriesFromPosterior.md),
 [`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
-[`demographyDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographyDefaults.md),
-[`disturbanceDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/disturbanceDefaults.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
-[`monitoringDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/monitoringDefaults.md),
-[`nationalTrajectoryDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/nationalTrajectoryDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
 [`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.md),
 [`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
 [`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
-[`timeDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/timeDefaults.md),
 [`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
@@ -163,18 +158,18 @@ Caribou demography functions:
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
-#>   ..$ R_bar         : num 0.198
-#>   ..$ R_sd          : num 0.0854
-#>   ..$ R_iv_mean     : num 0.325
-#>   ..$ R_iv_shape    : num 15
-#>   ..$ R_bar_lower   : num 0.172
-#>   ..$ R_bar_upper   : num 0.225
-#>   ..$ S_bar         : num 0.87
-#>   ..$ S_sd          : num 0.164
-#>   ..$ S_iv_mean     : num 0.266
-#>   ..$ S_iv_shape    : num 1.46
-#>   ..$ S_bar_lower   : num 0.832
-#>   ..$ S_bar_upper   : num 0.905
+#>   ..$ R_bar         : num 0.199
+#>   ..$ R_sd          : num 0.0827
+#>   ..$ R_iv_mean     : num 0.321
+#>   ..$ R_iv_shape    : num 13.7
+#>   ..$ R_bar_lower   : num 0.175
+#>   ..$ R_bar_upper   : num 0.226
+#>   ..$ S_bar         : num 0.872
+#>   ..$ S_sd          : num 0.163
+#>   ..$ S_iv_mean     : num 0.318
+#>   ..$ S_iv_shape    : num 2.63
+#>   ..$ S_bar_lower   : num 0.835
+#>   ..$ S_bar_upper   : num 0.906
 #>   ..$ N0            : logi NA
 #>   ..$ nCollarYears  : num NA
 #>   ..$ nSurvYears    : int 32
