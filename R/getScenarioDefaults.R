@@ -1,6 +1,11 @@
 #' Default scenario parameters.
 #'
-#' Returns default parameters for scenarios. Use this function to get a combination of [disturbanceDefaults()], [timeDefaults()], [demographyDefaults()], [nationalTrajectoryDefaults()], and [monitoringDefaults()]. If only one of these sets of parameters is needed consider using the relevant component function instead.
+#' `getScenarioDefaults()`: Returns default parameters for scenarios. Use this function to get a
+#' combination of [disturbanceDefaults()], [timeDefaults()],
+#' [demographyDefaults()], [nationalTrajectoryDefaults()], and
+#' [monitoringDefaults()]. If only one of these sets of parameters is needed
+#' consider using the relevant component function instead.
+#' 
 #'
 #' @param paramTable a data.frame with column names matching the arguments below. Any
 #'   columns that are missing will be filled with the default values.
@@ -15,10 +20,11 @@
 #' @inheritParams caribouPopGrowth
 #' @inheritParams bayesianTrajectoryWorkflow
 #'
-#' @return a data.frame of parameter values including a label that combines all
+#' @return a data.frame of parameter values and for [getScenarioDefaults()], a label column that combines all
 #'   the parameter names and values into a string
 #' @export
 #' @family demography
+#' @rdname getScenarioDefaults
 #' @examples
 #' getScenarioDefaults()
 #'
@@ -63,7 +69,7 @@ getScenarioDefaults <- function(paramTable = NULL,
 
 #' Default parameters for specifying scenario durations.
 #'
-#' Returns default parameter values for scenario durations. 
+#' `timeDefaults():` Returns default parameter values for scenario durations. 
 #' See [simulateObservations()] for additional details.
 #'
 #' @param paramTable a data.frame with column names matching the arguments below. Any
@@ -75,10 +81,9 @@ getScenarioDefaults <- function(paramTable = NULL,
 #'   observation period and years after are part of the projection period.
 #' @param startYear year. First year in observation period. Optional, if not provided
 #'   it will be calculated from `curYear` and `obsYears`
-#'
-#' @return a data.frame of parameter values.
+#'   
 #' @export
-#' @family demography
+#' @rdname getScenarioDefaults
 #' @examples
 #' timeDefaults()
 #' 
@@ -97,7 +102,7 @@ timeDefaults <- function(paramTable = NULL,
 
 #' Default parameters for simulation of disturbance scenarios.
 #'
-#' Returns default parameter values for disturbance scenarios. 
+#' `disturbanceDefaults()`: Returns default parameter values for disturbance scenarios. 
 #' See [simulateObservations()] for additional details.
 #'
 #' @param paramTable a data.frame with column names matching the arguments below. Any
@@ -109,15 +114,11 @@ timeDefaults <- function(paramTable = NULL,
 #' @param projAnthroSlope number. Percent change in anthropogenic disturbance per year in
 #'   the projection period
 #' @inheritParams timeDefaults
-#'
-#' @return a data.frame of parameter values.
+#' 
 #' @export
-#' @family demography
+#' @rdname getScenarioDefaults
 #' @examples
 #' disturbanceDefaults()
-#'
-#' # paramTable list takes precedence over argument values
-#' disturbanceDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears = 1), obsYears = 5)
 #' 
 disturbanceDefaults <- function(paramTable = NULL,
                                 iFire = 0, iAnthro = 0, obsAnthroSlope = 2, projAnthroSlope = 2,...) {
@@ -127,7 +128,7 @@ disturbanceDefaults <- function(paramTable = NULL,
 
 #' Default parameters for simulating demographic trajectories.
 #'
-#' Returns default parameter values for simulating any type of demographic trajectories. 
+#' `demographyDefaults()`: Returns default parameter values for simulating any type of demographic trajectories. 
 #' See [trajectoriesFromNational()], [trajectoriesFromBayesian()], [trajectoriesFromSummary()] or [simulateObservations()] for additional details.
 #'
 #' @param paramTable a data.frame with column names matching the arguments below. Any
@@ -142,9 +143,9 @@ disturbanceDefaults <- function(paramTable = NULL,
 #' @param cowMult number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use `cowCount`.
 #' @param lQuantile number in 0, 1. Lambda quantile
 #' @param correlateRates logical. Set TRUE to force correlation between recruitment and survival.
-#' @return a data.frame of parameter values.
+#' 
 #' @export
-#' @family demography
+#' @rdname getScenarioDefaults
 #' @examples
 #' demographyDefaults()
 #' 
@@ -154,8 +155,8 @@ demographyDefaults <- function(paramTable = NULL,
 }
 
 #' Default parameters for simulating national demographic trajectories.
-#'
-#' Returns default parameter values for national demographic trajectories. 
+#' 
+#' `nationalTrajectoryDefaults()`: Returns default parameter values for national demographic trajectories. 
 #' See [trajectoriesFromNational()] and [simulateObservations()] for additional details.
 #'
 #' @param paramTable a data.frame with column names matching the arguments below. Any
@@ -165,9 +166,9 @@ demographyDefaults <- function(paramTable = NULL,
 #' @param sQuantile number in 0,1. Survival quantile.
 #' @param rQuantile number in 0,1. Recruitment quantile.
 #' @inheritParams demographyDefaults
-#' @return a data.frame of parameter values.
+#' 
 #' @export
-#' @family demography
+#' @rdname getScenarioDefaults
 #' @examples
 #' nationalTrajectoryDefaults()
 #' 
@@ -180,8 +181,9 @@ nationalTrajectoryDefaults <- function(paramTable = NULL,
 
 #' Default parameters for simulating monitoring.
 #'
-#' Returns default parameter values for monitoring. 
+#' `monitoringDefaults`: Returns default parameter values for monitoring. 
 #' See [simulateObservations()] and [bayesianScenariosWorkflow()] for additional details.
+#'
 #'
 #' @param paramTable a data.frame with column names matching the arguments below. Any
 #'   columns that are missing will be filled with the default values.
@@ -191,9 +193,9 @@ nationalTrajectoryDefaults <- function(paramTable = NULL,
 #' @param cowCount Optional. Only used in `bayesianScenariosWorkflow()` to set the number of cows per
 #'   year in recruitment survey
 #' @inheritParams demographyDefaults
-#' @return a data.frame of parameter values.
+#' 
 #' @export
-#' @family demography
+#' @rdname getScenarioDefaults
 #' @examples
 #' monitoringDefaults()
 #' 

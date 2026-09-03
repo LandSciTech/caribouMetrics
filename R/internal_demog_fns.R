@@ -200,9 +200,43 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
   return(popMetrics)
 }
 
-#TO DO: export and document.
-#add variation to N0 if specified. Use Poisson distribution if N.sd = mean^0.5, truncated normal otherwise
-#Note this variation in N0 should be added at the same point in the workflows that compositionBiasCorrection is called.
+
+
+#' Add variation to initial population size
+#'
+#' Applies stochastic variation to initial population size estimates (`N0`).
+#' If uncertainty columns are present, a new value of `N0` is sampled for each
+#' row. When `N.sd` is provided, variation is sampled from either a Poisson
+#' distribution (if `N.sd = sqrt(N0)`) or a truncated Normal distribution. When
+#' `N.lower` and `N.upper` are provided, variation is sampled from a Uniform
+#' distribution bounded by those values. Simulated values are rounded to
+#' integers and constrained to any specified lower and upper bounds.
+#'
+#' This function is intended to be called at the same stage of simulation and
+#' projection workflows as [compositionBiasCorrection()] so that uncertainty in
+#' abundance estimates is propagated through subsequent analyses.
+#'
+#' @param popInfo numeric, list, or data.frame. Initial population size
+#'   information. Must contain an `N0` column or value. Optional columns
+#'   `N.sd`, `N.lower`, and `N.upper` specify uncertainty in abundance
+#'   estimates.
+#' @param forceDataFrame logical. If `TRUE` and the result is numeric, return a
+#'   data frame with column `N0`. Default `FALSE`.
+#'
+#' @return A modified version of `popInfo` with updated `N0` values. If no
+#'   uncertainty columns are present, the input is returned unchanged.
+#'
+#' @examples
+#' addN0Variation(500)
+#'
+#' addN0Variation(data.frame(PopulationName = rep("A", 10),
+#'                           N0 = 500, N.sd = 50))
+#' 
+#' addN0Variation(data.frame(PopulationName = rep("A", 10),
+#'                           N0 = 500,
+#'                           N.lower = 400,
+#'                           N.upper = 600))
+#'
 #' @export
 addN0Variation<- function(popInfo,forceDataFrame=F) { 
   if(class(popInfo)=="list"){
