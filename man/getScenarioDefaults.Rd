@@ -2,6 +2,11 @@
 % Please edit documentation in R/getScenarioDefaults.R
 \name{getScenarioDefaults}
 \alias{getScenarioDefaults}
+\alias{timeDefaults}
+\alias{disturbanceDefaults}
+\alias{demographyDefaults}
+\alias{nationalTrajectoryDefaults}
+\alias{monitoringDefaults}
 \title{Default scenario parameters.}
 \usage{
 getScenarioDefaults(
@@ -11,6 +16,58 @@ getScenarioDefaults(
   includeDemography = T,
   includeNational = T,
   includeMonitoring = T,
+  ...
+)
+
+timeDefaults(
+  paramTable = NULL,
+  projYears = 35,
+  obsYears = 15,
+  preYears = 0,
+  curYear = 2023,
+  startYear = NA,
+  ...
+)
+
+disturbanceDefaults(
+  paramTable = NULL,
+  iFire = 0,
+  iAnthro = 0,
+  obsAnthroSlope = 2,
+  projAnthroSlope = 2,
+  ...
+)
+
+demographyDefaults(
+  paramTable = NULL,
+  N0 = 1000,
+  qMin = 0,
+  qMax = 0,
+  uMin = 0,
+  uMax = 0,
+  zMin = 0,
+  zMax = 0,
+  cowMult = 6,
+  lQuantile = NA,
+  correlateRates = F,
+  ...
+)
+
+nationalTrajectoryDefaults(
+  paramTable = NULL,
+  sQuantile = NA,
+  rQuantile = NA,
+  rSlopeMod = 1,
+  sSlopeMod = 1,
+  interannualVar = list(eval(formals(caribouPopGrowth)$interannualVar)),
+  ...
+)
+
+monitoringDefaults(
+  paramTable = NULL,
+  collarInterval = NA,
+  cowCount = NA,
+  collarCount = NA,
   ...
 )
 }
@@ -27,19 +84,112 @@ columns that are missing will be filled with the default values.}
 \item{includeNational}{logical. Include \code{\link[=nationalTrajectoryDefaults]{nationalTrajectoryDefaults()}}?}
 
 \item{includeMonitoring}{logical. Include \code{\link[=monitoringDefaults]{monitoringDefaults()}}?}
+
+\item{projYears}{Number of years of projections}
+
+\item{obsYears}{Number of years of observations}
+
+\item{preYears}{Number of years before monitoring begins}
+
+\item{curYear}{year. The current year. All years before are part of the
+observation period and years after are part of the projection period.}
+
+\item{startYear}{year. First year in observation period. Optional, if not provided
+it will be calculated from \code{curYear} and \code{obsYears}}
+
+\item{iFire}{number. Initial fire disturbance percentage.}
+
+\item{iAnthro}{number. Initial anthropogenic disturbance percentage}
+
+\item{obsAnthroSlope}{number. Percent change in anthropogenic disturbance per year in the
+observation period}
+
+\item{projAnthroSlope}{number. Percent change in anthropogenic disturbance per year in
+the projection period}
+
+\item{N0}{number. Initial number of adult females.}
+
+\item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
+
+\item{qMax}{number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.}
+
+\item{uMin}{number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.}
+
+\item{uMax}{number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.}
+
+\item{zMin}{number in 0, 1. Minimum probability of missing calves in composition survey.}
+
+\item{zMax}{number in 0, <1. Maximum probability of missing calves in composition survey.}
+
+\item{cowMult}{number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use \code{cowCount}.}
+
+\item{lQuantile}{number in 0, 1. Lambda quantile}
+
+\item{correlateRates}{logical. Set TRUE to force correlation between recruitment and survival.}
+
+\item{sQuantile}{number in 0,1. Survival quantile.}
+
+\item{rQuantile}{number in 0,1. Recruitment quantile.}
+
+\item{rSlopeMod}{number. Disturbance-recruitment slope multiplier}
+
+\item{sSlopeMod}{number. Disturbance-survival slope multiplier}
+
+\item{interannualVar}{list or logical. List containing interannual
+variability parameters. These can be either coefficients of variation
+(R_CV, S_CV), beta precision parameters (R_phi, S_phi),
+or random effects parameters from a logistic glmm (R_annual, S_annual).
+Set to \code{FALSE} to ignore interannual variability.}
+
+\item{collarInterval}{number. Optional. Number of years between collar deployments. If
+missing assumed to be every year}
+
+\item{cowCount}{Optional. Only used in \code{bayesianScenariosWorkflow()} to set the number of cows per
+year in recruitment survey}
+
+\item{collarCount}{number >= 1. The target number of collars active each year. Set to NA to use \code{freqStartsPerYear} in \code{simulateObservations()}}
 }
 \value{
-a data.frame of parameter values including a label that combines all
+a data.frame of parameter values and for \code{\link[=getScenarioDefaults]{getScenarioDefaults()}}, a label column that combines all
 the parameter names and values into a string
 }
 \description{
-Returns default parameters for scenarios. Use this function to get a combination of \code{\link[=disturbanceDefaults]{disturbanceDefaults()}}, \code{\link[=timeDefaults]{timeDefaults()}}, \code{\link[=demographyDefaults]{demographyDefaults()}}, \code{\link[=nationalTrajectoryDefaults]{nationalTrajectoryDefaults()}}, and \code{\link[=monitoringDefaults]{monitoringDefaults()}}. If only one of these sets of parameters is needed consider using the relevant component function instead.
+\code{getScenarioDefaults()}: Returns default parameters for scenarios. Use this function to get a
+combination of \code{\link[=disturbanceDefaults]{disturbanceDefaults()}}, \code{\link[=timeDefaults]{timeDefaults()}},
+\code{\link[=demographyDefaults]{demographyDefaults()}}, \code{\link[=nationalTrajectoryDefaults]{nationalTrajectoryDefaults()}}, and
+\code{\link[=monitoringDefaults]{monitoringDefaults()}}. If only one of these sets of parameters is needed
+consider using the relevant component function instead.
+
+\verb{timeDefaults():} Returns default parameter values for scenario durations.
+See \code{\link[=simulateObservations]{simulateObservations()}} for additional details.
+
+\code{disturbanceDefaults()}: Returns default parameter values for disturbance scenarios.
+See \code{\link[=simulateObservations]{simulateObservations()}} for additional details.
+
+\code{demographyDefaults()}: Returns default parameter values for simulating any type of demographic trajectories.
+See \code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}}, \code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}}, \code{\link[=trajectoriesFromSummary]{trajectoriesFromSummary()}} or \code{\link[=simulateObservations]{simulateObservations()}} for additional details.
+
+\code{nationalTrajectoryDefaults()}: Returns default parameter values for national demographic trajectories.
+See \code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}} and \code{\link[=simulateObservations]{simulateObservations()}} for additional details.
+
+\code{monitoringDefaults}: Returns default parameter values for monitoring.
+See \code{\link[=simulateObservations]{simulateObservations()}} and \code{\link[=bayesianScenariosWorkflow]{bayesianScenariosWorkflow()}} for additional details.
 }
 \examples{
 getScenarioDefaults()
 
 # paramTable list takes precedence over argument values
 getScenarioDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears = 1), obsYears = 5)
+
+timeDefaults()
+
+disturbanceDefaults()
+
+demographyDefaults()
+
+nationalTrajectoryDefaults()
+
+monitoringDefaults()
 
 }
 \seealso{
@@ -53,19 +203,14 @@ Caribou demography functions:
 \code{\link{convertTrajectories}()},
 \code{\link{dataFromSheets}()},
 \code{\link{demographicProjectionApp}()},
-\code{\link{demographyDefaults}()},
-\code{\link{disturbanceDefaults}()},
 \code{\link{estimateBayesianRates}()},
 \code{\link{estimateNationalRate}()},
 \code{\link{getNationalCoefficients}()},
-\code{\link{monitoringDefaults}()},
-\code{\link{nationalTrajectoryDefaults}()},
 \code{\link{plotCompareTrajectories}()},
 \code{\link{plotSurvivalSeries}()},
 \code{\link{plotTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
 \code{\link{simulateObservations}()},
-\code{\link{timeDefaults}()},
 \code{\link{trajectoriesFromBayesian}()},
 \code{\link{trajectoriesFromNational}()},
 \code{\link{trajectoriesFromSummary}()},

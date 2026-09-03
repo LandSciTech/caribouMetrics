@@ -28,7 +28,28 @@
 estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = NULL, priors = NULL, shiny_progress = FALSE,
                                 return_mcmc=FALSE,i18n = NULL, niters = formals(bboutools::bb_fit_survival)$niters, nthin = formals(bboutools::bb_fit_survival)$nthin,...){
   #shiny_progress = FALSE;return_mcmc=FALSE;i18n = NULL
-  library(bboutools)
+  
+  if(!is.null(disturbance)){
+    testTable(
+      disturbance,
+      req_col_names = c(
+        "Year",
+        "Anthro",
+        "Fire_excl_anthro"
+      )
+    )
+  }
+  
+  if(!is.null(priors) &&
+     !(all(c("priors_survival", "priors_recruitment") %in% names(priors))||
+     all(c("R_b0_mu", "R_b0_sd", "R_b1_mu", "R_b1_sd", "R_b2_mu",
+       "R_b2_sd", "R_cv_min", "R_cv_max", "S_b0_mu", "S_b0_sd",
+       "S_b1_mu", "S_b1_sd", "S_cv_min", "S_cv_max") %in% names(priors)))){
+    stop(
+      "priors is missing expected list elements",
+      call. = FALSE
+    )
+  }
   
   N0 <- getN0Pars(N0,popNames=unique(surv_data$PopulationName))
 
@@ -73,7 +94,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   }
   
   if(length(unique(recruit_data$Year))<5){
-    stop("At least 5 years of survival data are needed to estimate interannual variation using bboutools")
+    stop("At least 5 years of recruitment data are needed to estimate interannual variation using bboutools")
   }
   
   if(shiny_progress && !rlang::is_installed("shiny")){

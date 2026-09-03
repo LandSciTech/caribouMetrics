@@ -27,6 +27,10 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
                                      returnSamples = TRUE, doSummary = TRUE, ...){
   cPars <- demographyDefaults(cPars)
   
+  if(!hasName(bayesianResults, "surv_fit")|!hasName(bayesianResults, "recruit_fit")){
+    stop("bayesianResults must contain surv_fit and recruit_fit elements")
+  }
+  
   if(hasName(bayesianResults,"Anthro")){
     message("Anthro from bayesianResults")
     bayesianResults=list(parTab=bayesianResults)

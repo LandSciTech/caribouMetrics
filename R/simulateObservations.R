@@ -86,9 +86,39 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   #paramTable=cs;cowCounts=NULL;freqStartByYear=NULL; collarNumYears = ePars$collarNumYears
   #collarOffTime = ePars$collarOffTime; collarOnTime = ePars$collarOnTime;caribouYearStart=4; writeFileDir=NULL
 
-  if(nrow(paramTable) > 1){
-    stop("paramTable cannot have multiple rows", call. = FALSE)
+  testTable(
+    paramTable,
+    nrows = 1,
+    req_col_names = c(
+      "startYear",
+      "preYears",
+      "obsYears",
+      "projYears"
+    )
+  )
+  
+  if(!is.null(cowCounts)){
+    testTable(
+      cowCounts,
+      req_col_names = c("Year", "Cows")
+    )
   }
+  
+  if(!is.null(freqStartsByYear)){
+    testTable(
+      freqStartsByYear,
+      req_col_names = "Year",
+      or_col_names = c("numStarts", "numTarget")
+    )
+    
+    if(all(c("numStarts", "numTarget") %in% names(freqStartsByYear))){
+      stop(
+        "Specify numStarts or numTarget, but not both.",
+        call. = FALSE
+      )
+    }
+  }
+  
   
   includeTimes = seq((paramTable$startYear+paramTable$preYears),
                        (paramTable$startYear+paramTable$preYears+paramTable$obsYears)-1)
@@ -294,7 +324,6 @@ simulateObservations <- function(paramTable, trajectories=NULL,
                                     collarOnTime, caribouYearStart,topUp = T,forceMonths=forceMonths)
     } else {
       if(hasName(freqStartsByYear,"numTarget")){
-        if(hasName(freqStartsByYear,"numStarts")){stop("In freqStartsByYear, specify numTarget or numStarts, but not both.")}
         names(freqStartsByYear)[names(freqStartsByYear)=="numTarget"] = "numStarts"; topUp = T
       }else{
         topUp = F

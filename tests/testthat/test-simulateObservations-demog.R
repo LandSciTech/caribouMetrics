@@ -14,7 +14,7 @@ test_that("multiple scenarios not allowed",{
                                                                numStarts = 10),
                                  cowCounts = data.frame(Year = 2014:2023,
                                                         Cows = 10)),
-            "cannot have multiple rows")
+            "must have 1 rows")
 })
 
 # TODO: add test for non-default popGrow table should use testPopGrowTable
