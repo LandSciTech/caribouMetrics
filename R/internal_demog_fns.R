@@ -750,10 +750,10 @@ setBbouNAs <- function(dat,year_start=formals(bboutools::bb_fit_survival)$year_s
 #add missing years to bboutools formatted data.
 #' @export
 addMissingYears<- function(dat, addYears, year_start=formals(bboutools::bb_fit_recruitment)$year_start) {
+  #dat <- surv_data; addYears <- union(distYrs,surv_data$CaribouYear)
   dat <- getCaribouYear(dat,year_start)
   inNames <- names(dat)
-  dat$Annual <- as.factor(dat$CaribouYear)
-  levels(dat$Annual) <- sort(union(dat$CaribouYear,addYears))
+  dat$Annual <- factor(dat$CaribouYear,levels=sort(union(dat$CaribouYear,addYears)))
   dat <- convertBbouData(dat,year_start,StartTotalMissing=NA)
   rmNames <- setdiff(names(dat),inNames)
   for(rm in rmNames){
