@@ -449,10 +449,10 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
     summarise(StartTotal=sum(StartTotal,na.rm=T),MortalitiesCertain=sum(MortalitiesCertain,na.rm=T), survival=mean(survival,na.rm=T))
   simSurvs$Malfunctions = 0
   simSurvs$MortalitiesUncertain = 0
-  
-  #plot(plotSurvivalSeries(simSurvs)))
+
+  #plot(plotSurvivalSeries(simSurvs))
   if(topUp){
-    if(any(simSurvs$StartTotal>max(freqStartsByYear$numStarts))){stop("Error in simSurvivalData: too many collars")}
+    if(any(simSurvs$StartTotal>max(freqStartsByYear$numStart,na.rm=T))){stop("Error in simSurvivalData: too many collars")}
   }
   if(nrow(simSurvs)==0){
     stop("TO DO: deal with no sampling case")
