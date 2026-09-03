@@ -4,8 +4,6 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   #             req_vals = unique(surv_data$PopulationName))
   # }
   #Note: using bboutools to check and structure the data without fitting the models...0
-  library(bboutools)
-  
   surv_data <- setBbouNAs(surv_data)
   recruit_data <- setBbouNAs(recruit_data)
   

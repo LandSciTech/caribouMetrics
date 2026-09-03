@@ -579,7 +579,7 @@ testPopGrowthTable <- function(df) {
 #' @return throws an error if failed otherwise invisible NULL
 #'
 #' @noRd
-testTable <- function(df, req_col_names, or_col_names = NULL, req_vals = NULL, acc_vals = NULL){
+testTable <- function(df, req_col_names, or_col_names = NULL, req_vals = NULL, acc_vals = NULL, nrows = NULL){
   df_name <- deparse(substitute(df))
   missing_cols <- setdiff(req_col_names, colnames(df))
   if(length(missing_cols) > 0){
@@ -613,6 +613,12 @@ testTable <- function(df, req_col_names, or_col_names = NULL, req_vals = NULL, a
              paste0(x, collapse = ", "), call. = FALSE)
       }
     }, acc_vals, names(acc_vals))
+  }
+  
+  if(!is.null(nrows)){
+    if(nrow(df) != nrows){
+      stop(df_name, "must have ", nrows, " rows", call. = FALSE)
+    }
   }
   return(invisible(NULL))
 }

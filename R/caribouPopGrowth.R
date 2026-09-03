@@ -110,6 +110,8 @@ caribouPopGrowth <- function(N0,
     interannualVar = eval(parse(text=as.character(interannualVar)))
   }
   stopifnot(is.numeric(N0)|is.na(N0))
+  stopifnot(is.numeric(R_bar))
+  stopifnot(is.numeric(S_bar))
   
   rr=data.frame(N0=N0)
   

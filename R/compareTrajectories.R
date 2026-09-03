@@ -57,6 +57,11 @@ compareTrajectories <- function(caribouBayesDemogMod,
   }else{
     result <- caribouBayesDemogMod
   }
+  if(!hasName(result, "surv_data") | !hasName(result, "recruit_data") | !hasName(result, "summary") ){
+    stop("caribouBayesDemogMod must contain summary, surv_data, and recruit_data. ",
+         "Have you processed the model results with a trajectoriesFrom function?")
+  }
+  
   survInput <- result$surv_data
   recInput <- result$recruit_data
   distInput <- caribouBayesDemogMod$inData$disturbanceIn
