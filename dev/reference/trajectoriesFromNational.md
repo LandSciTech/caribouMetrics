@@ -32,10 +32,9 @@ trajectoriesFromNational(
 
 - N0:
 
-  Number or dataframe. Initial population size(s). If a data frame N0
-  column is required. Additional (optional) variation columns will be
-  used by
-  [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md).
+  Number or vector of numbers. Initial population size for one or more
+  sample populations. If NA then population growth rate is
+  \$\_t=S_t\*(1+cR_t)/s\$.
 
 - useQuantiles:
 

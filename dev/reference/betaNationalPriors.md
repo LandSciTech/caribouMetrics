@@ -112,8 +112,8 @@ betaNationalPriors(
 
 - cowMult:
 
-  number. The apparent number of adult females per collared animal in
-  composition survey.
+  number \>= 1. The apparent number of adult females per collared animal
+  in composition survey. Set to NA to use `cowCount`.
 
 - populationGrowthTable:
 

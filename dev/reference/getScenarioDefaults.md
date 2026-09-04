@@ -182,7 +182,9 @@ monitoringDefaults(
 
 - N0:
 
-  number. Initial number of adult females.
+  Number or vector of numbers. Initial population size for one or more
+  sample populations. If NA then population growth rate is
+  \$\_t=S_t\*(1+cR_t)/s\$.
 
 - qMin:
 
@@ -211,7 +213,7 @@ monitoringDefaults(
 
 - zMax:
 
-  number in 0, \<1. Maximum probability of missing calves in composition
+  number in 0, 1. Maximum probability of missing calves in composition
   survey.
 
 - cowMult:
