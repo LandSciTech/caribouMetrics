@@ -731,13 +731,29 @@ setBbouNAs <- function(dat,year_start=formals(bboutools::bb_fit_survival)$year_s
   
   if(hasName(dat,"StartTotal")){
     dat$Year[is.na(dat$StartTotal)] <- dat$CaribouYear[is.na(dat$StartTotal)]
-    dat$Month[is.na(dat$StartTotal)]<-NA;dat<-unique(dat)
+    naSet<- c('Month','MortalitiesCertain','MortalitiesUncertain')
+    for (n in naSet){
+      if(!hasName(dat,n)){
+        dat[[n]]<-NA
+      }else{
+        dat[[n]][is.na(dat$StartTotal)]<-NA
+      }
+    }
+    dat<-unique(dat)
     return(dat)
   }
   
-  if(hasName(dat,"Cows")){
-    dat$Year[is.na(dat$Cows)]<-dat$CaribouYear[is.na(dat$Cows)]
-    dat$Month[is.na(dat$Cows)]<-NA;dat$Day[is.na(dat$Cows)]<-NA;dat<-unique(dat)
+  if(hasName(dat,"Calves")){
+    dat$Year[is.na(dat$Calves)]<-dat$CaribouYear[is.na(dat$Calves)]
+    naSet <- c('Month', 'Day', 'Bulls', 'UnknownAdults', 'Yearlings', 'Cows')
+    for (n in naSet){
+      if(!hasName(dat,n)){
+        dat[[n]]<-NA
+      }else{
+        dat[[n]][is.na(dat$Calves)]<-NA
+      }
+    }
+    dat<-unique(dat)
     
     return(dat)
   }

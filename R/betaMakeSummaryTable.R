@@ -8,8 +8,22 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   recruit_data <- setBbouNAs(recruit_data)
   
   surv_fit_in <- bboutools::bb_fit_survival(surv_data, allow_missing = TRUE, quiet = TRUE, niters=0,min_random_year=0)
-  recruit_fit_in <- bboutools::bb_fit_recruitment(recruit_data, allow_missing = TRUE, quiet = TRUE, niters=0,min_random_year=0)
-
+  recruit_fit_in <- try(bboutools::bb_fit_recruitment(recruit_data, allow_missing = TRUE, quiet = TRUE, niters=0,min_random_year=0),silent=T)
+  #Work around known bboutools error for now. It occurs when there is a single recruitment survey in a calendar year that is also included as a missing caribou year (e.g. survey in Feb 2017, missing caribou year 2017)
+  if(length(intersect(class(recruit_fit_in),c("try-error")))>0){
+    if(grepl("inconsistent dimensionality provided for node 'PopulationName",recruit_fit_in,fixed=T)){
+      warning("working around bboutools error that occurs when there is a single recruitment survey in a calendar year that is also included as a missing caribou year")
+      rd=getCaribouYear(recruit_data)
+      rd$Annual = factor(rd$CaribouYear)
+      rd = subset(rd,!is.na(Cows))
+      rd$CowsBulls[!is.na(rd$Bulls)]<-rd$Cows[!is.na(rd$Bulls)]+rd$Bulls[!is.na(rd$Bulls)]
+      rd$PopulationName <- factor(rd$PopulationName)
+      recruit_fit_in = list(data=rd)
+    }else{
+      stop(recruit_fit_in)
+    }
+  }
+  
   surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb)
   
   recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb)
@@ -20,7 +34,14 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   parList$Recruitment <- subset(summaries,MetricTypeID=="Recruitment")
   parList$Survival <- subset(summaries,MetricTypeID=="Survival")
   parList$Rbar <- subset(summaries,MetricTypeID=="Rbar")
-  parList$Sbar <- subset(summaries,MetricTypeID=="Sbar")
+  #remove months
+  Sbar <- subset(summaries,MetricTypeID=="Sbar")
+  Sbar$Year=as.numeric(as.character(Sbar$Annual))
+  Sbar <- unique(Sbar)
+  if(max(table(Sbar$Annual))>length(unique(Sbar$PopulationName))){
+    stop("Not expecting more than one mean survival estimate for each year.")
+  }
+  parList$Sbar <- Sbar
   parList$Siv <- priors#subset(summaries,MetricTypeID=="sig.R")
   parList$Riv <- priors#subset(summaries,MetricTypeID=="sig.R")
   parList$type <- "beta"
@@ -155,7 +176,7 @@ model {
 }
 
 betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
-  data <- convertBbouData(rec_fit$data,StartTotalMissing=1)
+  data <- convertBbouData(rec_fit$data)
   data$CowsBulls[is.na(data$CowsBulls)]=0
   data$UnknownAdults[is.na(data$UnknownAdults)]=0
   data$Yearlings[is.na(data$Yearlings)]=0
