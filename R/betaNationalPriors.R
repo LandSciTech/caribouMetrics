@@ -40,8 +40,7 @@
 #'   composition survey.
 #' @param zMax number in 0, 1. Maximum probability of missing calves in
 #'   composition survey.
-#' @param cowMult number. The apparent number of adult females per collared
-#'   animal in composition survey.
+#' @param cowMult number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use `cowCount`.
 #' @inheritParams subsetNationalCoefs
 #' @inheritParams getNationalCoefficients
 #'

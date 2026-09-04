@@ -52,7 +52,10 @@ summarizeTrajectories:
 simulateTrajectoriesFromPosterior: a data frame with results from \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for each set of survival/recruitment predictions.
 }
 \description{
-Assumes that rec_pred and surv_pred each include the same years and populations.TO DO: check this.
+This function is used inside \code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}} to simulate
+trajectories from Bayesian model results.
+Assumes that rec_pred and surv_pred each include the same years and
+populations.
 }
 \examples{
 \donttest{

@@ -69,8 +69,7 @@ composition survey.}
 \item{zMax}{number in 0, 1. Maximum probability of missing calves in
 composition survey.}
 
-\item{cowMult}{number. The apparent number of adult females per collared
-animal in composition survey.}
+\item{cowMult}{number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use \code{cowCount}.}
 
 \item{populationGrowthTable}{data.frame.\link{popGrowthTableJohnsonECCC} is
 included in the package and should be used in most cases. A custom table of

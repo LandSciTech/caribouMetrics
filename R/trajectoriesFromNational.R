@@ -30,7 +30,7 @@ if(file.exists("results/simsInitial.rds")){
 #'   not overlap anthropogenic disturbance.
 #' @inheritParams getNationalCoefficients
 #' @inheritParams caribouPopGrowth
-#' @param N0 Number or dataframe. Initial population size(s). If a data frame N0 column is required. Additional (optional) variation columns will be used by [addN0Variation()].
+#' @inheritParams estimateBayesianRates
 #' @param cPars optional. Parameters for calculating composition survey bias term.
 #' @param doSummary logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth. 
 #'  If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.

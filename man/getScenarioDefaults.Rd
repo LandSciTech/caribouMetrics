@@ -110,19 +110,26 @@ observation period}
 \item{projAnthroSlope}{number. Percent change in anthropogenic disturbance per year in
 the projection period}
 
-\item{N0}{number. Initial number of adult females.}
+\item{N0}{Number or vector of numbers. Initial population size for one or
+more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
 
-\item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.}
+\item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition
+survey groups.}
 
-\item{qMax}{number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.}
+\item{qMax}{number in 0, 1. Maximum ratio of bulls to cows in composition
+survey groups.}
 
-\item{uMin}{number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.}
+\item{uMin}{number in 0, 1. Minimum probability of misidentifying young bulls
+as adult females and vice versa in composition survey.}
 
-\item{uMax}{number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.}
+\item{uMax}{number in 0, 1. Maximum probability of misidentifying young bulls
+as adult females and vice versa in composition survey.}
 
-\item{zMin}{number in 0, 1. Minimum probability of missing calves in composition survey.}
+\item{zMin}{number in 0, 1. Minimum probability of missing calves in
+composition survey.}
 
-\item{zMax}{number in 0, <1. Maximum probability of missing calves in composition survey.}
+\item{zMax}{number in 0, 1. Maximum probability of missing calves in
+composition survey.}
 
 \item{cowMult}{number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use \code{cowCount}.}
 

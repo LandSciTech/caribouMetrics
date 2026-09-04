@@ -133,14 +133,8 @@ disturbanceDefaults <- function(paramTable = NULL,
 #'
 #' @param paramTable a data.frame with column names matching the arguments below. Any
 #'   columns that are missing will be filled with the default values.
-#' @param N0 number. Initial number of adult females.
-#' @param qMin number in 0, 1. Minimum ratio of bulls to cows in composition survey groups.
-#' @param qMax number in 0, 1. Maximum ratio of bulls to cows in composition survey groups.
-#' @param uMin number in 0, 1. Minimum probability of misidentifying young bulls as adult females and vice versa in composition survey.
-#' @param uMax number in 0, 1. Maximum probability of misidentifying young bulls as adult females and vice versa in composition survey.
-#' @param zMin number in 0, 1. Minimum probability of missing calves in composition survey.
-#' @param zMax number in 0, <1. Maximum probability of missing calves in composition survey.
-#' @param cowMult number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use `cowCount`.
+#' @inheritParams estimateBayesianRates
+#' @inheritParams betaNationalPriors
 #' @param lQuantile number in 0, 1. Lambda quantile
 #' @param correlateRates logical. Set TRUE to force correlation between recruitment and survival.
 #' 
