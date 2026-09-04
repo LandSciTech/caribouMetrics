@@ -1,7 +1,9 @@
 # Format trajectory tables
 
-Assumes that rec_pred and surv_pred each include the same years and
-populations.TO DO: check this.
+This function is used inside
+[`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md)
+to simulate trajectories from Bayesian model results. Assumes that
+rec_pred and surv_pred each include the same years and populations.
 
 ## Usage
 

@@ -147,8 +147,8 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-in"><span>                          u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          approx <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.8682434 1.1020621 0.9840235 1.0338195 0.9633063 1.1698025 0.9598484</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 1.0783347 1.0007939 0.9752389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 1.016804 1.121289 1.005592 1.006625 1.218395 1.013871 1.016075 1.025766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] 1.175605 1.020403</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">compositionBiasCorrection</span><span class="op">(</span>w <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>                          q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.6</span><span class="op">)</span>,</span></span>
@@ -156,9 +156,9 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 <span class="r-in"><span>                          z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">nr</span>, <span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                          approx <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       w     m       v    sig2     mu</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6  1.11 0.007<span style="text-decoration: underline;">07</span> 0.005<span style="text-decoration: underline;">77</span> 0.097<span style="text-decoration: underline;">4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       w     m       v    sig2       mu</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     6 0.994 0.001<span style="text-decoration: underline;">79</span> 0.001<span style="text-decoration: underline;">81</span> -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">88</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
