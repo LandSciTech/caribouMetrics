@@ -40,14 +40,13 @@ bayesianTrajectoryWorkflow(
 
 - priors:
 
-  a list of model priors. If disturbance is NA, this should be
+  list. Optional. If disturbance is NA, this should be
   list(priors_survival=c(...),priors_recruitment=c(...)); see
   [`bboutools::bb_priors_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html)
   and
   [`bboutools::bb_priors_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html)
-  for details. If disturbance is not NA, see
-  [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md)
-  for details.
+  for details. If disturbance is not NA, see `betaNationalPriors` for
+  details.
 
 - startYear, endYear:
 
@@ -56,15 +55,16 @@ bayesianTrajectoryWorkflow(
 
 - N0:
 
-  Number or dataframe. Optional. Initial populations size. If NA
+  number or dataframe. Optional. Initial population size(s). If NA
   (default) then population growth rate is \$\_t=S_t\*(1+cR_t)/s\$. If a
-  data frame N0 column is required. Additional (optional) variation
-  columns will be used by
+  data frame N0 column is required, and PopulationName column is
+  required if there is more than one row. Additional (optional)
+  variation columns will be used by
   [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md).
 
 - returnSamples:
 
-  logical. If F returns only summaries. If T returns example
+  logical. If FALSE returns only summaries. If TRUE returns example
   trajectories.
 
 - inputList:
@@ -74,12 +74,19 @@ bayesianTrajectoryWorkflow(
 
 - niters:
 
-  A whole number of the number of iterations per chain after thinning
-  and burn-in.
+  integer. The number of iterations per chain after thinning and
+  burn-in.
 
 - nthin:
 
   integer. The number of the thinning rate.
+
+- ...:
+
+  Other parameters passed on to
+  [`bboutools::bb_fit_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  and
+  [`bboutools::bb_fit_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
 
 ## Value
 
@@ -160,18 +167,18 @@ Caribou demography functions:
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
-#>   ..$ R_bar         : num 0.198
-#>   ..$ R_sd          : num 0.0855
-#>   ..$ R_iv_mean     : num 0.316
-#>   ..$ R_iv_shape    : num 8.5
+#>   ..$ R_bar         : num 0.199
+#>   ..$ R_sd          : num 0.0866
+#>   ..$ R_iv_mean     : num 0.323
+#>   ..$ R_iv_shape    : num 14.7
 #>   ..$ R_bar_lower   : num 0.172
-#>   ..$ R_bar_upper   : num 0.225
-#>   ..$ S_bar         : num 0.871
-#>   ..$ S_sd          : num 0.166
-#>   ..$ S_iv_mean     : num 0.32
-#>   ..$ S_iv_shape    : num 2.66
-#>   ..$ S_bar_lower   : num 0.833
-#>   ..$ S_bar_upper   : num 0.906
+#>   ..$ R_bar_upper   : num 0.227
+#>   ..$ S_bar         : num 0.872
+#>   ..$ S_sd          : num 0.173
+#>   ..$ S_iv_mean     : num 0.333
+#>   ..$ S_iv_shape    : num 3.18
+#>   ..$ S_bar_lower   : num 0.834
+#>   ..$ S_bar_upper   : num 0.908
 #>   ..$ N0            : logi NA
 #>   ..$ nCollarYears  : num NA
 #>   ..$ nSurvYears    : int 32

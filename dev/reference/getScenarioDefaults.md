@@ -133,6 +133,13 @@ monitoringDefaults(
 
   logical. Include `monitoringDefaults()`?
 
+- ...:
+
+  Other parameters passed on to
+  [`bboutools::bb_fit_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  and
+  [`bboutools::bb_fit_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
+
 - projYears:
 
   Number of years of projections

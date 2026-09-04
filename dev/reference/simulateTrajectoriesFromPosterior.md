@@ -1,12 +1,5 @@
 # Format trajectory tables
 
-Format trajectory tables
-
-Get 95% prediction intervals from trajectories
-
-Get a set of simulation results from fitted demographic models in raw
-form
-
 Assumes that rec_pred and surv_pred each include the same years and
 populations.TO DO: check this.
 

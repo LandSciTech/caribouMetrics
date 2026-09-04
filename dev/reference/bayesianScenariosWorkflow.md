@@ -58,19 +58,18 @@ bayesianScenariosWorkflow(
 
 - priors:
 
-  a list of model priors. If disturbance is NA, this should be
+  list. Optional. If disturbance is NA, this should be
   list(priors_survival=c(...),priors_recruitment=c(...)); see
   [`bboutools::bb_priors_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html)
   and
   [`bboutools::bb_priors_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html)
-  for details. If disturbance is not NA, see
-  [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md)
-  for details.
+  for details. If disturbance is not NA, see `betaNationalPriors` for
+  details.
 
 - niters:
 
-  A whole number of the number of iterations per chain after thinning
-  and burn-in.
+  integer. The number of iterations per chain after thinning and
+  burn-in.
 
 - nthin:
 
@@ -80,6 +79,13 @@ bayesianScenariosWorkflow(
 
   logical. Optional. If true, return full results from
   [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md).
+
+- ...:
+
+  Other parameters passed on to
+  [`bboutools::bb_fit_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  and
+  [`bboutools::bb_fit_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
 
 ## Value
 
