@@ -35,17 +35,19 @@ test_that("can specify multiple disturbance scenarios", {
 })
 
 test_that("get samples by default and projects over time when Year supplied",{
-  disturbance <- data.frame(Anthro = 40, Fire_excl_anthro = 2)
+  disturbance <- data.frame(Anthro = 20, Fire_excl_anthro = 2)
   disturbance <-  data.frame(step = 0:4) %>% bind_cols(disturbance) %>% 
     mutate(Anthro = Anthro + 10 * step, 
            Year = step * 10+2000)
   
+  N0in <- data.frame(N0 = 1000, N.lower = 100, N.upper = 2000)
+  
   wDist <- trajectoriesFromNational(disturbance = disturbance, replicates = 35, 
                                     interannualVar = FALSE, useQuantiles = TRUE,
-                                    N0 = 100, numSteps = 10)
+                                    N0 = N0in, numSteps = 10)
   expect_named(wDist, c("summary", "samples"))
   
-  if(F&interactive()){
+  if(interactive()){
     proj <- ggplot(data = wDist$samples, aes(x = Timestep, y = Amount, colour = Replicate,
                                              group = Replicate)) +
       geom_line() +
@@ -54,4 +56,13 @@ test_that("get samples by default and projects over time when Year supplied",{
       theme(legend.position = "none")
     proj
   }
-})
+  
+  wDistN0 <- trajectoriesFromNational(disturbance = disturbance, replicates = 35, 
+                                    interannualVar = FALSE, useQuantiles = TRUE,
+                                    N0 = N0in, numSteps = 10, doSummary = FALSE)
+  
+  testN0 <- wDistN0 %>% filter(Year == 2000) %>% pull(N0) %>% n_distinct()
+  expect_gt(testN0, 1)
+ })
+
+

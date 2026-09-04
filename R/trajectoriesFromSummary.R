@@ -24,6 +24,10 @@ trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv,
 
   # TO DO:
   # See https://github.com/LandSciTech/caribouMetrics/issues/146
+  testTable(Rbar, req_col_names = c("PopulationName", "Annual", "Year", "mean", "sd"))
+  testTable(Riv, req_col_names = c("R_iv_mean", "R_iv_shape"))
+  testTable(Sbar, req_col_names = c("PopulationName", "Annual", "Year", "mean", "sd"))
+  testTable(Siv, req_col_names = c("S_iv_mean", "S_iv_shape"))
   
   if(type=="beta"){
     results <- ratesFromBetaSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists)

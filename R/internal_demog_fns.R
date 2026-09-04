@@ -226,6 +226,7 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
 #' @return A modified version of `popInfo` with updated `N0` values. If no
 #'   uncertainty columns are present, the input is returned unchanged.
 #'
+#' @family demography
 #' @examples
 #' addN0Variation(500)
 #'

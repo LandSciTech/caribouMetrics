@@ -52,13 +52,10 @@ summarizeTrajectories:
 simulateTrajectoriesFromPosterior: a data frame with results from \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for each set of survival/recruitment predictions.
 }
 \description{
-Format trajectory tables
-
-Get 95\% prediction intervals from trajectories
-
-Get a set of simulation results from fitted demographic models in raw form
-
-Assumes that rec_pred and surv_pred each include the same years and populations.TO DO: check this.
+This function is used inside \code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}} to simulate
+trajectories from Bayesian model results.
+Assumes that rec_pred and surv_pred each include the same years and
+populations.
 }
 \examples{
 \donttest{
@@ -81,6 +78,7 @@ Assumes that rec_pred and surv_pred each include the same years and populations.
 }
 \seealso{
 Caribou demography functions:
+\code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
 \code{\link{betaNationalPriors}()},
@@ -104,6 +102,7 @@ Caribou demography functions:
 \code{\link{trajectoriesFromSummaryForApp}()}
 
 Caribou demography functions:
+\code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
 \code{\link{betaNationalPriors}()},

@@ -76,6 +76,7 @@ trajectoriesFromNational()
 }
 \seealso{
 Caribou demography functions:
+\code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
 \code{\link{betaNationalPriors}()},

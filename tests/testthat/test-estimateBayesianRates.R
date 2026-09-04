@@ -12,13 +12,11 @@ test_that("multipop works", {
 test_that("No survival works", {
   
   s_data <- s_data %>% 
-    mutate(MortalitiesCertain = ifelse(Year > 2013, StartTotal, MortalitiesCertain))%>% 
-    filter(PopulationName == "A")
+    mutate(MortalitiesCertain = ifelse(Year > 2013, StartTotal, MortalitiesCertain))
   
   r_data <- r_data %>% 
     mutate(Cows = ifelse(Year > 2013, 0, Cows),
-           Calves = ifelse(Year > 2013, 0, Calves)) %>% 
-    filter(PopulationName == "A")
+           Calves = ifelse(Year > 2013, 0, Calves)) 
   
   lowRates <- estimateBayesianRates(s_data, r_data, N0 = 500, niters = 20, return_mcmc = TRUE)
   

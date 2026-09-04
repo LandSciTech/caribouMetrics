@@ -32,14 +32,17 @@ bayesianScenariosWorkflow(
 \item{printProgress}{logical. Should the scenario number and parameters be
 printed at each step?}
 
-\item{priors}{a list of model priors. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see \code{bboutools::bb_priors_survival} and \code{bboutools::bb_priors_recruitment} for details.
-If disturbance is not NA, see \code{\link[=betaNationalPriors]{betaNationalPriors()}} for details.}
+\item{priors}{list. Optional. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see \code{bboutools::bb_priors_survival} and \code{bboutools::bb_priors_recruitment} for details.
+If disturbance is not NA, see \code{betaNationalPriors} for details.}
 
-\item{niters}{A whole number of the number of iterations per chain after thinning and burn-in.}
+\item{niters}{integer. The number of iterations per chain after thinning and burn-in.}
 
 \item{nthin}{integer. The number of the thinning rate.}
 
 \item{returnSamples}{logical. Optional. If true, return full results from \code{\link[=bayesianTrajectoryWorkflow]{bayesianTrajectoryWorkflow()}}.}
+
+\item{...}{Other parameters passed on to \code{bboutools::bb_fit_survival} and
+\code{bboutools::bb_fit_recruitment}.}
 }
 \value{
 A list similar to \code{\link[=compareTrajectories]{compareTrajectories()}} where tables for each scenario
@@ -65,6 +68,7 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 }
 \seealso{
 Caribou demography functions:
+\code{\link{addN0Variation}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
 \code{\link{betaNationalPriors}()},
 \code{\link{caribouPopGrowth}()},

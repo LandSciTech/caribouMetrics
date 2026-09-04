@@ -45,3 +45,29 @@ addN0Variation(data.frame(PopulationName = rep("A", 10),
                           N.upper = 600))
 
 }
+\seealso{
+Caribou demography functions:
+\code{\link{bayesianScenariosWorkflow}()},
+\code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{betaNationalPriors}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{compareTrajectories}()},
+\code{\link{compositionBiasCorrection}()},
+\code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{estimateBayesianRates}()},
+\code{\link{estimateNationalRate}()},
+\code{\link{getNationalCoefficients}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{plotCompareTrajectories}()},
+\code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
+\code{\link{popGrowthTableJohnsonECCC}},
+\code{\link{simulateObservations}()},
+\code{\link{trajectoriesFromBayesian}()},
+\code{\link{trajectoriesFromNational}()},
+\code{\link{trajectoriesFromSummary}()},
+\code{\link{trajectoriesFromSummaryForApp}()}
+}
+\concept{demography}

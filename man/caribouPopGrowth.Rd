@@ -136,6 +136,7 @@ Applications, 33(3), p.e2816. \url{https://doi.org/10.1002/eap.2816}
 }
 \seealso{
 Caribou demography functions:
+\code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
 \code{\link{betaNationalPriors}()},

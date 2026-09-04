@@ -145,6 +145,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 models from national demographic-disturbance relationships.
 
 Caribou demography functions:
+\code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
 \code{\link{caribouPopGrowth}()},

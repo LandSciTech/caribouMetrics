@@ -1,6 +1,9 @@
 #' Get a set of simulation results from fitted demographic models in raw form
-#'  
-#' Assumes that rec_pred and surv_pred each include the same years and populations.TO DO: check this.
+#'
+#' This function is used inside [`trajectoriesFromBayesian()`] to simulate
+#' trajectories from Bayesian model results.
+#' Assumes that rec_pred and surv_pred each include the same years and
+#' populations.
 #' @param popInfo If NA (default) predictions are made without populations size, density dependence, or demographic stochasticity. See [caribouPopGrowth()] for details.
 #' @param rec_pred results returned by [bb_fit_recruitment()] or [bb_predict_calf_cow_ratio()] functions of bboutools R package, or recruit_fit returned by [estimateBayesianRates()].
 #' @param surv_pred bboufit object return by [bb_fit_survival()] or [bb_predict_survival()] functions of bboutools R package, or surv_fit returned by [estimateBayesianRates()].
@@ -33,11 +36,28 @@
 #' 
 #'
 simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, initYear=NULL,correlateRates=FALSE,returnExpected=FALSE,c=formals(caribouPopGrowth)$c,K=FALSE,...) {
-  #TO DO: checks to ensure assumptions about form of rec_pred and surv_pred are correct
 
+  if(!hasName(surv_pred, "data")){
+    stop("surv_pred must have an element called 'data'")
+  }
+  if(!hasName(rec_pred, "data")){
+    stop("rec_pred must have an element called 'data'")
+  }
+  
+  testTable(surv_pred$data, req_col_names = c("Annual", "PopulationName"))
+  testTable(rec_pred$data, req_col_names = c("Annual", "PopulationName"))
+  
   inyears<-unique(c(levels(rec_pred$data$Annual),levels(surv_pred$data$Annual)))
   if(!is.null(initYear)){
     inyears<-inyears[inyears>=initYear]
+  }
+  
+  if(length(setdiff(levels(rec_pred$data$Annual), levels(surv_pred$data$Annual))) > 0){
+    stop("rec_pred and surv_pred must contain the same years")
+  }
+  
+  if(length(setdiff(unique(rec_pred$data$PopulationName), unique(surv_pred$data$PopulationName))) > 0){
+    stop("rec_pred and surv_pred must contain the same PopulationNames")
   }
   
   if(returnExpected&&(is.element("bboufit",class(rec_pred))!=is.element("bboufit",class(surv_pred)))){
@@ -80,6 +100,13 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
 
   S_lookup = unique(subset(data_sur,select=c(Annual,PopulationName)))
   R_lookup =  unique(subset(data_rec,select=c(Annual,PopulationName)))
+  
+  if(!hasName(surv_pred, "samples")){
+    stop("surv_pred must have an element called 'samples'")
+  }
+  if(!hasName(rec_pred, "samples")){
+    stop("rec_pred must have an element called 'samples'")
+  }
   
   if(class(surv_pred$samples)=="mcmc.list"){
     nns <- colnames(surv_pred$samples[[1]])
