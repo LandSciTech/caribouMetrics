@@ -81,6 +81,7 @@ Assumes that rec_pred and surv_pred each include the same years and populations.
 }
 \seealso{
 Caribou demography functions:
+\code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
 \code{\link{betaNationalPriors}()},
@@ -104,6 +105,7 @@ Caribou demography functions:
 \code{\link{trajectoriesFromSummaryForApp}()}
 
 Caribou demography functions:
+\code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
 \code{\link{betaNationalPriors}()},

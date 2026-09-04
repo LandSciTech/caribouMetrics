@@ -36,6 +36,7 @@ dataFromSheets("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIb
 }
 \seealso{
 Caribou demography functions:
+\code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
 \code{\link{betaNationalPriors}()},
