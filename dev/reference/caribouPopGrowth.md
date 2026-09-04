@@ -182,6 +182,7 @@ Ecological Applications, 33(3), p.e2816.
 ## See also
 
 Caribou demography functions:
+[`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
 [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md),
@@ -208,8 +209,8 @@ Caribou demography functions:
 
 ``` r
 caribouPopGrowth(100, 2, 0.5, 0.7)
-#>    N0    lambda lambdaE  N       R_t      X_t       S_t n_recruits
-#> 1 100 0.9165151   0.875 84 0.3683421 0.184171 0.7955247         14
+#>    N0    lambda lambdaE  N       R_t        X_t       S_t n_recruits
+#> 1 100 0.8062258   0.875 65 0.1088226 0.05441128 0.6475308          4
 #>   surviving_adFemales
-#> 1                  70
+#> 1                  61
 ```

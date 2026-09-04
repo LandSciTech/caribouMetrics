@@ -34,7 +34,8 @@ trajectoriesFromNational(
 
   Number or dataframe. Initial population size(s). If a data frame N0
   column is required. Additional (optional) variation columns will be
-  used by `addN0Variation()`.
+  used by
+  [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md).
 
 - useQuantiles:
 
@@ -101,6 +102,7 @@ Output from caribouPopGrowth function.
 ## See also
 
 Caribou demography functions:
+[`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
 [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md),
@@ -130,309 +132,309 @@ trajectoriesFromNational()
 #> Using saved object
 #> $summary
 #>     MetricTypeID PopulationName AnthroID Fire_excl_anthroID       Mean
-#> 102         Rbar       National       34                  0 0.19715205
-#> 103         Rbar       National       11                  0 0.29384298
-#> 104         Rbar       National       19                  0 0.26020345
-#> 105         Rbar       National       13                  0 0.28587543
-#> 106         Rbar       National       12                  0 0.29352524
-#> 107         Rbar       National       35                  0 0.19981547
-#> 108         Rbar       National       23                  0 0.23812885
-#> 109         Rbar       National       17                  0 0.27238762
-#> 110         Rbar       National       22                  0 0.24740974
-#> 111         Rbar       National       16                  0 0.27923127
-#> 112         Rbar       National       10                  0 0.30460521
-#> 113         Rbar       National       21                  0 0.25048103
-#> 114         Rbar       National        9                  0 0.29994172
-#> 115         Rbar       National       20                  0 0.25613889
-#> 116         Rbar       National       14                  0 0.28543256
-#> 117         Rbar       National       25                  0 0.23795170
-#> 118         Rbar       National       36                  0 0.19390615
-#> 119         Rbar       National       24                  0 0.24054476
-#> 120         Rbar       National       18                  0 0.27072782
-#> 121         Rbar       National        6                  0 0.32886923
-#> 122         Rbar       National        0                  0 0.35859953
-#> 123         Rbar       National       51                  0 0.15263999
-#> 124         Rbar       National       62                  0 0.12871051
-#> 125         Rbar       National       33                  0 0.20861290
-#> 126         Rbar       National        4                  0 0.34081365
-#> 127         Rbar       National       15                  0 0.28085796
-#> 128         Rbar       National       26                  0 0.22830401
-#> 129         Rbar       National       37                  0 0.19377823
-#> 130         Rbar       National        8                  0 0.31179668
-#> 131         Rbar       National       59                  0 0.13281256
-#> 132         Rbar       National        7                  0 0.32326174
-#> 133         Rbar       National        1                  0 0.35069840
-#> 134         Rbar       National       52                  0 0.15172385
-#> 135         Rbar       National       63                  0 0.12356999
-#> 136         Rbar       National       74                  0 0.10447088
-#> 137         Rbar       National        5                  0 0.32848145
-#> 138         Rbar       National       56                  0 0.13973520
-#> 139         Rbar       National       27                  0 0.22645870
-#> 140         Rbar       National       38                  0 0.18790029
-#> 141         Rbar       National       49                  0 0.16072318
-#> 142         Rbar       National       60                  0 0.13315700
-#> 143         Rbar       National       31                  0 0.20945482
-#> 144         Rbar       National        2                  0 0.34510469
-#> 145         Rbar       National       53                  0 0.15095665
-#> 146         Rbar       National       64                  0 0.12278271
-#> 147         Rbar       National       75                  0 0.10011939
-#> 148         Rbar       National       46                  0 0.16305442
-#> 149         Rbar       National       57                  0 0.14051947
-#> 150         Rbar       National       28                  0 0.22361159
-#> 151         Rbar       National       39                  0 0.19132343
-#> 152         Rbar       National       50                  0 0.15596985
-#> 153         Rbar       National       61                  0 0.12715806
-#> 154         Rbar       National       32                  0 0.20646701
-#> 155         Rbar       National        3                  0 0.34035109
-#> 156         Rbar       National       54                  0 0.14401198
-#> 157         Rbar       National       65                  0 0.11682856
-#> 158         Rbar       National       76                  0 0.10031157
-#> 159         Rbar       National       47                  0 0.16168587
-#> 160         Rbar       National       58                  0 0.13997562
-#> 161         Rbar       National       29                  0 0.22287608
-#> 162         Rbar       National       40                  0 0.18574366
-#> 163         Rbar       National       91                  0 0.07753010
-#> 164         Rbar       National       45                  0 0.16918074
-#> 165         Rbar       National       73                  0 0.10046546
-#> 166         Rbar       National       44                  0 0.16953365
-#> 167         Rbar       National       55                  0 0.14268009
-#> 168         Rbar       National       66                  0 0.12191446
-#> 169         Rbar       National       77                  0 0.09846864
-#> 170         Rbar       National       48                  0 0.15639504
-#> 171         Rbar       National       99                  0 0.06678138
-#> 172         Rbar       National       30                  0 0.21570520
-#> 173         Rbar       National       41                  0 0.18099022
-#> 174         Rbar       National       92                  0 0.07857947
-#> 175         Rbar       National       86                  0 0.08320832
-#> 176         Rbar       National       97                  0 0.07149196
-#> 177         Rbar       National       68                  0 0.10962357
-#> 178         Rbar       National       96                  0 0.07384024
-#> 179         Rbar       National       67                  0 0.11609121
-#> 180         Rbar       National       78                  0 0.09722523
-#> 181         Rbar       National       89                  0 0.07884543
-#> 182         Rbar       National      100                  0 0.07100258
-#> 183         Rbar       National       71                  0 0.10780396
-#> 184         Rbar       National       42                  0 0.17560870
-#> 185         Rbar       National       93                  0 0.07762036
-#> 186         Rbar       National       87                  0 0.08499373
-#> 187         Rbar       National       98                  0 0.07050429
-#> 188         Rbar       National       69                  0 0.11006043
-#> 189         Rbar       National       80                  0 0.09216405
-#> 190         Rbar       National       72                  0 0.10617975
-#> 191         Rbar       National       79                  0 0.09597910
-#> 192         Rbar       National       90                  0 0.08154978
-#> 193         Rbar       National       84                  0 0.09032017
-#> 194         Rbar       National       82                  0 0.09363668
-#> 195         Rbar       National       43                  0 0.17723460
-#> 196         Rbar       National       94                  0 0.07399314
-#> 197         Rbar       National       88                  0 0.08282452
-#> 198         Rbar       National       70                  0 0.10907873
-#> 199         Rbar       National       81                  0 0.08920367
-#> 200         Rbar       National       83                  0 0.09015291
-#> 201         Rbar       National       95                  0 0.07433224
-#> 202         Rbar       National       85                  0 0.08269561
-#> 203         Sbar       National       11                  0 0.86959052
-#> 204         Sbar       National       23                  0 0.85782504
-#> 205         Sbar       National       12                  0 0.86626768
-#> 206         Sbar       National       10                  0 0.87006461
-#> 207         Sbar       National        0                  0 0.87652811
-#> 208         Sbar       National       15                  0 0.86585499
-#> 209         Sbar       National       22                  0 0.86064162
-#> 210         Sbar       National       14                  0 0.86616255
-#> 211         Sbar       National       25                  0 0.85971863
-#> 212         Sbar       National       13                  0 0.86702559
-#> 213         Sbar       National       24                  0 0.86107795
-#> 214         Sbar       National        1                  0 0.87716849
-#> 215         Sbar       National       52                  0 0.83970766
-#> 216         Sbar       National       63                  0 0.83280422
-#> 217         Sbar       National       51                  0 0.84061875
-#> 218         Sbar       National        5                  0 0.87431637
-#> 219         Sbar       National       16                  0 0.86762266
-#> 220         Sbar       National       27                  0 0.85764237
-#> 221         Sbar       National       38                  0 0.84861362
-#> 222         Sbar       National       26                  0 0.85826609
-#> 223         Sbar       National       20                  0 0.85989260
-#> 224         Sbar       National        8                  0 0.86749951
-#> 225         Sbar       National        2                  0 0.87487982
-#> 226         Sbar       National       53                  0 0.84030395
-#> 227         Sbar       National       64                  0 0.83333662
-#> 228         Sbar       National       35                  0 0.85129778
-#> 229         Sbar       National        6                  0 0.87093718
-#> 230         Sbar       National       17                  0 0.86414805
-#> 231         Sbar       National       28                  0 0.85785042
-#> 232         Sbar       National       39                  0 0.84789133
-#> 233         Sbar       National       50                  0 0.83863645
-#> 234         Sbar       National       21                  0 0.86224739
-#> 235         Sbar       National        9                  0 0.86953062
-#> 236         Sbar       National        3                  0 0.87511165
-#> 237         Sbar       National       54                  0 0.83768233
-#> 238         Sbar       National       65                  0 0.82974713
-#> 239         Sbar       National       36                  0 0.84848279
-#> 240         Sbar       National        7                  0 0.87052324
-#> 241         Sbar       National       18                  0 0.86156783
-#> 242         Sbar       National       29                  0 0.85518272
-#> 243         Sbar       National       40                  0 0.84661647
-#> 244         Sbar       National       91                  0 0.81420218
-#> 245         Sbar       National       62                  0 0.83409038
-#> 246         Sbar       National       33                  0 0.85044810
-#> 247         Sbar       National        4                  0 0.87480393
-#> 248         Sbar       National       55                  0 0.83716387
-#> 249         Sbar       National       66                  0 0.83011158
-#> 250         Sbar       National       37                  0 0.85235902
-#> 251         Sbar       National       48                  0 0.84191453
-#> 252         Sbar       National       19                  0 0.86411054
-#> 253         Sbar       National       30                  0 0.85384034
-#> 254         Sbar       National       41                  0 0.84436923
-#> 255         Sbar       National       92                  0 0.81300063
-#> 256         Sbar       National       46                  0 0.84373035
-#> 257         Sbar       National       34                  0 0.85388784
-#> 258         Sbar       National       45                  0 0.84466475
-#> 259         Sbar       National       56                  0 0.83733300
-#> 260         Sbar       National       67                  0 0.82743447
-#> 261         Sbar       National       78                  0 0.82254658
-#> 262         Sbar       National       49                  0 0.84303306
-#> 263         Sbar       National       60                  0 0.83208208
-#> 264         Sbar       National       31                  0 0.85534673
-#> 265         Sbar       National       42                  0 0.84519324
-#> 266         Sbar       National       93                  0 0.81155784
-#> 267         Sbar       National       47                  0 0.84269003
-#> 268         Sbar       National       75                  0 0.82489095
-#> 269         Sbar       National       69                  0 0.82556295
-#> 270         Sbar       National       57                  0 0.83688063
-#> 271         Sbar       National       68                  0 0.82838302
-#> 272         Sbar       National       79                  0 0.82136103
-#> 273         Sbar       National       90                  0 0.81338671
-#> 274         Sbar       National       61                  0 0.83280879
-#> 275         Sbar       National       32                  0 0.85276119
-#> 276         Sbar       National       43                  0 0.84725007
-#> 277         Sbar       National       94                  0 0.81156931
-#> 278         Sbar       National       88                  0 0.81550613
-#> 279         Sbar       National       76                  0 0.82204668
-#> 280         Sbar       National       70                  0 0.82676709
-#> 281         Sbar       National       58                  0 0.83619543
-#> 282         Sbar       National       98                  0 0.80926229
-#> 283         Sbar       National       80                  0 0.82005705
-#> 284         Sbar       National       74                  0 0.82478988
-#> 285         Sbar       National       85                  0 0.81667283
-#> 286         Sbar       National       73                  0 0.82578074
-#> 287         Sbar       National       44                  0 0.84659162
-#> 288         Sbar       National       95                  0 0.81129431
-#> 289         Sbar       National       89                  0 0.81267610
-#> 290         Sbar       National       77                  0 0.82546747
-#> 291         Sbar       National       71                  0 0.83045954
-#> 292         Sbar       National       59                  0 0.83323038
-#> 293         Sbar       National       99                  0 0.80909508
-#> 294         Sbar       National       81                  0 0.81852100
-#> 295         Sbar       National       96                  0 0.81105948
-#> 296         Sbar       National       86                  0 0.81540997
-#> 297         Sbar       National       97                  0 0.81199895
-#> 298         Sbar       National       72                  0 0.82645167
-#> 299         Sbar       National      100                  0 0.80821064
-#> 300         Sbar       National       83                  0 0.82102891
-#> 301         Sbar       National       84                  0 0.81917786
-#> 302         Sbar       National       87                  0 0.81412249
-#> 303         Sbar       National       82                  0 0.82045189
-#> 304            X       National       11                  0 0.14325251
-#> 305            X       National       16                  0 0.13828228
-#> 306            X       National       13                  0 0.14315360
-#> 307            X       National       12                  0 0.14117811
-#> 308            X       National       14                  0 0.14171879
-#> 309            X       National       52                  0 0.07664048
-#> 310            X       National        0                  0 0.17150815
-#> 311            X       National       17                  0 0.13058846
-#> 312            X       National        1                  0 0.16864800
-#> 313            X       National       39                  0 0.09403390
-#> 314            X       National       27                  0 0.11420490
-#> 315            X       National       15                  0 0.13995162
-#> 316            X       National       28                  0 0.11109077
-#> 317            X       National        3                  0 0.16659958
-#> 318            X       National       54                  0 0.07181984
-#> 319            X       National        2                  0 0.16823842
-#> 320            X       National       53                  0 0.07444645
-#> 321            X       National       24                  0 0.11662702
-#> 322            X       National       18                  0 0.13570897
-#> 323            X       National       29                  0 0.11062544
-#> 324            X       National       40                  0 0.09269700
-#> 325            X       National       51                  0 0.07635115
-#> 326            X       National       22                  0 0.12691667
-#> 327            X       National       10                  0 0.14758038
-#> 328            X       National        4                  0 0.16933416
-#> 329            X       National       55                  0 0.07023025
-#> 330            X       National       26                  0 0.11232794
-#> 331            X       National       37                  0 0.09370013
-#> 332            X       National       25                  0 0.11707123
-#> 333            X       National       19                  0 0.13009778
-#> 334            X       National       30                  0 0.10862338
-#> 335            X       National       41                  0 0.09007059
-#> 336            X       National       92                  0 0.03977277
-#> 337            X       National       23                  0 0.11567013
-#> 338            X       National       34                  0 0.10156547
-#> 339            X       National        5                  0 0.15269090
-#> 340            X       National       56                  0 0.07014278
-#> 341            X       National       67                  0 0.05849487
-#> 342            X       National       38                  0 0.09104656
-#> 343            X       National        9                  0 0.14426767
-#> 344            X       National       20                  0 0.12609520
-#> 345            X       National       31                  0 0.10411172
-#> 346            X       National       42                  0 0.08686276
-#> 347            X       National       93                  0 0.03857848
-#> 348            X       National       64                  0 0.06142834
-#> 349            X       National       35                  0 0.09786079
-#> 350            X       National        6                  0 0.15763398
-#> 351            X       National       57                  0 0.06979117
-#> 352            X       National       68                  0 0.05314802
-#> 353            X       National       79                  0 0.04833145
-#> 354            X       National       50                  0 0.07839802
-#> 355            X       National       21                  0 0.12385601
-#> 356            X       National       32                  0 0.10208214
-#> 357            X       National       43                  0 0.08565901
-#> 358            X       National       94                  0 0.03661984
-#> 359            X       National       65                  0 0.05865037
-#> 360            X       National       36                  0 0.09614247
-#> 361            X       National        7                  0 0.15512801
-#> 362            X       National       58                  0 0.07047601
-#> 363            X       National       69                  0 0.05270329
-#> 364            X       National       80                  0 0.04556713
-#> 365            X       National       91                  0 0.03949006
-#> 366            X       National       62                  0 0.06315069
-#> 367            X       National       33                  0 0.10382581
-#> 368            X       National       44                  0 0.08649333
-#> 369            X       National       95                  0 0.03862026
-#> 370            X       National       66                  0 0.05882349
-#> 371            X       National       77                  0 0.04852103
-#> 372            X       National        8                  0 0.15471445
-#> 373            X       National       59                  0 0.06502046
-#> 374            X       National       70                  0 0.05419200
-#> 375            X       National       81                  0 0.04422510
-#> 376            X       National       75                  0 0.05047161
-#> 377            X       National       63                  0 0.06086266
-#> 378            X       National       74                  0 0.05328027
-#> 379            X       National       45                  0 0.08330053
-#> 380            X       National       96                  0 0.03641928
-#> 381            X       National       90                  0 0.04087849
-#> 382            X       National       78                  0 0.04875414
-#> 383            X       National       49                  0 0.07816465
-#> 384            X       National       60                  0 0.06497611
-#> 385            X       National       71                  0 0.05360157
-#> 386            X       National       82                  0 0.04640242
-#> 387            X       National       76                  0 0.05008761
-#> 388            X       National       47                  0 0.08158053
-#> 389            X       National       98                  0 0.03569458
-#> 390            X       National       46                  0 0.08158527
-#> 391            X       National       97                  0 0.03507013
-#> 392            X       National       72                  0 0.05234100
-#> 393            X       National       85                  0 0.04148963
-#> 394            X       National       73                  0 0.05061626
-#> 395            X       National       61                  0 0.06441955
-#> 396            X       National       99                  0 0.03394062
-#> 397            X       National       83                  0 0.04558192
-#> 398            X       National      100                  0 0.03456025
-#> 399            X       National       48                  0 0.07961493
-#> 400            X       National       86                  0 0.04187125
-#> 401            X       National       88                  0 0.04160996
-#> 402            X       National       87                  0 0.04123086
-#> 403            X       National       84                  0 0.04410674
-#> 404            X       National       89                  0 0.03965623
+#> 102         Rbar       National       34                  0 0.19679350
+#> 103         Rbar       National       11                  0 0.29357737
+#> 104         Rbar       National       19                  0 0.26009108
+#> 105         Rbar       National       13                  0 0.28478098
+#> 106         Rbar       National       12                  0 0.29421411
+#> 107         Rbar       National       35                  0 0.19955520
+#> 108         Rbar       National       23                  0 0.23800233
+#> 109         Rbar       National       17                  0 0.27241829
+#> 110         Rbar       National       22                  0 0.24768016
+#> 111         Rbar       National       16                  0 0.27903705
+#> 112         Rbar       National       10                  0 0.30370208
+#> 113         Rbar       National       21                  0 0.25001602
+#> 114         Rbar       National        9                  0 0.30088941
+#> 115         Rbar       National       20                  0 0.25649665
+#> 116         Rbar       National       14                  0 0.28586862
+#> 117         Rbar       National       25                  0 0.23712377
+#> 118         Rbar       National       36                  0 0.19441474
+#> 119         Rbar       National       24                  0 0.24131242
+#> 120         Rbar       National       18                  0 0.27050806
+#> 121         Rbar       National        6                  0 0.32888429
+#> 122         Rbar       National        0                  0 0.35898393
+#> 123         Rbar       National       51                  0 0.15272072
+#> 124         Rbar       National       62                  0 0.12870596
+#> 125         Rbar       National       33                  0 0.20841433
+#> 126         Rbar       National        4                  0 0.34098484
+#> 127         Rbar       National       15                  0 0.28075868
+#> 128         Rbar       National       26                  0 0.22859349
+#> 129         Rbar       National       37                  0 0.19381262
+#> 130         Rbar       National        8                  0 0.31122450
+#> 131         Rbar       National       59                  0 0.13275263
+#> 132         Rbar       National        7                  0 0.32340242
+#> 133         Rbar       National        1                  0 0.35106220
+#> 134         Rbar       National       52                  0 0.15214231
+#> 135         Rbar       National       63                  0 0.12298281
+#> 136         Rbar       National       74                  0 0.10462211
+#> 137         Rbar       National        5                  0 0.32830395
+#> 138         Rbar       National       56                  0 0.13976940
+#> 139         Rbar       National       27                  0 0.22645547
+#> 140         Rbar       National       38                  0 0.18829702
+#> 141         Rbar       National       49                  0 0.16009776
+#> 142         Rbar       National       60                  0 0.13368340
+#> 143         Rbar       National       31                  0 0.20939574
+#> 144         Rbar       National        2                  0 0.34397306
+#> 145         Rbar       National       53                  0 0.15118493
+#> 146         Rbar       National       64                  0 0.12344514
+#> 147         Rbar       National       75                  0 0.10012485
+#> 148         Rbar       National       46                  0 0.16289198
+#> 149         Rbar       National       57                  0 0.14073510
+#> 150         Rbar       National       28                  0 0.22368033
+#> 151         Rbar       National       39                  0 0.19088183
+#> 152         Rbar       National       50                  0 0.15559732
+#> 153         Rbar       National       61                  0 0.12708447
+#> 154         Rbar       National       32                  0 0.20660502
+#> 155         Rbar       National        3                  0 0.34109073
+#> 156         Rbar       National       54                  0 0.14370664
+#> 157         Rbar       National       65                  0 0.11602402
+#> 158         Rbar       National       76                  0 0.10006736
+#> 159         Rbar       National       47                  0 0.16164290
+#> 160         Rbar       National       58                  0 0.13974786
+#> 161         Rbar       National       29                  0 0.22281638
+#> 162         Rbar       National       40                  0 0.18552012
+#> 163         Rbar       National       91                  0 0.07738643
+#> 164         Rbar       National       45                  0 0.16970622
+#> 165         Rbar       National       73                  0 0.10054610
+#> 166         Rbar       National       44                  0 0.16951668
+#> 167         Rbar       National       55                  0 0.14301123
+#> 168         Rbar       National       66                  0 0.12221012
+#> 169         Rbar       National       77                  0 0.09855718
+#> 170         Rbar       National       48                  0 0.15694473
+#> 171         Rbar       National       99                  0 0.06744629
+#> 172         Rbar       National       30                  0 0.21547180
+#> 173         Rbar       National       41                  0 0.18064203
+#> 174         Rbar       National       92                  0 0.07873161
+#> 175         Rbar       National       86                  0 0.08314368
+#> 176         Rbar       National       97                  0 0.07173279
+#> 177         Rbar       National       68                  0 0.11055399
+#> 178         Rbar       National       96                  0 0.07282137
+#> 179         Rbar       National       67                  0 0.11553106
+#> 180         Rbar       National       78                  0 0.09731134
+#> 181         Rbar       National       89                  0 0.07912311
+#> 182         Rbar       National      100                  0 0.07125766
+#> 183         Rbar       National       71                  0 0.10847504
+#> 184         Rbar       National       42                  0 0.17573647
+#> 185         Rbar       National       93                  0 0.07795523
+#> 186         Rbar       National       87                  0 0.08542600
+#> 187         Rbar       National       98                  0 0.06971465
+#> 188         Rbar       National       69                  0 0.10950107
+#> 189         Rbar       National       80                  0 0.09196845
+#> 190         Rbar       National       72                  0 0.10551180
+#> 191         Rbar       National       79                  0 0.09601256
+#> 192         Rbar       National       90                  0 0.08242244
+#> 193         Rbar       National       84                  0 0.09085084
+#> 194         Rbar       National       82                  0 0.09249596
+#> 195         Rbar       National       43                  0 0.17728560
+#> 196         Rbar       National       94                  0 0.07392549
+#> 197         Rbar       National       88                  0 0.08205178
+#> 198         Rbar       National       70                  0 0.10933756
+#> 199         Rbar       National       81                  0 0.08939434
+#> 200         Rbar       National       83                  0 0.08899228
+#> 201         Rbar       National       95                  0 0.07513466
+#> 202         Rbar       National       85                  0 0.08251886
+#> 203         Sbar       National       11                  0 0.86922803
+#> 204         Sbar       National       23                  0 0.85774295
+#> 205         Sbar       National       12                  0 0.86642043
+#> 206         Sbar       National       10                  0 0.87016771
+#> 207         Sbar       National        0                  0 0.87692804
+#> 208         Sbar       National       15                  0 0.86550382
+#> 209         Sbar       National       22                  0 0.86104807
+#> 210         Sbar       National       14                  0 0.86626464
+#> 211         Sbar       National       25                  0 0.86015041
+#> 212         Sbar       National       13                  0 0.86709509
+#> 213         Sbar       National       24                  0 0.86062866
+#> 214         Sbar       National        1                  0 0.87736759
+#> 215         Sbar       National       52                  0 0.83985803
+#> 216         Sbar       National       63                  0 0.83252134
+#> 217         Sbar       National       51                  0 0.84061528
+#> 218         Sbar       National        5                  0 0.87473548
+#> 219         Sbar       National       16                  0 0.86803921
+#> 220         Sbar       National       27                  0 0.85788156
+#> 221         Sbar       National       38                  0 0.84882519
+#> 222         Sbar       National       26                  0 0.85816905
+#> 223         Sbar       National       20                  0 0.86021641
+#> 224         Sbar       National        8                  0 0.86805750
+#> 225         Sbar       National        2                  0 0.87494729
+#> 226         Sbar       National       53                  0 0.84007790
+#> 227         Sbar       National       64                  0 0.83332730
+#> 228         Sbar       National       35                  0 0.85104913
+#> 229         Sbar       National        6                  0 0.87108224
+#> 230         Sbar       National       17                  0 0.86471750
+#> 231         Sbar       National       28                  0 0.85781494
+#> 232         Sbar       National       39                  0 0.84817345
+#> 233         Sbar       National       50                  0 0.83863882
+#> 234         Sbar       National       21                  0 0.86228989
+#> 235         Sbar       National        9                  0 0.87010020
+#> 236         Sbar       National        3                  0 0.87589869
+#> 237         Sbar       National       54                  0 0.83765190
+#> 238         Sbar       National       65                  0 0.82987436
+#> 239         Sbar       National       36                  0 0.84835380
+#> 240         Sbar       National        7                  0 0.87063490
+#> 241         Sbar       National       18                  0 0.86189931
+#> 242         Sbar       National       29                  0 0.85552526
+#> 243         Sbar       National       40                  0 0.84659032
+#> 244         Sbar       National       91                  0 0.81435371
+#> 245         Sbar       National       62                  0 0.83362138
+#> 246         Sbar       National       33                  0 0.85050674
+#> 247         Sbar       National        4                  0 0.87443906
+#> 248         Sbar       National       55                  0 0.83715373
+#> 249         Sbar       National       66                  0 0.82982449
+#> 250         Sbar       National       37                  0 0.85256561
+#> 251         Sbar       National       48                  0 0.84145666
+#> 252         Sbar       National       19                  0 0.86436629
+#> 253         Sbar       National       30                  0 0.85390640
+#> 254         Sbar       National       41                  0 0.84454085
+#> 255         Sbar       National       92                  0 0.81303063
+#> 256         Sbar       National       46                  0 0.84391407
+#> 257         Sbar       National       34                  0 0.85319380
+#> 258         Sbar       National       45                  0 0.84525949
+#> 259         Sbar       National       56                  0 0.83726963
+#> 260         Sbar       National       67                  0 0.82754863
+#> 261         Sbar       National       78                  0 0.82199986
+#> 262         Sbar       National       49                  0 0.84276542
+#> 263         Sbar       National       60                  0 0.83175395
+#> 264         Sbar       National       31                  0 0.85550721
+#> 265         Sbar       National       42                  0 0.84500553
+#> 266         Sbar       National       93                  0 0.81142020
+#> 267         Sbar       National       47                  0 0.84287618
+#> 268         Sbar       National       75                  0 0.82494778
+#> 269         Sbar       National       69                  0 0.82571582
+#> 270         Sbar       National       57                  0 0.83717271
+#> 271         Sbar       National       68                  0 0.82769307
+#> 272         Sbar       National       79                  0 0.82109160
+#> 273         Sbar       National       90                  0 0.81328640
+#> 274         Sbar       National       61                  0 0.83291594
+#> 275         Sbar       National       32                  0 0.85276280
+#> 276         Sbar       National       43                  0 0.84718569
+#> 277         Sbar       National       94                  0 0.81172672
+#> 278         Sbar       National       88                  0 0.81579443
+#> 279         Sbar       National       76                  0 0.82244107
+#> 280         Sbar       National       70                  0 0.82682127
+#> 281         Sbar       National       58                  0 0.83565925
+#> 282         Sbar       National       98                  0 0.80907928
+#> 283         Sbar       National       80                  0 0.82022927
+#> 284         Sbar       National       74                  0 0.82461905
+#> 285         Sbar       National       85                  0 0.81676191
+#> 286         Sbar       National       73                  0 0.82618549
+#> 287         Sbar       National       44                  0 0.84689296
+#> 288         Sbar       National       95                  0 0.81118648
+#> 289         Sbar       National       89                  0 0.81250274
+#> 290         Sbar       National       77                  0 0.82567810
+#> 291         Sbar       National       71                  0 0.83042618
+#> 292         Sbar       National       59                  0 0.83311193
+#> 293         Sbar       National       99                  0 0.80938199
+#> 294         Sbar       National       81                  0 0.81884366
+#> 295         Sbar       National       96                  0 0.81114819
+#> 296         Sbar       National       86                  0 0.81500666
+#> 297         Sbar       National       97                  0 0.81197776
+#> 298         Sbar       National       72                  0 0.82672456
+#> 299         Sbar       National      100                  0 0.80842074
+#> 300         Sbar       National       83                  0 0.82116606
+#> 301         Sbar       National       84                  0 0.81901860
+#> 302         Sbar       National       87                  0 0.81433497
+#> 303         Sbar       National       82                  0 0.82057447
+#> 304            X       National       11                  0 0.14157688
+#> 305            X       National       16                  0 0.13709730
+#> 306            X       National       13                  0 0.13847764
+#> 307            X       National       12                  0 0.14492214
+#> 308            X       National       14                  0 0.14171031
+#> 309            X       National       52                  0 0.07569796
+#> 310            X       National        0                  0 0.16791547
+#> 311            X       National       17                  0 0.13011144
+#> 312            X       National        1                  0 0.16533176
+#> 313            X       National       39                  0 0.09514465
+#> 314            X       National       27                  0 0.10926246
+#> 315            X       National       15                  0 0.13490805
+#> 316            X       National       28                  0 0.11014933
+#> 317            X       National        3                  0 0.16169538
+#> 318            X       National       54                  0 0.07053353
+#> 319            X       National        2                  0 0.16931117
+#> 320            X       National       53                  0 0.07620150
+#> 321            X       National       24                  0 0.11608607
+#> 322            X       National       18                  0 0.12970623
+#> 323            X       National       29                  0 0.11030067
+#> 324            X       National       40                  0 0.09220507
+#> 325            X       National       51                  0 0.07559507
+#> 326            X       National       22                  0 0.12378060
+#> 327            X       National       10                  0 0.14980806
+#> 328            X       National        4                  0 0.16599289
+#> 329            X       National       55                  0 0.07115050
+#> 330            X       National       26                  0 0.11219420
+#> 331            X       National       37                  0 0.09538539
+#> 332            X       National       25                  0 0.11790635
+#> 333            X       National       19                  0 0.13080211
+#> 334            X       National       30                  0 0.10677547
+#> 335            X       National       41                  0 0.08948101
+#> 336            X       National       92                  0 0.03867391
+#> 337            X       National       23                  0 0.11770491
+#> 338            X       National       34                  0 0.09706254
+#> 339            X       National        5                  0 0.15994256
+#> 340            X       National       56                  0 0.07014122
+#> 341            X       National       67                  0 0.05812598
+#> 342            X       National       38                  0 0.09396343
+#> 343            X       National        9                  0 0.14737775
+#> 344            X       National       20                  0 0.12581003
+#> 345            X       National       31                  0 0.10523840
+#> 346            X       National       42                  0 0.08636844
+#> 347            X       National       93                  0 0.04099213
+#> 348            X       National       64                  0 0.05979695
+#> 349            X       National       35                  0 0.09719679
+#> 350            X       National        6                  0 0.16276045
+#> 351            X       National       57                  0 0.07165826
+#> 352            X       National       68                  0 0.05473115
+#> 353            X       National       79                  0 0.04818485
+#> 354            X       National       50                  0 0.07904066
+#> 355            X       National       21                  0 0.12245213
+#> 356            X       National       32                  0 0.10368981
+#> 357            X       National       43                  0 0.08867022
+#> 358            X       National       94                  0 0.03700714
+#> 359            X       National       65                  0 0.05750284
+#> 360            X       National       36                  0 0.09866554
+#> 361            X       National        7                  0 0.15534079
+#> 362            X       National       58                  0 0.06860039
+#> 363            X       National       69                  0 0.05482511
+#> 364            X       National       80                  0 0.04656174
+#> 365            X       National       91                  0 0.03913878
+#> 366            X       National       62                  0 0.06625571
+#> 367            X       National       33                  0 0.10439409
+#> 368            X       National       44                  0 0.08503031
+#> 369            X       National       95                  0 0.03775301
+#> 370            X       National       66                  0 0.06101637
+#> 371            X       National       77                  0 0.04960729
+#> 372            X       National        8                  0 0.15353744
+#> 373            X       National       59                  0 0.06666621
+#> 374            X       National       70                  0 0.05450682
+#> 375            X       National       81                  0 0.04613909
+#> 376            X       National       75                  0 0.05090747
+#> 377            X       National       63                  0 0.06385875
+#> 378            X       National       74                  0 0.05297048
+#> 379            X       National       45                  0 0.08316977
+#> 380            X       National       96                  0 0.03435668
+#> 381            X       National       90                  0 0.04222365
+#> 382            X       National       78                  0 0.04921643
+#> 383            X       National       49                  0 0.08136226
+#> 384            X       National       60                  0 0.06625139
+#> 385            X       National       71                  0 0.05316760
+#> 386            X       National       82                  0 0.04527759
+#> 387            X       National       76                  0 0.04821798
+#> 388            X       National       47                  0 0.08013279
+#> 389            X       National       98                  0 0.03390860
+#> 390            X       National       46                  0 0.08046601
+#> 391            X       National       97                  0 0.03491251
+#> 392            X       National       72                  0 0.05327130
+#> 393            X       National       85                  0 0.04146172
+#> 394            X       National       73                  0 0.05115017
+#> 395            X       National       61                  0 0.06468771
+#> 396            X       National       99                  0 0.03327897
+#> 397            X       National       83                  0 0.04394301
+#> 398            X       National      100                  0 0.03487037
+#> 399            X       National       48                  0 0.07876249
+#> 400            X       National       86                  0 0.04157952
+#> 401            X       National       88                  0 0.04085655
+#> 402            X       National       87                  0 0.04299027
+#> 403            X       National       84                  0 0.04542641
+#> 404            X       National       89                  0 0.03972046
 #> 405            c       National       18                  0 1.00000000
 #> 406            c       National       13                  0 1.00000000
 #> 407            c       National       16                  0 1.00000000
@@ -534,1218 +536,1218 @@ trajectoriesFromNational()
 #> 503            c       National       88                  0 1.00000000
 #> 504            c       National       77                  0 1.00000000
 #> 505            c       National       89                  0 1.00000000
-#> 506       lambda       National       15                  0 0.98720300
-#> 507       lambda       National        5                  0 1.01215000
-#> 508       lambda       National       17                  0 0.97772000
-#> 509       lambda       National       19                  0 0.98055000
-#> 510       lambda       National       30                  0 0.94706200
-#> 511       lambda       National       12                  0 0.99147000
-#> 512       lambda       National        6                  0 1.01084500
-#> 513       lambda       National       57                  0 0.90041500
-#> 514       lambda       National       18                  0 0.98102200
-#> 515       lambda       National       16                  0 0.98778500
-#> 516       lambda       National       10                  0 1.00307800
-#> 517       lambda       National       21                  0 0.97046300
-#> 518       lambda       National       28                  0 0.95532700
-#> 519       lambda       National       20                  0 0.96922600
-#> 520       lambda       National       31                  0 0.94853300
-#> 521       lambda       National        2                  0 1.02737700
-#> 522       lambda       National       13                  0 0.99143800
-#> 523       lambda       National        7                  0 1.00940000
-#> 524       lambda       National       58                  0 0.89292600
-#> 525       lambda       National       29                  0 0.95429600
-#> 526       lambda       National        0                  0 1.02739700
-#> 527       lambda       National       11                  0 0.99345500
-#> 528       lambda       National       22                  0 0.96978600
-#> 529       lambda       National       33                  0 0.93700400
-#> 530       lambda       National        4                  0 1.02268500
-#> 531       lambda       National       32                  0 0.94251300
-#> 532       lambda       National        3                  0 1.02167000
-#> 533       lambda       National       14                  0 0.98739000
-#> 534       lambda       National        8                  0 1.00495900
-#> 535       lambda       National       59                  0 0.88992600
-#> 536       lambda       National       70                  0 0.87606400
-#> 537       lambda       National        1                  0 1.02744600
-#> 538       lambda       National       52                  0 0.90568100
-#> 539       lambda       National       23                  0 0.96027900
-#> 540       lambda       National       34                  0 0.93940400
-#> 541       lambda       National       45                  0 0.91306500
-#> 542       lambda       National       56                  0 0.90014600
-#> 543       lambda       National       27                  0 0.95523100
-#> 544       lambda       National       55                  0 0.89725900
-#> 545       lambda       National        9                  0 0.99677400
-#> 546       lambda       National       60                  0 0.88449700
-#> 547       lambda       National       71                  0 0.87767400
-#> 548       lambda       National       42                  0 0.91616200
-#> 549       lambda       National       53                  0 0.90677800
-#> 550       lambda       National       24                  0 0.96300800
-#> 551       lambda       National       35                  0 0.93233600
-#> 552       lambda       National       46                  0 0.91840600
-#> 553       lambda       National       97                  0 0.84181800
-#> 554       lambda       National       68                  0 0.87506300
-#> 555       lambda       National       39                  0 0.92747900
-#> 556       lambda       National       50                  0 0.91380800
-#> 557       lambda       National       61                  0 0.88874600
-#> 558       lambda       National       72                  0 0.87291000
-#> 559       lambda       National       43                  0 0.92578300
-#> 560       lambda       National       54                  0 0.89907300
-#> 561       lambda       National       25                  0 0.96078500
-#> 562       lambda       National       36                  0 0.93316100
-#> 563       lambda       National       47                  0 0.91053100
-#> 564       lambda       National       98                  0 0.83723800
-#> 565       lambda       National       69                  0 0.87286600
-#> 566       lambda       National       40                  0 0.92784900
-#> 567       lambda       National       51                  0 0.90641200
-#> 568       lambda       National       62                  0 0.88867100
-#> 569       lambda       National       73                  0 0.87118600
-#> 570       lambda       National       44                  0 0.92073800
-#> 571       lambda       National       95                  0 0.84599500
-#> 572       lambda       National       26                  0 0.94800800
-#> 573       lambda       National       37                  0 0.93415900
-#> 574       lambda       National       48                  0 0.90928200
-#> 575       lambda       National       99                  0 0.83784100
-#> 576       lambda       National       93                  0 0.84627700
-#> 577       lambda       National       41                  0 0.92035100
-#> 578       lambda       National       92                  0 0.85066400
-#> 579       lambda       National       63                  0 0.88471000
-#> 580       lambda       National       74                  0 0.87375700
-#> 581       lambda       National       85                  0 0.85217700
-#> 582       lambda       National       96                  0 0.84459900
-#> 583       lambda       National       67                  0 0.88101300
-#> 584       lambda       National       38                  0 0.92248300
-#> 585       lambda       National       49                  0 0.91322900
-#> 586       lambda       National      100                  0 0.84172000
-#> 587       lambda       National       94                  0 0.84280900
-#> 588       lambda       National       82                  0 0.85561400
-#> 589       lambda       National       76                  0 0.86811200
-#> 590       lambda       National       64                  0 0.88629500
-#> 591       lambda       National       75                  0 0.87110200
-#> 592       lambda       National       86                  0 0.84920200
-#> 593       lambda       National       80                  0 0.85971300
-#> 594       lambda       National       91                  0 0.84277900
-#> 595       lambda       National       79                  0 0.86165900
-#> 596       lambda       National       90                  0 0.85499800
-#> 597       lambda       National       84                  0 0.85688500
-#> 598       lambda       National       78                  0 0.86681200
-#> 599       lambda       National       83                  0 0.85961600
-#> 600       lambda       National       77                  0 0.86277400
-#> 601       lambda       National       65                  0 0.88144300
-#> 602       lambda       National       88                  0 0.85070400
-#> 603       lambda       National       87                  0 0.84848900
-#> 604       lambda       National       81                  0 0.85750700
-#> 605       lambda       National       89                  0 0.84888600
-#> 606       lambda       National       66                  0 0.87984500
-#> 607   lambda_bar       National       19                  0 0.97655758
-#> 608   lambda_bar       National       17                  0 0.98178544
-#> 609   lambda_bar       National       18                  0 0.97815316
-#> 610   lambda_bar       National        6                  0 1.01432561
-#> 611   lambda_bar       National       21                  0 0.97026808
-#> 612   lambda_bar       National       11                  0 0.99733332
-#> 613   lambda_bar       National       22                  0 0.96710799
-#> 614   lambda_bar       National       10                  0 1.00266742
-#> 615   lambda_bar       National        8                  0 1.00274181
-#> 616   lambda_bar       National       59                  0 0.88856520
-#> 617   lambda_bar       National       20                  0 0.97001687
-#> 618   lambda_bar       National        1                  0 1.03111139
-#> 619   lambda_bar       National       12                  0 0.99337884
-#> 620   lambda_bar       National       23                  0 0.95991791
-#> 621   lambda_bar       National        7                  0 1.01117979
-#> 622   lambda_bar       National        5                  0 1.01794249
-#> 623   lambda_bar       National       16                  0 0.98874966
-#> 624   lambda_bar       National        4                  0 1.02381954
-#> 625   lambda_bar       National       34                  0 0.93805279
-#> 626   lambda_bar       National        9                  0 0.99994401
-#> 627   lambda_bar       National       60                  0 0.88747623
-#> 628   lambda_bar       National       31                  0 0.94500588
-#> 629   lambda_bar       National        2                  0 1.02582369
-#> 630   lambda_bar       National       13                  0 0.99087235
-#> 631   lambda_bar       National       24                  0 0.96479325
-#> 632   lambda_bar       National       35                  0 0.93638522
-#> 633   lambda_bar       National       46                  0 0.91251989
-#> 634   lambda_bar       National       57                  0 0.89567546
-#> 635   lambda_bar       National       28                  0 0.95364637
-#> 636   lambda_bar       National       39                  0 0.92895180
-#> 637   lambda_bar       National       50                  0 0.90410339
-#> 638   lambda_bar       National       61                  0 0.88574827
-#> 639   lambda_bar       National       32                  0 0.94077934
-#> 640   lambda_bar       National        3                  0 1.02397708
-#> 641   lambda_bar       National       14                  0 0.98980917
-#> 642   lambda_bar       National       25                  0 0.96191200
-#> 643   lambda_bar       National       36                  0 0.93075955
-#> 644   lambda_bar       National       47                  0 0.91090848
-#> 645   lambda_bar       National       58                  0 0.89462146
-#> 646   lambda_bar       National       29                  0 0.95045589
-#> 647   lambda_bar       National       40                  0 0.92532294
-#> 648   lambda_bar       National       51                  0 0.90484183
-#> 649   lambda_bar       National       62                  0 0.88777644
-#> 650   lambda_bar       National       33                  0 0.93921947
-#> 651   lambda_bar       National        0                  0 1.03373853
-#> 652   lambda_bar       National       15                  0 0.98751047
-#> 653   lambda_bar       National       26                  0 0.95630077
-#> 654   lambda_bar       National       37                  0 0.93503283
-#> 655   lambda_bar       National       48                  0 0.90777147
-#> 656   lambda_bar       National       99                  0 0.83610612
-#> 657   lambda_bar       National       30                  0 0.94587173
-#> 658   lambda_bar       National       41                  0 0.92067738
-#> 659   lambda_bar       National       52                  0 0.90338674
-#> 660   lambda_bar       National       63                  0 0.88428554
-#> 661   lambda_bar       National       74                  0 0.86787411
-#> 662   lambda_bar       National       45                  0 0.91612180
-#> 663   lambda_bar       National       56                  0 0.89577385
-#> 664   lambda_bar       National       27                  0 0.95459906
-#> 665   lambda_bar       National       38                  0 0.92838007
-#> 666   lambda_bar       National       49                  0 0.91075953
-#> 667   lambda_bar       National      100                  0 0.83689983
-#> 668   lambda_bar       National       71                  0 0.87536550
-#> 669   lambda_bar       National       42                  0 0.91943241
-#> 670   lambda_bar       National       53                  0 0.90372245
-#> 671   lambda_bar       National       64                  0 0.88453725
-#> 672   lambda_bar       National       75                  0 0.86619799
-#> 673   lambda_bar       National       86                  0 0.84932452
-#> 674   lambda_bar       National       97                  0 0.84103912
-#> 675   lambda_bar       National       68                  0 0.87381307
-#> 676   lambda_bar       National       79                  0 0.86077473
-#> 677   lambda_bar       National       90                  0 0.84646050
-#> 678   lambda_bar       National       44                  0 0.91828126
-#> 679   lambda_bar       National       72                  0 0.87032204
-#> 680   lambda_bar       National       43                  0 0.92231417
-#> 681   lambda_bar       National       54                  0 0.89807858
-#> 682   lambda_bar       National       65                  0 0.87819941
-#> 683   lambda_bar       National       76                  0 0.86329328
-#> 684   lambda_bar       National       87                  0 0.84862490
-#> 685   lambda_bar       National       98                  0 0.83780021
-#> 686   lambda_bar       National       69                  0 0.87113338
-#> 687   lambda_bar       National       80                  0 0.85788232
-#> 688   lambda_bar       National       91                  0 0.84580309
-#> 689   lambda_bar       National       85                  0 0.85045486
-#> 690   lambda_bar       National       73                  0 0.86736359
-#> 691   lambda_bar       National       67                  0 0.87549960
-#> 692   lambda_bar       National       55                  0 0.89678906
-#> 693   lambda_bar       National       66                  0 0.88069938
-#> 694   lambda_bar       National       77                  0 0.86609942
-#> 695   lambda_bar       National       88                  0 0.84930784
-#> 696   lambda_bar       National       82                  0 0.85889329
-#> 697   lambda_bar       National       70                  0 0.87180541
-#> 698   lambda_bar       National       81                  0 0.85503949
-#> 699   lambda_bar       National       92                  0 0.84492489
-#> 700   lambda_bar       National       94                  0 0.84161263
-#> 701   lambda_bar       National       78                  0 0.86256852
-#> 702   lambda_bar       National       89                  0 0.84467767
-#> 703   lambda_bar       National       96                  0 0.84102678
-#> 704   lambda_bar       National       93                  0 0.84309544
-#> 705   lambda_bar       National       83                  0 0.85803620
-#> 706   lambda_bar       National       84                  0 0.85610209
-#> 707   lambda_bar       National       95                  0 0.84147519
-#> 708  recruitment       National        8                  0 0.30942889
-#> 709  recruitment       National       19                  0 0.26019555
-#> 710  recruitment       National        6                  0 0.31526795
-#> 711  recruitment       National        4                  0 0.33866832
-#> 712  recruitment       National       20                  0 0.25219040
-#> 713  recruitment       National       35                  0 0.19572158
-#> 714  recruitment       National        7                  0 0.31025601
-#> 715  recruitment       National        9                  0 0.28853535
-#> 716  recruitment       National       24                  0 0.23325403
-#> 717  recruitment       National       39                  0 0.18806779
-#> 718  recruitment       National        2                  0 0.33647685
-#> 719  recruitment       National       13                  0 0.28630720
-#> 720  recruitment       National        5                  0 0.30538180
-#> 721  recruitment       National       16                  0 0.27656457
-#> 722  recruitment       National       10                  0 0.29516075
-#> 723  recruitment       National       21                  0 0.24771201
-#> 724  recruitment       National       36                  0 0.19228495
-#> 725  recruitment       National        3                  0 0.33319917
-#> 726  recruitment       National       14                  0 0.28343758
-#> 727  recruitment       National       25                  0 0.23414245
-#> 728  recruitment       National       40                  0 0.18539401
-#> 729  recruitment       National       51                  0 0.15270230
-#> 730  recruitment       National       18                  0 0.27141794
-#> 731  recruitment       National       50                  0 0.15679604
-#> 732  recruitment       National       17                  0 0.26117692
-#> 733  recruitment       National       11                  0 0.28650502
-#> 734  recruitment       National       22                  0 0.25383334
-#> 735  recruitment       National       37                  0 0.18740026
-#> 736  recruitment       National       48                  0 0.15922987
-#> 737  recruitment       National       15                  0 0.27990324
-#> 738  recruitment       National       26                  0 0.22465587
-#> 739  recruitment       National       41                  0 0.18014117
-#> 740  recruitment       National       52                  0 0.15328096
-#> 741  recruitment       National       63                  0 0.12172532
-#> 742  recruitment       National       34                  0 0.20313095
-#> 743  recruitment       National        1                  0 0.33729600
-#> 744  recruitment       National       12                  0 0.28235621
-#> 745  recruitment       National       23                  0 0.23134025
-#> 746  recruitment       National       38                  0 0.18209311
-#> 747  recruitment       National       49                  0 0.15632931
-#> 748  recruitment       National       60                  0 0.12995222
-#> 749  recruitment       National       27                  0 0.22840980
-#> 750  recruitment       National       42                  0 0.17372553
-#> 751  recruitment       National       53                  0 0.14889289
-#> 752  recruitment       National       64                  0 0.12285668
-#> 753  recruitment       National       31                  0 0.20822343
-#> 754  recruitment       National       46                  0 0.16317054
-#> 755  recruitment       National       57                  0 0.13958233
-#> 756  recruitment       National       68                  0 0.10629604
-#> 757  recruitment       National       79                  0 0.09666289
-#> 758  recruitment       National       90                  0 0.08175699
-#> 759  recruitment       National       61                  0 0.12883910
-#> 760  recruitment       National       28                  0 0.22218155
-#> 761  recruitment       National       43                  0 0.17131803
-#> 762  recruitment       National       54                  0 0.14363968
-#> 763  recruitment       National       65                  0 0.11730075
-#> 764  recruitment       National       32                  0 0.20416427
-#> 765  recruitment       National       47                  0 0.16316106
-#> 766  recruitment       National       58                  0 0.14095201
-#> 767  recruitment       National       69                  0 0.10540659
-#> 768  recruitment       National       80                  0 0.09113426
-#> 769  recruitment       National       91                  0 0.07898012
-#> 770  recruitment       National       62                  0 0.12630137
-#> 771  recruitment       National       29                  0 0.22125088
-#> 772  recruitment       National       44                  0 0.17298666
-#> 773  recruitment       National       55                  0 0.14046050
-#> 774  recruitment       National       66                  0 0.11764698
-#> 775  recruitment       National       33                  0 0.20765161
-#> 776  recruitment       National        0                  0 0.34301631
-#> 777  recruitment       National       59                  0 0.13004091
-#> 778  recruitment       National       70                  0 0.10838401
-#> 779  recruitment       National       81                  0 0.08845019
-#> 780  recruitment       National       92                  0 0.07954555
-#> 781  recruitment       National       86                  0 0.08374250
-#> 782  recruitment       National       30                  0 0.21724675
-#> 783  recruitment       National       45                  0 0.16660105
-#> 784  recruitment       National       56                  0 0.14028555
-#> 785  recruitment       National       67                  0 0.11698974
-#> 786  recruitment       National       78                  0 0.09750828
-#> 787  recruitment       National       89                  0 0.07931245
-#> 788  recruitment       National      100                  0 0.06912050
-#> 789  recruitment       National       71                  0 0.10720314
-#> 790  recruitment       National       82                  0 0.09280484
-#> 791  recruitment       National       93                  0 0.07715695
-#> 792  recruitment       National       87                  0 0.08246172
-#> 793  recruitment       National       75                  0 0.10094321
-#> 794  recruitment       National       73                  0 0.10123253
-#> 795  recruitment       National       97                  0 0.07014027
-#> 796  recruitment       National       74                  0 0.10656055
-#> 797  recruitment       National       85                  0 0.08297926
-#> 798  recruitment       National       94                  0 0.07323968
-#> 799  recruitment       National       84                  0 0.08821349
-#> 800  recruitment       National       72                  0 0.10468200
-#> 801  recruitment       National       83                  0 0.09116383
-#> 802  recruitment       National       98                  0 0.07138916
-#> 803  recruitment       National       88                  0 0.08321992
-#> 804  recruitment       National       76                  0 0.10017521
-#> 805  recruitment       National       95                  0 0.07724052
-#> 806  recruitment       National       96                  0 0.07283856
-#> 807  recruitment       National       99                  0 0.06788124
-#> 808  recruitment       National       77                  0 0.09704207
-#> 809     survival       National        4                  0 0.87552345
-#> 810     survival       National       69                  0 0.82917443
-#> 811     survival       National       68                  0 0.83116395
-#> 812     survival       National        2                  0 0.87936207
-#> 813     survival       National        5                  0 0.87758253
-#> 814     survival       National        7                  0 0.87424148
-#> 815     survival       National       10                  0 0.87459263
-#> 816     survival       National        6                  0 0.87363425
-#> 817     survival       National        9                  0 0.87166691
-#> 818     survival       National       11                  0 0.87001172
-#> 819     survival       National       70                  0 0.83173565
-#> 820     survival       National       37                  0 0.85481569
-#> 821     survival       National       48                  0 0.84279767
-#> 822     survival       National       36                  0 0.85070301
-#> 823     survival       National        3                  0 0.87649697
-#> 824     survival       National       35                  0 0.84962644
-#> 825     survival       National        8                  0 0.87021514
-#> 826     survival       National       67                  0 0.83345834
-#> 827     survival       National       34                  0 0.85251743
-#> 828     survival       National        1                  0 0.87954637
-#> 829     survival       National       12                  0 0.86812743
-#> 830     survival       National       71                  0 0.83351325
-#> 831     survival       National       38                  0 0.84543638
-#> 832     survival       National       49                  0 0.84626962
-#> 833     survival       National       16                  0 0.86820709
-#> 834     survival       National       75                  0 0.82856589
-#> 835     survival       National       42                  0 0.84378897
-#> 836     survival       National       53                  0 0.84342606
-#> 837     survival       National       20                  0 0.86073343
-#> 838     survival       National       79                  0 0.82227239
-#> 839     survival       National       46                  0 0.84928781
-#> 840     survival       National       13                  0 0.86738316
-#> 841     survival       National       72                  0 0.82926955
-#> 842     survival       National       39                  0 0.84795897
-#> 843     survival       National       50                  0 0.84717911
-#> 844     survival       National       17                  0 0.86487453
-#> 845     survival       National       76                  0 0.82683173
-#> 846     survival       National       43                  0 0.85261265
-#> 847     survival       National       54                  0 0.83881409
-#> 848     survival       National       21                  0 0.86393848
-#> 849     survival       National       80                  0 0.82250180
-#> 850     survival       National       47                  0 0.84114200
-#> 851     survival       National       14                  0 0.86465859
-#> 852     survival       National       73                  0 0.82935254
-#> 853     survival       National       40                  0 0.84905153
-#> 854     survival       National       51                  0 0.84182892
-#> 855     survival       National       18                  0 0.86393099
-#> 856     survival       National       77                  0 0.82370993
-#> 857     survival       National       44                  0 0.84774464
-#> 858     survival       National       55                  0 0.83917058
-#> 859     survival       National       22                  0 0.86132619
-#> 860     survival       National       81                  0 0.82106131
-#> 861     survival       National       92                  0 0.81781283
-#> 862     survival       National       15                  0 0.86608249
-#> 863     survival       National       74                  0 0.83017959
-#> 864     survival       National       41                  0 0.84478794
-#> 865     survival       National       52                  0 0.84131165
-#> 866     survival       National       19                  0 0.86690645
-#> 867     survival       National       78                  0 0.82686507
-#> 868     survival       National       45                  0 0.84371945
-#> 869     survival       National       56                  0 0.84124576
-#> 870     survival       National       23                  0 0.86103144
-#> 871     survival       National       82                  0 0.81874817
-#> 872     survival       National       93                  0 0.81503712
-#> 873     survival       National       60                  0 0.83080294
-#> 874     survival       National       27                  0 0.85795258
-#> 875     survival       National       86                  0 0.81503125
-#> 876     survival       National       97                  0 0.81303693
-#> 877     survival       National       64                  0 0.83450216
-#> 878     survival       National       31                  0 0.85868432
-#> 879     survival       National       90                  0 0.82132000
-#> 880     survival       National       57                  0 0.84167469
-#> 881     survival       National       24                  0 0.86224300
-#> 882     survival       National       83                  0 0.82228468
-#> 883     survival       National       94                  0 0.81301921
-#> 884     survival       National       61                  0 0.83541928
-#> 885     survival       National       28                  0 0.86036993
-#> 886     survival       National       87                  0 0.81452240
-#> 887     survival       National       98                  0 0.80890367
-#> 888     survival       National       65                  0 0.83293242
-#> 889     survival       National       32                  0 0.85511427
-#> 890     survival       National       91                  0 0.81064403
-#> 891     survival       National       58                  0 0.83338711
-#> 892     survival       National       25                  0 0.86029407
-#> 893     survival       National       84                  0 0.82145290
-#> 894     survival       National       95                  0 0.81427058
-#> 895     survival       National       62                  0 0.83572645
-#> 896     survival       National       29                  0 0.85938939
-#> 897     survival       National       88                  0 0.81664983
-#> 898     survival       National       99                  0 0.81037770
-#> 899     survival       National       66                  0 0.83145343
-#> 900     survival       National       33                  0 0.84920629
-#> 901     survival       National        0                  0 0.87812376
-#> 902     survival       National       59                  0 0.83622842
-#> 903     survival       National       26                  0 0.85316861
-#> 904     survival       National       85                  0 0.81835009
-#> 905     survival       National       96                  0 0.81406030
-#> 906     survival       National       63                  0 0.83338615
-#> 907     survival       National       30                  0 0.85454224
-#> 908     survival       National       89                  0 0.81679951
-#> 909     survival       National      100                  0 0.81331850
-#>           lower     upper probViable                 Metric
-#> 102 0.054218076 0.4074933      0.000   Expected recruitment
-#> 103 0.113461739 0.5109438      0.000   Expected recruitment
-#> 104 0.096483038 0.4817734      0.000   Expected recruitment
-#> 105 0.108160408 0.5111332      0.000   Expected recruitment
-#> 106 0.127496509 0.4964689      0.000   Expected recruitment
-#> 107 0.055353270 0.3934951      0.000   Expected recruitment
-#> 108 0.076557293 0.4377009      0.000   Expected recruitment
-#> 109 0.100857063 0.4753443      0.000   Expected recruitment
-#> 110 0.081548272 0.4578238      0.000   Expected recruitment
-#> 111 0.102441098 0.5108371      0.000   Expected recruitment
-#> 112 0.131226148 0.5367737      0.000   Expected recruitment
-#> 113 0.086320748 0.4658522      0.000   Expected recruitment
-#> 114 0.118442348 0.5234144      0.000   Expected recruitment
-#> 115 0.091789784 0.4639281      0.000   Expected recruitment
-#> 116 0.108655225 0.5003140      0.000   Expected recruitment
-#> 117 0.080540048 0.4475746      0.000   Expected recruitment
-#> 118 0.050964150 0.3912621      0.000   Expected recruitment
-#> 119 0.085745340 0.4443990      0.000   Expected recruitment
-#> 120 0.102713493 0.4636047      0.000   Expected recruitment
-#> 121 0.139929380 0.5787774      0.000   Expected recruitment
-#> 122 0.157834226 0.5901809      0.000   Expected recruitment
-#> 123 0.032587568 0.3446916      0.000   Expected recruitment
-#> 124 0.023627175 0.3088848      0.000   Expected recruitment
-#> 125 0.053426300 0.4141650      0.000   Expected recruitment
-#> 126 0.160030396 0.5641602      0.000   Expected recruitment
-#> 127 0.107929202 0.4992519      0.000   Expected recruitment
-#> 128 0.076727892 0.4262127      0.000   Expected recruitment
-#> 129 0.054227167 0.3931102      0.000   Expected recruitment
-#> 130 0.130198985 0.5283652      0.000   Expected recruitment
-#> 131 0.022354634 0.3042736      0.000   Expected recruitment
-#> 132 0.141946142 0.5403457      0.000   Expected recruitment
-#> 133 0.157296133 0.5709546      0.000   Expected recruitment
-#> 134 0.029888884 0.3455622      0.000   Expected recruitment
-#> 135 0.018417151 0.3088619      0.000   Expected recruitment
-#> 136 0.013279955 0.2671229      0.000   Expected recruitment
-#> 137 0.146735434 0.5498888      0.000   Expected recruitment
-#> 138 0.026993651 0.3134213      0.000   Expected recruitment
-#> 139 0.071685207 0.4306647      0.000   Expected recruitment
-#> 140 0.052119621 0.3894449      0.000   Expected recruitment
-#> 141 0.035235843 0.3648340      0.000   Expected recruitment
-#> 142 0.020943728 0.3139605      0.000   Expected recruitment
-#> 143 0.061339613 0.4106504      0.000   Expected recruitment
-#> 144 0.151459974 0.5713331      0.000   Expected recruitment
-#> 145 0.030192382 0.3264404      0.000   Expected recruitment
-#> 146 0.021312861 0.2968342      0.000   Expected recruitment
-#> 147 0.012797102 0.2595228      0.000   Expected recruitment
-#> 148 0.036818855 0.3558516      0.000   Expected recruitment
-#> 149 0.028583530 0.3289770      0.000   Expected recruitment
-#> 150 0.068825410 0.4327314      0.000   Expected recruitment
-#> 151 0.053967005 0.4129100      0.000   Expected recruitment
-#> 152 0.031012337 0.3456386      0.000   Expected recruitment
-#> 153 0.023081345 0.3036697      0.000   Expected recruitment
-#> 154 0.059002141 0.4095643      0.000   Expected recruitment
-#> 155 0.152898979 0.5659441      0.000   Expected recruitment
-#> 156 0.029048350 0.3175212      0.000   Expected recruitment
-#> 157 0.017903308 0.2890211      0.000   Expected recruitment
-#> 158 0.013411629 0.2645967      0.000   Expected recruitment
-#> 159 0.034019303 0.3474552      0.000   Expected recruitment
-#> 160 0.026927303 0.3153632      0.000   Expected recruitment
-#> 161 0.076593257 0.4230097      0.000   Expected recruitment
-#> 162 0.052062827 0.3840246      0.000   Expected recruitment
-#> 163 0.005223257 0.2247953      0.000   Expected recruitment
-#> 164 0.039977184 0.3447133      0.000   Expected recruitment
-#> 165 0.012907634 0.2653648      0.000   Expected recruitment
-#> 166 0.041457426 0.3582559      0.000   Expected recruitment
-#> 167 0.030394220 0.3294860      0.000   Expected recruitment
-#> 168 0.019332594 0.2800404      0.000   Expected recruitment
-#> 169 0.011463604 0.2678823      0.000   Expected recruitment
-#> 170 0.036944111 0.3446481      0.000   Expected recruitment
-#> 171 0.002810725 0.2075875      0.000   Expected recruitment
-#> 172 0.062150993 0.4003080      0.000   Expected recruitment
-#> 173 0.052700246 0.3744919      0.000   Expected recruitment
-#> 174 0.005221405 0.2316132      0.000   Expected recruitment
-#> 175 0.007748125 0.2293643      0.000   Expected recruitment
-#> 176 0.002252727 0.2180726      0.000   Expected recruitment
-#> 177 0.015316368 0.2787104      0.000   Expected recruitment
-#> 178 0.003197352 0.2377223      0.000   Expected recruitment
-#> 179 0.017940897 0.2863454      0.000   Expected recruitment
-#> 180 0.011017003 0.2610748      0.000   Expected recruitment
-#> 181 0.006784506 0.2256576      0.000   Expected recruitment
-#> 182 0.004330838 0.2108679      0.000   Expected recruitment
-#> 183 0.013742961 0.2710828      0.000   Expected recruitment
-#> 184 0.042283587 0.3681245      0.000   Expected recruitment
-#> 185 0.004905913 0.2283134      0.000   Expected recruitment
-#> 186 0.006244485 0.2392479      0.000   Expected recruitment
-#> 187 0.002653485 0.2136226      0.000   Expected recruitment
-#> 188 0.015828512 0.2740653      0.000   Expected recruitment
-#> 189 0.009023222 0.2466575      0.000   Expected recruitment
-#> 190 0.010625666 0.2714266      0.000   Expected recruitment
-#> 191 0.010309435 0.2476015      0.000   Expected recruitment
-#> 192 0.005507209 0.2452600      0.000   Expected recruitment
-#> 193 0.006524457 0.2331529      0.000   Expected recruitment
-#> 194 0.007366345 0.2525420      0.000   Expected recruitment
-#> 195 0.047892107 0.3702977      0.000   Expected recruitment
-#> 196 0.004922017 0.2132379      0.000   Expected recruitment
-#> 197 0.005079551 0.2380352      0.000   Expected recruitment
-#> 198 0.013458600 0.2808699      0.000   Expected recruitment
-#> 199 0.009425052 0.2500032      0.000   Expected recruitment
-#> 200 0.007969829 0.2442029      0.000   Expected recruitment
-#> 201 0.004285575 0.2202099      0.000   Expected recruitment
-#> 202 0.006259986 0.2201083      0.000   Expected recruitment
-#> 203 0.780485333 0.9384732      0.000      Expected survival
-#> 204 0.759042586 0.9328201      0.000      Expected survival
-#> 205 0.773706666 0.9391721      0.000      Expected survival
-#> 206 0.778036543 0.9421894      0.000      Expected survival
-#> 207 0.796719427 0.9437177      0.000      Expected survival
-#> 208 0.773614915 0.9386350      0.000      Expected survival
-#> 209 0.767741273 0.9321966      0.000      Expected survival
-#> 210 0.775618444 0.9345028      0.000      Expected survival
-#> 211 0.766599482 0.9317062      0.000      Expected survival
-#> 212 0.770166582 0.9392505      0.000      Expected survival
-#> 213 0.766020705 0.9391414      0.000      Expected survival
-#> 214 0.780366243 0.9451407      0.000      Expected survival
-#> 215 0.737429727 0.9227291      0.000      Expected survival
-#> 216 0.722848252 0.9142055      0.000      Expected survival
-#> 217 0.747810035 0.9219176      0.000      Expected survival
-#> 218 0.777133202 0.9473148      0.000      Expected survival
-#> 219 0.776476531 0.9368256      0.000      Expected survival
-#> 220 0.754681868 0.9325140      0.000      Expected survival
-#> 221 0.746003536 0.9252067      0.000      Expected survival
-#> 222 0.757553684 0.9302476      0.000      Expected survival
-#> 223 0.760739365 0.9322969      0.000      Expected survival
-#> 224 0.775123961 0.9373358      0.000      Expected survival
-#> 225 0.786874943 0.9468515      0.000      Expected survival
-#> 226 0.740004913 0.9215816      0.000      Expected survival
-#> 227 0.726390497 0.9170449      0.000      Expected survival
-#> 228 0.755643943 0.9237395      0.000      Expected survival
-#> 229 0.777181956 0.9385618      0.000      Expected survival
-#> 230 0.764968228 0.9362196      0.000      Expected survival
-#> 231 0.769981757 0.9333351      0.000      Expected survival
-#> 232 0.750512150 0.9277160      0.000      Expected survival
-#> 233 0.735668057 0.9204262      0.000      Expected survival
-#> 234 0.768240187 0.9326586      0.000      Expected survival
-#> 235 0.775051284 0.9390920      0.000      Expected survival
-#> 236 0.780490266 0.9413631      0.000      Expected survival
-#> 237 0.747225836 0.9170104      0.000      Expected survival
-#> 238 0.732089085 0.9100785      0.000      Expected survival
-#> 239 0.747678439 0.9246239      0.000      Expected survival
-#> 240 0.788778663 0.9414727      0.000      Expected survival
-#> 241 0.766462897 0.9367892      0.000      Expected survival
-#> 242 0.761815573 0.9338709      0.000      Expected survival
-#> 243 0.748120511 0.9253422      0.000      Expected survival
-#> 244 0.713765132 0.9004940      0.000      Expected survival
-#> 245 0.734494094 0.9215556      0.000      Expected survival
-#> 246 0.750358449 0.9303778      0.000      Expected survival
-#> 247 0.779320013 0.9462082      0.000      Expected survival
-#> 248 0.737566377 0.9192601      0.000      Expected survival
-#> 249 0.730357878 0.9092833      0.000      Expected survival
-#> 250 0.760358829 0.9291921      0.000      Expected survival
-#> 251 0.735993894 0.9177685      0.000      Expected survival
-#> 252 0.774297379 0.9346273      0.000      Expected survival
-#> 253 0.758164199 0.9316208      0.000      Expected survival
-#> 254 0.750632250 0.9287135      0.000      Expected survival
-#> 255 0.706023361 0.9003150      0.000      Expected survival
-#> 256 0.740309464 0.9223487      0.000      Expected survival
-#> 257 0.749611645 0.9307859      0.000      Expected survival
-#> 258 0.742856682 0.9237137      0.000      Expected survival
-#> 259 0.737452537 0.9180682      0.000      Expected survival
-#> 260 0.722665044 0.9162240      0.000      Expected survival
-#> 261 0.722836863 0.9101288      0.000      Expected survival
-#> 262 0.747885398 0.9212247      0.000      Expected survival
-#> 263 0.735466668 0.9139755      0.000      Expected survival
-#> 264 0.759394575 0.9310624      0.000      Expected survival
-#> 265 0.743523508 0.9179784      0.000      Expected survival
-#> 266 0.697342467 0.9029509      0.000      Expected survival
-#> 267 0.742042662 0.9254019      0.000      Expected survival
-#> 268 0.726365961 0.9100210      0.000      Expected survival
-#> 269 0.720575015 0.9113394      0.000      Expected survival
-#> 270 0.725489534 0.9144225      0.000      Expected survival
-#> 271 0.724007482 0.9151109      0.000      Expected survival
-#> 272 0.718139003 0.9124948      0.000      Expected survival
-#> 273 0.704823196 0.9041788      0.000      Expected survival
-#> 274 0.725709060 0.9160972      0.000      Expected survival
-#> 275 0.749858463 0.9316418      0.000      Expected survival
-#> 276 0.743791380 0.9241463      0.000      Expected survival
-#> 277 0.707656782 0.9060399      0.000      Expected survival
-#> 278 0.700165196 0.9029360      0.000      Expected survival
-#> 279 0.712101052 0.9067889      0.000      Expected survival
-#> 280 0.723885136 0.9102440      0.000      Expected survival
-#> 281 0.737223989 0.9214828      0.000      Expected survival
-#> 282 0.703949376 0.8958275      0.000      Expected survival
-#> 283 0.717329752 0.9049676      0.000      Expected survival
-#> 284 0.719924068 0.9033486      0.000      Expected survival
-#> 285 0.709302233 0.9075587      0.000      Expected survival
-#> 286 0.720497138 0.9085328      0.000      Expected survival
-#> 287 0.751427582 0.9233391      0.000      Expected survival
-#> 288 0.704727123 0.9033797      0.000      Expected survival
-#> 289 0.706208497 0.9009861      0.000      Expected survival
-#> 290 0.717292248 0.9106215      0.000      Expected survival
-#> 291 0.734283917 0.9173306      0.000      Expected survival
-#> 292 0.738663360 0.9152090      0.000      Expected survival
-#> 293 0.703178257 0.9009843      0.000      Expected survival
-#> 294 0.711661218 0.9033326      0.000      Expected survival
-#> 295 0.705643873 0.8980982      0.000      Expected survival
-#> 296 0.707523342 0.8953954      0.000      Expected survival
-#> 297 0.707439173 0.9050399      0.000      Expected survival
-#> 298 0.724460797 0.9092558      0.000      Expected survival
-#> 299 0.702171134 0.8989137      0.000      Expected survival
-#> 300 0.719478660 0.9126057      0.000      Expected survival
-#> 301 0.711169926 0.9058747      0.000      Expected survival
-#> 302 0.702316449 0.9073356      0.000      Expected survival
-#> 303 0.713436533 0.9064586      0.000      Expected survival
-#> 304 0.031001127 0.3394074      0.000   Adjusted recruitment
-#> 305 0.028431545 0.3260286      0.000   Adjusted recruitment
-#> 306 0.032562286 0.3467065      0.000   Adjusted recruitment
-#> 307 0.029562755 0.3320089      0.000   Adjusted recruitment
-#> 308 0.035114044 0.3196114      0.000   Adjusted recruitment
-#> 309 0.010800223 0.2264695      0.000   Adjusted recruitment
-#> 310 0.042680445 0.3658639      0.000   Adjusted recruitment
-#> 311 0.030371583 0.3151224      0.000   Adjusted recruitment
-#> 312 0.044829552 0.3685186      0.000   Adjusted recruitment
-#> 313 0.015993747 0.2696311      0.000   Adjusted recruitment
-#> 314 0.018565618 0.2988898      0.000   Adjusted recruitment
-#> 315 0.029606213 0.3364709      0.000   Adjusted recruitment
-#> 316 0.020660362 0.2869034      0.000   Adjusted recruitment
-#> 317 0.035639904 0.3591293      0.000   Adjusted recruitment
-#> 318 0.010219043 0.2100385      0.000   Adjusted recruitment
-#> 319 0.039153753 0.3595255      0.000   Adjusted recruitment
-#> 320 0.011229066 0.2176975      0.000   Adjusted recruitment
-#> 321 0.026684762 0.3110305      0.000   Adjusted recruitment
-#> 322 0.028648817 0.3309550      0.000   Adjusted recruitment
-#> 323 0.021356127 0.2948993      0.000   Adjusted recruitment
-#> 324 0.015301391 0.2536841      0.000   Adjusted recruitment
-#> 325 0.009478743 0.2117562      0.000   Adjusted recruitment
-#> 326 0.024942371 0.3166807      0.000   Adjusted recruitment
-#> 327 0.032619428 0.3478248      0.000   Adjusted recruitment
-#> 328 0.041276441 0.3618718      0.000   Adjusted recruitment
-#> 329 0.009241155 0.2020580      0.000   Adjusted recruitment
-#> 330 0.022411113 0.2780629      0.000   Adjusted recruitment
-#> 331 0.014996881 0.2476930      0.000   Adjusted recruitment
-#> 332 0.022936934 0.3056092      0.000   Adjusted recruitment
-#> 333 0.027423096 0.3232648      0.000   Adjusted recruitment
-#> 334 0.017244380 0.2717590      0.000   Adjusted recruitment
-#> 335 0.016073328 0.2492040      0.000   Adjusted recruitment
-#> 336 0.002067285 0.1425564      0.000   Adjusted recruitment
-#> 337 0.022407760 0.2954276      0.000   Adjusted recruitment
-#> 338 0.020437600 0.2690777      0.000   Adjusted recruitment
-#> 339 0.034738259 0.3572403      0.000   Adjusted recruitment
-#> 340 0.008820204 0.2126177      0.000   Adjusted recruitment
-#> 341 0.006013229 0.2004367      0.000   Adjusted recruitment
-#> 342 0.015809372 0.2392596      0.000   Adjusted recruitment
-#> 343 0.034516126 0.3418280      0.000   Adjusted recruitment
-#> 344 0.025810995 0.3061255      0.000   Adjusted recruitment
-#> 345 0.016284611 0.2708082      0.000   Adjusted recruitment
-#> 346 0.013216461 0.2564884      0.000   Adjusted recruitment
-#> 347 0.001748525 0.1418229      0.000   Adjusted recruitment
-#> 348 0.006560527 0.2029494      0.000   Adjusted recruitment
-#> 349 0.017133841 0.2697541      0.000   Adjusted recruitment
-#> 350 0.036639709 0.3716503      0.000   Adjusted recruitment
-#> 351 0.009249425 0.2129351      0.000   Adjusted recruitment
-#> 352 0.005365860 0.1716499      0.000   Adjusted recruitment
-#> 353 0.003720321 0.1775633      0.000   Adjusted recruitment
-#> 354 0.010061205 0.2266840      0.000   Adjusted recruitment
-#> 355 0.023249292 0.3078357      0.000   Adjusted recruitment
-#> 356 0.019253547 0.2625670      0.000   Adjusted recruitment
-#> 357 0.013147797 0.2101731      0.000   Adjusted recruitment
-#> 358 0.001919837 0.1255906      0.000   Adjusted recruitment
-#> 359 0.005530048 0.1922940      0.000   Adjusted recruitment
-#> 360 0.017269594 0.2548947      0.000   Adjusted recruitment
-#> 361 0.034768775 0.3517596      0.000   Adjusted recruitment
-#> 362 0.009589294 0.2233298      0.000   Adjusted recruitment
-#> 363 0.005741622 0.1530477      0.000   Adjusted recruitment
-#> 364 0.003472051 0.1634568      0.000   Adjusted recruitment
-#> 365 0.002138534 0.1388684      0.000   Adjusted recruitment
-#> 366 0.007576879 0.1829956      0.000   Adjusted recruitment
-#> 367 0.016586998 0.2671724      0.000   Adjusted recruitment
-#> 368 0.014923491 0.2383137      0.000   Adjusted recruitment
-#> 369 0.001648147 0.1436701      0.000   Adjusted recruitment
-#> 370 0.006238823 0.1663498      0.000   Adjusted recruitment
-#> 371 0.003976671 0.1773641      0.000   Adjusted recruitment
-#> 372 0.033001935 0.3473253      0.000   Adjusted recruitment
-#> 373 0.007960540 0.2084247      0.000   Adjusted recruitment
-#> 374 0.004826502 0.1660388      0.000   Adjusted recruitment
-#> 375 0.003230350 0.1514638      0.000   Adjusted recruitment
-#> 376 0.004138680 0.1622013      0.000   Adjusted recruitment
-#> 377 0.006310389 0.1925378      0.000   Adjusted recruitment
-#> 378 0.004221333 0.1726412      0.000   Adjusted recruitment
-#> 379 0.011961223 0.2275669      0.000   Adjusted recruitment
-#> 380 0.001335195 0.1490739      0.000   Adjusted recruitment
-#> 381 0.002196636 0.1484747      0.000   Adjusted recruitment
-#> 382 0.003954848 0.1672298      0.000   Adjusted recruitment
-#> 383 0.011868720 0.2403761      0.000   Adjusted recruitment
-#> 384 0.007742258 0.1941933      0.000   Adjusted recruitment
-#> 385 0.004601867 0.1815406      0.000   Adjusted recruitment
-#> 386 0.002599117 0.1500041      0.000   Adjusted recruitment
-#> 387 0.004964082 0.1630920      0.000   Adjusted recruitment
-#> 388 0.010823630 0.2411510      0.000   Adjusted recruitment
-#> 389 0.001082044 0.1311856      0.000   Adjusted recruitment
-#> 390 0.012346528 0.2235748      0.000   Adjusted recruitment
-#> 391 0.001016650 0.1285958      0.000   Adjusted recruitment
-#> 392 0.004789268 0.1627074      0.000   Adjusted recruitment
-#> 393 0.002647353 0.1396084      0.000   Adjusted recruitment
-#> 394 0.005179028 0.1710904      0.000   Adjusted recruitment
-#> 395 0.008727710 0.1864732      0.000   Adjusted recruitment
-#> 396 0.001032432 0.1230994      0.000   Adjusted recruitment
-#> 397 0.002826836 0.1581615      0.000   Adjusted recruitment
-#> 398 0.001493752 0.1278923      0.000   Adjusted recruitment
-#> 399 0.013413190 0.2164405      0.000   Adjusted recruitment
-#> 400 0.002542094 0.1446058      0.000   Adjusted recruitment
-#> 401 0.001914682 0.1343894      0.000   Adjusted recruitment
-#> 402 0.002002879 0.1399989      0.000   Adjusted recruitment
-#> 403 0.002690535 0.1479161      0.000   Adjusted recruitment
-#> 404 0.002516211 0.1420936      0.000   Adjusted recruitment
-#> 405 1.000000000 1.0000000      1.000                      c
-#> 406 1.000000000 1.0000000      1.000                      c
-#> 407 1.000000000 1.0000000      1.000                      c
-#> 408 1.000000000 1.0000000      1.000                      c
-#> 409 1.000000000 1.0000000      1.000                      c
-#> 410 1.000000000 1.0000000      1.000                      c
-#> 411 1.000000000 1.0000000      1.000                      c
-#> 412 1.000000000 1.0000000      1.000                      c
-#> 413 1.000000000 1.0000000      1.000                      c
-#> 414 1.000000000 1.0000000      1.000                      c
-#> 415 1.000000000 1.0000000      1.000                      c
-#> 416 1.000000000 1.0000000      1.000                      c
-#> 417 1.000000000 1.0000000      1.000                      c
-#> 418 1.000000000 1.0000000      1.000                      c
-#> 419 1.000000000 1.0000000      1.000                      c
-#> 420 1.000000000 1.0000000      1.000                      c
-#> 421 1.000000000 1.0000000      1.000                      c
-#> 422 1.000000000 1.0000000      1.000                      c
-#> 423 1.000000000 1.0000000      1.000                      c
-#> 424 1.000000000 1.0000000      1.000                      c
-#> 425 1.000000000 1.0000000      1.000                      c
-#> 426 1.000000000 1.0000000      1.000                      c
-#> 427 1.000000000 1.0000000      1.000                      c
-#> 428 1.000000000 1.0000000      1.000                      c
-#> 429 1.000000000 1.0000000      1.000                      c
-#> 430 1.000000000 1.0000000      1.000                      c
-#> 431 1.000000000 1.0000000      1.000                      c
-#> 432 1.000000000 1.0000000      1.000                      c
-#> 433 1.000000000 1.0000000      1.000                      c
-#> 434 1.000000000 1.0000000      1.000                      c
-#> 435 1.000000000 1.0000000      1.000                      c
-#> 436 1.000000000 1.0000000      1.000                      c
-#> 437 1.000000000 1.0000000      1.000                      c
-#> 438 1.000000000 1.0000000      1.000                      c
-#> 439 1.000000000 1.0000000      1.000                      c
-#> 440 1.000000000 1.0000000      1.000                      c
-#> 441 1.000000000 1.0000000      1.000                      c
-#> 442 1.000000000 1.0000000      1.000                      c
-#> 443 1.000000000 1.0000000      1.000                      c
-#> 444 1.000000000 1.0000000      1.000                      c
-#> 445 1.000000000 1.0000000      1.000                      c
-#> 446 1.000000000 1.0000000      1.000                      c
-#> 447 1.000000000 1.0000000      1.000                      c
-#> 448 1.000000000 1.0000000      1.000                      c
-#> 449 1.000000000 1.0000000      1.000                      c
-#> 450 1.000000000 1.0000000      1.000                      c
-#> 451 1.000000000 1.0000000      1.000                      c
-#> 452 1.000000000 1.0000000      1.000                      c
-#> 453 1.000000000 1.0000000      1.000                      c
-#> 454 1.000000000 1.0000000      1.000                      c
-#> 455 1.000000000 1.0000000      1.000                      c
-#> 456 1.000000000 1.0000000      1.000                      c
-#> 457 1.000000000 1.0000000      1.000                      c
-#> 458 1.000000000 1.0000000      1.000                      c
-#> 459 1.000000000 1.0000000      1.000                      c
-#> 460 1.000000000 1.0000000      1.000                      c
-#> 461 1.000000000 1.0000000      1.000                      c
-#> 462 1.000000000 1.0000000      1.000                      c
-#> 463 1.000000000 1.0000000      1.000                      c
-#> 464 1.000000000 1.0000000      1.000                      c
-#> 465 1.000000000 1.0000000      1.000                      c
-#> 466 1.000000000 1.0000000      1.000                      c
-#> 467 1.000000000 1.0000000      1.000                      c
-#> 468 1.000000000 1.0000000      1.000                      c
-#> 469 1.000000000 1.0000000      1.000                      c
-#> 470 1.000000000 1.0000000      1.000                      c
-#> 471 1.000000000 1.0000000      1.000                      c
-#> 472 1.000000000 1.0000000      1.000                      c
-#> 473 1.000000000 1.0000000      1.000                      c
-#> 474 1.000000000 1.0000000      1.000                      c
-#> 475 1.000000000 1.0000000      1.000                      c
-#> 476 1.000000000 1.0000000      1.000                      c
-#> 477 1.000000000 1.0000000      1.000                      c
-#> 478 1.000000000 1.0000000      1.000                      c
-#> 479 1.000000000 1.0000000      1.000                      c
-#> 480 1.000000000 1.0000000      1.000                      c
-#> 481 1.000000000 1.0000000      1.000                      c
-#> 482 1.000000000 1.0000000      1.000                      c
-#> 483 1.000000000 1.0000000      1.000                      c
-#> 484 1.000000000 1.0000000      1.000                      c
-#> 485 1.000000000 1.0000000      1.000                      c
-#> 486 1.000000000 1.0000000      1.000                      c
-#> 487 1.000000000 1.0000000      1.000                      c
-#> 488 1.000000000 1.0000000      1.000                      c
-#> 489 1.000000000 1.0000000      1.000                      c
-#> 490 1.000000000 1.0000000      1.000                      c
-#> 491 1.000000000 1.0000000      1.000                      c
-#> 492 1.000000000 1.0000000      1.000                      c
-#> 493 1.000000000 1.0000000      1.000                      c
-#> 494 1.000000000 1.0000000      1.000                      c
-#> 495 1.000000000 1.0000000      1.000                      c
-#> 496 1.000000000 1.0000000      1.000                      c
-#> 497 1.000000000 1.0000000      1.000                      c
-#> 498 1.000000000 1.0000000      1.000                      c
-#> 499 1.000000000 1.0000000      1.000                      c
-#> 500 1.000000000 1.0000000      1.000                      c
-#> 501 1.000000000 1.0000000      1.000                      c
-#> 502 1.000000000 1.0000000      1.000                      c
-#> 503 1.000000000 1.0000000      1.000                      c
-#> 504 1.000000000 1.0000000      1.000                      c
-#> 505 1.000000000 1.0000000      1.000                      c
-#> 506 0.761950000 1.2320250      0.484 Population growth rate
-#> 507 0.776950000 1.2610500      0.581 Population growth rate
-#> 508 0.734975000 1.2070250      0.479 Population growth rate
-#> 509 0.754000000 1.2340500      0.475 Population growth rate
-#> 510 0.734975000 1.1630250      0.369 Population growth rate
-#> 511 0.751000000 1.2350500      0.506 Population growth rate
-#> 512 0.756000000 1.2850000      0.579 Population growth rate
-#> 513 0.698975000 1.0820000      0.183 Population growth rate
-#> 514 0.744975000 1.2210000      0.474 Population growth rate
-#> 515 0.752975000 1.2172000      0.509 Population growth rate
-#> 516 0.778000000 1.2290250      0.546 Population growth rate
-#> 517 0.747975000 1.2010250      0.440 Population growth rate
-#> 518 0.754925000 1.1681250      0.366 Population growth rate
-#> 519 0.748875000 1.1980000      0.419 Population growth rate
-#> 520 0.747000000 1.1540250      0.375 Population growth rate
-#> 521 0.789975000 1.2840000      0.621 Population growth rate
-#> 522 0.740000000 1.2280750      0.491 Population growth rate
-#> 523 0.770975000 1.2690250      0.574 Population growth rate
-#> 524 0.691900000 1.0821000      0.158 Population growth rate
-#> 525 0.735950000 1.1820500      0.377 Population growth rate
-#> 526 0.795950000 1.2790250      0.619 Population growth rate
-#> 527 0.760975000 1.2190250      0.501 Population growth rate
-#> 528 0.731975000 1.2000250      0.455 Population growth rate
-#> 529 0.717950000 1.1590250      0.323 Population growth rate
-#> 530 0.768975000 1.2880000      0.606 Population growth rate
-#> 531 0.736950000 1.1610500      0.325 Population growth rate
-#> 532 0.779950000 1.2670000      0.607 Population growth rate
-#> 533 0.755975000 1.2190000      0.496 Population growth rate
-#> 534 0.782000000 1.2511000      0.548 Population growth rate
-#> 535 0.693900000 1.0900000      0.155 Population growth rate
-#> 536 0.694975000 1.0440250      0.114 Population growth rate
-#> 537 0.773925000 1.2750250      0.625 Population growth rate
-#> 538 0.701975000 1.1140000      0.198 Population growth rate
-#> 539 0.735925000 1.1690500      0.392 Population growth rate
-#> 540 0.720975000 1.1570750      0.325 Population growth rate
-#> 541 0.711975000 1.1130250      0.223 Population growth rate
-#> 542 0.705975000 1.0741000      0.175 Population growth rate
-#> 543 0.756975000 1.1960250      0.367 Population growth rate
-#> 544 0.696975000 1.0740750      0.165 Population growth rate
-#> 545 0.755975000 1.2480750      0.525 Population growth rate
-#> 546 0.693000000 1.0700500      0.130 Population growth rate
-#> 547 0.680925000 1.0570500      0.127 Population growth rate
-#> 548 0.714975000 1.1290500      0.234 Population growth rate
-#> 549 0.704925000 1.1121000      0.210 Population growth rate
-#> 550 0.751975000 1.1890250      0.396 Population growth rate
-#> 551 0.714950000 1.1441750      0.311 Population growth rate
-#> 552 0.717000000 1.1221250      0.248 Population growth rate
-#> 553 0.664950000 1.0250500      0.054 Population growth rate
-#> 554 0.688950000 1.0511000      0.112 Population growth rate
-#> 555 0.709925000 1.1511000      0.271 Population growth rate
-#> 556 0.716875000 1.1080250      0.244 Population growth rate
-#> 557 0.689975000 1.0660000      0.157 Population growth rate
-#> 558 0.686900000 1.0600500      0.107 Population growth rate
-#> 559 0.734975000 1.1170250      0.272 Population growth rate
-#> 560 0.704000000 1.0850000      0.181 Population growth rate
-#> 561 0.734975000 1.1840250      0.408 Population growth rate
-#> 562 0.718000000 1.1570500      0.302 Population growth rate
-#> 563 0.695975000 1.1200000      0.234 Population growth rate
-#> 564 0.664000000 1.0000000      0.031 Population growth rate
-#> 565 0.688950000 1.0490500      0.121 Population growth rate
-#> 566 0.711975000 1.1371000      0.294 Population growth rate
-#> 567 0.696000000 1.0940500      0.215 Population growth rate
-#> 568 0.694000000 1.0850250      0.154 Population growth rate
-#> 569 0.686925000 1.0370250      0.095 Population growth rate
-#> 570 0.720975000 1.1210250      0.248 Population growth rate
-#> 571 0.658000000 1.0280250      0.064 Population growth rate
-#> 572 0.724000000 1.1660000      0.366 Population growth rate
-#> 573 0.723975000 1.1470000      0.317 Population growth rate
-#> 574 0.707975000 1.1180000      0.212 Population growth rate
-#> 575 0.671950000 1.0070250      0.038 Population growth rate
-#> 576 0.679975000 1.0240250      0.055 Population growth rate
-#> 577 0.716975000 1.1270500      0.258 Population growth rate
-#> 578 0.677950000 1.0210500      0.061 Population growth rate
-#> 579 0.694900000 1.0740500      0.145 Population growth rate
-#> 580 0.682975000 1.0580000      0.113 Population growth rate
-#> 581 0.669850000 1.0231250      0.070 Population growth rate
-#> 582 0.667975000 1.0200250      0.051 Population growth rate
-#> 583 0.692000000 1.0730000      0.130 Population growth rate
-#> 584 0.715000000 1.1212000      0.272 Population growth rate
-#> 585 0.715000000 1.1190500      0.214 Population growth rate
-#> 586 0.666000000 1.0160250      0.048 Population growth rate
-#> 587 0.666950000 1.0130000      0.048 Population growth rate
-#> 588 0.677975000 1.0411000      0.074 Population growth rate
-#> 589 0.679000000 1.0430250      0.098 Population growth rate
-#> 590 0.682975000 1.0671000      0.149 Population growth rate
-#> 591 0.685925000 1.0360000      0.096 Population growth rate
-#> 592 0.670000000 1.0310750      0.065 Population growth rate
-#> 593 0.664975000 1.0401000      0.090 Population growth rate
-#> 594 0.665000000 1.0160250      0.059 Population growth rate
-#> 595 0.681000000 1.0350250      0.096 Population growth rate
-#> 596 0.666975000 1.0200500      0.071 Population growth rate
-#> 597 0.655000000 1.0270000      0.074 Population growth rate
-#> 598 0.671000000 1.0431000      0.095 Population growth rate
-#> 599 0.671000000 1.0431000      0.085 Population growth rate
-#> 600 0.675950000 1.0440000      0.086 Population growth rate
-#> 601 0.696950000 1.0620250      0.126 Population growth rate
-#> 602 0.669000000 1.0260750      0.062 Population growth rate
-#> 603 0.673000000 1.0130000      0.060 Population growth rate
-#> 604 0.673975000 1.0230250      0.072 Population growth rate
-#> 605 0.665900000 1.0160000      0.054 Population growth rate
-#> 606 0.689000000 1.0650250      0.129 Population growth rate
-#> 607 0.849762350 1.1063926      0.398   Expected growth rate
-#> 608 0.849996376 1.1066572      0.453   Expected growth rate
-#> 609 0.849836916 1.0998957      0.437   Expected growth rate
-#> 610 0.876528786 1.1468541      0.660   Expected growth rate
-#> 611 0.833447846 1.0935769      0.384   Expected growth rate
-#> 612 0.877250754 1.1233477      0.543   Expected growth rate
-#> 613 0.844647252 1.0954428      0.361   Expected growth rate
-#> 614 0.865306753 1.1210310      0.577   Expected growth rate
-#> 615 0.871289813 1.1367136      0.560   Expected growth rate
-#> 616 0.770564137 1.0017345      0.037   Expected growth rate
-#> 617 0.847302872 1.0946655      0.375   Expected growth rate
-#> 618 0.889256450 1.1622660      0.731   Expected growth rate
-#> 619 0.874968874 1.1258111      0.519   Expected growth rate
-#> 620 0.835760195 1.0858981      0.322   Expected growth rate
-#> 621 0.890207448 1.1344661      0.622   Expected growth rate
-#> 622 0.878874885 1.1437362      0.657   Expected growth rate
-#> 623 0.859760371 1.1185574      0.489   Expected growth rate
-#> 624 0.893394473 1.1523723      0.693   Expected growth rate
-#> 625 0.811739184 1.0697568      0.190   Expected growth rate
-#> 626 0.873655418 1.1373699      0.563   Expected growth rate
-#> 627 0.768543537 1.0087162      0.047   Expected growth rate
-#> 628 0.817597044 1.0665082      0.242   Expected growth rate
-#> 629 0.899674004 1.1648498      0.703   Expected growth rate
-#> 630 0.861196643 1.1169267      0.503   Expected growth rate
-#> 631 0.833247416 1.0956301      0.350   Expected growth rate
-#> 632 0.806915864 1.0568854      0.180   Expected growth rate
-#> 633 0.795893100 1.0263261      0.110   Expected growth rate
-#> 634 0.766358632 1.0110055      0.056   Expected growth rate
-#> 635 0.836850447 1.0741273      0.274   Expected growth rate
-#> 636 0.807351803 1.0601743      0.172   Expected growth rate
-#> 637 0.775473611 1.0294159      0.079   Expected growth rate
-#> 638 0.763799527 1.0051864      0.040   Expected growth rate
-#> 639 0.811822778 1.0704157      0.203   Expected growth rate
-#> 640 0.887796042 1.1504288      0.697   Expected growth rate
-#> 641 0.860593891 1.1168016      0.509   Expected growth rate
-#> 642 0.847053356 1.0835754      0.325   Expected growth rate
-#> 643 0.804114605 1.0530396      0.168   Expected growth rate
-#> 644 0.795550669 1.0418377      0.096   Expected growth rate
-#> 645 0.782312051 1.0036874      0.052   Expected growth rate
-#> 646 0.833087606 1.0774340      0.254   Expected growth rate
-#> 647 0.795641994 1.0461848      0.152   Expected growth rate
-#> 648 0.792423678 1.0315776      0.079   Expected growth rate
-#> 649 0.773238434 1.0113616      0.053   Expected growth rate
-#> 650 0.807142335 1.0686565      0.230   Expected growth rate
-#> 651 0.905946425 1.1777761      0.735   Expected growth rate
-#> 652 0.856592010 1.1123744      0.499   Expected growth rate
-#> 653 0.831601354 1.0749620      0.310   Expected growth rate
-#> 654 0.820727605 1.0617557      0.191   Expected growth rate
-#> 655 0.774053559 1.0251429      0.079   Expected growth rate
-#> 656 0.718916901 0.9432136      0.003   Expected growth rate
-#> 657 0.824469093 1.0674089      0.233   Expected growth rate
-#> 658 0.805390706 1.0385995      0.123   Expected growth rate
-#> 659 0.784239865 1.0258746      0.077   Expected growth rate
-#> 660 0.764593834 0.9993018      0.034   Expected growth rate
-#> 661 0.754375614 0.9800034      0.014   Expected growth rate
-#> 662 0.785669626 1.0308428      0.113   Expected growth rate
-#> 663 0.776463262 1.0126358      0.056   Expected growth rate
-#> 664 0.830481349 1.0754242      0.285   Expected growth rate
-#> 665 0.809190619 1.0503799      0.158   Expected growth rate
-#> 666 0.794726774 1.0372381      0.103   Expected growth rate
-#> 667 0.720245564 0.9410478      0.004   Expected growth rate
-#> 668 0.756034903 0.9880468      0.025   Expected growth rate
-#> 669 0.797661988 1.0336279      0.122   Expected growth rate
-#> 670 0.780560334 1.0213868      0.078   Expected growth rate
-#> 671 0.759322633 0.9985797      0.036   Expected growth rate
-#> 672 0.752694777 0.9716610      0.010   Expected growth rate
-#> 673 0.733239786 0.9492793      0.004   Expected growth rate
-#> 674 0.728520822 0.9536920      0.005   Expected growth rate
-#> 675 0.753236594 0.9923791      0.028   Expected growth rate
-#> 676 0.743491033 0.9729378      0.011   Expected growth rate
-#> 677 0.726895312 0.9549189      0.007   Expected growth rate
-#> 678 0.800347050 1.0358372      0.111   Expected growth rate
-#> 679 0.756209163 0.9778812      0.019   Expected growth rate
-#> 680 0.804707899 1.0458430      0.137   Expected growth rate
-#> 681 0.788726810 1.0138535      0.065   Expected growth rate
-#> 682 0.760964755 0.9939631      0.029   Expected growth rate
-#> 683 0.746517660 0.9742778      0.013   Expected growth rate
-#> 684 0.726382118 0.9591822      0.008   Expected growth rate
-#> 685 0.720234702 0.9494289      0.002   Expected growth rate
-#> 686 0.745256896 0.9882367      0.023   Expected growth rate
-#> 687 0.736298649 0.9653131      0.011   Expected growth rate
-#> 688 0.725945563 0.9526612      0.005   Expected growth rate
-#> 689 0.732657602 0.9587883      0.006   Expected growth rate
-#> 690 0.751377415 0.9838269      0.018   Expected growth rate
-#> 691 0.755258667 0.9918062      0.027   Expected growth rate
-#> 692 0.777910735 1.0112597      0.051   Expected growth rate
-#> 693 0.767382074 0.9918635      0.026   Expected growth rate
-#> 694 0.740446437 0.9832994      0.018   Expected growth rate
-#> 695 0.728596473 0.9621522      0.003   Expected growth rate
-#> 696 0.742951353 0.9685295      0.009   Expected growth rate
-#> 697 0.755569295 0.9807608      0.018   Expected growth rate
-#> 698 0.740432814 0.9618269      0.010   Expected growth rate
-#> 699 0.731531215 0.9467174      0.003   Expected growth rate
-#> 700 0.727313934 0.9513384      0.004   Expected growth rate
-#> 701 0.750845528 0.9730833      0.010   Expected growth rate
-#> 702 0.735219945 0.9530471      0.007   Expected growth rate
-#> 703 0.721426475 0.9475747      0.005   Expected growth rate
-#> 704 0.715178420 0.9579284      0.006   Expected growth rate
-#> 705 0.742221644 0.9732051      0.014   Expected growth rate
-#> 706 0.738061441 0.9614774      0.002   Expected growth rate
-#> 707 0.722254160 0.9517494      0.005   Expected growth rate
-#> 708 0.066003870 0.6946506      0.000            Recruitment
-#> 709 0.054846192 0.6465296      0.000            Recruitment
-#> 710 0.073279418 0.7433005      0.000            Recruitment
-#> 711 0.082552883 0.7237437      0.000            Recruitment
-#> 712 0.051621989 0.6122510      0.000            Recruitment
-#> 713 0.034267682 0.5395083      0.000            Recruitment
-#> 714 0.069537549 0.7035191      0.000            Recruitment
-#> 715 0.069032252 0.6836561      0.000            Recruitment
-#> 716 0.053369525 0.6220609      0.000            Recruitment
-#> 717 0.031987494 0.5392621      0.000            Recruitment
-#> 718 0.078307507 0.7190510      0.000            Recruitment
-#> 719 0.065124573 0.6934131      0.000            Recruitment
-#> 720 0.069476518 0.7144807      0.000            Recruitment
-#> 721 0.056863090 0.6520572      0.000            Recruitment
-#> 722 0.065238856 0.6956497      0.000            Recruitment
-#> 723 0.046498585 0.6156713      0.000            Recruitment
-#> 724 0.034539188 0.5097894      0.000            Recruitment
-#> 725 0.071279808 0.7182585      0.000            Recruitment
-#> 726 0.070228088 0.6392228      0.000            Recruitment
-#> 727 0.045873869 0.6112184      0.000            Recruitment
-#> 728 0.030602781 0.5073682      0.000            Recruitment
-#> 729 0.018957485 0.4235124      0.000            Recruitment
-#> 730 0.057297635 0.6619099      0.000            Recruitment
-#> 731 0.020122410 0.4533681      0.000            Recruitment
-#> 732 0.060743167 0.6302448      0.000            Recruitment
-#> 733 0.062002255 0.6788148      0.000            Recruitment
-#> 734 0.049884743 0.6333615      0.000            Recruitment
-#> 735 0.029993761 0.4953861      0.000            Recruitment
-#> 736 0.026826380 0.4328811      0.000            Recruitment
-#> 737 0.059212427 0.6729419      0.000            Recruitment
-#> 738 0.044822227 0.5561257      0.000            Recruitment
-#> 739 0.032146656 0.4984080      0.000            Recruitment
-#> 740 0.021600445 0.4529390      0.000            Recruitment
-#> 741 0.012620777 0.3850756      0.000            Recruitment
-#> 742 0.040875201 0.5381554      0.000            Recruitment
-#> 743 0.089659104 0.7370371      0.000            Recruitment
-#> 744 0.059125510 0.6640178      0.000            Recruitment
-#> 745 0.044815520 0.5908552      0.000            Recruitment
-#> 746 0.031618745 0.4785192      0.000            Recruitment
-#> 747 0.023737440 0.4807521      0.000            Recruitment
-#> 748 0.015484516 0.3883865      0.000            Recruitment
-#> 749 0.037131236 0.5977795      0.000            Recruitment
-#> 750 0.026432921 0.5129768      0.000            Recruitment
-#> 751 0.022458131 0.4353950      0.000            Recruitment
-#> 752 0.013121054 0.4058989      0.000            Recruitment
-#> 753 0.032569223 0.5416165      0.000            Recruitment
-#> 754 0.024693055 0.4471495      0.000            Recruitment
-#> 755 0.018498851 0.4258702      0.000            Recruitment
-#> 756 0.010731720 0.3432998      0.000            Recruitment
-#> 757 0.007440642 0.3551266      0.000            Recruitment
-#> 758 0.004393273 0.2969493      0.000            Recruitment
-#> 759 0.017455420 0.3729465      0.000            Recruitment
-#> 760 0.041320725 0.5738068      0.000            Recruitment
-#> 761 0.026295593 0.4203462      0.000            Recruitment
-#> 762 0.020438087 0.4200771      0.000            Recruitment
-#> 763 0.011060096 0.3845881      0.000            Recruitment
-#> 764 0.038507093 0.5251340      0.000            Recruitment
-#> 765 0.021647259 0.4823020      0.000            Recruitment
-#> 766 0.019178587 0.4466596      0.000            Recruitment
-#> 767 0.011483244 0.3060954      0.000            Recruitment
-#> 768 0.006944101 0.3269136      0.000            Recruitment
-#> 769 0.004277069 0.2777368      0.000            Recruitment
-#> 770 0.015153757 0.3659912      0.000            Recruitment
-#> 771 0.042712254 0.5897986      0.000            Recruitment
-#> 772 0.029846982 0.4766273      0.000            Recruitment
-#> 773 0.018482310 0.4041161      0.000            Recruitment
-#> 774 0.012477647 0.3326995      0.000            Recruitment
-#> 775 0.033173996 0.5343448      0.000            Recruitment
-#> 776 0.085360889 0.7317278      0.000            Recruitment
-#> 777 0.015921080 0.4168494      0.000            Recruitment
-#> 778 0.009653004 0.3320775      0.000            Recruitment
-#> 779 0.006460700 0.3029277      0.000            Recruitment
-#> 780 0.004134570 0.2851128      0.000            Recruitment
-#> 781 0.005084188 0.2892116      0.000            Recruitment
-#> 782 0.034488759 0.5435180      0.000            Recruitment
-#> 783 0.023922446 0.4551337      0.000            Recruitment
-#> 784 0.017640407 0.4252353      0.000            Recruitment
-#> 785 0.012026457 0.4008735      0.000            Recruitment
-#> 786 0.007909697 0.3344596      0.000            Recruitment
-#> 787 0.005032423 0.2841871      0.000            Recruitment
-#> 788 0.002987504 0.2557845      0.000            Recruitment
-#> 789 0.009203734 0.3630812      0.000            Recruitment
-#> 790 0.005198233 0.3000083      0.000            Recruitment
-#> 791 0.003497050 0.2836459      0.000            Recruitment
-#> 792 0.004005758 0.2799978      0.000            Recruitment
-#> 793 0.008277360 0.3244026      0.000            Recruitment
-#> 794 0.010358055 0.3421808      0.000            Recruitment
-#> 795 0.002033300 0.2571915      0.000            Recruitment
-#> 796 0.008442667 0.3452824      0.000            Recruitment
-#> 797 0.005294707 0.2792169      0.000            Recruitment
-#> 798 0.003839674 0.2511812      0.000            Recruitment
-#> 799 0.005381071 0.2958321      0.000            Recruitment
-#> 800 0.009578536 0.3254147      0.000            Recruitment
-#> 801 0.005653672 0.3163229      0.000            Recruitment
-#> 802 0.002164087 0.2623712      0.000            Recruitment
-#> 803 0.003829364 0.2687788      0.000            Recruitment
-#> 804 0.009928165 0.3261840      0.000            Recruitment
-#> 805 0.003296295 0.2873402      0.000            Recruitment
-#> 806 0.002670390 0.2981478      0.000            Recruitment
-#> 807 0.002064863 0.2461988      0.000            Recruitment
-#> 808 0.007953342 0.3547281      0.000            Recruitment
-#> 809 0.689448746 0.9977648      0.061  Adult female survival
-#> 810 0.661491642 0.9757088      0.012  Adult female survival
-#> 811 0.655867848 0.9754357      0.009  Adult female survival
-#> 812 0.695378361 0.9974644      0.058  Adult female survival
-#> 813 0.688768509 0.9954453      0.059  Adult female survival
-#> 814 0.687338329 0.9947034      0.042  Adult female survival
-#> 815 0.685866345 0.9949524      0.044  Adult female survival
-#> 816 0.685413691 0.9948295      0.053  Adult female survival
-#> 817 0.678801823 0.9967684      0.049  Adult female survival
-#> 818 0.680839864 0.9962809      0.048  Adult female survival
-#> 819 0.667413035 0.9784918      0.008  Adult female survival
-#> 820 0.679642388 0.9899069      0.024  Adult female survival
-#> 821 0.662314942 0.9815420      0.011  Adult female survival
-#> 822 0.678544851 0.9841619      0.013  Adult female survival
-#> 823 0.681563162 0.9973080      0.066  Adult female survival
-#> 824 0.670278141 0.9839090      0.018  Adult female survival
-#> 825 0.687764116 0.9950498      0.039  Adult female survival
-#> 826 0.663032478 0.9823963      0.014  Adult female survival
-#> 827 0.667567450 0.9893454      0.024  Adult female survival
-#> 828 0.687014120 0.9987155      0.068  Adult female survival
-#> 829 0.681113931 0.9972365      0.049  Adult female survival
-#> 830 0.665107613 0.9834212      0.012  Adult female survival
-#> 831 0.673658773 0.9867384      0.019  Adult female survival
-#> 832 0.664001151 0.9838269      0.012  Adult female survival
-#> 833 0.683186496 0.9930338      0.036  Adult female survival
-#> 834 0.662467421 0.9728253      0.007  Adult female survival
-#> 835 0.671594100 0.9800289      0.012  Adult female survival
-#> 836 0.664700476 0.9843903      0.016  Adult female survival
-#> 837 0.679032720 0.9913543      0.030  Adult female survival
-#> 838 0.657177632 0.9723862      0.009  Adult female survival
-#> 839 0.678929320 0.9886964      0.019  Adult female survival
-#> 840 0.673037891 0.9925887      0.041  Adult female survival
-#> 841 0.658407422 0.9746640      0.007  Adult female survival
-#> 842 0.664543753 0.9895250      0.024  Adult female survival
-#> 843 0.675200258 0.9812137      0.010  Adult female survival
-#> 844 0.681469818 0.9954887      0.041  Adult female survival
-#> 845 0.661131533 0.9736544      0.006  Adult female survival
-#> 846 0.670108069 0.9863372      0.014  Adult female survival
-#> 847 0.673886888 0.9764547      0.011  Adult female survival
-#> 848 0.680542181 0.9936951      0.032  Adult female survival
-#> 849 0.650090890 0.9713794      0.004  Adult female survival
-#> 850 0.667002015 0.9862052      0.016  Adult female survival
-#> 851 0.691716634 0.9929869      0.037  Adult female survival
-#> 852 0.668466652 0.9689435      0.005  Adult female survival
-#> 853 0.662878451 0.9878517      0.022  Adult female survival
-#> 854 0.670935027 0.9772536      0.011  Adult female survival
-#> 855 0.666686417 0.9941157      0.043  Adult female survival
-#> 856 0.654903401 0.9725707      0.003  Adult female survival
-#> 857 0.673647956 0.9831023      0.013  Adult female survival
-#> 858 0.665531777 0.9852291      0.016  Adult female survival
-#> 859 0.675953276 0.9905141      0.027  Adult female survival
-#> 860 0.644733267 0.9752628      0.011  Adult female survival
-#> 861 0.653512716 0.9666906      0.003  Adult female survival
-#> 862 0.688993957 0.9934488      0.034  Adult female survival
-#> 863 0.658384719 0.9739923      0.006  Adult female survival
-#> 864 0.668259849 0.9854032      0.019  Adult female survival
-#> 865 0.658720193 0.9826644      0.014  Adult female survival
-#> 866 0.693290807 0.9940533      0.042  Adult female survival
-#> 867 0.653141666 0.9755802      0.006  Adult female survival
-#> 868 0.666447183 0.9854025      0.018  Adult female survival
-#> 869 0.663053868 0.9823919      0.012  Adult female survival
-#> 870 0.667398726 0.9918840      0.033  Adult female survival
-#> 871 0.649538315 0.9695356      0.006  Adult female survival
-#> 872 0.654159317 0.9660514      0.006  Adult female survival
-#> 873 0.661947979 0.9742177      0.010  Adult female survival
-#> 874 0.686396602 0.9908276      0.028  Adult female survival
-#> 875 0.658130273 0.9609931      0.002  Adult female survival
-#> 876 0.651496484 0.9690732      0.010  Adult female survival
-#> 877 0.655906000 0.9765492      0.006  Adult female survival
-#> 878 0.691243526 0.9851082      0.016  Adult female survival
-#> 879 0.651983018 0.9732367      0.007  Adult female survival
-#> 880 0.662919585 0.9832631      0.015  Adult female survival
-#> 881 0.682537564 0.9941995      0.039  Adult female survival
-#> 882 0.654455811 0.9747935      0.008  Adult female survival
-#> 883 0.647420728 0.9669767      0.007  Adult female survival
-#> 884 0.664690776 0.9811280      0.013  Adult female survival
-#> 885 0.681982040 0.9893494      0.022  Adult female survival
-#> 886 0.652123282 0.9714850      0.005  Adult female survival
-#> 887 0.644277621 0.9645610      0.003  Adult female survival
-#> 888 0.674916754 0.9797628      0.007  Adult female survival
-#> 889 0.681297563 0.9933770      0.035  Adult female survival
-#> 890 0.641878550 0.9588264      0.004  Adult female survival
-#> 891 0.652577022 0.9777398      0.011  Adult female survival
-#> 892 0.674936601 0.9934635      0.040  Adult female survival
-#> 893 0.641737224 0.9710108      0.006  Adult female survival
-#> 894 0.647462655 0.9721736      0.005  Adult female survival
-#> 895 0.664306189 0.9786750      0.009  Adult female survival
-#> 896 0.683322040 0.9916306      0.030  Adult female survival
-#> 897 0.651642614 0.9650643      0.005  Adult female survival
-#> 898 0.645012400 0.9583072      0.003  Adult female survival
-#> 899 0.662375362 0.9803826      0.014  Adult female survival
-#> 900 0.677997709 0.9903378      0.026  Adult female survival
-#> 901 0.694897019 0.9963573      0.049  Adult female survival
-#> 902 0.667916102 0.9841880      0.019  Adult female survival
-#> 903 0.667508202 0.9919770      0.027  Adult female survival
-#> 904 0.650451324 0.9669909      0.004  Adult female survival
-#> 905 0.648355614 0.9582723      0.003  Adult female survival
-#> 906 0.666152566 0.9772192      0.013  Adult female survival
-#> 907 0.682902547 0.9922821      0.033  Adult female survival
-#> 908 0.645886446 0.9612342      0.002  Adult female survival
-#> 909 0.649881042 0.9641565      0.007  Adult female survival
+#> 506       lambda       National       15                  0 0.98577000
+#> 507       lambda       National        5                  0 1.01319000
+#> 508       lambda       National       17                  0 0.98067400
+#> 509       lambda       National       19                  0 0.97901000
+#> 510       lambda       National       30                  0 0.94867000
+#> 511       lambda       National       12                  0 0.99225300
+#> 512       lambda       National        6                  0 1.01313500
+#> 513       lambda       National       57                  0 0.89719800
+#> 514       lambda       National       18                  0 0.97245900
+#> 515       lambda       National       16                  0 0.98295000
+#> 516       lambda       National       10                  0 1.00225700
+#> 517       lambda       National       21                  0 0.96890100
+#> 518       lambda       National       28                  0 0.95847000
+#> 519       lambda       National       20                  0 0.97057200
+#> 520       lambda       National       31                  0 0.94942200
+#> 521       lambda       National        2                  0 1.02407700
+#> 522       lambda       National       13                  0 0.98895600
+#> 523       lambda       National        7                  0 1.00910500
+#> 524       lambda       National       58                  0 0.89781200
+#> 525       lambda       National       29                  0 0.95401500
+#> 526       lambda       National        0                  0 1.02239200
+#> 527       lambda       National       11                  0 0.99456100
+#> 528       lambda       National       22                  0 0.96872200
+#> 529       lambda       National       33                  0 0.94235700
+#> 530       lambda       National        4                  0 1.02455400
+#> 531       lambda       National       32                  0 0.94720300
+#> 532       lambda       National        3                  0 1.01667100
+#> 533       lambda       National       14                  0 0.99314700
+#> 534       lambda       National        8                  0 1.01002400
+#> 535       lambda       National       59                  0 0.88944200
+#> 536       lambda       National       70                  0 0.87312400
+#> 537       lambda       National        1                  0 1.02751800
+#> 538       lambda       National       52                  0 0.90320500
+#> 539       lambda       National       23                  0 0.96223300
+#> 540       lambda       National       34                  0 0.94069100
+#> 541       lambda       National       45                  0 0.91587800
+#> 542       lambda       National       56                  0 0.89559700
+#> 543       lambda       National       27                  0 0.95505700
+#> 544       lambda       National       55                  0 0.89728700
+#> 545       lambda       National        9                  0 0.99947100
+#> 546       lambda       National       60                  0 0.88981500
+#> 547       lambda       National       71                  0 0.87620200
+#> 548       lambda       National       42                  0 0.91951000
+#> 549       lambda       National       53                  0 0.90658900
+#> 550       lambda       National       24                  0 0.96216800
+#> 551       lambda       National       35                  0 0.93225300
+#> 552       lambda       National       46                  0 0.91208400
+#> 553       lambda       National       97                  0 0.83773600
+#> 554       lambda       National       68                  0 0.87581600
+#> 555       lambda       National       39                  0 0.93030700
+#> 556       lambda       National       50                  0 0.90952000
+#> 557       lambda       National       61                  0 0.89154400
+#> 558       lambda       National       72                  0 0.87179000
+#> 559       lambda       National       43                  0 0.92291600
+#> 560       lambda       National       54                  0 0.89971800
+#> 561       lambda       National       25                  0 0.96761200
+#> 562       lambda       National       36                  0 0.93689200
+#> 563       lambda       National       47                  0 0.91374600
+#> 564       lambda       National       98                  0 0.83821900
+#> 565       lambda       National       69                  0 0.87637000
+#> 566       lambda       National       40                  0 0.92299600
+#> 567       lambda       National       51                  0 0.90745900
+#> 568       lambda       National       62                  0 0.89039400
+#> 569       lambda       National       73                  0 0.86709200
+#> 570       lambda       National       44                  0 0.91942600
+#> 571       lambda       National       95                  0 0.84464400
+#> 572       lambda       National       26                  0 0.95570300
+#> 573       lambda       National       37                  0 0.93476600
+#> 574       lambda       National       48                  0 0.91595800
+#> 575       lambda       National       99                  0 0.83979800
+#> 576       lambda       National       93                  0 0.84514600
+#> 577       lambda       National       41                  0 0.92107600
+#> 578       lambda       National       92                  0 0.84332000
+#> 579       lambda       National       63                  0 0.88690600
+#> 580       lambda       National       74                  0 0.86812400
+#> 581       lambda       National       85                  0 0.84657100
+#> 582       lambda       National       96                  0 0.84184800
+#> 583       lambda       National       67                  0 0.87960400
+#> 584       lambda       National       38                  0 0.92936300
+#> 585       lambda       National       49                  0 0.90598700
+#> 586       lambda       National      100                  0 0.83843300
+#> 587       lambda       National       94                  0 0.84139500
+#> 588       lambda       National       82                  0 0.86253100
+#> 589       lambda       National       76                  0 0.86400800
+#> 590       lambda       National       64                  0 0.88713700
+#> 591       lambda       National       75                  0 0.86738500
+#> 592       lambda       National       86                  0 0.85080500
+#> 593       lambda       National       80                  0 0.86075500
+#> 594       lambda       National       91                  0 0.84960500
+#> 595       lambda       National       79                  0 0.86233700
+#> 596       lambda       National       90                  0 0.85156900
+#> 597       lambda       National       84                  0 0.85738300
+#> 598       lambda       National       78                  0 0.86611500
+#> 599       lambda       National       83                  0 0.85952200
+#> 600       lambda       National       77                  0 0.86945400
+#> 601       lambda       National       65                  0 0.88044300
+#> 602       lambda       National       88                  0 0.85443200
+#> 603       lambda       National       87                  0 0.85230600
+#> 604       lambda       National       81                  0 0.85819600
+#> 605       lambda       National       89                  0 0.84593000
+#> 606       lambda       National       66                  0 0.88428600
+#> 607   lambda_bar       National       19                  0 0.97672419
+#> 608   lambda_bar       National       17                  0 0.98259360
+#> 609   lambda_bar       National       18                  0 0.97848062
+#> 610   lambda_bar       National        6                  0 1.01441863
+#> 611   lambda_bar       National       21                  0 0.97004368
+#> 612   lambda_bar       National       11                  0 0.99691637
+#> 613   lambda_bar       National       22                  0 0.96765475
+#> 614   lambda_bar       National       10                  0 1.00236643
+#> 615   lambda_bar       National        8                  0 1.00313729
+#> 616   lambda_bar       National       59                  0 0.88848467
+#> 617   lambda_bar       National       20                  0 0.97049699
+#> 618   lambda_bar       National        1                  0 1.03135777
+#> 619   lambda_bar       National       12                  0 0.99397791
+#> 620   lambda_bar       National       23                  0 0.95983921
+#> 621   lambda_bar       National        7                  0 1.01134006
+#> 622   lambda_bar       National        5                  0 1.01841500
+#> 623   lambda_bar       National       16                  0 0.98925986
+#> 624   lambda_bar       National        4                  0 1.02340467
+#> 625   lambda_bar       National       34                  0 0.93711479
+#> 626   lambda_bar       National        9                  0 1.00098165
+#> 627   lambda_bar       National       60                  0 0.88732244
+#> 628   lambda_bar       National       31                  0 0.94503276
+#> 629   lambda_bar       National        2                  0 1.02531148
+#> 630   lambda_bar       National       13                  0 0.99057333
+#> 631   lambda_bar       National       24                  0 0.96439307
+#> 632   lambda_bar       National       35                  0 0.93584138
+#> 633   lambda_bar       National       46                  0 0.91267267
+#> 634   lambda_bar       National       57                  0 0.89618663
+#> 635   lambda_bar       National       28                  0 0.95375732
+#> 636   lambda_bar       National       39                  0 0.92907188
+#> 637   lambda_bar       National       50                  0 0.90387306
+#> 638   lambda_bar       National       61                  0 0.88576560
+#> 639   lambda_bar       National       32                  0 0.94072728
+#> 640   lambda_bar       National        3                  0 1.02529206
+#> 641   lambda_bar       National       14                  0 0.99002421
+#> 642   lambda_bar       National       25                  0 0.96213939
+#> 643   lambda_bar       National       36                  0 0.93088570
+#> 644   lambda_bar       National       47                  0 0.91102883
+#> 645   lambda_bar       National       58                  0 0.89408254
+#> 646   lambda_bar       National       29                  0 0.95088218
+#> 647   lambda_bar       National       40                  0 0.92515549
+#> 648   lambda_bar       National       51                  0 0.90478181
+#> 649   lambda_bar       National       62                  0 0.88725551
+#> 650   lambda_bar       National       33                  0 0.93901688
+#> 651   lambda_bar       National        0                  0 1.03429719
+#> 652   lambda_bar       National       15                  0 0.98704517
+#> 653   lambda_bar       National       26                  0 0.95625417
+#> 654   lambda_bar       National       37                  0 0.93511172
+#> 655   lambda_bar       National       48                  0 0.90759528
+#> 656   lambda_bar       National       99                  0 0.83667308
+#> 657   lambda_bar       National       30                  0 0.94596865
+#> 658   lambda_bar       National       41                  0 0.92082207
+#> 659   lambda_bar       National       52                  0 0.90384962
+#> 660   lambda_bar       National       63                  0 0.88377912
+#> 661   lambda_bar       National       74                  0 0.86783282
+#> 662   lambda_bar       National       45                  0 0.91699227
+#> 663   lambda_bar       National       56                  0 0.89573747
+#> 664   lambda_bar       National       27                  0 0.95506261
+#> 665   lambda_bar       National       38                  0 0.92878566
+#> 666   lambda_bar       National       49                  0 0.91038549
+#> 667   lambda_bar       National      100                  0 0.83721228
+#> 668   lambda_bar       National       71                  0 0.87549791
+#> 669   lambda_bar       National       42                  0 0.91924917
+#> 670   lambda_bar       National       53                  0 0.90365639
+#> 671   lambda_bar       National       64                  0 0.88472754
+#> 672   lambda_bar       National       75                  0 0.86619951
+#> 673   lambda_bar       National       86                  0 0.84888595
+#> 674   lambda_bar       National       97                  0 0.84110749
+#> 675   lambda_bar       National       68                  0 0.87350959
+#> 676   lambda_bar       National       79                  0 0.86058682
+#> 677   lambda_bar       National       90                  0 0.84669958
+#> 678   lambda_bar       National       44                  0 0.91861128
+#> 679   lambda_bar       National       72                  0 0.87031933
+#> 680   lambda_bar       National       43                  0 0.92227859
+#> 681   lambda_bar       National       54                  0 0.89789329
+#> 682   lambda_bar       National       65                  0 0.87807409
+#> 683   lambda_bar       National       76                  0 0.86362167
+#> 684   lambda_bar       National       87                  0 0.84908228
+#> 685   lambda_bar       National       98                  0 0.83726629
+#> 686   lambda_bar       National       69                  0 0.87089586
+#> 687   lambda_bar       National       80                  0 0.85791720
+#> 688   lambda_bar       National       91                  0 0.84590009
+#> 689   lambda_bar       National       85                  0 0.85039637
+#> 690   lambda_bar       National       73                  0 0.86764527
+#> 691   lambda_bar       National       67                  0 0.87529042
+#> 692   lambda_bar       National       55                  0 0.89703529
+#> 693   lambda_bar       National       66                  0 0.88048253
+#> 694   lambda_bar       National       77                  0 0.86630473
+#> 695   lambda_bar       National       88                  0 0.84920977
+#> 696   lambda_bar       National       82                  0 0.85850427
+#> 697   lambda_bar       National       70                  0 0.87205032
+#> 698   lambda_bar       National       81                  0 0.85546406
+#> 699   lambda_bar       National       92                  0 0.84502077
+#> 700   lambda_bar       National       94                  0 0.84174146
+#> 701   lambda_bar       National       78                  0 0.86204796
+#> 702   lambda_bar       National       89                  0 0.84461589
+#> 703   lambda_bar       National       96                  0 0.84070183
+#> 704   lambda_bar       National       93                  0 0.84309810
+#> 705   lambda_bar       National       83                  0 0.85772507
+#> 706   lambda_bar       National       84                  0 0.85629850
+#> 707   lambda_bar       National       95                  0 0.84165671
+#> 708  recruitment       National        8                  0 0.30707488
+#> 709  recruitment       National       19                  0 0.26160422
+#> 710  recruitment       National        6                  0 0.32552090
+#> 711  recruitment       National        4                  0 0.33198577
+#> 712  recruitment       National       20                  0 0.25162006
+#> 713  recruitment       National       35                  0 0.19439358
+#> 714  recruitment       National        7                  0 0.31068158
+#> 715  recruitment       National        9                  0 0.29475551
+#> 716  recruitment       National       24                  0 0.23217213
+#> 717  recruitment       National       39                  0 0.19028931
+#> 718  recruitment       National        2                  0 0.33862234
+#> 719  recruitment       National       13                  0 0.27695528
+#> 720  recruitment       National        5                  0 0.31988513
+#> 721  recruitment       National       16                  0 0.27419460
+#> 722  recruitment       National       10                  0 0.29961611
+#> 723  recruitment       National       21                  0 0.24490426
+#> 724  recruitment       National       36                  0 0.19733109
+#> 725  recruitment       National        3                  0 0.32339075
+#> 726  recruitment       National       14                  0 0.28342062
+#> 727  recruitment       National       25                  0 0.23581271
+#> 728  recruitment       National       40                  0 0.18441013
+#> 729  recruitment       National       51                  0 0.15119015
+#> 730  recruitment       National       18                  0 0.25941246
+#> 731  recruitment       National       50                  0 0.15808133
+#> 732  recruitment       National       17                  0 0.26022288
+#> 733  recruitment       National       11                  0 0.28315377
+#> 734  recruitment       National       22                  0 0.24756119
+#> 735  recruitment       National       37                  0 0.19077078
+#> 736  recruitment       National       48                  0 0.15752499
+#> 737  recruitment       National       15                  0 0.26981610
+#> 738  recruitment       National       26                  0 0.22438840
+#> 739  recruitment       National       41                  0 0.17896202
+#> 740  recruitment       National       52                  0 0.15139592
+#> 741  recruitment       National       63                  0 0.12771750
+#> 742  recruitment       National       34                  0 0.19412508
+#> 743  recruitment       National        1                  0 0.33066352
+#> 744  recruitment       National       12                  0 0.28984428
+#> 745  recruitment       National       23                  0 0.23540981
+#> 746  recruitment       National       38                  0 0.18792686
+#> 747  recruitment       National       49                  0 0.16272451
+#> 748  recruitment       National       60                  0 0.13250279
+#> 749  recruitment       National       27                  0 0.21852491
+#> 750  recruitment       National       42                  0 0.17273688
+#> 751  recruitment       National       53                  0 0.15240301
+#> 752  recruitment       National       64                  0 0.11959389
+#> 753  recruitment       National       31                  0 0.21047679
+#> 754  recruitment       National       46                  0 0.16093202
+#> 755  recruitment       National       57                  0 0.14331653
+#> 756  recruitment       National       68                  0 0.10946230
+#> 757  recruitment       National       79                  0 0.09636969
+#> 758  recruitment       National       90                  0 0.08444729
+#> 759  recruitment       National       61                  0 0.12937541
+#> 760  recruitment       National       28                  0 0.22029865
+#> 761  recruitment       National       43                  0 0.17734045
+#> 762  recruitment       National       54                  0 0.14106706
+#> 763  recruitment       National       65                  0 0.11500568
+#> 764  recruitment       National       32                  0 0.20737962
+#> 765  recruitment       National       47                  0 0.16026557
+#> 766  recruitment       National       58                  0 0.13720078
+#> 767  recruitment       National       69                  0 0.10965021
+#> 768  recruitment       National       80                  0 0.09312348
+#> 769  recruitment       National       91                  0 0.07827757
+#> 770  recruitment       National       62                  0 0.13251142
+#> 771  recruitment       National       29                  0 0.22060134
+#> 772  recruitment       National       44                  0 0.17006062
+#> 773  recruitment       National       55                  0 0.14230100
+#> 774  recruitment       National       66                  0 0.12203273
+#> 775  recruitment       National       33                  0 0.20878819
+#> 776  recruitment       National        0                  0 0.33583094
+#> 777  recruitment       National       59                  0 0.13333241
+#> 778  recruitment       National       70                  0 0.10901364
+#> 779  recruitment       National       81                  0 0.09227818
+#> 780  recruitment       National       92                  0 0.07734781
+#> 781  recruitment       National       86                  0 0.08315903
+#> 782  recruitment       National       30                  0 0.21355094
+#> 783  recruitment       National       45                  0 0.16633954
+#> 784  recruitment       National       56                  0 0.14028244
+#> 785  recruitment       National       67                  0 0.11625196
+#> 786  recruitment       National       78                  0 0.09843286
+#> 787  recruitment       National       89                  0 0.07944093
+#> 788  recruitment       National      100                  0 0.06974074
+#> 789  recruitment       National       71                  0 0.10633520
+#> 790  recruitment       National       82                  0 0.09055517
+#> 791  recruitment       National       93                  0 0.08198426
+#> 792  recruitment       National       87                  0 0.08598054
+#> 793  recruitment       National       75                  0 0.10181494
+#> 794  recruitment       National       73                  0 0.10230034
+#> 795  recruitment       National       97                  0 0.06982502
+#> 796  recruitment       National       74                  0 0.10594096
+#> 797  recruitment       National       85                  0 0.08292345
+#> 798  recruitment       National       94                  0 0.07401427
+#> 799  recruitment       National       84                  0 0.09085283
+#> 800  recruitment       National       72                  0 0.10654259
+#> 801  recruitment       National       83                  0 0.08788602
+#> 802  recruitment       National       98                  0 0.06781720
+#> 803  recruitment       National       88                  0 0.08171310
+#> 804  recruitment       National       76                  0 0.09643597
+#> 805  recruitment       National       95                  0 0.07550602
+#> 806  recruitment       National       96                  0 0.06871335
+#> 807  recruitment       National       99                  0 0.06655794
+#> 808  recruitment       National       77                  0 0.09921457
+#> 809     survival       National        4                  0 0.88001696
+#> 810     survival       National       69                  0 0.82968943
+#> 811     survival       National       68                  0 0.83024213
+#> 812     survival       National        2                  0 0.87673857
+#> 813     survival       National        5                  0 0.87338693
+#> 814     survival       National        7                  0 0.87367488
+#> 815     survival       National       10                  0 0.87128856
+#> 816     survival       National        6                  0 0.87172706
+#> 817     survival       National        9                  0 0.87109774
+#> 818     survival       National       11                  0 0.87143199
+#> 819     survival       National       70                  0 0.82743933
+#> 820     survival       National       37                  0 0.85277519
+#> 821     survival       National       48                  0 0.84916888
+#> 822     survival       National       36                  0 0.85262298
+#> 823     survival       National        3                  0 0.87489706
+#> 824     survival       National       35                  0 0.84932293
+#> 825     survival       National        8                  0 0.87679430
+#> 826     survival       National       67                  0 0.83150570
+#> 827     survival       National       34                  0 0.85768093
+#> 828     survival       National        1                  0 0.88249059
+#> 829     survival       National       12                  0 0.86724988
+#> 830     survival       National       71                  0 0.83260064
+#> 831     survival       National       38                  0 0.84996450
+#> 832     survival       National       49                  0 0.83812708
+#> 833     survival       National       16                  0 0.86436934
+#> 834     survival       National       75                  0 0.82582264
+#> 835     survival       National       42                  0 0.84614665
+#> 836     survival       National       53                  0 0.84202560
+#> 837     survival       National       20                  0 0.86244687
+#> 838     survival       National       79                  0 0.82186844
+#> 839     survival       National       46                  0 0.84452861
+#> 840     survival       National       13                  0 0.86915373
+#> 841     survival       National       72                  0 0.82752235
+#> 842     survival       National       39                  0 0.84948051
+#> 843     survival       National       50                  0 0.84258051
+#> 844     survival       National       17                  0 0.86779674
+#> 845     survival       National       76                  0 0.82408851
+#> 846     survival       National       43                  0 0.84781604
+#> 847     survival       National       54                  0 0.84026026
+#> 848     survival       National       21                  0 0.86302362
+#> 849     survival       National       80                  0 0.82268664
+#> 850     survival       National       47                  0 0.84601772
+#> 851     survival       National       14                  0 0.86996979
+#> 852     survival       National       73                  0 0.82489854
+#> 853     survival       National       40                  0 0.84438588
+#> 854     survival       National       51                  0 0.84368429
+#> 855     survival       National       18                  0 0.86072651
+#> 856     survival       National       77                  0 0.82840644
+#> 857     survival       National       44                  0 0.84707654
+#> 858     survival       National       55                  0 0.83766791
+#> 859     survival       National       22                  0 0.86215241
+#> 860     survival       National       81                  0 0.82054516
+#> 861     survival       National       92                  0 0.81270929
+#> 862     survival       National       15                  0 0.86975988
+#> 863     survival       National       74                  0 0.82493585
+#> 864     survival       National       41                  0 0.84530085
+#> 865     survival       National       52                  0 0.84019130
+#> 866     survival       National       19                  0 0.86650111
+#> 867     survival       National       78                  0 0.82484722
+#> 868     survival       National       45                  0 0.84533241
+#> 869     survival       National       56                  0 0.83688880
+#> 870     survival       National       23                  0 0.86126152
+#> 871     survival       National       82                  0 0.82487467
+#> 872     survival       National       93                  0 0.81131617
+#> 873     survival       National       60                  0 0.83444448
+#> 874     survival       National       27                  0 0.86155165
+#> 875     survival       National       86                  0 0.81606726
+#> 876     survival       National       97                  0 0.80988486
+#> 877     survival       National       64                  0 0.83689506
+#> 878     survival       National       31                  0 0.85909774
+#> 879     survival       National       90                  0 0.81679743
+#> 880     survival       National       57                  0 0.83760983
+#> 881     survival       National       24                  0 0.86192291
+#> 882     survival       National       83                  0 0.82309669
+#> 883     survival       National       94                  0 0.81088966
+#> 884     survival       National       61                  0 0.83706469
+#> 885     survival       National       28                  0 0.86304184
+#> 886     survival       National       87                  0 0.81691221
+#> 887     survival       National       98                  0 0.81041529
+#> 888     survival       National       65                  0 0.83263546
+#> 889     survival       National       32                  0 0.85773020
+#> 890     survival       National       91                  0 0.81751526
+#> 891     survival       National       58                  0 0.83938139
+#> 892     survival       National       25                  0 0.86589699
+#> 893     survival       National       84                  0 0.82087391
+#> 894     survival       National       95                  0 0.81418362
+#> 895     survival       National       62                  0 0.83540223
+#> 896     survival       National       29                  0 0.85915522
+#> 897     survival       National       88                  0 0.82077985
+#> 898     survival       National       99                  0 0.81249195
+#> 899     survival       National       66                  0 0.83359695
+#> 900     survival       National       33                  0 0.85382491
+#> 901     survival       National        0                  0 0.87610150
+#> 902     survival       National       59                  0 0.83425808
+#> 903     survival       National       26                  0 0.86041257
+#> 904     survival       National       85                  0 0.81337307
+#> 905     survival       National       96                  0 0.81402854
+#> 906     survival       National       63                  0 0.83393234
+#> 907     survival       National       30                  0 0.85702460
+#> 908     survival       National       89                  0 0.81461149
+#> 909     survival       National      100                  0 0.80936885
+#>            lower     upper probViable                 Metric
+#> 102 0.0531343927 0.4042838      0.000   Expected recruitment
+#> 103 0.1116219558 0.5109438      0.000   Expected recruitment
+#> 104 0.0956029348 0.4817734      0.000   Expected recruitment
+#> 105 0.1081604077 0.5031764      0.000   Expected recruitment
+#> 106 0.1271782628 0.4972864      0.000   Expected recruitment
+#> 107 0.0592024556 0.3963140      0.000   Expected recruitment
+#> 108 0.0765572931 0.4376818      0.000   Expected recruitment
+#> 109 0.1016268727 0.4708860      0.000   Expected recruitment
+#> 110 0.0814185492 0.4605223      0.000   Expected recruitment
+#> 111 0.1003288456 0.5108371      0.000   Expected recruitment
+#> 112 0.1331902473 0.5259641      0.000   Expected recruitment
+#> 113 0.0863207477 0.4610402      0.000   Expected recruitment
+#> 114 0.1183461491 0.5248124      0.000   Expected recruitment
+#> 115 0.0938703733 0.4697089      0.000   Expected recruitment
+#> 116 0.1085380084 0.5025087      0.000   Expected recruitment
+#> 117 0.0805400479 0.4475746      0.000   Expected recruitment
+#> 118 0.0512357720 0.3888855      0.000   Expected recruitment
+#> 119 0.0900330776 0.4448334      0.000   Expected recruitment
+#> 120 0.1022899541 0.4636047      0.000   Expected recruitment
+#> 121 0.1399293799 0.5774776      0.000   Expected recruitment
+#> 122 0.1578680504 0.5900724      0.000   Expected recruitment
+#> 123 0.0325875682 0.3446916      0.000   Expected recruitment
+#> 124 0.0236271748 0.3088848      0.000   Expected recruitment
+#> 125 0.0563439709 0.4069945      0.000   Expected recruitment
+#> 126 0.1600303963 0.5641602      0.000   Expected recruitment
+#> 127 0.1079292021 0.4987087      0.000   Expected recruitment
+#> 128 0.0767278918 0.4256221      0.000   Expected recruitment
+#> 129 0.0542393522 0.3938058      0.000   Expected recruitment
+#> 130 0.1304944970 0.5247123      0.000   Expected recruitment
+#> 131 0.0223546342 0.3056294      0.000   Expected recruitment
+#> 132 0.1419461425 0.5395569      0.000   Expected recruitment
+#> 133 0.1564095506 0.5733543      0.000   Expected recruitment
+#> 134 0.0298888840 0.3461829      0.000   Expected recruitment
+#> 135 0.0193253734 0.3088619      0.000   Expected recruitment
+#> 136 0.0132799550 0.2663303      0.000   Expected recruitment
+#> 137 0.1467354335 0.5501956      0.000   Expected recruitment
+#> 138 0.0243928145 0.3134213      0.000   Expected recruitment
+#> 139 0.0728635804 0.4311046      0.000   Expected recruitment
+#> 140 0.0523870025 0.3897727      0.000   Expected recruitment
+#> 141 0.0361687082 0.3621542      0.000   Expected recruitment
+#> 142 0.0209437282 0.3139605      0.000   Expected recruitment
+#> 143 0.0610288304 0.4145533      0.000   Expected recruitment
+#> 144 0.1514599743 0.5640116      0.000   Expected recruitment
+#> 145 0.0301923820 0.3264388      0.000   Expected recruitment
+#> 146 0.0210061530 0.3015278      0.000   Expected recruitment
+#> 147 0.0127442972 0.2628834      0.000   Expected recruitment
+#> 148 0.0368188550 0.3525461      0.000   Expected recruitment
+#> 149 0.0289282168 0.3289770      0.000   Expected recruitment
+#> 150 0.0688254102 0.4312571      0.000   Expected recruitment
+#> 151 0.0539670048 0.4049691      0.000   Expected recruitment
+#> 152 0.0310123370 0.3456386      0.000   Expected recruitment
+#> 153 0.0230813449 0.3030542      0.000   Expected recruitment
+#> 154 0.0601479407 0.4121221      0.000   Expected recruitment
+#> 155 0.1543160280 0.5683337      0.000   Expected recruitment
+#> 156 0.0292487870 0.3175212      0.000   Expected recruitment
+#> 157 0.0178918348 0.2872474      0.000   Expected recruitment
+#> 158 0.0136847056 0.2582561      0.000   Expected recruitment
+#> 159 0.0340193033 0.3474552      0.000   Expected recruitment
+#> 160 0.0269273028 0.3153632      0.000   Expected recruitment
+#> 161 0.0765932575 0.4221466      0.000   Expected recruitment
+#> 162 0.0505599980 0.3845220      0.000   Expected recruitment
+#> 163 0.0056755127 0.2230533      0.000   Expected recruitment
+#> 164 0.0399771839 0.3470584      0.000   Expected recruitment
+#> 165 0.0129076344 0.2575694      0.000   Expected recruitment
+#> 166 0.0414574260 0.3582559      0.000   Expected recruitment
+#> 167 0.0303942198 0.3294860      0.000   Expected recruitment
+#> 168 0.0194086473 0.2785746      0.000   Expected recruitment
+#> 169 0.0114636040 0.2678823      0.000   Expected recruitment
+#> 170 0.0368174515 0.3464185      0.000   Expected recruitment
+#> 171 0.0028772403 0.2075875      0.000   Expected recruitment
+#> 172 0.0613915790 0.3990953      0.000   Expected recruitment
+#> 173 0.0527002464 0.3736949      0.000   Expected recruitment
+#> 174 0.0051551452 0.2316132      0.000   Expected recruitment
+#> 175 0.0081414265 0.2293643      0.000   Expected recruitment
+#> 176 0.0022527271 0.2108627      0.000   Expected recruitment
+#> 177 0.0153786286 0.2836552      0.000   Expected recruitment
+#> 178 0.0034798559 0.2279330      0.000   Expected recruitment
+#> 179 0.0174998170 0.2822789      0.000   Expected recruitment
+#> 180 0.0117606829 0.2614358      0.000   Expected recruitment
+#> 181 0.0069600853 0.2264994      0.000   Expected recruitment
+#> 182 0.0042759867 0.2108679      0.000   Expected recruitment
+#> 183 0.0137429611 0.2761293      0.000   Expected recruitment
+#> 184 0.0426373807 0.3695786      0.000   Expected recruitment
+#> 185 0.0049317310 0.2344996      0.000   Expected recruitment
+#> 186 0.0061064248 0.2401856      0.000   Expected recruitment
+#> 187 0.0026393946 0.2165766      0.000   Expected recruitment
+#> 188 0.0158285123 0.2740653      0.000   Expected recruitment
+#> 189 0.0091135919 0.2466575      0.000   Expected recruitment
+#> 190 0.0109703234 0.2709054      0.000   Expected recruitment
+#> 191 0.0103094348 0.2476015      0.000   Expected recruitment
+#> 192 0.0055304317 0.2510843      0.000   Expected recruitment
+#> 193 0.0065244567 0.2422595      0.000   Expected recruitment
+#> 194 0.0095295129 0.2459630      0.000   Expected recruitment
+#> 195 0.0478921067 0.3677934      0.000   Expected recruitment
+#> 196 0.0046754453 0.2132808      0.000   Expected recruitment
+#> 197 0.0048703719 0.2335431      0.000   Expected recruitment
+#> 198 0.0133712881 0.2808699      0.000   Expected recruitment
+#> 199 0.0090628558 0.2553122      0.000   Expected recruitment
+#> 200 0.0087967622 0.2318047      0.000   Expected recruitment
+#> 201 0.0043215496 0.2156538      0.000   Expected recruitment
+#> 202 0.0065060171 0.2179664      0.000   Expected recruitment
+#> 203 0.7732218484 0.9352439      0.000      Expected survival
+#> 204 0.7522205384 0.9299177      0.000      Expected survival
+#> 205 0.7717329104 0.9379788      0.000      Expected survival
+#> 206 0.7708581820 0.9406360      0.000      Expected survival
+#> 207 0.7949553200 0.9446645      0.000      Expected survival
+#> 208 0.7727848622 0.9377910      0.000      Expected survival
+#> 209 0.7650282426 0.9334503      0.000      Expected survival
+#> 210 0.7742883430 0.9362277      0.000      Expected survival
+#> 211 0.7657004419 0.9314726      0.000      Expected survival
+#> 212 0.7683397164 0.9404786      0.000      Expected survival
+#> 213 0.7656589759 0.9377041      0.000      Expected survival
+#> 214 0.7867238922 0.9465088      0.000      Expected survival
+#> 215 0.7382423515 0.9227797      0.000      Expected survival
+#> 216 0.7293363759 0.9151857      0.000      Expected survival
+#> 217 0.7500177669 0.9233867      0.000      Expected survival
+#> 218 0.7800659319 0.9476354      0.000      Expected survival
+#> 219 0.7792143313 0.9381489      0.000      Expected survival
+#> 220 0.7585005610 0.9331984      0.000      Expected survival
+#> 221 0.7527059885 0.9281738      0.000      Expected survival
+#> 222 0.7573485108 0.9285205      0.000      Expected survival
+#> 223 0.7656575896 0.9347472      0.000      Expected survival
+#> 224 0.7779537017 0.9410517      0.000      Expected survival
+#> 225 0.7795816892 0.9455721      0.000      Expected survival
+#> 226 0.7350414521 0.9183723      0.000      Expected survival
+#> 227 0.7264386399 0.9194991      0.000      Expected survival
+#> 228 0.7577082370 0.9250550      0.000      Expected survival
+#> 229 0.7829012445 0.9394527      0.000      Expected survival
+#> 230 0.7722109612 0.9379229      0.000      Expected survival
+#> 231 0.7644154954 0.9327486      0.000      Expected survival
+#> 232 0.7447700400 0.9278095      0.000      Expected survival
+#> 233 0.7327369928 0.9179318      0.000      Expected survival
+#> 234 0.7643820493 0.9353862      0.000      Expected survival
+#> 235 0.7705001658 0.9402270      0.000      Expected survival
+#> 236 0.7818248825 0.9462017      0.000      Expected survival
+#> 237 0.7388344394 0.9138155      0.000      Expected survival
+#> 238 0.7218619304 0.9140383      0.000      Expected survival
+#> 239 0.7474985959 0.9238597      0.000      Expected survival
+#> 240 0.7853583000 0.9396912      0.000      Expected survival
+#> 241 0.7633694020 0.9376032      0.000      Expected survival
+#> 242 0.7657436800 0.9303765      0.000      Expected survival
+#> 243 0.7502211409 0.9297629      0.000      Expected survival
+#> 244 0.7137651321 0.9037580      0.000      Expected survival
+#> 245 0.7321369112 0.9193236      0.000      Expected survival
+#> 246 0.7452274759 0.9324492      0.000      Expected survival
+#> 247 0.7784969233 0.9440757      0.000      Expected survival
+#> 248 0.7385312256 0.9179329      0.000      Expected survival
+#> 249 0.7299338284 0.9086562      0.000      Expected survival
+#> 250 0.7628559269 0.9314792      0.000      Expected survival
+#> 251 0.7390156135 0.9190277      0.000      Expected survival
+#> 252 0.7801254309 0.9335553      0.000      Expected survival
+#> 253 0.7574685872 0.9306024      0.000      Expected survival
+#> 254 0.7465983630 0.9255395      0.000      Expected survival
+#> 255 0.7060233608 0.8999408      0.000      Expected survival
+#> 256 0.7475674168 0.9205015      0.000      Expected survival
+#> 257 0.7434912911 0.9321024      0.000      Expected survival
+#> 258 0.7435549381 0.9229355      0.000      Expected survival
+#> 259 0.7304098067 0.9197375      0.000      Expected survival
+#> 260 0.7204794897 0.9164797      0.000      Expected survival
+#> 261 0.7199427820 0.9077695      0.000      Expected survival
+#> 262 0.7449476501 0.9191905      0.000      Expected survival
+#> 263 0.7308424930 0.9156635      0.000      Expected survival
+#> 264 0.7549262091 0.9346699      0.000      Expected survival
+#> 265 0.7431936049 0.9178390      0.000      Expected survival
+#> 266 0.6973424673 0.9029509      0.000      Expected survival
+#> 267 0.7418481351 0.9236249      0.000      Expected survival
+#> 268 0.7252180949 0.9104136      0.000      Expected survival
+#> 269 0.7176334297 0.9114073      0.000      Expected survival
+#> 270 0.7256712231 0.9156373      0.000      Expected survival
+#> 271 0.7213074460 0.9136882      0.000      Expected survival
+#> 272 0.7154038364 0.9093259      0.000      Expected survival
+#> 273 0.7048231963 0.9041788      0.000      Expected survival
+#> 274 0.7279168746 0.9160079      0.000      Expected survival
+#> 275 0.7495582921 0.9312466      0.000      Expected survival
+#> 276 0.7538289424 0.9237826      0.000      Expected survival
+#> 277 0.7076567818 0.9060399      0.000      Expected survival
+#> 278 0.7006645418 0.9030260      0.000      Expected survival
+#> 279 0.7189271544 0.9085279      0.000      Expected survival
+#> 280 0.7211165189 0.9112812      0.000      Expected survival
+#> 281 0.7338917813 0.9204431      0.000      Expected survival
+#> 282 0.7028326843 0.8958275      0.000      Expected survival
+#> 283 0.7143773602 0.9071711      0.000      Expected survival
+#> 284 0.7172696298 0.9077104      0.000      Expected survival
+#> 285 0.7115698800 0.9055099      0.000      Expected survival
+#> 286 0.7223870890 0.9092640      0.000      Expected survival
+#> 287 0.7506501529 0.9255955      0.000      Expected survival
+#> 288 0.7017765536 0.9033797      0.000      Expected survival
+#> 289 0.7062084967 0.9009861      0.000      Expected survival
+#> 290 0.7202731460 0.9103699      0.000      Expected survival
+#> 291 0.7336683717 0.9139495      0.000      Expected survival
+#> 292 0.7328932262 0.9146341      0.000      Expected survival
+#> 293 0.7040278507 0.9009843      0.000      Expected survival
+#> 294 0.7086484662 0.9077684      0.000      Expected survival
+#> 295 0.7063618919 0.8980982      0.000      Expected survival
+#> 296 0.7077519543 0.8980725      0.000      Expected survival
+#> 297 0.7091187931 0.9050399      0.000      Expected survival
+#> 298 0.7252195313 0.9129598      0.000      Expected survival
+#> 299 0.7035243269 0.9001785      0.000      Expected survival
+#> 300 0.7158121801 0.9103363      0.000      Expected survival
+#> 301 0.7132413408 0.9049926      0.000      Expected survival
+#> 302 0.7065660715 0.9035824      0.000      Expected survival
+#> 303 0.7175110444 0.9053626      0.000      Expected survival
+#> 304 0.0321735389 0.3366164      0.000   Adjusted recruitment
+#> 305 0.0292063128 0.3242002      0.000   Adjusted recruitment
+#> 306 0.0278694488 0.3281632      0.000   Adjusted recruitment
+#> 307 0.0324138938 0.3459531      0.000   Adjusted recruitment
+#> 308 0.0285822885 0.3402281      0.000   Adjusted recruitment
+#> 309 0.0101774252 0.2225546      0.000   Adjusted recruitment
+#> 310 0.0374196456 0.3729945      0.000   Adjusted recruitment
+#> 311 0.0269786767 0.3211466      0.000   Adjusted recruitment
+#> 312 0.0389145133 0.3675657      0.000   Adjusted recruitment
+#> 313 0.0171568098 0.2621045      0.000   Adjusted recruitment
+#> 314 0.0201226674 0.2910190      0.000   Adjusted recruitment
+#> 315 0.0306010378 0.3181265      0.000   Adjusted recruitment
+#> 316 0.0209677599 0.2957152      0.000   Adjusted recruitment
+#> 317 0.0340427777 0.3569081      0.000   Adjusted recruitment
+#> 318 0.0094401676 0.2027218      0.000   Adjusted recruitment
+#> 319 0.0447392711 0.3646461      0.000   Adjusted recruitment
+#> 320 0.0108357058 0.2318503      0.000   Adjusted recruitment
+#> 321 0.0241973213 0.2885077      0.000   Adjusted recruitment
+#> 322 0.0303166480 0.3026923      0.000   Adjusted recruitment
+#> 323 0.0206414564 0.2880254      0.000   Adjusted recruitment
+#> 324 0.0152775800 0.2408822      0.000   Adjusted recruitment
+#> 325 0.0107131096 0.2070858      0.000   Adjusted recruitment
+#> 326 0.0213980373 0.3131796      0.000   Adjusted recruitment
+#> 327 0.0339597556 0.3520612      0.000   Adjusted recruitment
+#> 328 0.0399290797 0.3573161      0.000   Adjusted recruitment
+#> 329 0.0092915036 0.2166781      0.000   Adjusted recruitment
+#> 330 0.0205034937 0.2937772      0.000   Adjusted recruitment
+#> 331 0.0153972586 0.2619478      0.000   Adjusted recruitment
+#> 332 0.0230162860 0.3053503      0.000   Adjusted recruitment
+#> 333 0.0271843597 0.3316981      0.000   Adjusted recruitment
+#> 334 0.0206096989 0.2847776      0.000   Adjusted recruitment
+#> 335 0.0166820073 0.2217627      0.000   Adjusted recruitment
+#> 336 0.0018167402 0.1246639      0.000   Adjusted recruitment
+#> 337 0.0235305142 0.3010318      0.000   Adjusted recruitment
+#> 338 0.0166093987 0.2595889      0.000   Adjusted recruitment
+#> 339 0.0375151863 0.3503686      0.000   Adjusted recruitment
+#> 340 0.0078922531 0.2090131      0.000   Adjusted recruitment
+#> 341 0.0061318933 0.1772524      0.000   Adjusted recruitment
+#> 342 0.0166064999 0.2594740      0.000   Adjusted recruitment
+#> 343 0.0320591361 0.3450418      0.000   Adjusted recruitment
+#> 344 0.0248679537 0.3114203      0.000   Adjusted recruitment
+#> 345 0.0165571423 0.2776860      0.000   Adjusted recruitment
+#> 346 0.0119496560 0.2382067      0.000   Adjusted recruitment
+#> 347 0.0021374052 0.1450186      0.000   Adjusted recruitment
+#> 348 0.0062549697 0.1901536      0.000   Adjusted recruitment
+#> 349 0.0181349734 0.2607805      0.000   Adjusted recruitment
+#> 350 0.0396235641 0.3568864      0.000   Adjusted recruitment
+#> 351 0.0106669947 0.2125299      0.000   Adjusted recruitment
+#> 352 0.0060284716 0.1780960      0.000   Adjusted recruitment
+#> 353 0.0037650779 0.1645509      0.000   Adjusted recruitment
+#> 354 0.0105576891 0.2185518      0.000   Adjusted recruitment
+#> 355 0.0240644860 0.3100132      0.000   Adjusted recruitment
+#> 356 0.0187172228 0.2710773      0.000   Adjusted recruitment
+#> 357 0.0140423609 0.2397324      0.000   Adjusted recruitment
+#> 358 0.0016708416 0.1444160      0.000   Adjusted recruitment
+#> 359 0.0060607120 0.1751310      0.000   Adjusted recruitment
+#> 360 0.0147156272 0.2645807      0.000   Adjusted recruitment
+#> 361 0.0362629988 0.3554705      0.000   Adjusted recruitment
+#> 362 0.0104791014 0.2118674      0.000   Adjusted recruitment
+#> 363 0.0056395710 0.1702886      0.000   Adjusted recruitment
+#> 364 0.0032264718 0.1695680      0.000   Adjusted recruitment
+#> 365 0.0019915940 0.1329715      0.000   Adjusted recruitment
+#> 366 0.0070415103 0.2137062      0.000   Adjusted recruitment
+#> 367 0.0183427246 0.2729477      0.000   Adjusted recruitment
+#> 368 0.0138232296 0.2334781      0.000   Adjusted recruitment
+#> 369 0.0015052640 0.1342821      0.000   Adjusted recruitment
+#> 370 0.0053167399 0.1817718      0.000   Adjusted recruitment
+#> 371 0.0043375141 0.1744025      0.000   Adjusted recruitment
+#> 372 0.0306114972 0.3424903      0.000   Adjusted recruitment
+#> 373 0.0079941750 0.2086809      0.000   Adjusted recruitment
+#> 374 0.0052615471 0.1681402      0.000   Adjusted recruitment
+#> 375 0.0032333774 0.1637945      0.000   Adjusted recruitment
+#> 376 0.0050861791 0.1699462      0.000   Adjusted recruitment
+#> 377 0.0063669096 0.2063902      0.000   Adjusted recruitment
+#> 378 0.0048458867 0.1691529      0.000   Adjusted recruitment
+#> 379 0.0120732185 0.2310371      0.000   Adjusted recruitment
+#> 380 0.0014383719 0.1232021      0.000   Adjusted recruitment
+#> 381 0.0021224692 0.1604594      0.000   Adjusted recruitment
+#> 382 0.0045115091 0.1702972      0.000   Adjusted recruitment
+#> 383 0.0104680885 0.2440307      0.000   Adjusted recruitment
+#> 384 0.0084188592 0.1956433      0.000   Adjusted recruitment
+#> 385 0.0044002119 0.1681555      0.000   Adjusted recruitment
+#> 386 0.0037862743 0.1432308      0.000   Adjusted recruitment
+#> 387 0.0051061912 0.1508803      0.000   Adjusted recruitment
+#> 388 0.0117475402 0.2166163      0.000   Adjusted recruitment
+#> 389 0.0010940486 0.1226220      0.000   Adjusted recruitment
+#> 390 0.0123809910 0.2299037      0.000   Adjusted recruitment
+#> 391 0.0009417492 0.1290865      0.000   Adjusted recruitment
+#> 392 0.0043352878 0.1693930      0.000   Adjusted recruitment
+#> 393 0.0023800118 0.1498169      0.000   Adjusted recruitment
+#> 394 0.0050552898 0.1730505      0.000   Adjusted recruitment
+#> 395 0.0083537309 0.2123416      0.000   Adjusted recruitment
+#> 396 0.0009213603 0.1185853      0.000   Adjusted recruitment
+#> 397 0.0029695203 0.1619735      0.000   Adjusted recruitment
+#> 398 0.0017459689 0.1242309      0.000   Adjusted recruitment
+#> 399 0.0107114435 0.2292046      0.000   Adjusted recruitment
+#> 400 0.0029608209 0.1459668      0.000   Adjusted recruitment
+#> 401 0.0021132505 0.1444254      0.000   Adjusted recruitment
+#> 402 0.0022617569 0.1514023      0.000   Adjusted recruitment
+#> 403 0.0025271628 0.1601807      0.000   Adjusted recruitment
+#> 404 0.0023887014 0.1380607      0.000   Adjusted recruitment
+#> 405 1.0000000000 1.0000000      1.000                      c
+#> 406 1.0000000000 1.0000000      1.000                      c
+#> 407 1.0000000000 1.0000000      1.000                      c
+#> 408 1.0000000000 1.0000000      1.000                      c
+#> 409 1.0000000000 1.0000000      1.000                      c
+#> 410 1.0000000000 1.0000000      1.000                      c
+#> 411 1.0000000000 1.0000000      1.000                      c
+#> 412 1.0000000000 1.0000000      1.000                      c
+#> 413 1.0000000000 1.0000000      1.000                      c
+#> 414 1.0000000000 1.0000000      1.000                      c
+#> 415 1.0000000000 1.0000000      1.000                      c
+#> 416 1.0000000000 1.0000000      1.000                      c
+#> 417 1.0000000000 1.0000000      1.000                      c
+#> 418 1.0000000000 1.0000000      1.000                      c
+#> 419 1.0000000000 1.0000000      1.000                      c
+#> 420 1.0000000000 1.0000000      1.000                      c
+#> 421 1.0000000000 1.0000000      1.000                      c
+#> 422 1.0000000000 1.0000000      1.000                      c
+#> 423 1.0000000000 1.0000000      1.000                      c
+#> 424 1.0000000000 1.0000000      1.000                      c
+#> 425 1.0000000000 1.0000000      1.000                      c
+#> 426 1.0000000000 1.0000000      1.000                      c
+#> 427 1.0000000000 1.0000000      1.000                      c
+#> 428 1.0000000000 1.0000000      1.000                      c
+#> 429 1.0000000000 1.0000000      1.000                      c
+#> 430 1.0000000000 1.0000000      1.000                      c
+#> 431 1.0000000000 1.0000000      1.000                      c
+#> 432 1.0000000000 1.0000000      1.000                      c
+#> 433 1.0000000000 1.0000000      1.000                      c
+#> 434 1.0000000000 1.0000000      1.000                      c
+#> 435 1.0000000000 1.0000000      1.000                      c
+#> 436 1.0000000000 1.0000000      1.000                      c
+#> 437 1.0000000000 1.0000000      1.000                      c
+#> 438 1.0000000000 1.0000000      1.000                      c
+#> 439 1.0000000000 1.0000000      1.000                      c
+#> 440 1.0000000000 1.0000000      1.000                      c
+#> 441 1.0000000000 1.0000000      1.000                      c
+#> 442 1.0000000000 1.0000000      1.000                      c
+#> 443 1.0000000000 1.0000000      1.000                      c
+#> 444 1.0000000000 1.0000000      1.000                      c
+#> 445 1.0000000000 1.0000000      1.000                      c
+#> 446 1.0000000000 1.0000000      1.000                      c
+#> 447 1.0000000000 1.0000000      1.000                      c
+#> 448 1.0000000000 1.0000000      1.000                      c
+#> 449 1.0000000000 1.0000000      1.000                      c
+#> 450 1.0000000000 1.0000000      1.000                      c
+#> 451 1.0000000000 1.0000000      1.000                      c
+#> 452 1.0000000000 1.0000000      1.000                      c
+#> 453 1.0000000000 1.0000000      1.000                      c
+#> 454 1.0000000000 1.0000000      1.000                      c
+#> 455 1.0000000000 1.0000000      1.000                      c
+#> 456 1.0000000000 1.0000000      1.000                      c
+#> 457 1.0000000000 1.0000000      1.000                      c
+#> 458 1.0000000000 1.0000000      1.000                      c
+#> 459 1.0000000000 1.0000000      1.000                      c
+#> 460 1.0000000000 1.0000000      1.000                      c
+#> 461 1.0000000000 1.0000000      1.000                      c
+#> 462 1.0000000000 1.0000000      1.000                      c
+#> 463 1.0000000000 1.0000000      1.000                      c
+#> 464 1.0000000000 1.0000000      1.000                      c
+#> 465 1.0000000000 1.0000000      1.000                      c
+#> 466 1.0000000000 1.0000000      1.000                      c
+#> 467 1.0000000000 1.0000000      1.000                      c
+#> 468 1.0000000000 1.0000000      1.000                      c
+#> 469 1.0000000000 1.0000000      1.000                      c
+#> 470 1.0000000000 1.0000000      1.000                      c
+#> 471 1.0000000000 1.0000000      1.000                      c
+#> 472 1.0000000000 1.0000000      1.000                      c
+#> 473 1.0000000000 1.0000000      1.000                      c
+#> 474 1.0000000000 1.0000000      1.000                      c
+#> 475 1.0000000000 1.0000000      1.000                      c
+#> 476 1.0000000000 1.0000000      1.000                      c
+#> 477 1.0000000000 1.0000000      1.000                      c
+#> 478 1.0000000000 1.0000000      1.000                      c
+#> 479 1.0000000000 1.0000000      1.000                      c
+#> 480 1.0000000000 1.0000000      1.000                      c
+#> 481 1.0000000000 1.0000000      1.000                      c
+#> 482 1.0000000000 1.0000000      1.000                      c
+#> 483 1.0000000000 1.0000000      1.000                      c
+#> 484 1.0000000000 1.0000000      1.000                      c
+#> 485 1.0000000000 1.0000000      1.000                      c
+#> 486 1.0000000000 1.0000000      1.000                      c
+#> 487 1.0000000000 1.0000000      1.000                      c
+#> 488 1.0000000000 1.0000000      1.000                      c
+#> 489 1.0000000000 1.0000000      1.000                      c
+#> 490 1.0000000000 1.0000000      1.000                      c
+#> 491 1.0000000000 1.0000000      1.000                      c
+#> 492 1.0000000000 1.0000000      1.000                      c
+#> 493 1.0000000000 1.0000000      1.000                      c
+#> 494 1.0000000000 1.0000000      1.000                      c
+#> 495 1.0000000000 1.0000000      1.000                      c
+#> 496 1.0000000000 1.0000000      1.000                      c
+#> 497 1.0000000000 1.0000000      1.000                      c
+#> 498 1.0000000000 1.0000000      1.000                      c
+#> 499 1.0000000000 1.0000000      1.000                      c
+#> 500 1.0000000000 1.0000000      1.000                      c
+#> 501 1.0000000000 1.0000000      1.000                      c
+#> 502 1.0000000000 1.0000000      1.000                      c
+#> 503 1.0000000000 1.0000000      1.000                      c
+#> 504 1.0000000000 1.0000000      1.000                      c
+#> 505 1.0000000000 1.0000000      1.000                      c
+#> 506 0.7499750000 1.2130500      0.488 Population growth rate
+#> 507 0.7520000000 1.2590750      0.570 Population growth rate
+#> 508 0.7549750000 1.2130750      0.478 Population growth rate
+#> 509 0.7400000000 1.2072000      0.466 Population growth rate
+#> 510 0.7360000000 1.1770000      0.340 Population growth rate
+#> 511 0.7629500000 1.2560500      0.505 Population growth rate
+#> 512 0.7749750000 1.2650000      0.590 Population growth rate
+#> 513 0.7049750000 1.1010000      0.175 Population growth rate
+#> 514 0.7460000000 1.2090250      0.443 Population growth rate
+#> 515 0.7599250000 1.2140500      0.467 Population growth rate
+#> 516 0.7599750000 1.2600500      0.555 Population growth rate
+#> 517 0.7400000000 1.2121250      0.430 Population growth rate
+#> 518 0.7380000000 1.1820250      0.372 Population growth rate
+#> 519 0.7420000000 1.2070250      0.444 Population growth rate
+#> 520 0.7389750000 1.1600250      0.360 Population growth rate
+#> 521 0.7929750000 1.2750000      0.606 Population growth rate
+#> 522 0.7569750000 1.2330500      0.512 Population growth rate
+#> 523 0.7799750000 1.2651000      0.565 Population growth rate
+#> 524 0.7089000000 1.0920500      0.177 Population growth rate
+#> 525 0.7379250000 1.1840000      0.385 Population growth rate
+#> 526 0.7989750000 1.2731250      0.623 Population growth rate
+#> 527 0.7619250000 1.2320250      0.513 Population growth rate
+#> 528 0.7327250000 1.1990250      0.426 Population growth rate
+#> 529 0.7200000000 1.1620000      0.339 Population growth rate
+#> 530 0.7899500000 1.2740750      0.612 Population growth rate
+#> 531 0.7509750000 1.1500500      0.350 Population growth rate
+#> 532 0.7789000000 1.2653250      0.599 Population growth rate
+#> 533 0.7620000000 1.2330250      0.518 Population growth rate
+#> 534 0.7679750000 1.2430500      0.593 Population growth rate
+#> 535 0.6959750000 1.0681000      0.168 Population growth rate
+#> 536 0.6828750000 1.0500750      0.107 Population growth rate
+#> 537 0.7919250000 1.2780500      0.626 Population growth rate
+#> 538 0.7089500000 1.1081250      0.204 Population growth rate
+#> 539 0.7549250000 1.1950500      0.417 Population growth rate
+#> 540 0.7329750000 1.1510750      0.307 Population growth rate
+#> 541 0.7069750000 1.1180250      0.267 Population growth rate
+#> 542 0.7010000000 1.0870250      0.177 Population growth rate
+#> 543 0.7430000000 1.1660000      0.383 Population growth rate
+#> 544 0.6959750000 1.0860750      0.174 Population growth rate
+#> 545 0.7517500000 1.2390000      0.541 Population growth rate
+#> 546 0.6979750000 1.0760250      0.152 Population growth rate
+#> 547 0.6939500000 1.0520250      0.114 Population growth rate
+#> 548 0.7219750000 1.1250000      0.259 Population growth rate
+#> 549 0.7049750000 1.1081000      0.206 Population growth rate
+#> 550 0.7419750000 1.1880000      0.412 Population growth rate
+#> 551 0.7219750000 1.1600750      0.290 Population growth rate
+#> 552 0.7170000000 1.1100500      0.243 Population growth rate
+#> 553 0.6639500000 1.0020750      0.040 Population growth rate
+#> 554 0.6700000000 1.0610750      0.116 Population growth rate
+#> 555 0.7199500000 1.1280250      0.299 Population growth rate
+#> 556 0.7099750000 1.1040000      0.212 Population growth rate
+#> 557 0.7039250000 1.0720250      0.153 Population growth rate
+#> 558 0.6750000000 1.0390500      0.118 Population growth rate
+#> 559 0.7169750000 1.1380500      0.274 Population growth rate
+#> 560 0.6859500000 1.0990500      0.176 Population growth rate
+#> 561 0.7430000000 1.1910000      0.427 Population growth rate
+#> 562 0.7099750000 1.1581000      0.323 Population growth rate
+#> 563 0.6970000000 1.1090250      0.252 Population growth rate
+#> 564 0.6599500000 1.0020000      0.039 Population growth rate
+#> 565 0.6919000000 1.0480750      0.105 Population growth rate
+#> 566 0.7049750000 1.1360500      0.284 Population growth rate
+#> 567 0.7099500000 1.1080250      0.214 Population growth rate
+#> 568 0.6959500000 1.0790250      0.160 Population growth rate
+#> 569 0.6849750000 1.0490250      0.096 Population growth rate
+#> 570 0.7089500000 1.1180250      0.247 Population growth rate
+#> 571 0.6638500000 1.0290500      0.064 Population growth rate
+#> 572 0.7349500000 1.1761250      0.379 Population growth rate
+#> 573 0.7309500000 1.1350250      0.307 Population growth rate
+#> 574 0.7139750000 1.1180250      0.233 Population growth rate
+#> 575 0.6609750000 1.0110000      0.046 Population growth rate
+#> 576 0.6558750000 1.0230250      0.057 Population growth rate
+#> 577 0.7140000000 1.1260750      0.264 Population growth rate
+#> 578 0.6689250000 1.0130000      0.048 Population growth rate
+#> 579 0.6808750000 1.0850750      0.144 Population growth rate
+#> 580 0.6880000000 1.0460000      0.099 Population growth rate
+#> 581 0.6580000000 1.0250750      0.062 Population growth rate
+#> 582 0.6730000000 1.0110000      0.044 Population growth rate
+#> 583 0.6909250000 1.0610750      0.121 Population growth rate
+#> 584 0.7099500000 1.1380000      0.316 Population growth rate
+#> 585 0.6890000000 1.1100000      0.225 Population growth rate
+#> 586 0.6679750000 1.0010500      0.038 Population growth rate
+#> 587 0.6589250000 1.0270000      0.056 Population growth rate
+#> 588 0.6779750000 1.0260000      0.070 Population growth rate
+#> 589 0.6730000000 1.0411000      0.087 Population growth rate
+#> 590 0.6809750000 1.0741750      0.137 Population growth rate
+#> 591 0.6849250000 1.0500250      0.096 Population growth rate
+#> 592 0.6789750000 1.0180250      0.057 Population growth rate
+#> 593 0.6729250000 1.0370750      0.081 Population growth rate
+#> 594 0.6810000000 1.0170250      0.054 Population growth rate
+#> 595 0.6769500000 1.0450250      0.101 Population growth rate
+#> 596 0.6820000000 1.0170250      0.060 Population growth rate
+#> 597 0.6730000000 1.0330000      0.082 Population growth rate
+#> 598 0.6900000000 1.0620500      0.100 Population growth rate
+#> 599 0.6769500000 1.0380250      0.078 Population growth rate
+#> 600 0.6790000000 1.0380500      0.093 Population growth rate
+#> 601 0.6950000000 1.0710000      0.118 Population growth rate
+#> 602 0.6739250000 1.0150750      0.056 Population growth rate
+#> 603 0.6769500000 1.0330500      0.068 Population growth rate
+#> 604 0.6709500000 1.0310250      0.089 Population growth rate
+#> 605 0.6719500000 1.0160000      0.057 Population growth rate
+#> 606 0.6909750000 1.0660500      0.138 Population growth rate
+#> 607 0.8519262982 1.1040938      0.405   Expected growth rate
+#> 608 0.8490449680 1.1113474      0.462   Expected growth rate
+#> 609 0.8554360625 1.1085225      0.438   Expected growth rate
+#> 610 0.8840980415 1.1509566      0.631   Expected growth rate
+#> 611 0.8456105553 1.0972394      0.366   Expected growth rate
+#> 612 0.8646727244 1.1323476      0.545   Expected growth rate
+#> 613 0.8388654875 1.0964243      0.354   Expected growth rate
+#> 614 0.8703630690 1.1330570      0.576   Expected growth rate
+#> 615 0.8772628378 1.1382397      0.562   Expected growth rate
+#> 616 0.7721351149 1.0071148      0.045   Expected growth rate
+#> 617 0.8466933442 1.0961397      0.382   Expected growth rate
+#> 618 0.8927327316 1.1711593      0.729   Expected growth rate
+#> 619 0.8583555760 1.1212037      0.529   Expected growth rate
+#> 620 0.8331902984 1.0843186      0.322   Expected growth rate
+#> 621 0.8858681807 1.1389842      0.624   Expected growth rate
+#> 622 0.8885621513 1.1471546      0.662   Expected growth rate
+#> 623 0.8619320471 1.1261643      0.493   Expected growth rate
+#> 624 0.8913867016 1.1592897      0.714   Expected growth rate
+#> 625 0.8101747534 1.0556850      0.205   Expected growth rate
+#> 626 0.8682164170 1.1311137      0.564   Expected growth rate
+#> 627 0.7752603835 1.0094486      0.043   Expected growth rate
+#> 628 0.8175860876 1.0692730      0.230   Expected growth rate
+#> 629 0.8934332218 1.1588102      0.725   Expected growth rate
+#> 630 0.8553521803 1.1253093      0.486   Expected growth rate
+#> 631 0.8405715587 1.0884500      0.351   Expected growth rate
+#> 632 0.8196813335 1.0535101      0.171   Expected growth rate
+#> 633 0.7937091779 1.0240379      0.102   Expected growth rate
+#> 634 0.7695181747 1.0183293      0.069   Expected growth rate
+#> 635 0.8414349440 1.0785352      0.276   Expected growth rate
+#> 636 0.8005232342 1.0553627      0.160   Expected growth rate
+#> 637 0.7832283577 1.0246652      0.071   Expected growth rate
+#> 638 0.7670770243 1.0012637      0.040   Expected growth rate
+#> 639 0.8176355049 1.0588823      0.222   Expected growth rate
+#> 640 0.8960049370 1.1645151      0.684   Expected growth rate
+#> 641 0.8586762867 1.1160153      0.505   Expected growth rate
+#> 642 0.8362541701 1.0839019      0.338   Expected growth rate
+#> 643 0.8105264713 1.0539014      0.173   Expected growth rate
+#> 644 0.7871712729 1.0395553      0.112   Expected growth rate
+#> 645 0.7781933217 1.0071903      0.050   Expected growth rate
+#> 646 0.8310176415 1.0769562      0.267   Expected growth rate
+#> 647 0.8004584863 1.0514990      0.155   Expected growth rate
+#> 648 0.7918785054 1.0158414      0.071   Expected growth rate
+#> 649 0.7723528630 0.9991521      0.037   Expected growth rate
+#> 650 0.8153017833 1.0616033      0.199   Expected growth rate
+#> 651 0.9010820690 1.1677218      0.741   Expected growth rate
+#> 652 0.8539245391 1.1236282      0.481   Expected growth rate
+#> 653 0.8320953250 1.0797383      0.285   Expected growth rate
+#> 654 0.8198904421 1.0605672      0.176   Expected growth rate
+#> 655 0.7815855881 1.0277390      0.088   Expected growth rate
+#> 656 0.7190526188 0.9432136      0.003   Expected growth rate
+#> 657 0.8148221363 1.0742262      0.227   Expected growth rate
+#> 658 0.7920385291 1.0416467      0.132   Expected growth rate
+#> 659 0.7774348424 1.0206409      0.071   Expected growth rate
+#> 660 0.7621555981 0.9951630      0.030   Expected growth rate
+#> 661 0.7504306114 0.9824657      0.014   Expected growth rate
+#> 662 0.7919031631 1.0259442      0.097   Expected growth rate
+#> 663 0.7798342769 1.0155970      0.061   Expected growth rate
+#> 664 0.8254325607 1.0749981      0.288   Expected growth rate
+#> 665 0.8067377211 1.0604118      0.153   Expected growth rate
+#> 666 0.7867758100 1.0414909      0.096   Expected growth rate
+#> 667 0.7217005057 0.9410478      0.004   Expected growth rate
+#> 668 0.7640584342 0.9944242      0.030   Expected growth rate
+#> 669 0.7983357261 1.0382117      0.108   Expected growth rate
+#> 670 0.7804199174 1.0158412      0.073   Expected growth rate
+#> 671 0.7641895052 0.9941983      0.032   Expected growth rate
+#> 672 0.7535579975 0.9790636      0.016   Expected growth rate
+#> 673 0.7275739213 0.9512094      0.004   Expected growth rate
+#> 674 0.7285208220 0.9576338      0.005   Expected growth rate
+#> 675 0.7529287712 0.9839417      0.023   Expected growth rate
+#> 676 0.7366449377 0.9720666      0.012   Expected growth rate
+#> 677 0.7281653298 0.9543661      0.008   Expected growth rate
+#> 678 0.8057129329 1.0401763      0.115   Expected growth rate
+#> 679 0.7511392785 0.9847515      0.020   Expected growth rate
+#> 680 0.8074217348 1.0456170      0.120   Expected growth rate
+#> 681 0.7792016709 1.0061239      0.051   Expected growth rate
+#> 682 0.7570221765 0.9958527      0.029   Expected growth rate
+#> 683 0.7456087178 0.9719802      0.011   Expected growth rate
+#> 684 0.7330210699 0.9595825      0.011   Expected growth rate
+#> 685 0.7201323644 0.9483986      0.002   Expected growth rate
+#> 686 0.7465735750 0.9839515      0.022   Expected growth rate
+#> 687 0.7413965974 0.9723522      0.010   Expected growth rate
+#> 688 0.7259455633 0.9539558      0.005   Expected growth rate
+#> 689 0.7364656121 0.9558698      0.003   Expected growth rate
+#> 690 0.7539351998 0.9721576      0.009   Expected growth rate
+#> 691 0.7565201202 0.9908746      0.026   Expected growth rate
+#> 692 0.7739681657 1.0148965      0.060   Expected growth rate
+#> 693 0.7685415488 0.9871079      0.022   Expected growth rate
+#> 694 0.7434961469 0.9713776      0.011   Expected growth rate
+#> 695 0.7301114011 0.9544649      0.010   Expected growth rate
+#> 696 0.7439409259 0.9735959      0.013   Expected growth rate
+#> 697 0.7535238971 0.9858628      0.022   Expected growth rate
+#> 698 0.7294781589 0.9664497      0.007   Expected growth rate
+#> 699 0.7315312147 0.9467174      0.003   Expected growth rate
+#> 700 0.7273891434 0.9513384      0.004   Expected growth rate
+#> 701 0.7480686017 0.9834813      0.020   Expected growth rate
+#> 702 0.7352199451 0.9530471      0.007   Expected growth rate
+#> 703 0.7282163004 0.9504685      0.005   Expected growth rate
+#> 704 0.7151784199 0.9579284      0.006   Expected growth rate
+#> 705 0.7451122405 0.9663586      0.006   Expected growth rate
+#> 706 0.7376227976 0.9733396      0.010   Expected growth rate
+#> 707 0.7250072370 0.9445479      0.008   Expected growth rate
+#> 708 0.0612229944 0.6849807      0.000            Recruitment
+#> 709 0.0543687194 0.6633961      0.000            Recruitment
+#> 710 0.0792471282 0.7137728      0.000            Recruitment
+#> 711 0.0798581595 0.7146323      0.000            Recruitment
+#> 712 0.0497359075 0.6228405      0.000            Recruitment
+#> 713 0.0362699468 0.5215611      0.000            Recruitment
+#> 714 0.0725259976 0.7109410      0.000            Recruitment
+#> 715 0.0641182723 0.6900835      0.000            Recruitment
+#> 716 0.0483946426 0.5770155      0.000            Recruitment
+#> 717 0.0343136196 0.5242091      0.000            Recruitment
+#> 718 0.0894785423 0.7292923      0.000            Recruitment
+#> 719 0.0557388976 0.6563265      0.000            Recruitment
+#> 720 0.0750303725 0.7007372      0.000            Recruitment
+#> 721 0.0584126255 0.6484005      0.000            Recruitment
+#> 722 0.0679195112 0.7041224      0.000            Recruitment
+#> 723 0.0481289719 0.6200265      0.000            Recruitment
+#> 724 0.0294312545 0.5291613      0.000            Recruitment
+#> 725 0.0680855553 0.7138161      0.000            Recruitment
+#> 726 0.0571645770 0.6804562      0.000            Recruitment
+#> 727 0.0460325720 0.6107006      0.000            Recruitment
+#> 728 0.0305551600 0.4817645      0.000            Recruitment
+#> 729 0.0214262193 0.4141717      0.000            Recruitment
+#> 730 0.0606332960 0.6053846      0.000            Recruitment
+#> 731 0.0211153781 0.4371036      0.000            Recruitment
+#> 732 0.0539573534 0.6422932      0.000            Recruitment
+#> 733 0.0643470777 0.6732327      0.000            Recruitment
+#> 734 0.0427960747 0.6263592      0.000            Recruitment
+#> 735 0.0307945171 0.5238955      0.000            Recruitment
+#> 736 0.0214228870 0.4584092      0.000            Recruitment
+#> 737 0.0612020755 0.6362529      0.000            Recruitment
+#> 738 0.0410069874 0.5875544      0.000            Recruitment
+#> 739 0.0333640147 0.4435254      0.000            Recruitment
+#> 740 0.0203548503 0.4451092      0.000            Recruitment
+#> 741 0.0127338192 0.4127804      0.000            Recruitment
+#> 742 0.0332187975 0.5191779      0.000            Recruitment
+#> 743 0.0778290266 0.7351315      0.000            Recruitment
+#> 744 0.0648277877 0.6919062      0.000            Recruitment
+#> 745 0.0470610285 0.6020637      0.000            Recruitment
+#> 746 0.0332129998 0.5189480      0.000            Recruitment
+#> 747 0.0209361769 0.4880614      0.000            Recruitment
+#> 748 0.0168377184 0.3912865      0.000            Recruitment
+#> 749 0.0402453348 0.5820380      0.000            Recruitment
+#> 750 0.0238993121 0.4764134      0.000            Recruitment
+#> 751 0.0216714116 0.4637007      0.000            Recruitment
+#> 752 0.0125099394 0.3803072      0.000            Recruitment
+#> 753 0.0331142845 0.5553721      0.000            Recruitment
+#> 754 0.0247619820 0.4598073      0.000            Recruitment
+#> 755 0.0213339895 0.4250598      0.000            Recruitment
+#> 756 0.0120569432 0.3561919      0.000            Recruitment
+#> 757 0.0075301558 0.3291018      0.000            Recruitment
+#> 758 0.0042449384 0.3209188      0.000            Recruitment
+#> 759 0.0167074617 0.4246833      0.000            Recruitment
+#> 760 0.0419355198 0.5914304      0.000            Recruitment
+#> 761 0.0280847219 0.4794649      0.000            Recruitment
+#> 762 0.0188803353 0.4054436      0.000            Recruitment
+#> 763 0.0121214239 0.3502621      0.000            Recruitment
+#> 764 0.0374344455 0.5421546      0.000            Recruitment
+#> 765 0.0234950805 0.4332325      0.000            Recruitment
+#> 766 0.0209582027 0.4237347      0.000            Recruitment
+#> 767 0.0112791421 0.3405771      0.000            Recruitment
+#> 768 0.0064529436 0.3391360      0.000            Recruitment
+#> 769 0.0039831880 0.2659430      0.000            Recruitment
+#> 770 0.0140830205 0.4274125      0.000            Recruitment
+#> 771 0.0412829128 0.5760508      0.000            Recruitment
+#> 772 0.0276464592 0.4669562      0.000            Recruitment
+#> 773 0.0185830072 0.4333561      0.000            Recruitment
+#> 774 0.0106334797 0.3635436      0.000            Recruitment
+#> 775 0.0366854491 0.5458954      0.000            Recruitment
+#> 776 0.0748392911 0.7459891      0.000            Recruitment
+#> 777 0.0159883501 0.4173619      0.000            Recruitment
+#> 778 0.0105230942 0.3362804      0.000            Recruitment
+#> 779 0.0064667548 0.3275890      0.000            Recruitment
+#> 780 0.0036334804 0.2493279      0.000            Recruitment
+#> 781 0.0059216418 0.2919336      0.000            Recruitment
+#> 782 0.0412193978 0.5695551      0.000            Recruitment
+#> 783 0.0241464370 0.4620743      0.000            Recruitment
+#> 784 0.0157845063 0.4180261      0.000            Recruitment
+#> 785 0.0122637866 0.3545048      0.000            Recruitment
+#> 786 0.0090230183 0.3405943      0.000            Recruitment
+#> 787 0.0047774028 0.2761214      0.000            Recruitment
+#> 788 0.0034919378 0.2484617      0.000            Recruitment
+#> 789 0.0088004238 0.3363110      0.000            Recruitment
+#> 790 0.0075725485 0.2864617      0.000            Recruitment
+#> 791 0.0042748104 0.2900372      0.000            Recruitment
+#> 792 0.0045235138 0.3028046      0.000            Recruitment
+#> 793 0.0101723583 0.3398924      0.000            Recruitment
+#> 794 0.0101105795 0.3461009      0.000            Recruitment
+#> 795 0.0018834983 0.2581731      0.000            Recruitment
+#> 796 0.0096917735 0.3383058      0.000            Recruitment
+#> 797 0.0047600237 0.2996338      0.000            Recruitment
+#> 798 0.0033416833 0.2888319      0.000            Recruitment
+#> 799 0.0050543256 0.3203614      0.000            Recruitment
+#> 800 0.0086705756 0.3387860      0.000            Recruitment
+#> 801 0.0059390405 0.3239470      0.000            Recruitment
+#> 802 0.0021880972 0.2452439      0.000            Recruitment
+#> 803 0.0042265010 0.2888508      0.000            Recruitment
+#> 804 0.0102123824 0.3017606      0.000            Recruitment
+#> 805 0.0030105279 0.2685641      0.000            Recruitment
+#> 806 0.0028767437 0.2464041      0.000            Recruitment
+#> 807 0.0018427205 0.2371706      0.000            Recruitment
+#> 808 0.0086750281 0.3488049      0.000            Recruitment
+#> 809 0.7004529166 0.9986809      0.072  Adult female survival
+#> 810 0.6680744508 0.9718654      0.008  Adult female survival
+#> 811 0.6562349431 0.9700473      0.003  Adult female survival
+#> 812 0.7002128740 0.9959880      0.055  Adult female survival
+#> 813 0.6744344931 0.9977777      0.057  Adult female survival
+#> 814 0.6788871399 0.9958954      0.042  Adult female survival
+#> 815 0.6730813524 0.9972438      0.051  Adult female survival
+#> 816 0.6886202895 0.9954510      0.038  Adult female survival
+#> 817 0.6820952000 0.9965031      0.051  Adult female survival
+#> 818 0.6926783268 0.9958910      0.047  Adult female survival
+#> 819 0.6576322446 0.9744411      0.006  Adult female survival
+#> 820 0.6773970746 0.9891580      0.021  Adult female survival
+#> 821 0.6706651030 0.9832498      0.009  Adult female survival
+#> 822 0.6637748091 0.9845318      0.017  Adult female survival
+#> 823 0.6909361777 0.9976784      0.062  Adult female survival
+#> 824 0.6652324706 0.9864582      0.017  Adult female survival
+#> 825 0.6956714195 0.9955864      0.048  Adult female survival
+#> 826 0.6495665409 0.9735719      0.010  Adult female survival
+#> 827 0.6821174169 0.9891626      0.024  Adult female survival
+#> 828 0.6997459304 0.9982263      0.073  Adult female survival
+#> 829 0.6839164542 0.9957217      0.046  Adult female survival
+#> 830 0.6641704670 0.9776273      0.009  Adult female survival
+#> 831 0.6659127721 0.9895443      0.024  Adult female survival
+#> 832 0.6573957874 0.9864224      0.016  Adult female survival
+#> 833 0.6873358439 0.9930816      0.034  Adult female survival
+#> 834 0.6532950381 0.9790701      0.011  Adult female survival
+#> 835 0.6776319098 0.9842778      0.016  Adult female survival
+#> 836 0.6707435408 0.9849927      0.017  Adult female survival
+#> 837 0.6857410671 0.9883011      0.024  Adult female survival
+#> 838 0.6469211148 0.9743811      0.011  Adult female survival
+#> 839 0.6747847887 0.9776885      0.008  Adult female survival
+#> 840 0.6809910680 0.9967418      0.054  Adult female survival
+#> 841 0.6457372664 0.9793204      0.008  Adult female survival
+#> 842 0.6814957154 0.9894750      0.025  Adult female survival
+#> 843 0.6692961655 0.9829290      0.012  Adult female survival
+#> 844 0.6922440836 0.9942545      0.037  Adult female survival
+#> 845 0.6538006288 0.9748738      0.010  Adult female survival
+#> 846 0.6680851629 0.9849744      0.014  Adult female survival
+#> 847 0.6564982582 0.9817332      0.013  Adult female survival
+#> 848 0.6857461734 0.9900147      0.025  Adult female survival
+#> 849 0.6531052884 0.9735214      0.007  Adult female survival
+#> 850 0.6701443809 0.9855198      0.019  Adult female survival
+#> 851 0.6973784511 0.9917656      0.030  Adult female survival
+#> 852 0.6596845467 0.9692727      0.007  Adult female survival
+#> 853 0.6626992276 0.9896217      0.024  Adult female survival
+#> 854 0.6705724031 0.9828549      0.014  Adult female survival
+#> 855 0.6836844804 0.9944839      0.030  Adult female survival
+#> 856 0.6513704331 0.9750689      0.004  Adult female survival
+#> 857 0.6747404541 0.9821991      0.015  Adult female survival
+#> 858 0.6592036610 0.9780144      0.008  Adult female survival
+#> 859 0.6690851526 0.9906431      0.026  Adult female survival
+#> 860 0.6558603345 0.9703438      0.002  Adult female survival
+#> 861 0.6529140218 0.9597749      0.004  Adult female survival
+#> 862 0.6873552821 0.9973018      0.049  Adult female survival
+#> 863 0.6695907253 0.9638342      0.004  Adult female survival
+#> 864 0.6668075215 0.9874359      0.021  Adult female survival
+#> 865 0.6632356350 0.9831685      0.011  Adult female survival
+#> 866 0.6767919347 0.9972329      0.051  Adult female survival
+#> 867 0.6627527504 0.9739464      0.008  Adult female survival
+#> 868 0.6734056375 0.9840584      0.018  Adult female survival
+#> 869 0.6563486361 0.9760971      0.012  Adult female survival
+#> 870 0.6834248373 0.9888001      0.022  Adult female survival
+#> 871 0.6511431905 0.9678314      0.006  Adult female survival
+#> 872 0.6408376910 0.9641714      0.006  Adult female survival
+#> 873 0.6621283144 0.9766726      0.010  Adult female survival
+#> 874 0.6817748071 0.9914487      0.031  Adult female survival
+#> 875 0.6577704924 0.9627421      0.002  Adult female survival
+#> 876 0.6515727172 0.9638559      0.003  Adult female survival
+#> 877 0.6582124774 0.9791388      0.013  Adult female survival
+#> 878 0.6881187728 0.9883040      0.021  Adult female survival
+#> 879 0.6582091137 0.9709627      0.004  Adult female survival
+#> 880 0.6676610967 0.9805358      0.010  Adult female survival
+#> 881 0.6864042895 0.9955305      0.042  Adult female survival
+#> 882 0.6577090198 0.9714355      0.009  Adult female survival
+#> 883 0.6449394687 0.9705025      0.007  Adult female survival
+#> 884 0.6644643009 0.9788343      0.008  Adult female survival
+#> 885 0.6909831361 0.9897023      0.024  Adult female survival
+#> 886 0.6602339448 0.9659922      0.004  Adult female survival
+#> 887 0.6427782696 0.9553078      0.003  Adult female survival
+#> 888 0.6619596420 0.9771397      0.011  Adult female survival
+#> 889 0.6875209350 0.9903587      0.027  Adult female survival
+#> 890 0.6552832521 0.9693033      0.003  Adult female survival
+#> 891 0.6725237977 0.9851960      0.018  Adult female survival
+#> 892 0.6843157876 0.9915257      0.027  Adult female survival
+#> 893 0.6525884332 0.9725420      0.009  Adult female survival
+#> 894 0.6450892234 0.9706497      0.010  Adult female survival
+#> 895 0.6536829341 0.9789506      0.014  Adult female survival
+#> 896 0.6786919174 0.9885163      0.022  Adult female survival
+#> 897 0.6538155493 0.9663520      0.007  Adult female survival
+#> 898 0.6458362510 0.9637695      0.005  Adult female survival
+#> 899 0.6634209248 0.9736430      0.005  Adult female survival
+#> 900 0.6703185746 0.9902842      0.026  Adult female survival
+#> 901 0.6947181598 0.9959137      0.054  Adult female survival
+#> 902 0.6658093988 0.9795541      0.013  Adult female survival
+#> 903 0.6793453241 0.9927221      0.033  Adult female survival
+#> 904 0.6411340193 0.9677318      0.005  Adult female survival
+#> 905 0.6567613809 0.9684318      0.005  Adult female survival
+#> 906 0.6518106957 0.9781257      0.010  Adult female survival
+#> 907 0.6780405059 0.9865346      0.021  Adult female survival
+#> 908 0.6528363291 0.9654920      0.004  Adult female survival
+#> 909 0.6499639406 0.9554999      0.004  Adult female survival
 #> 
 ```

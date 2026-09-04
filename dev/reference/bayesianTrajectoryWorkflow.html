@@ -89,7 +89,7 @@ period and the end of the projection period.</p></dd>
 
 
 <dt id="arg-n-">N0<a class="anchor" aria-label="anchor" href="#arg-n-"></a></dt>
-<dd><p>Number or dataframe. Optional. Initial populations size. If NA (default) then population growth rate is $_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required. Additional (optional) variation columns will be used by <code>addN0Variation()</code>.</p></dd>
+<dd><p>Number or dataframe. Optional. Initial populations size. If NA (default) then population growth rate is $_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required. Additional (optional) variation columns will be used by <code><a href="addN0Variation.html">addN0Variation()</a></code>.</p></dd>
 
 
 <dt id="arg-returnsamples">returnSamples<a class="anchor" aria-label="anchor" href="#arg-returnsamples"></a></dt>
@@ -129,6 +129,7 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Caribou demography functions:
+<code><a href="addN0Variation.html">addN0Variation()</a></code>,
 <code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>,
 <code><a href="betaNationalPriors.html">betaNationalPriors()</a></code>,
 <code><a href="caribouPopGrowth.html">caribouPopGrowth()</a></code>,
@@ -175,18 +176,18 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ disturbanceIn: NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ parTab :'data.frame':	1 obs. of  18 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName: chr "A"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar         : num 0.199</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_sd          : num 0.0863</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_iv_mean     : num 0.321</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_iv_shape    : num 9.37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar         : num 0.198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_sd          : num 0.0855</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_iv_mean     : num 0.316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_iv_shape    : num 8.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar_lower   : num 0.172</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar_upper   : num 0.225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar         : num 0.872</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_sd          : num 0.16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_mean     : num 0.33</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_shape    : num 3.67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_lower   : num 0.836</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_upper   : num 0.904</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar         : num 0.871</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_sd          : num 0.166</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_mean     : num 0.32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_shape    : num 2.66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_lower   : num 0.833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_upper   : num 0.906</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ N0            : logi NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nCollarYears  : num NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nSurvYears    : int 32</span>

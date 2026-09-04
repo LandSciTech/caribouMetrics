@@ -37,7 +37,8 @@ estimateBayesianRates(
   (default) then population growth rate is \$\_t=S_t\*(1+cR_t)/s\$. If a
   data frame N0 column is required, and PopulationName column is
   required if there is more than one row. Additional (optional)
-  variation columns will be used by `addN0Variation()`.
+  variation columns will be used by
+  [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md).
 
 - disturbance:
 
@@ -88,6 +89,7 @@ FALSE just the results summaries are returned.
 ## See also
 
 Caribou demography functions:
+[`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
 [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md),
@@ -117,11 +119,11 @@ s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 estimateBayesianRates(s_data, r_data, N0 = 500)
 #>   PopulationName     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower
-#> 1              A 0.1989716 0.07893634 0.2878181   16.94093   0.1755463
-#> 2              B 0.2110102 0.10435515 0.2878181   16.94093   0.1780015
+#> 1              A 0.1991368 0.07869581 0.2801537   17.16522   0.1742502
+#> 2              B 0.2116802 0.09920695 0.2801537   17.16522   0.1805084
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
-#> 1   0.2244535 0.8834576 0.2371920 0.5044639   13.57145   0.8264123   0.9251399
-#> 2   0.2455056 0.9054767 0.2964022 0.5044639   13.57145   0.8465901   0.9455474
+#> 1   0.2239758 0.8829857 0.2520193 0.4969806   12.84644   0.8207610   0.9241898
+#> 2   0.2450281 0.9089153 0.2957098 0.4969806   12.84644   0.8528741   0.9490899
 #>    N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
 #> 1 500          900         31          2047            27
 #> 2 500          519         18          1645            15

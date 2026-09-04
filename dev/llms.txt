@@ -330,6 +330,8 @@ Overview of the package.
 Functions for predicting boreal caribou demographic rates and projecting
 population growth
 
+- [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md)
+  : Add variation to initial population size
 - [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md)
   : Run the Bayesian population model for multiple parameter sets
 - [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md)

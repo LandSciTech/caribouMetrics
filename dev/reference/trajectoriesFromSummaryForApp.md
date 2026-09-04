@@ -91,6 +91,7 @@ a data.frame
 ## See also
 
 Caribou demography functions:
+[`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
 [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md),
@@ -130,16 +131,16 @@ Caribou demography functions:
 #> 3  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
 #> 4  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
 #> 5  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
-#> 6  NA 0.9682560 0.9607391 NA 0.1682169 0.08410847 0.8931357         NA
-#> 7  NA 0.8683949 0.8868471 NA 0.1426620 0.07133102 0.8105757         NA
-#> 8  NA 0.9397831 0.9607391 NA 0.1590924 0.07954621 0.8705354         NA
-#> 9  NA 0.9365918 0.8868471 NA 0.1494537 0.07472683 0.8714697         NA
-#> 10 NA 0.9468236 0.9607391 NA 0.1790117 0.08950583 0.8690395         NA
-#> 11 NA 0.9033577 0.8868471 NA 0.1482936 0.07414678 0.8410003         NA
-#> 12 NA 0.9440797 0.9607391 NA 0.1725361 0.08626804 0.8691038         NA
-#> 13 NA 0.9150964 0.8868471 NA 0.2003486 0.10017431 0.8317740         NA
-#> 14 NA 0.9363735 0.9607391 NA 0.1762593 0.08812967 0.8605349         NA
-#> 15 NA 0.8281768 0.8868471 NA 0.1913182 0.09565909 0.7558709         NA
+#> 6  NA 0.9929620 0.9832081 NA 0.1932596 0.09662981 0.9054669         NA
+#> 7  NA 0.9667653 0.9019037 NA 0.1600672 0.08003358 0.8951252         NA
+#> 8  NA 1.0006365 0.9832081 NA 0.2012815 0.10064075 0.9091400         NA
+#> 9  NA 0.8760181 0.9019037 NA 0.1875542 0.09377709 0.8009110         NA
+#> 10 NA 0.9708536 0.9832081 NA 0.1651505 0.08257524 0.8968001         NA
+#> 11 NA 0.8943813 0.9019037 NA 0.1119624 0.05598120 0.8469671         NA
+#> 12 NA 0.9894197 0.9832081 NA 0.2090721 0.10453605 0.8957786         NA
+#> 13 NA 0.8172634 0.9019037 NA 0.2333263 0.11666316 0.7318799         NA
+#> 14 NA 0.9636823 0.9832081 NA 0.1653398 0.08266989 0.8900980         NA
+#> 15 NA 0.9837085 0.9019037 NA 0.2114181 0.10570903 0.8896630         NA
 #>    surviving_adFemales id time type  scn
 #> 1                   NA  1    1 mean base
 #> 2                   NA  1    2 mean base

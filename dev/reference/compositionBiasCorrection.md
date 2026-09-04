@@ -62,6 +62,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 ## See also
 
 Caribou demography functions:
+[`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
 [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md),
@@ -95,8 +96,8 @@ compositionBiasCorrection(w = 6,
                           u = runif(nr, 0, 0.2),
                           z = runif(nr, 0, 0.2),
                           approx = FALSE)
-#>  [1] 0.9676593 1.0384258 1.0160047 1.1363837 1.1608138 1.0916374 0.9317102
-#>  [8] 0.9180903 1.1237416 1.0030126
+#>  [1] 0.9451223 1.0889118 1.0059489 1.2178563 1.0016317 1.0962348 1.0149724
+#>  [8] 1.1339095 1.0266824 1.0698172
 
 compositionBiasCorrection(w = 6,
                           q = runif(nr, 0, 0.6),
@@ -106,6 +107,6 @@ compositionBiasCorrection(w = 6,
 #> # A tibble: 1 × 5
 #>       w     m       v    sig2     mu
 #>   <dbl> <dbl>   <dbl>   <dbl>  <dbl>
-#> 1     6  1.08 0.00902 0.00772 0.0721
+#> 1     6  1.03 0.00500 0.00471 0.0267
 
 ```

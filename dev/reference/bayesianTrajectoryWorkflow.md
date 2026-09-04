@@ -59,7 +59,8 @@ bayesianTrajectoryWorkflow(
   Number or dataframe. Optional. Initial populations size. If NA
   (default) then population growth rate is \$\_t=S_t\*(1+cR_t)/s\$. If a
   data frame N0 column is required. Additional (optional) variation
-  columns will be used by `addN0Variation()`.
+  columns will be used by
+  [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md).
 
 - returnSamples:
 
@@ -112,6 +113,7 @@ a list with elements:
 ## See also
 
 Caribou demography functions:
+[`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md),
 [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md),
@@ -158,18 +160,18 @@ Caribou demography functions:
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
-#>   ..$ R_bar         : num 0.199
-#>   ..$ R_sd          : num 0.0863
-#>   ..$ R_iv_mean     : num 0.321
-#>   ..$ R_iv_shape    : num 9.37
+#>   ..$ R_bar         : num 0.198
+#>   ..$ R_sd          : num 0.0855
+#>   ..$ R_iv_mean     : num 0.316
+#>   ..$ R_iv_shape    : num 8.5
 #>   ..$ R_bar_lower   : num 0.172
 #>   ..$ R_bar_upper   : num 0.225
-#>   ..$ S_bar         : num 0.872
-#>   ..$ S_sd          : num 0.16
-#>   ..$ S_iv_mean     : num 0.33
-#>   ..$ S_iv_shape    : num 3.67
-#>   ..$ S_bar_lower   : num 0.836
-#>   ..$ S_bar_upper   : num 0.904
+#>   ..$ S_bar         : num 0.871
+#>   ..$ S_sd          : num 0.166
+#>   ..$ S_iv_mean     : num 0.32
+#>   ..$ S_iv_shape    : num 2.66
+#>   ..$ S_bar_lower   : num 0.833
+#>   ..$ S_bar_upper   : num 0.906
 #>   ..$ N0            : logi NA
 #>   ..$ nCollarYears  : num NA
 #>   ..$ nSurvYears    : int 32
