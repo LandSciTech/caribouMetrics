@@ -26,6 +26,15 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
                                      cPars=demographyDefaults(),
                                      returnSamples = TRUE, doSummary = TRUE, ...){
   cPars <- demographyDefaults(cPars)
+
+  #bayesianResults = bbouResultFile
+  if(is.character(bayesianResults) && (length(bayesianResults) == 1) ){
+    if(file.exists(bayesianResults)){
+      bayesianResults <- readRDS(bayesianResults)
+    }else{
+      stop(paste("bayesianResults file not found,",bayesianResults))
+    }
+  }
   
   if(!hasName(bayesianResults, "surv_fit")|!hasName(bayesianResults, "recruit_fit")){
     stop("bayesianResults must contain surv_fit and recruit_fit elements")
@@ -34,15 +43,6 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   if(hasName(bayesianResults,"Anthro")){
     message("Anthro from bayesianResults")
     bayesianResults=list(parTab=bayesianResults)
-  }
-  
-  #bayesianResults = bbouResultFile
-  if(is.character(bayesianResults) && (length(bayesianResults) == 1) ){
-    if(file.exists(bayesianResults)){
-      bayesianResults <- readRDS(bayesianResults)
-    }else{
-      stop(paste("bayesianResults file not found,",bayesianResults))
-    }
   }
   
   if(!hasName(bayesianResults$parTab,"PopulationName")){bayesianResults$parTab$PopulationName="A"}
@@ -88,7 +88,6 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   popInfo$c <- compositionBiasCorrection(q=runif(nrow(popInfo),ccPars$qMin,ccPars$qMax),w=ccPars$cowMult,
                                          u=runif(nrow(popInfo),ccPars$uMin,ccPars$uMax),
                                          z=runif(nrow(popInfo),ccPars$zMin,ccPars$zMax))
-  
   parsBar <- simulateTrajectoriesFromPosterior(popInfo=popInfo,
                                rec_pred=bayesianResults$recruit_fit,
                                surv_pred=bayesianResults$surv_fit,
