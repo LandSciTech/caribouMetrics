@@ -52,12 +52,6 @@ summarizeTrajectories:
 simulateTrajectoriesFromPosterior: a data frame with results from \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for each set of survival/recruitment predictions.
 }
 \description{
-Format trajectory tables
-
-Get 95\% prediction intervals from trajectories
-
-Get a set of simulation results from fitted demographic models in raw form
-
 Assumes that rec_pred and surv_pred each include the same years and populations.TO DO: check this.
 }
 \examples{

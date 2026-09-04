@@ -27,22 +27,25 @@ bayesianTrajectoryWorkflow(
 \item{disturbance}{either a path to a csv file or a dataframe containing the
 columns "Anthro","Fire_excl_anthro", and "Year".}
 
-\item{priors}{a list of model priors. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see \code{bboutools::bb_priors_survival} and \code{bboutools::bb_priors_recruitment} for details.
-If disturbance is not NA, see \code{\link[=betaNationalPriors]{betaNationalPriors()}} for details.}
+\item{priors}{list. Optional. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see \code{bboutools::bb_priors_survival} and \code{bboutools::bb_priors_recruitment} for details.
+If disturbance is not NA, see \code{betaNationalPriors} for details.}
 
 \item{startYear, endYear}{year defining the beginning of the observation
 period and the end of the projection period.}
 
-\item{N0}{Number or dataframe. Optional. Initial populations size. If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required. Additional (optional) variation columns will be used by \code{\link[=addN0Variation]{addN0Variation()}}.}
+\item{N0}{number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by \code{\link[=addN0Variation]{addN0Variation()}}.}
 
-\item{returnSamples}{logical. If F returns only summaries. If T returns example trajectories.}
+\item{returnSamples}{logical. If FALSE returns only summaries. If TRUE returns example trajectories.}
 
 \item{inputList}{an optional list of inputs with names matching the above. If
 an argument is included in this list it will override the named argument.}
 
-\item{niters}{A whole number of the number of iterations per chain after thinning and burn-in.}
+\item{niters}{integer. The number of iterations per chain after thinning and burn-in.}
 
 \item{nthin}{integer. The number of the thinning rate.}
+
+\item{...}{Other parameters passed on to \code{bboutools::bb_fit_survival} and
+\code{bboutools::bb_fit_recruitment}.}
 }
 \value{
 a list with elements:

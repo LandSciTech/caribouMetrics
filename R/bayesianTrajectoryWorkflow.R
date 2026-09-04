@@ -8,18 +8,13 @@
 #' @param recruit_data either a path to a csv file or a recruitment data table in bboutools format.
 #' @param disturbance either a path to a csv file or a dataframe containing the
 #'   columns "Anthro","Fire_excl_anthro", and "Year".
-#' @param priors a list of model priors. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see `bboutools::bb_priors_survival` and `bboutools::bb_priors_recruitment` for details.
-#'               If disturbance is not NA, see [betaNationalPriors()] for details.
 #' @param startYear,endYear year defining the beginning of the observation
 #'   period and the end of the projection period.
-#' @param N0 Number or dataframe. Optional. Initial populations size. If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required. Additional (optional) variation columns will be used by [addN0Variation()].
-#' @param niters integer. The number of iterations per chain after thinning and burn-in.
-#' @param nthin integer. The number of the thinning rate.
-#' @param returnSamples logical. If F returns only summaries. If T returns example trajectories.
+#' @inheritParams estimateBayesianRates
+#' @param returnSamples logical. If FALSE returns only summaries. If TRUE returns example trajectories.
 #' @inheritParams caribouPopGrowth
 #' @param inputList an optional list of inputs with names matching the above. If
 #'   an argument is included in this list it will override the named argument.
-#' @param niters A whole number of the number of iterations per chain after thinning and burn-in.
 #'
 #' @return a list with elements:
 #'   * result: a list of model results:

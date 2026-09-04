@@ -85,6 +85,9 @@ columns that are missing will be filled with the default values.}
 
 \item{includeMonitoring}{logical. Include \code{\link[=monitoringDefaults]{monitoringDefaults()}}?}
 
+\item{...}{Other parameters passed on to \code{bboutools::bb_fit_survival} and
+\code{bboutools::bb_fit_recruitment}.}
+
 \item{projYears}{Number of years of projections}
 
 \item{obsYears}{Number of years of observations}
