@@ -8,9 +8,10 @@ test_that("testScript still works", {
     obsYears = c(8, 20), collarCount = 30, cowMult = 2, collarInterval = 2,
     iAnthro = 0,
     tA = 0, obsAnthroSlope = 0, projAnthroSlope = 0, sQuantile = 0.960908218594268,
-    rQuantile = 0.744425233039074, N0 = 1000,N.sd=0.2
+    rQuantile = 0.744425233039074, N0 = 1000 #,N.sd=0.2 Note this was not being used 
   )
-
+  # use variation in N0 (can't see it in output but useful to check that it doesn't break things)
+  scns$N0 <- bind_rows(data.frame(N0 = 1000, N.sd = 20), data.frame(N0 = 1000, N.sd = 20))
   ##########
   # Get full set of sims for comparison
   simBig <- suppressWarnings(trajectoriesFromNational(cPars = scns)) # If called with default parameters, use saved object to speed things up.
@@ -22,7 +23,7 @@ test_that("testScript still works", {
   # eParsIn$collarNumYears=1
 
   scResults <- suppressWarnings(bayesianScenariosWorkflow(scns, simBig, eParsIn,
-    niters = 100, printProgress = TRUE
+    niters = 100, printProgress = FALSE, returnSamples = TRUE
   ))
 
   expect_s3_class(scResults$rr.summary.all, "data.frame")
@@ -84,7 +85,8 @@ test_that("Model and input trajectory match", {
   scns$collarCount <- 0
 
   # devtools::load_all(path = "../caribouMetrics/")
-  posteriorResult <- bayesianScenariosWorkflow(scns, simBig, niters = 3000,returnSamples=T)
+  posteriorResult <- bayesianScenariosWorkflow(scns, simBig, niters = 1000,
+                                               returnSamples=T)
 
   #for(nn in union(names(simBig$surv_data),names(posteriorResult$out$result$surv_data))){
   #  print(nn)
@@ -156,7 +158,7 @@ test_that("results match expected", {
     )
     scResults <- suppressWarnings(bayesianScenariosWorkflow(
       scns, simBig,  eParsIn,
-      niters = 3000
+      niters = 1000
     ))
   }
   

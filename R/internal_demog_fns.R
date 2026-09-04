@@ -239,10 +239,18 @@ simTrajectory <- function(numYears, covariates, survivalModelNumber = "M1",
 #'                           N.upper = 600))
 #'
 #' @export
-addN0Variation<- function(popInfo,forceDataFrame=F) { 
-  if(class(popInfo)=="list"){
+addN0Variation<- function(popInfo,forceDataFrame=F) {
+  if(inherits(popInfo, "list")){
     popInfo = as.data.frame(popInfo)
   }
+  
+  if(inherits(popInfo, "data.frame")){
+    testTable(popInfo, req_col_names = "N0")
+    if(class(popInfo$N0) == "data.frame"){
+      popInfo <- tidyr::unnest(popInfo, N0)
+    }
+  }
+  
   if(length(intersect(c("N.sd","N.lower"),names(popInfo)))>0){
     popInfo$mean = popInfo$N0
     if(hasName(popInfo,"N.sd")){
@@ -261,7 +269,7 @@ addN0Variation<- function(popInfo,forceDataFrame=F) {
     popInfo <- subset(popInfo,select=setdiff(names(popInfo),c("mean","N.sd","N.lower","N.upper")))
   }
   
-  if(forceDataFrame & class(popInfo)=="numeric"){
+  if(forceDataFrame & inherits(popInfo, "numeric")){
     popInfo <- data.frame(N0=popInfo)
   }
   return(popInfo)

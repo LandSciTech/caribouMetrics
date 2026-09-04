@@ -152,8 +152,12 @@ simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynami
       
       if(length(unique(N0)) == 1){
         N0 <- rep(unique(N0), nrow(R_use))
-      } else if (length(N0) != nrow(R_use)) {
-        stop("Handle this case. To add N0 variation specify a data frame that addN0Variation() can use.")
+      } else if(inherits(N0, "data.frame")){
+        N0 <- addN0Variation(N0)$N0
+      }
+      if (length(N0) != nrow(R_use)) {
+        stop("To add N0 variation specify a data frame that addN0Variation() can use.")
+        
         #N0 <- seq(from = N0[1], to = N0[2], by  = 1) %>% round() %>% 
         #  sample(size = nrow(R_use), replace = TRUE)
       }
