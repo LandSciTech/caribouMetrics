@@ -3,10 +3,7 @@
 #' 
 #'
 #' @param bayesianResults A result from `estimateBayesianRates`
-#' @param N0 
-#' @param cPars 
-#' @param returnSamples 
-#' @param doSummary 
+#' @inheritParams trajectoriesFromSummary
 #' @param ... 
 #'
 #' @returns

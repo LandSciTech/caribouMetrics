@@ -57,6 +57,11 @@ test_that("works with disturbance and N0 variation", {
   pltDistwN0 <- plotTrajectories(trajDistwN0)
   
   expect_is(pltDistwN0, "ggplot2::ggplot")
+  
+  rngN0 <- trajDistwN0$samples %>% filter(MetricTypeID == "N", Year == min(Year)) %>% pull(Amount) %>% range()
+  
+  expect_gt(125, rngN0[1])
+  expect_lt(125, rngN0[2])
 })
 
 test_that("can project into future with missing years in data", {

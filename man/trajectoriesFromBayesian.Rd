@@ -16,13 +16,15 @@ trajectoriesFromBayesian(
 \arguments{
 \item{bayesianResults}{A result from \code{estimateBayesianRates}}
 
-\item{N0}{}
+\item{N0}{number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by \code{\link[=addN0Variation]{addN0Variation()}}.}
 
-\item{cPars}{}
+\item{cPars}{optional. Parameters for calculating composition survey bias term.}
 
-\item{returnSamples}{}
+\item{returnSamples}{logical. If FALSE returns only summaries. If TRUE
+returns example trajectories as well.}
 
-\item{doSummary}{}
+\item{doSummary}{logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth.
+If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.}
 
 \item{...}{}
 }

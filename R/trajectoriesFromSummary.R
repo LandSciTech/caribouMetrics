@@ -1,22 +1,38 @@
 #' Projections of population growth from demographic model summaries.
-#'
+#' 
 #' @param replicates 
 #' @param Rbar,Sbar Mean and standard deviation of R_bar and S_bar over time. See `estimateBayesianRates()$parList` for expected form.
 #' @param Riv,Siv Parameters defining the distribution of interannual variation. See `estimateBayesianRates()$parList` for expected form.
 #' @param type The distribution of interannual variation varies between "beta" or "bbou" model types. 
+#' @param cPars optional. Parameters for calculating composition survey bias term.
 #' @param doSummary logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth. 
 #'  If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.
 #' @param returnSamples logical. If FALSE returns only summaries. If TRUE
 #'   returns example trajectories as well. 
+#' @inheritParams estimateBayesianRates 
+#' @param varPersists logical. If FALSE treats all variation as interannual variation.
 #' @param ... Additional arguments passed to `caribouPopGrowth`
+#' 
 #' @return a data.frame
+#' 
 #' @family demography
 #'
 #' @export
 #' 
 #' @examples
+#' # trajectories from arbitrary demographic rates
 #'
-#'
+#' traj <- trajectoriesFromSummary(replicates = 35, N0 = 100,
+#'                         Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+#'                                           upper = 0.27, Annual = 2010:2015, Year = 2010:2015,
+#'                                           PopulationName = "A"),
+#'                         Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+#'                                           upper = 0.98, Annual = 2010:2015, Year = 2010:2015,
+#'                                           PopulationName = "A"),
+#'                         Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
+#'                         Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
+#'                         type = "bbou")
+#' plotTrajectories(traj)
 trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv, 
                   type = "beta", cPars = demographyDefaults(), 
                   doSummary = T, returnSamples = T,

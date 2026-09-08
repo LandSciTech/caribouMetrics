@@ -68,3 +68,22 @@ test_that("summary gives expected trajectory", {
   #             101)
   
 })
+
+
+test_that("trajectoriesFromSummary works with variation in N0", {
+  N0df <- data.frame(N0 = 1000, N.sd = 50)
+  
+  traj <- trajectoriesFromSummary(replicates = 35, N0 = N0df,
+                          Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+                                            upper = 0.27, Annual = 2010:2015, Year = 2010:2015,
+                                            PopulationName = "A"),
+                          Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+                                            upper = 0.98, Annual = 2010:2015, Year = 2010:2015,
+                                            PopulationName = "A"),
+                          Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
+                          Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
+                          type = "bbou")
+  
+  traj$popInfo$N0 %>% range() %>% diff() %>% expect_gt(100)
+  
+})
