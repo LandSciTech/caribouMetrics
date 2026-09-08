@@ -26,6 +26,15 @@ trajectoriesFromSummary(
 
 - replicates:
 
+- N0:
+
+  number or dataframe. Optional. Initial population size(s). If NA
+  (default) then population growth rate is \$\_t=S_t\*(1+cR_t)/s\$. If a
+  data frame N0 column is required, and PopulationName column is
+  required if there is more than one row. Additional (optional)
+  variation columns will be used by
+  [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md).
+
 - Rbar, Sbar:
 
   Mean and standard deviation of R_bar and S_bar over time. See
@@ -41,6 +50,10 @@ trajectoriesFromSummary(
   The distribution of interannual variation varies between "beta" or
   "bbou" model types.
 
+- cPars:
+
+  optional. Parameters for calculating composition survey bias term.
+
 - doSummary:
 
   logical. Default TRUE. If FALSE returns unprocessed outcomes from
@@ -51,6 +64,14 @@ trajectoriesFromSummary(
 
   logical. If FALSE returns only summaries. If TRUE returns example
   trajectories as well.
+
+- nthin:
+
+  integer. The number of the thinning rate.
+
+- varPersists:
+
+  logical. If FALSE treats all variation as interannual variation.
 
 - ...:
 

@@ -23,11 +23,27 @@ trajectoriesFromBayesian(
 
 - N0:
 
+  number or dataframe. Optional. Initial population size(s). If NA
+  (default) then population growth rate is \$\_t=S_t\*(1+cR_t)/s\$. If a
+  data frame N0 column is required, and PopulationName column is
+  required if there is more than one row. Additional (optional)
+  variation columns will be used by
+  [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md).
+
 - cPars:
+
+  optional. Parameters for calculating composition survey bias term.
 
 - returnSamples:
 
+  logical. If FALSE returns only summaries. If TRUE returns example
+  trajectories as well.
+
 - doSummary:
+
+  logical. Default TRUE. If FALSE returns unprocessed outcomes from
+  caribouPopGrowth. If TRUE returns summaries and (if returnSamples = T)
+  sample trajectories from prepareTrajectories.
 
 - ...:
 

@@ -64,19 +64,21 @@
 
 
 <dt id="arg-n-">N0<a class="anchor" aria-label="anchor" href="#arg-n-"></a></dt>
-<dd></dd>
+<dd><p>number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by <code><a href="addN0Variation.html">addN0Variation()</a></code>.</p></dd>
 
 
 <dt id="arg-cpars">cPars<a class="anchor" aria-label="anchor" href="#arg-cpars"></a></dt>
-<dd></dd>
+<dd><p>optional. Parameters for calculating composition survey bias term.</p></dd>
 
 
 <dt id="arg-returnsamples">returnSamples<a class="anchor" aria-label="anchor" href="#arg-returnsamples"></a></dt>
-<dd></dd>
+<dd><p>logical. If FALSE returns only summaries. If TRUE
+returns example trajectories as well.</p></dd>
 
 
 <dt id="arg-dosummary">doSummary<a class="anchor" aria-label="anchor" href="#arg-dosummary"></a></dt>
-<dd></dd>
+<dd><p>logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth.
+If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
