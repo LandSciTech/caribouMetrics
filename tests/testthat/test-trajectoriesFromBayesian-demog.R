@@ -14,9 +14,16 @@ test_that("works without disturbance", {
   
   trajNoDist <- trajectoriesFromBayesian(bbouNoDist)
   
+  expect_is(trajNoDist, "list")
+  
   pltNoDist <- plotTrajectories(trajNoDist)
   
   expect_is(pltNoDist, "ggplot2::ggplot")
+  
+  trajNoDistNoSum <- trajectoriesFromBayesian(bbouNoDist, doSummary = FALSE)
+  
+  expect_is(trajNoDistNoSum, "data.frame")
+  
 })
 
 test_that("works with disturbance and N0 variation", {

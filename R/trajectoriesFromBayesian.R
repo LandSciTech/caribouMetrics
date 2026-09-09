@@ -123,7 +123,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     simBig <- pars
   }
   
-  if(hasName(bayesianResults,"surv_fit")){
+  if(hasName(bayesianResults,"surv_fit") & doSummary){
     simBig$surv_data = convertBbouData(bayesianResults$surv_fit$data)
     simBig$recruit_data = convertBbouData(bayesianResults$recruit_fit$data)
     simBig$popInfo = popInfo
