@@ -6,7 +6,7 @@ sampled for each row. When `N.sd` is provided, variation is sampled from
 either a Poisson distribution (if `N.sd = sqrt(N0)`) or a truncated
 Normal distribution. When `N.lower` and `N.upper` are provided,
 variation is sampled from a Uniform distribution bounded by those
-values. Simulated values are rounded to integers and constrained to any
+values. Sampled values are rounded to integers and constrained to any
 specified lower and upper bounds.
 
 ## Usage
