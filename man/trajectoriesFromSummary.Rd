@@ -51,6 +51,21 @@ a data.frame
 \description{
 Projections of population growth from demographic model summaries.
 }
+\examples{
+# trajectories from arbitrary demographic rates
+
+traj <- trajectoriesFromSummary(replicates = 35, N0 = 100,
+                        Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+                                          upper = 0.27, Annual = 2010:2015, Year = 2010:2015,
+                                          PopulationName = "A"),
+                        Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+                                          upper = 0.98, Annual = 2010:2015, Year = 2010:2015,
+                                          PopulationName = "A"),
+                        Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
+                        Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
+                        type = "bbou")
+plotTrajectories(traj)
+}
 \seealso{
 Caribou demography functions:
 \code{\link{addN0Variation}()},

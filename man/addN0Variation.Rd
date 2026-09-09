@@ -25,7 +25,7 @@ If uncertainty columns are present, a new value of \code{N0} is sampled for each
 row. When \code{N.sd} is provided, variation is sampled from either a Poisson
 distribution (if \code{N.sd = sqrt(N0)}) or a truncated Normal distribution. When
 \code{N.lower} and \code{N.upper} are provided, variation is sampled from a Uniform
-distribution bounded by those values. Simulated values are rounded to
+distribution bounded by those values. Sampled values are rounded to
 integers and constrained to any specified lower and upper bounds.
 }
 \details{

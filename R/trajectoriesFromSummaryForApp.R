@@ -114,8 +114,8 @@ trajectoriesFromSummaryForApp <- function(numSteps, replicates, N0, R_bar, S_bar
 #' If `dynamicRates = FALSE` then `R_samp` and `S_samp` are constant rates over
 #' time and their length is the number of populations. If `dynamicRates = TRUE`
 #' and `R_samp` and `S_samp` are vectors they represent the rate at each time
-#' step and there length should be equal to `numSteps`. If If `dynamicRates =
-#' TRUE` and `R_samp` and `S_samp` are matrices then rows represent populations
+#' step and there length should be equal to `numSteps`. If `dynamicRates = TRUE`
+#' and `R_samp` and `S_samp` are matrices then rows represent populations
 #' and columns represent timesteps, so cell `[i,j]` of the matrix is the rate
 #' for population i at timestep j
 #' 
@@ -156,7 +156,8 @@ simPopsOverTime <- function(N0, numSteps, R_samp, S_samp, interannualVar, dynami
         N0 <- addN0Variation(N0)$N0
       }
       if (length(N0) != nrow(R_use)) {
-        stop("To add N0 variation specify a data frame that addN0Variation() can use.")
+        stop("The length of N0 and R_samp do not match.",
+             " To add N0 variation specify a data frame that addN0Variation() can use.")
         
         #N0 <- seq(from = N0[1], to = N0[2], by  = 1) %>% round() %>% 
         #  sample(size = nrow(R_use), replace = TRUE)
