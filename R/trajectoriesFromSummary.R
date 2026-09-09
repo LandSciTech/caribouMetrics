@@ -41,9 +41,14 @@ trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv,
   # TO DO:
   # See https://github.com/LandSciTech/caribouMetrics/issues/146
   testTable(Rbar, req_col_names = c("PopulationName", "Annual", "Year", "mean", "sd"))
-  testTable(Riv, req_col_names = c("R_iv_mean", "R_iv_shape"))
   testTable(Sbar, req_col_names = c("PopulationName", "Annual", "Year", "mean", "sd"))
-  testTable(Siv, req_col_names = c("S_iv_mean", "S_iv_shape"))
+  if(type == "beta"){
+    testTable(Riv, req_col_names = c("R_cv_min", "R_cv_max"))
+    testTable(Siv, req_col_names = c("S_cv_min", "S_cv_max"))
+  } else {
+    testTable(Riv, req_col_names = c("R_iv_mean", "R_iv_shape"))
+    testTable(Siv, req_col_names = c("S_iv_mean", "S_iv_shape"))
+  }
   
   if(type=="beta"){
     results <- ratesFromBetaSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists)
@@ -318,7 +323,7 @@ datal = list(
 if(r_priors$cv_max>0){
   datal <- c(datal,r_priors)
 }
-inits = parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
+inits = rjags::parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
 
 return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt))
 }
