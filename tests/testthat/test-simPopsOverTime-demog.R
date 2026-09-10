@@ -8,6 +8,16 @@ test_that("Works for multiple populations with constant rates", {
   expect_true(all(unique(multPop$R_t) == 1:10/10))
   expect_equal(nrow(multPop), 100)
   
+  multPopN0Var <- simPopsOverTime(N0 = data.frame(N0 = 1:10*100, N.sd = 50*(1:10/10)),
+                             R_samp = 1:10/10, S_samp = 1:10/10, numSteps = 10, 
+                             interannualVar = FALSE, 
+                             # set to avoid warnings
+                             l_R = 0, h_R = 1, l_S = 0, h_S = 1, 
+                             progress = FALSE)
+  
+  expect_true(all(unique(multPopN0Var$R_t) == 1:10/10))
+  expect_equal(nrow(multPopN0Var), 100)
+  expect_true(!all(multPopN0Var %>% filter(time == 1) %>% pull(N0) == 1:10*100))
 })
 
 test_that("Works for single population with dynamic rates", {

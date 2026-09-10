@@ -23,17 +23,25 @@ trajectoriesFromSummary(
 \arguments{
 \item{replicates}{}
 
+\item{N0}{number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by \code{\link[=addN0Variation]{addN0Variation()}}.}
+
 \item{Rbar, Sbar}{Mean and standard deviation of R_bar and S_bar over time. See \code{estimateBayesianRates()$parList} for expected form.}
 
 \item{Riv, Siv}{Parameters defining the distribution of interannual variation. See \code{estimateBayesianRates()$parList} for expected form.}
 
 \item{type}{The distribution of interannual variation varies between "beta" or "bbou" model types.}
 
+\item{cPars}{optional. Parameters for calculating composition survey bias term.}
+
 \item{doSummary}{logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth.
 If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.}
 
 \item{returnSamples}{logical. If FALSE returns only summaries. If TRUE
 returns example trajectories as well.}
+
+\item{nthin}{integer. The number of the thinning rate.}
+
+\item{varPersists}{logical. If FALSE treats all variation as interannual variation.}
 
 \item{...}{Additional arguments passed to \code{caribouPopGrowth}}
 }
@@ -42,6 +50,21 @@ a data.frame
 }
 \description{
 Projections of population growth from demographic model summaries.
+}
+\examples{
+# trajectories from arbitrary demographic rates
+
+traj <- trajectoriesFromSummary(replicates = 35, N0 = 100,
+                        Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+                                          upper = 0.27, Annual = 2010:2015, Year = 2010:2015,
+                                          PopulationName = "A"),
+                        Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+                                          upper = 0.98, Annual = 2010:2015, Year = 2010:2015,
+                                          PopulationName = "A"),
+                        Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
+                        Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
+                        type = "bbou")
+plotTrajectories(traj)
 }
 \seealso{
 Caribou demography functions:

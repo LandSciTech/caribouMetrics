@@ -31,9 +31,7 @@ if(file.exists("results/simsInitial.rds")){
 #' @inheritParams getNationalCoefficients
 #' @inheritParams caribouPopGrowth
 #' @inheritParams estimateBayesianRates
-#' @param cPars optional. Parameters for calculating composition survey bias term.
-#' @param doSummary logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth. 
-#'  If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.
+#' @inheritParams trajectoriesFromSummary
 #' @param returnSamples logical. If FALSE returns only summaries. If TRUE
 #'   returns example trajectories as well. By default summaries are not returned
 #'   unless the disturbance data provided contains a column named "Year".

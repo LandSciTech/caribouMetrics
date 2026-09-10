@@ -382,7 +382,11 @@ summarizeMonitoredNode <- function(parameter_stats,node,data){
            "lower"="quantiles.2.5.",
            "upper"="quantiles.97.5.") %>%
     select(c("node","mean","sd","lower","upper"))
-  data$node <- paste0(node,"[",as.integer(data$Annual),",",as.integer(as.factor(data$PopulationName)),"]")
+  if(nrow(data) == 1 & nrow(Rpred) == 1){
+    data$node <- node
+  } else {
+    data$node <- paste0(node,"[",as.integer(data$Annual),",",as.integer(as.factor(data$PopulationName)),"]")
+  }
   Rpred <- merge(Rpred,subset(data,select=intersect(names(data),c("node","Year","PopulationName","Annual","Anthro","Fire_excl_anthro"))))
   Rpred <- Rpred[order(Rpred$Year,Rpred$PopulationName),]
   Rpred$MetricTypeID = node

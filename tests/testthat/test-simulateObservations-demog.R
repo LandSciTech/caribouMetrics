@@ -1,12 +1,3 @@
-test_that("default works", {
-  scns <- getScenarioDefaults(projYears = 10, obsYears = 10, cowMult = 3,
-                              collarCount = 50)
-  ss <- trajectoriesFromNational(cPars=scns)
-  
-  expect_is(ss,"list")
-  #see test-compareTrajectories-demog.R for more thorough check that outputs are as expected.
-})
-
 test_that("multiple scenarios not allowed",{
   scns <- getScenarioDefaults(data.frame(iFire = 1:2), projYears = 10, obsYears = 10)
   expect_error(simulateObservations(scns,
@@ -299,4 +290,15 @@ test_that("JAGS mod works and the trajectory can include disturbance", {
     unique() %>% expect_equal(5)
 })
 
-
+test_that("N0 variation works", {
+  scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 1, 
+                              N0 = data.frame(N0 = 5000, N.sd = 100))
+  simObs <- simulateObservations(scns)
+  
+  expect_is(simObs$paramTable$N0, "data.frame")
+  
+  N1 <- simObs$exData %>% select(Year, Amount, MetricTypeID, PopulationName) %>%
+    filter(MetricTypeID == "N", Year == min(Year)) %>% pull(Amount)
+  
+  expect_lt(abs(N1 - 5000), 1000)
+})
