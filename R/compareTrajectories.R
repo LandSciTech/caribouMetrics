@@ -132,37 +132,40 @@ compareTrajectories <- function(caribouBayesDemogMod,
   if(!is.null(simInitial)){
     summaries <- simInitial$summary
 
-    if(hasName(summaries,"AnthroID")&&any(!is.na(summaries$AnthroID))){
-      
-      if(!hasName(summaries,"Year")&!is.element("Anthro",names(dist_params))){
-        stop("Set disturbance in bayesianTrajectoryWorkflow function call in order to compare to national model simulations.", call. = FALSE)
-      }
+    if(!hasName(summaries,"Year")&!hasName(dist_params,"Anthro")){
+      stop("Set disturbance in bayesianTrajectoryWorkflow function call in order to compare to national model simulations.", call. = FALSE)
+    }
+    
+    if(hasName(summaries,"AnthroID")&&any(!is.na(summaries$AnthroID))&&hasName(dist_params,"Anthro")){
       #only fill in national sims if simInitial is from national model
       if(!(hasName(simInitial,"surv_data"))&!all(unique(distInput$Anthro) %in% summaries$AnthroID)){
         message("recalculating initial sims to match anthropogenic distubance scenario")
         simInitial <- trajectoriesFromNational(cPars=paramTable)
         summaries <- simInitial$summary
       }
-      #remove irrelevant disturbance combinations from the summaries
-      distMerge <- subset(dist_params, 
-                          select=c(Anthro,Fire_excl_anthro,Year))
-      if(hasName(summaries,"Year")){
-        if(!all(dist_params$Year %in% summaries$Year)){
-          distMerge <- filter(distMerge, Year %in% summaries$Year)
-        }  
-      }
       
-      distMerge$Fire_excl_anthro=round(distMerge$Fire_excl_anthro);
-      distMerge$Anthro=round(distMerge$Anthro)
-      distMerge=unique(distMerge)
-      names(distMerge) <- c("AnthroID","Fire_excl_anthroID","Year")
-      tt<- merge(summaries,distMerge)
-      check <- unique(subset(tt,select=names(distMerge)))
-      if(nrow(check)!=nrow(distMerge)){
-        stop("Handle this case")
+      if(hasName(dist_params,"Anthro")){
+        #remove irrelevant disturbance combinations from the summaries
+        distMerge <- subset(dist_params, 
+                            select=c(Anthro,Fire_excl_anthro,Year))
+        if(hasName(summaries,"Year")){
+          if(!all(dist_params$Year %in% summaries$Year)){
+            distMerge <- filter(distMerge, Year %in% summaries$Year)
+          }  
+        }
+        
+        distMerge$Fire_excl_anthro=round(distMerge$Fire_excl_anthro);
+        distMerge$Anthro=round(distMerge$Anthro)
+        distMerge=unique(distMerge)
+        names(distMerge) <- c("AnthroID","Fire_excl_anthroID","Year")
+        tt<- merge(summaries,distMerge)
+        check <- unique(subset(tt,select=names(distMerge)))
+        if(nrow(check)!=nrow(distMerge)){
+          stop("Handle this case")
+        }
+        simBigO<-tt
+        simBigO$AnthroID=NULL;simBigO$Fire_excl_anthroID=NULL
       }
-      simBigO<-tt
-      simBigO$AnthroID=NULL;simBigO$Fire_excl_anthroID=NULL
     }else{
       summaries$AnthroID=NULL;summaries$Fire_excl_anthroID=NULL
       by_col <- intersect(names(summaries), names(dist_params))
