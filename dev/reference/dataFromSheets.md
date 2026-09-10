@@ -74,9 +74,6 @@ Caribou demography functions:
 ``` r
  
 dataFromSheets("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
-#> ✖ Request 1 failed [503: UNAVAILABLE].
-#> ℹ Will retry in 1.8s.
-#> ✔ Request 2 successful!
 #> ✔ Reading from bbou_example_data.
 #> ✔ Range ''recruit_data''.
 #> ✔ Reading from bbou_example_data.
