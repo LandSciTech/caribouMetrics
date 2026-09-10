@@ -330,6 +330,14 @@ return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt))
 
 
 rateFromBetaSummaryYS<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="PopDynMod_"){
+  if(!hasName(Rbar,"adjust.mu")){
+    Rbar$adjust.mu = 0
+  }
+  
+  if(!hasName(Rbar,"adjust.sd")){
+    Rbar$adjust.sd = 0
+  }
+  
   #####
   # Model - assign model file name (needed to match with the file name in the model object in jags.model())
   
