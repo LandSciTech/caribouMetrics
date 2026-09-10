@@ -28,7 +28,7 @@ trajectoriesFromSummaryForApp(
 \arguments{
 \item{numSteps}{Number. Number of years to project.}
 
-\item{replicates}{}
+\item{replicates}{integer. Number of replicate populations.}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
 more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}

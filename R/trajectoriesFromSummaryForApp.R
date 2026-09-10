@@ -4,7 +4,7 @@
 #'
 #' @param addl_params a list of additional parameters for `caribouPopGrowth`
 #' @inheritParams caribouPopGrowth 
-#' @param replicates 
+#' @inheritParams getNationalCoefficients
 #' @param R_sd,S_sd standard deviation of R_bar and S_bar
 #' @param R_iv_mean,R_iv_shape,S_iv_mean,S_iv_shape define the mean and shape of the interannual variation
 #' @param scn_nm Scenario name

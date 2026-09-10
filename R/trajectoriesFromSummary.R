@@ -1,6 +1,15 @@
 #' Projections of population growth from demographic model summaries.
 #' 
-#' @param replicates 
+#' Get sample trajectories and summaries from a model defined by a list of
+#' parameters. These parameters can come fitted Bayesian model using `estimateBayesianRates()$parList`
+#' or be specified arbitrarily. When parameters from a fitted Bayesian model are
+#' used, expected outcomes from `trajectoriesFromSummary` and
+#' [`trajectoriesFromBayesian()`] are the same, but `trajectoriesFromSummary`
+#' projections do not include variation in interannual variation over time. 
+#' 
+#' TODO explain varPersists and adjust.mu and adjust.sd
+#' 
+#' 
 #' @param Rbar,Sbar Mean and standard deviation of R_bar and S_bar over time. See `estimateBayesianRates()$parList` for expected form.
 #' @param Riv,Siv Parameters defining the distribution of interannual variation. See `estimateBayesianRates()$parList` for expected form.
 #' @param type The distribution of interannual variation varies between "beta" or "bbou" model types. 
@@ -10,10 +19,24 @@
 #' @param returnSamples logical. If FALSE returns only summaries. If TRUE
 #'   returns example trajectories as well. 
 #' @inheritParams estimateBayesianRates 
+#' @inheritParams getNationalCoefficients
 #' @param varPersists logical. If FALSE treats all variation as interannual variation.
 #' @param ... Additional arguments passed to `caribouPopGrowth`
 #' 
-#' @return a data.frame
+#' @returns
+#' If doSummary is TRUE and returnSamples is TRUE a list with elements:
+#'    * summary: a data.frame mean, lower (2.5%) and upper (97.5%) for each metric. 
+#'    * samples: a data.frame providing the full range of trajectories from the model. 
+#'       It is in a long format where "Amount" gives the value for 
+#'       each metric in c, survival, recruitment, X, N, 
+#'       lambda, Sbar, Rbar, Xbar, and lambda_bar, with a row for each 
+#'       combination of "MetricTypeID", "Replicate", "Year", "LambdaPercentile" 
+#'       and PopulationName.
+#'    * surv_data and recruit_data: data.frames with recruitment and survival data 
+#'    * popInfo: data.frame of population information including N0, PopulationName
+#'      and c.
+#'     
+#' If doSummary is FALSE a data.frame with the output from [`caribouPopGrowth()`]  
 #' 
 #' @family demography
 #'

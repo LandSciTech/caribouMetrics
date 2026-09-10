@@ -61,16 +61,44 @@ If TRUE returns summaries and (if returnSamples = T) sample trajectories from pr
 returns example trajectories as well. By default summaries are not returned
 unless the disturbance data provided contains a column named "Year".}
 
-\item{numSteps}{numeric. Number of steps to run \code{caribouPopGrowth()} at each
+\item{numSteps}{numeric. Number of steps to run \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} at each
 disturbance level.}
 }
 \value{
-Output from caribouPopGrowth function.
+If doSummary is TRUE and disturbance contains Year a list with elements:
+\itemize{
+\item summary: a data.frame
+\item samples: a data.frame providing the full range of trajectories from the model.
+It is in a long format where "Amount" gives the value for
+each metric in Anthro, Fire_excl_anthro, c, survival, recruitment, X, N,
+lambda, Sbar, Rbar, and lambda_bar, with a row for each
+combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"
+}
+
+If doSummary is FALSE and disturbance contains Year a data.frame with the
+output from \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}
+
+If disturbance does not contain Year or is NULL a list with elements:
+\itemize{
+\item summary: a data.frame similar to the samples described above but with metrics
+c, survival, recruitment, X, lambda, Sbar, Rbar, and lambda_bar
+for scenarios with Anthro from 1-100
+}
 }
 \description{
-Simulate demograhic rates based on the National demographic - disturbance model
+Simulate demographic rates based on the National demographic - disturbance model
 If a disturbance scenario containing Years is supplied trajectories will show
-growth of a population over time based on the National demographic - disturbance model
+growth of a population over time based on the National demographic - disturbance model.
+}
+\details{
+This is a wrapper function that samples the coefficients from the National model,
+calculates demographic rates given those coefficients and the level of
+disturbance, projects population growth using \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}, and returns
+summaries of the demographic rates. If the disturbance
+scenario includes a Year column \code{trajectoriesFromNational} projects
+population growth over time, and also returns sample demographic
+trajectories. If year is not provided, population growth is projected for one
+year, and sample trajectories are not returned.
 }
 \examples{
 trajectoriesFromNational()

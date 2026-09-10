@@ -21,7 +21,7 @@ trajectoriesFromSummary(
 )
 }
 \arguments{
-\item{replicates}{}
+\item{replicates}{integer. Number of replicate populations.}
 
 \item{N0}{number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by \code{\link[=addN0Variation]{addN0Variation()}}.}
 
@@ -46,10 +46,32 @@ returns example trajectories as well.}
 \item{...}{Additional arguments passed to \code{caribouPopGrowth}}
 }
 \value{
-a data.frame
+If doSummary is TRUE and returnSamples is TRUE a list with elements:
+\itemize{
+\item summary: a data.frame mean, lower (2.5\%) and upper (97.5\%) for each metric.
+\item samples: a data.frame providing the full range of trajectories from the model.
+It is in a long format where "Amount" gives the value for
+each metric in c, survival, recruitment, X, N,
+lambda, Sbar, Rbar, Xbar, and lambda_bar, with a row for each
+combination of "MetricTypeID", "Replicate", "Year", "LambdaPercentile"
+and PopulationName.
+\item surv_data and recruit_data: data.frames with recruitment and survival data
+\item popInfo: data.frame of population information including N0, PopulationName
+and c.
+}
+
+If doSummary is FALSE a data.frame with the output from \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}
 }
 \description{
-Projections of population growth from demographic model summaries.
+Get sample trajectories and summaries from a model defined by a list of
+parameters. These parameters can come fitted Bayesian model using \code{estimateBayesianRates()$parList}
+or be specified arbitrarily. When parameters from a fitted Bayesian model are
+used, expected outcomes from \code{trajectoriesFromSummary} and
+\code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}} are the same, but \code{trajectoriesFromSummary}
+projections do not include variation in interannual variation over time.
+}
+\details{
+TODO explain varPersists and adjust.mu and adjust.sd
 }
 \examples{
 # trajectories from arbitrary demographic rates

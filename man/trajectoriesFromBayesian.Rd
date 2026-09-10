@@ -26,10 +26,36 @@ returns example trajectories as well.}
 \item{doSummary}{logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth.
 If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.}
 
-\item{...}{}
+\item{...}{Additional arguments passed to \code{caribouPopGrowth}}
+}
+\value{
+If doSummary is TRUE and returnSamples is TRUE a list with elements:
+\itemize{
+\item summary: a data.frame mean, lower (2.5\%) and upper (97.5\%) for each metric.
+\item samples: a data.frame providing the full range of trajectories from the model.
+It is in a long format where "Amount" gives the value for
+each metric in c, survival, recruitment, X, N,
+lambda, Sbar, Rbar, Xbar, and lambda_bar, with a row for each
+combination of "MetricTypeID", "Replicate", "Year", "LambdaPercentile"
+and PopulationName.
+\item surv_data and recruit_data: data.frames with recruitment and survival data
+\item popInfo: data.frame of population information including N0, PopulationName
+and c.
+}
+
+If doSummary is FALSE a data.frame with the output from \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}
 }
 \description{
-Get trajectories from a Bayesian model result
+Get sample trajectories and summaries from a fitted Bayesian model. The
+returned example trajectories are derived from the MCMC samples. If we also
+provide initial population size information then the projection (by default)
+includes density dependence and demographic stochasticity and populations can go extinct.
+Note that in this case the form of the
+growth model (density dependence & demographic stochasticity, but not
+interannual variability) can be changed by setting \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}
+function parameters. The Bayesian MCMC samples include interannual variation
+in recruitment and survival, so no additional interannual variation is added
+by \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}.
 }
 \examples{
 surv_data <- bboudata::bbousurv_a \%>\% filter(Year > 2010)
