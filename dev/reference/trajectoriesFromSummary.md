@@ -1,6 +1,13 @@
 # Projections of population growth from demographic model summaries.
 
-Projections of population growth from demographic model summaries.
+Get sample trajectories and summaries from a model defined by a list of
+parameters. These parameters can come fitted Bayesian model using
+`estimateBayesianRates()$parList` or be specified arbitrarily. When
+parameters from a fitted Bayesian model are used, expected outcomes from
+`trajectoriesFromSummary` and
+[`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md)
+are the same, but `trajectoriesFromSummary` projections do not include
+variation in interannual variation over time.
 
 ## Usage
 
@@ -25,6 +32,8 @@ trajectoriesFromSummary(
 ## Arguments
 
 - replicates:
+
+  integer. Number of replicate populations.
 
 - N0:
 
@@ -79,7 +88,30 @@ trajectoriesFromSummary(
 
 ## Value
 
-a data.frame
+If doSummary is TRUE and returnSamples is TRUE a list with elements:
+
+- summary: a data.frame mean, lower (2.5%) and upper (97.5%) for each
+  metric.
+
+- samples: a data.frame providing the full range of trajectories from
+  the model. It is in a long format where "Amount" gives the value for
+  each metric in c, survival, recruitment, X, N, lambda, Sbar, Rbar,
+  Xbar, and lambda_bar, with a row for each combination of
+  "MetricTypeID", "Replicate", "Year", "LambdaPercentile" and
+  PopulationName.
+
+- surv_data and recruit_data: data.frames with recruitment and survival
+  data
+
+- popInfo: data.frame of population information including N0,
+  PopulationName and c.
+
+If doSummary is FALSE a data.frame with the output from
+[`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md)
+
+## Details
+
+TODO explain varPersists and adjust.mu and adjust.sd
 
 ## See also
 

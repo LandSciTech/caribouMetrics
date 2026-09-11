@@ -225,7 +225,6 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #> NOTE: Stopping adaptation
 #> 
 #> 
-#> Warning: The expected number of cows in composition survey exceeds population size. Adjusting cows in survey for consistency.
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
