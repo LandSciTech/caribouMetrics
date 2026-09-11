@@ -16,7 +16,7 @@
 #' If R_annual and S_annual are provided, interannual variation in survival and
 #' recruitment is modelled as in a logistic glmm with random effect of year.
 #' 
-#' If initial populations size N0 is NA then population growth rate is $\lambda_t=S_t*(1+cR_t/s)$. 
+#' If initial populations size N0 is NA then population growth rate is \eqn{\lambda_t=S_t*(1+cR_t/s)}. 
 #' In this case density dependence (P_0,P_K,a,b,K,r_max) and demographic stochasticity (probOption) are ignored.
 #' 
 #' See `vignette("caribouDemography")` 
@@ -24,7 +24,7 @@
 #' additional details and examples.
 #' 
 #' @param N0 Number or vector of numbers. Initial population size for one or
-#'   more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. 
+#'   more sample populations. If NA then population growth rate is \eqn{\lambda_t=S_t*(1+cR_t/s)}. 
 #' @param numSteps Number. Number of years to project.
 #' @param R_bar Number or vector of numbers. Expected recruitment rate (calf:cow
 #'   ratio) for one or more sample populations.

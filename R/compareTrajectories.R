@@ -14,6 +14,8 @@
 #' @param simInitial Initial simulation results, produced by calling
 #'   [trajectoriesFromNational()], [trajectoriesFromBayesian()], or [trajectoriesFromSummary()]
 #'
+#' @inheritSection timeDefaults Interpretation of Years
+#' 
 #' @return a list of tables:
 #' * rr.summary.all: Mean parameter values for each year and standard deviation,
 #'   upper and lower credible intervals projected by the Bayesian model, as well

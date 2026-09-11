@@ -83,6 +83,15 @@ used to estimate recruitment and survival rates and return summary tables.
 See \code{vignette("compare-bayesian-models")} for more details on the differences
 between the two models.
 }
+\section{Interpretation of Years}{
+
+Throughout the package a year is treated as the calendar year only if it is
+in a table that also contains a month column. In all other contexts year is
+treated as the caribou year which is the annual demographic cycle of caribou,
+measured from one calving season to the next. By default, April is set as the
+start of the caribou year.
+}
+
 \examples{
 s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)

@@ -15,7 +15,9 @@
 #' @inheritParams trajectoriesFromSummary
 #' 
 #' @inherit trajectoriesFromSummary return
-#'     
+#'  
+#' @inheritSection timeDefaults Interpretation of Years
+#'    
 #' @export
 #' @family demography
 #' @examples

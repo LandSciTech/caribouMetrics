@@ -23,6 +23,8 @@
 #' @param varPersists logical. If FALSE treats all variation as interannual variation.
 #' @param ... Additional arguments passed to `caribouPopGrowth`
 #' 
+#' @inheritSection timeDefaults Interpretation of Years
+#' 
 #' @returns
 #' If doSummary is TRUE and returnSamples is TRUE a list with elements:
 #'    * summary: a data.frame mean, lower (2.5%) and upper (97.5%) for each metric. 

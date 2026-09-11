@@ -47,6 +47,8 @@ if(file.exists("results/simsInitial.rds")){
 #' @param numSteps numeric. Number of steps to run [`caribouPopGrowth()`] at each 
 #'   disturbance level. 
 #'
+#' @inheritSection timeDefaults Interpretation of Years
+#' 
 #' @return 
 #' If doSummary is TRUE and disturbance contains Year a list with elements:
 #'    * summary: a data.frame

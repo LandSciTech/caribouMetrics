@@ -12,6 +12,8 @@
 #' @param returnExpected logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are [bb_predict_calf_cow_ratio()]/[bb_predict_survival()] results.
 #' @inheritParams caribouPopGrowth
 #'
+#' @inheritSection timeDefaults Interpretation of Years
+#' 
 #' @return simulateTrajectoriesFromPosterior: a data frame with results from [caribouPopGrowth()] for each set of survival/recruitment predictions.
 #' 
 #' @family demography

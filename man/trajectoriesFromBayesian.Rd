@@ -61,6 +61,15 @@ Bayesian MCMC samples include interannual variation in recruitment and
 survival, so no additional interannual variation is added by
 \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}.
 }
+\section{Interpretation of Years}{
+
+Throughout the package a year is treated as the calendar year only if it is
+in a table that also contains a month column. In all other contexts year is
+treated as the caribou year which is the annual demographic cycle of caribou,
+measured from one calving season to the next. By default, April is set as the
+start of the caribou year.
+}
+
 \examples{
 surv_data <- bboudata::bbousurv_a \%>\% filter(Year > 2010)
 recruit_data <- bboudata::bbourecruit_a \%>\% filter(Year > 2010)

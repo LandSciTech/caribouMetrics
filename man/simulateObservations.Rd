@@ -95,6 +95,15 @@ For a detailed description of the process for simulating data see the
 (\code{vignette("bayesian-model-outputs", package = "caribouMetrics")}) and
 \href{https://doi.org/10.1016/j.ecoinf.2025.103095}{Hughes et al. 2025}.
 }
+\section{Interpretation of Years}{
+
+Throughout the package a year is treated as the calendar year only if it is
+in a table that also contains a month column. In all other contexts year is
+treated as the caribou year which is the annual demographic cycle of caribou,
+measured from one calving season to the next. By default, April is set as the
+start of the caribou year.
+}
+
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
                             collarCount = 20, cowMult = 5)

@@ -23,7 +23,7 @@ trajectoriesFromNational(
 \item{replicates}{integer. Number of replicate populations.}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
+more sample populations. If NA then population growth rate is \eqn{\lambda_t=S_t*(1+cR_t/s)}.}
 
 \item{useQuantiles}{logical or numeric. If it is a numeric vector it must be
 length 2 and give the low and high limits of the quantiles to use. If
@@ -100,6 +100,15 @@ population growth over time, and also returns sample demographic
 trajectories. If year is not provided, population growth is projected for one
 year, and sample trajectories are not returned.
 }
+\section{Interpretation of Years}{
+
+Throughout the package a year is treated as the calendar year only if it is
+in a table that also contains a month column. In all other contexts year is
+treated as the caribou year which is the annual demographic cycle of caribou,
+measured from one calving season to the next. By default, April is set as the
+start of the caribou year.
+}
+
 \examples{
 trajectoriesFromNational()
 }

@@ -111,7 +111,7 @@ observation period}
 the projection period}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
+more sample populations. If NA then population growth rate is \eqn{\lambda_t=S_t*(1+cR_t/s)}.}
 
 \item{qMin}{number in 0, 1. Minimum ratio of bulls to cows in composition
 survey groups.}
@@ -185,6 +185,15 @@ See \code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}} and \cod
 \code{monitoringDefaults}: Returns default parameter values for monitoring.
 See \code{\link[=simulateObservations]{simulateObservations()}} and \code{\link[=bayesianScenariosWorkflow]{bayesianScenariosWorkflow()}} for additional details.
 }
+\section{Interpretation of Years}{
+
+Throughout the package a year is treated as the calendar year only if it is
+in a table that also contains a month column. In all other contexts year is
+treated as the caribou year which is the annual demographic cycle of caribou,
+measured from one calving season to the next. By default, April is set as the
+start of the caribou year.
+}
+
 \examples{
 getScenarioDefaults()
 

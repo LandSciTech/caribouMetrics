@@ -47,6 +47,15 @@ simulated based on the collaring program parameters.
 Produces summary tables for Bayesian caribou population model
 results.
 }
+\section{Interpretation of Years}{
+
+Throughout the package a year is treated as the calendar year only if it is
+in a table that also contains a month column. In all other contexts year is
+treated as the caribou year which is the annual demographic cycle of caribou,
+measured from one calving season to the next. By default, April is set as the
+start of the caribou year.
+}
+
 \examples{
 scns <- getScenarioDefaults(projYears = 10, obsYears = 10,
                             obsAnthroSlope = 1, projAnthroSlope = 5,

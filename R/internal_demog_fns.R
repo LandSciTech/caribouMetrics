@@ -771,8 +771,21 @@ setBbouNAs <- function(dat,year_start=formals(bboutools::bb_fit_survival)$year_s
   
 }
 
-#TO DO: export and document.
-#add missing years to bboutools formatted data.
+
+#' Add missing years to bboudata formatted data.
+#' 
+#' Add years with missing values to bboudata formatted survival or recruitment
+#' data. This will cause estimated rates to be returned for those years by 
+#' fitted Bayesian Models.
+#' 
+#' @param dat data.frame. Survival or recruitment data in bboudata format.
+#' @param addYears numeric. Vector of years to add to the data. 
+#' @inheritParams bboutools::bb_fit_recruitment 
+#' 
+#' @inheritSection timeDefaults Interpretation of Years
+#' 
+#' @returns a modified version of `dat` with additional rows for added Years.
+#' 
 #' @export
 addMissingYears<- function(dat, addYears, year_start=formals(bboutools::bb_fit_recruitment)$year_start) {
   #dat <- surv_data; addYears <- union(distYrs,surv_data$CaribouYear)

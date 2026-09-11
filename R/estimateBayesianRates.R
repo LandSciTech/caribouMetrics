@@ -34,6 +34,8 @@
 #' @param ... Other parameters passed on to [bboutools::bb_fit_survival()] and
 #'   [bboutools::bb_fit_recruitment()].
 #' 
+#' @inheritSection timeDefaults Interpretation of Years
+#' 
 #' @return 
 #' If `return_mcmc` FALSE a data.frame containing mean survival and recruitment
 #' estimates, standard deviation, upper and lower credible intervals, and

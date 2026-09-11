@@ -16,6 +16,8 @@
 #' @param inputList an optional list of inputs with names matching the above. If
 #'   an argument is included in this list it will override the named argument.
 #'
+#' @inheritSection timeDefaults Interpretation of Years
+#' 
 #' @return a list with elements:
 #'   * result: a list of model results:
 #'     * summary: a data.frame

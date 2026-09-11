@@ -44,7 +44,9 @@
 #'   results will be saved to csv files in the directory provided
 #' @param surv_data data.frame. Optional existing survival data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.
 #' @param recruit_data data.frame. Optional existing recruitment data in bboudata format. Will be combined with simulated data if ... Otherwise ignored.
-#'
+#' 
+#' @inheritSection timeDefaults Interpretation of Years
+#' 
 #' @return a list with elements:
 #'   * minYr: first year in the simulations,
 #'   * maxYr: last year in the simulations,

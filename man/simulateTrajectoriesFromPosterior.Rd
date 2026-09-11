@@ -57,6 +57,15 @@ trajectories from Bayesian model results.
 Assumes that rec_pred and surv_pred each include the same years and
 populations.
 }
+\section{Interpretation of Years}{
+
+Throughout the package a year is treated as the calendar year only if it is
+in a table that also contains a month column. In all other contexts year is
+treated as the caribou year which is the annual demographic cycle of caribou,
+measured from one calving season to the next. By default, April is set as the
+start of the caribou year.
+}
+
 \examples{
 \donttest{
   # Note these examples take a long time to run!

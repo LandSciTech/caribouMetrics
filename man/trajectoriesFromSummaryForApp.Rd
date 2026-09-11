@@ -31,7 +31,7 @@ trajectoriesFromSummaryForApp(
 \item{replicates}{integer. Number of replicate populations.}
 
 \item{N0}{Number or vector of numbers. Initial population size for one or
-more sample populations. If NA then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$.}
+more sample populations. If NA then population growth rate is \eqn{\lambda_t=S_t*(1+cR_t/s)}.}
 
 \item{R_bar}{Number or vector of numbers. Expected recruitment rate (calf:cow
 ratio) for one or more sample populations.}

@@ -12,6 +12,7 @@ docs
 inst/extdata/simsNational*
 results
 function_map/
+vignettes/_workflow_files/
 # History files
 .Rhistory
 .Rapp.history
