@@ -16,7 +16,11 @@ trajectoriesFromBayesian(
 \arguments{
 \item{bayesianResults}{A result from \code{estimateBayesianRates}}
 
-\item{N0}{number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by \code{\link[=addN0Variation]{addN0Variation()}}.}
+\item{N0}{number or dataframe. Optional. Initial population size(s). If NA
+(default) then population growth rate is \eqn{\lambda_t=S_t*(1+cR_t)/s}. If a
+data frame N0 column is required, and PopulationName column is required if
+there is more than one row. Additional (optional) variation columns will be
+used by \code{\link[=addN0Variation]{addN0Variation()}}.}
 
 \item{cPars}{optional. Parameters for calculating composition survey bias term.}
 
@@ -49,13 +53,13 @@ If doSummary is FALSE a data.frame with the output from \code{\link[=caribouPopG
 Get sample trajectories and summaries from a fitted Bayesian model. The
 returned example trajectories are derived from the MCMC samples. If we also
 provide initial population size information then the projection (by default)
-includes density dependence and demographic stochasticity and populations can go extinct.
-Note that in this case the form of the
-growth model (density dependence & demographic stochasticity, but not
-interannual variability) can be changed by setting \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}
-function parameters. The Bayesian MCMC samples include interannual variation
-in recruitment and survival, so no additional interannual variation is added
-by \code{\link[=caribouPopGrowth]{caribouPopGrowth()}}.
+includes density dependence and demographic stochasticity and populations can
+go extinct. Note that in this case the form of the growth model (density
+dependence & demographic stochasticity, but not interannual variability) can
+be changed by setting \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} function parameters. The
+Bayesian MCMC samples include interannual variation in recruitment and
+survival, so no additional interannual variation is added by
+\code{\link[=caribouPopGrowth]{caribouPopGrowth()}}.
 }
 \examples{
 surv_data <- bboudata::bbousurv_a \%>\% filter(Year > 2010)

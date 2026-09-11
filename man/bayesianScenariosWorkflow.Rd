@@ -32,17 +32,20 @@ bayesianScenariosWorkflow(
 \item{printProgress}{logical. Should the scenario number and parameters be
 printed at each step?}
 
-\item{priors}{list. Optional. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see \code{bboutools::bb_priors_survival} and \code{bboutools::bb_priors_recruitment} for details.
-If disturbance is not NA, see \code{betaNationalPriors} for details.}
+\item{priors}{list. Optional. If disturbance is NULL, this should be
+list(priors_survival=c(...),priors_recruitment=c(...)); see
+\code{\link[bboutools:bb_priors_survival]{bboutools::bb_priors_survival()}} and \code{\link[bboutools:bb_priors_recruitment]{bboutools::bb_priors_recruitment()}} for
+details. If disturbance is not NULL, see \code{\link[=betaNationalPriors]{betaNationalPriors()}} for details.}
 
-\item{niters}{integer. The number of iterations per chain after thinning and burn-in.}
+\item{niters}{integer. The number of iterations per chain after thinning and
+burn-in.}
 
 \item{nthin}{integer. The number of the thinning rate.}
 
 \item{returnSamples}{logical. Optional. If true, return full results from \code{\link[=bayesianTrajectoryWorkflow]{bayesianTrajectoryWorkflow()}}.}
 
-\item{...}{Other parameters passed on to \code{bboutools::bb_fit_survival} and
-\code{bboutools::bb_fit_recruitment}.}
+\item{...}{Other parameters passed on to \code{\link[bboutools:bb_fit_survival]{bboutools::bb_fit_survival()}} and
+\code{\link[bboutools:bb_fit_recruitment]{bboutools::bb_fit_recruitment()}}.}
 }
 \value{
 A list similar to \code{\link[=compareTrajectories]{compareTrajectories()}} where tables for each scenario

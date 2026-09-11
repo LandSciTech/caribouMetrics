@@ -1,22 +1,56 @@
-#' Create summary table of demographic rates from survival and recruitment surveys
+#' Model demographic rates from survival and recruitment surveys
 #'
-#' @param surv_data dataframe. Survival data in bboudata format. 
+#' Fit Bayesian models for survival and recruitment based on boreal caribou
+#' survey data. If disturbance data is provided a Beta model is fitted with
+#' disturbance covariates and priors informed by national
+#' demographic-disturbance relationships. If disturbance data is NULL bboutools
+#' logistic models are fit with [bboutools::bb_fit_survival()] and
+#' [bboutools::bb_fit_recruitment()]. In both cases the fitted the models are
+#' used to estimate recruitment and survival rates and return summary tables. 
+#' 
+#' See `vignette("compare-bayesian-models")` for more details on the differences 
+#' between the two models.
+#'
+#' @param surv_data dataframe. Survival data in bboudata format.
 #' @param recruit_data dataframe. Recruitment data in bboudata format.
-#' @param N0 number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by [addN0Variation()].
-#' @param disturbance dataframe. Optional. If provided, fit a Beta model that includes disturbance covariates.
-#' @param priors list. Optional. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see `bboutools::bb_priors_survival` and `bboutools::bb_priors_recruitment` for details.
-#'               If disturbance is not NA, see `betaNationalPriors` for details.
+#' @param N0 number or dataframe. Optional. Initial population size(s). If NA
+#'   (default) then population growth rate is \eqn{\lambda_t=S_t*(1+cR_t)/s}. If a
+#'   data frame N0 column is required, and PopulationName column is required if
+#'   there is more than one row. Additional (optional) variation columns will be
+#'   used by [addN0Variation()].
+#' @param disturbance dataframe. Optional. If provided, fit a Beta model that
+#'   includes disturbance covariates.
+#' @param priors list. Optional. If disturbance is NULL, this should be
+#'   list(priors_survival=c(...),priors_recruitment=c(...)); see
+#'   [bboutools::bb_priors_survival()] and [bboutools::bb_priors_recruitment()] for
+#'   details. If disturbance is not NULL, see [betaNationalPriors()] for details.
 #' @param shiny_progress logical. Should shiny progress bar be updated. Only set
 #'   to TRUE if using in an app.
 #' @param return_mcmc boolean. If TRUE return fitted survival and recruitment
 #'   models. Default FALSE.
-#' @param niters integer. The number of iterations per chain after thinning and burn-in.
+#' @param niters integer. The number of iterations per chain after thinning and
+#'   burn-in.
 #' @param nthin integer. The number of the thinning rate.
-#' @param ... Other parameters passed on to `bboutools::bb_fit_survival` and
-#'   `bboutools::bb_fit_recruitment`.
-#'
-#' @return If `return_mcmc` is TRUE then a list with results and fitted models,
-#'   if FALSE just the results summaries are returned.
+#' @param ... Other parameters passed on to [bboutools::bb_fit_survival()] and
+#'   [bboutools::bb_fit_recruitment()].
+#' 
+#' @return 
+#' If `return_mcmc` FALSE a data.frame containing mean survival and recruitment
+#' estimates, standard deviation, upper and lower credible intervals, and
+#' interannual variability distribution parameters for each population
+#' projected by the Bayesian model, as well as a summary of the amount of input
+#' data.
+#' 
+#' If `return_mcmc` is TRUE then a list with elements:
+#'   * parTab: the data.frame returned when `return_mcmc` FALSE
+#'   * parList:  a list of data.frames Rbar, Sbar, Siv and Riv. Sbar and Rbar 
+#'     contain yearly expected survival and recruitment estimates, standard
+#'     deviation, and upper and lower credible intervals for each population.
+#'     Estimates will only vary by year if disturbance was provided. Siv and Riv
+#'     contains interannual variability distribution parameters for each population.
+#'   * surv_fit and recruit_fit: fitted model objects containing samples and 
+#'     input data
+
 #' @export
 #' @family demography
 #'

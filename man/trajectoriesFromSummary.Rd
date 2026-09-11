@@ -23,7 +23,11 @@ trajectoriesFromSummary(
 \arguments{
 \item{replicates}{integer. Number of replicate populations.}
 
-\item{N0}{number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $\lambda_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by \code{\link[=addN0Variation]{addN0Variation()}}.}
+\item{N0}{number or dataframe. Optional. Initial population size(s). If NA
+(default) then population growth rate is \eqn{\lambda_t=S_t*(1+cR_t)/s}. If a
+data frame N0 column is required, and PopulationName column is required if
+there is more than one row. Additional (optional) variation columns will be
+used by \code{\link[=addN0Variation]{addN0Variation()}}.}
 
 \item{Rbar, Sbar}{Mean and standard deviation of R_bar and S_bar over time. See \code{estimateBayesianRates()$parList} for expected form.}
 

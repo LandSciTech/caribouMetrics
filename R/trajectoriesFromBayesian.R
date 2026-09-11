@@ -3,13 +3,13 @@
 #' Get sample trajectories and summaries from a fitted Bayesian model. The
 #' returned example trajectories are derived from the MCMC samples. If we also
 #' provide initial population size information then the projection (by default)
-#' includes density dependence and demographic stochasticity and populations can go extinct.
-#'  Note that in this case the form of the
-#' growth model (density dependence & demographic stochasticity, but not
-#' interannual variability) can be changed by setting [`caribouPopGrowth()`]
-#' function parameters. The Bayesian MCMC samples include interannual variation
-#' in recruitment and survival, so no additional interannual variation is added
-#' by [`caribouPopGrowth()`].
+#' includes density dependence and demographic stochasticity and populations can
+#' go extinct. Note that in this case the form of the growth model (density
+#' dependence & demographic stochasticity, but not interannual variability) can
+#' be changed by setting [caribouPopGrowth()] function parameters. The
+#' Bayesian MCMC samples include interannual variation in recruitment and
+#' survival, so no additional interannual variation is added by
+#' [caribouPopGrowth()].
 #'
 #' @param bayesianResults A result from `estimateBayesianRates`
 #' @inheritParams trajectoriesFromSummary
