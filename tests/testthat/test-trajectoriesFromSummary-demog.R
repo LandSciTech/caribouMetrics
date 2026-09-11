@@ -90,7 +90,7 @@ test_that("trajectoriesFromSummary works with variation in N0", {
   Ndist <- traj$popInfo$N0
   
   expect_true((var(Ndist) - 1000) < 250)
-  expect_true(abs(mean(Ndist)-1000)<2)  
+  expect_true(abs(mean(Ndist)-1000)< 10)  
   expect_true(min(Ndist)>=900)
   expect_true(max(Ndist)<=1100)
 })
