@@ -522,7 +522,7 @@ RbarAdjust <- pt$Rbar
 RbarAdjust$adjust.mu <- 0.1; RbarAdjust$adjust.sd <- 0.01
 RbarAdjust$adjust.mu[(RbarAdjust$Year<pm.startYear)|(RbarAdjust$Year>=pm.endYear)]=0
 RbarAdjust$adjust.sd[(RbarAdjust$Year<pm.startYear)|(RbarAdjust$Year>=pm.endYear)]=0
-NAdjust <- data.frame(PopulationName <- unique(RbarAdjust$PopulationName))
+NAdjust <- data.frame(PopulationName = unique(RbarAdjust$PopulationName))
 NAdjust$N0 <- 100
 NAdjust$N.sd <- 0.3*NAdjust$N0
 NAdjust$N.lower <- 50

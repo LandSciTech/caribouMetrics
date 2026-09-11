@@ -197,3 +197,64 @@ test_that("summary gives expected trajectory", {
 
 })
 
+
+test_that("adjust works as expected", {
+  trajs <- trajectoriesFromSummary(
+    replicates = 5000, N0 = 100,
+    Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+                      upper = 0.27, Annual = 2010:2015, Year = 2010:2015,
+                      PopulationName = "A"),
+    Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+                      upper = 0.98, Annual = 2010:2015, Year = 2010:2015,
+                      PopulationName = "A"),
+    Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
+    Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
+    type = "bbou")
+  
+  
+  trajs_adjR <- trajectoriesFromSummary(
+    replicates = 5000, N0 = 100,
+    Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+                      upper = 0.27, Annual = 2010:2015, Year = 2010:2015,
+                      PopulationName = "A", adjust.mu = -0.05, adjust.sd = 0.01),
+    Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+                      upper = 0.98, Annual = 2010:2015, Year = 2010:2015,
+                      PopulationName = "A"),
+    Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
+    Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
+    type = "bbou")
+  
+  plotTrajectories(trajs_adjR, metrics = c("Expected recruitment", "Recruitment"))+
+    ggplot2::ylim(0, 0.5)+ggplot2::ggtitle("adjustedR trajs")
+  plotTrajectories(trajs, metrics = c("Expected recruitment", "Recruitment"))+
+    ggplot2::ylim(0, 0.5)+ggplot2::ggtitle("trajs")
+  
+  
+  # Currently errors see # 165
+  # trajs_adjR <- trajectoriesFromSummary(
+  #   replicates = 5000, N0 = 100,
+  #   Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+  #                     upper = 0.27, Annual = 2010:2015, Year = 2010:2015,
+  #                     PopulationName = "A", adjust.mu = -0.05, adjust.sd = 0.2),
+  #   Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+  #                     upper = 0.98, Annual = 2010:2015, Year = 2010:2015,
+  #                     PopulationName = "A"),
+  #   Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
+  #   Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
+  #   type = "bbou")
+  
+
+  # trajs_adjS <- trajectoriesFromSummary(
+  #   replicates = 5000, N0 = 100,
+  #   Rbar = data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+  #                     upper = 0.27, Annual = 2010:2015, Year = 2010:2015,
+  #                     PopulationName = "A"),
+  #   Sbar = data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+  #                     upper = 0.98, Annual = 2010:2015, Year = 2010:2015,
+  #                     PopulationName = "A", adjust.mu = 0.1, adjust.sd = 0.01),
+  #   Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
+  #   Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
+  #   type = "bbou")
+})
+
+
