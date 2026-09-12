@@ -120,6 +120,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 }
 \seealso{
 Caribou demography functions:
+\code{\link{addMissingYears}()},
 \code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},

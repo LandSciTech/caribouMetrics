@@ -87,6 +87,7 @@ start of the caribou year.
 }
 \seealso{
 Caribou demography functions:
+\code{\link{addMissingYears}()},
 \code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
@@ -111,6 +112,7 @@ Caribou demography functions:
 \code{\link{trajectoriesFromSummaryForApp}()}
 
 Caribou demography functions:
+\code{\link{addMissingYears}()},
 \code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},

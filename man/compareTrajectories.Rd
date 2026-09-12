@@ -74,6 +74,7 @@ str(outTables, max.level = 2, give.attr = FALSE)
 }
 \seealso{
 Caribou demography functions:
+\code{\link{addMissingYears}()},
 \code{\link{addN0Variation}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},

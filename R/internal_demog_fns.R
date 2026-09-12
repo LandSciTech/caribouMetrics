@@ -788,6 +788,8 @@ setBbouNAs <- function(dat,year_start=formals(bboutools::bb_fit_survival)$year_s
 #' 
 #' @returns a modified version of `dat` with additional rows for added Years.
 #' 
+#' @family demography
+#' 
 #' @export
 addMissingYears<- function(dat, addYears, year_start=formals(bboutools::bb_fit_recruitment)$year_start) {
   #dat <- surv_data; addYears <- union(distYrs,surv_data$CaribouYear)

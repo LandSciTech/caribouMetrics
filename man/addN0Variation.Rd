@@ -47,6 +47,7 @@ addN0Variation(data.frame(PopulationName = rep("A", 10),
 }
 \seealso{
 Caribou demography functions:
+\code{\link{addMissingYears}()},
 \code{\link{bayesianScenariosWorkflow}()},
 \code{\link{bayesianTrajectoryWorkflow}()},
 \code{\link{betaNationalPriors}()},
