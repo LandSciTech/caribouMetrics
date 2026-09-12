@@ -36,7 +36,7 @@ To examine and compare predictions for unobserved years (2016 to 2023) we add mi
 
 Our starting points for analysis of monitoring scenarios are Bayesian Beta models informed by local data and prior knowledge of national demographic-disturbance relationships. See compare vignette for details. We examine the influence of prior information from national-demographic disturbance relationships in low disturbance (3% anthropogenic, 5% fire) and high disturbance (80% anthropogenic, 10% fire) scenarios. 
 
-```{r setup, results='hide'}
+```{r, results='hide'}
 library(caribouMetrics)
 # use local version on local and installed on GH
 if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
@@ -52,11 +52,11 @@ figHeight <- 10
 #Note - set niters to 100 to run quickly when testing. Set to 1000 for complete results.
 niters <- 1000
 
-#Note need to remove single month of data from April 2016 in order to add simulated data in caribou year 2016.
-surv_data <- addMissingYears(bboudata::bbousurv_a %>% filter((Year > 2010)&!((Year==2016)&(Month==4))),
-                             seq(2016,2022))
+surv_data <- addMissingYears(bboudata::bbousurv_a %>% 
+                               filter((Year > 2010)),
+                             seq(2016,2022)) %>% getCaribouYear()
 recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% filter(Year > 2010),
-                                seq(2016,2022))
+                                seq(2016,2022)) %>% getCaribouYear()
 
 surv_dataNone <- surv_data %>% filter(CaribouYear>2017)
 recruit_dataNone <- recruit_data %>% filter(CaribouYear>2017)

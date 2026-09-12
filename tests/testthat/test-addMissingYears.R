@@ -33,4 +33,10 @@ test_that("missing years works", {
   # should have rec survey in 2027 since 2026 caribou year was added. 
   expect_equal(add10R %>% filter(Year == 2027) %>% nrow(), 1)
   
+  # error from some simulated and some observed in same 
+  add16S <- addMissingYears(bboudata::bbousurv_a %>% filter(Year > 2010), 2016) %>% getCaribouYear()
+  add16R <- addMissingYears(bboudata::bbourecruit_a %>% filter(Year > 2010), 2016)
+  disturbance <-  data.frame(Year = unique(add16S$CaribouYear), Anthro = 3, Fire_excl_anthro = 5)
+  rates <- estimateBayesianRates(add16S, add16R,disturbance = disturbance, niters = 20)
+  expect_is(rates, "list")
 })
