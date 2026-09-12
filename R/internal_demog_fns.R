@@ -679,7 +679,7 @@ savePersistentCache <- function(env = cacheEnv){
 
 #add missing and change names to make data from bboutools models useable.
 convertBbouData<-function(dat,year_start=formals(bboutools::bb_fit_survival)$year_start,StartTotalMissing = NA){
-  
+  inNames <- names(dat)
   if(!hasName(dat,"Annual")){
     return(dat)
   }
@@ -693,8 +693,8 @@ convertBbouData<-function(dat,year_start=formals(bboutools::bb_fit_survival)$yea
       if(length(unique(dat$Month))>1){months=seq(1,12)}else{months=unique(dat$Month)}
     }
     dat_add <- expand.grid(PopulationName=pops,
-                            Annual=levels(dat$Annual),
-                            Month=months)
+                           Month=months,
+                           Annual=levels(dat$Annual))
   }
   if(hasName(dat,"Cows")){
     dat_add <- expand.grid(PopulationName=pops,
@@ -702,7 +702,8 @@ convertBbouData<-function(dat,year_start=formals(bboutools::bb_fit_survival)$yea
   }
   
   if(!is.null(dat_add)){
-    dat <- merge(dat,dat_add,all.x=T,all.y=T)
+    dat <- merge(dat,dat_add,all.x=T,all.y=T, sort = FALSE)
+    dat <- select(dat, any_of(inNames), everything())
   }  
   if(hasName(dat,"StartTotal")){
     #combine any duplicates
@@ -719,8 +720,9 @@ convertBbouData<-function(dat,year_start=formals(bboutools::bb_fit_survival)$yea
   
   dat$newYr <-  as.numeric(as.character(dat$Annual))
   if(hasName(dat,"Month")){
+    survey_mnth <- ifelse(hasName(dat,"Cows"), year_start-1, year_start)
     dat$monthCheck <- as.numeric(as.character(dat$Month))
-    dat$monthCheck[is.na(dat$monthCheck)]=year_start
+    dat$monthCheck[is.na(dat$monthCheck)]=survey_mnth
     dat$newYr[dat$monthCheck<year_start]=
       dat$newYr[dat$monthCheck<year_start]+1
   }
@@ -789,8 +791,8 @@ setBbouNAs <- function(dat,year_start=formals(bboutools::bb_fit_survival)$year_s
 #' @export
 addMissingYears<- function(dat, addYears, year_start=formals(bboutools::bb_fit_recruitment)$year_start) {
   #dat <- surv_data; addYears <- union(distYrs,surv_data$CaribouYear)
-  dat <- getCaribouYear(dat,year_start)
   inNames <- names(dat)
+  dat <- getCaribouYear(dat,year_start)
   dat$Annual <- factor(dat$CaribouYear,levels=sort(union(dat$CaribouYear,addYears)))
   dat <- convertBbouData(dat,year_start,StartTotalMissing=NA)
   rmNames <- setdiff(names(dat),inNames)
