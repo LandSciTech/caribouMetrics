@@ -55,7 +55,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
   }
   
   if(length(setdiff(levels(rec_pred$data$Annual), levels(surv_pred$data$Annual))) > 0){
-    stop("rec_pred and surv_pred must contain the same years")
+    warning("rec_pred and surv_pred do not contain the same years")
   }
   
   if(length(setdiff(unique(rec_pred$data$PopulationName), unique(surv_pred$data$PopulationName))) > 0){

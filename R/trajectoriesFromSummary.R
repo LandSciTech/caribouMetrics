@@ -86,7 +86,7 @@ ratesFromLogisticSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, va
   #Assumes gaussian distributed variation in means, gaussian random effect of year and log link.
   #Adapted from Shimoda QC workflow
   
-  nc <- 2      # number of chains
+  nc <- 3      # number of chains
   niters <- round(replicates/nc)
   ni <- niters * nthin   # number of samples for each chain
   nb <- ni / 2    # number of samples to discard as burnin
@@ -218,7 +218,7 @@ ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPer
   #Assumes gaussian distributed variation in means, beta distributed interannual variation
   #Adapted from Shimoda QC workflow
   
-  nc <- 2      # number of chains
+  nc <- 3      # number of chains
   niters <- round(replicates/nc)
   ni <- niters * nthin   # number of samples for each chain
   nb <- ni / 2    # number of samples to discard as burnin
