@@ -44,8 +44,8 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
     stop("Not expecting more than one mean survival estimate for each year.")
   }
   parList$Sbar <- Sbar
-  parList$Siv <- priors#subset(summaries,MetricTypeID=="sig.R")
-  parList$Riv <- priors#subset(summaries,MetricTypeID=="sig.R")
+  parList$Siv <- priors[c("S_cv_min","S_cv_max")]#subset(summaries,MetricTypeID=="sig.R")
+  parList$Riv <- priors[c("R_cv_min","R_cv_max")]#subset(summaries,MetricTypeID=="sig.R")
   parList$type <- "beta"
   
   return(list(parList=parList,surv_fit=surv_fit,recruit_fit=recruit_fit))

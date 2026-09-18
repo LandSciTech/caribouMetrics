@@ -282,6 +282,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   
   #Note these are caribou years, not calendar years
   if(!is.null(surv_data)){
+    if(!hasName(surv_data,"MortalitiesCertain")){surv_data$MortalitiesCertain=surv_data$Mortalities}
     survYrs <- sort(setdiff(includeYears,subset(surv_data,!is.na(MortalitiesCertain))$Annual))
   }else{
     survYrs <- includeYears
@@ -390,7 +391,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
                 row.names = FALSE)
     }
     
-    if(!is.null(recruit_data)){
+    if(!is.null(recruit_data)&&(sum(recruit_data$Cows,na.rm=T)>0)){
       if(nrow(simRecruitObs)>0){
         recruit_data <- merge(recruit_data,data.frame(Replicate=unique(simRecruitObs$Replicate)))
         missing = setdiff(names(simRecruitObs),names(recruit_data))
@@ -428,7 +429,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     
     simSurvObs$CaribouYear <- NULL
     
-    if(!is.null(surv_data)){
+    if(!is.null(surv_data)&&(sum(!is.na(surv_data$MortalitiesCertain))>0)){
       if(nrow(simSurvObs>0)){
         surv_data <- merge(surv_data,data.frame(Replicate=unique(simSurvObs$Replicate)))
         surv_data$Month=as.numeric(as.character(surv_data$Month))
