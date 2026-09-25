@@ -68,6 +68,14 @@ trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv,
   testTable(Rbar, req_col_names = c("PopulationName", "Annual", "Year", "mean", "sd"))
   testTable(Sbar, req_col_names = c("PopulationName", "Annual", "Year", "mean", "sd"))
 
+  if(length(levels(Rbar$Annual))!=length(unique(Rbar$Annual))){
+    Rbar$Annual = as.factor(as.numeric(as.character(Rbar$Annual)))
+  }
+
+  if(length(levels(Sbar$Annual))!=length(unique(Sbar$Annual))){
+    Sbar$Annual = as.factor(as.numeric(as.character(Sbar$Annual)))
+  }
+  
   if(type=="beta"){
     testTable(as.data.frame(Riv), req_col_names = c("R_cv_min", "R_cv_max"))
     testTable(as.data.frame(Siv), req_col_names = c("S_cv_min", "S_cv_max"))
@@ -86,7 +94,7 @@ ratesFromLogisticSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, va
   #Assumes gaussian distributed variation in means, gaussian random effect of year and log link.
   #Adapted from Shimoda QC workflow
   
-  nc <- 2      # number of chains
+  nc <- 3      # number of chains
   niters <- round(replicates/nc)
   ni <- niters * nthin   # number of samples for each chain
   nb <- ni / 2    # number of samples to discard as burnin
@@ -218,7 +226,7 @@ ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPer
   #Assumes gaussian distributed variation in means, beta distributed interannual variation
   #Adapted from Shimoda QC workflow
   
-  nc <- 2      # number of chains
+  nc <- 3      # number of chains
   niters <- round(replicates/nc)
   ni <- niters * nthin   # number of samples for each chain
   nb <- ni / 2    # number of samples to discard as burnin
@@ -228,8 +236,8 @@ ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPer
   r_priors <- list(cv_min= Riv$R_cv_min,cv_max = Riv$R_cv_max)
   params = c("Rbar","Recruitment") 
   if(varPersists){
-    surv_fit <- rateFromBetaSummary(Sbar,s_priors,sparams,nc,nthin,ni,nb)
     recruit_fit <- rateFromBetaSummary(Rbar,r_priors,params,nc,nthin,ni,nb)
+    surv_fit <- rateFromBetaSummary(Sbar,s_priors,sparams,nc,nthin,ni,nb)
   }else{
     #treats all variation as interannual variation
     surv_fit <- rateFromBetaSummaryYS(Sbar,s_priors,sparams,nc,nthin,ni,nb)

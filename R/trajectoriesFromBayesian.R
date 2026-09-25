@@ -72,7 +72,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
     }
   }
   
-  Nuse <- getN0Pars(unique(N0),popNames = unique(bayesianResults$parTab$PopulationName))
+  Nuse <- getN0Pars(unique(as.data.frame(N0)),popNames = unique(bayesianResults$parTab$PopulationName))
   
   if(nrow(Nuse)>length(unique(Nuse$PopulationName))){
     stop("Expecting a single value or distribution of N0 for each population.")

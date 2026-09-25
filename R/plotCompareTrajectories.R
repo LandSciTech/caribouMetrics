@@ -65,6 +65,7 @@ plotCompareTrajectories <- function(modTables, metric, lowBound = 0, highBound =
   allRes <- modTables$rr.summary.all
   obs <- modTables$obs.all
   simRange <- modTables$sim.all
+  if(!is.null(simRange)&&nrow(simRange)==0){simRange=NULL}
   
   if(is.null(facetVars)&&length(unique(allRes$PopulationName))>1){
     facetVars = "PopulationName"
@@ -202,7 +203,7 @@ plotCompareTrajectories <- function(modTables, metric, lowBound = 0, highBound =
                                      labeller = "label_both")
     } else {
       x2 <- x2 + ggplot2::facet_wrap(as.formula(paste0("~", facetVars[1])),
-                                     labeller = "label_both")
+                                     labeller = "label_value")
     }
   }
   if (grepl("growth rate",metric,fixed=T)) {

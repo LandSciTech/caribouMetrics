@@ -4,6 +4,7 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   #             req_vals = unique(surv_data$PopulationName))
   # }
   #Note: using bboutools to check and structure the data without fitting the models...0
+  
   surv_data <- setBbouNAs(surv_data)
   recruit_data <- setBbouNAs(recruit_data)
   
@@ -29,6 +30,7 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb)
   
   summaries <- rbind(recruit_fit$summaries,surv_fit$summaries)
+  summaries$Annual <- as.factor(as.numeric(as.character(summaries$Annual))) #ensure factor levels are ordered.
   
   parList <- list()
   parList$Recruitment <- subset(summaries,MetricTypeID=="Recruitment")
@@ -42,8 +44,8 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
     stop("Not expecting more than one mean survival estimate for each year.")
   }
   parList$Sbar <- Sbar
-  parList$Siv <- priors#subset(summaries,MetricTypeID=="sig.R")
-  parList$Riv <- priors#subset(summaries,MetricTypeID=="sig.R")
+  parList$Siv <- priors[c("S_cv_min","S_cv_max")]#subset(summaries,MetricTypeID=="sig.R")
+  parList$Riv <- priors[c("R_cv_min","R_cv_max")]#subset(summaries,MetricTypeID=="sig.R")
   parList$type <- "beta"
   
   return(list(parList=parList,surv_fit=surv_fit,recruit_fit=recruit_fit))

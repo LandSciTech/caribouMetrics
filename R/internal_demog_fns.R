@@ -739,8 +739,12 @@ convertBbouData<-function(dat,year_start=formals(bboutools::bb_fit_survival)$yea
 setBbouNAs <- function(dat,year_start=formals(bboutools::bb_fit_survival)$year_start){
   
   dat <- getCaribouYear(dat,year_start)
+  if(!hasName(dat,"PopulationName")){
+    dat$PopulationName="A"
+  }
   
   if(hasName(dat,"StartTotal")){
+    dat$StartTotal <- as.numeric(dat$StartTotal) #all NA columns are logical, and bboutools won't accept logical
     dat$Year[is.na(dat$StartTotal)] <- dat$CaribouYear[is.na(dat$StartTotal)]
     naSet<- c('Month','MortalitiesCertain','MortalitiesUncertain')
     for (n in naSet){
@@ -749,12 +753,14 @@ setBbouNAs <- function(dat,year_start=formals(bboutools::bb_fit_survival)$year_s
       }else{
         dat[[n]][is.na(dat$StartTotal)]<-NA
       }
+      dat[[n]]<-as.numeric(dat[[n]])
     }
     dat<-unique(dat)
     return(dat)
   }
   
   if(hasName(dat,"Calves")){
+    dat$Calves <- as.numeric(dat$Calves)
     dat$Year[is.na(dat$Calves)]<-dat$CaribouYear[is.na(dat$Calves)]
     naSet <- c('Month', 'Day', 'Bulls', 'UnknownAdults', 'Yearlings', 'Cows')
     for (n in naSet){
@@ -763,6 +769,7 @@ setBbouNAs <- function(dat,year_start=formals(bboutools::bb_fit_survival)$year_s
       }else{
         dat[[n]][is.na(dat$Calves)]<-NA
       }
+      dat[[n]]<-as.numeric(dat[[n]])
     }
     dat<-unique(dat)
     
