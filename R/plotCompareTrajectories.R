@@ -259,6 +259,15 @@ plotTrajectories <- function(caribouBayesDemogMod,
                                          "Population growth rate","Female population size","c",
                                          "Expected survival","Expected recruitment",
                                          "Expected adjusted recruitment","Expected growth rate")){
+  if(!hasName(caribouBayesDemogMod, "summary")){
+    stop("caribouBayesDemogMod must contain a summary table.")
+  }
+  
+  if(any(!metrics %in% unique(caribouBayesDemogMod$summary$Metric))){
+    stop("One of the supplied metrics is not recognized. metrics: ",
+         paste0(metrics, collapse = ", "))
+  }
+  
   caribouBayesDemogMod$summary <- caribouBayesDemogMod$summary %>%
     filter(Metric %in% metrics)
   names <- caribouBayesDemogMod$summary %>% select(MetricTypeID, Metric) %>% unique()
