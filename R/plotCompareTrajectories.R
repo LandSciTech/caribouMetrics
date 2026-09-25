@@ -263,9 +263,9 @@ plotTrajectories <- function(caribouBayesDemogMod,
     stop("caribouBayesDemogMod must contain a summary table.")
   }
   
-  if(any(!metrics %in% unique(caribouBayesDemogMod$summary$Metric))){
-    stop("One of the supplied metrics is not recognized. metrics: ",
-         paste0(metrics, collapse = ", "))
+  no_match <- setdiff(metrics, unique(caribouBayesDemogMod$summary$Metric))
+  if(length(no_match) > 0){
+    stop(paste0(no_match, collapse = ", "), " metrics do not match the expected metrics")
   }
   
   caribouBayesDemogMod$summary <- caribouBayesDemogMod$summary %>%

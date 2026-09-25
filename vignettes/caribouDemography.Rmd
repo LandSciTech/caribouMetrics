@@ -568,9 +568,8 @@ scnCompare <- list(summary=rbind(popMetricsBase$summary,popMetricsS85$summary),
 ```{r summaryTrajectoryForAppPlot, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Comparison of demographic trajectories from a fitted bboutools model (base) and a scenario in which expected survival is decreased from 94% to 85% (S85), obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
 proj <- plotTrajectories(scnCompare, 
                          metrics = c("Population growth rate", "Expected growth rate",
-                                     "Female population size", 
-                                     "Expected recruitment", "Recruitment", 
-                                     "Expected survival", "Adult female survival"), 
+                                     "Female population size", "Recruitment",
+                                     "Adult female survival"), 
                          replicates = 25)
 proj
 ```
