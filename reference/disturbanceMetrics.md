@@ -165,37 +165,37 @@ disturbanceMetrics(landCover = lc,
 #> calculating disturbance metrics
 #> An object of class "DisturbanceMetrics"
 #> Slot "landCover":
-#> class       : SpatRaster 
+#> class       : SpatRaster
 #> size        : 10, 10, 1  (nrow, ncol, nlyr)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)
-#> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
+#> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> name        : lyr.1 
-#> min value   :     1 
-#> max value   :     1 
+#> name        : lyr.1
+#> min value   :     1
+#> max value   :     1
 #> 
 #> Slot "natDist":
-#> class       : SpatRaster 
+#> class       : SpatRaster
 #> size        : 10, 10, 1  (nrow, ncol, nlyr)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)
-#> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
+#> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> name        : lyr.1 
-#> min value   :     1 
-#> max value   :     1 
+#> name        : lyr.1
+#> min value   :     1
+#> max value   :     1
 #> 
 #> Slot "anthroDist":
-#> class       : SpatRaster 
+#> class       : SpatRaster
 #> size        : 10, 10, 1  (nrow, ncol, nlyr)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)
-#> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
+#> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> name        : lyr.1 
-#> min value   :     1 
-#> max value   :     1 
+#> name        : lyr.1
+#> min value   :     1
+#> max value   :     1
 #> 
 #> Slot "linFeat":
 #> [[1]]
@@ -218,15 +218,15 @@ disturbanceMetrics(landCover = lc,
 #> 1 POLYGON ((0 0, 10 0, 10 10,...
 #> 
 #> Slot "processedData":
-#> class       : SpatRaster 
+#> class       : SpatRaster
 #> size        : 10, 10, 4  (nrow, ncol, nlyr)
 #> resolution  : 1, 1  (x, y)
 #> extent      : 0, 10, 0, 10  (xmin, xmax, ymin, ymax)
-#> coord. ref. : NAD83 / Conus Albers (EPSG:5070) 
+#> coord. ref. : NAD83 / Conus Albers (EPSG:5070)
 #> source(s)   : memory
-#> names       : Anthro, Fire, Total_dist, Fire_excl_anthro 
-#> min values  :      0,    0,          0,                0 
-#> max values  :      1,    1,          1,                1 
+#> names       : Anthro, Fire, Total_dist, Fire_excl_anthro
+#> min values  :      0,    0,          0,                0
+#> max values  :      1,    1,          1,                1
 #> 
 #> Slot "disturbanceMetrics":
 #>   zone Anthro Fire Total_dist Fire_excl_anthro

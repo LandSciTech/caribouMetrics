@@ -1,6 +1,6 @@
 # Comparing the caribouMetrics Beta model to bboutools models
 
-## 0.1 Similarities and differences between the caribouMetrics Beta model and the bboutools model
+## 1 Similarities and differences between the caribouMetrics Beta model and the bboutools model
 
 Hughes et al. ([2025](#ref-hughes_integration_2025)) described a Beta
 model with disturbance covariates and informative priors for analysis of
@@ -41,7 +41,7 @@ bbou model include:
 - The distribution of interannual variation differs between the models.
 - The bbou model allows for variation in survival among months.
 
-## 0.2 Example data
+## 2 Example data
 
 We compare the Beta and bbou models using three examples derived from
 the
@@ -59,6 +59,7 @@ To examine and compare predictions for unobserved years (2018 to 2021)
 we add missing data.
 
 ``` r
+
 library(caribouMetrics)
 # use local version on local and installed on GH
 if (requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
@@ -94,7 +95,7 @@ surv_dataLimited <- surv_data %>% filter(Year > 2014)
 recruit_dataLimited <- recruit_data %>% filter(Year > 2014)
 ```
 
-## 0.3 Comparison of the Beta and national models
+## 3 Comparison of the Beta and national models
 
 As shown by Hughes et al. ([2025](#ref-hughes_integration_2025)) the
 prior means and 95% prior predictive intervals from the Beta model are
@@ -103,6 +104,7 @@ similar to the means and ranges between the 2.5% and 97.5% quantiles of
 model (Figure [1](#fig:fig-plot1)).
 
 ``` r
+
 disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 5,
                           Fire_excl_anthro = 1)
 betaPrior <- bayesianTrajectoryWorkflow(surv_dataNone, recruit_dataNone, disturbance)
@@ -112,6 +114,7 @@ typeLabs <- c("Beta", "National")
 ```
 
 ``` r
+
 rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
 surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
 lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
@@ -129,7 +132,7 @@ Figure 1: 95% prior predictive intervals from Beta model with 5%
 anthropogenic disturbance, default priors, and no local data compared to
 simulations from the national model.
 
-## 0.4 Comparison of Beta and bbou prior predictions
+## 4 Comparison of Beta and bbou prior predictions
 
 The bbou model default priors are less informative than the Beta model
 default priors (Figure [2](#fig:fig-plotPriorsDefault)). The bbou model
@@ -139,6 +142,7 @@ recruitment and survival rates are within the range of variation among
 boreal caribou populations there were included in the national model.
 
 ``` r
+
 if (useSaved & file.exists(bbouPriorFile)) {
   bbouPrior <- readRDS(bbouPriorFile)
 } else {
@@ -154,6 +158,7 @@ typeLabs <- c("Beta", "Bbou")
 ```
 
 ``` r
+
 rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
 
 surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
@@ -181,6 +186,7 @@ parameters are and how they are different from the plots shown on the
 right.
 
 ``` r
+
 b0Priors <- bbouNationalPriors(anthro = unique(disturbance$Anthro), fire_excl_anthro = unique(disturbance$Fire_excl_anthro), month = TRUE)
 if (useSaved & file.exists(bbouPriorNationalFile)) {
   bbouPriorNational <- readRDS(bbouPriorNationalFile)
@@ -197,6 +203,7 @@ typeLabs <- c("Beta", "Bbou National")
 ```
 
 ``` r
+
 recBar <- plotCompareTrajectories(out_tbls, "Expected recruitment", typeLabels = typeLabs)
 
 rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
@@ -222,7 +229,7 @@ Figure 3: Prior means and 95% predictive intervals from Beta and bbou
 models with 5% anthropogenic disturbance and priors informed by national
 demographic-disturbance relationships.
 
-## 0.5 Comparison of Beta and bbou models with informative local data
+## 5 Comparison of Beta and bbou models with informative local data
 
 With more informative data, the Beta model with constant disturbance
 covariates and informative priors often gives results that are
@@ -231,6 +238,7 @@ When there is enough local data available differences in the priors are
 less important.
 
 ``` r
+
 betaInformative <- bayesianTrajectoryWorkflow(surv_data, recruit_data, disturbance)
 if (useSaved & file.exists(bbouInformativeFile)) {
   bbouInformative <- readRDS(bbouInformativeFile)
@@ -247,6 +255,7 @@ typeLabs <- c("Beta", "Bbou")
 ```
 
 ``` r
+
 rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
 
 surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
@@ -270,6 +279,7 @@ models to project different outcomes in a case where disturbance changes
 over time.
 
 ``` r
+
 disturbance <- data.frame(Year = seq(2011, 2051),
                           Anthro = seq(20, 2 * 40 + 20, length.out = 41),
                           Fire_excl_anthro = 1)
@@ -297,6 +307,7 @@ typeLabs <- c("Beta", "Bbou")
 ```
 
 ``` r
+
 rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs,
                breakInterval = 5)
 
@@ -317,7 +328,7 @@ Figure 5: Posterior means and 95% posterior predictive intervals from
 Beta and bbou models with default priors, informative local data, and
 anthropogenic disturbance increasing from 20 to 100% over 40 years.
 
-## 0.6 Comparison of Beta and bbou models with limited local data
+## 6 Comparison of Beta and bbou models with limited local data
 
 If local data is limited the bbou model with default (less informative)
 priors and the Beta model with disturbance covariates and informative
@@ -335,6 +346,7 @@ combining the limited local information with a prior expectation that
 demographic rates will be low when disturbance is high.
 
 ``` r
+
 disturbance <- data.frame(Year = unique(surv_data$Year), Anthro = 90, Fire_excl_anthro = 5)
 betaLimited <- bayesianTrajectoryWorkflow(surv_dataLimited, recruit_dataLimited, disturbance)
 if (useSaved & file.exists(bbouLimitedFile)) {
@@ -352,6 +364,7 @@ typeLabs <- c("Beta", "Bbou")
 ```
 
 ``` r
+
 rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
 
 surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
@@ -371,10 +384,9 @@ limited local data.
 
 ## References
 
-Dalgarno, Seb, John Boulanger, Ayla Pearson, Joe Thorley, Troy Hegel,
-Barry Nobert, and Dave Hervieux. 2025. “Bbousuite: A Set of R Packages
-to Facilitate Analysis of Boreal Caribou Survival and Recruitment Data.”
-*Journal of Open Source Software* 10 (109): 7997.
+Dalgarno, Seb, John Boulanger, Ayla Pearson, et al. 2025. “Bbousuite: A
+Set of R Packages to Facilitate Analysis of Boreal Caribou Survival and
+Recruitment Data.” *Journal of Open Source Software* 10 (109): 7997.
 <https://doi.org/10.21105/joss.07997>.
 
 Hughes, Josie, Sarah Endicott, Anna M. Calvert, and Cheryl A. Johnson.

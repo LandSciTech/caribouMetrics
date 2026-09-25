@@ -37,6 +37,7 @@ Interannual variation in survival and recruitment is modelled using
 truncated Beta distributions.
 
 ``` r
+
 library(bboutools)
 library(caribouMetrics)
 # use local version on local and installed on GH
@@ -65,6 +66,7 @@ Metrics](https://landscitech.github.io/caribouMetrics/articles/Using_disturbance
 vignette for an example.
 
 ``` r
+
 disturbance <- data.frame(Anthro = 40, Fire_excl_anthro = 2)
 ```
 
@@ -75,6 +77,7 @@ standard errors from the national model as well as the sampled
 coefficients and the quantiles that they have been assigned to.
 
 ``` r
+
 popGrowthPars <- getNationalCoefficients(500)
 
 head(popGrowthPars$coefSamples_Survival$coefSamples)
@@ -113,6 +116,7 @@ but not density dependence or demographic stochasticity (Figure
 [1.2](#fig:plotSimpleDemographyNoN)).
 
 ``` r
+
 rateSamples <- estimateNationalRates(
   covTable = disturbance,
   popGrowthPars = popGrowthPars,
@@ -157,6 +161,7 @@ ratio and (optionally) composition survey bias - see Hughes et al.
 ([2025](#ref-hughes_integration_2025)) for details.
 
 ``` r
+
 rateSamples$N0 <- NA
 demography <- cbind(rateSamples,
                     caribouPopGrowth(N = rateSamples$N0,
@@ -184,6 +189,7 @@ table of disturbance scenarios across a range of different levels of
 fire and anthropogenic disturbance.
 
 ``` r
+
 covTableSim <- expand.grid(Anthro = seq(0, 90, by = 2), 
                            Fire_excl_anthro = seq(0, 70, by = 10)) 
 covTableSim$Total_dist = covTableSim$Anthro + covTableSim$Fire_excl_anthro
@@ -194,6 +200,7 @@ of 500 is used to calculate averages, while the sample of 35 is used to
 show variability among populations.
 
 ``` r
+
 # set seed so vignette looks the same each time
 set.seed(34533)
 
@@ -238,6 +245,7 @@ and additional variation summarized by the precision parameter of the
 Beta regression model (Figure [1.4](#fig:withPrecision)).
 
 ``` r
+
 rateSamples <- estimateNationalRates(
   covTable = covTableSim,
   popGrowthPars = popGrowthParsSmall,
@@ -308,6 +316,7 @@ stochasticity etc) can be changed by setting
 function parameters.
 
 ``` r
+
 numTimesteps <- 50
 stepLength <- 1
 N0 <- 100
@@ -384,6 +393,7 @@ year is not provided, population growth is projected for one year, and
 sample trajectories are not returned.
 
 ``` r
+
 natTraj <- trajectoriesFromNational(replicates = 500, 
                                     disturbance = covTableSim, interannualVar = FALSE, 
                                     useQuantiles = TRUE)
@@ -410,6 +420,7 @@ increasing by 5% per decade, we can also produce projections over a
 changing landscape with `trajectoriesFromNational`.
 
 ``` r
+
 disturbance2 = data.frame(step = 0:40) %>% bind_cols(disturbance) %>% 
   mutate(Anthro = Anthro + AnthroChange * step, 
          Year = step)
@@ -428,6 +439,7 @@ popMetrics2$samples <- merge(popMetrics2$samples,names) %>%
 ```
 
 ``` r
+
 
 proj <- ggplot(data = popMetrics2$summary,
                aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
@@ -466,6 +478,7 @@ vignette for an overview of the Bayesian models. For this example we use
 a bboutools logistic model and example data.
 
 ``` r
+
 library(bboudata)
 library(bboutools)
 useSaved <- T # option to skip slow step of fitting bboutools model
@@ -496,6 +509,7 @@ population size, demographic stochasticity or density dependence in
 these projections.
 
 ``` r
+
 predict_calfcow <- bboutools::bb_predict_calf_cow_ratio(bbouInformative$recruit_fit, year = TRUE)
 bboutools::bb_plot_year_calf_cow_ratio(predict_calfcow)
 ```
@@ -506,6 +520,7 @@ bboutools.](caribouDemography_files/figure-html/bboutoolsCalfCow-1.png)
 Figure 2.1: Calf:cow ratio projection from bboutools.
 
 ``` r
+
 predict_recruitment <- bboutools::bb_predict_recruitment(bbouInformative$recruit_fit, year = TRUE)
 bboutools::bb_plot_year_recruitment(predict_recruitment)
 ```
@@ -516,6 +531,7 @@ bboutools.](caribouDemography_files/figure-html/bboutoolsRecruitment-1.png)
 Figure 2.2: Recruitment projection from bboutools.
 
 ``` r
+
 predict_survival <- bboutools::bb_predict_survival(bbouInformative$surv_fit, year = TRUE, month = FALSE)
 bboutools::bb_plot_year_survival(predict_survival)
 ```
@@ -526,6 +542,7 @@ bboutools.](caribouDemography_files/figure-html/bboutoolsSurvival-1.png)
 Figure 2.3: Survival projection from bboutools.
 
 ``` r
+
 predict_lambda <- bboutools::bb_predict_growth(survival = bbouInformative$surv_fit, recruitment = bbouInformative$recruit_fit)
 bboutools::bb_plot_year_growth(predict_lambda) +
   ggplot2::scale_y_continuous(labels = scales::percent)+
@@ -565,6 +582,7 @@ additional interannual variation is added by `caribouPopGrowth` in this
 case.
 
 ``` r
+
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
 popMetricsBayes$summary <- popMetricsBayes$summary %>% 
   filter(MetricTypeID %in% c("Sbar","survival","Rbar","recruitment", "lambda_bar", "lambda"))
@@ -586,6 +604,7 @@ popMetricsBayes$samples <- popMetricsBayes$samples %>%
 ```
 
 ``` r
+
 proj <- ggplot(data = popMetricsBayes$summary,
                aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
   geom_ribbon(fill="grey") +
@@ -608,6 +627,7 @@ model, obtained using the trajectoriesFromBayesian wrapper function.
 Bands are 95% predictive intervals.
 
 ``` r
+
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative,N0=100)
 popMetricsBayes$summary <- popMetricsBayes$summary %>% 
   filter(MetricTypeID %in% c("survival","recruitment", "lambda_bar", "lambda","N"))
@@ -627,6 +647,7 @@ popMetricsBayes$samples <- popMetricsBayes$samples %>%
 ```
 
 ``` r
+
 proj <- ggplot(data = popMetricsBayes$summary,
                aes(x=Year,y=Mean,ymin=lower,ymax=upper))+
   geom_ribbon(fill="grey") +
@@ -664,6 +685,7 @@ projections do not include variation in interannual variation over time
 changing model parameters (Fig [2.9](#fig:summaryTrajectoryAdjustPlot)).
 
 ``` r
+
 pt <- bbouInformative$parList
 trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rbar,
                                                Sbar=pt$Sbar, Riv=pt$Riv,Siv=pt$Siv,
@@ -692,6 +714,7 @@ typeLabs <- c("Summary", "Bayes")
 ```
 
 ``` r
+
 recE <- plotCompareTrajectories(out_tbls, "Expected recruitment", typeLabels = typeLabs)
 survE <- plotCompareTrajectories(out_tbls, "Expected survival", typeLabels = typeLabs)
 lamE <- plotCompareTrajectories(out_tbls, "Expected growth rate", typeLabels = typeLabs,
@@ -710,6 +733,7 @@ using the trajectoriesFromSummary (Summary) and trajectoriesFromBayesian
 samples.
 
 ``` r
+
 rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
 surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
 lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
@@ -730,6 +754,7 @@ wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500
 samples.
 
 ``` r
+
 pm.startYear <- 2015; pm.endYear <- 2022
 RbarAdjust <- pt$Rbar
 RbarAdjust$adjust.mu <- 0.1; RbarAdjust$adjust.sd <- 0.01
@@ -768,6 +793,7 @@ typeLabs <- c("Adjust", "Base")
 ```
 
 ``` r
+
 rec <- plotCompareTrajectories(out_tbls, "Recruitment", typeLabels = typeLabs)
 surv <- plotCompareTrajectories(out_tbls, "Adult female survival", typeLabels = typeLabs)
 lam <- plotCompareTrajectories(out_tbls, "Population growth rate", typeLabels = typeLabs,
@@ -797,6 +823,7 @@ in our [Boreal Caribou Demographic Projection
 Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp).
 
 ``` r
+
 pt <- bbouInformative$parTab;pt
 #>   PopulationName     R_bar     R_sd R_iv_mean R_iv_shape R_bar_lower
 #> 1              A 0.1957146 0.223214 0.3769658   2.237384   0.1357969
@@ -830,6 +857,7 @@ scnCompare$samples <- merge(scnCompare$samples,names) %>% filter(as.numeric(as.f
 ```
 
 ``` r
+
 proj <- ggplot(data = scnCompare$summary,
                aes(x=Year,y=Mean,ymin=lower,ymax=upper,fill=PopulationName,group=PopulationName))+
   geom_ribbon(alpha=0.2) +
@@ -853,8 +881,7 @@ wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples.
 
 ### References
 
-Dyson, Matt, Sarah Endicott, Craig Simpkins, Julie W. Turner, Stephanie
-Avery-Gomm, Cheryl A. Johnson, Mathieu Leblond, et al. 2026. “Effective
+Dyson, Matt, Sarah Endicott, Craig Simpkins, et al. 2026. “Effective
 Conservation Decisions Require Models Designed for Purpose: A Case Study
 of Boreal Caribou in Ontario’s Ring of Fire.” *Ecology and Evolution* In
 press. <https://doi.org/10.1101/2022.06.01.494350>.
@@ -869,8 +896,7 @@ Local Data Can Improve Caribou Population Viability Projections and
 Inform Monitoring Decisions.” *Ecological Informatics* 87 (July):
 103095. <https://doi.org/10.1016/j.ecoinf.2025.103095>.
 
-Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, Mathieu Leblond,
-Patrick Kirby, Clara Superbie, and Philip D. McLoughlin. 2020. “Science
-to Inform Policy: Linking Population Dynamics to Habitat for a
+Johnson, Cheryl A., Glenn D. Sutherland, Erin Neave, et al. 2020.
+“Science to Inform Policy: Linking Population Dynamics to Habitat for a
 Threatened Species in Canada.” *Journal of Applied Ecology* 57 (7):
 1314–27. <https://doi.org/10.1111/1365-2664.13637>.
