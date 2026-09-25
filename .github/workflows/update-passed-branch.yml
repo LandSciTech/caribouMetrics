@@ -1,0 +1,32 @@
+name: Update Passed Branch
+
+on:
+  workflow_run:
+    workflows: ["test-coverage.yaml"]   # Name of the workflow that runs on bbouIntegration
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+jobs:
+  update-branch:
+    if: |
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'bbouIntegration'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update branch
+        run: |
+          git fetch origin
+          git checkout -B bbouIntegration-passed \
+            ${{ github.event.workflow_run.head_sha }}
+
+          git push origin bbouIntegration-passed --force
