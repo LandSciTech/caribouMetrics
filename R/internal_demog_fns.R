@@ -821,6 +821,8 @@ addMissingYears<- function(dat, addYears, year_start=formals(bboutools::bb_fit_r
 #' 
 #' @inheritSection timeDefaults Interpretation of Years
 #' 
+#' @family demography
+#' 
 #' @export
 getCaribouYear <- function(x,
                            year_start = formals(bboutools::bb_fit_recruitment)$year_start){

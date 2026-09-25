@@ -111,6 +111,7 @@ Caribou demography functions:
 \code{\link{dataFromSheets}()},
 \code{\link{demographicProjectionApp}()},
 \code{\link{estimateNationalRate}()},
+\code{\link{getCaribouYear}()},
 \code{\link{getNationalCoefficients}()},
 \code{\link{getScenarioDefaults}()},
 \code{\link{plotCompareTrajectories}()},
