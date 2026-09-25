@@ -79,8 +79,8 @@ surv_data <- addMissingYears(bboudata::bbousurv_a %>% filter((Year > 2010)&!((Ye
 recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% filter(Year > 2010),
                                 seq(2016,2022))
 
-surv_dataNone <- surv_data %>% filter(CaribouYear>2017)
-recruit_dataNone <- recruit_data %>% filter(CaribouYear>2017)
+surv_dataNone <- surv_data %>% getCaribouYear() %>% filter(CaribouYear>2017)
+recruit_dataNone <- recruit_data %>% getCaribouYear() %>%  filter(CaribouYear>2017)
 
 surv_dataLimited <- surv_data %>% filter(CaribouYear > 2013)
 recruit_dataLimited <- recruit_data %>% filter(CaribouYear > 2013)
