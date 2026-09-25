@@ -58,7 +58,7 @@ test_that("summary gives expected trajectory", {
   #Expect truncated poisson distribution
   Ndist <- trajs_rng %>% filter(time == 1, type == "samp") %>% pull(N0)
 
-  expect_true((var(Ndist)-150)<2.5) #fails sometimes with 2 changing to 2.5
+  expect_true(abs(var(Ndist)-150)<3) #fails sometimes with 2 changing to 3
   expect_true(abs(mean(Ndist)-150)<1)  
   expect_true(min(Ndist)>=100)
   expect_true(max(Ndist)<=200)
