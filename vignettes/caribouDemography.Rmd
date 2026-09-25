@@ -396,7 +396,7 @@ traj <- plotTrajectories(popMetrics2,
                          metrics = c("Population growth rate", "Expected growth rate",
                                      "Female population size", 
                                      "Expected recruitment", "Recruitment", 
-                                     "Expected survival", "Survival"))
+                                     "Expected survival", "Adult female survival"))
 traj
 ```
 # Demographic rates and trajectories from Bayesian models
@@ -468,7 +468,7 @@ popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
 proj <-  plotTrajectories(popMetricsBayes, 
                           metrics = c("Population growth rate", "Expected growth rate",
                                      "Expected recruitment", "Recruitment", 
-                                     "Expected survival", "Survival"))
+                                     "Expected survival", "Adult female survival"))
 proj
 ```
 
@@ -481,7 +481,7 @@ proj <- plotTrajectories(popMetricsBayes,
                          metrics = c("Population growth rate", "Expected growth rate",
                                      "Female population size", 
                                      "Expected recruitment", "Recruitment", 
-                                     "Expected survival", "Survival"))
+                                     "Expected survival", "Adult female survival"))
 proj
 ```
 
@@ -570,7 +570,7 @@ proj <- plotTrajectories(scnCompare,
                          metrics = c("Population growth rate", "Expected growth rate",
                                      "Female population size", 
                                      "Expected recruitment", "Recruitment", 
-                                     "Expected survival", "Survival"), 
+                                     "Expected survival", "Adult female survival"), 
                          replicates = 25)
 proj
 ```
