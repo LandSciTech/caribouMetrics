@@ -80,7 +80,7 @@ simLimitedHigh <- trajectoriesFromBayesian(betaLimitedHigh)
 
 We begin by specifying monitoring scenario parameters, and selecting an example trajectory with a relatively low expected growth rate (i.e. in the 1st percentile of the distribution of mcmc samples from the initial model). In this example, we specify 5 additional years of monitoring, with a target of 30 collars per year, and 6 cows per collared cow in the composition surveys. Default settings specify that deployed collars last 4 years, and lost collars are replaced in April of each year. We then simulate additional years of monitoring, combine the simulated and observed data (Figure \@ref(fig:fig-plot1)), and reanalyze the combined data. Methods for simulating monitoring of example trajectories are described in @hughes_integration_2025.
 
-In these examples, an additional 5 years of monitoring of a plausible low growth rate trajectory with 5 intial years of data does not provide additional clarity about whether the population is likely to decline or not in future (Figure \@ref(fig:fig-plot2)). An additional 5 years of monitoring is more likely to reduce uncertainty when there is limited initial data (e.g. Figures \@ref(fig:fig-plot3) and \@ref(fig:fig-plot4)), but outcomes of single trajectory analysis are stochastic. Thorough analysis of the value of additional monitoring requires examining outcomes from a larger representative sample of plausible trajectories from the initial model [as in @hughes_integration_2025].
+In these examples, an additional 5 years of monitoring of a plausible low growth rate trajectory with 5 initial years of data does not provide additional clarity about whether the population is likely to decline or not in future (Figure \@ref(fig:fig-plot2)). An additional 5 years of monitoring is more likely to reduce uncertainty when there is limited initial data (e.g. Figures \@ref(fig:fig-plot3) and \@ref(fig:fig-plot4)), but outcomes of single trajectory analysis are stochastic. Thorough analysis of the value of additional monitoring requires examining outcomes from a larger representative sample of plausible trajectories from the initial model [as in @hughes_integration_2025].
 
 Thorough analysis of representative samples of plausible trajectories is time consuming, and beyond the scope of this vignette. Here we show an example workflow with three example trajectories for each case (Figure \@ref(fig:fig-plot5)). This example clarifies that there are a range of possible outcomes from additional monitoring. In the case where true growth rate is plausibly high (99th percentile of the distribution of expected growth rate) 5 years of additional monitoring clarifies that this population is likely viable. In the case where true growth rate is plausibly low (1st percentile of the distribution of expected growth rate) 5 years of additional monitoring does not clarify whether the population is stable or declining. Additional collars do help distinguish the cases from one another, but additional benefits of that information should be weighed against additional costs. 
 
@@ -156,6 +156,144 @@ base
 ```
 
 TO DO: As in Hughes et al we can also explore monitoring scenarios using simulated trajectories from the national model instead of trajectories from a fitted Bayesian model.
+
+## Simulating repeating the historical monitoring strategy into the future
+
+In this example we simulate monitoring that matches the historical monitoring program to show how continuing the same monitoring strategy would affect the understanding of the population. 
+
+To repeat the past monitoring strategy we extract the number of collars in each year and use that to create a numTarget so that if there are fewer collars available due to deaths of malfunctions more will be added. 
+
+We will use the betaLimited model from above as the starting point to have a smaller number of years
+
+```{r}
+last_observed_year <- 2016 #historical baseline cutoff (last year of observed data)
+future_years <- 2017:2021 #future years to simulate
+
+simLimitedCorr <- trajectoriesFromBayesian(betaLimited, 
+                                           cPars = list(correlateRates = TRUE))
+
+surv <- surv_dataLimited %>%
+  mutate(Year = Year) %>%
+  filter(!is.na(Year)) %>%
+  filter(Year <= last_observed_year)
+
+#max collars per year
+collar_summary <- surv %>%
+  group_by(PopulationName, Year) %>%
+  summarise(
+    max_collars = max(StartTotal, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+#collars remaining from previous year
+collar_prev <- surv %>%
+  group_by(PopulationName, Year) %>%
+  summarise(
+    prev_collars = min(StartTotal, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+collar_prev$Year <- collar_prev$Year + 1
+
+#merge and compute new starts
+collar_summary <- merge(collar_summary, collar_prev)
+
+collar_summary$numStarts <- pmax(0, collar_summary$max_collars - collar_summary$prev_collars)
+
+#keep only relevant columns
+collar_summary <- collar_summary %>%
+  select(PopulationName, Year, numStarts)
+
+#Extract cow counts
+rec_simple <- recruit_dataLimited %>%
+  mutate(Year = Year) %>%
+  filter(!is.na(Cows)) %>%
+  group_by(Year, PopulationName) %>% 
+  summarise(Cows = sum(Cows)) %>% 
+  filter(Year <= last_observed_year) %>%
+  select(PopulationName, Year, Cows)
+
+#Combine survival (numStarts) and recruitment (Cows)
+historic_baseline <- merge(
+  collar_summary,
+  rec_simple,
+  by = c("PopulationName", "Year"),
+  all = TRUE
+)
+
+statusquo_future <- historic_baseline
+statusquo_future$Year <- statusquo_future$Year -min(statusquo_future$Year) + min(future_years)+1
+
+collaringStrategy <- "numStarts"
+#If collaringStrategy == "numStarts", numStarts collars will be added each year
+#If collaringStrategy == "numTarget", each year the number of collars will be topped up to numTarget
+
+freqStartsByYr <- subset(statusquo_future,
+  select = c("Year", "PopulationName", collaringStrategy)
+)
+
+cowCounts <- subset(statusquo_future, select = c(Year, PopulationName, Cows))
+
+# Needed inputs are cowCounts and freqStartsByYear tables.
+eParsIn <- eval(formals(bayesianScenariosWorkflow)$ePars)
+eParsIn$cowCounts <- cowCounts
+eParsIn$freqStartsByYear <- freqStartsByYr
+
+scns <- list()
+
+scns$obsYears <- 4
+scns$startYear <- 2015
+scns$projYears <- 2
+
+posteriorResult <- bayesianScenariosWorkflow(
+  scns, simLimitedCorr, eParsIn,
+  niters = niters, nthin = 10, returnSamples = T
+)
+# Check survival data
+surv <- posteriorResult$out$result$surv_data
+plotSurvivalSeries(surv)
+
+
+if (collaringStrategy == "numStarts") {
+  collar_summary <- subset(surv, Month == 4, select = c(PopulationName, Year, StartTotal))
+  collar_prev <- subset(surv, Month == 3, select = c(PopulationName, Year, StartTotal, Mortalities))
+  names(collar_prev)[3] <- c("prev_starts")
+  collar_summary <- merge(collar_summary, collar_prev)
+  collar_summary$prev_mortalities[is.na(collar_summary$Mortalities)] <- 0
+  collar_summary$numStarts <- collar_summary$StartTotal - 
+    collar_summary$prev_starts +
+    collar_summary$Mortalities 
+
+  target <- freqStartsByYr
+  names(target)[names(target) == "numStarts"] <- "numStartsTarget"
+  collar_summary <- merge(collar_summary, target)
+  collar_summary <- subset(collar_summary, Year != 2032)
+
+  # These numbers match until collars start falling off 4 yrs after deployment.
+  ggplot(collar_summary, aes(x = numStartsTarget, y = numStarts, colour = Year)) +
+    geom_point() +
+    facet_wrap(~PopulationName) +
+    geom_abline()
+
+  subset(collar_summary, numStarts < 0)
+} else {
+  collar_summary <- subset(surv, Month == 4, select = c(PopulationName, Year, StartTotal))
+  collar_summary <- merge(collar_summary, freqStartsByYr)
+  collar_summary <- subset(collar_summary, Year != 2032)
+
+  # This is working as expected :)
+  ggplot(collar_summary, aes(x = numTarget, y = StartTotal, colour = Year)) +
+    geom_point() +
+    facet_wrap(~PopulationName) +
+    geom_abline()
+
+  subset(collar_summary, StartTotal < numTarget)
+}
+
+
+```
+
+
 
 ## References
 
