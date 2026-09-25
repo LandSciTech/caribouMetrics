@@ -6,12 +6,14 @@ output:
         toc: true
 vignette: >
   %\VignetteIndexEntry{Simulation of monitoring scenarios informed by local data}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 bibliography: caribouMetricsPackageRefs.bib
 pkgdown:
   as_is: true
 link-citations: yes
+editor_options:
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -166,13 +168,19 @@ To repeat the past monitoring strategy we extract the number of collars in each 
 We will use the betaLimited model from above as the starting point to have a smaller number of years
 
 ```{r}
-last_observed_year <- 2016 #historical baseline cutoff (last year of observed data)
-future_years <- 2017:2021 #future years to simulate
+last_observed_year <- 2022 #historical baseline cutoff (last year of observed data)
+future_years <- 2023:2037 #future years to simulate
 
-simLimitedCorr <- trajectoriesFromBayesian(betaLimited, 
+surv_data <- bboudata::bbousurv_multi %>% addMissingYears(future_years)
+recruit_data <- bboudata::bbourecruit_multi %>% addMissingYears(future_years)
+
+betaRepeated<- estimateBayesianRates(surv_data, recruit_data, niters=niters,
+                                     return_mcmc = TRUE)
+
+simRepeated <- trajectoriesFromBayesian(betaRepeated, 
                                            cPars = list(correlateRates = TRUE))
 
-surv <- surv_dataLimited %>%
+surv <- surv_data %>%
   mutate(Year = Year) %>%
   filter(!is.na(Year)) %>%
   filter(Year <= last_observed_year)
@@ -205,7 +213,7 @@ collar_summary <- collar_summary %>%
   select(PopulationName, Year, numStarts)
 
 #Extract cow counts
-rec_simple <- recruit_dataLimited %>%
+rec_simple <- recruit_data%>%
   mutate(Year = Year) %>%
   filter(!is.na(Cows)) %>%
   group_by(Year, PopulationName) %>% 
@@ -241,12 +249,12 @@ eParsIn$freqStartsByYear <- freqStartsByYr
 
 scns <- list()
 
-scns$obsYears <- 4
-scns$startYear <- 2015
-scns$projYears <- 2
+scns$obsYears<- max(freqStartsByYr$Year)-min(simRepeated$recruit_data$Year)
+scns$startYear <- min(simRepeated$summary$Year)
+scns$projYears <- 20
 
 posteriorResult <- bayesianScenariosWorkflow(
-  scns, simLimitedCorr, eParsIn,
+  scns, simRepeated, eParsIn,
   niters = niters, nthin = 10, returnSamples = T
 )
 # Check survival data
