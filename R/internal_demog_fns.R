@@ -811,6 +811,17 @@ addMissingYears<- function(dat, addYears, year_start=formals(bboutools::bb_fit_r
   return(dat)
 }
 
+#' Get caribou year from calendar year and month
+#'
+#' @param x A data frame containing Year and Month columns 
+#' @inheritParams bboutools::bb_fit_recruitment 
+#'
+#' @returns
+#' A data frame with a new column added for CaribouYear
+#' 
+#' @inheritSection timeDefaults Interpretation of Years
+#' 
+#' @export
 getCaribouYear <- function(x,
                            year_start = formals(bboutools::bb_fit_recruitment)$year_start){
   x$CaribouYear <- x$Year
