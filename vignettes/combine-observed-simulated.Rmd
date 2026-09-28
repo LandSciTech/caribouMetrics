@@ -168,6 +168,7 @@ To repeat the past monitoring strategy we extract the number of collars in each 
 We will use the betaLimited model from above as the starting point to have a smaller number of years
 
 ```{r}
+# sort of working but need to figure out timing better. Right now obs end in 2015 and restart in 2025
 last_observed_year <- 2022 #historical baseline cutoff (last year of observed data)
 future_years <- 2023:2037 #future years to simulate
 
