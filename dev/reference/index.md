@@ -14,6 +14,8 @@ Overview of the package.
 Functions for predicting boreal caribou demographic rates and projecting
 population growth
 
+- [`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md)
+  : Add missing years to bboudata formatted data.
 - [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md)
   : Add variation to initial population size
 - [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md)
@@ -33,11 +35,12 @@ population growth
 - [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md)
   : Run the Bayesian caribou demographic projection app
 - [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md)
-  : Create summary table of demographic rates from survival and
-  recruitment surveys
+  : Model demographic rates from survival and recruitment surveys
 - [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md)
   [`estimateNationalRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md)
   : Sample demographic rates
+- [`getCaribouYear()`](https://landscitech.github.io/caribouMetrics/dev/reference/getCaribouYear.md)
+  : Get caribou year from calendar year and month
 - [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md)
   [`sampleNationalCoefs()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md)
   [`subsetNationalCoefs()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md)

@@ -75,6 +75,7 @@ trajectories from one model
 ## See also
 
 Caribou demography functions:
+[`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md),
 [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
@@ -87,6 +88,7 @@ Caribou demography functions:
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
+[`getCaribouYear()`](https://landscitech.github.io/caribouMetrics/dev/reference/getCaribouYear.md),
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
@@ -129,8 +131,8 @@ out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = si
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 20
-#>    Unobserved stochastic nodes: 84
-#>    Total graph size: 729
+#>    Unobserved stochastic nodes: 79
+#>    Total graph size: 694
 #> 
 #> Initializing model
 #> 

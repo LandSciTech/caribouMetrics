@@ -86,7 +86,11 @@ projections do not include variation in interannual variation over time.</p>
 
 
 <dt id="arg-n-">N0<a class="anchor" aria-label="anchor" href="#arg-n-"></a></dt>
-<dd><p>number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by <code><a href="addN0Variation.html">addN0Variation()</a></code>.</p></dd>
+<dd><p>number or dataframe. Optional. Initial population size(s). If NA
+(default) then population growth rate is \(\lambda_t=S_t*(1+cR_t)/s\). If a
+data frame N0 column is required, and PopulationName column is required if
+there is more than one row. Additional (optional) variation columns will be
+used by <code><a href="addN0Variation.html">addN0Variation()</a></code>.</p></dd>
 
 
 <dt id="arg-rbar-sbar">Rbar, Sbar<a class="anchor" aria-label="anchor" href="#arg-rbar-sbar"></a></dt>
@@ -146,8 +150,19 @@ and c.</p></li>
     <p>TODO explain varPersists and adjust.mu and adjust.sd</p>
     </div>
     <div class="section level2">
+    <h2 id="interpretation-of-years">Interpretation of Years<a class="anchor" aria-label="anchor" href="#interpretation-of-years"></a></h2>
+
+
+<p>Throughout the package a year is treated as the calendar year only if it is
+in a table that also contains a month column. In all other contexts year is
+treated as the caribou year which is the annual demographic cycle of caribou,
+measured from one calving season to the next. By default, April is set as the
+start of the caribou year.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Caribou demography functions:
+<code><a href="addMissingYears.html">addMissingYears()</a></code>,
 <code><a href="addN0Variation.html">addN0Variation()</a></code>,
 <code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>,
 <code><a href="bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow()</a></code>,
@@ -160,6 +175,7 @@ and c.</p></li>
 <code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code>,
 <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>,
 <code><a href="estimateNationalRates.html">estimateNationalRate()</a></code>,
+<code><a href="getCaribouYear.html">getCaribouYear()</a></code>,
 <code><a href="getNationalCoefficients.html">getNationalCoefficients()</a></code>,
 <code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code>,
 <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,

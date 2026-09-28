@@ -85,7 +85,7 @@ TO DO: Consider removing and replacing with call to trajectoriesFromSummary.</p>
 
 <dt id="arg-n-">N0<a class="anchor" aria-label="anchor" href="#arg-n-"></a></dt>
 <dd><p>Number or vector of numbers. Initial population size for one or
-more sample populations. If NA then population growth rate is $_t=S_t*(1+cR_t)/s$.</p></dd>
+more sample populations. If NA then population growth rate is \(\lambda_t=S_t*(1+cR_t/s)\).</p></dd>
 
 
 <dt id="arg-r-bar">R_bar<a class="anchor" aria-label="anchor" href="#arg-r-bar"></a></dt>
@@ -135,6 +135,7 @@ returns example trajectories as well.</p></dd>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Caribou demography functions:
+<code><a href="addMissingYears.html">addMissingYears()</a></code>,
 <code><a href="addN0Variation.html">addN0Variation()</a></code>,
 <code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>,
 <code><a href="bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow()</a></code>,
@@ -147,6 +148,7 @@ returns example trajectories as well.</p></dd>
 <code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code>,
 <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>,
 <code><a href="estimateNationalRates.html">estimateNationalRate()</a></code>,
+<code><a href="getCaribouYear.html">getCaribouYear()</a></code>,
 <code><a href="getNationalCoefficients.html">getNationalCoefficients()</a></code>,
 <code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code>,
 <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
@@ -175,16 +177,16 @@ returns example trajectories as well.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  NA 0.9469850 0.9637683 NA 0.1481581 0.07407905 0.8816716         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  NA 0.9145061 0.9381275 NA 0.1549886 0.07749428 0.8487340         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  NA 0.9767545 0.9637683 NA 0.1664276 0.08321378 0.9017190         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  NA 0.9439132 0.9381275 NA 0.1409648 0.07048241 0.8817643         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 NA 0.9593386 0.9637683 NA 0.2249204 0.11246022 0.8623576         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 NA 0.9023763 0.9381275 NA 0.1697245 0.08486224 0.8317888         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 NA 0.9614271 0.9637683 NA 0.1378708 0.06893541 0.8994249         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 NA 0.9114367 0.9381275 NA 0.1076599 0.05382993 0.8648803         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 NA 0.9645818 0.9637683 NA 0.2295513 0.11477565 0.8652699         NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 NA 1.0048633 0.9381275 NA 0.2029774 0.10148871 0.9122775         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  NA 1.0697521 0.9882726 NA 0.3345976 0.16729881 0.9164338         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  NA 0.9631120 0.9587792 NA 0.1816777 0.09083883 0.8829095         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  NA 0.9497766 0.9882726 NA 0.2452888 0.12264438 0.8460173         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  NA 0.9427755 0.9587792 NA 0.1716393 0.08581965 0.8682616         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 NA 0.9716352 0.9882726 NA 0.1489708 0.07448539 0.9042796         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 NA 0.9822163 0.9587792 NA 0.1770774 0.08853871 0.9023256         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 NA 1.0517531 0.9882726 NA 0.2390058 0.11950291 0.9394823         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 NA 0.9547342 0.9587792 NA 0.1514545 0.07572725 0.8875244         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 NA 1.0216545 0.9882726 NA 0.2470653 0.12353264 0.9093234         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 NA 0.9923442 0.9587792 NA 0.2536507 0.12682535 0.8806548         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    surviving_adFemales id time type  scn</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1                   NA  1    1 mean base</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2                   NA  1    2 mean base</span>

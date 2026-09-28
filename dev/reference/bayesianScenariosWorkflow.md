@@ -58,13 +58,14 @@ bayesianScenariosWorkflow(
 
 - priors:
 
-  list. Optional. If disturbance is NA, this should be
+  list. Optional. If disturbance is NULL, this should be
   list(priors_survival=c(...),priors_recruitment=c(...)); see
-  [`bboutools::bb_priors_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html)
+  [`bboutools::bb_priors_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html)
   and
-  [`bboutools::bb_priors_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html)
-  for details. If disturbance is not NA, see `betaNationalPriors` for
-  details.
+  [`bboutools::bb_priors_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html)
+  for details. If disturbance is not NULL, see
+  [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md)
+  for details.
 
 - niters:
 
@@ -83,9 +84,9 @@ bayesianScenariosWorkflow(
 - ...:
 
   Other parameters passed on to
-  [`bboutools::bb_fit_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  [`bboutools::bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
   and
-  [`bboutools::bb_fit_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
+  [`bboutools::bb_fit_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
 
 ## Value
 
@@ -97,6 +98,7 @@ error log for any scenarios that failed to run.
 ## See also
 
 Caribou demography functions:
+[`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md),
 [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
 [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md),
@@ -108,6 +110,7 @@ Caribou demography functions:
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
+[`getCaribouYear()`](https://landscitech.github.io/caribouMetrics/dev/reference/getCaribouYear.md),
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
@@ -160,8 +163,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 16
-#>    Unobserved stochastic nodes: 213
-#>    Total graph size: 680
+#>    Unobserved stochastic nodes: 203
+#>    Total graph size: 652
 #> 
 #> Initializing model
 #> 
@@ -188,8 +191,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 36
-#>    Unobserved stochastic nodes: 243
-#>    Total graph size: 820
+#>    Unobserved stochastic nodes: 233
+#>    Total graph size: 792
 #> 
 #> Initializing model
 #> 
@@ -216,8 +219,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 16
-#>    Unobserved stochastic nodes: 213
-#>    Total graph size: 680
+#>    Unobserved stochastic nodes: 203
+#>    Total graph size: 652
 #> 
 #> Initializing model
 #> 
@@ -225,6 +228,7 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #> NOTE: Stopping adaptation
 #> 
 #> 
+#> Warning: The expected number of cows in composition survey exceeds population size. Adjusting cows in survey for consistency.
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -244,8 +248,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 36
-#>    Unobserved stochastic nodes: 243
-#>    Total graph size: 820
+#>    Unobserved stochastic nodes: 233
+#>    Total graph size: 792
 #> 
 #> Initializing model
 #> 

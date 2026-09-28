@@ -105,7 +105,7 @@ discrete numbers of animals used by <a href="https://doi.org/10.1002/eap.2816" c
 
 <dl><dt id="arg-n-">N0<a class="anchor" aria-label="anchor" href="#arg-n-"></a></dt>
 <dd><p>Number or vector of numbers. Initial population size for one or
-more sample populations. If NA then population growth rate is $_t=S_t*(1+cR_t)/s$.</p></dd>
+more sample populations. If NA then population growth rate is \(\lambda_t=S_t*(1+cR_t/s)\).</p></dd>
 
 
 <dt id="arg-numsteps">numSteps<a class="anchor" aria-label="anchor" href="#arg-numsteps"></a></dt>
@@ -198,7 +198,7 @@ for each sample population projected for numSteps years.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>If R_annual and S_annual are provided, interannual variation in survival and
 recruitment is modelled as in a logistic glmm with random effect of year.</p>
-<p>If initial populations size N0 is NA then population growth rate is $_t=S_t*(1+cR_t/s)$.
+<p>If initial populations size N0 is NA then population growth rate is \(\lambda_t=S_t*(1+cR_t/s)\).
 In this case density dependence (P_0,P_K,a,b,K,r_max) and demographic stochasticity (probOption) are ignored.</p>
 <p>See <code><a href="../articles/caribouDemography.html">vignette("caribouDemography")</a></code>
 and <a href="https://doi.org/10.1016/j.ecoinf.2025.103095" class="external-link">Hughes et al. (2025)</a> for
@@ -231,6 +231,7 @@ Applications, 33(3), p.e2816. <a href="https://doi.org/10.1002/eap.2816" class="
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Caribou demography functions:
+<code><a href="addMissingYears.html">addMissingYears()</a></code>,
 <code><a href="addN0Variation.html">addN0Variation()</a></code>,
 <code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>,
 <code><a href="bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow()</a></code>,
@@ -242,6 +243,7 @@ Applications, 33(3), p.e2816. <a href="https://doi.org/10.1002/eap.2816" class="
 <code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code>,
 <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>,
 <code><a href="estimateNationalRates.html">estimateNationalRate()</a></code>,
+<code><a href="getCaribouYear.html">getCaribouYear()</a></code>,
 <code><a href="getNationalCoefficients.html">getNationalCoefficients()</a></code>,
 <code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code>,
 <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
@@ -258,10 +260,10 @@ Applications, 33(3), p.e2816. <a href="https://doi.org/10.1002/eap.2816" class="
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">caribouPopGrowth</span><span class="op">(</span><span class="fl">100</span>, <span class="fl">2</span>, <span class="fl">0.5</span>, <span class="fl">0.7</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    N0 lambda lambdaE  N       R_t      X_t       S_t n_recruits</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 100    0.8   0.875 64 0.2096121 0.104806 0.7397656          6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    N0    lambda lambdaE  N       R_t       X_t     S_t n_recruits</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 100 0.8544004   0.875 73 0.3333577 0.1666789 0.64262         10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   surviving_adFemales</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  63</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

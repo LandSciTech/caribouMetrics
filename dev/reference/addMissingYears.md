@@ -1,50 +1,51 @@
-# Add variation to initial population size
+# Add missing years to bboudata formatted data.
 
-Applies stochastic variation to initial population size estimates
-(`N0`). If uncertainty columns are present, a new value of `N0` is
-sampled for each row. When `N.sd` is provided, variation is sampled from
-either a Poisson distribution (if `N.sd = sqrt(N0)`) or a truncated
-Normal distribution. When `N.lower` and `N.upper` are provided,
-variation is sampled from a Uniform distribution bounded by those
-values. Sampled values are rounded to integers and constrained to any
-specified lower and upper bounds.
+Add years with missing values to bboudata formatted survival or
+recruitment data. This will cause estimated rates to be returned for
+those years by fitted Bayesian Models.
 
 ## Usage
 
 ``` r
-addN0Variation(popInfo, forceDataFrame = F)
+addMissingYears(
+  dat,
+  addYears,
+  year_start = formals(bboutools::bb_fit_recruitment)$year_start
+)
 ```
 
 ## Arguments
 
-- popInfo:
+- dat:
 
-  numeric, list, or data.frame. Initial population size information.
-  Must contain an `N0` column or value. Optional columns `N.sd`,
-  `N.lower`, and `N.upper` specify uncertainty in abundance estimates.
+  data.frame. Survival or recruitment data in bboudata format.
 
-- forceDataFrame:
+- addYears:
 
-  logical. If `TRUE` and the result is numeric, return a data frame with
-  column `N0`. Default `FALSE`.
+  numeric. Vector of years to add to the data.
+
+- year_start:
+
+  A whole number between 1 and 12 indicating the start of the caribou
+  (i.e., biological) year. By default, April is set as the start of the
+  caribou year.
 
 ## Value
 
-A modified version of `popInfo` with updated `N0` values. If no
-uncertainty columns are present, the input is returned unchanged.
+a modified version of `dat` with additional rows for added Years.
 
-## Details
+## Interpretation of Years
 
-This function is intended to be called at the same stage of simulation
-and projection workflows as
-[`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md)
-so that uncertainty in abundance estimates is propagated through
-subsequent analyses.
+Throughout the package a year is treated as the calendar year only if it
+is in a table that also contains a month column. In all other contexts
+year is treated as the caribou year which is the annual demographic
+cycle of caribou, measured from one calving season to the next. By
+default, April is set as the start of the caribou year.
 
 ## See also
 
 Caribou demography functions:
-[`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md),
+[`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
 [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md),
@@ -68,40 +69,3 @@ Caribou demography functions:
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
 [`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
-
-## Examples
-
-``` r
-addN0Variation(500)
-#> [1] 500
-
-addN0Variation(data.frame(PopulationName = rep("A", 10),
-                          N0 = 500, N.sd = 50))
-#>    PopulationName  N0
-#> 1               A 430
-#> 2               A 513
-#> 3               A 378
-#> 4               A 500
-#> 5               A 531
-#> 6               A 557
-#> 7               A 409
-#> 8               A 488
-#> 9               A 488
-#> 10              A 486
-
-addN0Variation(data.frame(PopulationName = rep("A", 10),
-                          N0 = 500,
-                          N.lower = 400,
-                          N.upper = 600))
-#>    PopulationName  N0
-#> 1               A 458
-#> 2               A 536
-#> 3               A 547
-#> 4               A 439
-#> 5               A 596
-#> 6               A 548
-#> 7               A 410
-#> 8               A 506
-#> 9               A 539
-#> 10              A 538
-```

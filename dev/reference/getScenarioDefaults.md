@@ -136,9 +136,9 @@ monitoringDefaults(
 - ...:
 
   Other parameters passed on to
-  [`bboutools::bb_fit_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  [`bboutools::bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
   and
-  [`bboutools::bb_fit_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
+  [`bboutools::bb_fit_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
 
 - projYears:
 
@@ -184,7 +184,7 @@ monitoringDefaults(
 
   Number or vector of numbers. Initial population size for one or more
   sample populations. If NA then population growth rate is
-  \$\_t=S_t\*(1+cR_t)/s\$.
+  \\\lambda_t=S_t\*(1+cR_t/s)\\.
 
 - qMin:
 
@@ -277,9 +277,18 @@ a data.frame of parameter values and for `getScenarioDefaults()`, a
 label column that combines all the parameter names and values into a
 string
 
+## Interpretation of Years
+
+Throughout the package a year is treated as the calendar year only if it
+is in a table that also contains a month column. In all other contexts
+year is treated as the caribou year which is the annual demographic
+cycle of caribou, measured from one calving season to the next. By
+default, April is set as the start of the caribou year.
+
 ## See also
 
 Caribou demography functions:
+[`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md),
 [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
@@ -292,6 +301,7 @@ Caribou demography functions:
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
+[`getCaribouYear()`](https://landscitech.github.io/caribouMetrics/dev/reference/getCaribouYear.md),
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
 [`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),

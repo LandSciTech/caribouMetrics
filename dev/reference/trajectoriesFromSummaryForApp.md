@@ -42,7 +42,7 @@ trajectoriesFromSummaryForApp(
 
   Number or vector of numbers. Initial population size for one or more
   sample populations. If NA then population growth rate is
-  \$\_t=S_t\*(1+cR_t)/s\$.
+  \\\lambda_t=S_t\*(1+cR_t/s)\\.
 
 - R_bar:
 
@@ -93,6 +93,7 @@ a data.frame
 ## See also
 
 Caribou demography functions:
+[`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md),
 [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
@@ -105,6 +106,7 @@ Caribou demography functions:
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
+[`getCaribouYear()`](https://landscitech.github.io/caribouMetrics/dev/reference/getCaribouYear.md),
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
@@ -133,16 +135,16 @@ Caribou demography functions:
 #> 3  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
 #> 4  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
 #> 5  NA 0.9483000 0.9483000 NA 0.1800000 0.09000000 0.8700000         NA
-#> 6  NA 0.9469850 0.9637683 NA 0.1481581 0.07407905 0.8816716         NA
-#> 7  NA 0.9145061 0.9381275 NA 0.1549886 0.07749428 0.8487340         NA
-#> 8  NA 0.9767545 0.9637683 NA 0.1664276 0.08321378 0.9017190         NA
-#> 9  NA 0.9439132 0.9381275 NA 0.1409648 0.07048241 0.8817643         NA
-#> 10 NA 0.9593386 0.9637683 NA 0.2249204 0.11246022 0.8623576         NA
-#> 11 NA 0.9023763 0.9381275 NA 0.1697245 0.08486224 0.8317888         NA
-#> 12 NA 0.9614271 0.9637683 NA 0.1378708 0.06893541 0.8994249         NA
-#> 13 NA 0.9114367 0.9381275 NA 0.1076599 0.05382993 0.8648803         NA
-#> 14 NA 0.9645818 0.9637683 NA 0.2295513 0.11477565 0.8652699         NA
-#> 15 NA 1.0048633 0.9381275 NA 0.2029774 0.10148871 0.9122775         NA
+#> 6  NA 1.0697521 0.9882726 NA 0.3345976 0.16729881 0.9164338         NA
+#> 7  NA 0.9631120 0.9587792 NA 0.1816777 0.09083883 0.8829095         NA
+#> 8  NA 0.9497766 0.9882726 NA 0.2452888 0.12264438 0.8460173         NA
+#> 9  NA 0.9427755 0.9587792 NA 0.1716393 0.08581965 0.8682616         NA
+#> 10 NA 0.9716352 0.9882726 NA 0.1489708 0.07448539 0.9042796         NA
+#> 11 NA 0.9822163 0.9587792 NA 0.1770774 0.08853871 0.9023256         NA
+#> 12 NA 1.0517531 0.9882726 NA 0.2390058 0.11950291 0.9394823         NA
+#> 13 NA 0.9547342 0.9587792 NA 0.1514545 0.07572725 0.8875244         NA
+#> 14 NA 1.0216545 0.9882726 NA 0.2470653 0.12353264 0.9093234         NA
+#> 15 NA 0.9923442 0.9587792 NA 0.2536507 0.12682535 0.8806548         NA
 #>    surviving_adFemales id time type  scn
 #> 1                   NA  1    1 mean base
 #> 2                   NA  1    2 mean base

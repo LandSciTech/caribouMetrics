@@ -62,6 +62,7 @@ monitoring decisions. Ecological Informatics, 87, p.103095.
 ## See also
 
 Caribou demography functions:
+[`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md),
 [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
@@ -73,6 +74,7 @@ Caribou demography functions:
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
+[`getCaribouYear()`](https://landscitech.github.io/caribouMetrics/dev/reference/getCaribouYear.md),
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
@@ -96,8 +98,8 @@ compositionBiasCorrection(w = 6,
                           u = runif(nr, 0, 0.2),
                           z = runif(nr, 0, 0.2),
                           approx = FALSE)
-#>  [1] 0.9140981 1.1060711 0.9517291 0.9781318 1.0990677 1.1677726 1.1205561
-#>  [8] 1.0093503 1.1332668 1.0350580
+#>  [1] 1.0639150 1.0139729 1.0255901 0.9876233 1.1125626 1.1282081 1.1331082
+#>  [8] 1.1218483 1.0728507 1.0222012
 
 compositionBiasCorrection(w = 6,
                           q = runif(nr, 0, 0.6),
@@ -107,6 +109,6 @@ compositionBiasCorrection(w = 6,
 #> # A tibble: 1 × 5
 #>       w     m       v    sig2     mu
 #>   <dbl> <dbl>   <dbl>   <dbl>  <dbl>
-#> 1     6  1.10 0.00896 0.00737 0.0919
+#> 1     6  1.02 0.00551 0.00524 0.0206
 
 ```

@@ -38,11 +38,11 @@ figHeight <- 10
 #Note - set niters to 100 to run quickly when testing. Set to 1000 for complete results.
 niters <- 1000
 
-#Note need to remove single month of data from April 2016 in order to add simulated data in caribou year 2016.
-surv_data <- addMissingYears(bboudata::bbousurv_a %>% filter((Year > 2010)&!((Year==2016)&(Month==4))),
-                             seq(2016,2022))
+surv_data <- addMissingYears(bboudata::bbousurv_a %>% 
+                               filter((Year > 2010)),
+                             seq(2016,2022)) %>% getCaribouYear()
 recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% filter(Year > 2010),
-                                seq(2016,2022))
+                                seq(2016,2022)) %>% getCaribouYear()
 
 surv_dataNone <- surv_data %>% filter(CaribouYear>2017)
 recruit_dataNone <- recruit_data %>% filter(CaribouYear>2017)
@@ -77,7 +77,7 @@ data. Methods for simulating monitoring of example trajectories are
 described in Hughes et al. ([2025](#ref-hughes_integration_2025)).
 
 In these examples, an additional 5 years of monitoring of a plausible
-low growth rate trajectory with 5 intial years of data does not provide
+low growth rate trajectory with 5 initial years of data does not provide
 additional clarity about whether the population is likely to decline or
 not in future (Figure [2](#fig:fig-plot2)). An additional 5 years of
 monitoring is more likely to reduce uncertainty when there is limited
@@ -255,6 +255,185 @@ growth rate that is greater than 0.99).
 TO DO: As in Hughes et al we can also explore monitoring scenarios using
 simulated trajectories from the national model instead of trajectories
 from a fitted Bayesian model.
+
+## 3 Simulating repeating the historical monitoring strategy into the future
+
+In this example we simulate monitoring that matches the historical
+monitoring program to show how continuing the same monitoring strategy
+would affect the understanding of the population.
+
+To repeat the past monitoring strategy we extract the number of collars
+in each year and use that to create a numTarget so that if there are
+fewer collars available due to deaths of malfunctions more will be
+added.
+
+We will use the betaLimited model from above as the starting point to
+have a smaller number of years
+
+``` r
+
+# sort of working but need to figure out timing better. Right now obs end in 2015 and restart in 2025
+last_observed_year <- 2022 #historical baseline cutoff (last year of observed data)
+future_years <- 2023:2037 #future years to simulate
+
+surv_data <- bboudata::bbousurv_multi %>% addMissingYears(future_years)
+recruit_data <- bboudata::bbourecruit_multi %>% addMissingYears(future_years)
+
+betaRepeated<- estimateBayesianRates(surv_data, recruit_data, niters=niters,
+                                     return_mcmc = TRUE)
+
+simRepeated <- trajectoriesFromBayesian(betaRepeated, 
+                                           cPars = list(correlateRates = TRUE))
+
+surv <- surv_data %>%
+  mutate(Year = Year) %>%
+  filter(!is.na(Year)) %>%
+  filter(Year <= last_observed_year)
+
+#max collars per year
+collar_summary <- surv %>%
+  group_by(PopulationName, Year) %>%
+  summarise(
+    max_collars = max(StartTotal, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+#collars remaining from previous year
+collar_prev <- surv %>%
+  group_by(PopulationName, Year) %>%
+  summarise(
+    prev_collars = min(StartTotal, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+collar_prev$Year <- collar_prev$Year + 1
+
+#merge and compute new starts
+collar_summary <- merge(collar_summary, collar_prev)
+
+collar_summary$numStarts <- pmax(0, collar_summary$max_collars - collar_summary$prev_collars)
+
+#keep only relevant columns
+collar_summary <- collar_summary %>%
+  select(PopulationName, Year, numStarts)
+
+#Extract cow counts
+rec_simple <- recruit_data%>%
+  mutate(Year = Year) %>%
+  filter(!is.na(Cows)) %>%
+  group_by(Year, PopulationName) %>% 
+  summarise(Cows = sum(Cows)) %>% 
+  filter(Year <= last_observed_year) %>%
+  select(PopulationName, Year, Cows)
+
+#Combine survival (numStarts) and recruitment (Cows)
+historic_baseline <- merge(
+  collar_summary,
+  rec_simple,
+  by = c("PopulationName", "Year"),
+  all = TRUE
+)
+
+statusquo_future <- historic_baseline
+statusquo_future$Year <- statusquo_future$Year -min(statusquo_future$Year) + min(future_years)+1
+
+collaringStrategy <- "numStarts"
+#If collaringStrategy == "numStarts", numStarts collars will be added each year
+#If collaringStrategy == "numTarget", each year the number of collars will be topped up to numTarget
+
+freqStartsByYr <- subset(statusquo_future,
+  select = c("Year", "PopulationName", collaringStrategy)
+)
+
+cowCounts <- subset(statusquo_future, select = c(Year, PopulationName, Cows))
+
+# Needed inputs are cowCounts and freqStartsByYear tables.
+eParsIn <- eval(formals(bayesianScenariosWorkflow)$ePars)
+eParsIn$cowCounts <- cowCounts
+eParsIn$freqStartsByYear <- freqStartsByYr
+
+scns <- list()
+
+scns$obsYears<- max(freqStartsByYr$Year)-min(simRepeated$recruit_data$Year)
+scns$startYear <- min(simRepeated$summary$Year)
+scns$projYears <- 20
+
+posteriorResult <- bayesianScenariosWorkflow(
+  scns, simRepeated, eParsIn,
+  niters = niters, nthin = 10, returnSamples = T
+)
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 644
+#>    Unobserved stochastic nodes: 1588
+#>    Total graph size: 12595
+#> 
+#> Initializing model
+#> 
+#> Compiling model graph
+#>    Resolving undeclared variables
+#>    Allocating nodes
+#> Graph information:
+#>    Observed stochastic nodes: 98
+#>    Unobserved stochastic nodes: 769
+#>    Total graph size: 5646
+#> 
+#> Initializing model
+# Check survival data
+surv <- posteriorResult$out$result$surv_data
+plotSurvivalSeries(surv)
+```
+
+![](combine-observed-simulated_files/figure-html/unnamed-chunk-3-1.png)
+
+``` r
+
+
+
+if (collaringStrategy == "numStarts") {
+  collar_summary <- subset(surv, Month == 4, select = c(PopulationName, Year, StartTotal))
+  collar_prev <- subset(surv, Month == 3, select = c(PopulationName, Year, StartTotal, Mortalities))
+  names(collar_prev)[3] <- c("prev_starts")
+  collar_summary <- merge(collar_summary, collar_prev)
+  collar_summary$prev_mortalities[is.na(collar_summary$Mortalities)] <- 0
+  collar_summary$numStarts <- collar_summary$StartTotal - 
+    collar_summary$prev_starts +
+    collar_summary$Mortalities 
+
+  target <- freqStartsByYr
+  names(target)[names(target) == "numStarts"] <- "numStartsTarget"
+  collar_summary <- merge(collar_summary, target)
+  collar_summary <- subset(collar_summary, Year != 2032)
+
+  # These numbers match until collars start falling off 4 yrs after deployment.
+  ggplot(collar_summary, aes(x = numStartsTarget, y = numStarts, colour = Year)) +
+    geom_point() +
+    facet_wrap(~PopulationName) +
+    geom_abline()
+
+  subset(collar_summary, numStarts < 0)
+} else {
+  collar_summary <- subset(surv, Month == 4, select = c(PopulationName, Year, StartTotal))
+  collar_summary <- merge(collar_summary, freqStartsByYr)
+  collar_summary <- subset(collar_summary, Year != 2032)
+
+  # This is working as expected :)
+  ggplot(collar_summary, aes(x = numTarget, y = StartTotal, colour = Year)) +
+    geom_point() +
+    facet_wrap(~PopulationName) +
+    geom_abline()
+
+  subset(collar_summary, StartTotal < numTarget)
+}
+#>    PopulationName Year StartTotal prev_starts Mortalities prev_mortalities
+#> 31              B 2038          1           5           0               NA
+#> 47              C 2038          1          12           0               NA
+#>    numStarts numStartsTarget
+#> 31        -4               0
+#> 47       -11               0
+```
 
 ## References
 

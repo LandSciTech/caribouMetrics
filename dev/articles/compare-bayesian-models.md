@@ -81,12 +81,12 @@ betaAnthroFile <- here::here("results/betaAnthroExample.rds")
 
 #Note need to remove single month of data from April 2016 in order to add simulated data in caribou year 2016.
 surv_data <- addMissingYears(bboudata::bbousurv_a %>% filter((Year > 2010)&!((Year==2016)&(Month==4))),
-                             seq(2016,2022))
+                             seq(2016,2022)) %>% getCaribouYear()
 recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% filter(Year > 2010),
-                                seq(2016,2022))
+                                seq(2016,2022)) %>% getCaribouYear()
 
 surv_dataNone <- surv_data %>% filter(CaribouYear>2017)
-recruit_dataNone <- recruit_data %>% filter(CaribouYear>2017)
+recruit_dataNone <- recruit_data %>%  filter(CaribouYear>2017)
 
 surv_dataLimited <- surv_data %>% filter(CaribouYear > 2013)
 recruit_dataLimited <- recruit_data %>% filter(CaribouYear > 2013)

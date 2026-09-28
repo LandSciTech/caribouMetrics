@@ -46,7 +46,7 @@ caribouPopGrowth(
 
   Number or vector of numbers. Initial population size for one or more
   sample populations. If NA then population growth rate is
-  \$\_t=S_t\*(1+cR_t)/s\$.
+  \\\lambda_t=S_t\*(1+cR_t/s)\\.
 
 - numSteps:
 
@@ -142,7 +142,7 @@ and recruitment is modelled as in a logistic glmm with random effect of
 year.
 
 If initial populations size N0 is NA then population growth rate is
-\$\_t=S_t\*(1+cR_t/s)\$. In this case density dependence
+\\\lambda_t=S_t\*(1+cR_t/s)\\. In this case density dependence
 (P_0,P_K,a,b,K,r_max) and demographic stochasticity (probOption) are
 ignored.
 
@@ -182,6 +182,7 @@ Ecological Applications, 33(3), p.e2816.
 ## See also
 
 Caribou demography functions:
+[`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md),
 [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
@@ -193,6 +194,7 @@ Caribou demography functions:
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
+[`getCaribouYear()`](https://landscitech.github.io/caribouMetrics/dev/reference/getCaribouYear.md),
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
@@ -209,8 +211,8 @@ Caribou demography functions:
 
 ``` r
 caribouPopGrowth(100, 2, 0.5, 0.7)
-#>    N0 lambda lambdaE  N       R_t      X_t       S_t n_recruits
-#> 1 100    0.8   0.875 64 0.2096121 0.104806 0.7397656          6
+#>    N0    lambda lambdaE  N       R_t       X_t     S_t n_recruits
+#> 1 100 0.8544004   0.875 73 0.3333577 0.1666789 0.64262         10
 #>   surviving_adFemales
-#> 1                  58
+#> 1                  63
 ```

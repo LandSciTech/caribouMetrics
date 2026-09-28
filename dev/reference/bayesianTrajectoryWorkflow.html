@@ -79,8 +79,10 @@ columns "Anthro","Fire_excl_anthro", and "Year".</p></dd>
 
 
 <dt id="arg-priors">priors<a class="anchor" aria-label="anchor" href="#arg-priors"></a></dt>
-<dd><p>list. Optional. If disturbance is NA, this should be list(priors_survival=c(...),priors_recruitment=c(...)); see <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html" class="external-link">bboutools::bb_priors_survival</a></code> and <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html" class="external-link">bboutools::bb_priors_recruitment</a></code> for details.
-If disturbance is not NA, see <code>betaNationalPriors</code> for details.</p></dd>
+<dd><p>list. Optional. If disturbance is NULL, this should be
+list(priors_survival=c(...),priors_recruitment=c(...)); see
+<code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html" class="external-link">bboutools::bb_priors_survival()</a></code> and <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html" class="external-link">bboutools::bb_priors_recruitment()</a></code> for
+details. If disturbance is not NULL, see <code><a href="betaNationalPriors.html">betaNationalPriors()</a></code> for details.</p></dd>
 
 
 <dt id="arg-startyear-endyear">startYear, endYear<a class="anchor" aria-label="anchor" href="#arg-startyear-endyear"></a></dt>
@@ -89,7 +91,11 @@ period and the end of the projection period.</p></dd>
 
 
 <dt id="arg-n-">N0<a class="anchor" aria-label="anchor" href="#arg-n-"></a></dt>
-<dd><p>number or dataframe. Optional. Initial population size(s). If NA (default) then population growth rate is $_t=S_t*(1+cR_t)/s$. If a data frame N0 column is required, and PopulationName column is required if there is more than one row. Additional (optional) variation columns will be used by <code><a href="addN0Variation.html">addN0Variation()</a></code>.</p></dd>
+<dd><p>number or dataframe. Optional. Initial population size(s). If NA
+(default) then population growth rate is \(\lambda_t=S_t*(1+cR_t)/s\). If a
+data frame N0 column is required, and PopulationName column is required if
+there is more than one row. Additional (optional) variation columns will be
+used by <code><a href="addN0Variation.html">addN0Variation()</a></code>.</p></dd>
 
 
 <dt id="arg-returnsamples">returnSamples<a class="anchor" aria-label="anchor" href="#arg-returnsamples"></a></dt>
@@ -102,7 +108,8 @@ an argument is included in this list it will override the named argument.</p></d
 
 
 <dt id="arg-niters">niters<a class="anchor" aria-label="anchor" href="#arg-niters"></a></dt>
-<dd><p>integer. The number of iterations per chain after thinning and burn-in.</p></dd>
+<dd><p>integer. The number of iterations per chain after thinning and
+burn-in.</p></dd>
 
 
 <dt id="arg-nthin">nthin<a class="anchor" aria-label="anchor" href="#arg-nthin"></a></dt>
@@ -110,8 +117,8 @@ an argument is included in this list it will override the named argument.</p></d
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other parameters passed on to <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival</a></code> and
-<code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment</a></code>.</p></dd>
+<dd><p>Other parameters passed on to <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival()</a></code> and
+<code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -132,8 +139,19 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 </ul></li>
 </ul></div>
     <div class="section level2">
+    <h2 id="interpretation-of-years">Interpretation of Years<a class="anchor" aria-label="anchor" href="#interpretation-of-years"></a></h2>
+
+
+<p>Throughout the package a year is treated as the calendar year only if it is
+in a table that also contains a month column. In all other contexts year is
+treated as the caribou year which is the annual demographic cycle of caribou,
+measured from one calving season to the next. By default, April is set as the
+start of the caribou year.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Caribou demography functions:
+<code><a href="addMissingYears.html">addMissingYears()</a></code>,
 <code><a href="addN0Variation.html">addN0Variation()</a></code>,
 <code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>,
 <code><a href="betaNationalPriors.html">betaNationalPriors()</a></code>,
@@ -145,6 +163,7 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code>,
 <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>,
 <code><a href="estimateNationalRates.html">estimateNationalRate()</a></code>,
+<code><a href="getCaribouYear.html">getCaribouYear()</a></code>,
 <code><a href="getNationalCoefficients.html">getNationalCoefficients()</a></code>,
 <code><a href="getScenarioDefaults.html">getScenarioDefaults()</a></code>,
 <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
@@ -170,37 +189,39 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <span class="r-in"><span>    disturbance <span class="op">=</span> <span class="cn">NULL</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>missing years of recruitment data: 1985, 1986, 1987, 1988</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>rec_pred and surv_pred do not contain the same years</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>rec_pred and surv_pred do not contain the same years</span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mod</span>, max.level <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ result :List of 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ summary     :'data.frame':	320 obs. of  8 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ summary     :'data.frame':	300 obs. of  8 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ surv_data   :'data.frame':	384 obs. of  9 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ recruit_data:'data.frame':	32 obs. of  9 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ recruit_data:'data.frame':	31 obs. of  9 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ popInfo     :'data.frame':	3000 obs. of  4 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ inData :List of 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ disturbanceIn: NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ parTab :'data.frame':	1 obs. of  18 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ PopulationName: chr "A"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar         : num 0.198</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_sd          : num 0.0888</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar         : num 0.199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_sd          : num 0.0856</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_iv_mean     : num 0.322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_iv_shape    : num 13.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar_lower   : num 0.171</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_iv_shape    : num 13.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar_lower   : num 0.173</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R_bar_upper   : num 0.227</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar         : num 0.874</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_sd          : num 0.171</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_mean     : num 0.363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_shape    : num 4.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_lower   : num 0.836</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_upper   : num 0.907</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar         : num 0.872</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_sd          : num 0.168</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_mean     : num 0.329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_iv_shape    : num 3.17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_lower   : num 0.835</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ S_bar_upper   : num 0.908</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ N0            : logi NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nCollarYears  : num NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nSurvYears    : int 32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nCowsAllYears : int NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nRecruitYears : int 31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nCowsAllYears : num NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nRecruitYears : int 32</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ parList:List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Rbar:'data.frame':	32 obs. of  7 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Sbar:'data.frame':	32 obs. of  7 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Rbar:'data.frame':	30 obs. of  7 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Sbar:'data.frame':	30 obs. of  7 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Siv :'data.frame':	1 obs. of  2 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ Riv :'data.frame':	1 obs. of  2 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ type: chr "bbou"</span>
@@ -230,8 +251,8 @@ combination of "MetricTypeID", "Replicate", "Year" and "LambdaPercentile"</p></l
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Allocating nodes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Graph information:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Observed stochastic nodes: 20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 729</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Unobserved stochastic nodes: 79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Total graph size: 694</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initializing model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

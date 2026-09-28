@@ -439,7 +439,7 @@ traj <- plotTrajectories(popMetrics2,
                          metrics = c("Population growth rate", "Expected growth rate",
                                      "Female population size", 
                                      "Expected recruitment", "Recruitment", 
-                                     "Expected survival", "Survival"))
+                                     "Expected survival", "Adult female survival"))
 traj
 ```
 
@@ -572,6 +572,12 @@ case.
 ``` r
 
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
+#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
+#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
+#> years
+#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
+#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
+#> years
 ```
 
 ``` r
@@ -579,7 +585,7 @@ popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
 proj <-  plotTrajectories(popMetricsBayes, 
                           metrics = c("Population growth rate", "Expected growth rate",
                                      "Expected recruitment", "Recruitment", 
-                                     "Expected survival", "Survival"))
+                                     "Expected survival", "Adult female survival"))
 proj
 ```
 
@@ -595,6 +601,12 @@ Bands are 95% predictive intervals.
 ``` r
 
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative,N0=100)
+#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
+#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
+#> years
+#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
+#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
+#> years
 ```
 
 ``` r
@@ -603,7 +615,7 @@ proj <- plotTrajectories(popMetricsBayes,
                          metrics = c("Population growth rate", "Expected growth rate",
                                      "Female population size", 
                                      "Expected recruitment", "Recruitment", 
-                                     "Expected survival", "Survival"))
+                                     "Expected survival", "Adult female survival"))
 proj
 ```
 
@@ -642,8 +654,8 @@ trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rb
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 28
-#>    Total graph size: 216
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 201
 #> 
 #> Initializing model
 #> 
@@ -652,8 +664,8 @@ trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rb
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 28
-#>    Total graph size: 216
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 201
 #> 
 #> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryBase, simInitial = popMetricsBayes)
@@ -721,8 +733,8 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 28
-#>    Total graph size: 216
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 201
 #> 
 #> Initializing model
 #> 
@@ -731,8 +743,8 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 28
-#>    Total graph size: 222
+#>    Unobserved stochastic nodes: 26
+#>    Total graph size: 207
 #> 
 #> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryAdjust, simInitial = trajFromSummaryBase)
@@ -777,7 +789,7 @@ pt <- bbouInformative$parTab;pt
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
 #> 1   0.2617138 0.9403158 0.6231178 0.6593312   1.658096    0.840353   0.9840703
 #>   N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
-#> 1 NA           NA         13            NA            12
+#> 1 NA           NA         13            NA            13
 
 popMetricsBase <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
                                              R_sd=pt$R_sd,S_sd=pt$S_sd,
@@ -797,9 +809,8 @@ scnCompare <- list(summary=rbind(popMetricsBase$summary,popMetricsS85$summary),
 
 proj <- plotTrajectories(scnCompare, 
                          metrics = c("Population growth rate", "Expected growth rate",
-                                     "Female population size", 
-                                     "Expected recruitment", "Recruitment", 
-                                     "Expected survival", "Survival"), 
+                                     "Female population size", "Recruitment",
+                                     "Adult female survival"), 
                          replicates = 25)
 proj
 ```

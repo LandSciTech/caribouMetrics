@@ -40,13 +40,14 @@ bayesianTrajectoryWorkflow(
 
 - priors:
 
-  list. Optional. If disturbance is NA, this should be
+  list. Optional. If disturbance is NULL, this should be
   list(priors_survival=c(...),priors_recruitment=c(...)); see
-  [`bboutools::bb_priors_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html)
+  [`bboutools::bb_priors_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html)
   and
-  [`bboutools::bb_priors_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html)
-  for details. If disturbance is not NA, see `betaNationalPriors` for
-  details.
+  [`bboutools::bb_priors_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html)
+  for details. If disturbance is not NULL, see
+  [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md)
+  for details.
 
 - startYear, endYear:
 
@@ -56,10 +57,10 @@ bayesianTrajectoryWorkflow(
 - N0:
 
   number or dataframe. Optional. Initial population size(s). If NA
-  (default) then population growth rate is \$\_t=S_t\*(1+cR_t)/s\$. If a
-  data frame N0 column is required, and PopulationName column is
-  required if there is more than one row. Additional (optional)
-  variation columns will be used by
+  (default) then population growth rate is
+  \\\lambda_t=S_t\*(1+cR_t)/s\\. If a data frame N0 column is required,
+  and PopulationName column is required if there is more than one row.
+  Additional (optional) variation columns will be used by
   [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md).
 
 - returnSamples:
@@ -84,9 +85,9 @@ bayesianTrajectoryWorkflow(
 - ...:
 
   Other parameters passed on to
-  [`bboutools::bb_fit_survival`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  [`bboutools::bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
   and
-  [`bboutools::bb_fit_recruitment`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
+  [`bboutools::bb_fit_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
 
 ## Value
 
@@ -117,9 +118,18 @@ a list with elements:
 
   - recruitDataIn: composition data
 
+## Interpretation of Years
+
+Throughout the package a year is treated as the calendar year only if it
+is in a table that also contains a month column. In all other contexts
+year is treated as the caribou year which is the annual demographic
+cycle of caribou, measured from one calving season to the next. By
+default, April is set as the start of the caribou year.
+
 ## See also
 
 Caribou demography functions:
+[`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md),
 [`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
 [`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
 [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md),
@@ -131,6 +141,7 @@ Caribou demography functions:
 [`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
 [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
 [`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
+[`getCaribouYear()`](https://landscitech.github.io/caribouMetrics/dev/reference/getCaribouYear.md),
 [`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
 [`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
 [`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
@@ -156,37 +167,39 @@ Caribou demography functions:
     disturbance = NULL
   )
 #> Warning: missing years of recruitment data: 1985, 1986, 1987, 1988
+#> Warning: rec_pred and surv_pred do not contain the same years
+#> Warning: rec_pred and surv_pred do not contain the same years
   str(mod, max.level = 2)
 #> List of 4
 #>  $ result :List of 4
-#>   ..$ summary     :'data.frame': 320 obs. of  8 variables:
+#>   ..$ summary     :'data.frame': 300 obs. of  8 variables:
 #>   ..$ surv_data   :'data.frame': 384 obs. of  9 variables:
-#>   ..$ recruit_data:'data.frame': 32 obs. of  9 variables:
+#>   ..$ recruit_data:'data.frame': 31 obs. of  9 variables:
 #>   ..$ popInfo     :'data.frame': 3000 obs. of  4 variables:
 #>  $ inData :List of 1
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
-#>   ..$ R_bar         : num 0.198
-#>   ..$ R_sd          : num 0.0888
+#>   ..$ R_bar         : num 0.199
+#>   ..$ R_sd          : num 0.0856
 #>   ..$ R_iv_mean     : num 0.322
-#>   ..$ R_iv_shape    : num 13.6
-#>   ..$ R_bar_lower   : num 0.171
+#>   ..$ R_iv_shape    : num 13.8
+#>   ..$ R_bar_lower   : num 0.173
 #>   ..$ R_bar_upper   : num 0.227
-#>   ..$ S_bar         : num 0.874
-#>   ..$ S_sd          : num 0.171
-#>   ..$ S_iv_mean     : num 0.363
-#>   ..$ S_iv_shape    : num 4.4
-#>   ..$ S_bar_lower   : num 0.836
-#>   ..$ S_bar_upper   : num 0.907
+#>   ..$ S_bar         : num 0.872
+#>   ..$ S_sd          : num 0.168
+#>   ..$ S_iv_mean     : num 0.329
+#>   ..$ S_iv_shape    : num 3.17
+#>   ..$ S_bar_lower   : num 0.835
+#>   ..$ S_bar_upper   : num 0.908
 #>   ..$ N0            : logi NA
 #>   ..$ nCollarYears  : num NA
 #>   ..$ nSurvYears    : int 32
-#>   ..$ nCowsAllYears : int NA
-#>   ..$ nRecruitYears : int 31
+#>   ..$ nCowsAllYears : num NA
+#>   ..$ nRecruitYears : int 32
 #>  $ parList:List of 5
-#>   ..$ Rbar:'data.frame': 32 obs. of  7 variables:
-#>   ..$ Sbar:'data.frame': 32 obs. of  7 variables:
+#>   ..$ Rbar:'data.frame': 30 obs. of  7 variables:
+#>   ..$ Sbar:'data.frame': 30 obs. of  7 variables:
 #>   ..$ Siv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ Riv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ type: chr "bbou"
@@ -216,8 +229,8 @@ Caribou demography functions:
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 20
-#>    Unobserved stochastic nodes: 84
-#>    Total graph size: 729
+#>    Unobserved stochastic nodes: 79
+#>    Total graph size: 694
 #> 
 #> Initializing model
 #> 

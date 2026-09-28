@@ -180,8 +180,8 @@ columns that are missing will be filled with the default values.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other parameters passed on to <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival</a></code> and
-<code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment</a></code>.</p></dd>
+<dd><p>Other parameters passed on to <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival()</a></code> and
+<code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment()</a></code>.</p></dd>
 
 
 <dt id="arg-projyears">projYears<a class="anchor" aria-label="anchor" href="#arg-projyears"></a></dt>
@@ -226,7 +226,7 @@ the projection period</p></dd>
 
 <dt id="arg-n-">N0<a class="anchor" aria-label="anchor" href="#arg-n-"></a></dt>
 <dd><p>Number or vector of numbers. Initial population size for one or
-more sample populations. If NA then population growth rate is $_t=S_t*(1+cR_t)/s$.</p></dd>
+more sample populations. If NA then population growth rate is \(\lambda_t=S_t*(1+cR_t/s)\).</p></dd>
 
 
 <dt id="arg-qmin">qMin<a class="anchor" aria-label="anchor" href="#arg-qmin"></a></dt>
@@ -315,8 +315,19 @@ year in recruitment survey</p></dd>
 the parameter names and values into a string</p>
     </div>
     <div class="section level2">
+    <h2 id="interpretation-of-years">Interpretation of Years<a class="anchor" aria-label="anchor" href="#interpretation-of-years"></a></h2>
+
+
+<p>Throughout the package a year is treated as the calendar year only if it is
+in a table that also contains a month column. In all other contexts year is
+treated as the caribou year which is the annual demographic cycle of caribou,
+measured from one calving season to the next. By default, April is set as the
+start of the caribou year.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Caribou demography functions:
+<code><a href="addMissingYears.html">addMissingYears()</a></code>,
 <code><a href="addN0Variation.html">addN0Variation()</a></code>,
 <code><a href="bayesianScenariosWorkflow.html">bayesianScenariosWorkflow()</a></code>,
 <code><a href="bayesianTrajectoryWorkflow.html">bayesianTrajectoryWorkflow()</a></code>,
@@ -329,6 +340,7 @@ the parameter names and values into a string</p>
 <code><a href="demographicProjectionApp.html">demographicProjectionApp()</a></code>,
 <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>,
 <code><a href="estimateNationalRates.html">estimateNationalRate()</a></code>,
+<code><a href="getCaribouYear.html">getCaribouYear()</a></code>,
 <code><a href="getNationalCoefficients.html">getNationalCoefficients()</a></code>,
 <code><a href="plotCompareTrajectories.html">plotCompareTrajectories()</a></code>,
 <code><a href="plotSurvivalSeries.html">plotSurvivalSeries()</a></code>,

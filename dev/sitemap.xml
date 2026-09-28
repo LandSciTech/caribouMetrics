@@ -9,6 +9,7 @@
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/index.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/news/index.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/DisturbanceMetrics-class.html</loc></url>
+<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.html</loc></url>
@@ -22,6 +23,7 @@
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/disturbanceMetrics.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.html</loc></url>
+<url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/getCaribouYear.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.html</loc></url>
 <url><loc>https://landscitech.github.io/caribouMetrics/dev/reference/index.html</loc></url>
