@@ -29,13 +29,16 @@ simulateObservations(
 \item{trajectories}{data.frame. Optional example demographic trajectory.
 If NULL the trajectory will be simulated from the national model.}
 
-\item{cowCounts}{data.frame. Optional. Number of cows counted in aerial
-surveys each caribou year. If NULL, and \code{paramTable} contains \code{cowMult} the number
+\item{cowCounts}{data.frame. Optional. Number of cows (\code{Cows}) or the number of cows per collared cow
+(\code{cowMult}) counted in aerial surveys each caribou year.
+If NULL, and \code{paramTable} contains \code{cowMult} the number
 of cows that survive calving based on the collar data is multiplied by
-\code{cowMult} to determine the number of cows counted in aerial surveys. If
-\code{paramTable} does not contain \code{cowMult} \code{paramTable$cowCount} is used to
+\code{cowMult} to determine the number of cows counted in aerial surveys. If neither \code{cowCounts} nor
+\code{paramTable} contains \code{cowMult} \code{paramTable$cowCount} is used to
 set the number of cows counted in aerial surveys each year. If a data.frame
-is provided it must have columns "Year"  and "Cows". Note that the survey will done in the recSurveyMonth of the 12 month period that begins on the caribouYearStart month of the calendar year; if recSurveyMonth is < caribouYearStart then the survey for year X is done in calendar year X+1.}
+is provided it must have columns "Year"  and "Cows" or "cowMult". Note that the survey will done in the
+recSurveyMonth of the 12 month period that begins on the caribouYearStart month of the calendar year;
+if recSurveyMonth is < caribouYearStart then the survey for year X is done in calendar year X+1.}
 
 \item{freqStartsByYear}{data.frame. Optional. Number of collars deployed in
 each year. If NULL \code{paramTable$collarCount} is used as the target number of
