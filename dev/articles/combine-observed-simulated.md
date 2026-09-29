@@ -366,8 +366,8 @@ posteriorResult <- bayesianScenariosWorkflow(
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 644
-#>    Unobserved stochastic nodes: 1588
+#>    Observed stochastic nodes: 645
+#>    Unobserved stochastic nodes: 1587
 #>    Total graph size: 12595
 #> 
 #> Initializing model
@@ -428,11 +428,11 @@ if (collaringStrategy == "numStarts") {
   subset(collar_summary, StartTotal < numTarget)
 }
 #>    PopulationName Year StartTotal prev_starts Mortalities prev_mortalities
-#> 31              B 2038          1           5           0               NA
-#> 47              C 2038          1          12           0               NA
+#> 31              B 2038          1          10           0               NA
+#> 47              C 2038          1          15           0               NA
 #>    numStarts numStartsTarget
-#> 31        -4               0
-#> 47       -11               0
+#> 31        -9               0
+#> 47       -14               0
 ```
 
 ## References

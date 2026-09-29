@@ -43,17 +43,19 @@ simulateObservations(
 
 - cowCounts:
 
-  data.frame. Optional. Number of cows counted in aerial surveys each
-  caribou year. If NULL, and `paramTable` contains `cowMult` the number
-  of cows that survive calving based on the collar data is multiplied by
+  data.frame. Optional. Number of cows (`Cows`) or the number of cows
+  per collared cow (`cowMult`) counted in aerial surveys each caribou
+  year. If NULL, and `paramTable` contains `cowMult` the number of cows
+  that survive calving based on the collar data is multiplied by
   `cowMult` to determine the number of cows counted in aerial surveys.
-  If `paramTable` does not contain `cowMult` `paramTable$cowCount` is
-  used to set the number of cows counted in aerial surveys each year. If
-  a data.frame is provided it must have columns "Year" and "Cows". Note
-  that the survey will done in the recSurveyMonth of the 12 month period
-  that begins on the caribouYearStart month of the calendar year; if
-  recSurveyMonth is \< caribouYearStart then the survey for year X is
-  done in calendar year X+1.
+  If neither `cowCounts` nor `paramTable` contains `cowMult`
+  `paramTable$cowCount` is used to set the number of cows counted in
+  aerial surveys each year. If a data.frame is provided it must have
+  columns "Year" and "Cows" or "cowMult". Note that the survey will done
+  in the recSurveyMonth of the 12 month period that begins on the
+  caribouYearStart month of the calendar year; if recSurveyMonth is \<
+  caribouYearStart then the survey for year X is done in calendar year
+  X+1.
 
 - freqStartsByYear:
 

@@ -161,11 +161,11 @@ s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 estimateBayesianRates(s_data, r_data, N0 = 500)
 #>   PopulationName     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower
-#> 1              A 0.1989571 0.08037253 0.2857571   19.00788   0.1740515
-#> 2              B 0.2130707 0.09865786 0.2857571   19.00788   0.1824531
+#> 1              A 0.1986521 0.07776184 0.2874524   19.80048   0.1755579
+#> 2              B 0.2111393 0.10102978 0.2874524   19.80048   0.1794684
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
-#> 1   0.2250004 0.8830194 0.2508802 0.5007712   14.57276   0.8222825   0.9258783
-#> 2   0.2480182 0.9085359 0.3040960 0.5007712   14.57276   0.8486361   0.9504125
+#> 1   0.2235260 0.8831014 0.2375619 0.5019806   15.89554   0.8278837   0.9241552
+#> 2   0.2456546 0.9068512 0.2857254 0.5019806   15.89554   0.8517241   0.9457451
 #>    N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
 #> 1 500          900         31          2047            27
 #> 2 500          519         18          1645            15
