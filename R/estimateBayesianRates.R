@@ -133,6 +133,30 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     stop("At least 5 years of recruitment data are needed to estimate interannual variation using bboutools")
   }
   
+  n_yrs_surv <- surv_data %>% count(Year, PopulationName) %>% count(PopulationName)
+  n_yrs_recruit <- recruit_data %>% count(Year, PopulationName) %>% count(PopulationName)
+  
+  if(any(n_yrs_recruit$n < 2)){
+    pops_drop <- filter(n_yrs_recruit, n < 2) %>% pull(PopulationName)
+    recruit_data <- filter(recruit_data, !PopulationName %in% pops_drop)
+    surv_data <- filter(surv_data, !PopulationName %in% pops_drop)
+    
+    warning("At least two years of data per population is needed to fit a model. The population: ", 
+             paste0(pops_drop, collapse = ", "), 
+            " has less than 2 years of recruitment data and will be excluded from the model")
+  }
+  
+  if(any(n_yrs_surv$n < 2)){
+    pops_drop <- filter(n_yrs_surv, n < 2) %>% pull(PopulationName)
+    recruit_data <- filter(recruit_data, !PopulationName %in% pops_drop)
+    surv_data <- filter(surv_data, !PopulationName %in% pops_drop)
+    
+    warning("At least two years of data per population is needed to fit a model. The population: ", 
+            pops_drop %>% paste0(collapse = ", "), 
+            " has less than 2 years of survival data and will be excluded from the model")
+  }
+  
+  
   if(shiny_progress && !rlang::is_installed("shiny")){
     warning("Package shiny is not installed. Setting shiny_progress to FALSE")
     shiny_progress <- FALSE

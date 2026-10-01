@@ -25,6 +25,18 @@ test_that("multipop works", {
   expect_lt(abs(N0Pops$meanN[1] - 500), 50)
   expect_lt(abs(N0Pops$meanN[2] - 5000), 500)
   
+  
+  # when one pop is missing all years of data
+  expect_warning({
+    multPop2 <- estimateBayesianRates(bboudata::bbousurv_multi %>% getCaribouYear() %>%
+                                        filter(CaribouYear %>% between(2010, 2015)), 
+                                      bboudata::bbourecruit_multi %>% getCaribouYear() %>%
+                                        filter(CaribouYear %>% between(2010, 2015)),
+                                      N0 = 500, niters = 20)
+  })
+  
+  expect_equal(multPop2$PopulationName, c("B", "C"))
+
 })
 
 test_that("No survival works", {

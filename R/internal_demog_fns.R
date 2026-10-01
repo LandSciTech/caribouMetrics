@@ -771,7 +771,8 @@ setBbouNAs <- function(dat,year_start=formals(bboutools::bb_fit_survival)$year_s
       }
       dat[[n]]<-as.numeric(dat[[n]])
     }
-    dat<-unique(dat)
+    # dat<-unique(dat) # this was removing observations on the same day with the 
+    # same numbers. I don't think we want that.
     
     return(dat)
   }
