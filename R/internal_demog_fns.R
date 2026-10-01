@@ -829,7 +829,8 @@ getCaribouYear <- function(x,
   x$CaribouYear <- x$Year
   # if(length(unique(x$Month))>1){
      cMonth <- as.numeric(as.character(x$Month))
-     cMonth[is.na(cMonth)]=year_start
+     survey_mnth <- ifelse(hasName(x, "Cows"), year_start-1, year_start)
+     cMonth[is.na(cMonth)]= survey_mnth
      x$CaribouYear[cMonth<year_start] <- x$CaribouYear[cMonth<year_start]-1
   # }
   return(x)
