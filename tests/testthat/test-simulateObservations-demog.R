@@ -276,10 +276,11 @@ test_that("JAGS mod works and the trajectory can include disturbance", {
   #devtools::document();devtools::load_all()
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 100)
-  mod_jags <- estimateBayesianRates(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 
-                                     recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),N0=1000,
-                                     disturbance = data.frame(Year=seq(2010,2017),Anthro=5,Fire_excl_anthro=0.2),
-                                     niters=15)
+  mod_jags <- estimateBayesianRates(surv_data = bboudata::bbousurv_multi %>% filter(Year > 2005), 
+                                    recruit_data = bboudata::bbourecruit_multi %>% filter(Year > 2005),
+                                    N0=1000,
+                                    disturbance = data.frame(Year=seq(2010,2017),Anthro=5,Fire_excl_anthro=0.2),
+                                    niters=15)
   
   trajs <- trajectoriesFromBayesian(mod_jags)$samples
   
