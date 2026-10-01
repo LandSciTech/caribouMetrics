@@ -457,7 +457,7 @@ bboutools::bb_plot_year_growth(predict_lambda) +
 
 ## Using the trajectoriesFromBayesian wrapper function to project population growth
 
-For convenience, to enable comparisons (e.g. [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html) vignette), and to integrate with other methods and workflows, we can use the `trajectoriesFromBayesian` wrapper function to get sample trajectories and summaries from our fitted bboutools model. Note that if we use only the information in the fitted model (that does not include initial population size) then the summary results (bands for Adult female survival, Recruitment and Population growth rate in Figure \@ref(fig:bayesTrajectoryPlot)) are identical to the bboutools projections (Figures \@ref(fig:bboutoolsCalfCow), \@ref(fig:bboutoolsSurvival), and \@ref(fig:bboutoolsLambda)). The returned example trajectories are derived from the MCMC samples. If we also provide initial population size information then the projection (by default) includes density dependence and demographic stochasticity [@dyson_effective_2026; @hughes_integration_2025] and populations can go extinct (Fig \@ref(fig:bayesTrajectoryPlotN)). Note that in this case the form of the growth model (density dependence & demographic stochasticity, but not interannual variability) can be changed by setting `caribouPopGrowth` function parameters. The Bayesian MCMC samples include interannual variation in recruitment and survival, so no additional interannual variation is added by `caribouPopGrowth` in this case.
+For convenience, to enable comparisons (e.g. [Comparing caribouMetrics (Beta) and bboutools (logistic) Bayesian models](https://landscitech.github.io/caribouMetrics/dev/articles/compare-bayesian-models.html) vignette), and to integrate with other methods and workflows, we can use the `trajectoriesFromBayesian` wrapper function to get sample trajectories and summaries from our fitted bboutools model. Note that if we use only the information in the fitted model (that does not include initial population size) then the summary results (bands for Adult female survival, Recruitment and Population growth rate in Figure \@ref(fig:bayesTrajectoryPlot)) are identical to the bboutools projections (Figures \@ref(fig:bboutoolsCalfCow), \@ref(fig:bboutoolsSurvival), and \@ref(fig:bboutoolsLambda)). The returned example trajectories are derived from the MCMC samples. 
 
 ```{r,trajectoriesFromBayesian,message=F, warning=T}
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
@@ -472,6 +472,8 @@ proj <-  plotTrajectories(popMetricsBayes,
 proj
 ```
 
+If we also provide initial population size information then the projection (by default) includes density dependence and demographic stochasticity [@dyson_effective_2026; @hughes_integration_2025] and populations can go extinct (Fig \@ref(fig:bayesTrajectoryPlotN)). Note that in this case the form of the growth model (density dependence & demographic stochasticity, but not interannual variability) can be changed by setting `caribouPopGrowth` function parameters. The Bayesian MCMC samples include interannual variation in recruitment and survival, so no additional interannual variation is added by `caribouPopGrowth` in this case.
+
 ```{r,trajectoriesFromBayesianN,message=F, warning=T}
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative,N0=100)
 ```
@@ -484,6 +486,27 @@ proj <- plotTrajectories(popMetricsBayes,
                                      "Expected survival", "Adult female survival"))
 proj
 ```
+We can also incorporate uncertainty in estimates of initial population size by supplying an upper and lower bound or a mean and standard deviation along with the initial population size estimate. `addN0Variation()` is used internally to propagate the uncertainty in the population size through the analysis. 
+```{r,trajectoriesFromBayesianNvar,message=F, warning=T}
+popMetricsBayesNvar <- trajectoriesFromBayesian(bbouInformative,
+                                                N0 = data.frame(N0 = 100, 
+                                                                N.lower = 50, 
+                                                                N.upper = 150))
+```
+
+
+```{r bayesTrajectoryPlotNvar, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Comparison of example demographic trajectories of female population size from a fitted bboutools model, obtained using the trajectoriesFromBayesian wrapper function, when initial population size is a) 100 or b) between 50 - 150. Bands are 95% predictive intervals."}
+proj <- plotTrajectories(popMetricsBayes,
+                         metrics = c("Female population size"))
+
+projNvar <- plotTrajectories(popMetricsBayesNvar,
+                         metrics = c("Female population size"))
+pw <- proj | projNvar 
+
+pw + plot_annotation(tag_levels = "a")
+```
+Note that in Fig \@ref(fig:bayesTrajectoryPlotNvar)a there is some variation in female population size in the first year of the projection because the initial population size is for the year before (e.g. 2009) so stochasticity in the first year of the projection creates some variation.
+
 
 ## Using the trajectoriesFromSummaries wrapper function to project population growth
 
