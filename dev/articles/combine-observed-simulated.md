@@ -38,11 +38,12 @@ figHeight <- 10
 #Note - set niters to 100 to run quickly when testing. Set to 1000 for complete results.
 niters <- 1000
 
-surv_data <- addMissingYears(bboudata::bbousurv_a %>% 
-                               filter((Year > 2010)),
-                             seq(2016,2022)) %>% getCaribouYear()
-recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% filter(Year > 2010),
-                                seq(2016,2022)) %>% getCaribouYear()
+surv_data <- addMissingYears(bboudata::bbousurv_a %>% getCaribouYear() %>% 
+                                  filter(between(CaribouYear, 2010, 2015)),
+                             seq(2016,2022)) 
+recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% getCaribouYear() %>% 
+                                  filter(between(CaribouYear, 2010, 2015)),
+                                seq(2016,2022)) 
 
 surv_dataNone <- surv_data %>% filter(CaribouYear>2017)
 recruit_dataNone <- recruit_data %>% filter(CaribouYear>2017)
@@ -118,9 +119,16 @@ trajectories <- subset(simInformative$samples,LambdaPercentile == round(scns$lQu
 trajectories <- subset(trajectories,Replicate==sample(unique(trajectories$Replicate),1))
 
 oo <- simulateObservations(getScenarioDefaults(scns), trajectories,
-                           surv_data = simInformative$surv_data,
-                           recruit_data=simInformative$recruit_data)
-informativeMoreMonitoring <- bayesianTrajectoryWorkflow(surv_data = oo$simSurvObs, recruit_data = oo$simRecruitObs, disturbance=disturbance,niters=niters)
+                           surv_data = simInformative$surv_data %>%
+                             filter(!is.na(Mortalities)),
+                           recruit_data = simInformative$recruit_data %>% 
+                             filter(!is.na(Cows)))
+
+informativeMoreMonitoring <- bayesianTrajectoryWorkflow(
+  surv_data = oo$simSurvObs, recruit_data = oo$simRecruitObs,
+  disturbance=disturbance, niters=niters
+)
+
 out_tbls <- compareTrajectories(informativeMoreMonitoring, simInitial = simInformative)
 typeLabsI <- c("More", "Informative")
 
@@ -272,9 +280,8 @@ have a smaller number of years
 
 ``` r
 
-# sort of working but need to figure out timing better. Right now obs end in 2015 and restart in 2025
-last_observed_year <- 2022 #historical baseline cutoff (last year of observed data)
-future_years <- 2023:2037 #future years to simulate
+last_observed_year <- 2014 #historical baseline cutoff (last year of observed data)
+future_years <- 2015:2025 #future years to simulate
 
 surv_data <- bboudata::bbousurv_multi %>% addMissingYears(future_years)
 recruit_data <- bboudata::bbourecruit_multi %>% addMissingYears(future_years)
@@ -335,7 +342,8 @@ historic_baseline <- merge(
 )
 
 statusquo_future <- historic_baseline
-statusquo_future$Year <- statusquo_future$Year -min(statusquo_future$Year) + min(future_years)+1
+statusquo_future$Year <- statusquo_future$Year - min(statusquo_future$Year) +
+  min(future_years) - 1
 
 collaringStrategy <- "numStarts"
 #If collaringStrategy == "numStarts", numStarts collars will be added each year
@@ -366,9 +374,9 @@ posteriorResult <- bayesianScenariosWorkflow(
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 645
-#>    Unobserved stochastic nodes: 1587
-#>    Total graph size: 12595
+#>    Observed stochastic nodes: 586
+#>    Unobserved stochastic nodes: 1178
+#>    Total graph size: 10291
 #> 
 #> Initializing model
 #> 
@@ -376,9 +384,9 @@ posteriorResult <- bayesianScenariosWorkflow(
 #>    Resolving undeclared variables
 #>    Allocating nodes
 #> Graph information:
-#>    Observed stochastic nodes: 98
-#>    Unobserved stochastic nodes: 769
-#>    Total graph size: 5646
+#>    Observed stochastic nodes: 92
+#>    Unobserved stochastic nodes: 595
+#>    Total graph size: 4764
 #> 
 #> Initializing model
 # Check survival data
@@ -405,10 +413,10 @@ if (collaringStrategy == "numStarts") {
   target <- freqStartsByYr
   names(target)[names(target) == "numStarts"] <- "numStartsTarget"
   collar_summary <- merge(collar_summary, target)
-  collar_summary <- subset(collar_summary, Year != 2032)
+  collar_summary <- subset(collar_summary, Year != 2026)
 
   # These numbers match until collars start falling off 4 yrs after deployment.
-  ggplot(collar_summary, aes(x = numStartsTarget, y = numStarts, colour = Year)) +
+  plt <- ggplot(collar_summary, aes(x = numStartsTarget, y = numStarts, colour = Year)) +
     geom_point() +
     facet_wrap(~PopulationName) +
     geom_abline()
@@ -420,20 +428,20 @@ if (collaringStrategy == "numStarts") {
   collar_summary <- subset(collar_summary, Year != 2032)
 
   # This is working as expected :)
-  ggplot(collar_summary, aes(x = numTarget, y = StartTotal, colour = Year)) +
+  plt <- ggplot(collar_summary, aes(x = numTarget, y = StartTotal, colour = Year)) +
     geom_point() +
     facet_wrap(~PopulationName) +
     geom_abline()
 
   subset(collar_summary, StartTotal < numTarget)
 }
-#>    PopulationName Year StartTotal prev_starts Mortalities prev_mortalities
-#> 31              B 2038          1          10           0               NA
-#> 47              C 2038          1          15           0               NA
-#>    numStarts numStartsTarget
-#> 31        -9               0
-#> 47       -14               0
+#> [1] PopulationName   Year             StartTotal       prev_starts     
+#> [5] Mortalities      prev_mortalities numStarts        numStartsTarget 
+#> <0 rows> (or 0-length row.names)
+plt
 ```
+
+![](combine-observed-simulated_files/figure-html/unnamed-chunk-3-2.png)
 
 ## References
 

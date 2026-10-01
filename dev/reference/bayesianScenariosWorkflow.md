@@ -138,6 +138,8 @@ simsIn <- trajectoriesFromNational()
 #> Updating cached initial simulations.
 scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.
+#> Warning: requested year range: 2014 - 2058 does not match recruitment data year range:  2013 - 2023
+#> Warning: missing years of recruitment data: 2015
 #> Registered S3 method overwritten by 'mcmcr':
 #>   method         from 
 #>   as.mcmc.nlists nlist
@@ -163,8 +165,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 16
-#>    Unobserved stochastic nodes: 203
-#>    Total graph size: 652
+#>    Unobserved stochastic nodes: 213
+#>    Total graph size: 680
 #> 
 #> Initializing model
 #> 
@@ -172,6 +174,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #> NOTE: Stopping adaptation
 #> 
 #> 
+#> Warning: requested year range: 2004 - 2058 does not match recruitment data year range:  2003 - 2023
+#> Warning: missing years of recruitment data: 2005
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -191,8 +195,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 36
-#>    Unobserved stochastic nodes: 233
-#>    Total graph size: 792
+#>    Unobserved stochastic nodes: 243
+#>    Total graph size: 820
 #> 
 #> Initializing model
 #> 
@@ -200,6 +204,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #> NOTE: Stopping adaptation
 #> 
 #> 
+#> Warning: requested year range: 2014 - 2058 does not match recruitment data year range:  2013 - 2023
+#> Warning: missing years of recruitment data: 2015
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -219,8 +225,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 16
-#>    Unobserved stochastic nodes: 203
-#>    Total graph size: 652
+#>    Unobserved stochastic nodes: 213
+#>    Total graph size: 680
 #> 
 #> Initializing model
 #> 
@@ -228,6 +234,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #> NOTE: Stopping adaptation
 #> 
 #> 
+#> Warning: requested year range: 2004 - 2058 does not match recruitment data year range:  2003 - 2023
+#> Warning: missing years of recruitment data: 2005
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes
@@ -247,8 +255,8 @@ scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 36
-#>    Unobserved stochastic nodes: 233
-#>    Total graph size: 792
+#>    Unobserved stochastic nodes: 243
+#>    Total graph size: 820
 #> 
 #> Initializing model
 #> 

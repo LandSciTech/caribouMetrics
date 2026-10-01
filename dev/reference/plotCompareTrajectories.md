@@ -131,8 +131,8 @@ out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = si
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 20
-#>    Unobserved stochastic nodes: 79
-#>    Total graph size: 694
+#>    Unobserved stochastic nodes: 84
+#>    Total graph size: 729
 #> 
 #> Initializing model
 #> 

@@ -167,39 +167,37 @@ Caribou demography functions:
     disturbance = NULL
   )
 #> Warning: missing years of recruitment data: 1985, 1986, 1987, 1988
-#> Warning: rec_pred and surv_pred do not contain the same years
-#> Warning: rec_pred and surv_pred do not contain the same years
   str(mod, max.level = 2)
 #> List of 4
 #>  $ result :List of 4
-#>   ..$ summary     :'data.frame': 300 obs. of  8 variables:
+#>   ..$ summary     :'data.frame': 320 obs. of  8 variables:
 #>   ..$ surv_data   :'data.frame': 384 obs. of  9 variables:
-#>   ..$ recruit_data:'data.frame': 31 obs. of  9 variables:
+#>   ..$ recruit_data:'data.frame': 32 obs. of  9 variables:
 #>   ..$ popInfo     :'data.frame': 3000 obs. of  4 variables:
 #>  $ inData :List of 1
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
 #>   ..$ R_bar         : num 0.198
-#>   ..$ R_sd          : num 0.085
-#>   ..$ R_iv_mean     : num 0.325
-#>   ..$ R_iv_shape    : num 13.4
-#>   ..$ R_bar_lower   : num 0.173
-#>   ..$ R_bar_upper   : num 0.226
+#>   ..$ R_sd          : num 0.0853
+#>   ..$ R_iv_mean     : num 0.322
+#>   ..$ R_iv_shape    : num 14.5
+#>   ..$ R_bar_lower   : num 0.172
+#>   ..$ R_bar_upper   : num 0.225
 #>   ..$ S_bar         : num 0.872
-#>   ..$ S_sd          : num 0.159
-#>   ..$ S_iv_mean     : num 0.333
-#>   ..$ S_iv_shape    : num 3.51
-#>   ..$ S_bar_lower   : num 0.835
-#>   ..$ S_bar_upper   : num 0.905
+#>   ..$ S_sd          : num 0.165
+#>   ..$ S_iv_mean     : num 0.289
+#>   ..$ S_iv_shape    : num 1.31
+#>   ..$ S_bar_lower   : num 0.833
+#>   ..$ S_bar_upper   : num 0.907
 #>   ..$ N0            : logi NA
 #>   ..$ nCollarYears  : num NA
 #>   ..$ nSurvYears    : int 32
 #>   ..$ nCowsAllYears : num NA
-#>   ..$ nRecruitYears : int 32
+#>   ..$ nRecruitYears : int 31
 #>  $ parList:List of 5
-#>   ..$ Rbar:'data.frame': 30 obs. of  7 variables:
-#>   ..$ Sbar:'data.frame': 30 obs. of  7 variables:
+#>   ..$ Rbar:'data.frame': 32 obs. of  7 variables:
+#>   ..$ Sbar:'data.frame': 32 obs. of  7 variables:
 #>   ..$ Siv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ Riv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ type: chr "bbou"
@@ -229,8 +227,8 @@ Caribou demography functions:
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 20
-#>    Unobserved stochastic nodes: 79
-#>    Total graph size: 694
+#>    Unobserved stochastic nodes: 84
+#>    Total graph size: 729
 #> 
 #> Initializing model
 #> 

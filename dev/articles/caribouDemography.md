@@ -556,28 +556,11 @@ female survival, Recruitment and Population growth rate in Figure
 [2.5](#fig:bayesTrajectoryPlot)) are identical to the bboutools
 projections (Figures [2.1](#fig:bboutoolsCalfCow),
 [2.3](#fig:bboutoolsSurvival), and [2.4](#fig:bboutoolsLambda)). The
-returned example trajectories are derived from the MCMC samples. If we
-also provide initial population size information then the projection (by
-default) includes density dependence and demographic stochasticity
-([Dyson et al. 2026](#ref-dyson_effective_2026); [Hughes et al.
-2025](#ref-hughes_integration_2025)) and populations can go extinct (Fig
-[2.6](#fig:bayesTrajectoryPlotN)). Note that in this case the form of
-the growth model (density dependence & demographic stochasticity, but
-not interannual variability) can be changed by setting
-`caribouPopGrowth` function parameters. The Bayesian MCMC samples
-include interannual variation in recruitment and survival, so no
-additional interannual variation is added by `caribouPopGrowth` in this
-case.
+returned example trajectories are derived from the MCMC samples.
 
 ``` r
 
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
-#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
-#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
-#> years
-#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
-#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
-#> years
 ```
 
 ``` r
@@ -598,15 +581,21 @@ Figure 2.5: Example demographic trajectories from a fitted bboutools
 model, obtained using the trajectoriesFromBayesian wrapper function.
 Bands are 95% predictive intervals.
 
+If we also provide initial population size information then the
+projection (by default) includes density dependence and demographic
+stochasticity ([Dyson et al. 2026](#ref-dyson_effective_2026); [Hughes
+et al. 2025](#ref-hughes_integration_2025)) and populations can go
+extinct (Fig [2.6](#fig:bayesTrajectoryPlotN)). Note that in this case
+the form of the growth model (density dependence & demographic
+stochasticity, but not interannual variability) can be changed by
+setting `caribouPopGrowth` function parameters. The Bayesian MCMC
+samples include interannual variation in recruitment and survival, so no
+additional interannual variation is added by `caribouPopGrowth` in this
+case.
+
 ``` r
 
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative,N0=100)
-#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
-#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
-#> years
-#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
-#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
-#> years
 ```
 
 ``` r
@@ -628,6 +617,50 @@ Figure 2.6: Example demographic trajectories from a fitted bboutools
 model, obtained using the trajectoriesFromBayesian wrapper function,
 with initial population size of 100. Bands are 95% predictive intervals.
 
+We can also incorporate uncertainty in estimates of initial population
+size by supplying an upper and lower bound or a mean and standard
+deviation along with the initial population size estimate.
+[`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md)
+is used internally to propagate the uncertainty in the population size
+through the analysis.
+
+``` r
+
+popMetricsBayesNvar <- trajectoriesFromBayesian(bbouInformative,
+                                                N0 = data.frame(N0 = 100, 
+                                                                N.lower = 50, 
+                                                                N.upper = 150))
+```
+
+``` r
+
+proj <- plotTrajectories(popMetricsBayes,
+                         metrics = c("Female population size"))
+
+projNvar <- plotTrajectories(popMetricsBayesNvar,
+                         metrics = c("Female population size"))
+pw <- proj | projNvar 
+
+pw + plot_annotation(tag_levels = "a")
+```
+
+![Comparison of example demographic trajectories of female population
+size from a fitted bboutools model, obtained using the
+trajectoriesFromBayesian wrapper function, when initial population size
+is a) 100 or b) between 50 - 150. Bands are 95% predictive
+intervals.](caribouDemography_files/figure-html/bayesTrajectoryPlotNvar-1.png)
+
+Figure 2.7: Comparison of example demographic trajectories of female
+population size from a fitted bboutools model, obtained using the
+trajectoriesFromBayesian wrapper function, when initial population size
+is a) 100 or b) between 50 - 150. Bands are 95% predictive intervals.
+
+Note that in Fig [2.7](#fig:bayesTrajectoryPlotNvar)a there is some
+variation in female population size in the first year of the projection
+because the initial population size is for the year before (e.g. 2009)
+so stochasticity in the first year of the projection creates some
+variation.
+
 ### 2.4 Using the trajectoriesFromSummaries wrapper function to project population growth
 
 To allow for the possibility of using fitted Bayesian models as a
@@ -637,11 +670,12 @@ parameters. `trajectoriesFromSummary` projects outcomes from a model
 defined by these parameters. When parameters from a fitted Bayesian
 model are used, expected outcomes from `trajectoriesFromSummary` and
 `trajectoriesFromBayesian` are the same (Figure
-[2.7](#fig:summaryTrajectoryBaseEPlot)), but `trajectoriesFromSummary`
+[2.8](#fig:summaryTrajectoryBaseEPlot)), but `trajectoriesFromSummary`
 projections do not include variation in interannual variation over time
-(Figure [2.8](#fig:summaryTrajectoryBasePlot)).
+(Figure [2.9](#fig:summaryTrajectoryBasePlot)).
 `trajectoriesFromSummary` allows us to explore the implications of
-changing model parameters (Fig [2.9](#fig:summaryTrajectoryAdjustPlot)).
+changing model parameters (Fig
+[2.10](#fig:summaryTrajectoryAdjustPlot)).
 
 ``` r
 
@@ -654,8 +688,8 @@ trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rb
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 201
+#>    Unobserved stochastic nodes: 28
+#>    Total graph size: 216
 #> 
 #> Initializing model
 #> 
@@ -664,8 +698,8 @@ trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rb
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 201
+#>    Unobserved stochastic nodes: 28
+#>    Total graph size: 216
 #> 
 #> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryBase, simInitial = popMetricsBayes)
@@ -686,7 +720,7 @@ trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes)
 wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500
 samples.](caribouDemography_files/figure-html/summaryTrajectoryBaseEPlot-1.png)
 
-Figure 2.7: Comparison of expected demographic projections obtained
+Figure 2.8: Comparison of expected demographic projections obtained
 using the trajectoriesFromSummary (Summary) and trajectoriesFromBayesian
 (Bayes) wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500
 samples.
@@ -707,7 +741,7 @@ trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes)
 wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500
 samples.](caribouDemography_files/figure-html/summaryTrajectoryBasePlot-1.png)
 
-Figure 2.8: Comparison of demographic projections obtained using the
+Figure 2.9: Comparison of demographic projections obtained using the
 trajectoriesFromSummary (Summary) and trajectoriesFromBayesian (Bayes)
 wrapper functions. Bands are the 2.5% and 97.5% quantiles of 500
 samples.
@@ -733,8 +767,8 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 201
+#>    Unobserved stochastic nodes: 28
+#>    Total graph size: 216
 #> 
 #> Initializing model
 #> 
@@ -743,8 +777,8 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
 #>    Allocating nodes
 #> Graph information:
 #>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 26
-#>    Total graph size: 207
+#>    Unobserved stochastic nodes: 28
+#>    Total graph size: 222
 #> 
 #> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryAdjust, simInitial = trajFromSummaryBase)
@@ -768,7 +802,7 @@ trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5%
 quantiles of 500
 samples.](caribouDemography_files/figure-html/summaryTrajectoryAdjustPlot-1.png)
 
-Figure 2.9: Effects of increasing recruitment after 2015 and increasing
+Figure 2.10: Effects of increasing recruitment after 2015 and increasing
 variation in initial population size on demographic projections obtained
 using the trajectoriesFromSummary wrapper function. Bands are the 2.5%
 and 97.5% quantiles of 500 samples.
@@ -789,7 +823,7 @@ pt <- bbouInformative$parTab;pt
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
 #> 1   0.2617138 0.9403158 0.6231178 0.6593312   1.658096    0.840353   0.9840703
 #>   N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
-#> 1 NA           NA         13            NA            13
+#> 1 NA           NA         13            NA            12
 
 popMetricsBase <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
                                              R_sd=pt$R_sd,S_sd=pt$S_sd,
@@ -821,7 +855,7 @@ to 85% (S85), obtained using the trajectoriesFromSummary wrapper
 function. Bands are the 2.5% and 97.5% quantiles of 500
 samples.](caribouDemography_files/figure-html/summaryTrajectoryForAppPlot-1.png)
 
-Figure 2.10: Comparison of demographic trajectories from a fitted
+Figure 2.11: Comparison of demographic trajectories from a fitted
 bboutools model (base) and a scenario in which expected survival is
 decreased from 94% to 85% (S85), obtained using the
 trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5%
