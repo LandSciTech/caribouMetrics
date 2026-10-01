@@ -175,10 +175,9 @@ To repeat the past monitoring strategy we extract the number of collars in each 
 
 We will use the betaLimited model from above as the starting point to have a smaller number of years
 
-```{r}
-# sort of working but need to figure out timing better. Right now obs end in 2015 and restart in 2025
-last_observed_year <- 2022 #historical baseline cutoff (last year of observed data)
-future_years <- 2023:2037 #future years to simulate
+```{r fig.width=10, fig.height=8}
+last_observed_year <- 2014 #historical baseline cutoff (last year of observed data)
+future_years <- 2015:2025 #future years to simulate
 
 surv_data <- bboudata::bbousurv_multi %>% addMissingYears(future_years)
 recruit_data <- bboudata::bbourecruit_multi %>% addMissingYears(future_years)
@@ -239,7 +238,8 @@ historic_baseline <- merge(
 )
 
 statusquo_future <- historic_baseline
-statusquo_future$Year <- statusquo_future$Year -min(statusquo_future$Year) + min(future_years)+1
+statusquo_future$Year <- statusquo_future$Year - min(statusquo_future$Year) +
+  min(future_years) - 1
 
 collaringStrategy <- "numStarts"
 #If collaringStrategy == "numStarts", numStarts collars will be added each year
@@ -284,10 +284,10 @@ if (collaringStrategy == "numStarts") {
   target <- freqStartsByYr
   names(target)[names(target) == "numStarts"] <- "numStartsTarget"
   collar_summary <- merge(collar_summary, target)
-  collar_summary <- subset(collar_summary, Year != 2032)
+  collar_summary <- subset(collar_summary, Year != 2026)
 
   # These numbers match until collars start falling off 4 yrs after deployment.
-  ggplot(collar_summary, aes(x = numStartsTarget, y = numStarts, colour = Year)) +
+  plt <- ggplot(collar_summary, aes(x = numStartsTarget, y = numStarts, colour = Year)) +
     geom_point() +
     facet_wrap(~PopulationName) +
     geom_abline()
@@ -299,14 +299,14 @@ if (collaringStrategy == "numStarts") {
   collar_summary <- subset(collar_summary, Year != 2032)
 
   # This is working as expected :)
-  ggplot(collar_summary, aes(x = numTarget, y = StartTotal, colour = Year)) +
+  plt <- ggplot(collar_summary, aes(x = numTarget, y = StartTotal, colour = Year)) +
     geom_point() +
     facet_wrap(~PopulationName) +
     geom_abline()
 
   subset(collar_summary, StartTotal < numTarget)
 }
-
+plt
 
 ```
 
