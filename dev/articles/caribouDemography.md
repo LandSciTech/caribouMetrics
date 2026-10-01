@@ -819,9 +819,9 @@ Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp).
 
 pt <- bbouInformative$parTab;pt
 #>   PopulationName     R_bar      R_sd R_iv_mean R_iv_shape R_bar_lower
-#> 1              A 0.2006003 0.1859027 0.2950272   1.573157   0.1445223
+#> 1              A 0.1926965 0.2001358 0.3598852   2.336045   0.1385524
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
-#> 1   0.2617138 0.9403158 0.6231178 0.6593312   1.658096    0.840353   0.9840703
+#> 1   0.2647976 0.9403158 0.6231178 0.6593312   1.658096    0.840353   0.9840703
 #>   N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
 #> 1 NA           NA         13            NA            12
 
