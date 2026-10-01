@@ -13,13 +13,16 @@
 #'   [getScenarioDefaults()] for details.
 #' @param trajectories data.frame. Optional example demographic trajectory. 
 #'   If NULL the trajectory will be simulated from the national model.
-#' @param cowCounts data.frame. Optional. Number of cows counted in aerial
-#'   surveys each caribou year. If NULL, and `paramTable` contains `cowMult` the number
+#' @param cowCounts data.frame. Optional. Number of cows (`Cows`) or the number of cows per collared cow 
+#'   (`cowMult`) counted in aerial surveys each caribou year. 
+#'   If NULL, and `paramTable` contains `cowMult` the number
 #'   of cows that survive calving based on the collar data is multiplied by
-#'   `cowMult` to determine the number of cows counted in aerial surveys. If
-#'   `paramTable` does not contain `cowMult` `paramTable$cowCount` is used to
+#'   `cowMult` to determine the number of cows counted in aerial surveys. If neither `cowCounts` nor 
+#'   `paramTable` contains `cowMult` `paramTable$cowCount` is used to
 #'   set the number of cows counted in aerial surveys each year. If a data.frame
-#'   is provided it must have columns "Year"  and "Cows". Note that the survey will done in the recSurveyMonth of the 12 month period that begins on the caribouYearStart month of the calendar year; if recSurveyMonth is < caribouYearStart then the survey for year X is done in calendar year X+1.
+#'   is provided it must have columns "Year"  and "Cows" or "cowMult". Note that the survey will done in the
+#'   recSurveyMonth of the 12 month period that begins on the caribouYearStart month of the calendar year; 
+#'   if recSurveyMonth is < caribouYearStart then the survey for year X is done in calendar year X+1.
 #' @param freqStartsByYear data.frame. Optional. Number of collars deployed in
 #'   each year. If NULL `paramTable$collarCount` is used as the target number of
 #'   collars and each year that collars are deployed they will be topped up to
@@ -102,7 +105,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   if(!is.null(cowCounts)){
     testTable(
       cowCounts,
-      req_col_names = c("Year", "Cows")
+      req_col_names = c("Year"),
+      or_col_names = c("Cows","cowMult")
     )
   }
   
@@ -270,7 +274,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     recruitYrs <-intersect(recruitYrs,cowCounts$Year)
     cowCounts <- subset(cowCounts,is.element(Year,recruitYrs))
     
-    testTable(cowCounts, c("Year", "Cows"),
+    testTable(cowCounts,"Year", c("cowMult", "Cows"),
               req_vals = list(Year = recruitYrs))
   } else if(hasName(paramTable, "cowCount")){
     cowCounts <- expand.grid(Year = recruitYrs,
@@ -315,6 +319,22 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     freqStartsByYear$numStarts[!is.element(freqStartsByYear$Year, renewYrs)] <- 0
   }
   
+  cowMult = NULL
+  if(hasName(paramTable,"cowMult") & is.null(cowCountsIn) & !hasName(paramTable, "cowCount")){
+    if(nrow(freqStartsByYear)>0){
+      cowMult = subset(freqStartsByYear,select=intersect(names(freqStartsByYear),c("Year","PopulationName")))
+      cowMult$cowMult = paramTable$cowMult
+    }
+  }else{
+    if(hasName(cowCountsIn,"Cows")&hasName(cowCountsIn,"cowMult")){
+      stop("Specify cowMult or Cows in cowCounts, but not both.")
+    }
+    if(hasName(cowCountsIn,"cowMult")){
+      cowMult = cowCountsIn
+    }
+  }
+  
+  
   if(!is.null(surv_data)&&(length(unique(surv_data$Month))>1)){
     forceMonths = T
   }else{forceMonths=F}
@@ -342,7 +362,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     # if cowMult is provided, set cows as a function of number of surviving cows at
     # year start
 
-    if (hasName(paramTable,"cowMult") & is.null(cowCountsIn) & !hasName(paramTable, "cowCount")) {
+    if (!is.null(cowMult)) {
       
       # if multiple months filter to the start of caribou year
       # if only one subtract all the mortalities for the year
@@ -361,8 +381,10 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       survsCalving$Year <- survsCalving$CaribouYear;survsCalving$Month=NULL
       if (nrow(survsCalving) > 0) {
         cowCounts <- subset(survsCalving, select=c("PopulationName","Replicate","Year","StartTotal", "surviving"))
-        cowCounts$Cows <- paramTable$cowMult * cowCounts$surviving
-        cowCounts$surviving <- NULL
+        cowCounts <- merge(cowCounts, cowMult,all.x=T)
+        cowCounts$cowMult[is.na(cowCounts$cowMult)]=0
+        cowCounts$Cows <- cowCounts$cowMult * cowCounts$surviving
+        cowCounts$surviving <- NULL; cowCounts$cowMult = NULL
       } else {
         cowCounts <- unique(subset(trajectories,select=c("PopulationName","Replicate","Year")))
         cowCounts$Cows <- 0
