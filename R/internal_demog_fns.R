@@ -471,7 +471,7 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   simSurvs$MortalitiesUncertain[simSurvs$StartTotal==0]=NA
   simSurvs$Malfunctions[simSurvs$StartTotal==0]=NA
   
-  return(simSurvs)
+  return(ungroup(simSurvs))
 }
 
 simCalfCowRatios <- function(cowCounts, exData) {

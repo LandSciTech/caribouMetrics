@@ -45,8 +45,8 @@ test_that("No survival works", {
     mutate(MortalitiesCertain = ifelse(Year > 2013, StartTotal, MortalitiesCertain))
   
   r_data <- r_data %>% 
-    mutate(Cows = ifelse(Year > 2013, 0, Cows),
-           Calves = ifelse(Year > 2013, 0, Calves)) 
+    mutate(Cows = ifelse(Year > 2010, 0, Cows),
+           Calves = ifelse(Year > 2010, 0, Calves)) 
   
   lowRates <- estimateBayesianRates(s_data, r_data, N0 = 500, niters = 20, return_mcmc = TRUE)
   
@@ -54,9 +54,22 @@ test_that("No survival works", {
                                                       curYear = 2016, collarCount = 20),
                                   trajectories = trajectoriesFromBayesian(lowRates)$samples %>%
                                     filter(Replicate == "x1"))
-  # Gives error see issue #163
-  # lowRates2 <- estimateBayesianRates(lowSims$simSurvObs %>% filter(!is.na(StartTotal)),
-  #                                    lowSims$simRecruitObs%>% filter(!is.na(Cows)),
-  #                                    N0 = 500, niters = 20, return_mcmc = TRUE)
+  # Works now
+  lowRates2 <- estimateBayesianRates(lowSims$simSurvObs %>%
+                                       mutate(StartTotal = ifelse(is.na(StartTotal),
+                                                                  10, StartTotal),
+                                              MortalitiesCertain = ifelse(is.na(MortalitiesCertain),
+                                                                          10, MortalitiesCertain),
+                                              MortalitiesUncertain = 0, 
+                                              Malfunctions = 0),
+                                     lowSims$simRecruitObs %>% 
+                                       mutate(Cows = ifelse(is.na(Cows), 10, Cows),
+                                              Calves = ifelse(is.na(Calves), 0, Calves),
+                                              Bulls = ifelse(is.na(Bulls), 0, Bulls),
+                                              UnknownAdults = ifelse(is.na(UnknownAdults), 0, UnknownAdults),
+                                              Yearlings = ifelse(is.na(Yearlings), 0, Yearlings),
+                                              CowsBulls = ifelse(is.na(CowsBulls), 0, CowsBulls)),
+                                     N0 = 500, niters = 20, return_mcmc = TRUE)
   
+  expect_is(lowRates2, "list")
 })
