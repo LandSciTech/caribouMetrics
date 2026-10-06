@@ -273,9 +273,14 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   if(!is.null(cowCounts)){
     recruitYrs <-intersect(recruitYrs,cowCounts$Year)
     cowCounts <- subset(cowCounts,is.element(Year,recruitYrs))
+
+    testTable(
+      cowCounts,
+      req_col_names = c("Year"),
+      or_col_names = c("Cows","cowMult"),
+      req_vals = list(Year = recruitYrs)
+    )
     
-    testTable(cowCounts,"Year", c("cowMult", "Cows"),
-              req_vals = list(Year = recruitYrs))
   } else if(hasName(paramTable, "cowCount")){
     cowCounts <- expand.grid(Year = recruitYrs,
                              Cows = paramTable$cowCount)

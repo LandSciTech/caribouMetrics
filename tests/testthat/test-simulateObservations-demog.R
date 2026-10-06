@@ -127,6 +127,27 @@ test_that("freqStartsByYear and CowCounts behave", {
   
   simObs7$simRecruitObs %>% filter(Cows != 10) %>% nrow() %>% 
     {expect_true(. == 0)} 
+  
+  # can have cowMult instead of Cows in cowCounts
+  simObs8 <- simulateObservations(scns,
+                                  freqStartsByYear = data.frame(Year = seq(2009, 2023, by = 3),
+                                                                numStarts = 10),
+                                  cowCounts = data.frame(Year = 2009:2023,
+                                                         cowMult = 10))
+  # cowMult in cowCounts table gives expected results
+  simObs8$simSurvObs %>% mutate(CaribouYear = Year) %>% 
+    left_join(simObs8$simRecruitObs %>% mutate(CaribouYear = Year - 1), 
+              by = join_by(PopulationName, Replicate, CaribouYear)) %>% 
+    mutate(pass = Cows == (StartTotal - MortalitiesCertain) * 10) %>% 
+    pull(pass) %>% all %>% 
+    expect_true()
+  
+  nrow(simObs8$simSurvObs)
+  nrow(simObs8$simRecruitObs)
+  
+  nrow(simObs7$simSurvObs)
+  nrow(simObs7$simRecruitObs)
+  
 })
 
 test_that("collarInterval behaves", {
@@ -279,7 +300,7 @@ test_that("JAGS mod works and the trajectory can include disturbance", {
   mod_jags <- estimateBayesianRates(surv_data = bboudata::bbousurv_multi %>% filter(Year > 2005), 
                                     recruit_data = bboudata::bbourecruit_multi %>% filter(Year > 2005),
                                     N0=1000,
-                                    disturbance = data.frame(Year=seq(2010,2017),Anthro=5,Fire_excl_anthro=0.2),
+                                    disturbance = data.frame(Year=seq(2005,2017),Anthro=5,Fire_excl_anthro=0.2),
                                     niters=15)
   
   trajs <- trajectoriesFromBayesian(mod_jags)$samples
