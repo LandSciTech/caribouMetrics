@@ -145,6 +145,15 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     recruit_data <- subset(recruit_data,as.numeric(as.character(Annual))<=max(includeTimes))
   }
   
+  if(is.null(distScen)&hasName(recruit_data,"Anthro")){
+    selNames <- intersect(names(recruit_data),
+                          c("PopulationName","Year","CaribouYear","Anthro","Total_dist","Fire_excl_anthro"))
+    distScen <- unique(subset(recruit_data,select=selNames))
+    if(hasName(distScen,"CaribouYear")){
+      distScen$Year = distScen$CaribouYear; distScen$CaribouYear = NULL
+    }
+  }
+
   # Simulate covariate table
   if (is.null(distScen)) {
     covariates <- simCovariates(paramTable$iAnthro, paramTable$iFire, 
@@ -168,7 +177,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
                                .data$Year >= paramTable$startYear)
   }
   
-  simDisturbance <- round(simDisturbance)
+  simDisturbance[,2:ncol(simDisturbance)] <- round(simDisturbance[,2:ncol(simDisturbance)])
   
   if(is.null(trajectories)){
     # simulate true population trajectory
