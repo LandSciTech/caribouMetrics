@@ -102,6 +102,9 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     )
   )
   
+  includeTimes = seq((paramTable$startYear+paramTable$preYears),
+                     (paramTable$startYear+paramTable$preYears+paramTable$obsYears)-1)
+  
   if(!is.null(cowCounts)){
     testTable(
       cowCounts,
@@ -123,11 +126,12 @@ simulateObservations <- function(paramTable, trajectories=NULL,
         call. = FALSE
       )
     }
+    
+    #fill missing yrs in freqStartsByYear
+    freqStartsByYear <- merge(freqStartsByYear,data.frame(Year = seq(min(freqStartsByYear$Year),max(includeTimes))),all.y=T)
+    freqStartsByYear[is.na(freqStartsByYear)] <- 0
+    
   }
-  
-  
-  includeTimes = seq((paramTable$startYear+paramTable$preYears),
-                       (paramTable$startYear+paramTable$preYears+paramTable$obsYears)-1)
   
   if(!is.null(surv_data)){
     if(!hasName(surv_data,"Annual")){
