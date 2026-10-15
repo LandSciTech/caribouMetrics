@@ -198,7 +198,8 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   #characterize distribution of sAnnual
   x = mcmcr::collapse_chains(surv_fit$samples$sAnnual)[, , ]
   #descdist(x, discrete = FALSE)
-  s_dist <- fitdistrplus::fitdist(x, "gamma", optim.method = "L-BFGS-B", lower = 0.0001)
+  s_dist <- fitdistrplus::fitdist(x, "gamma", optim.method = "L-BFGS-B", lower = 0.00001)
+  
   #plot(gamma_dist)
   S_annual_mean <- s_dist$estimate[1]/s_dist$estimate[2]
   S_annual_shape <- s_dist$estimate[1]
