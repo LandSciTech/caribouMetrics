@@ -6,7 +6,7 @@ test_that("can change with individual args", {
   defs <- getScenarioDefaults(obsAnthroSlope = c(1:3))
   expect_equal(defs$obsAnthroSlope, 1:3)
   # ensure labels are unique
-  expect_equal(nrow(distinct(defs, label)), 3)
+  expect_equal(n_distinct(defs$label), 3)
 })
 
 test_that("can change with data.frame", {

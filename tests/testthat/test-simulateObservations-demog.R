@@ -318,7 +318,7 @@ test_that("JAGS mod works and the trajectory can include disturbance", {
   expect_warning(simObs8 <- simulateObservations(scns10,trajs), "do not include the disturbance")
   
   simObs8$exData %>% filter(MetricTypeID == "Anthro") %>% pull(Amount) %>% 
-    unique() %>% expect_equal(5)
+    unique() %>% expect_equal(c(5, 2, 10))
 })
 
 test_that("N0 variation works", {

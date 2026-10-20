@@ -60,18 +60,17 @@ getScenarioDefaults <- function(paramTable = NULL,
 
   paramTable$ID <- seq(1:nrow(paramTable))
   
-  paramTable$label <- paramTable %>%
-    mutate(across(everything(), \(x) paste0(x, collapse = "_"))) %>% 
-    rowwise() %>% 
+  paramTable$label <- paramTable %>% rowwise() %>% 
+    mutate(across(everything(), \(x) paste0(as.character(x), collapse = "_"))) %>% 
     mutate(label = paste0(paste0(rev(colnames(pick(everything()))), 
                                  rev(c_across(everything()))), collapse = "_")) %>% 
     ungroup() %>% pull(label)
   
-  # This was not working right with multiple rows in paramTable
-  paramTable$label <- ""
-  for (n in names(paramTable)[(length(names(paramTable)) - 1):1]) {
-    paramTable$label <- paste0(paramTable$label, n, paste0(paramTable[[n]], collapse = "_"), "_")
-  }
+  # # This was not working right with multiple rows in paramTable
+  # paramTable$label <- ""
+  # for (n in names(paramTable)[(length(names(paramTable)) - 1):1]) {
+  #   paramTable$label <- paste0(paramTable$label, n, paste0(paramTable[[n]], collapse = "_"), "_")
+  # }
 
   return(paramTable)
 }
