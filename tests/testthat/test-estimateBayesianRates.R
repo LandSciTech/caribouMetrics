@@ -53,7 +53,9 @@ test_that("No survival works", {
   lowSims <- simulateObservations(getScenarioDefaults(obsAnthroSlope = 0, projAnthroSlope = 0, 
                                                       curYear = 2016, collarCount = 20),
                                   trajectories = trajectoriesFromBayesian(lowRates)$samples %>%
-                                    filter(Replicate == "x1"))
+                                    filter(Replicate == "x1")) %>% 
+    expect_warning(regexp = "Adjusting number of collars")
+  
   # Works now
   lowRates2 <- estimateBayesianRates(lowSims$simSurvObs %>%
                                        mutate(StartTotal = ifelse(is.na(StartTotal),
@@ -70,6 +72,16 @@ test_that("No survival works", {
                                               Yearlings = ifelse(is.na(Yearlings), 0, Yearlings),
                                               CowsBulls = ifelse(is.na(CowsBulls), 0, CowsBulls)),
                                      N0 = 500, niters = 20, return_mcmc = TRUE)
+  
+  # TODO produced weird text output:
+  # Error, could not find name
+  # Name = lifted_d1_minus_eSurvival_oBi_cB_L19
+  # Available Name 1 = Mortalities
+  # Error, could not find name
+  # Name = lifted_d1_minus_eSurvival_oBi_cB_L19
+  # Available Name 1 = Mortalities
+  # 
+  # Either capture somehow or find the source and prevent it.
   
   expect_is(lowRates2, "list")
 })

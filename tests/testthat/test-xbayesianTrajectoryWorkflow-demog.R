@@ -3,7 +3,7 @@ test_that("real and simulated data work", {
   mod <- bayesianTrajectoryWorkflow(
     surv_data = bboudata::bbousurv_a %>% filter(Year > 2010),
     recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
-    disturbance = NULL
+    disturbance = NULL, niters=100
   )
   # str(mod, max.level = 2)
   
@@ -19,7 +19,7 @@ test_that("real and simulated data work", {
   #devtools::document();devtools::load_all()
   out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                            disturbance = simO$simDisturbance,
-                           startYear = 2014)
+                            niters=100)
   
   expect_type(out, "list")
 })

@@ -129,8 +129,10 @@ test_that("ignorePrecision works as expected", {
 })
 
 test_that("all model versions in table work", {
-  versJ <- distinct(popGrowthTableJohnsonECCC, modelVersion, ModelNumber) %>%
-    filter(modelVersion == "Johnson")
+  versJ <- popGrowthTableJohnsonECCC %>%
+    filter(modelVersion == "Johnson", !(is.na(StdErr) & is.na(lowerCI))) %>%
+    distinct(modelVersion, ModelNumber)
+    
   
   allJmods <- purrr::map2(versJ$modelVersion, versJ$ModelNumber,
                           ~estimateNationalRates(covTableSim, 

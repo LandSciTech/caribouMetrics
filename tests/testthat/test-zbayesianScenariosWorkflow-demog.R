@@ -86,7 +86,7 @@ test_that("Model and input trajectory match", {
 
   # devtools::load_all(path = "../caribouMetrics/")
   posteriorResult <- bayesianScenariosWorkflow(scns, simBig, niters = 1000,
-                                               returnSamples=T)
+                                               returnSamples=T, printProgress = FALSE)
 
   #for(nn in union(names(simBig$surv_data),names(posteriorResult$out$result$surv_data))){
   #  print(nn)
@@ -158,7 +158,7 @@ test_that("results match expected", {
     )
     scResults <- suppressWarnings(bayesianScenariosWorkflow(
       scns, simBig,  eParsIn,
-      niters = 1000
+      niters = 1000, printProgress = FALSE
     ))
   }
   
