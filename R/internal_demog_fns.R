@@ -761,7 +761,7 @@ setBbouNAs <- function(dat,year_start=formals(bboutools::bb_fit_survival)$year_s
   
   if(hasName(dat,"Calves")){
     dat$Calves <- as.numeric(dat$Calves)
-    dat$Year[is.na(dat$Calves)]<-dat$CaribouYear[is.na(dat$Calves)]
+    dat$Year[is.na(dat$Calves)]<-dat$CaribouYear[is.na(dat$Calves)]+1
     naSet <- c('Month', 'Day', 'Bulls', 'UnknownAdults', 'Yearlings', 'Cows')
     for (n in naSet){
       if(!hasName(dat,n)){
