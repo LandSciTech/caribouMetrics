@@ -141,12 +141,14 @@ test_that("freqStartsByYear and CowCounts behave", {
     mutate(pass = Cows == (StartTotal - MortalitiesCertain) * 10) %>% 
     pull(pass) %>% all %>% 
     expect_true()
+
+  #plotSurvivalSeries(simObs8$simSurvObs) # drops are due to collars falling off after 4 yrs
+  #check that missing years were filled  
+  expect_true(nrow(simObs8$simSurvObs)==15)
+  expect_true(nrow(simObs8$simRecruitObs)==15)
   
-  nrow(simObs8$simSurvObs)
-  nrow(simObs8$simRecruitObs)
-  
-  nrow(simObs7$simSurvObs)
-  nrow(simObs7$simRecruitObs)
+  expect_true(nrow(simObs7$simSurvObs)==15)
+  expect_true(nrow(simObs7$simRecruitObs)==15)
   
 })
 
