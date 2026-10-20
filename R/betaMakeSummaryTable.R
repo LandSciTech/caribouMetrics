@@ -347,11 +347,11 @@ jagsRunAndSummarize <- function(data,datal,params,fname,inits,nc,ni,nb,nt){
   # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed
   if(!file.exists(fname)){stop()}
   
-  model.fit <- rjags::jags.model(file=fname, data=datal, n.adapt=nb, n.chains = nc,inits = inits)
+  model.fit <- rjags::jags.model(file=fname, data=datal, n.adapt=nb, n.chains = nc,inits = inits, quiet = TRUE)
   
   # To get samples from the posterior distribution of the parameters
-  update(model.fit, n.iter=ni)
-  model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt)
+  update(model.fit, n.iter=ni, progress.bar = "none")
+  model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt, progress.bar = "none")
   
   ### Output data preparation
   # Summary statistics of mcmc
