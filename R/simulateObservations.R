@@ -209,8 +209,8 @@ simulateObservations <- function(paramTable, trajectories=NULL,
       check <- unique(subset(tt,select=names(distMerge)))
       if(nrow(check)!=nrow(distMerge)){
         if(hasName(trajectories,"Anthro")){
-          simDisturbance <- unique(subset(trajectories,select=c(Anthro,Fire_excl_anthro,Year)))
-          if(max(table(simDisturbance$Year))>1){
+          simDisturbance <- unique(subset(trajectories,select=c(Anthro,Fire_excl_anthro,Year, PopulationName)))
+          if(max(table(simDisturbance$Year, simDisturbance$PopulationName))>1){
             stop("The example trajectories do not include the disturbance scenario specified, and they include more than one disturbance scenario. Either provide a trajectory that does not include multiple disturbance scnenario, or specify a disturbance scenario that is included in the trajectories.")
           }else{
             warning("The example trajectories do not include the disturbance scenario. Ignoring the disturbance scenario.")

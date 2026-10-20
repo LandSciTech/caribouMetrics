@@ -300,7 +300,14 @@ test_that("JAGS mod works and the trajectory can include disturbance", {
   mod_jags <- estimateBayesianRates(surv_data = bboudata::bbousurv_multi %>% filter(Year > 2005), 
                                     recruit_data = bboudata::bbourecruit_multi %>% filter(Year > 2005),
                                     N0=1000,
-                                    disturbance = data.frame(Year=seq(2005,2017),Anthro=5,Fire_excl_anthro=0.2),
+                                    disturbance = bind_rows(
+                                      data.frame(PopulationName = "A", Year=seq(2005,2017),
+                                                 Anthro=5,Fire_excl_anthro=0.2),
+                                      data.frame(PopulationName = "B", Year=seq(2005,2017),
+                                                 Anthro=10,Fire_excl_anthro=2),
+                                      data.frame(PopulationName = "C", Year=seq(2005,2017),
+                                                 Anthro=2,Fire_excl_anthro=1),
+                                      ),
                                     niters=15)
   
   trajs <- trajectoriesFromBayesian(mod_jags)$samples
