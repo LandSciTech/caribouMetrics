@@ -709,7 +709,7 @@ convertBbouData<-function(dat,year_start=formals(bboutools::bb_fit_survival)$yea
     #combine any duplicates
     sumVars <- intersect(names(dat),c("StartTotal","Malfunctions","Mortalities","MortalitiesUncertain","MortalitiesCertain"))
     groupVars <- setdiff(names(dat),sumVars)
-    dat <- dat |> group_by(across(groupVars)) |> 
+    dat <- dat |> group_by(across(any_of(groupVars))) |> 
       summarize_at(sumVars,function(x){ifelse(all(is.na(x)), NA, sum(x, na.rm=TRUE))})
     dat <- as.data.frame(dat)
     dat$StartTotal[is.na(dat$StartTotal)]=StartTotalMissing 
