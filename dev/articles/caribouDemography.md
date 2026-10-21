@@ -683,25 +683,6 @@ pt <- bbouInformative$parList
 trajFromSummaryBase <- trajectoriesFromSummary(replicates=1000,N0=100,Rbar=pt$Rbar,
                                                Sbar=pt$Sbar, Riv=pt$Riv,Siv=pt$Siv,
                                                type=pt$type)
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 28
-#>    Total graph size: 216
-#> 
-#> Initializing model
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 28
-#>    Total graph size: 216
-#> 
-#> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryBase, simInitial = popMetricsBayes)
 typeLabs <- c("Summary", "Bayes")
 ```
@@ -762,25 +743,6 @@ trajFromSummaryAdjust <- trajectoriesFromSummary(replicates=1000,N0=NAdjust,Rbar
                                                Sbar=pt$Sbar,
                                                Riv=pt$Riv,Siv=pt$Siv,
                                                type=pt$type)
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 28
-#>    Total graph size: 216
-#> 
-#> Initializing model
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 28
-#>    Total graph size: 222
-#> 
-#> Initializing model
 out_tbls <- compareTrajectories(trajFromSummaryAdjust, simInitial = trajFromSummaryBase)
 typeLabs <- c("Adjust", "Base")
 ```
@@ -823,7 +785,7 @@ pt <- bbouInformative$parTab;pt
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
 #> 1   0.2647976 0.9403158 0.6231178 0.6593312   1.658096    0.840353   0.9840703
 #>   N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
-#> 1 NA           NA         13            NA            12
+#> 1 NA           NA         13            NA            13
 
 popMetricsBase <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
                                              R_sd=pt$R_sd,S_sd=pt$S_sd,

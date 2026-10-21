@@ -88,26 +88,6 @@ traj <- trajectoriesFromSummary(replicates = 35, N0 = 100,
                         Riv = data.frame(R_iv_mean = 0.36, R_iv_shape = 2),
                         Siv = data.frame(S_iv_mean = 0.63, S_iv_shape = 1.4),
                         type = "bbou")
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 14
-#>    Total graph size: 111
-#> 
-#> Initializing model
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 0
-#>    Unobserved stochastic nodes: 14
-#>    Total graph size: 111
-#> 
-#> Initializing model
-#> 
 plotTrajectories(traj)
 #> Warning: Removed 210 rows containing missing values or values outside the scale range
 #> (`geom_line()`).

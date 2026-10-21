@@ -3,9 +3,9 @@
 ## 1 Examples of initial Bayesian models informed by local data and national-demographic disturbance relationships
 
 We simulate monitoring scenarios informed by example data from the
-[`bboudata::bbousurv_a`](https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html)
+[`bboudata::bbousurv_a`](https://LandSciTech.github.io/bboudata/reference/bbousurv_a.html)
 and
-[`bboudata::bbourecruit_a`](https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html)
+[`bboudata::bbourecruit_a`](https://LandSciTech.github.io/bboudata/reference/bbourecruit_a.html)
 data sets:
 
 - Informative local data: Observations from 2010 to 2015.
@@ -370,25 +370,6 @@ posteriorResult <- bayesianScenariosWorkflow(
   scns, simRepeated, eParsIn,
   niters = niters, nthin = 10, returnSamples = T
 )
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 586
-#>    Unobserved stochastic nodes: 1178
-#>    Total graph size: 10291
-#> 
-#> Initializing model
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 92
-#>    Unobserved stochastic nodes: 595
-#>    Total graph size: 4764
-#> 
-#> Initializing model
 # Check survival data
 surv <- posteriorResult$out$result$surv_data
 plotSurvivalSeries(surv)

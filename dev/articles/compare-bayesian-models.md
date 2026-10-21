@@ -16,7 +16,7 @@ Hughes et al. ([2025](#ref-hughes_integration_2025)) models as follows:
   Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html)
   for details.
 - Allow analysis of monthly survival data in bboutools form
-  (e.g. [`bboudata::bbousurv_a`](https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html)).
+  (e.g. [`bboudata::bbousurv_a`](https://LandSciTech.github.io/bboudata/reference/bbousurv_a.html)).
 - Allow for calculation of population growth rate without initial
   population size information. See [Analytic Methods for Estimation of
   Boreal Caribou Survival, Recruitment and Population
@@ -45,9 +45,9 @@ bbou model include:
 
 We compare the Beta and bbou models using three examples derived from
 the
-[`bboudata::bbousurv_a`](https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html)
+[`bboudata::bbousurv_a`](https://LandSciTech.github.io/bboudata/reference/bbousurv_a.html)
 and
-[`bboudata::bbourecruit_a`](https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html)
+[`bboudata::bbourecruit_a`](https://LandSciTech.github.io/bboudata/reference/bbourecruit_a.html)
 data sets:
 
 - No local data: used to examine and compare prior predictions from the

@@ -60,9 +60,9 @@ bayesianScenariosWorkflow(
 
   list. Optional. If disturbance is NULL, this should be
   list(priors_survival=c(...),priors_recruitment=c(...)); see
-  [`bboutools::bb_priors_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html)
+  [`bboutools::bb_priors_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_priors_survival.html)
   and
-  [`bboutools::bb_priors_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html)
+  [`bboutools::bb_priors_recruitment()`](https://github.com/LandSciTech/bboutools/reference/bb_priors_recruitment.html)
   for details. If disturbance is not NULL, see
   [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md)
   for details.
@@ -84,9 +84,9 @@ bayesianScenariosWorkflow(
 - ...:
 
   Other parameters passed on to
-  [`bboutools::bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  [`bboutools::bb_fit_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html)
   and
-  [`bboutools::bb_fit_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
+  [`bboutools::bb_fit_recruitment()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html).
 
 ## Value
 
@@ -138,127 +138,39 @@ simsIn <- trajectoriesFromNational()
 #> Updating cached initial simulations.
 scResults <- bayesianScenariosWorkflow(scns, simsIn, eParsIn,
                        niters = 10)# only set to speed up example. Normally keep defaults.
-#> Warning: requested year range: 2014 - 2058 does not match recruitment data year range:  2013 - 2023
-#> Warning: missing years of recruitment data: 2015
 #> Registered S3 method overwritten by 'mcmcr':
 #>   method         from 
 #>   as.mcmc.nlists nlist
 #> Registered S3 method overwritten by 'rjags':
 #>   method               from 
 #>   as.mcmc.list.mcarray mcmcr
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 96
-#>    Unobserved stochastic nodes: 492
-#>    Total graph size: 2389
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
 #> 
-#> Initializing model
 #> 
 #> Warning: Adaptation incomplete
 #> NOTE: Stopping adaptation
 #> 
 #> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 16
-#>    Unobserved stochastic nodes: 213
-#>    Total graph size: 680
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
 #> 
-#> Initializing model
 #> 
 #> Warning: Adaptation incomplete
 #> NOTE: Stopping adaptation
 #> 
 #> 
-#> Warning: requested year range: 2004 - 2058 does not match recruitment data year range:  2003 - 2023
-#> Warning: missing years of recruitment data: 2005
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 216
-#>    Unobserved stochastic nodes: 502
-#>    Total graph size: 2909
+#> Warning: Adaptation incomplete
+#> NOTE: Stopping adaptation
 #> 
-#> Initializing model
 #> 
 #> Warning: Adaptation incomplete
 #> NOTE: Stopping adaptation
 #> 
 #> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 36
-#>    Unobserved stochastic nodes: 243
-#>    Total graph size: 820
-#> 
-#> Initializing model
-#> 
 #> Warning: Adaptation incomplete
 #> NOTE: Stopping adaptation
 #> 
-#> 
-#> Warning: requested year range: 2014 - 2058 does not match recruitment data year range:  2013 - 2023
-#> Warning: missing years of recruitment data: 2015
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 96
-#>    Unobserved stochastic nodes: 492
-#>    Total graph size: 2389
-#> 
-#> Initializing model
-#> 
-#> Warning: Adaptation incomplete
-#> NOTE: Stopping adaptation
-#> 
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 16
-#>    Unobserved stochastic nodes: 213
-#>    Total graph size: 680
-#> 
-#> Initializing model
-#> 
-#> Warning: Adaptation incomplete
-#> NOTE: Stopping adaptation
-#> 
-#> 
-#> Warning: requested year range: 2004 - 2058 does not match recruitment data year range:  2003 - 2023
-#> Warning: missing years of recruitment data: 2005
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 216
-#>    Unobserved stochastic nodes: 502
-#>    Total graph size: 2909
-#> 
-#> Initializing model
-#> 
-#> Warning: Adaptation incomplete
-#> NOTE: Stopping adaptation
-#> 
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 36
-#>    Unobserved stochastic nodes: 243
-#>    Total graph size: 820
-#> 
-#> Initializing model
 #> 
 #> Warning: Adaptation incomplete
 #> NOTE: Stopping adaptation

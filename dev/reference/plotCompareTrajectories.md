@@ -112,29 +112,9 @@ simO <- simulateObservations(scns)
 out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                           disturbance = simO$simDisturbance,
                           startYear = 2014, niters=10)
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 10
-#>    Unobserved stochastic nodes: 33
-#>    Total graph size: 665
-#> 
-#> Initializing model
-#> 
 #> Warning: Adaptation incomplete
 #> NOTE: Stopping adaptation
 #> 
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 20
-#>    Unobserved stochastic nodes: 84
-#>    Total graph size: 729
-#> 
-#> Initializing model
 #> 
 #> Warning: Adaptation incomplete
 #> NOTE: Stopping adaptation

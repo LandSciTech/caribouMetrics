@@ -136,9 +136,9 @@ monitoringDefaults(
 - ...:
 
   Other parameters passed on to
-  [`bboutools::bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  [`bboutools::bb_fit_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html)
   and
-  [`bboutools::bb_fit_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
+  [`bboutools::bb_fit_recruitment()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html).
 
 - projYears:
 
@@ -334,8 +334,8 @@ getScenarioDefaults(paramTable = data.frame(iFire = 10, iAnthro = 20, obsYears =
 #> 1 0.46000, 0.08696    10      20              2               2   FALSE
 #>   projYears obsYears preYears curYear startYear ID
 #> 1        35        1        0    2023      2023  1
-#>                                                                                                                                                                                                                                                                          label
-#> 1 ID1_startYear2023_curYear2023_preYears0_obsYears1_projYears35_hasYearFALSE_projAnthroSlope2_obsAnthroSlope2_iAnthro20_iFire10_interannualVarlist(R_CV = 0.46, S_CV = 0.08696)_sSlopeMod1_rSlopeMod1_correlateRatesFALSE_cowMult6_zMax0_zMin0_uMax0_uMin0_qMax0_qMin0_N01000_
+#>                                                                                                                                                                                                                                                    label
+#> 1 ID1_startYear2023_curYear2023_preYears0_obsYears1_projYears35_hasYearFALSE_projAnthroSlope2_obsAnthroSlope2_iAnthro20_iFire10_interannualVar0.46_0.08696_sSlopeMod1_rSlopeMod1_correlateRatesFALSE_cowMult6_zMax0_zMin0_uMax0_uMin0_qMax0_qMin0_N01000
 
 timeDefaults()
 #> # A tibble: 1 × 6

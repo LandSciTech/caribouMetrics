@@ -42,9 +42,9 @@ bayesianTrajectoryWorkflow(
 
   list. Optional. If disturbance is NULL, this should be
   list(priors_survival=c(...),priors_recruitment=c(...)); see
-  [`bboutools::bb_priors_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html)
+  [`bboutools::bb_priors_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_priors_survival.html)
   and
-  [`bboutools::bb_priors_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html)
+  [`bboutools::bb_priors_recruitment()`](https://github.com/LandSciTech/bboutools/reference/bb_priors_recruitment.html)
   for details. If disturbance is not NULL, see
   [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md)
   for details.
@@ -85,9 +85,9 @@ bayesianTrajectoryWorkflow(
 - ...:
 
   Other parameters passed on to
-  [`bboutools::bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  [`bboutools::bb_fit_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html)
   and
-  [`bboutools::bb_fit_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
+  [`bboutools::bb_fit_recruitment()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html).
 
 ## Value
 
@@ -178,23 +178,23 @@ Caribou demography functions:
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
-#>   ..$ R_bar         : num 0.189
-#>   ..$ R_sd          : num 0.0865
-#>   ..$ R_iv_mean     : num 0.344
-#>   ..$ R_iv_shape    : num 17.7
-#>   ..$ R_bar_lower   : num 0.164
+#>   ..$ R_bar         : num 0.188
+#>   ..$ R_sd          : num 0.087
+#>   ..$ R_iv_mean     : num 0.341
+#>   ..$ R_iv_shape    : num 16.8
+#>   ..$ R_bar_lower   : num 0.163
 #>   ..$ R_bar_upper   : num 0.215
-#>   ..$ S_bar         : num 0.87
-#>   ..$ S_sd          : num 0.16
-#>   ..$ S_iv_mean     : num 0.29
-#>   ..$ S_iv_shape    : num 1.46
-#>   ..$ S_bar_lower   : num 0.832
-#>   ..$ S_bar_upper   : num 0.903
+#>   ..$ S_bar         : num 0.871
+#>   ..$ S_sd          : num 0.162
+#>   ..$ S_iv_mean     : num 0.315
+#>   ..$ S_iv_shape    : num 2.78
+#>   ..$ S_bar_lower   : num 0.835
+#>   ..$ S_bar_upper   : num 0.906
 #>   ..$ N0            : logi NA
 #>   ..$ nCollarYears  : num NA
 #>   ..$ nSurvYears    : int 32
 #>   ..$ nCowsAllYears : num NA
-#>   ..$ nRecruitYears : int 31
+#>   ..$ nRecruitYears : int 32
 #>  $ parList:List of 5
 #>   ..$ Rbar:'data.frame': 32 obs. of  7 variables:
 #>   ..$ Sbar:'data.frame': 32 obs. of  7 variables:
@@ -212,25 +212,5 @@ Caribou demography functions:
   out <- bayesianTrajectoryWorkflow(surv_data = simO$simSurvObs, recruit_data = simO$simRecruitObs,
                            disturbance = simO$simDisturbance,
                            startYear = 2014)
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 10
-#>    Unobserved stochastic nodes: 33
-#>    Total graph size: 665
-#> 
-#> Initializing model
-#> 
-#> Compiling model graph
-#>    Resolving undeclared variables
-#>    Allocating nodes
-#> Graph information:
-#>    Observed stochastic nodes: 20
-#>    Unobserved stochastic nodes: 84
-#>    Total graph size: 729
-#> 
-#> Initializing model
-#> 
 # }
 ```

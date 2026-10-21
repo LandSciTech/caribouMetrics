@@ -5,9 +5,9 @@ survey data. If disturbance data is provided a Beta model is fitted with
 disturbance covariates and priors informed by national
 demographic-disturbance relationships. If disturbance data is NULL
 bboutools logistic models are fit with
-[`bboutools::bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+[`bboutools::bb_fit_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html)
 and
-[`bboutools::bb_fit_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
+[`bboutools::bb_fit_recruitment()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html).
 In both cases the fitted the models are used to estimate recruitment and
 survival rates and return summary tables.
 
@@ -57,9 +57,9 @@ estimateBayesianRates(
 
   list. Optional. If disturbance is NULL, this should be
   list(priors_survival=c(...),priors_recruitment=c(...)); see
-  [`bboutools::bb_priors_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html)
+  [`bboutools::bb_priors_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_priors_survival.html)
   and
-  [`bboutools::bb_priors_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html)
+  [`bboutools::bb_priors_recruitment()`](https://github.com/LandSciTech/bboutools/reference/bb_priors_recruitment.html)
   for details. If disturbance is not NULL, see
   [`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md)
   for details.
@@ -86,9 +86,9 @@ estimateBayesianRates(
 - ...:
 
   Other parameters passed on to
-  [`bboutools::bb_fit_survival()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html)
+  [`bboutools::bb_fit_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html)
   and
-  [`bboutools::bb_fit_recruitment()`](https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html).
+  [`bboutools::bb_fit_recruitment()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html).
 
 ## Value
 
@@ -161,11 +161,11 @@ s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 estimateBayesianRates(s_data, r_data, N0 = 500)
 #>   PopulationName     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower
-#> 1              A 0.1897638 0.08041563 0.3160781   24.92854   0.1656643
-#> 2              B 0.2038875 0.10827290 0.3160781   24.92854   0.1700242
+#> 1              A 0.1892745 0.08127592 0.3153711   26.45534   0.1661514
+#> 2              B 0.2030830 0.10232056 0.3153711   26.45534   0.1717109
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
-#> 1   0.2153105 0.8812224 0.2451984 0.4978054   13.09841   0.8211208   0.9240329
-#> 2   0.2390926 0.9086878 0.2964434 0.4978054   13.09841   0.8504153   0.9482841
+#> 1   0.2141778 0.8842859 0.2450002 0.5007685   12.93896   0.8259776   0.9271648
+#> 2   0.2381331 0.9085433 0.2951537 0.5007685   12.93896   0.8527330   0.9474408
 #>    N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
 #> 1 500          900         31          2353            27
 #> 2 500          519         18          2001            15

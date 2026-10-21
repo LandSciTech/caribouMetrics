@@ -39,7 +39,7 @@ extended as follows:
   Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html)
   for details.
 - Allow analysis of monthly survival data in bboutools form
-  (e.g. [`bboudata::bbousurv_a`](https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html)).
+  (e.g. [`bboudata::bbousurv_a`](https://LandSciTech.github.io/bboudata/reference/bbousurv_a.html)).
 - Allow for calculation of population growth rate without initial
   population size information. See [Analytic Methods for Estimation of
   Boreal Caribou Survival, Recruitment and Population

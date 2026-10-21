@@ -88,11 +88,11 @@ populations.</p>
 
 
 <dt id="arg-rec-pred">rec_pred<a class="anchor" aria-label="anchor" href="#arg-rec-pred"></a></dt>
-<dd><p>results returned by <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment()</a></code> or <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_calf_cow_ratio.html" class="external-link">bboutools::bb_predict_calf_cow_ratio()</a></code> functions of bboutools R package, or recruit_fit returned by <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>.</p></dd>
+<dd><p>results returned by <code><a href="https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment()</a></code> or <code><a href="https://github.com/LandSciTech/bboutools/reference/bb_predict_calf_cow_ratio.html" class="external-link">bboutools::bb_predict_calf_cow_ratio()</a></code> functions of bboutools R package, or recruit_fit returned by <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>.</p></dd>
 
 
 <dt id="arg-surv-pred">surv_pred<a class="anchor" aria-label="anchor" href="#arg-surv-pred"></a></dt>
-<dd><p>bboufit object return by <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival()</a></code> or <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival.html" class="external-link">bboutools::bb_predict_survival()</a></code> functions of bboutools R package, or surv_fit returned by <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>.</p></dd>
+<dd><p>bboufit object return by <code><a href="https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival()</a></code> or <code><a href="https://github.com/LandSciTech/bboutools/reference/bb_predict_survival.html" class="external-link">bboutools::bb_predict_survival()</a></code> functions of bboutools R package, or surv_fit returned by <code><a href="estimateBayesianRates.html">estimateBayesianRates()</a></code>.</p></dd>
 
 
 <dt id="arg-inityear">initYear<a class="anchor" aria-label="anchor" href="#arg-inityear"></a></dt>
@@ -104,7 +104,7 @@ populations.</p>
 
 
 <dt id="arg-returnexpected">returnExpected<a class="anchor" aria-label="anchor" href="#arg-returnexpected"></a></dt>
-<dd><p>logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_calf_cow_ratio.html" class="external-link">bboutools::bb_predict_calf_cow_ratio()</a></code>/<code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_predict_survival.html" class="external-link">bboutools::bb_predict_survival()</a></code> results.</p></dd>
+<dd><p>logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are <code><a href="https://github.com/LandSciTech/bboutools/reference/bb_predict_calf_cow_ratio.html" class="external-link">bboutools::bb_predict_calf_cow_ratio()</a></code>/<code><a href="https://github.com/LandSciTech/bboutools/reference/bb_predict_survival.html" class="external-link">bboutools::bb_predict_survival()</a></code> results.</p></dd>
 
 
 <dt id="arg-c">c<a class="anchor" aria-label="anchor" href="#arg-c"></a></dt>
@@ -190,8 +190,8 @@ start of the caribou year.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span>  <span class="co"># Note these examples take a long time to run!</span></span></span>
 <span class="r-in"><span>  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimateBayesianRates.html">estimateBayesianRates</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    surv_data <span class="op">=</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bbousurv_a</a></span>,</span></span>
-<span class="r-in"><span>    recruit_data <span class="op">=</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span>, </span></span>
+<span class="r-in"><span>    surv_data <span class="op">=</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://LandSciTech.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bbousurv_a</a></span>,</span></span>
+<span class="r-in"><span>    recruit_data <span class="op">=</span> <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://LandSciTech.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span>, </span></span>
 <span class="r-in"><span>    N0 <span class="op">=</span> <span class="cn">NA</span>, return_mcmc <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span>                           </span></span>

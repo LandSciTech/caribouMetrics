@@ -56,8 +56,8 @@ used to estimate recruitment and survival rates and return summary tables."><met
 survey data. If disturbance data is provided a Beta model is fitted with
 disturbance covariates and priors informed by national
 demographic-disturbance relationships. If disturbance data is NULL bboutools
-logistic models are fit with <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival()</a></code> and
-<code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment()</a></code>. In both cases the fitted the models are
+logistic models are fit with <code><a href="https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival()</a></code> and
+<code><a href="https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment()</a></code>. In both cases the fitted the models are
 used to estimate recruitment and survival rates and return summary tables.</p>
     </div>
 
@@ -72,8 +72,8 @@ used to estimate recruitment and survival rates and return summary tables.</p>
 <span>  shiny_progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  return_mcmc <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  i18n <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  niters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="fu">bboutools</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bb_fit_survival</a></span><span class="op">)</span><span class="op">$</span><span class="va">niters</span>,</span>
-<span>  nthin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="fu">bboutools</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bb_fit_survival</a></span><span class="op">)</span><span class="op">$</span><span class="va">nthin</span>,</span>
+<span>  niters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="fu">bboutools</span><span class="fu">::</span><span class="va"><a href="https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html" class="external-link">bb_fit_survival</a></span><span class="op">)</span><span class="op">$</span><span class="va">niters</span>,</span>
+<span>  nthin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="fu">bboutools</span><span class="fu">::</span><span class="va"><a href="https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html" class="external-link">bb_fit_survival</a></span><span class="op">)</span><span class="op">$</span><span class="va">nthin</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -106,7 +106,7 @@ includes disturbance covariates.</p></dd>
 <dt id="arg-priors">priors<a class="anchor" aria-label="anchor" href="#arg-priors"></a></dt>
 <dd><p>list. Optional. If disturbance is NULL, this should be
 list(priors_survival=c(...),priors_recruitment=c(...)); see
-<code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_priors_survival.html" class="external-link">bboutools::bb_priors_survival()</a></code> and <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_priors_recruitment.html" class="external-link">bboutools::bb_priors_recruitment()</a></code> for
+<code><a href="https://github.com/LandSciTech/bboutools/reference/bb_priors_survival.html" class="external-link">bboutools::bb_priors_survival()</a></code> and <code><a href="https://github.com/LandSciTech/bboutools/reference/bb_priors_recruitment.html" class="external-link">bboutools::bb_priors_recruitment()</a></code> for
 details. If disturbance is not NULL, see <code><a href="betaNationalPriors.html">betaNationalPriors()</a></code> for details.</p></dd>
 
 
@@ -130,8 +130,8 @@ burn-in.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other parameters passed on to <code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival()</a></code> and
-<code><a href="https://poissonconsulting.github.io/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment()</a></code>.</p></dd>
+<dd><p>Other parameters passed on to <code><a href="https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html" class="external-link">bboutools::bb_fit_survival()</a></code> and
+<code><a href="https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html" class="external-link">bboutools::bb_fit_recruitment()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -196,15 +196,15 @@ start of the caribou year.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">s_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bbousurv_a</a></span>, <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbousurv_b.html" class="external-link">bbousurv_b</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">r_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span>, <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://poissonconsulting.github.io/bboudata/reference/bbourecruit_b.html" class="external-link">bbourecruit_b</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">s_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://LandSciTech.github.io/bboudata/reference/bbousurv_a.html" class="external-link">bbousurv_a</a></span>, <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://LandSciTech.github.io/bboudata/reference/bbousurv_b.html" class="external-link">bbousurv_b</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">r_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://LandSciTech.github.io/bboudata/reference/bbourecruit_a.html" class="external-link">bbourecruit_a</a></span>, <span class="fu">bboudata</span><span class="fu">::</span><span class="va"><a href="https://LandSciTech.github.io/bboudata/reference/bbourecruit_b.html" class="external-link">bbourecruit_b</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">estimateBayesianRates</span><span class="op">(</span><span class="va">s_data</span>, <span class="va">r_data</span>, N0 <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   PopulationName     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1              A 0.1897638 0.08041563 0.3160781   24.92854   0.1656643</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2              B 0.2038875 0.10827290 0.3160781   24.92854   0.1700242</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1              A 0.1892745 0.08127592 0.3153711   26.45534   0.1661514</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2              B 0.2030830 0.10232056 0.3153711   26.45534   0.1717109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.2153105 0.8812224 0.2451984 0.4978054   13.09841   0.8211208   0.9240329</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.2390926 0.9086878 0.2964434 0.4978054   13.09841   0.8504153   0.9482841</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0.2141778 0.8842859 0.2450002 0.5007685   12.93896   0.8259776   0.9271648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0.2381331 0.9085433 0.2951537 0.5007685   12.93896   0.8527330   0.9474408</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 500          900         31          2353            27</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 500          519         18          2001            15</span>
