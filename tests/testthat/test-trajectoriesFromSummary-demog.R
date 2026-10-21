@@ -50,7 +50,7 @@ test_that("summary gives expected trajectory", {
   
   # works with variation in N0 (specified the way it is in the app handled internally by call to addN0Variation)
   trajs_rng <- trajectoriesFromSummaryForApp(
-    numSteps = 10, replicates = 5000, N0 = c(100,200), R_bar = 0.3,
+    numSteps = 10, replicates = 50000, N0 = c(100,200), R_bar = 0.3,
     S_bar = 0.8, R_sd = 0.05, S_sd = 0.1, R_iv_shape = 0.01, 
     R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
     scn_nm = "test")

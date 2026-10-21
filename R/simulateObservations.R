@@ -181,7 +181,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
                                .data$Year >= paramTable$startYear)
   }
   
-  simDisturbance[,2:ncol(simDisturbance)] <- round(simDisturbance[,2:ncol(simDisturbance)])
+  simDisturbance[,which(sapply(simDisturbance, is.numeric))] <- round(simDisturbance[,which(sapply(simDisturbance, is.numeric))])
   
   if(is.null(trajectories)){
     # simulate true population trajectory
