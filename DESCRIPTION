@@ -53,7 +53,9 @@ Imports:
     bboutools,
     bboudata,
     mcmcr,
-    fitdistrplus
+    fitdistrplus,
+    scales,
+    tibble
 Collate: 
     'AAAClassDefinitions.R'
     'applyDist.R'

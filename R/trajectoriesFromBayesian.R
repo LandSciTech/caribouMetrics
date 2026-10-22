@@ -62,7 +62,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   
   if(is.null(N0)){
     if(hasName(bayesianResults$parTab,"N0")){
-      if(class(bayesianResults$parTab)=="list"){
+      if(inherits(bayesianResults$parTab, "list")){
         N0 <- getN0Pars(bayesianResults$parTab$N0)
       }else{
         N0 <- getN0Pars(bayesianResults$parTab)
@@ -112,7 +112,7 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
 
   pars <- merge(pars,parsBar)
 
-  if(class(bayesianResults$parTab)=="list"){
+  if(inherits(bayesianResults$parTab, "list")){
     pi <- bayesianResults$parTab$N0
   }else{
     pi <- bayesianResults$parTab

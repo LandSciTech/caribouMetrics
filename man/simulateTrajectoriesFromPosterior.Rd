@@ -26,7 +26,8 @@ simulateTrajectoriesFromPosterior(
 \arguments{
 \item{trajectories}{data.frame containing trajectories created by \code{simulateTrajectoriesFromPosterior}}
 
-\item{returnSamples}{}
+\item{returnSamples}{logical. Should samples table be returned as well as
+summary?}
 
 \item{popInfo}{If NA (default) predictions are made without populations size, density dependence, or demographic stochasticity. See \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for details.}
 

@@ -52,7 +52,8 @@ convertTrajectories<-function(trajectories){
 #' Get 95% prediction intervals from trajectories
 #'
 #' @inheritParams convertTrajectories 
-#' @param returnSamples 
+#' @param returnSamples logical. Should samples table be returned as well as 
+#'   summary?
 #'
 #' @returns summarizeTrajectories: a list containing "summary" with a summary
 #'   table of trajectories and, if `returnSamples = TRUE`, "samples" with the
@@ -248,7 +249,7 @@ addN0Variation<- function(popInfo,forceDataFrame=F) {
   
   if(inherits(popInfo, "data.frame")){
     testTable(popInfo, req_col_names = "N0")
-    if(class(popInfo$N0) == "data.frame"){
+    if(inherits(popInfo$N0, "data.frame")){
       popInfo <- tidyr::unnest(popInfo, N0)
     }
   }

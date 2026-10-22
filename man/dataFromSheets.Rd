@@ -31,7 +31,10 @@ for more details on the format of the data.
 }
 \examples{
  
-dataFromSheets("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
+dataFromSheets(paste0(
+  "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/",
+  "edit?usp=sharing"
+))
 
 }
 \seealso{

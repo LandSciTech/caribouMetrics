@@ -273,7 +273,7 @@ simulateObservations <- function(paramTable, trajectories=NULL,
   exData <- tidyr::pivot_wider(popMetrics, id_cols = c("Replicate", "Year","Timestep","PopulationName"),
                                names_from = "MetricTypeID",
                                values_from = "Amount")
-  if(class(exData$N)=="list"){stop("Cannot extract example trajectory due to duplication. Check for errors in trajectoriesFromBayesian.")}
+  if(inherits(exData$N, "list")){stop("Cannot extract example trajectory due to duplication. Check for errors in trajectoriesFromBayesian.")}
 
   #Note these are caribou years, not calendar years
   if(!is.null(recruit_data)){
