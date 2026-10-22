@@ -4,6 +4,11 @@
 #' 
 #' @family demography
 #' @export
+#' @examples
+#' scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 1)
+#' simObs <- simulateObservations(scns)
+#' 
+#' plotSurvivalSeries(simObs$simSurvObs)
 plotSurvivalSeries <- function(surv_data_show) {
   # surv_data_show = subset(outObs$simSurvObs,Replicate==outObs$simSurvObs$Replicate[1])
 
@@ -18,10 +23,10 @@ plotSurvivalSeries <- function(surv_data_show) {
                                          colour = PopulationName)) +
       ggplot2::geom_line() +
       ggplot2::geom_point(ggplot2::aes(x = Year, y = MortalitiesCertain, group = PopulationName, 
-                                       colour = PopulationName), shape = 4) +
+                                       colour = PopulationName), shape = 4, na.rm = TRUE) +
       ggplot2::geom_col(ggplot2::aes(x = Year, y = Malfunctions, group = PopulationName, 
                                      colour = PopulationName, fill = PopulationName), 
-                        alpha = 0.2) +
+                        alpha = 0.2, na.rm = TRUE) +
       ggplot2::ylab("Number of Animals") +
       ggplot2::theme_bw()
   } else {
@@ -31,10 +36,10 @@ plotSurvivalSeries <- function(surv_data_show) {
       ggplot2::geom_line() +
       ggplot2::facet_wrap(~Year) +
       ggplot2::geom_point(ggplot2::aes(x = Month, y = MortalitiesCertain, group = PopulationName, 
-                                       colour = PopulationName), shape = 4) +
+                                       colour = PopulationName), shape = 4, na.rm = TRUE) +
       ggplot2::geom_col(ggplot2::aes(x = Month, y = Malfunctions, group = PopulationName, 
                                      colour = PopulationName, fill = PopulationName), 
-                        alpha = 0.2) +
+                        alpha = 0.2, na.rm = TRUE) +
       ggplot2::ylab("Number of Animals") +
       ggplot2::theme_bw()
   }
