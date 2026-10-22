@@ -54,6 +54,11 @@ representing the percentage of the landscape covered by anthropogenic
 disturbance buffered by 500 m, and the percentage covered by fire that does
 not overlap anthropogenic disturbance.}
 
+\item{skipSave}{Do not cache a version of \code{trajectoriesFromNational}. Note
+caching is not done if any of the arguments are different from the defaults.}
+
+\item{forceUpdate}{logical. If TRUE update the cache.}
+
 \item{doSummary}{logical. Default TRUE. If FALSE returns unprocessed outcomes from caribouPopGrowth.
 If TRUE returns summaries and (if returnSamples = T) sample trajectories from prepareTrajectories.}
 

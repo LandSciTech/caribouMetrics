@@ -13,7 +13,6 @@ simulateObservations(
   collarOffTime = 3,
   collarOnTime = 4,
   caribouYearStart = 4,
-  topUp = F,
   recSurveyMonth = 3,
   recSurveyDay = 15,
   distScen = NULL,

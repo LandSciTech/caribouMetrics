@@ -24,7 +24,7 @@ caribouPopGrowth(
   interannualVar = list(R_CV = 0.46, S_CV = 0.08696),
   probOption = "binomial",
   progress = interactive(),
-  warn = T
+  warn = TRUE
 )
 }
 \arguments{
@@ -73,6 +73,9 @@ Set to \code{FALSE} to ignore interannual variability.}
 "matchJohnson2020". See description for details.}
 
 \item{progress}{Logical. Should progress updates be shown?}
+
+\item{warn}{Logical. Should warnings be shown when values are forced to be
+within required boundaries?}
 }
 \value{
 A data.frame of population size (\code{N}), expected growth rate

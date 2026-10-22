@@ -7,9 +7,9 @@
 \alias{simulateTrajectoriesFromPosterior}
 \title{Format trajectory tables}
 \usage{
-convertTrajectories(pars)
+convertTrajectories(trajectories)
 
-summarizeTrajectories(pars, returnSamples = T)
+summarizeTrajectories(trajectories, returnSamples = T)
 
 simulateTrajectoriesFromPosterior(
   popInfo = NA,
@@ -24,7 +24,7 @@ simulateTrajectoriesFromPosterior(
 )
 }
 \arguments{
-\item{pars}{}
+\item{trajectories}{data.frame containing trajectories created by \code{simulateTrajectoriesFromPosterior}}
 
 \item{returnSamples}{}
 
@@ -43,11 +43,15 @@ simulateTrajectoriesFromPosterior(
 \item{c}{Number. Bias correction term.}
 
 \item{K}{Number. Carrying capacity.}
+
+\item{...}{Other parameters passed to \code{caribouPopGrowth()}}
 }
 \value{
 convertTrajectories: formatted tables
 
-summarizeTrajectories:
+summarizeTrajectories: a list containing "summary" with a summary
+table of trajectories and, if \code{returnSamples = TRUE}, "samples" with the
+sample table
 
 simulateTrajectoriesFromPosterior: a data frame with results from \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for each set of survival/recruitment predictions.
 }

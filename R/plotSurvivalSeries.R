@@ -1,6 +1,6 @@
 #' Plot survival time series
 #' 
-#' TO DO: write documentation
+#' @param surv_data_show data.frame. Survival data in bboudata format.
 #' 
 #' @family demography
 #' @export

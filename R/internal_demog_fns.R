@@ -54,7 +54,9 @@ convertTrajectories<-function(trajectories){
 #' @inheritParams convertTrajectories 
 #' @param returnSamples 
 #'
-#' @returns summarizeTrajectories:
+#' @returns summarizeTrajectories: a list containing "summary" with a summary
+#'   table of trajectories and, if `returnSamples = TRUE`, "samples" with the
+#'   sample table
 #' @export
 #' @family demography
 #'

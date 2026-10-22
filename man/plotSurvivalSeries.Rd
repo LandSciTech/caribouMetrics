@@ -6,8 +6,17 @@
 \usage{
 plotSurvivalSeries(surv_data_show)
 }
+\arguments{
+\item{surv_data_show}{data.frame. Survival data in bboudata format.}
+}
 \description{
-TO DO: write documentation
+Plot survival time series
+}
+\examples{
+scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 1)
+simObs <- simulateObservations(scns)
+
+plotSurvivalSeries(simObs$simSurvObs)
 }
 \seealso{
 Caribou demography functions:
