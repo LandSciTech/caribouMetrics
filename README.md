@@ -41,23 +41,23 @@ extended as follows:
 - Allow for calculation of population growth rate without initial
   population size information. See [Analytic Methods for Estimation of
   Boreal Caribou Survival, Recruitment and Population
-  Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html)
+  Growth](https://LandSciTech.github.io/bboutools/articles/methods.html)
   for details.
 - Allow analysis of composition survey data in bboutools form that
   includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods
   for Estimation of Boreal Caribou Survival, Recruitment and Population
-  Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html)
+  Growth](https://LandSciTech.github.io/bboutools/articles/methods.html)
   for details.
 - Allow analysis of monthly survival data in bboutools form
   (e.g. `bboudata::bbousurv_a`).
 - Allow for calculation of population growth rate without initial
   population size information. See [Analytic Methods for Estimation of
   Boreal Caribou Survival, Recruitment and Population
-  Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html)
+  Growth](https://LandSciTech.github.io/bboutools/articles/methods.html)
   for details.
 - Allow for analysis of groups of populations with shared interannual
   variation. See [Multi-Population Analysis and Other
-  Extensions](https://poissonconsulting.github.io/bboutools/articles/extensions.html)
+  Extensions](https://LandSciTech.github.io/bboutools/articles/extensions.html)
   for details.
 
 Simulated example population trajectories can be created from the

@@ -115,8 +115,8 @@ Suggests:
     googlesheets4
 Remotes: LandSciTech/pfocal,
     LandSciTech/bbouNationalPriors,
-    poissonconsulting/bboutools,
-    poissonconsulting/bboudata
+    LandSciTech/bboutools,
+    LandSciTech/bboudata
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 

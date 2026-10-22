@@ -27,11 +27,11 @@ The `caribouMetrics` R package provides implementations of models of Boreal wood
     
 To facilitate [comparison with Bayesian logistic models implemented in the `bboutools`](https://landscitech.github.io/caribouMetrics/articles/compare-bayesian-models.html) R package [(Dalgarno et al. 2025)]( https://doi.org/10.21105/joss.07997) `caribouMetrics` also allows for the use of those models. To align with `bboutools` note that the [Hughes et al. (2025)](https://doi.org/10.1016/j.ecoinf.2025.103095) model has been extended  as follows: 
 
-* Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
-* Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+* Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://LandSciTech.github.io/bboutools/articles/methods.html) for details.
+* Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://LandSciTech.github.io/bboutools/articles/methods.html) for details.
 * Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
-* Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
-* Allow for analysis of groups of populations with shared interannual variation. See [Multi-Population Analysis and Other Extensions](https://poissonconsulting.github.io/bboutools/articles/extensions.html) for details.
+* Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://LandSciTech.github.io/bboutools/articles/methods.html) for details.
+* Allow for analysis of groups of populations with shared interannual variation. See [Multi-Population Analysis and Other Extensions](https://LandSciTech.github.io/bboutools/articles/extensions.html) for details.
 
 Simulated example population trajectories can be created from the national model or fitted Bayesian models, and combined with a simple observation model and the Bayesian population model to explore monitoring scenarios and show how monitoring requirements depend on landscape condition ([Hughes et al. 2025](https://doi.org/10.1016/j.ecoinf.2025.103095)). 
 

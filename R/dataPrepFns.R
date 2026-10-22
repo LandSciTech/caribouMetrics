@@ -1,7 +1,7 @@
 #' Demographic data from Google sheet
 #' 
 #' Download data from Google sheets stored in bboutools format. See the
-#' [bboutools website](https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data) 
+#' [bboutools website](https://LandSciTech.github.io/bboutools/articles/bboutools.html#providing-data) 
 #' and this [template sheet](https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing)
 #' for more details on the format of the data.
 #' 

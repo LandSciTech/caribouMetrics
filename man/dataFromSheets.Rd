@@ -25,7 +25,7 @@ a list containing:
 }
 \description{
 Download data from Google sheets stored in bboutools format. See the
-\href{https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data}{bboutools website}
+\href{https://LandSciTech.github.io/bboutools/articles/bboutools.html#providing-data}{bboutools website}
 and this \href{https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing}{template sheet}
 for more details on the format of the data.
 }
