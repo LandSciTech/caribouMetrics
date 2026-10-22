@@ -1,4 +1,4 @@
-betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,nt,ni,nb){
+betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,nt,ni,nb, quiet = TRUE){
   # if(n_distinct(surv_data$PopulationName) > 1){
   #   testTable(disturbance, req_col_names = "PopulationName", 
   #             req_vals = unique(surv_data$PopulationName))
@@ -25,9 +25,9 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
     }
   }
   
-  surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb)
+  surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb, quiet = quiet)
   
-  recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb)
+  recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb, quiet = quiet)
   
   summaries <- rbind(recruit_fit$summaries,surv_fit$summaries)
   summaries$Annual <- as.factor(as.numeric(as.character(summaries$Annual))) #ensure factor levels are ordered.
@@ -51,7 +51,7 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   return(list(parList=parList,surv_fit=surv_fit,recruit_fit=recruit_fit))
 }
 
-betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb){
+betaSurvival <-function(surv_fit,disturbance,priors,nc,nt,ni,nb, quiet = quiet){
   data <- convertBbouData(surv_fit$data,StartTotalMissing =1)
   if(hasName(disturbance,"Annual")){
     disturbance$Year = NULL
@@ -173,11 +173,11 @@ model {
   inits3 <- list(b0 = rnorm(datal$nPops, 3, 2),b1 = rnorm(datal$nPops, 0, 2)) 
   inits <- list(inits1,inits2,inits3)
   
-  return(jagsRunAndSummarize(data,datal,params,fname=surv_mod_fl,inits=inits,nc=nc,ni=ni,nb=nb,nt=nt))
+  return(jagsRunAndSummarize(data,datal,params,fname=surv_mod_fl,inits=inits,nc=nc,ni=ni,nb=nb,nt=nt, quiet = quiet))
 
 }
 
-betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb){
+betaRecruitment <- function(rec_fit, disturbance,priors,nc,nt,ni,nb, quiet){
   data <- convertBbouData(rec_fit$data)
   data$CowsBulls[is.na(data$CowsBulls)]=0
   data$UnknownAdults[is.na(data$UnknownAdults)]=0
@@ -337,21 +337,22 @@ model {
   inits3 <- list(b0 = rnorm(datal$nPops,-1, 2)) 
   inits <- list(inits1,inits2,inits3)
   
-  return(jagsRunAndSummarize(data,datal,params,fname=rec_mod_fl,inits=inits,nc=nc,ni=ni,nb=nb,nt=nt))
+  return(jagsRunAndSummarize(data,datal,params,fname=rec_mod_fl,inits=inits,nc=nc,ni=ni,nb=nb,nt=nt, quiet = quiet))
   
 }
 
-jagsRunAndSummarize <- function(data,datal,params,fname,inits,nc,ni,nb,nt){
+jagsRunAndSummarize <- function(data,datal,params,fname,inits,nc,ni,nb,nt, quiet){
   #################################################################################################################
   ### Running JAGS
   # Create a model object - this compiles and initialize the model (if adaptation is required then a prgress bar made of '+' signs will be printed
   if(!file.exists(fname)){stop()}
   
-  model.fit <- rjags::jags.model(file=fname, data=datal, n.adapt=nb, n.chains = nc,inits = inits, quiet = TRUE)
+  model.fit <- rjags::jags.model(file=fname, data=datal, n.adapt=nb, n.chains = nc,inits = inits, quiet = quiet)
+  proj_bar <- ifelse(quiet, "none", "text")
   
   # To get samples from the posterior distribution of the parameters
-  update(model.fit, n.iter=ni, progress.bar = "none")
-  model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt, progress.bar = "none")
+  update(model.fit, n.iter=ni, progress.bar = proj_bar)
+  model.samples <- rjags::coda.samples(model.fit, params, n.iter=ni, thin = nt, progress.bar = proj_bar)
   
   ### Output data preparation
   # Summary statistics of mcmc
