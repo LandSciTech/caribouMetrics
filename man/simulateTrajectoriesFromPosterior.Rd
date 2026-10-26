@@ -7,9 +7,9 @@
 \alias{simulateTrajectoriesFromPosterior}
 \title{Format trajectory tables}
 \usage{
-convertTrajectories(pars)
+convertTrajectories(trajectories)
 
-summarizeTrajectories(pars, returnSamples = T)
+summarizeTrajectories(trajectories, returnSamples = T)
 
 simulateTrajectoriesFromPosterior(
   popInfo = NA,
@@ -24,6 +24,11 @@ simulateTrajectoriesFromPosterior(
 )
 }
 \arguments{
+\item{trajectories}{data.frame containing trajectories created by \code{simulateTrajectoriesFromPosterior}}
+
+\item{returnSamples}{logical. Should samples table be returned as well as
+summary?}
+
 \item{popInfo}{If NA (default) predictions are made without populations size, density dependence, or demographic stochasticity. See \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for details.}
 
 \item{rec_pred}{results returned by \code{\link[bboutools:bb_fit_recruitment]{bb_fit_recruitment()}} or \code{\link[bboutools:bb_predict_calf_cow_ratio]{bb_predict_calf_cow_ratio()}} functions of bboutools R package, or recruit_fit returned by \code{\link[=estimateBayesianRates]{estimateBayesianRates()}}.}
@@ -39,11 +44,15 @@ simulateTrajectoriesFromPosterior(
 \item{c}{Number. Bias correction term.}
 
 \item{K}{Number. Carrying capacity.}
+
+\item{...}{Other parameters passed to \code{caribouPopGrowth()}}
 }
 \value{
 convertTrajectories: formatted tables
 
-summarizeTrajectories:
+summarizeTrajectories: a list containing "summary" with a summary
+table of trajectories and, if \code{returnSamples = TRUE}, "samples" with the
+sample table
 
 simulateTrajectoriesFromPosterior: a data frame with results from \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for each set of survival/recruitment predictions.
 }

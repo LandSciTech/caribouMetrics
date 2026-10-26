@@ -61,7 +61,8 @@
 trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv, 
                   type = "beta", cPars = demographyDefaults(), 
                   doSummary = T, returnSamples = T,
-                  nthin=formals(bboutools::bb_fit_survival)$nthin,varPersists=T,...){
+                  nthin=formals(bboutools::bb_fit_survival)$nthin,varPersists=T,
+                  quiet = TRUE, ...){
 
   # TO DO:
   # See https://github.com/LandSciTech/caribouMetrics/issues/146
@@ -79,18 +80,18 @@ trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv,
   if(type=="beta"){
     testTable(as.data.frame(Riv), req_col_names = c("R_cv_min", "R_cv_max"))
     testTable(as.data.frame(Siv), req_col_names = c("S_cv_min", "S_cv_max"))
-    results <- ratesFromBetaSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists)
+    results <- ratesFromBetaSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists, quiet = quiet)
   }else{
     testTable(as.data.frame(Riv), req_col_names = c("R_iv_mean", "R_iv_shape"))
     testTable(as.data.frame(Siv), req_col_names = c("S_iv_mean", "S_iv_shape"))
-    results <- ratesFromLogisticSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists)
+    results <- ratesFromLogisticSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists, quiet = quiet)
   }
   rr <- trajectoriesFromBayesian(results, N0 = N0,returnSamples = returnSamples, 
                                  doSummary = doSummary,cPars=cPars, ...)
   return(rr)
 }
 
-ratesFromLogisticSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPersists){
+ratesFromLogisticSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPersists, quiet){
   #Assumes gaussian distributed variation in means, gaussian random effect of year and log link.
   #Adapted from Shimoda QC workflow
   
@@ -104,8 +105,8 @@ ratesFromLogisticSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, va
   r_priors <- list(iv_mean= Riv$R_iv_mean,iv_shape = Riv$R_iv_shape)
   params = c("Rbar","Recruitment") 
   if(varPersists){
-    surv_fit <- rateFromLogisticSummary(Sbar,s_priors,sparams,nc,nthin,ni,nb)
-    recruit_fit <- rateFromLogisticSummary(Rbar,r_priors,params,nc,nthin,ni,nb)
+    surv_fit <- rateFromLogisticSummary(Sbar,s_priors,sparams,nc,nthin,ni,nb, quiet = quiet)
+    recruit_fit <- rateFromLogisticSummary(Rbar,r_priors,params,nc,nthin,ni,nb, quiet = quiet)
   }else{
     stop("varPersists = F is not an option for bbou logistic models")
   }
@@ -116,7 +117,7 @@ ratesFromLogisticSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, va
   return(results)
 }
 
-rateFromLogisticSummary<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="RatesLogistic_"){
+rateFromLogisticSummary<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="RatesLogistic_", quiet){
   
   if(!hasName(Rbar,"adjust.mu")){Rbar$adjust.mu = 0}
   if(!hasName(Rbar,"adjust.sd")){Rbar$adjust.sd = 0}
@@ -218,11 +219,11 @@ if(r_priors$iv_mean>0){
 }
 inits = rjags::parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
 
-return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt))
+return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt, quiet = quiet))
 }
 
 
-ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPersists){
+ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPersists, quiet = quiet){
   #Assumes gaussian distributed variation in means, beta distributed interannual variation
   #Adapted from Shimoda QC workflow
   
@@ -236,12 +237,12 @@ ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPer
   r_priors <- list(cv_min= Riv$R_cv_min,cv_max = Riv$R_cv_max)
   params = c("Rbar","Recruitment") 
   if(varPersists){
-    recruit_fit <- rateFromBetaSummary(Rbar,r_priors,params,nc,nthin,ni,nb)
-    surv_fit <- rateFromBetaSummary(Sbar,s_priors,sparams,nc,nthin,ni,nb)
+    recruit_fit <- rateFromBetaSummary(Rbar,r_priors,params,nc,nthin,ni,nb, quiet = quiet)
+    surv_fit <- rateFromBetaSummary(Sbar,s_priors,sparams,nc,nthin,ni,nb, quiet = quiet)
   }else{
     #treats all variation as interannual variation
-    surv_fit <- rateFromBetaSummaryYS(Sbar,s_priors,sparams,nc,nthin,ni,nb)
-    recruit_fit <- rateFromBetaSummaryYS(Rbar,r_priors,params,nc,nthin,ni,nb)
+    surv_fit <- rateFromBetaSummaryYS(Sbar,s_priors,sparams,nc,nthin,ni,nb, quiet = quiet)
+    recruit_fit <- rateFromBetaSummaryYS(Rbar,r_priors,params,nc,nthin,ni,nb, quiet = quiet)
   }
   
   parTab <- subset(Rbar,select=intersect(c("Year","PopulationName","Anthro","Fire_excl_anthro"),names(Rbar)))
@@ -250,7 +251,7 @@ ratesFromBetaSummary <- function(Rbar, Sbar, Riv, Siv, replicates, nthin, varPer
   return(results)
 }
 
-rateFromBetaSummary<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="RatesBeta_"){
+rateFromBetaSummary<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="RatesBeta_", quiet){
   
   if(!hasName(Rbar,"adjust.mu")){
     Rbar$adjust.mu = 0
@@ -355,11 +356,11 @@ if(r_priors$cv_max>0){
 }
 inits = rjags::parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
 
-return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt))
+return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt, quiet = quiet))
 }
 
 
-rateFromBetaSummaryYS<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="PopDynMod_"){
+rateFromBetaSummaryYS<- function(Rbar,r_priors,params,nc,nt,ni,nb,fname="PopDynMod_", quiet){
   if(!hasName(Rbar,"adjust.mu")){
     Rbar$adjust.mu = 0
   }
@@ -467,7 +468,7 @@ for (k in 1:nPops) {
   }
   inits = rjags::parallel.seeds("base::BaseRNG", nc) # For MCMC reproducibility: returns a list of values that may be used to initialize the random number generator of each chain
   
-  return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt))
+  return(jagsRunAndSummarize(data,datal,params,ffname,inits,nc,ni,nb,nt, quiet = quiet))
 }
 
 

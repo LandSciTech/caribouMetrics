@@ -43,6 +43,7 @@
 #' @param cowMult number >= 1. The apparent number of adult females per collared animal in composition survey. Set to NA to use `cowCount`.
 #' @inheritParams subsetNationalCoefs
 #' @inheritParams getNationalCoefficients
+#' @param r.inv.link string. Recruitment model inverse link function.
 #'
 #' @return a list with values:
 #'
@@ -64,6 +65,7 @@
 #'   on adult female survival,
 #' * S_cv_max: Max of the prior distribution of the random
 #'   effect of year on adult female survival,
+#' * R_inv_link: Recruitment model inverse link function, 
 #' * qMin,qMax,uMin,uMax,zMin,zMax,cowMult: Composition bias parameters.   
 #' 
 #' @references    
@@ -99,7 +101,7 @@ betaNationalPriors <- function(modList = NULL,
                       cowMult = 6,
                       populationGrowthTable = caribouMetrics::popGrowthTableJohnsonECCC,
                       modelVersion = "Johnson",
-                      r.inv.link="exp",
+                      r.inv.link = "exp",
                       returnValues = TRUE) {
   # modList=paramTable
 
@@ -175,7 +177,7 @@ betaNationalPriors <- function(modList = NULL,
       S_b1_sd = modList$sAnthroSlopeSE,
       S_cv_min = modList$sNuMin,
       S_cv_max = modList$sNuMax,
-      R_inv_link =modList$r.inv.link
+      R_inv_link = modList$r.inv.link
     )
 
     # replace NULL values with 0 for when anthro or fire is not included
@@ -202,7 +204,8 @@ betaNationalPriors <- function(modList = NULL,
       S_b1_mu = sPriorCoefs$Anthro,
       S_b1_sd = round(modList$sAnthroSlopeSE, 4),
       S_cv_min = modList$sNuMin,
-      S_cv_max = modList$sNuMax
+      S_cv_max = modList$sNuMax,
+      R_inv_link = modList$r.inv.link
     )
   }
   

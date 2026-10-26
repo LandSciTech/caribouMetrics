@@ -3,7 +3,7 @@
 # Helpers for table format conversion --------------------------------------------------
 #' Format trajectory tables
 #'
-#' @param pars 
+#' @param trajectories data.frame containing trajectories created by `simulateTrajectoriesFromPosterior`
 #'
 #' @returns convertTrajectories: formatted tables
 #' @export
@@ -11,13 +11,13 @@
 #' @rdname simulateTrajectoriesFromPosterior
 #' 
 
-convertTrajectories<-function(pars){
+convertTrajectories<-function(trajectories){
   #converts output from simPopsOverTime to alternate form
-  #pars = trajectories
-  if(!hasName(pars,"lamPercentile")){
-    pars$lamPercentile=NA
+  #trajectories = trajectories
+  if(!hasName(trajectories,"lamPercentile")){
+    trajectories$lamPercentile=NA
   }
-  if(!hasName(pars,"c")){pars$c=NA}
+  if(!hasName(trajectories,"c")){trajectories$c=NA}
 
   nameChange <- data.frame(inName=c("id","lamPercentile", "Year","PopulationName","Anthro", "Fire_excl_anthro","c",
                                     "S_t", "R_t", "X_t", "N",
@@ -25,11 +25,11 @@ convertTrajectories<-function(pars){
                            outName=c("Replicate","LambdaPercentile","Year", "PopulationName","Anthro", "Fire_excl_anthro","c", 
                                      "survival","recruitment","X", "N", "lambda","Sbar","Rbar","Xbar","Nbar","lambda_bar"))
   
-  if(!hasName(pars,"lambdaE_bar")){
-    pars$lambdaE_bar = pars$lambdaE
+  if(!hasName(trajectories,"lambdaE_bar")){
+    trajectories$lambdaE_bar = trajectories$lambdaE
   }
-  nameChange <-subset(nameChange,is.element(inName,names(pars)))
-  fds <- subset(pars, select = nameChange$inName)
+  nameChange <-subset(nameChange,is.element(inName,names(trajectories)))
+  fds <- subset(trajectories, select = nameChange$inName)
   names(fds) <- nameChange$outName
   
   if(hasName(fds,"Anthro")){
@@ -43,7 +43,7 @@ convertTrajectories<-function(pars){
   fds$MetricTypeID <- as.character(fds$MetricTypeID)
   fds$Replicate <- paste0("x", fds$Replicate)
   
-  if(!hasName(pars,"lamPercentile")){
+  if(!hasName(trajectories,"lamPercentile")){
     fds$LambdaPercentile=NULL
   }
   return(fds)
@@ -51,23 +51,26 @@ convertTrajectories<-function(pars){
 
 #' Get 95% prediction intervals from trajectories
 #'
-#' @param pars 
-#' @param returnSamples 
+#' @inheritParams convertTrajectories 
+#' @param returnSamples logical. Should samples table be returned as well as 
+#'   summary?
 #'
-#' @returns summarizeTrajectories:
+#' @returns summarizeTrajectories: a list containing "summary" with a summary
+#'   table of trajectories and, if `returnSamples = TRUE`, "samples" with the
+#'   sample table
 #' @export
 #' @family demography
 #'
 #' @rdname simulateTrajectoriesFromPosterior
-summarizeTrajectories <- function(pars,returnSamples=T){
+summarizeTrajectories <- function(trajectories,returnSamples=T){
 
-  if(hasName(pars,"AnthroID")){  
-    simSum <- pars  %>%
+  if(hasName(trajectories,"AnthroID")){  
+    simSum <- trajectories  %>%
       group_by(Year,PopulationName,MetricTypeID,AnthroID,Fire_excl_anthroID) %>%
       summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
                 upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
   }else{
-    simSum <- pars  %>%
+    simSum <- trajectories  %>%
       group_by(Year,PopulationName,MetricTypeID) %>%
       summarize(Mean = mean(Amount,na.rm=T), lower = quantile(Amount, 0.025,na.rm=T),
                 upper = quantile(Amount, 0.975,na.rm=T),probViable=mean(Amount > 0.99,na.rm=T))
@@ -79,9 +82,9 @@ summarizeTrajectories <- function(pars,returnSamples=T){
                                    "Expected survival","Expected recruitment","Expected adjusted recruitment","Expected growth rate"
                                    ))
   simSum=merge(simSum,names)
-  pars <- merge(pars, names, all.x = TRUE)
+  trajectories <- merge(trajectories, names, all.x = TRUE)
   if (returnSamples){
-    simBig <- list(summary = simSum, samples = pars)
+    simBig <- list(summary = simSum, samples = trajectories)
   } else {
     simBig <- list(summary = simSum)
   }
@@ -246,7 +249,7 @@ addN0Variation<- function(popInfo,forceDataFrame=F) {
   
   if(inherits(popInfo, "data.frame")){
     testTable(popInfo, req_col_names = "N0")
-    if(class(popInfo$N0) == "data.frame"){
+    if(inherits(popInfo$N0, "data.frame")){
       popInfo <- tidyr::unnest(popInfo, N0)
     }
   }

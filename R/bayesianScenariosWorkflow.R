@@ -38,7 +38,7 @@
 bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4,collarOffTime=3,collarNumYears=4),Rep=NULL,
                       printProgress = FALSE,priors="default",
                       niters=formals(bboutools::bb_fit_survival)$niters,nthin=formals(bboutools::bb_fit_survival)$nthin,
-                      returnSamples=F,...) {
+                      returnSamples=F, quiet = TRUE, ...) {
   
   # ePars=eParsIn;simInitial=simBig;printProgress=F;niters = formals(bboutools::bb_fit_survival)$niters)
 
@@ -116,7 +116,8 @@ bayesianScenariosWorkflow <- function(scns, simInitial,ePars=list(collarOnTime=4
       surv_data = oo$simSurvObs, recruit_data = oo$simRecruitObs,
       disturbance = oo$simDisturbance,
       priors = priors, startYear = oo$minYr, endYear = oo$maxYr,
-      N0 = getN0Pars(cs),niters=niters,nthin=nthin,returnSamples=returnSamples,...))
+      N0 = getN0Pars(cs),niters=niters,nthin=nthin,returnSamples=returnSamples, 
+      quiet = quiet, ...))
 
     if (inherits(out, "try-error")) {
       errorLog[[p]] <- list(cs = cs, error = out)

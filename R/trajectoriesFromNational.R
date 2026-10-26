@@ -45,7 +45,10 @@ if(file.exists("results/simsInitial.rds")){
 #'   returns example trajectories as well. By default summaries are not returned
 #'   unless the disturbance data provided contains a column named "Year".
 #' @param numSteps numeric. Number of steps to run [`caribouPopGrowth()`] at each 
-#'   disturbance level. 
+#'   disturbance level.
+#' @param skipSave Do not cache a version of `trajectoriesFromNational`. Note
+#'   caching is not done if any of the arguments are different from the defaults.
+#' @param forceUpdate logical. If TRUE update the cache.
 #'
 #' @inheritSection timeDefaults Interpretation of Years
 #' 

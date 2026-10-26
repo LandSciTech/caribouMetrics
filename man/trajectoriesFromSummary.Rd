@@ -17,6 +17,7 @@ trajectoriesFromSummary(
   returnSamples = T,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
   varPersists = T,
+  quiet = TRUE,
   ...
 )
 }
@@ -46,6 +47,9 @@ returns example trajectories as well.}
 \item{nthin}{integer. The number of the thinning rate.}
 
 \item{varPersists}{logical. If FALSE treats all variation as interannual variation.}
+
+\item{quiet}{logical. Whether to suppress jags model fitting console output,
+including progress bar}
 
 \item{...}{Additional arguments passed to \code{caribouPopGrowth}}
 }

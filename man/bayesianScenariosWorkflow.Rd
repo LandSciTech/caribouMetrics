@@ -14,6 +14,7 @@ bayesianScenariosWorkflow(
   niters = formals(bboutools::bb_fit_survival)$niters,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
   returnSamples = F,
+  quiet = TRUE,
   ...
 )
 }
@@ -43,6 +44,9 @@ burn-in.}
 \item{nthin}{integer. The number of the thinning rate.}
 
 \item{returnSamples}{logical. Optional. If true, return full results from \code{\link[=bayesianTrajectoryWorkflow]{bayesianTrajectoryWorkflow()}}.}
+
+\item{quiet}{logical. Whether to suppress jags model fitting console output,
+including progress bar}
 
 \item{...}{Other parameters passed on to \code{\link[bboutools:bb_fit_survival]{bboutools::bb_fit_survival()}} and
 \code{\link[bboutools:bb_fit_recruitment]{bboutools::bb_fit_recruitment()}}.}

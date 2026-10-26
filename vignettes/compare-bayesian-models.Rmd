@@ -29,10 +29,10 @@ if (!rlang::is_installed("patchwork")) stop("Please install.packages('patchwork'
 
 @hughes_integration_2025 described a Beta model with disturbance covariates and informative priors for analysis of a single boreal caribou population with survival data aggregated by year and only cows and calves reported in the composition survey. To align with and allow comparison to the models implemented in bboutools [@dalgarno_bbousuite_2025] we extended the @hughes_integration_2025 models as follows:
 
--   Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
+-   Allow analysis of composition survey data in bboutools form that includes Yearlings, Bulls, and UnknownAdults. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://LandSciTech.github.io/bboutools/articles/methods.html) for details.
 -   Allow analysis of monthly survival data in bboutools form (e.g. `bboudata::bbousurv_a`).
--   Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://poissonconsulting.github.io/bboutools/articles/methods.html) for details.
--   Allow for analysis of groups of populations with shared interannual variation. See [Multi-Population Analysis and Other Extensions](https://poissonconsulting.github.io/bboutools/articles/extensions.html) for details.
+-   Allow for calculation of population growth rate without initial population size information. See [Analytic Methods for Estimation of Boreal Caribou Survival, Recruitment and Population Growth](https://LandSciTech.github.io/bboutools/articles/methods.html) for details.
+-   Allow for analysis of groups of populations with shared interannual variation. See [Multi-Population Analysis and Other Extensions](https://LandSciTech.github.io/bboutools/articles/extensions.html) for details.
 
 Note that bboutools includes a number of different model variants. Throughout this document we compare to the Bayesian model with a random effect of year and no annual trend. For brevity, we refer to that as the "bbou" model.
 

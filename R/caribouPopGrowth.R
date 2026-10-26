@@ -50,6 +50,8 @@
 #' @param probOption Character. Choices are "binomial","continuous" or
 #'   "matchJohnson2020". See description for details.
 #' @param progress Logical. Should progress updates be shown?
+#' @param warn Logical. Should warnings be shown when values are forced to be 
+#'   within required boundaries?
 #'
 #' @return A data.frame of population size (`N`), expected growth rate
 #'   (`lambdaE`), true growth rate (`lambda`), apparent annual reproduction rate (`R_t`), adjusted reproduction (`X_t`),
@@ -105,7 +107,7 @@ caribouPopGrowth <- function(N0,
                              interannualVar = list(R_CV=0.46,S_CV=0.08696),
                              probOption="binomial",
                              progress = interactive(),
-                             warn=T){
+                             warn=TRUE){
   if(is.character(interannualVar)|is.factor(interannualVar)){
     interannualVar = eval(parse(text=as.character(interannualVar)))
   }
@@ -129,8 +131,8 @@ caribouPopGrowth <- function(N0,
   }
 
   if(any(R_bar < l_R) || any(R_bar > h_R)){
-    warning("Setting expected recruitment R_bar to be between l_R and h_R.",
-            call. = FALSE)
+    if(warn){warning("Setting expected recruitment R_bar to be between l_R and h_R.",
+            call. = FALSE)}
     R_bar = pmax(R_bar,l_R);R_bar=pmin(R_bar,h_R)
   }
 
@@ -235,7 +237,7 @@ caribouPopGrowth <- function(N0,
       
       if(doBinomial){
         if(max(R_tadj*adjDDRtProportion) > 1){
-          warning("Adjusted recruitment greater than 1.")
+          if(warn){warning("Adjusted recruitment greater than 1.")}
           R_tadj[R_tadj>1]=1
         }
         n_recruits <- rbinom(length(N),surviving_adFemales,R_tadj*adjDDRtProportion)

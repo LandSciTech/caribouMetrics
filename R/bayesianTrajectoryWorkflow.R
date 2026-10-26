@@ -70,6 +70,7 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
                        inputList = list(),
                        niters=formals(bboutools::bb_fit_survival)$niters,
                        nthin=formals(bboutools::bb_fit_survival)$nthin,
+                       quiet = TRUE,
                        ...) {
   
   if(any(c("survData", "ageRatio", "Niter", "Nthin") %in% names(match.call()))){
@@ -234,7 +235,8 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   ##################
   #fit models
   bbouResults = estimateBayesianRates(surv_data, recruit_data,N0,disturbance,priors=priors,
-                                     return_mcmc=T,shiny_progress=F,niters=niters,nthin=nthin)
+                                     return_mcmc=T,shiny_progress=F,niters=niters,nthin=nthin,
+                                     quiet = quiet)
   #get output trajectories
   rr <- trajectoriesFromBayesian(bbouResults, cPars = priors, N0 = N0,
                                     returnSamples = returnSamples, ...)

@@ -31,8 +31,12 @@
 #' @param niters integer. The number of iterations per chain after thinning and
 #'   burn-in.
 #' @param nthin integer. The number of the thinning rate.
+#' @param quiet logical. Whether to suppress jags model fitting console output,
+#'   including progress bar
 #' @param ... Other parameters passed on to [bboutools::bb_fit_survival()] and
 #'   [bboutools::bb_fit_recruitment()].
+#' @param i18n NULL or function. Only used in shiny app to provide translation 
+#'   function for messages.
 #' 
 #' @inheritSection timeDefaults Interpretation of Years
 #' 
@@ -62,7 +66,9 @@
 #' estimateBayesianRates(s_data, r_data, N0 = 500)
 
 estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = NULL, priors = NULL, shiny_progress = FALSE,
-                                return_mcmc=FALSE,i18n = NULL, niters = formals(bboutools::bb_fit_survival)$niters, nthin = formals(bboutools::bb_fit_survival)$nthin,...){
+                                return_mcmc=FALSE,i18n = NULL, niters = formals(bboutools::bb_fit_survival)$niters,
+                                nthin = formals(bboutools::bb_fit_survival)$nthin,
+                                quiet = TRUE, ...){
   #shiny_progress = FALSE;return_mcmc=FALSE;i18n = NULL
   
   if(!is.null(disturbance)){
@@ -103,7 +109,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     if(is.null(priors)){
       priors=betaNationalPriors()
     }
-    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb) 
+    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb, quiet = quiet) 
     
     ret$parList$N0 <- merge(N0,disturbance)
     

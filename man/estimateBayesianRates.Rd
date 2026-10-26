@@ -15,6 +15,7 @@ estimateBayesianRates(
   i18n = NULL,
   niters = formals(bboutools::bb_fit_survival)$niters,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
+  quiet = TRUE,
   ...
 )
 }
@@ -43,10 +44,16 @@ to TRUE if using in an app.}
 \item{return_mcmc}{boolean. If TRUE return fitted survival and recruitment
 models. Default FALSE.}
 
+\item{i18n}{NULL or function. Only used in shiny app to provide translation
+function for messages.}
+
 \item{niters}{integer. The number of iterations per chain after thinning and
 burn-in.}
 
 \item{nthin}{integer. The number of the thinning rate.}
+
+\item{quiet}{logical. Whether to suppress jags model fitting console output,
+including progress bar}
 
 \item{...}{Other parameters passed on to \code{\link[bboutools:bb_fit_survival]{bboutools::bb_fit_survival()}} and
 \code{\link[bboutools:bb_fit_recruitment]{bboutools::bb_fit_recruitment()}}.}

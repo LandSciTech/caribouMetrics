@@ -11,6 +11,7 @@
 #' @param correlateRates logical. Set TRUE to force correlation between recruitment and survival. Ignored 
 #' @param returnExpected logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are [bb_predict_calf_cow_ratio()]/[bb_predict_survival()] results.
 #' @inheritParams caribouPopGrowth
+#' @param ... Other parameters passed to `caribouPopGrowth()`
 #'
 #' @inheritSection timeDefaults Interpretation of Years
 #' 
@@ -110,7 +111,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
     stop("rec_pred must have an element called 'samples'")
   }
   
-  if(class(surv_pred$samples)=="mcmc.list"){
+  if(inherits(surv_pred$samples, "mcmc.list")){
     nns <- colnames(surv_pred$samples[[1]])
     nni <- seq(1,length(nns))
     if(returnExpected){nni <- nni[grepl("bar",nns,fixed=T)]}else{nni <- nni[!grepl("bar",nns,fixed=T)]}
@@ -118,7 +119,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
       surv_pred$samples[[i]]<-surv_pred$samples[[i]][,nni]
     }
   }
-  if(class(rec_pred$samples)=="mcmc.list"){
+  if(inherits(rec_pred$samples, "mcmc.list")){
     nns <- colnames(rec_pred$samples[[1]])
     nni <- seq(1,length(nns))
     if(returnExpected){nni <- nni[grepl("bar",nns,fixed=T)]}else{nni <- nni[!grepl("bar",nns,fixed=T)]}
@@ -127,7 +128,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
     }
   }
   
-  if(class(surv_pred$samples)=="mcmcarray"){
+  if(inherits(surv_pred$samples, "mcmcarray")){
     sur = mcmcr::collapse_chains(surv_pred$samples)
   }else{
     sur2 <- as.matrix(data.table::rbindlist(lapply(surv_pred$samples, as.data.frame)))
@@ -136,7 +137,7 @@ simulateTrajectoriesFromPosterior <- function(popInfo=NA, rec_pred, surv_pred, i
     S_lookup = S_lookup[order(S_lookup$PopulationName,S_lookup$Annual),]
   }
   
-  if(class(rec_pred$samples)=="mcmcarray"){
+  if(inherits(rec_pred$samples, "mcmcarray")){
     rec = mcmcr::collapse_chains(rec_pred$samples)
   }else{
     rec2 <- as.matrix(data.table::rbindlist(lapply(rec_pred$samples, as.data.frame)))

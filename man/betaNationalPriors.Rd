@@ -82,6 +82,8 @@ confidence interval.}
 option is "Johnson" for the model used in Johnson et. al. (2020), but
 additional options may be added in the future.}
 
+\item{r.inv.link}{string. Recruitment model inverse link function.}
+
 \item{returnValues}{logical. Default is TRUE. If FALSE returns strings for
 some values showing the initial values and the modifier ie "0.9 * 1.05"}
 }
@@ -106,6 +108,7 @@ on recruitment,
 on adult female survival,
 \item S_cv_max: Max of the prior distribution of the random
 effect of year on adult female survival,
+\item R_inv_link: Recruitment model inverse link function,
 \item qMin,qMax,uMin,uMax,zMin,zMax,cowMult: Composition bias parameters.
 }
 }
