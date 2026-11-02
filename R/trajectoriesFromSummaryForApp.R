@@ -52,7 +52,7 @@ trajectoriesFromSummaryForApp <- function(numSteps, replicates, N0, R_bar, S_bar
   #Temporary fix: handle older way of specifying variation so that app still works. 
   #Permanent fix will be changing app to use trajectoriesFromSummary
   if (length(N0)==2){
-    Nvar <- addN0Variation(data.frame(N0=mean(N0),N.sd=mean(N0)^0.5,N.lower=N0[1],N.upper=N0[2],
+    Nvar <- addN0Variation(data.frame(N0=mean(N0), N.lower=N0[1],N.upper=N0[2],
                                       replicate=seq(1:replicates)))
     N0 <- Nvar$N0
   }
