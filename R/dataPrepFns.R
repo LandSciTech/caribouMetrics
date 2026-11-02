@@ -102,6 +102,30 @@ dataFromSheets <- function(survey_url, shiny_progress = FALSE, i18n = NULL){
   
   N0 <- survey_pop %>% group_by(PopulationName) %>% filter(Year == max(Year))
   
+  
+  
+  dist_sh <- stringr::str_subset(survey_sh_names, "[D,d]isturbance")
+  if(length(dist_sh)<1){
+    message("The spreadsheet does not include a sheet named 'disturbance'")
+    dist <- NULL
+  } else {
+    nms <- c("PopulationName", "Year", "Anthro", "Fire_excl_anthro")
+    
+    survey_dist <- googlesheets4::read_sheet(survey_url, dist_sh,
+                                             na = "NA") %>%
+      select(any_of(nms))
+    
+    dist_nms <- purrr::map_lgl(nms,
+                               \(x)stringr::str_detect(colnames(survey_dist), x) %>% any())
+    
+    if(!all(dist_nms)){
+      stop("The disturbance estimates sheet is missing the expected column names:",
+           paste0(colnames(survey_dist)[!dist_nms], collapse = ", "))
+    }
+    
+    dist <- survey_dist %>% group_by(PopulationName)
+  }
+  
   pops_run <- intersect(survey_recruit$PopulationName,
                         survey_surv$PopulationName) %>%
     intersect(N0$PopulationName)
@@ -129,7 +153,7 @@ dataFromSheets <- function(survey_url, shiny_progress = FALSE, i18n = NULL){
   
   return(list(survey_surv = survey_surv, pops_run = pops_run,
               survey_recruit = survey_recruit, N0 = N0, 
-              dat_desc = dat_desc))
+              dat_desc = dat_desc, dist = dist))
 }
 
 #' Functions used for data prep for disturbanceMetrics and caribouHabitat
