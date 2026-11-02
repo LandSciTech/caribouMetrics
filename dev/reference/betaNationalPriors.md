@@ -131,6 +131,10 @@ betaNationalPriors(
   "Johnson" for the model used in Johnson et. al. (2020), but additional
   options may be added in the future.
 
+- r.inv.link:
+
+  string. Recruitment model inverse link function.
+
 - returnValues:
 
   logical. Default is TRUE. If FALSE returns strings for some values
@@ -174,6 +178,8 @@ a list with values:
 
 - S_cv_max: Max of the prior distribution of the random effect of year
   on adult female survival,
+
+- R_inv_link: Recruitment model inverse link function,
 
 - qMin,qMax,uMin,uMax,zMin,zMax,cowMult: Composition bias parameters.
 

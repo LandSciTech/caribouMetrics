@@ -25,6 +25,7 @@ estimateBayesianRates(
   i18n = NULL,
   niters = formals(bboutools::bb_fit_survival)$niters,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
+  quiet = TRUE,
   ...
 )
 ```
@@ -74,6 +75,11 @@ estimateBayesianRates(
   boolean. If TRUE return fitted survival and recruitment models.
   Default FALSE.
 
+- i18n:
+
+  NULL or function. Only used in shiny app to provide translation
+  function for messages.
+
 - niters:
 
   integer. The number of iterations per chain after thinning and
@@ -82,6 +88,11 @@ estimateBayesianRates(
 - nthin:
 
   integer. The number of the thinning rate.
+
+- quiet:
+
+  logical. Whether to suppress jags model fitting console output,
+  including progress bar
 
 - ...:
 
@@ -161,11 +172,11 @@ s_data <- rbind(bboudata::bbousurv_a, bboudata::bbousurv_b)
 r_data <- rbind(bboudata::bbourecruit_a, bboudata::bbourecruit_b)
 estimateBayesianRates(s_data, r_data, N0 = 500)
 #>   PopulationName     R_bar       R_sd R_iv_mean R_iv_shape R_bar_lower
-#> 1              A 0.1892745 0.08127592 0.3153711   26.45534   0.1661514
-#> 2              B 0.2030830 0.10232056 0.3153711   26.45534   0.1717109
+#> 1              A 0.1894437 0.08344549 0.3177894   28.33268   0.1649342
+#> 2              B 0.2038677 0.10326869 0.3177894   28.33268   0.1718786
 #>   R_bar_upper     S_bar      S_sd S_iv_mean S_iv_shape S_bar_lower S_bar_upper
-#> 1   0.2141778 0.8842859 0.2450002 0.5007685   12.93896   0.8259776   0.9271648
-#> 2   0.2381331 0.9085433 0.2951537 0.5007685   12.93896   0.8527330   0.9474408
+#> 1   0.2164723 0.8811968 0.2396932 0.5002357   14.94935   0.8207842   0.9222616
+#> 2   0.2380755 0.9073002 0.2933512 0.5002357   14.94935   0.8487917   0.9463532
 #>    N0 nCollarYears nSurvYears nCowsAllYears nRecruitYears
 #> 1 500          900         31          2353            27
 #> 2 500          519         18          2001            15

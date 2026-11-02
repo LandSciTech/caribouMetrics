@@ -561,6 +561,12 @@ returned example trajectories are derived from the MCMC samples.
 ``` r
 
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative)
+#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
+#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
+#> years
+#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
+#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
+#> years
 ```
 
 ``` r
@@ -596,6 +602,12 @@ case.
 ``` r
 
 popMetricsBayes <- trajectoriesFromBayesian(bbouInformative,N0=100)
+#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
+#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
+#> years
+#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
+#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
+#> years
 ```
 
 ``` r
@@ -630,6 +642,12 @@ popMetricsBayesNvar <- trajectoriesFromBayesian(bbouInformative,
                                                 N0 = data.frame(N0 = 100, 
                                                                 N.lower = 50, 
                                                                 N.upper = 150))
+#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
+#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
+#> years
+#> Warning in simulateTrajectoriesFromPosterior(popInfo = popInfo, rec_pred =
+#> bayesianResults$recruit_fit, : rec_pred and surv_pred do not contain the same
+#> years
 ```
 
 ``` r

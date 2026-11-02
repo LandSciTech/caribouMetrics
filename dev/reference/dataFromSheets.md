@@ -2,7 +2,7 @@
 
 Download data from Google sheets stored in bboutools format. See the
 [bboutools
-website](https://poissonconsulting.github.io/bboutools/articles/bboutools.html#providing-data)
+website](https://LandSciTech.github.io/bboutools/articles/bboutools.html#providing-data)
 and this [template
 sheet](https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing)
 for more details on the format of the data.
@@ -75,15 +75,18 @@ Caribou demography functions:
 
 ``` r
  
-dataFromSheets("https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/edit?usp=sharing")
+dataFromSheets(paste0(
+  "https://docs.google.com/spreadsheets/d/1i53nQrJXgrq3B6jO0ATHhSIbibtLq5TmmFL-PxGQNm8/",
+  "edit?usp=sharing"
+))
 #> ✔ Reading from bbou_example_data.
-#> ✔ Range ''recruit_data''.
+#> ✔ Range 'recruit_data'.
 #> ✔ Reading from bbou_example_data.
-#> ✔ Range ''surv_data''.
+#> ✔ Range 'surv_data'.
 #> ✔ Reading from bbou_example_data.
-#> ✔ Range ''population_estimates''.
+#> ✔ Range 'population_estimates'.
 #> ✔ Reading from bbou_example_data.
-#> ✔ Range ''data_description''.
+#> ✔ Range 'data_description'.
 #> $survey_surv
 #> # A tibble: 570 × 6
 #>    PopulationName  Year Month StartTotal MortalitiesCertain MortalitiesUncertain

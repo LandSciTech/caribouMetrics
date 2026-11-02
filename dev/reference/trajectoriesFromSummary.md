@@ -25,6 +25,7 @@ trajectoriesFromSummary(
   returnSamples = T,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
   varPersists = T,
+  quiet = TRUE,
   ...
 )
 ```
@@ -81,6 +82,11 @@ trajectoriesFromSummary(
 - varPersists:
 
   logical. If FALSE treats all variation as interannual variation.
+
+- quiet:
+
+  logical. Whether to suppress jags model fitting console output,
+  including progress bar
 
 - ...:
 

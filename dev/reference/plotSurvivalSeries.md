@@ -1,12 +1,18 @@
 # Plot survival time series
 
-TO DO: write documentation
+Plot survival time series
 
 ## Usage
 
 ``` r
 plotSurvivalSeries(surv_data_show)
 ```
+
+## Arguments
+
+- surv_data_show:
+
+  data.frame. Survival data in bboudata format.
 
 ## See also
 
@@ -35,3 +41,12 @@ Caribou demography functions:
 [`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
 [`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
 [`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
+
+## Examples
+
+``` r
+scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 1)
+simObs <- simulateObservations(scns)
+
+plotSurvivalSeries(simObs$simSurvObs)
+```

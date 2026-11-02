@@ -8,9 +8,9 @@ rec_pred and surv_pred each include the same years and populations.
 ## Usage
 
 ``` r
-convertTrajectories(pars)
+convertTrajectories(trajectories)
 
-summarizeTrajectories(pars, returnSamples = T)
+summarizeTrajectories(trajectories, returnSamples = T)
 
 simulateTrajectoriesFromPosterior(
   popInfo = NA,
@@ -27,9 +27,14 @@ simulateTrajectoriesFromPosterior(
 
 ## Arguments
 
-- pars:
+- trajectories:
+
+  data.frame containing trajectories created by
+  `simulateTrajectoriesFromPosterior`
 
 - returnSamples:
+
+  logical. Should samples table be returned as well as summary?
 
 - popInfo:
 
@@ -41,18 +46,18 @@ simulateTrajectoriesFromPosterior(
 - rec_pred:
 
   results returned by
-  [`bboutools::bb_fit_recruitment()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html)
+  [`bb_fit_recruitment()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html)
   or
-  [`bboutools::bb_predict_calf_cow_ratio()`](https://github.com/LandSciTech/bboutools/reference/bb_predict_calf_cow_ratio.html)
+  [`bb_predict_calf_cow_ratio()`](https://github.com/LandSciTech/bboutools/reference/bb_predict_calf_cow_ratio.html)
   functions of bboutools R package, or recruit_fit returned by
   [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md).
 
 - surv_pred:
 
   bboufit object return by
-  [`bboutools::bb_fit_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html)
+  [`bb_fit_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_fit_survival.html)
   or
-  [`bboutools::bb_predict_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_predict_survival.html)
+  [`bb_predict_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_predict_survival.html)
   functions of bboutools R package, or surv_fit returned by
   [`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md).
 
@@ -70,7 +75,7 @@ simulateTrajectoriesFromPosterior(
   logical. Default FALSE. Set TRUE to return expected values of R, S,
   and lambda (without interannual variation). Ignored if
   rec_pred/surv_pred are
-  [`bboutools::bb_predict_calf_cow_ratio()`](https://github.com/LandSciTech/bboutools/reference/bb_predict_calf_cow_ratio.html)/[`bboutools::bb_predict_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_predict_survival.html)
+  [`bb_predict_calf_cow_ratio()`](https://github.com/LandSciTech/bboutools/reference/bb_predict_calf_cow_ratio.html)/[`bb_predict_survival()`](https://github.com/LandSciTech/bboutools/reference/bb_predict_survival.html)
   results.
 
 - c:
@@ -81,11 +86,18 @@ simulateTrajectoriesFromPosterior(
 
   Number. Carrying capacity.
 
+- ...:
+
+  Other parameters passed to
+  [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md)
+
 ## Value
 
 convertTrajectories: formatted tables
 
-summarizeTrajectories:
+summarizeTrajectories: a list containing "summary" with a summary table
+of trajectories and, if `returnSamples = TRUE`, "samples" with the
+sample table
 
 simulateTrajectoriesFromPosterior: a data frame with results from
 [`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md)
@@ -100,32 +112,6 @@ cycle of caribou, measured from one calving season to the next. By
 default, April is set as the start of the caribou year.
 
 ## See also
-
-Caribou demography functions:
-[`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md),
-[`addN0Variation()`](https://landscitech.github.io/caribouMetrics/dev/reference/addN0Variation.md),
-[`bayesianScenariosWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianScenariosWorkflow.md),
-[`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md),
-[`betaNationalPriors()`](https://landscitech.github.io/caribouMetrics/dev/reference/betaNationalPriors.md),
-[`caribouPopGrowth()`](https://landscitech.github.io/caribouMetrics/dev/reference/caribouPopGrowth.md),
-[`compareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/compareTrajectories.md),
-[`compositionBiasCorrection()`](https://landscitech.github.io/caribouMetrics/dev/reference/compositionBiasCorrection.md),
-[`dataFromSheets()`](https://landscitech.github.io/caribouMetrics/dev/reference/dataFromSheets.md),
-[`demographicProjectionApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/demographicProjectionApp.md),
-[`estimateBayesianRates()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateBayesianRates.md),
-[`estimateNationalRate()`](https://landscitech.github.io/caribouMetrics/dev/reference/estimateNationalRates.md),
-[`getCaribouYear()`](https://landscitech.github.io/caribouMetrics/dev/reference/getCaribouYear.md),
-[`getNationalCoefficients()`](https://landscitech.github.io/caribouMetrics/dev/reference/getNationalCoefficients.md),
-[`getScenarioDefaults()`](https://landscitech.github.io/caribouMetrics/dev/reference/getScenarioDefaults.md),
-[`plotCompareTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotCompareTrajectories.md),
-[`plotSurvivalSeries()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotSurvivalSeries.md),
-[`plotTrajectories()`](https://landscitech.github.io/caribouMetrics/dev/reference/plotTrajectories.md),
-[`popGrowthTableJohnsonECCC`](https://landscitech.github.io/caribouMetrics/dev/reference/popGrowthTableJohnsonECCC.md),
-[`simulateObservations()`](https://landscitech.github.io/caribouMetrics/dev/reference/simulateObservations.md),
-[`trajectoriesFromBayesian()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromBayesian.md),
-[`trajectoriesFromNational()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromNational.md),
-[`trajectoriesFromSummary()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummary.md),
-[`trajectoriesFromSummaryForApp()`](https://landscitech.github.io/caribouMetrics/dev/reference/trajectoriesFromSummaryForApp.md)
 
 Caribou demography functions:
 [`addMissingYears()`](https://landscitech.github.io/caribouMetrics/dev/reference/addMissingYears.md),

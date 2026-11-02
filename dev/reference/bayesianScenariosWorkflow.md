@@ -21,6 +21,7 @@ bayesianScenariosWorkflow(
   niters = formals(bboutools::bb_fit_survival)$niters,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
   returnSamples = F,
+  quiet = TRUE,
   ...
 )
 ```
@@ -80,6 +81,11 @@ bayesianScenariosWorkflow(
 
   logical. Optional. If true, return full results from
   [`bayesianTrajectoryWorkflow()`](https://landscitech.github.io/caribouMetrics/dev/reference/bayesianTrajectoryWorkflow.md).
+
+- quiet:
+
+  logical. Whether to suppress jags model fitting console output,
+  including progress bar
 
 - ...:
 

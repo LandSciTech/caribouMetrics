@@ -36,7 +36,7 @@ caribouPopGrowth(
   interannualVar = list(R_CV = 0.46, S_CV = 0.08696),
   probOption = "binomial",
   progress = interactive(),
-  warn = T
+  warn = TRUE
 )
 ```
 
@@ -127,6 +127,11 @@ caribouPopGrowth(
 
   Logical. Should progress updates be shown?
 
+- warn:
+
+  Logical. Should warnings be shown when values are forced to be within
+  required boundaries?
+
 ## Value
 
 A data.frame of population size (`N`), expected growth rate (`lambdaE`),
@@ -212,7 +217,7 @@ Caribou demography functions:
 ``` r
 caribouPopGrowth(100, 2, 0.5, 0.7)
 #>    N0    lambda lambdaE  N       R_t       X_t       S_t n_recruits
-#> 1 100 0.9486833   0.875 90 0.4617577 0.2308788 0.6621662         15
+#> 1 100 0.9165151   0.875 84 0.5396293 0.2698146 0.7299416         14
 #>   surviving_adFemales
-#> 1                  75
+#> 1                  70
 ```

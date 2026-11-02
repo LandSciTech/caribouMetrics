@@ -17,6 +17,7 @@ bayesianTrajectoryWorkflow(
   inputList = list(),
   niters = formals(bboutools::bb_fit_survival)$niters,
   nthin = formals(bboutools::bb_fit_survival)$nthin,
+  quiet = TRUE,
   ...
 )
 ```
@@ -81,6 +82,11 @@ bayesianTrajectoryWorkflow(
 - nthin:
 
   integer. The number of the thinning rate.
+
+- quiet:
+
+  logical. Whether to suppress jags model fitting console output,
+  including progress bar
 
 - ...:
 
@@ -167,37 +173,39 @@ Caribou demography functions:
     disturbance = NULL
   )
 #> Warning: missing years of recruitment data: 1985, 1986, 1987, 1988
+#> Warning: rec_pred and surv_pred do not contain the same years
+#> Warning: rec_pred and surv_pred do not contain the same years
   str(mod, max.level = 2)
 #> List of 4
 #>  $ result :List of 4
-#>   ..$ summary     :'data.frame': 320 obs. of  8 variables:
+#>   ..$ summary     :'data.frame': 300 obs. of  8 variables:
 #>   ..$ surv_data   :'data.frame': 384 obs. of  9 variables:
-#>   ..$ recruit_data:'data.frame': 32 obs. of  9 variables:
+#>   ..$ recruit_data:'data.frame': 31 obs. of  9 variables:
 #>   ..$ popInfo     :'data.frame': 3000 obs. of  4 variables:
 #>  $ inData :List of 1
 #>   ..$ disturbanceIn: NULL
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
-#>   ..$ R_bar         : num 0.188
-#>   ..$ R_sd          : num 0.087
+#>   ..$ R_bar         : num 0.189
+#>   ..$ R_sd          : num 0.0859
 #>   ..$ R_iv_mean     : num 0.341
-#>   ..$ R_iv_shape    : num 16.8
-#>   ..$ R_bar_lower   : num 0.163
-#>   ..$ R_bar_upper   : num 0.215
+#>   ..$ R_iv_shape    : num 18.5
+#>   ..$ R_bar_lower   : num 0.164
+#>   ..$ R_bar_upper   : num 0.217
 #>   ..$ S_bar         : num 0.871
-#>   ..$ S_sd          : num 0.162
-#>   ..$ S_iv_mean     : num 0.315
-#>   ..$ S_iv_shape    : num 2.78
-#>   ..$ S_bar_lower   : num 0.835
-#>   ..$ S_bar_upper   : num 0.906
+#>   ..$ S_sd          : num 0.159
+#>   ..$ S_iv_mean     : num 0.31
+#>   ..$ S_iv_shape    : num 2.45
+#>   ..$ S_bar_lower   : num 0.834
+#>   ..$ S_bar_upper   : num 0.905
 #>   ..$ N0            : logi NA
 #>   ..$ nCollarYears  : num NA
 #>   ..$ nSurvYears    : int 32
 #>   ..$ nCowsAllYears : num NA
 #>   ..$ nRecruitYears : int 32
 #>  $ parList:List of 5
-#>   ..$ Rbar:'data.frame': 32 obs. of  7 variables:
-#>   ..$ Sbar:'data.frame': 32 obs. of  7 variables:
+#>   ..$ Rbar:'data.frame': 30 obs. of  7 variables:
+#>   ..$ Sbar:'data.frame': 30 obs. of  7 variables:
 #>   ..$ Siv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ Riv :'data.frame': 1 obs. of  2 variables:
 #>   ..$ type: chr "bbou"

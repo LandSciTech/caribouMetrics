@@ -76,6 +76,15 @@ trajectoriesFromNational(
   disturbance buffered by 500 m, and the percentage covered by fire that
   does not overlap anthropogenic disturbance.
 
+- skipSave:
+
+  Do not cache a version of `trajectoriesFromNational`. Note caching is
+  not done if any of the arguments are different from the defaults.
+
+- forceUpdate:
+
+  logical. If TRUE update the cache.
+
 - doSummary:
 
   logical. Default TRUE. If FALSE returns unprocessed outcomes from
