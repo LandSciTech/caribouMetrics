@@ -75,6 +75,7 @@ Collate:
     'estimateBayesianRates.R'
     'estimateNationalRate.R'
     'estimateNationalRates.R'
+    'fillDisturbance.R'
     'getNationalCoefficients.R'
     'getScenarioDefaults.R'
     'spatialAlignFns.R'
