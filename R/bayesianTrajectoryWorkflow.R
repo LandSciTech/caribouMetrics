@@ -146,8 +146,12 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   }
 
   if(!is.null(disturbance)){
-    disturbance <- merge(data.frame(Year = seq(inp$startYear, inp$endYear)),
-                         disturbance, by = "Year", all.x = T)
+    distM <- data.frame(Year = seq(inp$startYear, inp$endYear))
+    if(hasName(disturbance,"PopulationName")){
+      distM <- merge(distM,data.frame(PopulationName=unique(disturbance$PopulationName)))
+    }
+    disturbance <- merge(distM, disturbance, all.x = T)
+    
     if (anyNA(select(disturbance, "Anthro", "Fire_excl_anthro"))) {
       warning(
         "Years ",
@@ -157,7 +161,13 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
         "Anthro will be filled from the next year with data and fire will be fill with 0s"
       )
       
-      disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup") %>%
+      if(hasName(disturbance,"PopulationName")){
+        disturbance <- tidyr::fill(disturbance, Anthro, .by = PopulationName, .direction = "downup")
+      }else{
+        disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup")
+      }
+
+      disturbance <- disturbance %>%
         mutate(
           Fire_excl_anthro = tidyr::replace_na(Fire_excl_anthro, 0),
           Total_dist = Fire_excl_anthro + Anthro
