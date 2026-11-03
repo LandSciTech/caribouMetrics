@@ -37,7 +37,8 @@ fillDisturbance <- function(disturbance, merge_df){
       "Anthro will be filled from the previous year with data and fire will be filled with 0s"
     )
     
-    disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup") %>%
+    disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup",
+                               .by = any_of("PopulationName")) %>%
       mutate(
         Fire_excl_anthro = tidyr::replace_na(Fire_excl_anthro, 0),
         Total_dist = Fire_excl_anthro + Anthro
