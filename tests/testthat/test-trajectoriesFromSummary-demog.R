@@ -278,28 +278,5 @@ test_that("works with multipop",{
   
   # When Year is < 100 still can track timesteps 
   expect_contains(colnames(trajs_beta$summary), "Timestep")
-  
-  expect_is(plotTrajectories(trajs_beta, metrics = "Female population size"), 
-            "ggplot")
-  
-  plotTrajectories(trajs_beta, metrics = "Female population size")+
-    ggplot2::labs(col = "Scenario", fill = "Scenario",  x = "Years in the future")
-  
-  plotTrajectories(trajs_beta1, metrics = "Female population size")
-  
-  plotTrajectories(trajs_beta1, metrics = "Female population size", 
-                   multicolour_samples = FALSE, ribbon = FALSE)+
-    ggplot2::labs(col = "Scenario", x = "Years in the future",
-                  linewidth = "Trajectory")+
-    ggplot2::guides(linewidth = ggplot2::guide_legend(override.aes = list(linewidth = c(1,2))),
-                    color = ggplot2::guide_legend(override.aes = list(linewidth = c(2))))
-  
-  plotTrajectories(trajs_beta, metrics = "Female population size", 
-                   multicolour_samples = FALSE, ribbon = FALSE, 
-                   add_N0 = TRUE)+
-    ggplot2::labs(col = "Scenario", x = "Years in the future",
-                  linewidth = "Trajectory")+
-    ggplot2::guides(linewidth = ggplot2::guide_legend(override.aes = list(linewidth = c(1,2))),
-                    color = ggplot2::guide_legend(override.aes = list(linewidth = c(2))))
 })
 

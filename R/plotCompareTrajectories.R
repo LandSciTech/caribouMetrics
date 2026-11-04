@@ -337,15 +337,15 @@ plotTrajectories <- function(caribouBayesDemogMod,
       proj_samp <- base+
         ggplot2::geom_line(data=caribouBayesDemogMod$samples,
                            ggplot2::aes(x=Year,y=Amount,colour=Replicate,group=Replicate,
-                                        linewidth = as.factor(1)), 
+                                        linewidth = 1), 
                            inherit.aes = FALSE)   
     } else {
       proj_samp <- base+
         ggplot2::geom_line(data=caribouBayesDemogMod$samples,
                            ggplot2::aes(x=Year,y=Amount,colour=PopulationName, 
                                         group=interaction(Replicate, PopulationName),
-                                        linewidth = as.factor(1)), 
-                           inherit.aes = FALSE, alpha = 0.6) 
+                                        linewidth = 1), 
+                           inherit.aes = FALSE, alpha = 0.4) 
     }
   } else {
     proj_samp <- base
@@ -354,7 +354,7 @@ plotTrajectories <- function(caribouBayesDemogMod,
   if(n_distinct(caribouBayesDemogMod$summary$PopulationName) < 2 && multicolour_samples){
     proj <- proj_samp+
       ggplot2::aes(x=Year,y=Mean,ymin=lower,ymax=upper) +
-      ggplot2::geom_line(colour="black",ggplot2::aes(linewidth=as.factor(2)))+
+      ggplot2::geom_line(colour="black",ggplot2::aes(linewidth=2))+
       ggplot2::theme(legend.position = "none")
     
     if(ribbon){
@@ -366,7 +366,7 @@ plotTrajectories <- function(caribouBayesDemogMod,
       ggplot2::aes(x=Year,y=Mean,ymin=lower,ymax=upper, 
                    group = PopulationName, colour = PopulationName, 
                    fill = PopulationName) +
-      ggplot2::geom_line(ggplot2::aes(linewidth=as.factor(2)))
+      ggplot2::geom_line(ggplot2::aes(linewidth=2))
     if(ribbon){
       proj <- proj +
         ggplot2::geom_ribbon(alpha = 0.2)
@@ -375,7 +375,7 @@ plotTrajectories <- function(caribouBayesDemogMod,
   
   proj+
     ggplot2::labs(linewidth = "Trajectory")+
-    ggplot2::scale_linewidth_discrete(range = c(1, 2),
+    ggplot2::scale_linewidth_continuous(range = c(1, 2), breaks = c(1,2),
                                       labels = c("Plausible", "Mean"))
   
 }
