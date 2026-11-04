@@ -9,7 +9,11 @@ plotTrajectories(
   replicates = 35,
   metrics = c("Adult female survival", "Recruitment", "Adjusted recruitment",
     "Population growth rate", "Female population size", "c", "Expected survival",
-    "Expected recruitment", "Expected adjusted recruitment", "Expected growth rate")
+    "Expected recruitment", "Expected adjusted recruitment", "Expected growth rate"),
+  i18n = NULL,
+  multicolour_samples = TRUE,
+  ribbon = TRUE,
+  add_N0 = FALSE
 )
 }
 \arguments{
@@ -23,6 +27,18 @@ samples not included in \code{caribouBayesDemogMod}.}
 
 \item{metrics}{character. A vector of Metrics to be included as facets
 in the plot.}
+
+\item{i18n}{NULL or function. Only used in shiny app to provide translation
+function for messages.}
+
+\item{multicolour_samples}{logical. Should sample trajectories be shown in
+different colours when there is only one population?}
+
+\item{ribbon}{logical. Should a ribbon be plotted using the upper and lower
+bounds?}
+
+\item{add_N0}{logical. Should year 0 be added to plots of Female population
+size based on N0?}
 }
 \description{
 Plot Bayesian population model results including multiple sample trajectories

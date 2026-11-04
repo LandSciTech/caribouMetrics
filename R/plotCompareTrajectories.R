@@ -233,6 +233,13 @@ plotCompareTrajectories <- function(modTables, metric, lowBound = 0, highBound =
 #'   samples not included in `caribouBayesDemogMod`.
 #' @param metrics character. A vector of Metrics to be included as facets
 #'   in the plot.
+#' @inheritParams estimateBayesianRates
+#' @param multicolour_samples logical. Should sample trajectories be shown in
+#'   different colours when there is only one population?
+#' @param ribbon logical. Should a ribbon be plotted using the upper and lower
+#'   bounds?
+#' @param add_N0 logical. Should year 0 be added to plots of Female population
+#'   size based on N0?
 #'
 #' @export
 #' 
@@ -258,7 +265,15 @@ plotTrajectories <- function(caribouBayesDemogMod,
                              metrics = c("Adult female survival","Recruitment","Adjusted recruitment",
                                          "Population growth rate","Female population size","c",
                                          "Expected survival","Expected recruitment",
-                                         "Expected adjusted recruitment","Expected growth rate")){
+                                         "Expected adjusted recruitment","Expected growth rate"), 
+                             i18n = NULL, 
+                             multicolour_samples = TRUE, 
+                             ribbon = TRUE, 
+                             add_N0 = FALSE){
+  if(is.null(i18n)){
+    i18n <- list(t = function(x)paste0(x))
+  }
+  
   if(!hasName(caribouBayesDemogMod, "summary")){
     stop("caribouBayesDemogMod must contain a summary table.")
   }
@@ -272,9 +287,28 @@ plotTrajectories <- function(caribouBayesDemogMod,
     filter(Metric %in% metrics)
   names <- caribouBayesDemogMod$summary %>% select(MetricTypeID, Metric) %>% unique()
   
-  base <- ggplot2::ggplot(data = caribouBayesDemogMod$summary)+
-    ggplot2::facet_wrap(~Metric, scales = "free") +
-    ggplot2::ylab("")
+  if(is.null(caribouBayesDemogMod$summary$Year)){
+    caribouBayesDemogMod$summary$Year <- caribouBayesDemogMod$summary$Timestep 
+  }
+  
+  if(add_N0){
+    caribouBayesDemogMod$summary <- caribouBayesDemogMod$summary %>%
+      bind_rows(
+        caribouBayesDemogMod$summary %>% 
+          filter(Year == min(Year)) %>% 
+          distinct(PopulationName, Year = min(Year) - 1, 
+                   Mean = mean(caribouBayesDemogMod$popInfo$N0), MetricTypeID = "N")
+      )
+  }
+  
+  if(length(metrics) == 1){
+    base <- ggplot2::ggplot(data = caribouBayesDemogMod$summary)+
+      ggplot2::ylab(metrics)
+  } else {
+    base <- ggplot2::ggplot(data = caribouBayesDemogMod$summary)+
+      ggplot2::facet_wrap(~Metric, scales = "free") +
+      ggplot2::ylab("") 
+  }
   
   if(hasName(caribouBayesDemogMod,"samples")){
     caribouBayesDemogMod$samples <- caribouBayesDemogMod$samples %>%
@@ -282,38 +316,67 @@ plotTrajectories <- function(caribouBayesDemogMod,
       merge(names) %>%
       filter(as.numeric(as.factor(Replicate))<=replicates)
     
-    if(n_distinct(caribouBayesDemogMod$summary$PopulationName) < 2){
+    if(is.null(caribouBayesDemogMod$samples$Year)){
+      caribouBayesDemogMod$samples$Year <- caribouBayesDemogMod$samples$Timestep 
+    }
+    
+    if(add_N0){
+      caribouBayesDemogMod$samples <- caribouBayesDemogMod$samples %>%
+        bind_rows(
+          caribouBayesDemogMod$samples %>% 
+            filter(Year == min(Year)) %>% 
+            distinct(PopulationName, Replicate, Year = min(Year) - 1, MetricTypeID = "N") %>%
+            left_join(caribouBayesDemogMod$popInfo %>% 
+                        mutate(Replicate = paste0("x", id),
+                               PopulationName, Amount = N0, .keep = "none"),
+                      by = join_by(PopulationName, Replicate))
+        )
+    }
+    
+    if(n_distinct(caribouBayesDemogMod$summary$PopulationName) < 2 && multicolour_samples){
       proj_samp <- base+
         ggplot2::geom_line(data=caribouBayesDemogMod$samples,
-                           ggplot2::aes(x=Year,y=Amount,colour=Replicate,group=Replicate), 
+                           ggplot2::aes(x=Year,y=Amount,colour=Replicate,group=Replicate,
+                                        linewidth = as.factor(1)), 
                            inherit.aes = FALSE)   
     } else {
       proj_samp <- base+
         ggplot2::geom_line(data=caribouBayesDemogMod$samples,
                            ggplot2::aes(x=Year,y=Amount,colour=PopulationName, 
-                                        group=interaction(Replicate, PopulationName)), 
+                                        group=interaction(Replicate, PopulationName),
+                                        linewidth = as.factor(1)), 
                            inherit.aes = FALSE, alpha = 0.6) 
     }
   } else {
     proj_samp <- base
   }
   
-  if(n_distinct(caribouBayesDemogMod$summary$PopulationName) < 2){
+  if(n_distinct(caribouBayesDemogMod$summary$PopulationName) < 2 && multicolour_samples){
     proj <- proj_samp+
-      ggplot2::aes(x=Year,y=Mean,ymin=lower,ymax=upper)+
-      ggplot2::geom_ribbon(fill="grey", alpha = 0.4) +
-      ggplot2::geom_line(colour="black",linewidth=2)+
+      ggplot2::aes(x=Year,y=Mean,ymin=lower,ymax=upper) +
+      ggplot2::geom_line(colour="black",ggplot2::aes(linewidth=as.factor(2)))+
       ggplot2::theme(legend.position = "none")
+    
+    if(ribbon){
+      proj <- proj +
+        ggplot2::geom_ribbon(fill="grey", alpha = 0.4)
+    }
   } else {
     proj <- proj_samp+
       ggplot2::aes(x=Year,y=Mean,ymin=lower,ymax=upper, 
                    group = PopulationName, colour = PopulationName, 
-                   fill = PopulationName)+
-      ggplot2::geom_ribbon(alpha = 0.2) +
-      ggplot2::geom_line(linewidth=2)
+                   fill = PopulationName) +
+      ggplot2::geom_line(ggplot2::aes(linewidth=as.factor(2)))
+    if(ribbon){
+      proj <- proj +
+        ggplot2::geom_ribbon(alpha = 0.2)
+    }
   }
   
-  proj
+  proj+
+    ggplot2::labs(linewidth = "Trajectory")+
+    ggplot2::scale_linewidth_discrete(range = c(1, 2),
+                                      labels = c("Plausible", "Mean"))
   
 }
 
