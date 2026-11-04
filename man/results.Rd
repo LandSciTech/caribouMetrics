@@ -60,10 +60,10 @@ resDMrasters <- results(dm, type = "processedData")
 \seealso{
 Functions for calculating disturbance:
 \code{\link{DisturbanceMetrics-class}},
-\code{\link{disturbanceMetrics}()},
-\code{\link{loadSpatialInputs}()},
-\code{\link{rasterizeLineDensity}()},
-\code{\link{reclassDist}()},
-\code{\link{updateDisturbance}()}
+\code{\link[=disturbanceMetrics]{disturbanceMetrics()}},
+\code{\link[=loadSpatialInputs]{loadSpatialInputs()}},
+\code{\link[=rasterizeLineDensity]{rasterizeLineDensity()}},
+\code{\link[=reclassDist]{reclassDist()}},
+\code{\link[=updateDisturbance]{updateDisturbance()}}
 }
 \concept{disturbance}

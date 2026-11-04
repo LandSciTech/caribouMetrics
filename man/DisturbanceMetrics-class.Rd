@@ -47,11 +47,11 @@ See \code{\link[=disturbanceMetrics]{disturbanceMetrics()}} for options when cre
 DisturbanceMetrics object.
 
 Functions for calculating disturbance:
-\code{\link{disturbanceMetrics}()},
-\code{\link{loadSpatialInputs}()},
-\code{\link{rasterizeLineDensity}()},
-\code{\link{reclassDist}()},
-\code{\link{results}()},
-\code{\link{updateDisturbance}()}
+\code{\link[=disturbanceMetrics]{disturbanceMetrics()}},
+\code{\link[=loadSpatialInputs]{loadSpatialInputs()}},
+\code{\link[=rasterizeLineDensity]{rasterizeLineDensity()}},
+\code{\link[=reclassDist]{reclassDist()}},
+\code{\link[=results]{results()}},
+\code{\link[=updateDisturbance]{updateDisturbance()}}
 }
 \concept{disturbance}

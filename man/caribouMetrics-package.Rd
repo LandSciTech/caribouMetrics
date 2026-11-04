@@ -21,6 +21,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Sarah Endicott \email{sarah.endicott@ec.gc.ca} (\href{https://orcid.org/0000-0001-9644-5343}{ORCID})
   \item Josie Hughes \email{josie.hughes@ec.gc.ca} (\href{https://orcid.org/0000-0001-7875-9015}{ORCID})
 }
 

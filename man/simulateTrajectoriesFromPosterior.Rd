@@ -31,15 +31,15 @@ summary?}
 
 \item{popInfo}{If NA (default) predictions are made without populations size, density dependence, or demographic stochasticity. See \code{\link[=caribouPopGrowth]{caribouPopGrowth()}} for details.}
 
-\item{rec_pred}{results returned by \code{\link[bboutools:bb_fit_recruitment]{bboutools::bb_fit_recruitment()}} or \code{\link[bboutools:bb_predict_calf_cow_ratio]{bboutools::bb_predict_calf_cow_ratio()}} functions of bboutools R package, or recruit_fit returned by \code{\link[=estimateBayesianRates]{estimateBayesianRates()}}.}
+\item{rec_pred}{results returned by \code{\link[bboutools:bb_fit_recruitment]{bb_fit_recruitment()}} or \code{\link[bboutools:bb_predict_calf_cow_ratio]{bb_predict_calf_cow_ratio()}} functions of bboutools R package, or recruit_fit returned by \code{\link[=estimateBayesianRates]{estimateBayesianRates()}}.}
 
-\item{surv_pred}{bboufit object return by \code{\link[bboutools:bb_fit_survival]{bboutools::bb_fit_survival()}} or \code{\link[bboutools:bb_predict_survival]{bboutools::bb_predict_survival()}} functions of bboutools R package, or surv_fit returned by \code{\link[=estimateBayesianRates]{estimateBayesianRates()}}.}
+\item{surv_pred}{bboufit object return by \code{\link[bboutools:bb_fit_survival]{bb_fit_survival()}} or \code{\link[bboutools:bb_predict_survival]{bb_predict_survival()}} functions of bboutools R package, or surv_fit returned by \code{\link[=estimateBayesianRates]{estimateBayesianRates()}}.}
 
 \item{initYear}{numeric. Initial year.}
 
 \item{correlateRates}{logical. Set TRUE to force correlation between recruitment and survival. Ignored}
 
-\item{returnExpected}{logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are \code{\link[bboutools:bb_predict_calf_cow_ratio]{bboutools::bb_predict_calf_cow_ratio()}}/\code{\link[bboutools:bb_predict_survival]{bboutools::bb_predict_survival()}} results.}
+\item{returnExpected}{logical. Default FALSE. Set TRUE to return expected values of R, S, and lambda (without interannual variation). Ignored if rec_pred/surv_pred are \code{\link[bboutools:bb_predict_calf_cow_ratio]{bb_predict_calf_cow_ratio()}}/\code{\link[bboutools:bb_predict_survival]{bb_predict_survival()}} results.}
 
 \item{c}{Number. Bias correction term.}
 
@@ -92,55 +92,29 @@ start of the caribou year.
 }
 \seealso{
 Caribou demography functions:
-\code{\link{addMissingYears}()},
-\code{\link{addN0Variation}()},
-\code{\link{bayesianScenariosWorkflow}()},
-\code{\link{bayesianTrajectoryWorkflow}()},
-\code{\link{betaNationalPriors}()},
-\code{\link{caribouPopGrowth}()},
-\code{\link{compareTrajectories}()},
-\code{\link{compositionBiasCorrection}()},
-\code{\link{dataFromSheets}()},
-\code{\link{demographicProjectionApp}()},
-\code{\link{estimateBayesianRates}()},
-\code{\link{estimateNationalRate}()},
-\code{\link{getCaribouYear}()},
-\code{\link{getNationalCoefficients}()},
-\code{\link{getScenarioDefaults}()},
-\code{\link{plotCompareTrajectories}()},
-\code{\link{plotSurvivalSeries}()},
-\code{\link{plotTrajectories}()},
+\code{\link[=addMissingYears]{addMissingYears()}},
+\code{\link[=addN0Variation]{addN0Variation()}},
+\code{\link[=bayesianScenariosWorkflow]{bayesianScenariosWorkflow()}},
+\code{\link[=bayesianTrajectoryWorkflow]{bayesianTrajectoryWorkflow()}},
+\code{\link[=betaNationalPriors]{betaNationalPriors()}},
+\code{\link[=caribouPopGrowth]{caribouPopGrowth()}},
+\code{\link[=compareTrajectories]{compareTrajectories()}},
+\code{\link[=compositionBiasCorrection]{compositionBiasCorrection()}},
+\code{\link[=dataFromSheets]{dataFromSheets()}},
+\code{\link[=demographicProjectionApp]{demographicProjectionApp()}},
+\code{\link[=estimateBayesianRates]{estimateBayesianRates()}},
+\code{\link[=estimateNationalRate]{estimateNationalRate()}},
+\code{\link[=getCaribouYear]{getCaribouYear()}},
+\code{\link[=getNationalCoefficients]{getNationalCoefficients()}},
+\code{\link[=getScenarioDefaults]{getScenarioDefaults()}},
+\code{\link[=plotCompareTrajectories]{plotCompareTrajectories()}},
+\code{\link[=plotSurvivalSeries]{plotSurvivalSeries()}},
+\code{\link[=plotTrajectories]{plotTrajectories()}},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{simulateObservations}()},
-\code{\link{trajectoriesFromBayesian}()},
-\code{\link{trajectoriesFromNational}()},
-\code{\link{trajectoriesFromSummary}()},
-\code{\link{trajectoriesFromSummaryForApp}()}
-
-Caribou demography functions:
-\code{\link{addMissingYears}()},
-\code{\link{addN0Variation}()},
-\code{\link{bayesianScenariosWorkflow}()},
-\code{\link{bayesianTrajectoryWorkflow}()},
-\code{\link{betaNationalPriors}()},
-\code{\link{caribouPopGrowth}()},
-\code{\link{compareTrajectories}()},
-\code{\link{compositionBiasCorrection}()},
-\code{\link{dataFromSheets}()},
-\code{\link{demographicProjectionApp}()},
-\code{\link{estimateBayesianRates}()},
-\code{\link{estimateNationalRate}()},
-\code{\link{getCaribouYear}()},
-\code{\link{getNationalCoefficients}()},
-\code{\link{getScenarioDefaults}()},
-\code{\link{plotCompareTrajectories}()},
-\code{\link{plotSurvivalSeries}()},
-\code{\link{plotTrajectories}()},
-\code{\link{popGrowthTableJohnsonECCC}},
-\code{\link{simulateObservations}()},
-\code{\link{trajectoriesFromBayesian}()},
-\code{\link{trajectoriesFromNational}()},
-\code{\link{trajectoriesFromSummary}()},
-\code{\link{trajectoriesFromSummaryForApp}()}
+\code{\link[=simulateObservations]{simulateObservations()}},
+\code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}},
+\code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}},
+\code{\link[=trajectoriesFromSummary]{trajectoriesFromSummary()}},
+\code{\link[=trajectoriesFromSummaryForApp]{trajectoriesFromSummaryForApp()}}
 }
 \concept{demography}

@@ -94,6 +94,12 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   }
   
   N0 <- getN0Pars(N0,popNames=unique(surv_data$PopulationName))
+  
+  if(length(N0)>1){
+    #fill any gaps in the time-series to avoid errors that crop up with multiple populations sampled in different years
+    surv_data <- addMissingYears(surv_data) 
+    recruit_data <- addMissingYears(recruit_data)
+  }
 
   if(is.null(i18n)){
     i18n <- list(t = function(x)paste0(x))
