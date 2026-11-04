@@ -130,7 +130,12 @@ simulateObservations <- function(paramTable, trajectories=NULL,
     freqStartsByYear <- merge(freqStartsByYear,data.frame(Year = seq(min(freqStartsByYear$Year),max(includeTimes))),all.y=T)
     freqStartsByYear[is.na(freqStartsByYear)] <- 0
     
+    #adjust - make year caribou year
+    if (collarOnTime<caribouYearStart){
+      freqStartsByYear$Year = freqStartsByYear$Year - 1 
+    }
   }
+
   
   if(!is.null(surv_data)){
     if(!hasName(surv_data,"Annual")){

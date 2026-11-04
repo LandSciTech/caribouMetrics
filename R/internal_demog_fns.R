@@ -368,7 +368,10 @@ simSurvivalData <- function(freqStartsByYear, exData, collarNumYears, collarOffT
   survivalSeries$numStarts[is.na(survivalSeries$numStarts)]=0
   
   startYrs = sort(unique(freqStartsByYear$CaribouYear))
-
+  if(collarOnTime<caribouYearStart){
+    startYrs = c(startYrs,max(startYrs+1))
+  }
+  
   #print(freqStartsByYear)
   firstStep=T
 

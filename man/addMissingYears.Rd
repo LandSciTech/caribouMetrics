@@ -6,7 +6,7 @@
 \usage{
 addMissingYears(
   dat,
-  addYears,
+  addYears = c(),
   year_start = formals(bboutools::bb_fit_recruitment)$year_start
 )
 }
@@ -18,12 +18,15 @@ addMissingYears(
 \item{year_start}{A whole number between 1 and 12 indicating the start of the caribou (i.e., biological) year. By default, April is set as the start of the caribou year.}
 }
 \value{
-a modified version of \code{dat} with additional rows for added Years.
+a modified version of \code{dat} with additional rows for added missing Years.
 }
 \description{
 Add years with missing values to bboudata formatted survival or recruitment
 data. This will cause estimated rates to be returned for those years by
 fitted Bayesian Models.
+}
+\details{
+Note the function also fills any gaps in the existing time-series, even if addYears is not specified.
 }
 \section{Interpretation of Years}{
 
