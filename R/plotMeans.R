@@ -2,15 +2,23 @@
 #' 
 #' 
 #'
-#' @param bayesianResults 
-#' @param metrics 
-#' @param plotMissing 
-#' @param y_labs 
+#' @inheritParams trajectoriesFromBayesian
+#' @param metrics character. Metrics to plot, can be Recruitment or Survival or both
+#' @param plotMissing logical. Should years with missing input data have interpolated results plotted?
+#' @param y_labs character. Names for the y axis.
 #'
-#' @returns
+#' @returns a ggplot object
 #' @export
 #'
 #' @examples
+#' surv_data <- bboudata::bbousurv_a %>% filter(Year > 2010)
+#' recruit_data <- bboudata::bbourecruit_a %>% filter(Year > 2010)
+#' bbouInformative <- estimateBayesianRates(surv_data, recruit_data,
+#'                                          return_mcmc = TRUE, 
+#'                                          # only set to speed up examples
+#'                                          niters = 20) 
+#' 
+#' plotMeans(bbouInformative)
 plotMeans <- function(bayesianResults,
                       metrics = c("Recruitment", "Survival"),
                       plotMissing = FALSE,

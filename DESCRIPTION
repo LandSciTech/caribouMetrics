@@ -84,6 +84,7 @@ Collate:
     'loadSpatialInputs.R'
     'movingWindowAvg.R'
     'plotCompareTrajectories.R'
+    'plotMeans.R'
     'plotSurvivalSeries.R'
     'popGrowthTableJohnsonECCC.R'
     'prepareTrajectories.R'
