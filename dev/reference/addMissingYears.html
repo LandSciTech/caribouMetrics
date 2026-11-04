@@ -53,7 +53,7 @@ fitted Bayesian Models.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addMissingYears</span><span class="op">(</span></span>
 <span>  <span class="va">dat</span>,</span>
-<span>  <span class="va">addYears</span>,</span>
+<span>  addYears <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  year_start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="fu">bboutools</span><span class="fu">::</span><span class="va"><a href="https://github.com/LandSciTech/bboutools/reference/bb_fit_recruitment.html" class="external-link">bb_fit_recruitment</a></span><span class="op">)</span><span class="op">$</span><span class="va">year_start</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -76,7 +76,11 @@ fitted Bayesian Models.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a modified version of <code>dat</code> with additional rows for added Years.</p>
+    <p>a modified version of <code>dat</code> with additional rows for added missing Years.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Note the function also fills any gaps in the existing time-series, even if addYears is not specified.</p>
     </div>
     <div class="section level2">
     <h2 id="interpretation-of-years">Interpretation of Years<a class="anchor" aria-label="anchor" href="#interpretation-of-years"></a></h2>

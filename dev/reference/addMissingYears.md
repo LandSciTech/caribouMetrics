@@ -9,7 +9,7 @@ those years by fitted Bayesian Models.
 ``` r
 addMissingYears(
   dat,
-  addYears,
+  addYears = c(),
   year_start = formals(bboutools::bb_fit_recruitment)$year_start
 )
 ```
@@ -32,7 +32,13 @@ addMissingYears(
 
 ## Value
 
-a modified version of `dat` with additional rows for added Years.
+a modified version of `dat` with additional rows for added missing
+Years.
+
+## Details
+
+Note the function also fills any gaps in the existing time-series, even
+if addYears is not specified.
 
 ## Interpretation of Years
 
