@@ -127,3 +127,4 @@ Depends:
     R (>= 3.5)
 URL: https://landscitech.github.io/caribouMetrics, https://github.com/LandSciTech/caribouMetrics
 Config/roxygen2/version: 8.1.1
+RoxygenNote: 7.3.3

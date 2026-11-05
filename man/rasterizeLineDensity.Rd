@@ -46,10 +46,10 @@ terra::plot(rastLines)
 \seealso{
 Functions for calculating disturbance:
 \code{\link{DisturbanceMetrics-class}},
-\code{\link[=disturbanceMetrics]{disturbanceMetrics()}},
-\code{\link[=loadSpatialInputs]{loadSpatialInputs()}},
-\code{\link[=reclassDist]{reclassDist()}},
-\code{\link[=results]{results()}},
-\code{\link[=updateDisturbance]{updateDisturbance()}}
+\code{\link{disturbanceMetrics}()},
+\code{\link{loadSpatialInputs}()},
+\code{\link{reclassDist}()},
+\code{\link{results}()},
+\code{\link{updateDisturbance}()}
 }
 \concept{disturbance}

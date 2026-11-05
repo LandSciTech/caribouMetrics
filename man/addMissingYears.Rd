@@ -6,7 +6,7 @@
 \usage{
 addMissingYears(
   dat,
-  addYears,
+  addYears = c(),
   year_start = formals(bboutools::bb_fit_recruitment)$year_start
 )
 }
@@ -18,12 +18,15 @@ addMissingYears(
 \item{year_start}{A whole number between 1 and 12 indicating the start of the caribou (i.e., biological) year. By default, April is set as the start of the caribou year.}
 }
 \value{
-a modified version of \code{dat} with additional rows for added Years.
+a modified version of \code{dat} with additional rows for added missing Years.
 }
 \description{
 Add years with missing values to bboudata formatted survival or recruitment
 data. This will cause estimated rates to be returned for those years by
 fitted Bayesian Models.
+}
+\details{
+Note the function also fills any gaps in the existing time-series, even if addYears is not specified.
 }
 \section{Interpretation of Years}{
 
@@ -36,29 +39,29 @@ start of the caribou year.
 
 \seealso{
 Caribou demography functions:
-\code{\link[=addN0Variation]{addN0Variation()}},
-\code{\link[=bayesianScenariosWorkflow]{bayesianScenariosWorkflow()}},
-\code{\link[=bayesianTrajectoryWorkflow]{bayesianTrajectoryWorkflow()}},
-\code{\link[=betaNationalPriors]{betaNationalPriors()}},
-\code{\link[=caribouPopGrowth]{caribouPopGrowth()}},
-\code{\link[=compareTrajectories]{compareTrajectories()}},
-\code{\link[=compositionBiasCorrection]{compositionBiasCorrection()}},
-\code{\link[=convertTrajectories]{convertTrajectories()}},
-\code{\link[=dataFromSheets]{dataFromSheets()}},
-\code{\link[=demographicProjectionApp]{demographicProjectionApp()}},
-\code{\link[=estimateBayesianRates]{estimateBayesianRates()}},
-\code{\link[=estimateNationalRate]{estimateNationalRate()}},
-\code{\link[=getCaribouYear]{getCaribouYear()}},
-\code{\link[=getNationalCoefficients]{getNationalCoefficients()}},
-\code{\link[=getScenarioDefaults]{getScenarioDefaults()}},
-\code{\link[=plotCompareTrajectories]{plotCompareTrajectories()}},
-\code{\link[=plotSurvivalSeries]{plotSurvivalSeries()}},
-\code{\link[=plotTrajectories]{plotTrajectories()}},
+\code{\link{addN0Variation}()},
+\code{\link{bayesianScenariosWorkflow}()},
+\code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{betaNationalPriors}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{compareTrajectories}()},
+\code{\link{compositionBiasCorrection}()},
+\code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{estimateBayesianRates}()},
+\code{\link{estimateNationalRate}()},
+\code{\link{getCaribouYear}()},
+\code{\link{getNationalCoefficients}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{plotCompareTrajectories}()},
+\code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link[=simulateObservations]{simulateObservations()}},
-\code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}},
-\code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}},
-\code{\link[=trajectoriesFromSummary]{trajectoriesFromSummary()}},
-\code{\link[=trajectoriesFromSummaryForApp]{trajectoriesFromSummaryForApp()}}
+\code{\link{simulateObservations}()},
+\code{\link{trajectoriesFromBayesian}()},
+\code{\link{trajectoriesFromNational}()},
+\code{\link{trajectoriesFromSummary}()},
+\code{\link{trajectoriesFromSummaryForApp}()}
 }
 \concept{demography}
