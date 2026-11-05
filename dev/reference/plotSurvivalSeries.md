@@ -47,6 +47,7 @@ Caribou demography functions:
 ``` r
 scns <- getScenarioDefaults(collarCount = 30, cowCount = 100, cowMult = 1)
 simObs <- simulateObservations(scns)
+#> Warning: The expected number of cows in composition survey exceeds population size. Adjusting cows in survey for consistency.
 
 plotSurvivalSeries(simObs$simSurvObs)
 ```

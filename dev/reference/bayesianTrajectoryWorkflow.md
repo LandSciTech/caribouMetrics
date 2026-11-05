@@ -187,17 +187,17 @@ Caribou demography functions:
 #>  $ parTab :'data.frame': 1 obs. of  18 variables:
 #>   ..$ PopulationName: chr "A"
 #>   ..$ R_bar         : num 0.189
-#>   ..$ R_sd          : num 0.0853
-#>   ..$ R_iv_mean     : num 0.337
-#>   ..$ R_iv_shape    : num 17.6
-#>   ..$ R_bar_lower   : num 0.163
-#>   ..$ R_bar_upper   : num 0.215
+#>   ..$ R_sd          : num 0.0868
+#>   ..$ R_iv_mean     : num 0.34
+#>   ..$ R_iv_shape    : num 18.1
+#>   ..$ R_bar_lower   : num 0.164
+#>   ..$ R_bar_upper   : num 0.216
 #>   ..$ S_bar         : num 0.871
-#>   ..$ S_sd          : num 0.17
-#>   ..$ S_iv_mean     : num 0.325
-#>   ..$ S_iv_shape    : num 3.27
-#>   ..$ S_bar_lower   : num 0.833
-#>   ..$ S_bar_upper   : num 0.907
+#>   ..$ S_sd          : num 0.165
+#>   ..$ S_iv_mean     : num 0.295
+#>   ..$ S_iv_shape    : num 2.33
+#>   ..$ S_bar_lower   : num 0.832
+#>   ..$ S_bar_upper   : num 0.905
 #>   ..$ N0            : logi NA
 #>   ..$ nCollarYears  : num NA
 #>   ..$ nSurvYears    : int 32

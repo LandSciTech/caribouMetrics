@@ -9,25 +9,29 @@ and
 data sets:
 
 - Informative local data: Observations from 2010 to 2015.
-- Limited local data: Observations from 2014 to 2015.
+- Limited local data: Observations from 2014 and 2015.
 
-To examine and compare predictions for unobserved years (2016 to 2023)
-we add missing data.
+To work with model predictions for unobserved years (2016 to 2023) we
+add missing years to the input data.
 
 Our starting points for analysis of monitoring scenarios are Bayesian
 Beta models informed by local data and prior knowledge of national
 demographic-disturbance relationships. See compare vignette for details.
-We examine the influence of prior information from national-demographic
-disturbance relationships in low disturbance (3% anthropogenic, 5% fire)
-and high disturbance (80% anthropogenic, 10% fire) scenarios.
+We show a how to work with multiple populations and examine the
+influence of prior information from national-demographic disturbance
+relationships by constructing a data set that includes two populations
+with limited data; population A experiences low disturbance (3%
+anthropogenic, 5% fire), and population B experiences high disturbance
+(80% anthropogenic, 10% fire).
 
 ``` r
 
 library(caribouMetrics)
+library(bboutools)
 # use local version on local and installed on GH
 if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all()
+if(requireNamespace("devtools", quietly = TRUE)) devtools::load_all(path = "C:/Users/HughesJo/Documents/gitprojects/bboutools/")
 library(bboudata)
-library(bboutools)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
@@ -39,28 +43,32 @@ figHeight <- 10
 niters <- 1000
 
 surv_data <- addMissingYears(bboudata::bbousurv_a %>% getCaribouYear() %>% 
-                                  filter(between(CaribouYear, 2010, 2015)),
-                             seq(2016,2022)) 
+                               filter(between(CaribouYear, 2010, 2015)),
+                             seq(2016,2023)) 
 recruit_data <- addMissingYears(bboudata::bbourecruit_a %>% getCaribouYear() %>% 
                                   filter(between(CaribouYear, 2010, 2015)),
-                                seq(2016,2022)) 
-
-surv_dataNone <- surv_data %>% filter(CaribouYear>2017)
-recruit_dataNone <- recruit_data %>% filter(CaribouYear>2017)
-
+                                seq(2016,2023)) 
 surv_dataLimited <- surv_data %>% filter(CaribouYear > 2013)
 recruit_dataLimited <- recruit_data %>% filter(CaribouYear > 2013)
 
+#Construct data set that includes two example populations with the same initial observation data to show workflow for multiple populations
+surv_dataLimited$PopulationName = NULL; recruit_dataLimited$PopulationName = NULL
+surv_dataLimited <- merge(surv_dataLimited,data.frame(PopulationName=c("A","B")))
+recruit_dataLimited <- merge(recruit_dataLimited,data.frame(PopulationName=c("A","B")))
+                          
 disturbance = data.frame(Year = unique(surv_data$CaribouYear), Anthro = 3, Fire_excl_anthro = 5)
+disturbance$PopulationName = "A"
 disturbanceHigh <- data.frame(Year = disturbance$Year,Anthro = 80,Fire_excl_anthro = 10)
+disturbanceHigh$PopulationName = "B"
+#Disturbance differs between population A and B
+disturbanceBoth <- rbind(disturbance,disturbanceHigh)
 
-betaLimited <- estimateBayesianRates(surv_dataLimited, recruit_dataLimited, disturbance=disturbance,niters=niters)
+betaLimited <- estimateBayesianRates(surv_dataLimited, recruit_dataLimited, disturbance=disturbanceBoth,niters=niters)
+
 betaInformative <- estimateBayesianRates(surv_data, recruit_data, disturbance=disturbance,niters=niters)
-betaLimitedHigh <- estimateBayesianRates(surv_dataLimited, recruit_dataLimited, disturbance=disturbanceHigh,niters=niters)
 
 simInformative <- trajectoriesFromBayesian(betaInformative)
 simLimited <- trajectoriesFromBayesian(betaLimited)
-simLimitedHigh <- trajectoriesFromBayesian(betaLimitedHigh)
 ```
 
 ## 2 Simulating additional monitoring of plausible example trajectories from fitted Bayesian models
@@ -82,17 +90,17 @@ low growth rate trajectory with 5 initial years of data does not provide
 additional clarity about whether the population is likely to decline or
 not in future (Figure [2](#fig:fig-plot2)). An additional 5 years of
 monitoring is more likely to reduce uncertainty when there is limited
-initial data (e.g. Figures [3](#fig:fig-plot3) and [4](#fig:fig-plot4)),
-but outcomes of single trajectory analysis are stochastic. Thorough
-analysis of the value of additional monitoring requires examining
-outcomes from a larger representative sample of plausible trajectories
-from the initial model (as in [Hughes et al.
+initial data, particularly when disturbance is low (e.g. Population A in
+Figure [3](#fig:fig-plot3)), but outcomes of single trajectory analysis
+are stochastic. Thorough analysis of the value of additional monitoring
+requires examining outcomes from a larger representative sample of
+plausible trajectories from the initial model (as in [Hughes et al.
 2025](#ref-hughes_integration_2025)).
 
 Thorough analysis of representative samples of plausible trajectories is
 time consuming, and beyond the scope of this vignette. Here we show an
 example workflow with three example trajectories for each case (Figure
-[5](#fig:fig-plot5)). This example clarifies that there are a range of
+[4](#fig:fig-plot5)). This example clarifies that there are a range of
 possible outcomes from additional monitoring. In the case where true
 growth rate is plausibly high (99th percentile of the distribution of
 expected growth rate) 5 years of additional monitoring clarifies that
@@ -106,8 +114,8 @@ information should be weighed against additional costs.
 ``` r
 
 scns=list()
-scns$lQuantile=0.01 #select example trajectories with low growth rate
-correlateRates = T #Force correlation among demographic rates to examine extreme cases
+scns$lQuantile = 0.01 #select example trajectories with low growth rate
+scns$correlateRates = T #Force correlation among demographic rates to examine extreme cases
 scns$N0 = NA
 scns$projYears = 3
 scns$curYear = max(simInformative$recruit_data$Year)- scns$projYears
@@ -132,11 +140,10 @@ informativeMoreMonitoring <- bayesianTrajectoryWorkflow(
 out_tbls <- compareTrajectories(informativeMoreMonitoring, simInitial = simInformative)
 typeLabsI <- c("More", "Informative")
 
-#Use bayesianScenariosWorkflow to select trajectory, simulate observations, fit new model and summarize results for the case when initial data is limited. In this case, we can see both the "true" population trajectory and the observations in result plots.
+#Use bayesianScenariosWorkflow to select trajectory, simulate observations, fit new model and summarize results for the case of two population with limited initial data. In this case, we can see both the "true" population trajectory and the observations in result plots.
+#TO DO: include additional projection years
 limitedMoreMonitoring = bayesianScenariosWorkflow(scns,simLimited,niters=niters) 
 typeLabsL <- c("More", "Limited")
-
-limitedMoreHigh = bayesianScenariosWorkflow(scns,simLimitedHigh,niters=niters) 
 ```
 
 ``` r
@@ -192,35 +199,17 @@ rec / surv / lam
 ```
 
 ![95% predictive intervals from Beta models with and without additional
-monitoring (5 years) of an example trajectory with limited initial data
-(2 years), low disturbance, and a relatively low expected growth rate
-(Figure
-1).](combine-observed-simulated_files/figure-html/fig-plot3-1.png)
+monitoring (5 years) of example trajectories with limited initial data
+(2 years) and a relatively low expected growth rate (Figure 1).
+Population A experiences low disturbance, and Population B experiences
+high
+disturbance.](combine-observed-simulated_files/figure-html/fig-plot3-1.png)
 
 Figure 3: 95% predictive intervals from Beta models with and without
-additional monitoring (5 years) of an example trajectory with limited
-initial data (2 years), low disturbance, and a relatively low expected
-growth rate (Figure 1).
-
-``` r
-
-rec <- plotCompareTrajectories(limitedMoreHigh, "Recruitment", typeLabels = typeLabsL)
-surv <- plotCompareTrajectories(limitedMoreHigh, "Adult female survival", typeLabels = typeLabsL)
-lam <- plotCompareTrajectories(limitedMoreHigh, "Expected growth rate", typeLabels = typeLabsL,
-               lowBound = 0.7, highBound = 1.2)
-rec / surv / lam
-```
-
-![95% predictive intervals from Beta models with and without additional
-monitoring (5 years) of an example trajectory with limited initial data
-(2 years), high disturbance, and a relatively low expected growth rate
-(Figure
-1).](combine-observed-simulated_files/figure-html/fig-plot4-1.png)
-
-Figure 4: 95% predictive intervals from Beta models with and without
-additional monitoring (5 years) of an example trajectory with limited
-initial data (2 years), high disturbance, and a relatively low expected
-growth rate (Figure 1).
+additional monitoring (5 years) of example trajectories with limited
+initial data (2 years) and a relatively low expected growth rate (Figure
+1). Population A experiences low disturbance, and Population B
+experiences high disturbance.
 
 ``` r
 
@@ -230,8 +219,8 @@ scnsMulti = merge(scnsMulti,expand.grid(lQuantile=c(0.01,0.5,0.99),collarCount=c
 
 limitedMoreMulti = bayesianScenariosWorkflow(scnsMulti,simLimited,niters=niters) 
 
-lmmView <- subset(limitedMoreMulti$rr.summary.all,(Metric=="Expected growth rate")&(Year==2021),select=c(lQuantile,collarCount,Mean,lower,upper,probViable))
-base <- ggplot(lmmView,aes(x=collarCount,y=Mean,ymax=upper,ymin=lower,group=lQuantile,colour=probViable))+geom_point()+geom_errorbar()+ylab("Expected growth rate")
+lmmView <- subset(limitedMoreMulti$rr.summary.all,(Metric=="Expected growth rate")&(Year==2020),select=c(PopulationName, lQuantile,collarCount,Mean,lower,upper,probViable))
+base <- ggplot(lmmView,aes(x=PopulationName,y=Mean,ymax=upper,ymin=lower,group=lQuantile,colour=probViable))+geom_point()+geom_errorbar()+facet_wrap(~collarCount,labeller=label_both)+ylab("Expected growth rate")
 ```
 
 ``` r
@@ -240,189 +229,109 @@ base
 ```
 
 ![Outcomes of additional monitoring vary among example trajectories
-(points), and with monitoring effort (collarCount). In these examples
-there is 5 years additional monitoring, limited initial data (2 years),
-and low disturbance. Example trajectories are from the 99th, 50th, and
-1st percentiles of the distribution of expected growth rate in the
-initial model informed by 2 years of local data. probViable is the
-posterior probability of viability (i.e. the proportion of the estimated
-posterior predictive distribution of expected population growth rate
-that is greater than
+(points), with monitoring effort (collarCount), and among populations (A
+and B). In these examples there is 5 years additional monitoring, and
+limited initial data (2 years). Population A experiences low
+disturbance, and population B experiences high disturbance. Example
+trajectories are from the 99th, 50th, and 1st percentiles of the
+distribution of expected growth rate in the initial model informed by 2
+years of local data. probViable is the posterior probability of
+viability (i.e. the proportion of the estimated posterior predictive
+distribution of expected population growth rate that is greater than
 0.99).](combine-observed-simulated_files/figure-html/fig-plot5-1.png)
 
-Figure 5: Outcomes of additional monitoring vary among example
-trajectories (points), and with monitoring effort (collarCount). In
-these examples there is 5 years additional monitoring, limited initial
-data (2 years), and low disturbance. Example trajectories are from the
-99th, 50th, and 1st percentiles of the distribution of expected growth
-rate in the initial model informed by 2 years of local data. probViable
-is the posterior probability of viability (i.e. the proportion of the
-estimated posterior predictive distribution of expected population
-growth rate that is greater than 0.99).
+Figure 4: Outcomes of additional monitoring vary among example
+trajectories (points), with monitoring effort (collarCount), and among
+populations (A and B). In these examples there is 5 years additional
+monitoring, and limited initial data (2 years). Population A experiences
+low disturbance, and population B experiences high disturbance. Example
+trajectories are from the 99th, 50th, and 1st percentiles of the
+distribution of expected growth rate in the initial model informed by 2
+years of local data. probViable is the posterior probability of
+viability (i.e. the proportion of the estimated posterior predictive
+distribution of expected population growth rate that is greater than
+0.99).
 
-TO DO: As in Hughes et al we can also explore monitoring scenarios using
-simulated trajectories from the national model instead of trajectories
-from a fitted Bayesian model.
-
-## 3 Simulating repeating the historical monitoring strategy into the future
-
-In this example we simulate monitoring that matches the historical
-monitoring program to show how continuing the same monitoring strategy
-would affect the understanding of the population.
-
-To repeat the past monitoring strategy we extract the number of collars
-in each year and use that to create a numTarget so that if there are
-fewer collars available due to deaths of malfunctions more will be
-added.
-
-We will use the betaLimited model from above as the starting point to
-have a smaller number of years
+## 3 Specifying a more complex staggered monitoring scenario in tables
 
 ``` r
 
-last_observed_year <- 2014 #historical baseline cutoff (last year of observed data)
-future_years <- 2015:2025 #future years to simulate
+freqStartsByYrA <- data.frame(Year = seq(2017,2021), PopulationName = "A", numTarget = c(30,0,30,0,0)) 
+freqStartsByYrB <- data.frame(Year = seq(2017,2021), PopulationName = "B", numTarget = c(0,30,0,30,0)) 
+freqStartsByYr <- rbind(freqStartsByYrA,freqStartsByYrB)
+#Note these are calendar years. Collars deployed in March before start of 2017 caribou year in April
 
-surv_data <- bboudata::bbousurv_multi %>% addMissingYears(future_years)
-recruit_data <- bboudata::bbourecruit_multi %>% addMissingYears(future_years)
+cowCounts <- data.frame(PopulationName = c("A","B"),cowMult=c(3,4))
+cowCounts <- merge(cowCounts,data.frame(Year = unique(freqStartsByYr$Year)))
+#Note these are caribou years. 2017 survey happens in spring 2018 and so on. 2021 survey won't happen because no collared animals to survey after March 2021.
 
-betaRepeated<- estimateBayesianRates(surv_data, recruit_data, niters=niters,
-                                     return_mcmc = TRUE)
-
-simRepeated <- trajectoriesFromBayesian(betaRepeated, 
-                                           cPars = list(correlateRates = TRUE))
-
-surv <- surv_data %>%
-  mutate(Year = Year) %>%
-  filter(!is.na(Year)) %>%
-  filter(Year <= last_observed_year)
-
-#max collars per year
-collar_summary <- surv %>%
-  group_by(PopulationName, Year) %>%
-  summarise(
-    max_collars = max(StartTotal, na.rm = TRUE),
-    .groups = "drop"
-  )
-
-#collars remaining from previous year
-collar_prev <- surv %>%
-  group_by(PopulationName, Year) %>%
-  summarise(
-    prev_collars = min(StartTotal, na.rm = TRUE),
-    .groups = "drop"
-  )
-
-collar_prev$Year <- collar_prev$Year + 1
-
-#merge and compute new starts
-collar_summary <- merge(collar_summary, collar_prev)
-
-collar_summary$numStarts <- pmax(0, collar_summary$max_collars - collar_summary$prev_collars)
-
-#keep only relevant columns
-collar_summary <- collar_summary %>%
-  select(PopulationName, Year, numStarts)
-
-#Extract cow counts
-rec_simple <- recruit_data%>%
-  mutate(Year = Year) %>%
-  filter(!is.na(Cows)) %>%
-  group_by(Year, PopulationName) %>% 
-  summarise(Cows = sum(Cows)) %>% 
-  filter(Year <= last_observed_year) %>%
-  select(PopulationName, Year, Cows)
-
-#Combine survival (numStarts) and recruitment (Cows)
-historic_baseline <- merge(
-  collar_summary,
-  rec_simple,
-  by = c("PopulationName", "Year"),
-  all = TRUE
-)
-
-statusquo_future <- historic_baseline
-statusquo_future$Year <- statusquo_future$Year - min(statusquo_future$Year) +
-  min(future_years) - 1
-
-collaringStrategy <- "numStarts"
-#If collaringStrategy == "numStarts", numStarts collars will be added each year
-#If collaringStrategy == "numTarget", each year the number of collars will be topped up to numTarget
-
-freqStartsByYr <- subset(statusquo_future,
-  select = c("Year", "PopulationName", collaringStrategy)
-)
-
-cowCounts <- subset(statusquo_future, select = c(Year, PopulationName, Cows))
-
-# Needed inputs are cowCounts and freqStartsByYear tables.
-eParsIn <- eval(formals(bayesianScenariosWorkflow)$ePars)
+eParsIn <- eval(formals(caribouMetrics::bayesianScenariosWorkflow)$ePars)
+eParsIn$collarOnTime <- 3
+eParsIn$collarOffTime <- 2
 eParsIn$cowCounts <- cowCounts
 eParsIn$freqStartsByYear <- freqStartsByYr
+eParsIn$collarNumYears <- 6
 
-scns <- list()
+scnsB <- data.frame(obsYears = max(freqStartsByYr$Year)-min(simLimited$recruit_data$CaribouYear)+1,
+                   startYear = min(simLimited$summary$Year))
+scnsB$projYears <- max(simLimited$summary$Year)-scnsB$obsYears-scnsB$startYear
+scnsB$N0 <- scns$N0
+scnsB$lQuantile <- scns$lQuantile
+scnsB$correlateRates <- T
 
-scns$obsYears<- max(freqStartsByYr$Year)-min(simRepeated$recruit_data$Year)
-scns$startYear <- min(simRepeated$summary$Year)
-scns$projYears <- 20
+posteriorResult = bayesianScenariosWorkflow(scnsB,simLimited,eParsIn,
+                                            niters=niters,returnSamples = T)
 
-posteriorResult <- bayesianScenariosWorkflow(
-  scns, simRepeated, eParsIn,
-  niters = niters, nthin = 10, returnSamples = T
-)
-# Check survival data
-surv <- posteriorResult$out$result$surv_data
-plotSurvivalSeries(surv)
+surv_data_sim <- subset(posteriorResult$out$result$surv_data,!is.na(StartTotal))
+rec_data_sim <- posteriorResult$out$result$recruit_data
 ```
-
-![](combine-observed-simulated_files/figure-html/unnamed-chunk-3-1.png)
 
 ``` r
 
-
-
-if (collaringStrategy == "numStarts") {
-  collar_summary <- subset(surv, Month == 4, select = c(PopulationName, Year, StartTotal))
-  collar_prev <- subset(surv, Month == 3, select = c(PopulationName, Year, StartTotal, Mortalities))
-  names(collar_prev)[3] <- c("prev_starts")
-  collar_summary <- merge(collar_summary, collar_prev)
-  collar_summary$prev_mortalities[is.na(collar_summary$Mortalities)] <- 0
-  collar_summary$numStarts <- collar_summary$StartTotal - 
-    collar_summary$prev_starts +
-    collar_summary$Mortalities 
-
-  target <- freqStartsByYr
-  names(target)[names(target) == "numStarts"] <- "numStartsTarget"
-  collar_summary <- merge(collar_summary, target)
-  collar_summary <- subset(collar_summary, Year != 2026)
-
-  # These numbers match until collars start falling off 4 yrs after deployment.
-  plt <- ggplot(collar_summary, aes(x = numStartsTarget, y = numStarts, colour = Year)) +
-    geom_point() +
-    facet_wrap(~PopulationName) +
-    geom_abline()
-
-  subset(collar_summary, numStarts < 0)
-} else {
-  collar_summary <- subset(surv, Month == 4, select = c(PopulationName, Year, StartTotal))
-  collar_summary <- merge(collar_summary, freqStartsByYr)
-  collar_summary <- subset(collar_summary, Year != 2032)
-
-  # This is working as expected :)
-  plt <- ggplot(collar_summary, aes(x = numTarget, y = StartTotal, colour = Year)) +
-    geom_point() +
-    facet_wrap(~PopulationName) +
-    geom_abline()
-
-  subset(collar_summary, StartTotal < numTarget)
-}
-#> [1] PopulationName   Year             StartTotal       prev_starts     
-#> [5] Mortalities      prev_mortalities numStarts        numStartsTarget 
-#> <0 rows> (or 0-length row.names)
-plt
+plotSurvivalSeries(surv_data_sim)
 ```
 
-![](combine-observed-simulated_files/figure-html/unnamed-chunk-3-2.png)
+![Observed (2014-2016) and simulated (2017-2021) survival data for an
+example trajectory with a relatively low expected growth rate (i.e. in
+the 1st percentile of the distribution of mcmc samples from the initial
+model). X's indicate mortalities, and lines indicate the number of
+deployed collars. Each simulated collar lasts for 6 years. In March of
+each year, collars lost throughout the year are replaced. Top up to 30
+collars happens in March 2017/2019 for population A, and March 2018/2020
+for population B, as
+specified.](combine-observed-simulated_files/figure-html/fig-plot6-1.png)
+
+Figure 5: Observed (2014-2016) and simulated (2017-2021) survival data
+for an example trajectory with a relatively low expected growth rate
+(i.e. in the 1st percentile of the distribution of mcmc samples from the
+initial model). X’s indicate mortalities, and lines indicate the number
+of deployed collars. Each simulated collar lasts for 6 years. In March
+of each year, collars lost throughout the year are replaced. Top up to
+30 collars happens in March 2017/2019 for population A, and March
+2018/2020 for population B, as specified.
+
+``` r
+
+base <- ggplot(rec_data_sim,aes(x=Year,y=Cows))+geom_point()+facet_wrap(~PopulationName)+
+  ylab("Cows in rec survey")
+base
+```
+
+![Observed (2014-2016) and simulated (2017-2020) cows in recruitment
+survey for an example trajectory with a relatively low expected growth
+rate (i.e. in the 1st percentile of the distribution of mcmc samples
+from the initial model). The simulated recruitment survey occurs in
+caribou years 2017 to 2020 but not in caribou year 2021 because there
+are no collared animals in spring 2022 at the end of caribou year
+2021.](combine-observed-simulated_files/figure-html/fig-plot7-1.png)
+
+Figure 6: Observed (2014-2016) and simulated (2017-2020) cows in
+recruitment survey for an example trajectory with a relatively low
+expected growth rate (i.e. in the 1st percentile of the distribution of
+mcmc samples from the initial model). The simulated recruitment survey
+occurs in caribou years 2017 to 2020 but not in caribou year 2021
+because there are no collared animals in spring 2022 at the end of
+caribou year 2021.
 
 ## References
 
