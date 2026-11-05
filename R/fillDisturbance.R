@@ -18,6 +18,9 @@
 #' fillDisturbance(disturb, year_dat)
 #' 
 fillDisturbance <- function(disturbance, merge_df){
+  if(is.null(disturbance)){
+    return(disturbance)
+  }
   testTable(disturbance, c("Year", "Anthro", "Fire_excl_anthro"))
   testTable(merge_df, c("Year"))
   
