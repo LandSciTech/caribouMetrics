@@ -111,7 +111,7 @@ Suggests:
     bookdown
 Remotes: LandSciTech/pfocal,
     bboudata=github::LandSciTech/bboudata,
-    bboutools=github::LandSciTech/bboutoolsMultiPop
+    bboutools=github::LandSciTech/bboutools
 Additional_repositories: https://landscitech.github.io/drat
 VignetteBuilder: knitr
 Depends: 
