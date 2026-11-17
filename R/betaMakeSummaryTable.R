@@ -34,6 +34,7 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
   
   surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb, quiet = quiet)
   
+  if(shiny_progress) shiny::setProgress(0.2, message = i18n$t("Fitting recruitment"))
   recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb, quiet = quiet)
   
   summaries <- rbind(recruit_fit$summaries,surv_fit$summaries)
