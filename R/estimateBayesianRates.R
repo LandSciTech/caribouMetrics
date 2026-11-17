@@ -115,7 +115,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     if(is.null(priors)){
       priors=betaNationalPriors()
     }
-    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb, quiet = quiet) 
+    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb, quiet = quiet, i18n = i18n, shiny_progress = shiny_progress) 
     
     ret$parList$N0 <- merge(N0,disturbance)
     
