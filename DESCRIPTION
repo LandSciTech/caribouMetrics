@@ -92,6 +92,7 @@ Collate:
     'reclassDist.R'
     'results.R'
     'sampleNationalCoefs.R'
+    'simPopsOverTime.R'
     'simulateObservations.R'
     'simulateTrajectoriesFromPosterior.R'
     'subsetNationalCoefs.R'
