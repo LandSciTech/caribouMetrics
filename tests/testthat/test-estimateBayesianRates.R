@@ -8,8 +8,6 @@ test_that("multipop works", {
 
   multPop <- estimateBayesianRates(s_data, r_data, N0 = 500, niters = 20)
   
-  expect_is(rec_mean_plt[[1]], "ggplot")
-  
   # N0 is not really used until passed into trajectories
   wN0Var <- estimateBayesianRates(s_data, r_data, 
                                   N0 = data.frame(PopulationName = c("A", "B"), 

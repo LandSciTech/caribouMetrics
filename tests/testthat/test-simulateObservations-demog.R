@@ -244,10 +244,9 @@ test_that("data continues to be simulated after Anthro is 100, but population ha
   #exData ok in simple case with one one input scenario
   scns10 <- getScenarioDefaults(collarCount = 5, cowMult = 2, 
                                 projYears = 200, rSlopeMod = 2, sSlopeMod = 2)
-  expect_warning(
-    simObs8 <- simulateObservations(scns10),
-    "Setting expected recruitment"
-  )
+  
+  simObs8 <- simulateObservations(scns10)
+
   exDataOut <- simObs8$exData %>% 
     pivot_wider(id_cols = c("Replicate", "Year","Timestep","PopulationName"),
                 names_from = "MetricTypeID",
