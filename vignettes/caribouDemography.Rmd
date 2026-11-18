@@ -568,25 +568,7 @@ N <- plotCompareTrajectories(out_tbls, "Female population size", typeLabels = ty
 rec /surv / lam / N
 ```
 
-## Using the trajectoriesFromSummariesForApp wrapper function to project population growth
-The `trajectoriesFromSummaryForApp` wrapper function is less flexible than  `trajectoriesFromSummary`, and does not allow changes in demographic rates over time. It is used to enable scenario exploration in our [Boreal Caribou Demographic Projection Explorer](https://github.com/LandSciTech/CaribouDemographyBasicApp). 
 
-```{r,trajectoriesFromSummaryForApp,message=F, warning=T}
-pt <- bbouInformative$parTab;pt
-
-popMetricsBase <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=pt$S_bar,
-                                             R_sd=pt$R_sd,S_sd=pt$S_sd,
-                                             R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
-                                             S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,
-                                             scn_nm="base",doSummary=T)
-popMetricsS85 <- trajectoriesFromSummaryForApp(numSteps=10,replicates=500,N0=500,R_bar=pt$R_bar,S_bar=0.85,
-                                             R_sd=pt$R_sd,S_sd=pt$S_sd,
-                                             R_iv_mean=pt$R_iv_mean,R_iv_shape=pt$R_iv_shape,
-                                             S_iv_mean=pt$S_iv_mean,S_iv_shape=pt$S_iv_shape,
-                                             scn_nm="S85",doSummary=T)
-scnCompare <- list(summary=rbind(popMetricsBase$summary,popMetricsS85$summary),
-                   samples=rbind(popMetricsBase$samples,popMetricsS85$samples))
-```
 
 ```{r summaryTrajectoryForAppPlot, echo=T, fig.width=figWidth,fig.height=7,fig.cap="Comparison of demographic trajectories from a fitted bboutools model (base) and a scenario in which expected survival is decreased from 94% to 85% (S85), obtained using the trajectoriesFromSummary wrapper function. Bands are the 2.5% and 97.5% quantiles of 500 samples."}
 proj <- plotTrajectories(scnCompare, 

@@ -131,6 +131,7 @@ Caribou demography functions:
 \code{\link{demographicProjectionApp}()},
 \code{\link{estimateBayesianRates}()},
 \code{\link{estimateNationalRate}()},
+\code{\link{fillDisturbance}()},
 \code{\link{getCaribouYear}()},
 \code{\link{getNationalCoefficients}()},
 \code{\link{getScenarioDefaults}()},
@@ -141,7 +142,6 @@ Caribou demography functions:
 \code{\link{simulateObservations}()},
 \code{\link{trajectoriesFromBayesian}()},
 \code{\link{trajectoriesFromNational}()},
-\code{\link{trajectoriesFromSummary}()},
-\code{\link{trajectoriesFromSummaryForApp}()}
+\code{\link{trajectoriesFromSummary}()}
 }
 \concept{demography}

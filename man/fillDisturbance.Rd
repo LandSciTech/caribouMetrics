@@ -31,3 +31,31 @@ year_dat <- data.frame(Year = 2000:2010)
 fillDisturbance(disturb, year_dat)
 
 }
+\seealso{
+Caribou demography functions:
+\code{\link{addMissingYears}()},
+\code{\link{addN0Variation}()},
+\code{\link{bayesianScenariosWorkflow}()},
+\code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{betaNationalPriors}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{compareTrajectories}()},
+\code{\link{compositionBiasCorrection}()},
+\code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{estimateBayesianRates}()},
+\code{\link{estimateNationalRate}()},
+\code{\link{getCaribouYear}()},
+\code{\link{getNationalCoefficients}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{plotCompareTrajectories}()},
+\code{\link{plotSurvivalSeries}()},
+\code{\link{plotTrajectories}()},
+\code{\link{popGrowthTableJohnsonECCC}},
+\code{\link{simulateObservations}()},
+\code{\link{trajectoriesFromBayesian}()},
+\code{\link{trajectoriesFromNational}()},
+\code{\link{trajectoriesFromSummary}()}
+}
+\concept{demography}

@@ -9,6 +9,8 @@
 #'
 #' @returns a data.frame with a row for each year in `merge_df`
 #' @export
+#' 
+#' @family demography
 #'
 #' @examples
 #' disturb <- data.frame(Year = c(2000:2005, 2008:2010), Anthro = 1:9, Fire_excl_anthro = 2)

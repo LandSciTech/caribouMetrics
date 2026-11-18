@@ -98,7 +98,6 @@ Collate:
     'trajectoriesFromBayesian.R'
     'trajectoriesFromNational.R'
     'trajectoriesFromSummary.R'
-    'trajectoriesFromSummaryForApp.R'
     'updateDisturbance.R'
 Suggests: 
     testthat (>= 2.1.0),
