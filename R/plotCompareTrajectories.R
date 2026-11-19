@@ -359,7 +359,7 @@ plotTrajectories <- function(caribouBayesDemogMod,
     
     if(ribbon){
       proj <- proj +
-        ggplot2::geom_ribbon(fill="grey", alpha = 0.4)
+        ggplot2::geom_ribbon(fill="grey", alpha = 0.4, colour = NA)
     }
   } else {
     proj <- proj_samp+
@@ -369,7 +369,7 @@ plotTrajectories <- function(caribouBayesDemogMod,
       ggplot2::geom_line(ggplot2::aes(linewidth=2))
     if(ribbon){
       proj <- proj +
-        ggplot2::geom_ribbon(alpha = 0.2)
+        ggplot2::geom_ribbon(alpha = 0.2, colour = NA)
     }
   }
   
