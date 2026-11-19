@@ -61,7 +61,7 @@ if(file.exists(mod_fl)){
 } else {
   mod_real <- bayesianTrajectoryWorkflow(surv_data = bboudata::bbousurv_a %>% filter(Year > 2010), 
                                 recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
-                                niters=1,returnSamples=T)
+                                niters=15,returnSamples=T)
   if(dir.exists(dirname(mod_fl))){
     saveRDS(mod_real, mod_fl)
   }
@@ -79,7 +79,7 @@ if(file.exists(mod_flb)){
     surv_data = bboudata::bbousurv_a %>% filter(Year > 2010),
     recruit_data = bboudata::bbourecruit_a %>% filter(Year > 2010),
     disturbance = disturbance,
-    niters = 10,returnSamples=T
+    niters = 15,returnSamples=T
   )
   if(dir.exists(dirname(mod_flb))){
     saveRDS(mod_realb, mod_flb)
