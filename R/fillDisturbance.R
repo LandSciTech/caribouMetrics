@@ -39,10 +39,10 @@ fillDisturbance <- function(disturbance, merge_df){
       filter(disturbance, if_any(c(Anthro, Fire_excl_anthro), is.na)) %>%
         pull(Year) %>% paste0(collapse = ", "),
       " have missing disturbance data. ",
-      "Anthro will be filled from the previous year with data and fire will be filled with 0s"
+      "Anthro and fire will be filled from the previous year with data"
     )
     
-    disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup",
+    disturbance <- tidyr::fill(disturbance, Anthro, Fire_excl_anthro, .direction = "downup",
                                .by = any_of("PopulationName")) %>%
       mutate(
         Fire_excl_anthro = tidyr::replace_na(Fire_excl_anthro, 0),

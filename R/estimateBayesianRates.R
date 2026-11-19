@@ -95,6 +95,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
   
   diff_pop_nms <- setdiff(unique(surv_data$PopulationName),
                           unique(recruit_data$PopulationName))
+  
   if(length(diff_pop_nms) > 0){
     warning("The populations ", paste0(diff_pop_nms, sep = ", "), 
             "are only present in one of surv_data or recruit_data.",
