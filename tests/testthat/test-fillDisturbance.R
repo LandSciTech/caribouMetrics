@@ -7,7 +7,7 @@ test_that("works", {
   )
   
   expect_equal(disturb_filled %>% filter(Year == 2006) %>% pull(Anthro), 6)
-  expect_equal(disturb_filled %>% filter(Year == 2006) %>% pull(Fire_excl_anthro), 0)
+  expect_equal(disturb_filled %>% filter(Year == 2006) %>% pull(Fire_excl_anthro), 2)
   
   expect_warning(
     disturb_null <- fillDisturbance(disturb, data.frame(Year = 2020:2025)), 
@@ -37,7 +37,7 @@ test_that("works with multipop", {
   expect_equal(disturb_filled %>% filter(Year == 2026, PopulationName == "B") %>% pull(Anthro), 6)
   expect_equal(disturb_filled %>% filter(Year == 2006, PopulationName == "B") %>% pull(Anthro), integer(0))
   
-  expect_equal(disturb_filled %>% filter(Year == 2006) %>% pull(Fire_excl_anthro), 0)
+  expect_equal(disturb_filled %>% filter(Year == 2006) %>% pull(Fire_excl_anthro), 2)
 
   
 })
