@@ -125,7 +125,11 @@ trajectoriesFromBayesian <- function(bayesianResults, N0 = NULL,
   if(doSummary){
     simBig <- prepareTrajectories(pars, returnSamples = returnSamples)
     
-    if(max(simBig$summary$Year)<=100){simBig$summary$Year=NULL}
+    if(max(simBig$summary$Year)<=100){
+      # sometimes year is n years in the future so preserve as Timestep (samples already has Timestep)
+      simBig$summary$Timestep <- simBig$summary$Year
+      simBig$summary$Year=NULL
+    }
     if(returnSamples){
       if(max(simBig$samples$Year)<=100){simBig$samples$Year=NULL}
     }

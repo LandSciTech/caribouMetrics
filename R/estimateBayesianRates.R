@@ -93,6 +93,17 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     )
   }
   
+  diff_pop_nms <- setdiff(unique(surv_data$PopulationName),
+                          unique(recruit_data$PopulationName))
+  
+  if(length(diff_pop_nms) > 0){
+    warning("The populations ", paste0(diff_pop_nms, sep = ", "), 
+            "are only present in one of surv_data or recruit_data.",
+            "They will be removed from both.")
+    surv_data <- filter(surv_data, !PopulationName %in% diff_pop_nms)
+    recruit_data <- filter(recruit_data, !PopulationName %in% diff_pop_nms)
+  }
+  
   N0 <- getN0Pars(N0,popNames=unique(surv_data$PopulationName))
   
   if(length(N0)>1){
@@ -115,7 +126,7 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     if(is.null(priors)){
       priors=betaNationalPriors()
     }
-    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb, quiet = quiet) 
+    ret <- betaMakeSummaryTable(surv_data, recruit_data, disturbance, priors, nc,nthin,ni,nb, quiet = quiet, i18n = i18n, shiny_progress = shiny_progress) 
     
     ret$parList$N0 <- merge(N0,disturbance)
     
@@ -145,8 +156,10 @@ estimateBayesianRates <-function(surv_data, recruit_data, N0=NA, disturbance = N
     stop("At least 5 years of recruitment data are needed to estimate interannual variation using bboutools")
   }
   
-  n_yrs_surv <- surv_data %>% count(Year, PopulationName) %>% count(PopulationName)
-  n_yrs_recruit <- recruit_data %>% count(Year, PopulationName) %>% count(PopulationName)
+  n_yrs_surv <- surv_data |> filter(!is.na(MortalitiesCertain)) %>% 
+    count(Year, PopulationName) %>% count(PopulationName)
+  n_yrs_recruit <- recruit_data|> filter(!is.na(Cows)) %>% 
+    count(Year, PopulationName) %>% count(PopulationName)
   
   if(any(n_yrs_recruit$n < 2)){
     pops_drop <- filter(n_yrs_recruit, n < 2) %>% pull(PopulationName)

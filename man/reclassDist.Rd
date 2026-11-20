@@ -77,10 +77,10 @@ terra::plot(cumFirePresence)
 \seealso{
 Functions for calculating disturbance:
 \code{\link{DisturbanceMetrics-class}},
-\code{\link[=disturbanceMetrics]{disturbanceMetrics()}},
-\code{\link[=loadSpatialInputs]{loadSpatialInputs()}},
-\code{\link[=rasterizeLineDensity]{rasterizeLineDensity()}},
-\code{\link[=results]{results()}},
-\code{\link[=updateDisturbance]{updateDisturbance()}}
+\code{\link{disturbanceMetrics}()},
+\code{\link{loadSpatialInputs}()},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{results}()},
+\code{\link{updateDisturbance}()}
 }
 \concept{disturbance}

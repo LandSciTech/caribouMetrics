@@ -86,7 +86,7 @@ trajectoriesFromSummary <- function(replicates, N0, Rbar, Sbar, Riv, Siv,
     testTable(as.data.frame(Siv), req_col_names = c("S_iv_mean", "S_iv_shape"))
     results <- ratesFromLogisticSummary(Rbar, Sbar, Riv, Siv, replicates, nthin,varPersists, quiet = quiet)
   }
-  rr <- trajectoriesFromBayesian(results, N0 = N0,returnSamples = returnSamples, 
+  rr <- trajectoriesFromBayesian(bayesianResults = results, N0 = N0,returnSamples = returnSamples, 
                                  doSummary = doSummary,cPars=cPars, ...)
   return(rr)
 }

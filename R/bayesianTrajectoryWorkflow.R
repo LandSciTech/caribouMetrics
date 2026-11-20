@@ -146,38 +146,9 @@ bayesianTrajectoryWorkflow <- function(surv_data = bboudata::bbousurv_a,
   }
 
   if(!is.null(disturbance)){
-    distM <- data.frame(Year = seq(inp$startYear, inp$endYear))
-    if(hasName(disturbance,"PopulationName")){
-      distM <- merge(distM,data.frame(PopulationName=unique(disturbance$PopulationName)))
-    }
-    disturbance <- merge(distM, disturbance, all.x = T)
-    
-    if (anyNA(select(disturbance, "Anthro", "Fire_excl_anthro"))) {
-      warning(
-        "Years ",
-        filter(disturbance, if_any(c(Anthro, Fire_excl_anthro), is.na)) %>%
-          pull(Year) %>% paste0(collapse = ", "),
-        " have missing disturbance data. ",
-        "Anthro will be filled from the next year with data and fire will be fill with 0s"
-      )
-      
-      if(hasName(disturbance,"PopulationName")){
-        disturbance <- tidyr::fill(disturbance, Anthro, .by = PopulationName, .direction = "downup")
-      }else{
-        disturbance <- tidyr::fill(disturbance, Anthro, .direction = "downup")
-      }
-
-      disturbance <- disturbance %>%
-        mutate(
-          Fire_excl_anthro = tidyr::replace_na(Fire_excl_anthro, 0),
-          Total_dist = Fire_excl_anthro + Anthro
-        )
-      if(anyNA(select(disturbance, "Anthro", "Fire_excl_anthro"))){
-        #stop("None of the disturbance data is within the requested year range",
-        #     call. = FALSE)
-        disturbance=NULL
-      }
-    }
+    disturbance <- fillDisturbance(disturbance,
+                                   data.frame(Year = seq(inp$startYear, inp$endYear)))
+                        
     distYrs = disturbance$Year
   }else if(!is.null(inp$endYear) && is.finite(inp$endYear)){
     distYrs = seq(min(surv_data$CaribouYear),inp$endYear)

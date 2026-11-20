@@ -9,7 +9,11 @@ plotTrajectories(
   replicates = 35,
   metrics = c("Adult female survival", "Recruitment", "Adjusted recruitment",
     "Population growth rate", "Female population size", "c", "Expected survival",
-    "Expected recruitment", "Expected adjusted recruitment", "Expected growth rate")
+    "Expected recruitment", "Expected adjusted recruitment", "Expected growth rate"),
+  i18n = NULL,
+  multicolour_samples = TRUE,
+  ribbon = TRUE,
+  add_N0 = FALSE
 )
 }
 \arguments{
@@ -23,6 +27,18 @@ samples not included in \code{caribouBayesDemogMod}.}
 
 \item{metrics}{character. A vector of Metrics to be included as facets
 in the plot.}
+
+\item{i18n}{NULL or function. Only used in shiny app to provide translation
+function for messages.}
+
+\item{multicolour_samples}{logical. Should sample trajectories be shown in
+different colours when there is only one population?}
+
+\item{ribbon}{logical. Should a ribbon be plotted using the upper and lower
+bounds?}
+
+\item{add_N0}{logical. Should year 0 be added to plots of Female population
+size based on N0?}
 }
 \description{
 Plot Bayesian population model results including multiple sample trajectories
@@ -53,29 +69,29 @@ plotTrajectories(traj)
 }
 \seealso{
 Caribou demography functions:
-\code{\link[=addMissingYears]{addMissingYears()}},
-\code{\link[=addN0Variation]{addN0Variation()}},
-\code{\link[=bayesianScenariosWorkflow]{bayesianScenariosWorkflow()}},
-\code{\link[=bayesianTrajectoryWorkflow]{bayesianTrajectoryWorkflow()}},
-\code{\link[=betaNationalPriors]{betaNationalPriors()}},
-\code{\link[=caribouPopGrowth]{caribouPopGrowth()}},
-\code{\link[=compareTrajectories]{compareTrajectories()}},
-\code{\link[=compositionBiasCorrection]{compositionBiasCorrection()}},
-\code{\link[=convertTrajectories]{convertTrajectories()}},
-\code{\link[=dataFromSheets]{dataFromSheets()}},
-\code{\link[=demographicProjectionApp]{demographicProjectionApp()}},
-\code{\link[=estimateBayesianRates]{estimateBayesianRates()}},
-\code{\link[=estimateNationalRate]{estimateNationalRate()}},
-\code{\link[=getCaribouYear]{getCaribouYear()}},
-\code{\link[=getNationalCoefficients]{getNationalCoefficients()}},
-\code{\link[=getScenarioDefaults]{getScenarioDefaults()}},
-\code{\link[=plotCompareTrajectories]{plotCompareTrajectories()}},
-\code{\link[=plotSurvivalSeries]{plotSurvivalSeries()}},
+\code{\link{addMissingYears}()},
+\code{\link{addN0Variation}()},
+\code{\link{bayesianScenariosWorkflow}()},
+\code{\link{bayesianTrajectoryWorkflow}()},
+\code{\link{betaNationalPriors}()},
+\code{\link{caribouPopGrowth}()},
+\code{\link{compareTrajectories}()},
+\code{\link{compositionBiasCorrection}()},
+\code{\link{convertTrajectories}()},
+\code{\link{dataFromSheets}()},
+\code{\link{demographicProjectionApp}()},
+\code{\link{estimateBayesianRates}()},
+\code{\link{estimateNationalRate}()},
+\code{\link{fillDisturbance}()},
+\code{\link{getCaribouYear}()},
+\code{\link{getNationalCoefficients}()},
+\code{\link{getScenarioDefaults}()},
+\code{\link{plotCompareTrajectories}()},
+\code{\link{plotSurvivalSeries}()},
 \code{\link{popGrowthTableJohnsonECCC}},
-\code{\link[=simulateObservations]{simulateObservations()}},
-\code{\link[=trajectoriesFromBayesian]{trajectoriesFromBayesian()}},
-\code{\link[=trajectoriesFromNational]{trajectoriesFromNational()}},
-\code{\link[=trajectoriesFromSummary]{trajectoriesFromSummary()}},
-\code{\link[=trajectoriesFromSummaryForApp]{trajectoriesFromSummaryForApp()}}
+\code{\link{simulateObservations}()},
+\code{\link{trajectoriesFromBayesian}()},
+\code{\link{trajectoriesFromNational}()},
+\code{\link{trajectoriesFromSummary}()}
 }
 \concept{demography}

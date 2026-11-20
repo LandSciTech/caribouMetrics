@@ -74,6 +74,7 @@ Collate:
     'estimateBayesianRates.R'
     'estimateNationalRate.R'
     'estimateNationalRates.R'
+    'fillDisturbance.R'
     'getNationalCoefficients.R'
     'getScenarioDefaults.R'
     'spatialAlignFns.R'
@@ -82,6 +83,7 @@ Collate:
     'loadSpatialInputs.R'
     'movingWindowAvg.R'
     'plotCompareTrajectories.R'
+    'plotMeans.R'
     'plotSurvivalSeries.R'
     'popGrowthTableJohnsonECCC.R'
     'prepareTrajectories.R'
@@ -90,13 +92,13 @@ Collate:
     'reclassDist.R'
     'results.R'
     'sampleNationalCoefs.R'
+    'simPopsOverTime.R'
     'simulateObservations.R'
     'simulateTrajectoriesFromPosterior.R'
     'subsetNationalCoefs.R'
     'trajectoriesFromBayesian.R'
     'trajectoriesFromNational.R'
     'trajectoriesFromSummary.R'
-    'trajectoriesFromSummaryForApp.R'
     'updateDisturbance.R'
 Suggests: 
     testthat (>= 2.1.0),
@@ -125,3 +127,4 @@ Depends:
     R (>= 3.5)
 URL: https://landscitech.github.io/caribouMetrics, https://github.com/LandSciTech/caribouMetrics
 Config/roxygen2/version: 8.1.1
+RoxygenNote: 7.3.3

@@ -1,74 +1,3 @@
-test_that("summary gives expected trajectory", {
-  trajs <- trajectoriesFromSummaryForApp(
-    numSteps = 10, replicates = 5000, N0 = 100, R_bar = 0.3,
-    S_bar = 0.8, R_sd = 0.05, S_sd = 0.1, R_iv_shape = 0.01, 
-    R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
-    scn_nm = "test")
-  
-  expect_equal(
-    trajs %>% filter(type == "mean") %>% pull(R_t) %>% unique(),
-    0.3
-  )
-
-  trajs_beta <- trajectoriesFromSummaryForApp(
-    numSteps = 10, replicates = 5000, N0 = 100, R_bar = 0.3,
-    S_bar = 0.8, R_sd = 0.05, S_sd = 0.1, R_iv_shape = 0.01, 
-    R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
-    scn_nm = "test", type = "beta")
-  
-  # beta and logistic give similar results
-  expect_equal(
-    trajs_beta %>% filter(type == "samp") %>% 
-      summarise(mlambda = mean(lambda)),
-    trajs %>% filter(type == "samp") %>% 
-      summarise(mlambda = mean(lambda)),
-    tolerance = 0.01
-  )  
-  
-  trajs_w_sum <- trajectoriesFromSummaryForApp(
-    numSteps = 10, replicates = 5000, N0 = 100, R_bar = 0.3,
-    S_bar = 0.8, R_sd = 0.05, S_sd = 0.1, R_iv_shape = 0.01, 
-    R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
-    scn_nm = "test", doSummary = TRUE)
-  
-  # setting no Summary doesn't change mean lambda
-  expect_equal(
-    trajs_w_sum$summary %>% filter(MetricTypeID == "lambda") %>% 
-      summarise(mlambda = mean(Mean)),
-    trajs %>% filter(type == "samp") %>% 
-      summarise(mlambda = mean(lambda)),
-    tolerance = 0.01
-  ) 
-  
-  # can't have multiple R_bar because then sample from multiple distributions
-  # which is confusing
-  expect_error(trajectoriesFromSummaryForApp(
-    numSteps = 10, replicates = 5000, N0 = c(100, 200), R_bar = c(1:3/9.01),
-    S_bar = c(7:9/9.01), R_sd = 0.05, S_sd = 0.1, R_iv_shape = 0.01, 
-    R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
-    scn_nm = "test"), "length one")
-  
-  # works with variation in N0 (specified the way it is in the app handled internally by call to addN0Variation)
-  trajs_rng <- trajectoriesFromSummaryForApp(
-    numSteps = 10, replicates = 50000, N0 = c(100,200), R_bar = 0.3,
-    S_bar = 0.8, R_sd = 0.05, S_sd = 0.1, R_iv_shape = 0.01, 
-    R_iv_mean = 0.01, S_iv_mean = 0.05, S_iv_shape = 0.05, 
-    scn_nm = "test")
-  
-  #Expect truncated poisson distribution
-  Ndist <- trajs_rng %>% filter(time == 1, type == "samp") %>% pull(N0)
-
-  expect_true(abs(var(Ndist)-150)<3) #fails sometimes with 2 changing to 3
-  expect_true(abs(mean(Ndist)-150)<1)  
-  expect_true(min(Ndist)>=100)
-  expect_true(max(Ndist)<=200)
-  
-  #expect_equal(trajs_rng %>% filter(time == 1, type == "samp") %>% pull(N0) %>% n_distinct(), 
-  #             101)
-  
-})
-
-
 test_that("trajectoriesFromSummary works with variation in N0", {
   N0df <- data.frame(N0 = 1000, N.sd =1000^0.5,N.lower=900,N.upper=1100)
 
@@ -257,4 +186,26 @@ test_that("adjust works as expected", {
   #   type = "bbou")
 })
 
+test_that("works with multipop",{
+  trajs_beta <- trajectoriesFromSummary(
+    replicates = 5000, N0 = 100,
+    Rbar = bind_rows(data.frame(mean = 0.19, sd = 0.23, lower = 0.13,
+                      upper = 0.27, Annual = 1:5, Year = 1:5,
+                      PopulationName = "A"),
+                     data.frame(mean = 0.3, sd = 0.23, lower = 0.2,
+                                upper = 0.4, Annual = 1:5, Year = 1:5,
+                                PopulationName = "B")), 
+    Sbar = bind_rows(data.frame(mean = 0.94, sd = 0.61, lower = 0.86,
+                      upper = 0.98, Annual = 1:5, Year = 1:5,
+                      PopulationName = "A"),
+                     data.frame(mean = 0.9, sd = 0.61, lower = 0.8,
+                                upper = 0.95, Annual = 1:5, Year = 1:5,
+                                PopulationName = "B")),
+    Riv = data.frame(R_cv_min = 0.01, R_cv_max = 0.7),
+    Siv = data.frame(S_cv_min = 0.01, S_cv_max = 0.13),
+    type = "beta")
+  
+  # When Year is < 100 still can track timesteps 
+  expect_contains(colnames(trajs_beta$summary), "Timestep")
+})
 

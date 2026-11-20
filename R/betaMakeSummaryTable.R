@@ -1,4 +1,5 @@
-betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,nt,ni,nb, quiet = TRUE){
+betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,nt,ni,nb, quiet = TRUE, 
+                                 i18n = NULL, shiny_progress = FALSE){
   # if(n_distinct(surv_data$PopulationName) > 1){
   #   testTable(disturbance, req_col_names = "PopulationName", 
   #             req_vals = unique(surv_data$PopulationName))
@@ -25,8 +26,15 @@ betaMakeSummaryTable <- function(surv_data, recruit_data, disturbance,priors,nc,
     }
   }
   
+  if(shiny_progress && !rlang::is_installed("shiny")){
+    warning("Package shiny is not installed. Setting shiny_progress to FALSE")
+    shiny_progress <- FALSE
+  }
+  if(shiny_progress) shiny::setProgress(0.2, message = i18n$t("Fitting survival"))
+  
   surv_fit <- betaSurvival(surv_fit_in,disturbance,priors,nc,nt,ni,nb, quiet = quiet)
   
+  if(shiny_progress) shiny::setProgress(0.2, message = i18n$t("Fitting recruitment"))
   recruit_fit <- betaRecruitment(recruit_fit_in,disturbance,priors,nc,nt,ni,nb, quiet = quiet)
   
   summaries <- rbind(recruit_fit$summaries,surv_fit$summaries)

@@ -45,6 +45,11 @@ test_that("works with disturbance and N0 variation", {
     }
   }
   
+  # plot works with beta model
+  rec_mean_plt <- plotMeans(bbouDist, metrics = "Recruitment")
+  
+  expect_is(rec_mean_plt[[1]], "ggplot")
+  
   trajDist <- trajectoriesFromBayesian(bbouDist)
   
   expect_type(trajDist, "list")

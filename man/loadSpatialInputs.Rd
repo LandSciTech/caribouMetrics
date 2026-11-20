@@ -100,10 +100,10 @@ res <- loadSpatialInputs(projectPoly = projPol, refRast = lc,
 \seealso{
 Functions for calculating disturbance:
 \code{\link{DisturbanceMetrics-class}},
-\code{\link[=disturbanceMetrics]{disturbanceMetrics()}},
-\code{\link[=rasterizeLineDensity]{rasterizeLineDensity()}},
-\code{\link[=reclassDist]{reclassDist()}},
-\code{\link[=results]{results()}},
-\code{\link[=updateDisturbance]{updateDisturbance()}}
+\code{\link{disturbanceMetrics}()},
+\code{\link{rasterizeLineDensity}()},
+\code{\link{reclassDist}()},
+\code{\link{results}()},
+\code{\link{updateDisturbance}()}
 }
 \concept{disturbance}

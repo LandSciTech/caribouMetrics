@@ -14,6 +14,10 @@ test_that("multipop works", {
                                                   N0 = c(500, 5000), 
                                                   N.sd = c(20, 1000)),
                                   niters = 20, return_mcmc = TRUE)
+  # plot works with bbou model
+  rec_mean_plt <- plotMeans(wN0Var, metrics = "Recruitment")
+  
+  
   trajwN0 <- trajectoriesFromBayesian(wN0Var)
   
   # check N0 is different in two pops
